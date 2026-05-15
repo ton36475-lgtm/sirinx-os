@@ -141,6 +141,10 @@ h2 {
   margin-bottom: 14px;
 }
 
+.switch-panel {
+  margin-bottom: 14px;
+}
+
 .hermes-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -207,6 +211,7 @@ h2 {
 }
 
 .signal-list,
+.switch-list,
 .team-list,
 .project-list,
 .task-list {
@@ -215,6 +220,7 @@ h2 {
 }
 
 .signal-row,
+.switch-row,
 .team-block,
 .project-row,
 .task-row {
@@ -225,7 +231,8 @@ h2 {
   background: #fbfcfa;
 }
 
-.signal-row {
+.signal-row,
+.switch-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
@@ -238,6 +245,14 @@ h2 {
 
 .signal-warn {
   border-left: 4px solid var(--amber);
+}
+
+.switch-on {
+  border-left: 4px solid var(--green);
+}
+
+.switch-off {
+  border-left: 4px solid var(--red);
 }
 
 .signal-title,
@@ -254,6 +269,14 @@ h2 {
   margin-top: 3px;
   color: var(--muted);
   font-size: 0.82rem;
+}
+
+.switch-env {
+  margin: 5px 0 0;
+  color: var(--blue);
+  font-size: 0.76rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .mini-status {

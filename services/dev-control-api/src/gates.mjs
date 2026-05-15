@@ -1,3 +1,5 @@
+import { evaluateRequiredSwitches } from "./switches.mjs";
+
 export const gates = [
   {
     id: "dry-run-lock",
@@ -46,6 +48,14 @@ export const actions = [
     description: "List missing gates before staging approval.",
     risk: "medium",
     mode: "dry-run"
+  },
+  {
+    id: "external-adapter-smoke",
+    title: "External adapter smoke",
+    description: "Simulate an external adapter send and prove kill switches block it locally.",
+    risk: "high",
+    mode: "dry-run",
+    requiredSwitches: ["customer-messaging", "cloud-mutation"]
   }
 ];
 
@@ -63,6 +73,27 @@ export function createDryRunResult(actionId) {
       body: {
         error: "unknown_action",
         actionId
+      }
+    };
+  }
+
+  const switchResult = evaluateRequiredSwitches(action.requiredSwitches);
+
+  if (!switchResult.allowed) {
+    return {
+      ok: true,
+      status: 200,
+      body: {
+        actionId,
+        result: "blocked_by_kill_switch",
+        externalWrites: false,
+        requiresHumanApproval: true,
+        blockedSwitches: switchResult.blocked.map((item) => ({
+          id: item.id,
+          title: item.title,
+          env: item.env
+        })),
+        timestamp: new Date().toISOString()
       }
     };
   }

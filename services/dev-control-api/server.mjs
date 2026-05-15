@@ -4,6 +4,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
+import { switches } from "./src/switches.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -405,6 +406,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/actions") {
     sendJson(request, response, 200, { actions });
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/switches") {
+    sendJson(request, response, 200, { switches });
     return;
   }
 

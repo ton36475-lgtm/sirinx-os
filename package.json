@@ -24,7 +24,7 @@
     "hq:test": "./scripts/test-ai-hq.sh",
     "hq:digest": "./scripts/knowledge-digest.sh",
     "dashboard:test": "./scripts/test-dashboard-brain.sh",
-    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs"
+    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs && node --check services/dev-control-api/src/switches.mjs"
   },
   "workspaces": [
     "apps/*",

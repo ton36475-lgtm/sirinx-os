@@ -20,6 +20,7 @@ const hermesGatewayState = document.querySelector("#hermesGatewayState");
 const hermesGatewayMeta = document.querySelector("#hermesGatewayMeta");
 const hermesKanbanState = document.querySelector("#hermesKanbanState");
 const hermesKanbanMeta = document.querySelector("#hermesKanbanMeta");
+const switchList = document.querySelector("#switchList");
 const executiveStatus = document.querySelector("#executiveStatus");
 const executiveSummary = document.querySelector("#executiveSummary");
 const executiveServices = document.querySelector("#executiveServices");
@@ -66,6 +67,30 @@ const fallbackActions = [
     description: "Prepares browser QA steps for dev.sirinx.co.",
     risk: "low",
     mode: "dry-run"
+  }
+];
+
+const fallbackSwitches = [
+  {
+    id: "cloud-mutation",
+    title: "Cloud mutation",
+    env: "CLOUDFLARE_MUTATION_ENABLED",
+    enabled: false,
+    description: "Allows cloud resource writes only after explicit approval."
+  },
+  {
+    id: "customer-messaging",
+    title: "Customer messaging",
+    env: "CUSTOMER_MESSAGE_SEND_ENABLED",
+    enabled: false,
+    description: "Allows customer-facing sends only after explicit approval."
+  },
+  {
+    id: "paid-api",
+    title: "Paid API calls",
+    env: "PAID_API_CALLS_ENABLED",
+    enabled: false,
+    description: "Allows paid API usage only after approval gates pass."
   }
 ];
 
@@ -166,7 +191,12 @@ function renderActions(actions) {
 
       const meta = document.createElement("div");
       meta.className = "action-meta";
-      for (const value of [action.mode, `risk: ${action.risk}`]) {
+      const tags = [action.mode, `risk: ${action.risk}`];
+      if (action.requiredSwitches?.length) {
+        tags.push(`requires: ${action.requiredSwitches.join(", ")}`);
+      }
+
+      for (const value of tags) {
         const tag = document.createElement("span");
         tag.className = "tag";
         tag.textContent = value;
@@ -182,6 +212,32 @@ function renderActions(actions) {
       button.addEventListener("click", () => runDryRun(action.id));
 
       row.append(content, button);
+      return row;
+    })
+  );
+}
+
+function renderSwitches(items) {
+  switchList.replaceChildren(
+    ...items.map((item) => {
+      const row = document.createElement("article");
+      row.className = `switch-row ${item.enabled ? "switch-on" : "switch-off"}`;
+
+      const content = document.createElement("div");
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = item.title;
+
+      const copy = document.createElement("p");
+      copy.className = "signal-detail";
+      copy.textContent = item.description;
+
+      const env = document.createElement("p");
+      env.className = "switch-env";
+      env.textContent = item.env;
+
+      content.append(title, copy, env);
+      row.append(content, makeStatusBadge(item.enabled ? "on" : "off", item.enabled));
       return row;
     })
   );
@@ -614,10 +670,11 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   try {
-    const [health, gates, actions, hermes, executiveHq] = await Promise.all([
+    const [health, gates, actions, switches, hermes, executiveHq] = await Promise.all([
       fetchJson("/health"),
       fetchJson("/api/gates"),
       fetchJson("/api/actions"),
+      fetchJson("/api/switches"),
       fetchJson("/api/hermes"),
       fetchJson("/api/executive-hq")
     ]);
@@ -625,6 +682,7 @@ async function loadDashboard() {
     setApiState("online", `API ${health.status}`);
     renderGates(gates.gates);
     renderActions(actions.actions);
+    renderSwitches(switches.switches);
     renderHermes(hermes);
     renderExecutive(executiveHq);
     lastUpdated.textContent = new Date().toLocaleString();
@@ -634,6 +692,7 @@ async function loadDashboard() {
     setApiState("offline", "API offline");
     renderGates(fallbackGates);
     renderActions(fallbackActions);
+    renderSwitches(fallbackSwitches);
     renderHermes(fallbackHermes);
     renderExecutive(fallbackExecutive);
     lastUpdated.textContent = "Fallback data";
