@@ -40,4 +40,37 @@ test.describe("Developer Command Center", () => {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(1);
   });
+
+  test("uses safe fallback controls when the API is offline", async ({ page }) => {
+    const consoleErrors = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        consoleErrors.push(message.text());
+      }
+    });
+
+    await page.goto("/?api=http://127.0.0.1:65535");
+
+    await expect(page.locator("#apiState")).toHaveText("API offline");
+    await expect(page.locator("#gateList")).toContainText("Dry-run lock");
+    await expect(page.locator("#gateList")).toContainText("Cloud mutation");
+    await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
+    await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
+
+    await page.getByRole("button", { name: "Dry run" }).first().click();
+    await expect(page.locator("#eventLog")).toContainText("dry-run unavailable");
+    expect(consoleErrors.filter((message) => !message.includes("ERR_CONNECTION_REFUSED"))).toEqual([]);
+  });
+
+  test("does not expose public production endpoints in the dashboard", async ({ page }) => {
+    await page.goto("/");
+
+    const bodyText = await page.locator("body").innerText();
+    expect(bodyText).not.toMatch(/dev\.sirinx\.co|studio\.sirinx\.co|n8n\.sirinx\.co|grafana\.sirinx\.co/i);
+
+    const externalLinks = await page.locator("a[href]").evaluateAll((links) =>
+      links.map((link) => link.href).filter((href) => !href.startsWith("http://127.0.0.1") && !href.startsWith("http://localhost"))
+    );
+    expect(externalLinks).toEqual([]);
+  });
 });
