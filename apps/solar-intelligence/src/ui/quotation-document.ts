@@ -5,10 +5,9 @@ function money(value: number): string {
 }
 
 function escapeHtml(value: unknown): string {
+  const entities: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
   return String(value ?? "").replace(/[&<>"']/g, (char) => {
-    return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" } as Record<string, string>)[
-      char
-    ];
+    return entities[char] ?? char;
   });
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { equipmentCatalog, generateSolarProposal, sampleCustomer, thailandRules } from "./index.js";
+import { equipmentCatalog, findForbiddenClaimText, generateSolarProposal, sampleCustomer, thailandRules } from "./index.js";
 import type { EquipmentCatalog } from "./types.js";
 
 describe("Solar Energy Intelligence Phase 1", () => {
@@ -12,6 +12,9 @@ describe("Solar Energy Intelligence Phase 1", () => {
     expect(proposal.design.pvSizeKwp.value).toBeGreaterThan(0);
     expect(proposal.roi.annualSavingsThb.value).toBeGreaterThan(0);
     expect(proposal.thailandComplianceSummary.every((check) => check.passed)).toBe(true);
+    expect(proposal.claimGuard.status).toBe("draft-not-for-final-quote");
+    expect(proposal.claimGuard.finalQuoteAllowed).toBe(false);
+    expect(proposal.claimGuard.disclaimers.join(" ")).toContain("not guarantees");
   });
 
   test("blocks incompatible phase recommendations", () => {
@@ -43,5 +46,16 @@ describe("Solar Energy Intelligence Phase 1", () => {
     };
 
     expect(() => generateSolarProposal(sampleCustomer, catalog, thailandRules)).toThrow(/No eligible/);
+  });
+
+  test("keeps commercial claims in draft guarded language", () => {
+    const proposal = generateSolarProposal();
+
+    expect(proposal.executiveSummary).toContain("assumptions, not guarantees");
+    expect(proposal.nextActions.join(" ")).toContain("claim guard");
+    expect(findForbiddenClaimText(proposal.executiveSummary)).toEqual([]);
+    expect(proposal.claimGuard.requiredVerifications).toContain(
+      "Refresh official PEA/MEA inverter approval status before final quote."
+    );
   });
 });

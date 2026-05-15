@@ -7,6 +7,7 @@ import { buildLoadBreakdown, classifySystemSize, systemSizeBands } from "./load-
 import { buildCustomerUsageProfile } from "./usage-profile.js";
 import { createProposal } from "./proposal.js";
 import { calculateRoi } from "./roi-engine.js";
+export { buildClaimGuard, findForbiddenClaimText } from "./claim-guard.js";
 export { buildCompetitorIntelligence } from "./competitor-intelligence.js";
 export { generateCommercialQuotation } from "./quotation.js";
 import type { BusinessRules, CustomerIntake, EquipmentCatalog, Proposal } from "./types.js";

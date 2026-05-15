@@ -201,10 +201,12 @@ export function generateCommercialQuotation(
     vatThb,
     grandTotalThb: round(taxable + vatThb),
     assumptions: [
+      "This quotation is commercial draft material, not a binding final quote.",
       "This quotation is based on preliminary operator inputs and must be finalized after site survey.",
       "Utility approval, export permission, roof/structural condition, cable route, and protection coordination can affect final price.",
       "Battery usable energy, thermal derating, and warranty conditions must be confirmed with OEM documentation.",
-      "Savings are estimates; uptime/resilience value is separated from electricity bill savings."
+      "Savings, ROI, payback, and cashflow are estimates, not guarantees.",
+      "Uptime/resilience value is separated from electricity bill savings."
     ],
     exclusions: [
       "Civil works outside stated equipment foundation and cable route assumptions.",

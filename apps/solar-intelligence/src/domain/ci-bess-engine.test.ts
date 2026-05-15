@@ -130,6 +130,8 @@ describe("Commercial BESS + PV + STS design intelligence", () => {
     expect(quote.vatThb).toBeGreaterThan(0);
     expect(quote.grandTotalThb).toBeGreaterThan(quote.subtotalThb);
     expect(quote.paymentTerms).toHaveLength(4);
+    expect(quote.assumptions.join(" ")).toContain("not a binding final quote");
+    expect(quote.assumptions.join(" ")).toContain("not guarantees");
   });
 
   test("builds competitor intelligence for Thailand quotation positioning", () => {

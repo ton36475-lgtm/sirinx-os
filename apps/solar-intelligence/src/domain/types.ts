@@ -161,6 +161,15 @@ export interface RoiResult {
   };
 }
 
+export interface ClaimGuard {
+  status: "draft-not-for-final-quote";
+  finalQuoteAllowed: boolean;
+  blockers: string[];
+  forbiddenClaims: string[];
+  requiredVerifications: string[];
+  disclaimers: string[];
+}
+
 export interface Proposal {
   id: string;
   generatedAt: string;
@@ -168,6 +177,7 @@ export interface Proposal {
   behavior: EnergyBehaviorModel;
   design: DesignRecommendation;
   roi: RoiResult;
+  claimGuard: ClaimGuard;
   executiveSummary: string;
   billOfMaterials: Array<{ item: string; quantity: number; notes: string }>;
   thailandComplianceSummary: CompatibilityCheck[];
