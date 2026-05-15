@@ -30,19 +30,25 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#approvalList")).toContainText("Evaluate release preflight");
     await expect(page.locator("#approvalList")).toContainText("Customer message send");
     await expect(page.locator("#approvalList")).toContainText("blocked");
+    await expect(page.getByRole("heading", { name: "Local API Events" })).toBeVisible();
+    await expect(page.locator("#auditList")).toContainText("No local API audit events recorded yet.");
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
     await expect(page.locator("#actionList")).toContainText("External adapter smoke");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("simulated_only");
+    await expect(page.locator("#auditList")).toContainText("simulated_only");
+    await expect(page.locator("#auditList")).toContainText("no external writes");
 
     const approvalAction = page.locator(".action-row").filter({ hasText: "Evaluate release preflight" });
     await approvalAction.getByRole("button", { name: "Dry run" }).click();
     await expect(page.locator("#eventLog")).toContainText("queued_for_approval");
+    await expect(page.locator("#auditList")).toContainText("queued_for_approval");
 
     const riskyAction = page.locator(".action-row").filter({ hasText: "External adapter smoke" });
     await riskyAction.getByRole("button", { name: "Dry run" }).click();
     await expect(page.locator("#eventLog")).toContainText("blocked_by_kill_switch");
+    await expect(page.locator("#auditList")).toContainText("blocked_by_kill_switch");
     expect(consoleErrors).toEqual([]);
   });
 
@@ -72,6 +78,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#gateList")).toContainText("Cloud mutation");
     await expect(page.locator("#switchList")).toContainText("Paid API calls");
     await expect(page.locator("#approvalList")).toContainText("Local fallback approval");
+    await expect(page.locator("#auditList")).toContainText("api_offline");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
 

@@ -142,7 +142,8 @@ h2 {
 }
 
 .switch-panel,
-.approval-panel {
+.approval-panel,
+.audit-panel {
   margin-bottom: 14px;
 }
 
@@ -214,6 +215,7 @@ h2 {
 .signal-list,
 .switch-list,
 .approval-list,
+.audit-list,
 .team-list,
 .project-list,
 .task-list {
@@ -224,6 +226,7 @@ h2 {
 .signal-row,
 .switch-row,
 .approval-row,
+.audit-row,
 .team-block,
 .project-row,
 .task-row {
@@ -236,7 +239,8 @@ h2 {
 
 .signal-row,
 .switch-row,
-.approval-row {
+.approval-row,
+.audit-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
@@ -269,6 +273,21 @@ h2 {
 
 .approval-rejected,
 .approval-blocked {
+  border-left: 4px solid var(--red);
+}
+
+.audit-simulated_only,
+.audit-queued_for_approval {
+  border-left: 4px solid var(--green);
+}
+
+.audit-blocked_by_kill_switch {
+  border-left: 4px solid var(--amber);
+}
+
+.audit-invalid_json,
+.audit-unknown_action,
+.audit-api_offline {
   border-left: 4px solid var(--red);
 }
 

@@ -1,6 +1,6 @@
 # P2 Observability And Audit Trail
 
-Status: plan ready
+Status: implemented locally
 Date: 2026-05-16
 Runtime impact: none
 
@@ -51,14 +51,40 @@ evidence:
 - Control API dry-run responses include `externalWrites: false`.
 - Kill switches block risky dry-run actions.
 - Approval queue models pending, approved, rejected, and blocked states.
+- Local API audit trail exists at `GET /api/audit-events`.
+- Dry-run actions record audit events in local API memory.
+- Dashboard renders recent local API audit events.
 
-## Next Implementation Step
+## Implemented Endpoint
 
-Add a local in-memory or file-backed audit endpoint only after operator approval:
+The local control API exposes:
 
 - `GET /api/audit-events`
-- `POST` is not required publicly; audit writes should happen inside local API handlers.
+
+Audit writes happen inside local API handlers only. There is no public `POST` endpoint for arbitrary audit insertion.
+
+## Implemented Results
+
+The audit trail records:
+
+- `simulated_only`
+- `queued_for_approval`
+- `blocked_by_kill_switch`
+- `invalid_json`
+- `unknown_action`
+
+Every recorded dry-run event includes `external_writes: false`.
+
+## Verification
+
+Required checks:
+
+```bash
+node --check services/dev-control-api/src/audit-events.mjs
+pnpm verify
+pnpm dashboard:e2e
+```
 
 ## Staging Gate
 
-Staging remains blocked until audit events are captured outside the transient browser event log.
+Staging remains blocked until this local in-memory audit trail is upgraded to a reviewed durable local store or approved staging-safe store.

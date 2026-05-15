@@ -30,6 +30,8 @@ const executiveAgents = document.querySelector("#executiveAgents");
 const executiveProjects = document.querySelector("#executiveProjects");
 const executiveKanban = document.querySelector("#executiveKanban");
 const eventLog = document.querySelector("#eventLog");
+const auditStatus = document.querySelector("#auditStatus");
+const auditList = document.querySelector("#auditList");
 const lastUpdated = document.querySelector("#lastUpdated");
 const refreshButton = document.querySelector("#refreshButton");
 const clearLogButton = document.querySelector("#clearLogButton");
@@ -110,6 +112,26 @@ const fallbackApprovalQueue = {
     }
   ],
   totals: { pending: 1, approved: 0, rejected: 0, blocked: 0 }
+};
+
+const fallbackAuditTrail = {
+  items: [
+    {
+      event_id: "fallback-audit",
+      timestamp: new Date().toISOString(),
+      actor: "dashboard",
+      source: "fallback",
+      action: "audit unavailable",
+      target: "control-api",
+      risk_level: "low",
+      approval_status: "not-required",
+      kill_switch_status: "not-required",
+      external_writes: false,
+      result: "api_offline",
+      evidence: ["fallback mode"]
+    }
+  ],
+  totals: { api_offline: 1 }
 };
 
 const fallbackBrain = {
@@ -303,6 +325,59 @@ async function loadApprovalQueue() {
   } catch {
     renderApprovalQueue(fallbackApprovalQueue);
     return fallbackApprovalQueue;
+  }
+}
+
+function renderAuditEvents(audit) {
+  const items = audit.items || [];
+  auditStatus.textContent = `${items.length} events`;
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "gate-copy";
+    empty.textContent = "No local API audit events recorded yet.";
+    auditList.replaceChildren(empty);
+    return;
+  }
+
+  auditList.replaceChildren(
+    ...items.slice(0, 8).map((item) => {
+      const row = document.createElement("article");
+      row.className = `audit-row audit-${item.result}`;
+
+      const content = document.createElement("div");
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = `${item.result} - ${item.target}`;
+
+      const detail = document.createElement("p");
+      detail.className = "signal-detail";
+      detail.textContent = `${item.source} / ${item.action}`;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(
+        makeTag(`risk: ${item.risk_level}`),
+        makeTag(`approval: ${item.approval_status}`),
+        makeTag(`switch: ${item.kill_switch_status}`),
+        makeTag(item.external_writes ? "external writes" : "no external writes")
+      );
+
+      content.append(title, detail, meta);
+      row.append(content, makeStatusBadge(item.external_writes ? "write" : "local", !item.external_writes));
+      return row;
+    })
+  );
+}
+
+async function loadAuditEvents() {
+  try {
+    const audit = await fetchJson("/api/audit-events");
+    renderAuditEvents(audit);
+    return audit;
+  } catch {
+    renderAuditEvents(fallbackAuditTrail);
+    return fallbackAuditTrail;
   }
 }
 
@@ -733,12 +808,13 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   try {
-    const [health, gates, actions, switches, approvalQueue, hermes, executiveHq] = await Promise.all([
+    const [health, gates, actions, switches, approvalQueue, auditEvents, hermes, executiveHq] = await Promise.all([
       fetchJson("/health"),
       fetchJson("/api/gates"),
       fetchJson("/api/actions"),
       fetchJson("/api/switches"),
       fetchJson("/api/approval-queue"),
+      fetchJson("/api/audit-events"),
       fetchJson("/api/hermes"),
       fetchJson("/api/executive-hq")
     ]);
@@ -748,6 +824,7 @@ async function loadDashboard() {
     renderActions(actions.actions);
     renderSwitches(switches.switches);
     renderApprovalQueue(approvalQueue);
+    renderAuditEvents(auditEvents);
     renderHermes(hermes);
     renderExecutive(executiveHq);
     lastUpdated.textContent = new Date().toLocaleString();
@@ -759,6 +836,7 @@ async function loadDashboard() {
     renderActions(fallbackActions);
     renderSwitches(fallbackSwitches);
     renderApprovalQueue(fallbackApprovalQueue);
+    renderAuditEvents(fallbackAuditTrail);
     renderHermes(fallbackHermes);
     renderExecutive(fallbackExecutive);
     lastUpdated.textContent = "Fallback data";
@@ -777,6 +855,7 @@ async function runDryRun(actionId) {
     if (result.approvalRequest) {
       await loadApprovalQueue();
     }
+    await loadAuditEvents();
   } catch (error) {
     logEvent(`${actionId}: dry-run unavailable (${error.message})`);
   }

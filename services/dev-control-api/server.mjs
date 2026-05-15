@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { listApprovalQueue } from "./src/approval-queue.mjs";
+import { listAuditEvents, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { switches } from "./src/switches.mjs";
@@ -420,6 +421,11 @@ const server = createServer(async (request, response) => {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/audit-events") {
+    sendJson(request, response, 200, listAuditEvents());
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/hermes") {
     sendJson(request, response, 200, await getHermesStatus());
     return;
@@ -459,9 +465,12 @@ const server = createServer(async (request, response) => {
     try {
       const body = await readJson(request);
       const result = createDryRunResult(body.actionId);
+      recordDryRunAuditEvent(body.actionId, result.body, result.status);
       sendJson(request, response, result.status, result.body);
     } catch {
-      sendJson(request, response, 400, { error: "invalid_json" });
+      const body = { error: "invalid_json", externalWrites: false, requiresHumanApproval: true };
+      recordDryRunAuditEvent("invalid-json", body, 400);
+      sendJson(request, response, 400, body);
     }
     return;
   }
