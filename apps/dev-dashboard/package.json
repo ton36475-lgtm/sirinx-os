@@ -1,0 +1,10 @@
+{
+  "name": "@sirinx/dev-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "verify": "node --check server.mjs && node --check src/app.js"
+  }
+}

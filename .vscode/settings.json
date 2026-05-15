@@ -1,0 +1,9 @@
+{
+  "claudeCode.initialPermissionMode": "plan",
+  "claudeCode.preferredLocation": "sidebar",
+  "claudeCode.autosave": true,
+  "claudeCode.usePythonEnvironment": true,
+  "playwright.reuseBrowser": true,
+  "playwright.showTrace": false,
+  "terminal.integrated.cwd": "${workspaceFolder}"
+}

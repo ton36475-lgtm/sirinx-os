@@ -1,0 +1,41 @@
+{
+  "name": "sirinx-os",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev:api": "node services/dev-control-api/server.mjs",
+    "dev:dashboard": "node apps/dev-dashboard/server.mjs",
+    "dashboard:run": "./scripts/run-dev-dashboard.sh start",
+    "dashboard:stop": "./scripts/run-dev-dashboard.sh stop",
+    "dashboard:restart": "./scripts/run-dev-dashboard.sh restart",
+    "dashboard:status": "./scripts/run-dev-dashboard.sh status",
+    "dashboard:e2e": "playwright test",
+    "dashboard:e2e:ui": "playwright test --ui",
+    "solar:dev": "pnpm --filter @sirinx/solar-intelligence dev",
+    "solar:check": "pnpm --filter @sirinx/solar-intelligence check",
+    "solar:test": "pnpm --filter @sirinx/solar-intelligence test",
+    "solar:proposal": "pnpm --filter @sirinx/solar-intelligence proposal",
+    "solar:obsidian:sync": "pnpm --filter @sirinx/solar-intelligence obsidian:sync",
+    "solar:ci-bess": "pnpm --filter @sirinx/solar-intelligence ci-bess",
+    "solar:ci-bess:obsidian:sync": "pnpm --filter @sirinx/solar-intelligence ci-bess:obsidian:sync",
+    "hq:status": "./scripts/ai-hq-status.sh",
+    "hq:test": "./scripts/test-ai-hq.sh",
+    "hq:digest": "./scripts/knowledge-digest.sh",
+    "dashboard:test": "./scripts/test-dashboard-brain.sh",
+    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs"
+  },
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.7.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
+}

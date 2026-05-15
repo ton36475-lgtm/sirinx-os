@@ -1,0 +1,16 @@
+{
+  "name": "@sirinx/solar-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "start": "tsx src/server.ts",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "proposal": "tsx src/cli.ts proposal",
+    "obsidian:sync": "tsx src/cli.ts obsidian:sync",
+    "ci-bess": "tsx src/cli.ts ci-bess",
+    "ci-bess:obsidian:sync": "tsx src/cli.ts ci-bess:obsidian:sync"
+  }
+}

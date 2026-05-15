@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SIRINX Developer Command Center</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SIRINX OS</p>
+          <h1>Developer Command Center</h1>
+        </div>
+        <div class="status-strip" aria-label="Runtime status">
+          <span id="apiState" class="status-pill status-warn">API pending</span>
+          <span class="status-pill status-safe">Dry-run only</span>
+          <span class="status-pill status-lock">Human approval</span>
+        </div>
+      </header>
+
+      <section class="grid summary-grid" aria-label="Operational summary">
+        <article class="metric">
+          <span class="metric-label">Release Mode</span>
+          <strong>Production Hardening</strong>
+          <span class="metric-note">No deployment target armed</span>
+        </article>
+        <article class="metric">
+          <span class="metric-label">External Writes</span>
+          <strong>Blocked</strong>
+          <span class="metric-note">Cloud, paid APIs, and messages disabled</span>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Baseline</span>
+          <strong>Mac Live Passed</strong>
+          <span class="metric-note">Frozen for local verification</span>
+        </article>
+      </section>
+
+      <section class="panel hermes-panel" aria-label="Hermes connection">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Hermes</p>
+            <h2>Agent Connection</h2>
+          </div>
+          <a id="hermesOpenLink" class="text-button link-button" href="http://127.0.0.1:9119" target="_blank" rel="noreferrer">Open Hermes</a>
+        </div>
+        <div class="hermes-grid">
+          <article class="hermes-card">
+            <span class="metric-label">Dashboard</span>
+            <strong id="hermesDashboardState">Checking</strong>
+            <span id="hermesDashboardMeta" class="metric-note">http://127.0.0.1:9119</span>
+          </article>
+          <article class="hermes-card">
+            <span class="metric-label">Gateway</span>
+            <strong id="hermesGatewayState">Checking</strong>
+            <span id="hermesGatewayMeta" class="metric-note">Safe dispatcher pending</span>
+          </article>
+          <article class="hermes-card">
+            <span class="metric-label">Kanban</span>
+            <strong id="hermesKanbanState">Checking</strong>
+            <span id="hermesKanbanMeta" class="metric-note">Board: sirinx-os</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="executive-hq" class="panel executive-panel" aria-label="Hermes Agent HQ">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Agent HQ</p>
+            <h2>Executive Live Command View</h2>
+          </div>
+          <span id="executiveStatus" class="status-pill status-warn">HQ checking</span>
+        </div>
+        <div id="executiveSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="executive-layout">
+          <section class="executive-column" aria-label="Live services">
+            <h3>Live Services</h3>
+            <div id="executiveServices" class="signal-list"></div>
+          </section>
+          <section class="executive-column" aria-label="Agent teams">
+            <h3>Agent Teams</h3>
+            <div id="executiveAgents" class="team-list"></div>
+          </section>
+          <section class="executive-column" aria-label="Projects">
+            <h3>Projects Ready To Run</h3>
+            <div id="executiveProjects" class="project-list"></div>
+          </section>
+          <section class="executive-column" aria-label="Kanban tasks">
+            <h3>Kanban Next Tasks</h3>
+            <div id="executiveKanban" class="task-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel gate-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Safety Gates</p>
+              <h2>Release Readiness</h2>
+            </div>
+            <button id="refreshButton" class="icon-button" type="button" aria-label="Refresh gates" title="Refresh gates">
+              R
+            </button>
+          </div>
+          <div id="gateList" class="gate-list" aria-live="polite"></div>
+        </aside>
+
+        <section class="panel action-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Command Registry</p>
+              <h2>Dry-Run Actions</h2>
+            </div>
+            <span id="lastUpdated" class="timestamp">Not loaded</span>
+          </div>
+          <div id="actionList" class="action-list" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <section class="panel brain-panel" aria-label="Obsidian brain">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">All Brain</p>
+            <h2>AI HQ DNA Dashboard</h2>
+          </div>
+          <span id="brainStatus" class="timestamp">Not loaded</span>
+        </div>
+        <div class="brain-layout">
+          <div>
+            <div id="brainSummary" class="brain-summary"></div>
+            <div id="brainRootList" class="brain-root-list" aria-live="polite"></div>
+            <div id="brainNoteList" class="brain-note-list" aria-live="polite"></div>
+          </div>
+          <article class="brain-preview">
+            <div class="brain-preview-head">
+              <div>
+                <p id="brainNotePath" class="metric-note">Select a note</p>
+                <h3 id="brainNoteTitle">Brain Preview</h3>
+              </div>
+              <a id="brainOpenLink" class="text-button link-button" href="#" aria-disabled="true">Open</a>
+            </div>
+            <div id="brainNoteMeta" class="action-meta"></div>
+            <div id="brainNoteContent" class="markdown-preview"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel log-panel" aria-label="Audit preview">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Audit Preview</p>
+            <h2>Local Event Log</h2>
+          </div>
+          <button id="clearLogButton" class="text-button" type="button">Clear</button>
+        </div>
+        <ol id="eventLog" class="event-log"></ol>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

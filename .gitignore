@@ -1,0 +1,41 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Dependency and build output
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+dist/
+build/
+coverage/
+
+# Test and browser reports
+playwright-report/
+test-results/
+
+# Runtime logs and process state
+ops/logs/
+ops/pids/
+logs/
+*.log
+*.pid
+
+# Local control/state folders
+.thclaws/
+data/
+archive/
+
+# Secret/key material
+*.pem
+*.key
+*.p12
+*.pfx
+SIRINX_SECRET_BACKUP*.tar.gz
+SIRINX_SECRET_BACKUP*.tar.gz.enc
+
+# OS/editor noise
+.DS_Store
