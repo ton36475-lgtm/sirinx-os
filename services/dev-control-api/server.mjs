@@ -2,6 +2,7 @@ import { createServer } from "node:http";
 import { execFile } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
+import { listApprovalQueue } from "./src/approval-queue.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { switches } from "./src/switches.mjs";
@@ -411,6 +412,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/switches") {
     sendJson(request, response, 200, { switches });
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/approval-queue") {
+    sendJson(request, response, 200, listApprovalQueue());
     return;
   }
 

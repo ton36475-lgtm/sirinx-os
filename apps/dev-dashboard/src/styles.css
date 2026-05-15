@@ -141,7 +141,8 @@ h2 {
   margin-bottom: 14px;
 }
 
-.switch-panel {
+.switch-panel,
+.approval-panel {
   margin-bottom: 14px;
 }
 
@@ -212,6 +213,7 @@ h2 {
 
 .signal-list,
 .switch-list,
+.approval-list,
 .team-list,
 .project-list,
 .task-list {
@@ -221,6 +223,7 @@ h2 {
 
 .signal-row,
 .switch-row,
+.approval-row,
 .team-block,
 .project-row,
 .task-row {
@@ -232,7 +235,8 @@ h2 {
 }
 
 .signal-row,
-.switch-row {
+.switch-row,
+.approval-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
@@ -252,6 +256,19 @@ h2 {
 }
 
 .switch-off {
+  border-left: 4px solid var(--red);
+}
+
+.approval-pending {
+  border-left: 4px solid var(--amber);
+}
+
+.approval-approved {
+  border-left: 4px solid var(--green);
+}
+
+.approval-rejected,
+.approval-blocked {
   border-left: 4px solid var(--red);
 }
 

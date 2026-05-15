@@ -21,6 +21,8 @@ const hermesGatewayMeta = document.querySelector("#hermesGatewayMeta");
 const hermesKanbanState = document.querySelector("#hermesKanbanState");
 const hermesKanbanMeta = document.querySelector("#hermesKanbanMeta");
 const switchList = document.querySelector("#switchList");
+const approvalStatus = document.querySelector("#approvalStatus");
+const approvalList = document.querySelector("#approvalList");
 const executiveStatus = document.querySelector("#executiveStatus");
 const executiveSummary = document.querySelector("#executiveSummary");
 const executiveServices = document.querySelector("#executiveServices");
@@ -93,6 +95,22 @@ const fallbackSwitches = [
     description: "Allows paid API usage only after approval gates pass."
   }
 ];
+
+const fallbackApprovalQueue = {
+  items: [
+    {
+      id: "fallback-approval",
+      action: "Local fallback approval",
+      actionId: "fallback",
+      source: "dashboard",
+      riskLevel: "low",
+      status: "pending",
+      reason: "Control API is offline; approvals cannot be changed.",
+      evidence: ["fallback mode"]
+    }
+  ],
+  totals: { pending: 1, approved: 0, rejected: 0, blocked: 0 }
+};
 
 const fallbackBrain = {
   rootCount: 0,
@@ -241,6 +259,51 @@ function renderSwitches(items) {
       return row;
     })
   );
+}
+
+function renderApprovalQueue(queue) {
+  const items = queue.items || [];
+  const totals = queue.totals || {};
+  approvalStatus.textContent = `${items.length} items - ${totals.pending || 0} pending`;
+
+  approvalList.replaceChildren(
+    ...items.map((item) => {
+      const row = document.createElement("article");
+      row.className = `approval-row approval-${item.status}`;
+
+      const content = document.createElement("div");
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = item.action;
+
+      const detail = document.createElement("p");
+      detail.className = "signal-detail";
+      detail.textContent = item.reason;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(
+        makeTag(item.source),
+        makeTag(`risk: ${item.riskLevel}`),
+        makeTag(item.actionId)
+      );
+
+      content.append(title, detail, meta);
+      row.append(content, makeStatusBadge(item.status, item.status === "approved"));
+      return row;
+    })
+  );
+}
+
+async function loadApprovalQueue() {
+  try {
+    const queue = await fetchJson("/api/approval-queue");
+    renderApprovalQueue(queue);
+    return queue;
+  } catch {
+    renderApprovalQueue(fallbackApprovalQueue);
+    return fallbackApprovalQueue;
+  }
 }
 
 function makeTag(value) {
@@ -670,11 +733,12 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   try {
-    const [health, gates, actions, switches, hermes, executiveHq] = await Promise.all([
+    const [health, gates, actions, switches, approvalQueue, hermes, executiveHq] = await Promise.all([
       fetchJson("/health"),
       fetchJson("/api/gates"),
       fetchJson("/api/actions"),
       fetchJson("/api/switches"),
+      fetchJson("/api/approval-queue"),
       fetchJson("/api/hermes"),
       fetchJson("/api/executive-hq")
     ]);
@@ -683,6 +747,7 @@ async function loadDashboard() {
     renderGates(gates.gates);
     renderActions(actions.actions);
     renderSwitches(switches.switches);
+    renderApprovalQueue(approvalQueue);
     renderHermes(hermes);
     renderExecutive(executiveHq);
     lastUpdated.textContent = new Date().toLocaleString();
@@ -693,6 +758,7 @@ async function loadDashboard() {
     renderGates(fallbackGates);
     renderActions(fallbackActions);
     renderSwitches(fallbackSwitches);
+    renderApprovalQueue(fallbackApprovalQueue);
     renderHermes(fallbackHermes);
     renderExecutive(fallbackExecutive);
     lastUpdated.textContent = "Fallback data";
@@ -708,6 +774,9 @@ async function runDryRun(actionId) {
       body: JSON.stringify({ actionId })
     });
     logEvent(`${result.actionId}: ${result.result}`);
+    if (result.approvalRequest) {
+      await loadApprovalQueue();
+    }
   } catch (error) {
     logEvent(`${actionId}: dry-run unavailable (${error.message})`);
   }

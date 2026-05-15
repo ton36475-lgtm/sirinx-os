@@ -26,11 +26,19 @@ test.describe("Developer Command Center", () => {
     await expect(page.getByRole("heading", { name: "Kill Switches" })).toBeVisible();
     await expect(page.locator("#switchList")).toContainText("Customer messaging");
     await expect(page.locator("#switchList")).toContainText("off");
+    await expect(page.getByRole("heading", { name: "Human Approval Queue" })).toBeVisible();
+    await expect(page.locator("#approvalList")).toContainText("Evaluate release preflight");
+    await expect(page.locator("#approvalList")).toContainText("Customer message send");
+    await expect(page.locator("#approvalList")).toContainText("blocked");
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
     await expect(page.locator("#actionList")).toContainText("External adapter smoke");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("simulated_only");
+
+    const approvalAction = page.locator(".action-row").filter({ hasText: "Evaluate release preflight" });
+    await approvalAction.getByRole("button", { name: "Dry run" }).click();
+    await expect(page.locator("#eventLog")).toContainText("queued_for_approval");
 
     const riskyAction = page.locator(".action-row").filter({ hasText: "External adapter smoke" });
     await riskyAction.getByRole("button", { name: "Dry run" }).click();
@@ -63,6 +71,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#gateList")).toContainText("Dry-run lock");
     await expect(page.locator("#gateList")).toContainText("Cloud mutation");
     await expect(page.locator("#switchList")).toContainText("Paid API calls");
+    await expect(page.locator("#approvalList")).toContainText("Local fallback approval");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
 

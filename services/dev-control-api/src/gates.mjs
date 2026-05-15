@@ -1,3 +1,4 @@
+import { ensureApprovalRequest } from "./approval-queue.mjs";
 import { evaluateRequiredSwitches } from "./switches.mjs";
 
 export const gates = [
@@ -47,7 +48,8 @@ export const actions = [
     title: "Evaluate release preflight",
     description: "List missing gates before staging approval.",
     risk: "medium",
-    mode: "dry-run"
+    mode: "dry-run",
+    requiresApproval: true
   },
   {
     id: "external-adapter-smoke",
@@ -55,6 +57,7 @@ export const actions = [
     description: "Simulate an external adapter send and prove kill switches block it locally.",
     risk: "high",
     mode: "dry-run",
+    requiresApproval: true,
     requiredSwitches: ["customer-messaging", "cloud-mutation"]
   }
 ];
@@ -78,6 +81,9 @@ export function createDryRunResult(actionId) {
   }
 
   const switchResult = evaluateRequiredSwitches(action.requiredSwitches);
+  const approvalRequest = action.requiresApproval
+    ? ensureApprovalRequest(action, switchResult.blocked)
+    : null;
 
   if (!switchResult.allowed) {
     return {
@@ -88,11 +94,27 @@ export function createDryRunResult(actionId) {
         result: "blocked_by_kill_switch",
         externalWrites: false,
         requiresHumanApproval: true,
+        approvalRequest,
         blockedSwitches: switchResult.blocked.map((item) => ({
           id: item.id,
           title: item.title,
           env: item.env
         })),
+        timestamp: new Date().toISOString()
+      }
+    };
+  }
+
+  if (action.requiresApproval) {
+    return {
+      ok: true,
+      status: 202,
+      body: {
+        actionId,
+        result: "queued_for_approval",
+        externalWrites: false,
+        requiresHumanApproval: true,
+        approvalRequest,
         timestamp: new Date().toISOString()
       }
     };
