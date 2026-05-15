@@ -1,0 +1,74 @@
+version: 1
+council_id: learning-council
+status: draft-level-1
+name: SIRINX Learning Council
+purpose: >
+  Define review gates for Level 1 self-learning artifacts without granting
+  runtime authority or production access.
+scope:
+  allowed_paths:
+    - docs/knowledge/
+    - brain/self-learning/
+    - councils/
+    - policies/
+  forbidden_paths:
+    - apps/
+    - services/
+    - packages/
+    - migrations/
+    - config/
+    - infra/
+    - secrets/
+    - backups/
+    - .env
+    - .env.*
+members:
+  - role: operator
+    responsibility: Approves scope, reviews risk, and decides whether artifacts become durable policy.
+    required: true
+  - role: codex
+    responsibility: Drafts documentation and policy artifacts inside approved paths.
+    required: true
+  - role: reviewer
+    responsibility: Verifies syntax, forbidden content, and diff boundaries before commit.
+    required: true
+review_gates:
+  - id: scope-review
+    required: true
+    checks:
+      - Changed files are inside allowed paths.
+      - No source code changed.
+      - No runtime configuration changed.
+  - id: markdown-review
+    required: true
+    checks:
+      - Markdown is readable.
+      - Level 0 to Level 1 timeline is clear.
+      - Level 2 next goals are included where relevant.
+      - Raw chat logs are not stored.
+  - id: yaml-review
+    required: true
+    checks:
+      - YAML syntax is valid.
+      - Required identifiers exist.
+      - Forbidden actions are strict.
+      - Reviewer verification is required.
+  - id: secret-review
+    required: true
+    checks:
+      - Secret files were not read.
+      - Secret values were not printed.
+      - Secret-like values are not included in the diff.
+decision_rules:
+  raw_chat_logs_allowed: false
+  secret_access_allowed: false
+  source_code_changes_allowed_level_1: false
+  runtime_changes_allowed_level_1: false
+  deployment_allowed_level_1: false
+  external_mutation_allowed_level_1: false
+outputs_required:
+  - changed_files
+  - checks_run
+  - risks
+  - reviewer_verification
+  - commit_readiness

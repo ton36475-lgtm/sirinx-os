@@ -1,0 +1,77 @@
+version: 1
+policy_id: self-learning-policy
+status: active-level-1
+name: SIRINX Self-Learning Policy
+purpose: >
+  Allow controlled documentation-only self-learning while preventing unreviewed
+  memory ingestion, secret exposure, runtime changes, and production mutation.
+level: 1
+allowed_actions:
+  - Create reviewed summaries from completed work.
+  - Create documentation under docs/knowledge/.
+  - Create memory candidates under brain/self-learning/.
+  - Create council definitions under councils/.
+  - Create policy files under policies/.
+  - Validate Markdown and YAML using existing local tools.
+forbidden_actions:
+  - Read or print .env values.
+  - Read, copy, summarize, or expose secret files.
+  - Store raw chat logs as memory.
+  - Store credentials, tokens, private keys, cookies, passwords, or API keys.
+  - Change source code during Level 1.
+  - Change runtime configuration during Level 1.
+  - Run migrations during Level 1.
+  - Install dependencies during Level 1.
+  - Deploy, push, or mutate cloud resources during Level 1.
+  - Send customer-facing messages during Level 1.
+allowed_paths:
+  - docs/knowledge/
+  - brain/self-learning/
+  - councils/
+  - policies/
+forbidden_paths:
+  - apps/
+  - services/
+  - packages/
+  - migrations/
+  - config/
+  - infra/
+  - secrets/
+  - backups/
+  - .env
+  - .env.*
+memory_rules:
+  raw_chat_allowed: false
+  sanitized_summary_required: true
+  reviewer_required_before_durable_use: true
+  evidence_allowed:
+    - repository_path
+    - commit_hash
+    - test_name
+    - command_name
+    - approved_summary
+  evidence_forbidden:
+    - raw_chat_log
+    - env_value
+    - credential
+    - token
+    - private_key
+    - customer_private_data
+required_outputs:
+  - repo_root
+  - changed_files
+  - source_code_changes
+  - runtime_config_changes
+  - secrets_included
+  - checks_run
+  - risks
+  - safe_to_commit
+reviewer_verification:
+  required: true
+  checks:
+    - Markdown structure is readable.
+    - YAML syntax is valid.
+    - Forbidden actions are present and strict.
+    - No production code changes are included.
+    - No secret access occurred.
+    - No raw chat became memory.

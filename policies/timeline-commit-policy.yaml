@@ -1,0 +1,57 @@
+version: 1
+policy_id: timeline-commit-policy
+status: active-level-1
+name: SIRINX Timeline Commit Policy
+purpose: >
+  Define the commit gate for Level 1 timeline and self-learning artifacts.
+level: 1
+commit_scope:
+  allowed_paths:
+    - docs/knowledge/
+    - brain/self-learning/
+    - councils/
+    - policies/
+  forbidden_paths:
+    - apps/
+    - services/
+    - packages/
+    - migrations/
+    - config/
+    - infra/
+    - secrets/
+    - backups/
+    - .env
+    - .env.*
+pre_commit_requirements:
+  - Show changed files.
+  - Confirm no source code changes.
+  - Confirm no runtime behavior changes.
+  - Confirm no migrations ran.
+  - Confirm no dependencies were installed.
+  - Confirm no secrets are included.
+  - Confirm no .env values were read or printed.
+  - Validate YAML syntax using existing local tools only.
+  - Run diff checks for the staged documentation and policy files.
+forbidden_commit_contents:
+  - source_code_change
+  - runtime_config_change
+  - migration_change
+  - dependency_installation
+  - secret_value
+  - raw_chat_log
+  - private_customer_data
+required_commit_message: "docs: add Level 1 self-learning timeline and policies"
+reviewer_verification:
+  required: true
+  verifier: operator-or-codex-review
+  checks:
+    - Added files match the approved Level 1 artifact list.
+    - Deleted files are absent.
+    - Source code changes are absent.
+    - Runtime configuration changes are absent.
+    - Secrets are absent.
+    - Commit contains only approved documentation and policy artifacts.
+post_commit_output:
+  - latest_commit_hash
+  - one_paragraph_summary
+  - remaining_untracked_or_uncommitted_changes
