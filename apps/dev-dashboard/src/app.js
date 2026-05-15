@@ -224,9 +224,11 @@ function renderHermes(hermes) {
     "Running",
     "Stopped"
   );
-  hermesGatewayMeta.textContent = data.gateway?.safeDispatch
-    ? "Safe mode - kanban dispatch paused"
-    : "Dispatcher may pick ready tasks";
+  hermesGatewayMeta.textContent = data.gateway?.running
+    ? data.gateway?.safeDispatch
+      ? "Safe mode - kanban dispatch paused"
+      : "Dispatcher may pick ready tasks"
+    : "Gateway stopped - no dispatch active";
 
   setStateText(
     hermesKanbanState,

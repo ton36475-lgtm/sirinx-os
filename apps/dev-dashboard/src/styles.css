@@ -429,6 +429,10 @@ h2 {
   align-items: start;
 }
 
+.brain-layout > * {
+  min-width: 0;
+}
+
 .brain-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -479,6 +483,15 @@ h2 {
   margin: 3px 0 0;
 }
 
+.brain-root-title,
+.brain-root-meta,
+.brain-note-title,
+.brain-note-summary,
+.brain-note-meta,
+.markdown-preview {
+  overflow-wrap: anywhere;
+}
+
 .root-ok {
   border-left: 4px solid var(--green);
 }
@@ -519,6 +532,7 @@ h2 {
 }
 
 .brain-preview {
+  min-width: 0;
   min-height: 460px;
   padding: 14px;
   border: 1px solid var(--line);
