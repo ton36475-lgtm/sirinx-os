@@ -37,6 +37,7 @@ Build a Thailand-focused solar engineering intelligence layer that supports cust
 - Installer workflow board
 - PDF proposal renderer
 - AI recommendation draft mode with human approval
+- Solis home telemetry ingestion and recommendation-only load balancing
 
 ## Commercial BESS Extension
 
@@ -51,6 +52,27 @@ The app now also includes a C&I Hybrid PV + BESS + STS critical-load subsystem:
 - Commissioning gates for IR test, precharge, phase sequence, CT polarity, CAN/BMS, STS transfer, EMS acceptance, fire/gas chain, and export compliance
 
 All C&I values are seeded from operator-provided project knowledge and must be attached to OEM manuals, local engineer sign-off, and utility requirements before EPC release.
+
+## Solis Home Load Balancing Extension
+
+The next production path is a residential/site intelligence layer that connects customer-approved SolisCloud telemetry to SIRINX OS without changing the public website.
+
+Initial scope:
+
+- Read-only SolisCloud telemetry and customer mobile-app site mapping.
+- Per-house digital twin for PV, inverter, battery, grid import/export, protected load, deferrable load, tariff, and consent status.
+- Recommendation-only optimization for battery charge/discharge, export limiting, and deferrable load shifting.
+- Human approval before any external control command.
+- Kill switch, homeowner override, alarm blocking, stale-data blocking, and audit trail.
+
+Implementation files:
+
+- `docs/knowledge/SOLIS_HOME_LOAD_BALANCING_AGENT_PLAN.md`
+- `policies/solis-load-control-policy.yaml`
+- `src/domain/solis-load-control.ts`
+- `src/domain/solis-load-control.test.ts`
+
+Current state: deterministic dry-run safety engine only. It does not call SolisCloud and does not execute real inverter or load-control commands.
 
 ## C&I BESS Deep Knowledge Pack
 

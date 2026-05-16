@@ -1,0 +1,94 @@
+version: 1
+policy_id: solis-load-control-policy
+status: active-dry-run
+name: SIRINX Solis Load Control Policy
+purpose: >
+  Govern Solis inverter telemetry, home load-balancing recommendations, and any
+  future cyber-physical control action. Default posture is read-only telemetry
+  and simulation; external control requires staged human approval and safety gates.
+default_mode: read_only
+source_systems:
+  - SolisCloud API
+  - customer_mobile_app_mapping
+  - sirinx_site_digital_twin
+allowed_without_approval:
+  - read_public_solis_documentation
+  - inspect_local_source_code
+  - create_dry_run_rule_engine
+  - ingest_mock_telemetry
+  - normalize_read_only_telemetry_after_customer_consent
+  - generate_recommendation_only_actions
+requires_approval:
+  - request_solis_api_access_for_customer
+  - store_solis_api_secret_reference
+  - connect_customer_solis_account
+  - import_customer_mobile_app_site_mapping
+  - enable_live_telemetry_ingestion
+  - send_customer_notification
+  - enable_manual_control_pilot
+  - create_or_change_control_adapter
+  - execute_any_external_device_command
+  - deploy_load_control_worker
+forbidden:
+  - read_or_print_raw_api_secret
+  - commit_solis_api_id_or_secret
+  - bypass_customer_consent
+  - bypass_homeowner_override
+  - execute_control_from_llm_free_text
+  - execute_control_when_telemetry_stale
+  - execute_control_when_inverter_alarm_active
+  - execute_control_when_grid_or_meter_status_unknown
+  - discharge_battery_below_configured_reserve
+  - control_protected_load_without_engineer_signoff
+  - modify_public_www_site_for_internal_control_surface
+  - claim_guaranteed_savings_or_zero_risk
+safety_gates:
+  customer_consent:
+    required: true
+    evidence: consent_record_id
+  telemetry_freshness:
+    required: true
+    default_max_age_minutes: 10
+  solis_data_cadence_assumption:
+    minutes: 5
+    note: Solis support describes uploaded values as snapshots, not 5-minute averages.
+  inverter_alarm_clear:
+    required: true
+  logger_meter_grid_online:
+    required: true
+  homeowner_override_clear:
+    required: true
+  kill_switch_clear:
+    required: true
+  human_approval:
+    required_for_external_command: true
+    evidence: approval_id
+  rollback_plan:
+    required_for_external_command: true
+  engineer_signoff:
+    required_for_first_site_pilot: true
+agent_access:
+  hermes_orchestrator: no_external_write
+  solis_telemetry_steward: read_only
+  site_digital_twin_agent: read_only
+  load_balance_optimizer: recommendation_only
+  safety_validator: block_or_allow_decision_only
+  customer_approval_agent: approval_gated_notifications
+  control_adapter_agent: pilot_only_after_all_gates
+  audit_incident_agent: approval_gated_records
+required_outputs:
+  - normalized_telemetry_snapshot
+  - data_freshness_status
+  - safety_gate_decision
+  - recommendation_or_block_reason
+  - approval_scope
+  - audit_event_id
+  - rollback_note
+reviewer_verification:
+  required: true
+  checks:
+    - Solis integration remains read-only until customer consent and approval gates exist.
+    - No API ID, API secret, mobile-app token, or customer credential is committed.
+    - Public website routes are not used as internal control surfaces.
+    - Every proposed command has deterministic safety-gate output.
+    - Every external command path requires explicit human approval and rollback evidence.

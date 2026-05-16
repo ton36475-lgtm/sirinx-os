@@ -9,6 +9,11 @@ import { createProposal } from "./proposal.js";
 import { calculateRoi } from "./roi-engine.js";
 export { buildClaimGuard, findForbiddenClaimText } from "./claim-guard.js";
 export { buildCompetitorIntelligence } from "./competitor-intelligence.js";
+export {
+  evaluateSolisLoadControlProposal,
+  solisApiOperatingFacts,
+  solisLoadBalanceAgentTeam
+} from "./solis-load-control.js";
 export { generateCommercialQuotation } from "./quotation.js";
 import type { BusinessRules, CustomerIntake, EquipmentCatalog, Proposal } from "./types.js";
 
@@ -36,3 +41,4 @@ export type * from "./types.js";
 export type * from "./ci-bess-types.js";
 export type * from "./competitor-intelligence.js";
 export type * from "./quotation.js";
+export type * from "./solis-load-control.js";
