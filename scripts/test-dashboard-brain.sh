@@ -21,7 +21,7 @@ dna="$(curl -fsS "$api/api/brain/ai-hq-dna-brain")"
 
 echo "[test] dashboard HTML"
 html="$(curl -fsS "$dashboard/")"
-[[ "$html" == *"Obsidian Brain"* ]]
-[[ "$html" == *"AI HQ DNA Live Notes"* ]]
+[[ "$html" == *'aria-label="Obsidian brain"'* ]]
+[[ "$html" == *"AI HQ DNA Dashboard"* ]]
 
 echo "[test] dashboard brain checks passed"

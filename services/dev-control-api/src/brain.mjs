@@ -246,10 +246,24 @@ export async function listBrainNotes() {
 }
 
 export async function getBrainNote(slug) {
+  const suffixMatches = [];
+
   for (const root of brainRoots) {
     try {
       const files = await walkMarkdownFiles(root.root);
-      const relativePath = files.find((file) => slugFromPath(root.id, file) === slug);
+      const relativePath = files.find((file) => {
+        const fileSlug = slugFromPath(root.id, file);
+
+        if (fileSlug === slug) {
+          return true;
+        }
+
+        if (slug && fileSlug.endsWith(`-${slug}`)) {
+          suffixMatches.push({ root, relativePath: file });
+        }
+
+        return false;
+      });
 
       if (relativePath) {
         return noteFromFile(root, relativePath, true);
@@ -257,6 +271,11 @@ export async function getBrainNote(slug) {
     } catch {
       // Keep searching other roots.
     }
+  }
+
+  if (suffixMatches.length === 1) {
+    const [match] = suffixMatches;
+    return noteFromFile(match.root, match.relativePath, true);
   }
 
   return null;
