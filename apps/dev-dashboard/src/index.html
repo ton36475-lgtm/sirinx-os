@@ -116,6 +116,47 @@
         </div>
       </section>
 
+      <section class="panel tool-panel" aria-label="Tool management">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Tool Management</p>
+            <h2>Repo, Subdomain, And Integration Control</h2>
+          </div>
+          <div class="panel-actions">
+            <a id="inventoryJsonLink" class="text-button link-button" href="#" target="_blank" rel="noreferrer">Open JSON</a>
+            <button id="toolRefreshButton" class="icon-button" type="button" aria-label="Refresh tool inventory" title="Refresh tool inventory">
+              R
+            </button>
+          </div>
+        </div>
+        <div id="toolSummary" class="tool-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Subdomain controls">
+            <div class="tool-column-head">
+              <h3>Subdomain Controls</h3>
+              <span id="projectInventoryStatus" class="timestamp">Not loaded</span>
+            </div>
+            <div id="toolSubdomainList" class="subdomain-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Integration gates">
+            <h3>Integration Gates</h3>
+            <div id="toolIntegrationList" class="integration-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Blockers">
+            <h3>Blockers</h3>
+            <div id="toolBlockerList" class="blocker-list"></div>
+          </section>
+          <section class="tool-column tool-column-wide" aria-label="Repository inventory">
+            <h3>Repository Inventory</h3>
+            <div id="toolRepoList" class="repo-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Next safe actions">
+            <h3>Next Safe Actions</h3>
+            <ol id="toolNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="workspace">
         <aside class="panel gate-panel">
           <div class="panel-head">

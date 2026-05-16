@@ -24,6 +24,24 @@ GET http://127.0.0.1:8711/api/project-inventory
 
 This endpoint checks repository state, subdomain candidates, integration gates, and blockers. It does not deploy, push, mutate Cloudflare, send Telegram/LINE messages, or read secret values.
 
+## Dashboard Tool Management
+
+The local Developer Command Center now includes a `Tool Management` panel that renders the inventory endpoint into usable controls:
+
+- subdomain controls with live/unreachable status
+- repository inventory with clean/dirty state
+- integration gates for Telegram, LINE OA, GitHub, Cloudflare, and Supabase
+- blockers with severity and required action
+- next safe actions before any approved deploy
+
+The dry-run action registry also includes:
+
+- `subdomain-build-preflight`
+- `telegram-line-bridge-check`
+- `cloudflare-subdomain-plan`
+
+These actions are simulations only. They are designed to prove that build planning, messaging bridges, and Cloudflare planning stay behind approval gates.
+
 ## GitHub Audit Scope
 
 Audited GitHub account: `ton36475-lgtm`

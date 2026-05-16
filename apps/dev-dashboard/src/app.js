@@ -29,6 +29,15 @@ const executiveServices = document.querySelector("#executiveServices");
 const executiveAgents = document.querySelector("#executiveAgents");
 const executiveProjects = document.querySelector("#executiveProjects");
 const executiveKanban = document.querySelector("#executiveKanban");
+const projectInventoryStatus = document.querySelector("#projectInventoryStatus");
+const inventoryJsonLink = document.querySelector("#inventoryJsonLink");
+const toolRefreshButton = document.querySelector("#toolRefreshButton");
+const toolSummary = document.querySelector("#toolSummary");
+const toolSubdomainList = document.querySelector("#toolSubdomainList");
+const toolRepoList = document.querySelector("#toolRepoList");
+const toolIntegrationList = document.querySelector("#toolIntegrationList");
+const toolBlockerList = document.querySelector("#toolBlockerList");
+const toolNextActions = document.querySelector("#toolNextActions");
 const eventLog = document.querySelector("#eventLog");
 const auditStatus = document.querySelector("#auditStatus");
 const auditList = document.querySelector("#auditList");
@@ -174,6 +183,41 @@ const fallbackExecutive = {
   skills: [],
   projects: [],
   kanbanTasks: []
+};
+
+const fallbackProjectInventory = {
+  mode: "read-only",
+  mainWebsiteProtected: true,
+  externalWrites: false,
+  summary: {
+    repositories: 0,
+    subdomains: 0,
+    readySubdomains: 0,
+    blockedSubdomains: 0,
+    integrationGates: 0,
+    blockers: 0,
+    dirtyRepos: 0
+  },
+  repositories: [],
+  subdomains: [
+    {
+      host: "www.sirinx.co",
+      role: "public company website",
+      source: "/Users/sirinx/restore-sources/ton36475-lgtm-sirinx",
+      desiredState: "locked",
+      action: "do-not-touch",
+      current: { online: true, status: 200 }
+    }
+  ],
+  integrationGates: [
+    {
+      channel: "Control API",
+      status: "offline",
+      reason: "Tool inventory is unavailable until the local control API is online."
+    }
+  ],
+  blockers: [],
+  nextActions: ["Start the local control API and refresh the tool inventory."]
 };
 
 function logEvent(message) {
@@ -457,6 +501,209 @@ function makeStatusBadge(label, ok) {
   badge.className = `mini-status ${ok ? "status-safe" : "status-warn"}`;
   badge.textContent = label;
   return badge;
+}
+
+function actionTone(action) {
+  if (action === "do-not-touch" || action.startsWith("blocked")) {
+    return "danger";
+  }
+  if (action.includes("approval") || action.includes("verify")) {
+    return "warn";
+  }
+  return "safe";
+}
+
+function makeToneBadge(label, tone = "safe") {
+  const badge = document.createElement("span");
+  badge.className = `tone-badge tone-${tone}`;
+  badge.textContent = label;
+  return badge;
+}
+
+function renderToolSummary(inventory) {
+  const summary = inventory.summary || fallbackProjectInventory.summary;
+  const protectedLabel = inventory.mainWebsiteProtected ? "Protected" : "Check";
+  const writeLabel = inventory.externalWrites ? "Armed" : "Blocked";
+
+  toolSummary.replaceChildren(
+    makeSummaryCard("Main Website", protectedLabel, "www.sirinx.co locked"),
+    makeSummaryCard("External Writes", writeLabel, "Cloud, GitHub, Telegram, LINE"),
+    makeSummaryCard("Repos", `${summary.repositories}`, `${summary.dirtyRepos} dirty`),
+    makeSummaryCard("Subdomains", `${summary.subdomains}`, `${summary.readySubdomains} live`),
+    makeSummaryCard("Blockers", `${summary.blockers}`, `${summary.integrationGates} gates`)
+  );
+}
+
+function renderToolSubdomains(inventory) {
+  const items = inventory.subdomains || [];
+
+  toolSubdomainList.replaceChildren(
+    ...items.map((entry) => {
+      const card = document.createElement("article");
+      card.className = `subdomain-card ${entry.current?.online ? "subdomain-online" : "subdomain-pending"}`;
+
+      const head = document.createElement("div");
+      head.className = "subdomain-head";
+
+      const host = document.createElement("p");
+      host.className = "subdomain-host";
+      host.textContent = entry.host;
+
+      const statusLabel = entry.current?.status
+        ? `${entry.current.status}`
+        : entry.current?.error || "not live";
+      head.append(host, makeToneBadge(statusLabel, entry.current?.online ? "safe" : "warn"));
+
+      const role = document.createElement("p");
+      role.className = "signal-detail";
+      role.textContent = entry.role;
+
+      const source = document.createElement("p");
+      source.className = "tool-path";
+      source.textContent = entry.source;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(
+        makeToneBadge(entry.action, actionTone(entry.action)),
+        makeTag(entry.desiredState)
+      );
+
+      card.append(head, role, source, meta);
+      return card;
+    })
+  );
+}
+
+function renderToolRepos(inventory) {
+  const items = inventory.repositories || [];
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "gate-copy";
+    empty.textContent = "Repository inventory is unavailable.";
+    toolRepoList.replaceChildren(empty);
+    return;
+  }
+
+  toolRepoList.replaceChildren(
+    ...items.map((repo) => {
+      const row = document.createElement("article");
+      row.className = `repo-row ${repo.git?.dirty ? "repo-dirty" : "repo-clean"}`;
+
+      const content = document.createElement("div");
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = repo.name;
+
+      const detail = document.createElement("p");
+      detail.className = "signal-detail";
+      detail.textContent = repo.recommendation;
+
+      const path = document.createElement("p");
+      path.className = "tool-path";
+      path.textContent = repo.localPath;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(
+        makeTag(repo.role),
+        makeTag(repo.deployFit),
+        makeTag(repo.git?.branch || "unknown"),
+        makeToneBadge(repo.git?.dirty ? "dirty" : "clean", repo.git?.dirty ? "warn" : "safe")
+      );
+
+      content.append(title, detail, path, meta);
+      row.append(content);
+      return row;
+    })
+  );
+}
+
+function renderToolIntegrations(inventory) {
+  const items = inventory.integrationGates || [];
+
+  toolIntegrationList.replaceChildren(
+    ...items.map((gate) => {
+      const row = document.createElement("article");
+      const tone = gate.status.includes("blocked") ? "danger" : gate.status.includes("ready") ? "safe" : "warn";
+      row.className = `integration-row integration-${tone}`;
+
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = gate.channel;
+
+      const reason = document.createElement("p");
+      reason.className = "signal-detail";
+      reason.textContent = gate.reason;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(makeToneBadge(gate.status, tone), makeTag(gate.currentSource || "local"));
+
+      row.append(title, reason, meta);
+      return row;
+    })
+  );
+}
+
+function renderToolBlockers(inventory) {
+  const items = inventory.blockers || [];
+
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "gate-copy";
+    empty.textContent = "No blockers recorded.";
+    toolBlockerList.replaceChildren(empty);
+    return;
+  }
+
+  toolBlockerList.replaceChildren(
+    ...items.map((blocker) => {
+      const row = document.createElement("article");
+      const tone = blocker.severity === "critical" || blocker.severity === "high" ? "danger" : "warn";
+      row.className = `blocker-row blocker-${tone}`;
+
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = blocker.summary;
+
+      const action = document.createElement("p");
+      action.className = "signal-detail";
+      action.textContent = blocker.requiredAction;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(makeToneBadge(blocker.severity, tone), makeTag(blocker.area), makeTag(blocker.id));
+
+      row.append(title, action, meta);
+      return row;
+    })
+  );
+}
+
+function renderToolNextActions(inventory) {
+  toolNextActions.replaceChildren(
+    ...(inventory.nextActions || []).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
+function renderProjectInventory(inventory) {
+  const data = inventory || fallbackProjectInventory;
+  const summary = data.summary || fallbackProjectInventory.summary;
+
+  projectInventoryStatus.textContent = `${summary.repositories} repos / ${summary.subdomains} subdomains`;
+  inventoryJsonLink.href = `${apiBase}/api/project-inventory`;
+  renderToolSummary(data);
+  renderToolSubdomains(data);
+  renderToolRepos(data);
+  renderToolIntegrations(data);
+  renderToolBlockers(data);
+  renderToolNextActions(data);
 }
 
 function renderExecutive(hq) {
@@ -793,6 +1040,19 @@ async function loadBrain() {
   }
 }
 
+async function loadProjectInventory() {
+  try {
+    const inventory = await fetchJson("/api/project-inventory");
+    renderProjectInventory(inventory);
+    logEvent("Tool management inventory refreshed");
+    return inventory;
+  } catch (error) {
+    renderProjectInventory(fallbackProjectInventory);
+    logEvent(`Tool inventory fallback: ${error.message}`);
+    return fallbackProjectInventory;
+  }
+}
+
 async function fetchJson(path, options) {
   const response = await fetch(`${apiBase}${path}`, {
     headers: { "content-type": "application/json" },
@@ -808,7 +1068,7 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   try {
-    const [health, gates, actions, switches, approvalQueue, auditEvents, hermes, executiveHq] = await Promise.all([
+    const [health, gates, actions, switches, approvalQueue, auditEvents, hermes, executiveHq, projectInventory] = await Promise.all([
       fetchJson("/health"),
       fetchJson("/api/gates"),
       fetchJson("/api/actions"),
@@ -816,7 +1076,8 @@ async function loadDashboard() {
       fetchJson("/api/approval-queue"),
       fetchJson("/api/audit-events"),
       fetchJson("/api/hermes"),
-      fetchJson("/api/executive-hq")
+      fetchJson("/api/executive-hq"),
+      fetchJson("/api/project-inventory")
     ]);
 
     setApiState("online", `API ${health.status}`);
@@ -827,6 +1088,7 @@ async function loadDashboard() {
     renderAuditEvents(auditEvents);
     renderHermes(hermes);
     renderExecutive(executiveHq);
+    renderProjectInventory(projectInventory);
     lastUpdated.textContent = new Date().toLocaleString();
     logEvent("Control API refreshed");
     await loadBrain();
@@ -839,6 +1101,7 @@ async function loadDashboard() {
     renderAuditEvents(fallbackAuditTrail);
     renderHermes(fallbackHermes);
     renderExecutive(fallbackExecutive);
+    renderProjectInventory(fallbackProjectInventory);
     lastUpdated.textContent = "Fallback data";
     logEvent(`Fallback mode: ${error.message}`);
     await loadBrain();
@@ -862,6 +1125,7 @@ async function runDryRun(actionId) {
 }
 
 refreshButton.addEventListener("click", loadDashboard);
+toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
 
 loadDashboard();

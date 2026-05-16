@@ -14,6 +14,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.getByRole("heading", { name: "Developer Command Center" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
     await expect(page.locator("#executiveStatus")).toHaveText(/HQ (live|partial)/);
     await expect(page.locator("#executiveAgents")).toContainText("Hermes Agent Team");
     await expect(page.locator("#executiveProjects")).toContainText("SIRINX public website management");
@@ -38,6 +39,13 @@ test.describe("Developer Command Center", () => {
     expect(initialAuditText).toMatch(/No local API audit events recorded yet\.|dry-run \/ dry-run action/);
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
     await expect(page.locator("#actionList")).toContainText("External adapter smoke");
+    await expect(page.locator("#actionList")).toContainText("Prepare subdomain build preflight");
+    await expect(page.locator("#toolSummary")).toContainText("Main Website");
+    await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");
+    await expect(page.locator("#toolSubdomainList")).toContainText("do-not-touch");
+    await expect(page.locator("#toolIntegrationList")).toContainText("Telegram");
+    await expect(page.locator("#toolBlockerList")).toContainText("telegram-token-rotation");
+    await expect(page.locator("#toolRepoList")).toContainText("sirinx");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("simulated_only");
@@ -92,6 +100,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#auditList")).toContainText("api_offline");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
+    await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");
+    await expect(page.locator("#projectInventoryStatus")).toContainText("0 repos");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("dry-run unavailable");

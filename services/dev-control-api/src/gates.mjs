@@ -52,6 +52,32 @@ export const actions = [
     requiresApproval: true
   },
   {
+    id: "subdomain-build-preflight",
+    title: "Prepare subdomain build preflight",
+    description: "Simulate the checks needed before a subdomain build without touching DNS or Cloudflare.",
+    risk: "medium",
+    mode: "dry-run",
+    requiresApproval: true
+  },
+  {
+    id: "telegram-line-bridge-check",
+    title: "Check Telegram and LINE bridge gates",
+    description: "Simulate messaging bridge readiness and prove production sends remain blocked.",
+    risk: "high",
+    mode: "dry-run",
+    requiresApproval: true,
+    requiredSwitches: ["customer-messaging"]
+  },
+  {
+    id: "cloudflare-subdomain-plan",
+    title: "Prepare Cloudflare subdomain plan",
+    description: "Simulate Cloudflare Pages, Worker, route, and DNS planning without applying changes.",
+    risk: "high",
+    mode: "dry-run",
+    requiresApproval: true,
+    requiredSwitches: ["cloud-mutation"]
+  },
+  {
     id: "external-adapter-smoke",
     title: "External adapter smoke",
     description: "Simulate an external adapter send and prove kill switches block it locally.",
