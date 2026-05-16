@@ -9,6 +9,7 @@ import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { switches } from "./src/switches.mjs";
+import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -462,6 +463,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/project-inventory") {
     sendJson(request, response, 200, await getProjectInventory());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/vibe-command-center") {
+    sendJson(request, response, 200, getVibeCommandCenter());
     return;
   }
 

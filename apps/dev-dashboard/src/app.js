@@ -14,6 +14,11 @@ const brainOpenLink = document.querySelector("#brainOpenLink");
 const brainNoteMeta = document.querySelector("#brainNoteMeta");
 const brainNoteContent = document.querySelector("#brainNoteContent");
 const hermesOpenLink = document.querySelector("#hermesOpenLink");
+const vibeStatus = document.querySelector("#vibeStatus");
+const vibeSummary = document.querySelector("#vibeSummary");
+const vibeRule = document.querySelector("#vibeRule");
+const vibeProcessLane = document.querySelector("#vibeProcessLane");
+const vibeFunctionGrid = document.querySelector("#vibeFunctionGrid");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -160,6 +165,25 @@ const fallbackHermes = {
     ready: 0,
     stats: { running: 0, blocked: 0, done: 0 }
   }
+};
+
+const fallbackVibe = {
+  mode: "local-fallback",
+  externalWrites: false,
+  mainWebsiteProtected: true,
+  summary: { functions: 0, ready: 0, dryRun: 0, blocked: 0, phases: 0 },
+  functions: [],
+  processLane: [
+    {
+      id: "fallback",
+      label: "Fallback",
+      title: "Control API unavailable",
+      status: "manual-gate",
+      nextCommand: "Start local control API",
+      output: "Process control returns when API is online."
+    }
+  ],
+  operatingRule: "Fallback mode only. No external writes are available."
 };
 
 const fallbackExecutive = {
@@ -475,6 +499,128 @@ function renderHermes(hermes) {
     "Unavailable"
   );
   hermesKanbanMeta.textContent = `Board: ${data.kanban?.board || "sirinx-os"} - ${running} running / ${blocked} blocked / ${done} done`;
+}
+
+function statusTone(status = "") {
+  if (status.includes("done") || status.includes("ready") || status.includes("online") || status.includes("live")) {
+    return "safe";
+  }
+  if (status.includes("blocked")) {
+    return "danger";
+  }
+  return "warn";
+}
+
+function renderVibeSummary(vibe) {
+  const summary = vibe.summary || fallbackVibe.summary;
+
+  vibeStatus.textContent = vibe.externalWrites ? "External writes armed" : "Dry-run command";
+  vibeStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  vibeStatus.classList.add(vibe.externalWrites ? "status-warn" : "status-safe");
+
+  vibeSummary.replaceChildren(
+    makeSummaryCard("Functions", `${summary.functions}`, "Command Center surfaces"),
+    makeSummaryCard("Ready", `${summary.ready}`, "Runnable locally"),
+    makeSummaryCard("Dry Run", `${summary.dryRun}`, "No external writes"),
+    makeSummaryCard("Blocked", `${summary.blocked}`, "Needs approval/fix"),
+    makeSummaryCard("Phases", `${summary.phases}`, "Strict sequence")
+  );
+}
+
+function renderVibeProcess(vibe) {
+  const lane = vibe.processLane || fallbackVibe.processLane;
+
+  vibeProcessLane.replaceChildren(
+    ...lane.map((phase, index) => {
+      const row = document.createElement("article");
+      row.className = `process-card process-${statusTone(phase.status)}`;
+
+      const indexNode = document.createElement("span");
+      indexNode.className = "process-index";
+      indexNode.textContent = `${index + 1}`;
+
+      const content = document.createElement("div");
+      const label = document.createElement("p");
+      label.className = "metric-label";
+      label.textContent = phase.label;
+
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = phase.title;
+
+      const output = document.createElement("p");
+      output.className = "signal-detail";
+      output.textContent = phase.output;
+
+      const meta = document.createElement("div");
+      meta.className = "action-meta";
+      meta.append(makeToneBadge(phase.status, statusTone(phase.status)), makeTag(phase.nextCommand));
+
+      content.append(label, title, output, meta);
+      row.append(indexNode, content);
+      return row;
+    })
+  );
+}
+
+function renderVibeFunctions(vibe) {
+  const functions = vibe.functions || fallbackVibe.functions;
+
+  if (!functions.length) {
+    const empty = document.createElement("p");
+    empty.className = "gate-copy";
+    empty.textContent = "Function matrix is unavailable until the local control API is online.";
+    vibeFunctionGrid.replaceChildren(empty);
+    return;
+  }
+
+  vibeFunctionGrid.replaceChildren(
+    ...functions.map((item) => {
+      const card = document.createElement("article");
+      card.className = `function-card function-${statusTone(item.status)}`;
+
+      const head = document.createElement("div");
+      head.className = "function-head";
+
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = item.title;
+
+      head.append(title, makeToneBadge(item.status, statusTone(item.status)));
+
+      const surface = document.createElement("p");
+      surface.className = "signal-detail";
+      surface.textContent = `${item.surface} - ${item.owner}`;
+
+      const command = document.createElement("p");
+      command.className = "tool-path";
+      command.textContent = item.command;
+
+      const evidence = document.createElement("div");
+      evidence.className = "action-meta";
+      evidence.append(makeTag(item.mode), makeTag(item.approvalGate));
+      for (const value of item.evidence || []) {
+        evidence.append(makeTag(value));
+      }
+
+      const button = document.createElement("button");
+      button.className = "run-button";
+      button.type = "button";
+      button.textContent = "Dry run";
+      button.addEventListener("click", () => runDryRun(item.actionId));
+
+      card.append(head, surface, command, evidence, button);
+      return card;
+    })
+  );
+}
+
+function renderVibe(vibe) {
+  const data = vibe || fallbackVibe;
+  vibeRule.textContent = data.operatingRule || fallbackVibe.operatingRule;
+  renderVibeSummary(data);
+  renderVibeProcess(data);
+  renderVibeFunctions(data);
 }
 
 function makeSummaryCard(label, value, note) {
@@ -1053,6 +1199,18 @@ async function loadProjectInventory() {
   }
 }
 
+async function loadVibeCommandCenter() {
+  try {
+    const vibe = await fetchJson("/api/vibe-command-center");
+    renderVibe(vibe);
+    return vibe;
+  } catch (error) {
+    renderVibe(fallbackVibe);
+    logEvent(`Vibe command fallback: ${error.message}`);
+    return fallbackVibe;
+  }
+}
+
 async function fetchJson(path, options) {
   const response = await fetch(`${apiBase}${path}`, {
     headers: { "content-type": "application/json" },
@@ -1068,13 +1226,14 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   try {
-    const [health, gates, actions, switches, approvalQueue, auditEvents, hermes, executiveHq, projectInventory] = await Promise.all([
+    const [health, gates, actions, switches, approvalQueue, auditEvents, vibe, hermes, executiveHq, projectInventory] = await Promise.all([
       fetchJson("/health"),
       fetchJson("/api/gates"),
       fetchJson("/api/actions"),
       fetchJson("/api/switches"),
       fetchJson("/api/approval-queue"),
       fetchJson("/api/audit-events"),
+      fetchJson("/api/vibe-command-center"),
       fetchJson("/api/hermes"),
       fetchJson("/api/executive-hq"),
       fetchJson("/api/project-inventory")
@@ -1086,6 +1245,7 @@ async function loadDashboard() {
     renderSwitches(switches.switches);
     renderApprovalQueue(approvalQueue);
     renderAuditEvents(auditEvents);
+    renderVibe(vibe);
     renderHermes(hermes);
     renderExecutive(executiveHq);
     renderProjectInventory(projectInventory);
@@ -1099,6 +1259,7 @@ async function loadDashboard() {
     renderSwitches(fallbackSwitches);
     renderApprovalQueue(fallbackApprovalQueue);
     renderAuditEvents(fallbackAuditTrail);
+    renderVibe(fallbackVibe);
     renderHermes(fallbackHermes);
     renderExecutive(fallbackExecutive);
     renderProjectInventory(fallbackProjectInventory);

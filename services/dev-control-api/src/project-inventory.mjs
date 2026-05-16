@@ -23,6 +23,14 @@ const repositories = [
     recommendation: "Use for local HQ, read-only website status, Obsidian, Hermes, and release gates."
   },
   {
+    name: "hermes-agent",
+    remote: "https://github.com/NousResearch/hermes-agent",
+    localPath: "/Users/sirinx/.hermes/hermes-agent",
+    role: "local-agent-runtime-and-messaging-gateway",
+    deployFit: "local-host-control-plane",
+    recommendation: "Use as the local agent runtime, dashboard, and messaging gateway. Keep credentials in Hermes secret storage and do not expose the dashboard publicly."
+  },
+  {
     name: "sirinx-solar-energy",
     remote: "https://github.com/ton36475-lgtm/sirinx-solar-energy",
     localPath: `${githubAuditRoot}/sirinx-solar-energy`,
@@ -37,6 +45,22 @@ const repositories = [
     role: "legacy-warroom-and-agent-scaffold",
     deployFit: "internal-only",
     recommendation: "Keep away from public homepage. Use as internal agent/ops reference after dirty worktree review."
+  },
+  {
+    name: "openclaw-worker",
+    remote: "git@github.com:ton36475-lgtm/sirinx-unified-os.git",
+    localPath: "/Users/sirinx/OZ-CORP/services/openclaw-worker",
+    role: "legacy-worker-reference",
+    deployFit: "internal-reference-only",
+    recommendation: "Use as a reference for worker behavior only after dirty worktree review. Do not connect to public routes without a new security review."
+  },
+  {
+    name: "thClaws",
+    remote: "https://github.com/thClaws/thClaws",
+    localPath: "/Users/sirinx/thClaws",
+    role: "agent-tooling-reference",
+    deployFit: "local-reference-only",
+    recommendation: "Keep as local tooling/reference. Do not merge into SIRINX production surfaces without scoped review."
   },
   {
     name: "automation-dashboard",
@@ -185,6 +209,18 @@ const subdomainPlan = [
 ];
 
 const integrationGates = [
+  {
+    channel: "Codex Mobile",
+    currentSource: "Codex App host on Mac mini, Codex CLI, local projects, plugins, MCP, browser, and Computer Use configuration",
+    status: "host-ready-manual-qr-required",
+    reason: "Codex App and CLI are installed and the Mac is configured to stay awake on AC power. Pairing still requires the user to scan the Codex mobile QR and confirm the same ChatGPT account/workspace on the phone."
+  },
+  {
+    channel: "Hermes Gateway",
+    currentSource: "Hermes dashboard and messaging gateway on this Mac mini",
+    status: "local-running-approval-gated",
+    reason: "Hermes dashboard and gateway are running locally. Production messaging must remain blocked until channel secrets, allowed users, and approval gates are reviewed."
+  },
   {
     channel: "Telegram",
     currentSource: "Hermes gateway and sirinx-solar-energy scripts",
@@ -354,6 +390,8 @@ export async function getProjectInventory() {
     integrationGates,
     blockers,
     nextActions: [
+      "Open Codex App on the Mac, use Set up Codex mobile or Settings > Connections, scan the QR from ChatGPT mobile, and confirm the same workspace.",
+      "Use /Users/sirinx/sirinx-os/docs/knowledge/MAC_MINI_CODEX_HERMES_CONTROL_PLANE.md as the mobile operating runbook.",
       "Rotate/revoke leaked Telegram bot credentials before enabling Telegram production sends.",
       "Choose first subdomain candidate: dev.sirinx.co, admin.sirinx.co, customer.sirinx.co, or contractor.sirinx.co.",
       "Run build checks for the selected subdomain source without modifying www.sirinx.co.",

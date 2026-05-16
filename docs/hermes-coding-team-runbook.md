@@ -26,6 +26,31 @@ Logs live in:
 - `ops/logs/dev-control-api.log`
 - `ops/logs/dev-dashboard.log`
 
+## Codex Mobile Host
+
+This Mac mini is the execution host. Codex Mobile is only the command, review,
+and approval surface.
+
+Before using mobile:
+
+```bash
+codex --version
+pmset -g custom
+curl http://127.0.0.1:8711/health
+```
+
+Then pair manually:
+
+```text
+Codex App on Mac mini
+-> Set up Codex mobile or Settings > Connections
+-> scan QR from ChatGPT mobile
+-> confirm same account and workspace
+```
+
+Use `docs/knowledge/MAC_MINI_CODEX_HERMES_CONTROL_PLANE.md` as the operating
+runbook for mobile prompts, project inventory, and approval boundaries.
+
 ## Verification
 
 ```bash

@@ -12,6 +12,14 @@ test.describe("Developer Command Center", () => {
     await page.goto("/");
 
     await expect(page.getByRole("heading", { name: "Developer Command Center" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Process Control Center" })).toBeVisible();
+    await expect(page.locator("#vibeStatus")).toHaveText("Dry-run command");
+    await expect(page.locator("#vibeRule")).toContainText("Work in order");
+    await expect(page.locator("#vibeProcessLane")).toContainText("Freeze Public Website Baseline");
+    await expect(page.locator("#vibeProcessLane")).toContainText("Build Solis Read-Only Connector");
+    await expect(page.locator("#vibeFunctionGrid")).toContainText("Public Website Control");
+    await expect(page.locator("#vibeFunctionGrid")).toContainText("Solis Load Balancing");
+    await expect(page.locator("#vibeFunctionGrid")).toContainText("Telegram / LINE Bridge");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -40,6 +48,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
     await expect(page.locator("#actionList")).toContainText("External adapter smoke");
     await expect(page.locator("#actionList")).toContainText("Prepare subdomain build preflight");
+    await expect(page.locator("#actionList")).toContainText("Prepare Solis read-only connector");
     await expect(page.locator("#toolSummary")).toContainText("Main Website");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");
     await expect(page.locator("#toolSubdomainList")).toContainText("do-not-touch");
@@ -75,6 +84,7 @@ test.describe("Developer Command Center", () => {
     await page.goto("/");
 
     await expect(page.getByRole("heading", { name: "Developer Command Center" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Process Control Center" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
 
@@ -98,6 +108,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#switchList")).toContainText("Paid API calls");
     await expect(page.locator("#approvalList")).toContainText("Local fallback approval");
     await expect(page.locator("#auditList")).toContainText("api_offline");
+    await expect(page.locator("#vibeProcessLane")).toContainText("Control API unavailable");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

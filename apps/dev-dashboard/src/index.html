@@ -38,6 +38,28 @@
         </article>
       </section>
 
+      <section class="panel vibe-panel" aria-label="Vibe coding command center">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Vibe Coding</p>
+            <h2>Process Control Center</h2>
+          </div>
+          <span id="vibeStatus" class="status-pill status-warn">Process loading</span>
+        </div>
+        <div id="vibeSummary" class="vibe-summary" aria-live="polite"></div>
+        <div class="vibe-rule" id="vibeRule">Loading ordered process.</div>
+        <div class="vibe-layout">
+          <section class="vibe-column vibe-column-wide" aria-label="Ordered process lane">
+            <h3>Strict Work Lane</h3>
+            <div id="vibeProcessLane" class="process-lane"></div>
+          </section>
+          <section class="vibe-column" aria-label="Command center functions">
+            <h3>Function Matrix</h3>
+            <div id="vibeFunctionGrid" class="function-grid"></div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>

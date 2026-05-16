@@ -60,6 +60,29 @@ export const actions = [
     requiresApproval: true
   },
   {
+    id: "solis-readonly-preflight",
+    title: "Prepare Solis read-only connector",
+    description: "Simulate the first Solis telemetry connector gate without API secrets or control commands.",
+    risk: "medium",
+    mode: "dry-run",
+    requiresApproval: true
+  },
+  {
+    id: "approval-queue-preflight",
+    title: "Review approval and audit queue",
+    description: "Simulate approval workflow readiness while external writes remain disabled.",
+    risk: "medium",
+    mode: "dry-run",
+    requiresApproval: true
+  },
+  {
+    id: "brain-index-preflight",
+    title: "Review Obsidian brain index",
+    description: "Simulate knowledge capture readiness and confirm raw chat or secrets must not become memory.",
+    risk: "low",
+    mode: "dry-run"
+  },
+  {
     id: "telegram-line-bridge-check",
     title: "Check Telegram and LINE bridge gates",
     description: "Simulate messaging bridge readiness and prove production sends remain blocked.",
