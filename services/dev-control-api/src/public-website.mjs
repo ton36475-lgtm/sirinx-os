@@ -17,6 +17,7 @@ const publicRoutes = [
 ];
 
 const knownPreviewDeployments = [
+  "https://625a64af.sirinx-co.pages.dev",
   "https://4840209e.sirinx-co.pages.dev",
   "https://0c586301.sirinx-co.pages.dev",
   "https://3952deb7.sirinx-co.pages.dev",
@@ -119,7 +120,8 @@ export async function getPublicWebsiteStatus() {
       externalWrites: false,
       requiresApprovalForDeploy: true,
       nextActions: [
-        "Verify contact form lead delivery before paid traffic.",
+        "Contact form email/LINE fallback is live; build automatic backend capture before paid traffic.",
+        "Deploy Cloudflare Function/D1 or approved webhook for /api/trpc/lead.submit after binding/secrets review.",
         "Keep 77 province SEO pages and sitemap monitored.",
         "Confirm apex sirinx.co routing remains 301 to www.",
         "Decide production analytics architecture.",

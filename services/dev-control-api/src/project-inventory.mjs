@@ -276,6 +276,13 @@ const blockers = [
     requiredAction: "Deploy new surfaces only to subdomains and keep apex redirect/main router unchanged unless explicitly approved."
   },
   {
+    id: "lead-capture-backend",
+    severity: "high",
+    area: "Public website",
+    summary: "Contact form now has a verified email/LINE fallback, but /api/trpc/lead.submit still returns 405 on production.",
+    requiredAction: "Add a production-safe Cloudflare Function/D1/notification path after binding and secret review."
+  },
+  {
     id: "oz-monorepo-dirty",
     severity: "medium",
     area: "Repo hygiene",
@@ -393,6 +400,7 @@ export async function getProjectInventory() {
       "Run pnpm night-watch before unattended periods so Hermes/Codex records current status into Obsidian.",
       "Open Codex App on the Mac, use Set up Codex mobile or Settings > Connections, scan the QR from ChatGPT mobile, and confirm the same workspace.",
       "Use /Users/sirinx/sirinx-os/docs/knowledge/MAC_MINI_CODEX_HERMES_CONTROL_PLANE.md as the mobile operating runbook.",
+      "Treat www.sirinx.co contact fallback as live mitigation, then implement automatic lead capture backend.",
       "Monitor the 77 province SEO routes and sitemap without changing www.sirinx.co unless a deploy is approved.",
       "Rotate/revoke leaked Telegram bot credentials before enabling Telegram production sends.",
       "Choose first subdomain candidate: dev.sirinx.co, admin.sirinx.co, customer.sirinx.co, or contractor.sirinx.co.",
