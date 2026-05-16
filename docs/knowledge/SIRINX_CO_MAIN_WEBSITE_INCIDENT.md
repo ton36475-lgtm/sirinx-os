@@ -132,6 +132,14 @@ Content check:
 
 ```text
 <title>SIRINX - Cloudflare Ready</title>
+Live on the primary www domain.
+Production check: 5 ready, 0 blocking
+```
+
+Latest Pages deployment after production-copy refresh:
+
+```text
+https://ffaafed5.sirinx-co.pages.dev
 ```
 
 Cloudflare Pages custom domain status:

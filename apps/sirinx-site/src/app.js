@@ -9,5 +9,5 @@ if (buildStamp) {
     timeZone: "Asia/Bangkok"
   }).format(new Date());
 
-  buildStamp.textContent = `Local check: ${readyItems} ready, ${pendingItems} pending approval - ${formatted}`;
+  buildStamp.textContent = `Production check: ${readyItems} ready, ${pendingItems} blocking - ${formatted}`;
 }

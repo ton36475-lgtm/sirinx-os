@@ -96,11 +96,11 @@
 
       <section id="readiness" class="section-block readiness" aria-labelledby="readiness-title">
         <div>
-          <div class="section-kicker">Current local state</div>
-          <h2 id="readiness-title">Deployed, with DNS routing pending.</h2>
+          <div class="section-kicker">Current production state</div>
+          <h2 id="readiness-title">Live on the primary www domain.</h2>
           <p>
-            The public Pages deployment is live. The custom domains still need DNS edit permission before
-            <code>www.sirinx.co</code> can become the primary production URL.
+            The public Pages deployment is reachable at <code>www.sirinx.co</code>. The apex domain redirects to
+            the www host while the rest of the platform remains reserved for purpose-specific subdomains.
           </p>
         </div>
         <div class="check-panel" aria-label="Readiness checklist">
@@ -116,13 +116,13 @@
             <span aria-hidden="true"></span>
             <p><strong>Subdomain model</strong> reserved for dev, solar, API, and ops surfaces</p>
           </div>
-          <div class="check-row" data-ready="pending">
+          <div class="check-row" data-ready="true">
             <span aria-hidden="true"></span>
-            <p><strong>DNS records</strong> require Cloudflare DNS edit permission</p>
+            <p><strong>DNS records</strong> route <code>www</code> through Cloudflare Pages</p>
           </div>
-          <div class="check-row" data-ready="pending">
+          <div class="check-row" data-ready="true">
             <span aria-hidden="true"></span>
-            <p><strong>Apex redirect</strong> <code>sirinx.co</code> to <code>www.sirinx.co</code></p>
+            <p><strong>Apex redirect</strong> sends <code>sirinx.co</code> to <code>www.sirinx.co</code></p>
           </div>
         </div>
       </section>
@@ -162,7 +162,7 @@
 
     <footer class="site-footer">
       <p>www.sirinx.co primary site</p>
-      <p id="buildStamp" aria-live="polite">Build status pending local check</p>
+      <p id="buildStamp" aria-live="polite">Production check loading</p>
     </footer>
 
     <script type="module" src="/app.js"></script>
