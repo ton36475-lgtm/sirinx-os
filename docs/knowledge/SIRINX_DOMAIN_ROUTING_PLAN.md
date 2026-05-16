@@ -93,9 +93,27 @@ Completed:
 - Production deployment exists.
 - `www.sirinx.co` and `sirinx.co` are registered as Pages custom domains.
 - Site canonical and sitemap point to `https://www.sirinx.co/`.
+- Cloudflare Worker router `sirinx-main-router` is prepared as an emergency path when DNS edit permission is unavailable.
 
 Pending:
 
 - DNS CNAME records require Cloudflare DNS edit permission.
 - Apex-to-www redirect rule requires Cloudflare zone rule permission.
 - Subdomain projects/routes require separate implementation and access policy.
+
+## Emergency Worker Router
+
+If DNS custom-domain validation remains blocked, deploy:
+
+```bash
+pnpm dlx wrangler deploy --config infra/cloudflare/main-router/wrangler.jsonc
+```
+
+Routes:
+
+```text
+www.sirinx.co/* -> proxy to https://sirinx-co.pages.dev/*
+sirinx.co/*     -> 301 redirect to https://www.sirinx.co/*
+```
+
+This is a temporary edge router. The preferred final state remains direct Cloudflare Pages custom domains with DNS records and a zone redirect rule.

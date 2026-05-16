@@ -1,0 +1,16 @@
+{
+  "name": "sirinx-main-router",
+  "main": "./src/worker.js",
+  "compatibility_date": "2026-05-16",
+  "send_metrics": false,
+  "routes": [
+    {
+      "pattern": "www.sirinx.co/*",
+      "zone_name": "sirinx.co"
+    },
+    {
+      "pattern": "sirinx.co/*",
+      "zone_name": "sirinx.co"
+    }
+  ]
+}
