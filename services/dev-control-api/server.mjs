@@ -6,6 +6,7 @@ import { listApprovalQueue } from "./src/approval-queue.mjs";
 import { listAuditEvents, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
+import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { switches } from "./src/switches.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -277,11 +278,13 @@ async function getExecutiveHq() {
     checkHttp("http://127.0.0.1:8787"),
     checkHttp("http://127.0.0.1:15672")
   ]);
+  const publicWebsite = await getPublicWebsiteStatus();
 
   const kanbanTasks = parseKanbanTasks(kanbanList.output);
   const services = [
     buildService("SIRINX dashboard", dashboard, "Presentation surface at http://127.0.0.1:8710"),
     buildService("Control API", controlApi, "Local dry-run command API"),
+    buildService("Public website", publicWebsite.primary || {}, publicWebsite.domain),
     buildService("Hermes Agent HQ", hermes.dashboard, hermesDashboardUrl),
     {
       name: "Hermes gateway",
@@ -296,6 +299,12 @@ async function getExecutiveHq() {
   ];
 
   const projects = [
+    {
+      name: "SIRINX public website management",
+      status: publicWebsite.status,
+      surface: `${publicWebsite.domain} (${publicWebsite.provider})`,
+      run: "curl /api/website"
+    },
     {
       name: "SIRINX developer command center",
       status: dashboard.online ? "live" : "needs start",
@@ -379,6 +388,7 @@ async function getExecutiveHq() {
     projects,
     kanbanTasks,
     hermes,
+    publicWebsite,
     updatedAt: new Date().toISOString()
   };
 }
@@ -433,6 +443,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/executive-hq") {
     sendJson(request, response, 200, await getExecutiveHq());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/website") {
+    sendJson(request, response, 200, await getPublicWebsiteStatus());
     return;
   }
 

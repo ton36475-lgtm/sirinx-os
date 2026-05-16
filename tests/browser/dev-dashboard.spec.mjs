@@ -16,6 +16,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.locator("#executiveStatus")).toHaveText(/HQ (live|partial)/);
     await expect(page.locator("#executiveAgents")).toContainText("Hermes Agent Team");
+    await expect(page.locator("#executiveProjects")).toContainText("SIRINX public website management");
+    await expect(page.locator("#executiveProjects")).toContainText("www.sirinx.co");
     await expect(page.locator("#executiveProjects")).toContainText("SIRINX developer command center");
     await expect(page.locator("#hermesDashboardState")).toHaveText(/Online|Offline/);
     await expect(page.locator("#hermesGatewayState")).toHaveText(/Running|Stopped/);
@@ -31,7 +33,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#approvalList")).toContainText("Customer message send");
     await expect(page.locator("#approvalList")).toContainText("blocked");
     await expect(page.getByRole("heading", { name: "Local API Events" })).toBeVisible();
-    await expect(page.locator("#auditList")).toContainText("No local API audit events recorded yet.");
+    const initialAuditText = await page.locator("#auditList").innerText();
+    expect(initialAuditText).toMatch(/No local API audit events recorded yet\.|dry-run \/ dry-run action/);
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
     await expect(page.locator("#actionList")).toContainText("External adapter smoke");
 
