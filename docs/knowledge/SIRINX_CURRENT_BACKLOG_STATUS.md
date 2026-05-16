@@ -13,12 +13,14 @@ Status: current, no hidden backlog
 | Command Center lead health | Done locally | `GET http://127.0.0.1:8711/api/lead-health` |
 | Cloudflare `.com` cleanup scope | Documented | `SIRINX_CLOUDFLARE_DOMAIN_CONFIG_CLEANUP_PLAN.md` |
 | Local stack | Online | dev-control-api, dev-dashboard, solar-intelligence, sirinx-site |
+| Public website ahead commits | Locally verified | `pnpm check`, `pnpm test` 162/162, `pnpm build`, SEO province routes 77/77 |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is clean locally on branch `codex/urgent-backlog-execution`.
 - Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean but ahead of origin by 5 commits.
+- Those 5 public website commits have passed local typecheck, test, and production build verification.
 - Lead handler is ready locally but production POST is not activated.
 - Command Center lead health intentionally does not run production POST or create production leads.
 - Contact fallback stays live until production lead POST is approved and verified.
