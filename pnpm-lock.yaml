@@ -26,6 +26,10 @@ importers:
 
   apps/dev-dashboard: {}
 
+  apps/sirinx-site: {}
+
+  apps/solar-intelligence: {}
+
   services/dev-control-api: {}
 
 packages:
