@@ -5,7 +5,7 @@ Date: 2026-05-16
 
 ## Summary
 
-The SIRINX public static site was built locally and deployed to Cloudflare Pages as a real production deployment. The primary `www.sirinx.co` host is active and serving the Pages deployment through the Cloudflare Worker bridge.
+The SIRINX public company website was built locally and deployed to Cloudflare Pages as a real production deployment. The primary `www.sirinx.co` host is active and serving the Pages deployment through the Cloudflare Worker bridge.
 
 The primary public website is now defined as:
 
@@ -38,13 +38,13 @@ main
 Deployment ID:
 
 ```text
-ffaafed5-cc26-4025-baca-ffd5d6273518
+ae89807a-a1e7-45b7-9f6d-b69994dc3c7f
 ```
 
 Deployment URL:
 
 ```text
-https://ffaafed5.sirinx-co.pages.dev
+https://ae89807a.sirinx-co.pages.dev
 ```
 
 Stable Pages URL:
@@ -73,7 +73,8 @@ Cloudflare verification after deploy:
 https://sirinx-co.pages.dev returned HTTP 200
 https://www.sirinx.co returned HTTP 200
 https://sirinx.co returned HTTP 301 to https://www.sirinx.co/
-Deployed HTML contains live www.sirinx.co production status copy
+Deployed HTML contains company-facing SIRINX content
+Deployed HTML does not contain dev, preflight, Cloudflare status, or DNS-pending copy
 Sitemap points to https://www.sirinx.co/
 Robots.txt points to https://www.sirinx.co/sitemap.xml
 _headers uploaded

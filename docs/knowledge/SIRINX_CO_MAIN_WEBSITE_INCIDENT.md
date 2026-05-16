@@ -131,15 +131,15 @@ curl --doh-url https://cloudflare-dns.com/dns-query -I https://www.sirinx.co -> 
 Content check:
 
 ```text
-<title>SIRINX - Cloudflare Ready</title>
-Live on the primary www domain.
-Production check: 5 ready, 0 blocking
+<title>SIRINX - Controlled AI Operations</title>
+AI operating systems for serious work
+contact@sirinx.co
 ```
 
-Latest Pages deployment after production-copy refresh:
+Latest Pages deployment after company-homepage refresh:
 
 ```text
-https://ffaafed5.sirinx-co.pages.dev
+https://ae89807a.sirinx-co.pages.dev
 ```
 
 Cloudflare Pages custom domain status:
