@@ -6,6 +6,7 @@ import { listApprovalQueue } from "./src/approval-queue.mjs";
 import { listAuditEvents, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
+import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { switches } from "./src/switches.mjs";
 
@@ -279,6 +280,7 @@ async function getExecutiveHq() {
     checkHttp("http://127.0.0.1:15672")
   ]);
   const publicWebsite = await getPublicWebsiteStatus();
+  const projectInventory = await getProjectInventory();
 
   const kanbanTasks = parseKanbanTasks(kanbanList.output);
   const services = [
@@ -304,6 +306,12 @@ async function getExecutiveHq() {
       status: publicWebsite.status,
       surface: `${publicWebsite.domain} (${publicWebsite.provider})`,
       run: "curl /api/website"
+    },
+    {
+      name: "Subdomain integration inventory",
+      status: projectInventory.blockers.length ? "blocked review" : "ready",
+      surface: "read-only project map",
+      run: "curl /api/project-inventory"
     },
     {
       name: "SIRINX developer command center",
@@ -389,6 +397,7 @@ async function getExecutiveHq() {
     kanbanTasks,
     hermes,
     publicWebsite,
+    projectInventory,
     updatedAt: new Date().toISOString()
   };
 }
@@ -448,6 +457,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/website") {
     sendJson(request, response, 200, await getPublicWebsiteStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/project-inventory") {
+    sendJson(request, response, 200, await getProjectInventory());
     return;
   }
 

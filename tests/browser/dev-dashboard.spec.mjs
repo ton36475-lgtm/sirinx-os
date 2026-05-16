@@ -18,6 +18,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#executiveAgents")).toContainText("Hermes Agent Team");
     await expect(page.locator("#executiveProjects")).toContainText("SIRINX public website management");
     await expect(page.locator("#executiveProjects")).toContainText("www.sirinx.co");
+    await expect(page.locator("#executiveProjects")).toContainText("Subdomain integration inventory");
     await expect(page.locator("#executiveProjects")).toContainText("SIRINX developer command center");
     await expect(page.locator("#hermesDashboardState")).toHaveText(/Online|Offline/);
     await expect(page.locator("#hermesGatewayState")).toHaveText(/Running|Stopped/);
@@ -52,6 +53,13 @@ test.describe("Developer Command Center", () => {
     await riskyAction.getByRole("button", { name: "Dry run" }).click();
     await expect(page.locator("#eventLog")).toContainText("blocked_by_kill_switch");
     await expect(page.locator("#auditList")).toContainText("blocked_by_kill_switch");
+
+    const inventoryResponse = await page.request.get("http://127.0.0.1:8711/api/project-inventory");
+    expect(inventoryResponse.ok()).toBeTruthy();
+    const inventory = await inventoryResponse.json();
+    expect(inventory.mainWebsiteProtected).toBe(true);
+    expect(inventory.externalWrites).toBe(false);
+    expect(inventory.subdomains.some((entry) => entry.host === "www.sirinx.co" && entry.action === "do-not-touch")).toBe(true);
     expect(consoleErrors).toEqual([]);
   });
 
