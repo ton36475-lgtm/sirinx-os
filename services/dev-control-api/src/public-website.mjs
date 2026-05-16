@@ -17,6 +17,7 @@ const publicRoutes = [
 ];
 
 const knownPreviewDeployments = [
+  "https://40065338.sirinx-co.pages.dev",
   "https://625a64af.sirinx-co.pages.dev",
   "https://4840209e.sirinx-co.pages.dev",
   "https://0c586301.sirinx-co.pages.dev",
