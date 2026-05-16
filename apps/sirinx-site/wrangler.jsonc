@@ -1,0 +1,6 @@
+{
+  "name": "sirinx-co",
+  "compatibility_date": "2026-05-16",
+  "pages_build_output_dir": "./dist",
+  "send_metrics": false
+}

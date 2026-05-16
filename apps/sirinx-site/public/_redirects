@@ -1,0 +1,3 @@
+# Domain-level www to apex redirect must be configured in Cloudflare Bulk Redirects.
+/home / 301
+/index.html / 301

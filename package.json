@@ -20,11 +20,14 @@
     "solar:obsidian:sync": "pnpm --filter @sirinx/solar-intelligence obsidian:sync",
     "solar:ci-bess": "pnpm --filter @sirinx/solar-intelligence ci-bess",
     "solar:ci-bess:obsidian:sync": "pnpm --filter @sirinx/solar-intelligence ci-bess:obsidian:sync",
+    "site:dev": "pnpm --filter @sirinx/site dev",
+    "site:build": "pnpm --filter @sirinx/site build",
+    "site:check": "pnpm --filter @sirinx/site build && pnpm --filter @sirinx/site check",
     "hq:status": "./scripts/ai-hq-status.sh",
     "hq:test": "./scripts/test-ai-hq.sh",
     "hq:digest": "./scripts/knowledge-digest.sh",
     "dashboard:test": "./scripts/test-dashboard-brain.sh",
-    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs && node --check services/dev-control-api/src/switches.mjs && node --check services/dev-control-api/src/approval-queue.mjs"
+    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs && node --check services/dev-control-api/src/switches.mjs && node --check services/dev-control-api/src/approval-queue.mjs && node --check services/dev-control-api/src/audit-events.mjs"
   },
   "workspaces": [
     "apps/*",

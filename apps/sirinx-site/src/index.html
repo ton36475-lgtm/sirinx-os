@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIRINX - Cloudflare Ready</title>
+    <meta
+      name="description"
+      content="SIRINX prepares controlled, secure, and auditable AI operations. This sirinx.co page is ready for Cloudflare Pages setup."
+    />
+    <link rel="canonical" href="https://sirinx.co/" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="SIRINX home">
+        <span class="brand-mark" aria-hidden="true">SX</span>
+        <span>
+          <strong>SIRINX</strong>
+          <small>controlled AI operations</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#platform">Platform</a>
+        <a href="#readiness">Readiness</a>
+        <a href="#cloudflare">Cloudflare</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">sirinx.co preflight page</p>
+          <h1 id="hero-title">SIRINX</h1>
+          <p class="hero-lede">
+            A controlled operating layer for AI command centers, solar intelligence, and approval-gated agent workflows.
+          </p>
+          <div class="hero-actions" aria-label="Deployment status">
+            <a class="primary-action" href="#cloudflare">Cloudflare checklist</a>
+            <span class="status-pill">No deploy run</span>
+          </div>
+          <dl class="hero-metrics" aria-label="Local setup status">
+            <div>
+              <dt>Hosting target</dt>
+              <dd>Cloudflare Pages</dd>
+            </div>
+            <div>
+              <dt>Runtime scope</dt>
+              <dd>Static assets only</dd>
+            </div>
+            <div>
+              <dt>Secrets required</dt>
+              <dd>None</dd>
+            </div>
+          </dl>
+        </div>
+
+        <figure class="hero-visual">
+          <img
+            src="/assets/sirinx-cloudflare-readiness.svg"
+            alt="Readiness map showing sirinx.co routed through Cloudflare to a static site build."
+          />
+          <figcaption>
+            Local build artifact prepared for review before Cloudflare Pages creation, DNS changes, or production deployment.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="platform" class="section-block platform-grid" aria-labelledby="platform-title">
+        <div class="section-kicker">Operating model</div>
+        <div class="section-heading">
+          <h2 id="platform-title">Built for reviewable operations.</h2>
+          <p>
+            The public page mirrors the SIRINX production rule: every externally visible step should be scoped,
+            documented, and approved before it mutates real infrastructure.
+          </p>
+        </div>
+        <article>
+          <span class="card-index">01</span>
+          <h3>Command Center</h3>
+          <p>Operator-facing workflows with clear task state, approvals, and local verification before release.</p>
+        </article>
+        <article>
+          <span class="card-index">02</span>
+          <h3>Solar Intelligence</h3>
+          <p>Proposal and analysis surfaces that avoid absolute ROI claims and keep assumptions visible.</p>
+        </article>
+        <article>
+          <span class="card-index">03</span>
+          <h3>Agentic Workflows</h3>
+          <p>Bounded pipelines where autonomous steps stay inside audit, safety, and rollback gates.</p>
+        </article>
+      </section>
+
+      <section id="readiness" class="section-block readiness" aria-labelledby="readiness-title">
+        <div>
+          <div class="section-kicker">Current local state</div>
+          <h2 id="readiness-title">Ready for Cloudflare setup review.</h2>
+          <p>
+            These checks are local repository artifacts only. They prepare the next Cloudflare step without logging in,
+            deploying, changing DNS, or touching secrets.
+          </p>
+        </div>
+        <div class="check-panel" aria-label="Readiness checklist">
+          <div class="check-row" data-ready="true">
+            <span aria-hidden="true"></span>
+            <p><strong>Static build path</strong> <code>apps/sirinx-site/dist</code></p>
+          </div>
+          <div class="check-row" data-ready="true">
+            <span aria-hidden="true"></span>
+            <p><strong>Security headers</strong> prepared in <code>_headers</code></p>
+          </div>
+          <div class="check-row" data-ready="true">
+            <span aria-hidden="true"></span>
+            <p><strong>Path redirects</strong> prepared in <code>_redirects</code></p>
+          </div>
+          <div class="check-row" data-ready="pending">
+            <span aria-hidden="true"></span>
+            <p><strong>Custom domain</strong> pending human approval in Cloudflare</p>
+          </div>
+          <div class="check-row" data-ready="pending">
+            <span aria-hidden="true"></span>
+            <p><strong>DNS mutation</strong> not performed from Codex</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="cloudflare" class="cloudflare-band" aria-labelledby="cloudflare-title">
+        <div class="cloudflare-copy">
+          <p class="eyebrow">Next approved step</p>
+          <h2 id="cloudflare-title">Create the Cloudflare Pages project when ready.</h2>
+          <p>
+            Recommended setup values are stored in the repo documentation. Deployment remains blocked until you approve
+            Cloudflare account access, Pages project creation, and domain/DNS changes.
+          </p>
+        </div>
+        <div class="setup-card">
+          <h3>Pages setup values</h3>
+          <dl>
+            <div>
+              <dt>Project</dt>
+              <dd>sirinx-co</dd>
+            </div>
+            <div>
+              <dt>Build command</dt>
+              <dd>pnpm --filter @sirinx/site build</dd>
+            </div>
+            <div>
+              <dt>Output directory</dt>
+              <dd>apps/sirinx-site/dist</dd>
+            </div>
+            <div>
+              <dt>Environment variables</dt>
+              <dd>None required</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>sirinx.co local preflight</p>
+      <p id="buildStamp" aria-live="polite">Build status pending local check</p>
+    </footer>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
