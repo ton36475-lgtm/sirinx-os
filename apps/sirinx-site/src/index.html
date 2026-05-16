@@ -6,9 +6,9 @@
     <title>SIRINX - Cloudflare Ready</title>
     <meta
       name="description"
-      content="SIRINX prepares controlled, secure, and auditable AI operations. This sirinx.co page is ready for Cloudflare Pages setup."
+      content="SIRINX prepares controlled, secure, and auditable AI operations. The primary public website is www.sirinx.co."
     />
-    <link rel="canonical" href="https://sirinx.co/" />
+    <link rel="canonical" href="https://www.sirinx.co/" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
@@ -25,34 +25,34 @@
       <nav class="nav-links" aria-label="Page sections">
         <a href="#platform">Platform</a>
         <a href="#readiness">Readiness</a>
-        <a href="#cloudflare">Cloudflare</a>
+        <a href="#routing">Routing</a>
       </nav>
     </header>
 
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">sirinx.co preflight page</p>
+          <p class="eyebrow">www.sirinx.co primary website</p>
           <h1 id="hero-title">SIRINX</h1>
           <p class="hero-lede">
             A controlled operating layer for AI command centers, solar intelligence, and approval-gated agent workflows.
           </p>
           <div class="hero-actions" aria-label="Deployment status">
-            <a class="primary-action" href="#cloudflare">Cloudflare checklist</a>
-            <span class="status-pill">No deploy run</span>
+            <a class="primary-action" href="#routing">Domain routing</a>
+            <span class="status-pill">Pages deployed</span>
           </div>
           <dl class="hero-metrics" aria-label="Local setup status">
             <div>
-              <dt>Hosting target</dt>
-              <dd>Cloudflare Pages</dd>
+              <dt>Primary host</dt>
+              <dd>www.sirinx.co</dd>
             </div>
             <div>
-              <dt>Runtime scope</dt>
-              <dd>Static assets only</dd>
+              <dt>Apex domain</dt>
+              <dd>Redirect to www</dd>
             </div>
             <div>
-              <dt>Secrets required</dt>
-              <dd>None</dd>
+              <dt>Other systems</dt>
+              <dd>Subdomains</dd>
             </div>
           </dl>
         </div>
@@ -60,10 +60,10 @@
         <figure class="hero-visual">
           <img
             src="/assets/sirinx-cloudflare-readiness.svg"
-            alt="Readiness map showing sirinx.co routed through Cloudflare to a static site build."
+            alt="Readiness map showing www.sirinx.co routed through Cloudflare to a static site build."
           />
           <figcaption>
-            Local build artifact prepared for review before Cloudflare Pages creation, DNS changes, or production deployment.
+            Cloudflare Pages deployment prepared for a www-first domain structure with separate subdomains for other systems.
           </figcaption>
         </figure>
       </section>
@@ -97,63 +97,63 @@
       <section id="readiness" class="section-block readiness" aria-labelledby="readiness-title">
         <div>
           <div class="section-kicker">Current local state</div>
-          <h2 id="readiness-title">Ready for Cloudflare setup review.</h2>
+          <h2 id="readiness-title">Deployed, with DNS routing pending.</h2>
           <p>
-            These checks are local repository artifacts only. They prepare the next Cloudflare step without logging in,
-            deploying, changing DNS, or touching secrets.
+            The public Pages deployment is live. The custom domains still need DNS edit permission before
+            <code>www.sirinx.co</code> can become the primary production URL.
           </p>
         </div>
         <div class="check-panel" aria-label="Readiness checklist">
           <div class="check-row" data-ready="true">
             <span aria-hidden="true"></span>
-            <p><strong>Static build path</strong> <code>apps/sirinx-site/dist</code></p>
+            <p><strong>Pages deployment</strong> live on <code>sirinx-co.pages.dev</code></p>
           </div>
           <div class="check-row" data-ready="true">
             <span aria-hidden="true"></span>
-            <p><strong>Security headers</strong> prepared in <code>_headers</code></p>
+            <p><strong>Primary canonical</strong> set to <code>https://www.sirinx.co/</code></p>
           </div>
           <div class="check-row" data-ready="true">
             <span aria-hidden="true"></span>
-            <p><strong>Path redirects</strong> prepared in <code>_redirects</code></p>
+            <p><strong>Subdomain model</strong> reserved for dev, solar, API, and ops surfaces</p>
           </div>
           <div class="check-row" data-ready="pending">
             <span aria-hidden="true"></span>
-            <p><strong>Custom domain</strong> pending human approval in Cloudflare</p>
+            <p><strong>DNS records</strong> require Cloudflare DNS edit permission</p>
           </div>
           <div class="check-row" data-ready="pending">
             <span aria-hidden="true"></span>
-            <p><strong>DNS mutation</strong> not performed from Codex</p>
+            <p><strong>Apex redirect</strong> <code>sirinx.co</code> to <code>www.sirinx.co</code></p>
           </div>
         </div>
       </section>
 
-      <section id="cloudflare" class="cloudflare-band" aria-labelledby="cloudflare-title">
+      <section id="routing" class="cloudflare-band" aria-labelledby="routing-title">
         <div class="cloudflare-copy">
-          <p class="eyebrow">Next approved step</p>
-          <h2 id="cloudflare-title">Create the Cloudflare Pages project when ready.</h2>
+          <p class="eyebrow">Domain architecture</p>
+          <h2 id="routing-title">Use www for the main site. Put everything else on subdomains.</h2>
           <p>
-            Recommended setup values are stored in the repo documentation. Deployment remains blocked until you approve
-            Cloudflare account access, Pages project creation, and domain/DNS changes.
+            The main website should resolve at <code>www.sirinx.co</code>. Operational systems should live behind
+            purpose-specific subdomains with Cloudflare Access or equivalent controls before public exposure.
           </p>
         </div>
         <div class="setup-card">
-          <h3>Pages setup values</h3>
+          <h3>Routing targets</h3>
           <dl>
             <div>
-              <dt>Project</dt>
-              <dd>sirinx-co</dd>
+              <dt>Main site</dt>
+              <dd>www.sirinx.co</dd>
             </div>
             <div>
-              <dt>Build command</dt>
-              <dd>pnpm --filter @sirinx/site build</dd>
+              <dt>Apex</dt>
+              <dd>sirinx.co -> www</dd>
             </div>
             <div>
-              <dt>Output directory</dt>
-              <dd>apps/sirinx-site/dist</dd>
+              <dt>Command center</dt>
+              <dd>dev.sirinx.co</dd>
             </div>
             <div>
-              <dt>Environment variables</dt>
-              <dd>None required</dd>
+              <dt>Solar system</dt>
+              <dd>solar.sirinx.co</dd>
             </div>
           </dl>
         </div>
@@ -161,7 +161,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>sirinx.co local preflight</p>
+      <p>www.sirinx.co primary site</p>
       <p id="buildStamp" aria-live="polite">Build status pending local check</p>
     </footer>
 

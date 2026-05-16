@@ -1,11 +1,23 @@
 # sirinx.co Cloudflare Deployment Report
 
-Status: Pages deployed, custom domains pending DNS authorization
+Status: Pages deployed, www-first domain routing pending DNS authorization
 Date: 2026-05-16
 
 ## Summary
 
-The `sirinx.co` static site was built locally and deployed to Cloudflare Pages as a real production deployment.
+The SIRINX public static site was built locally and deployed to Cloudflare Pages as a real production deployment.
+
+The primary public website is now defined as:
+
+```text
+www.sirinx.co
+```
+
+The apex domain should redirect to the primary website:
+
+```text
+sirinx.co -> https://www.sirinx.co
+```
 
 No `.env` files were read. No secrets were printed. No source files were changed during deployment.
 
@@ -82,8 +94,8 @@ www.sirinx.co
 Current status:
 
 ```text
-sirinx.co: pending HTTP validation
-www.sirinx.co: pending HTTP validation
+www.sirinx.co: pending HTTP validation, primary website
+sirinx.co: pending HTTP validation, apex redirect source
 ```
 
 The active Cloudflare OAuth token has `pages:write` and `zone:read`, but DNS record creation returned:
@@ -100,13 +112,13 @@ Create or update these DNS records in the `sirinx.co` zone:
 
 ```text
 Type: CNAME
-Name: @
+Name: www
 Target: sirinx-co.pages.dev
 Proxy status: Proxied
 TTL: Auto
 
 Type: CNAME
-Name: www
+Name: @
 Target: sirinx-co.pages.dev
 Proxy status: Proxied
 TTL: Auto
@@ -116,11 +128,11 @@ After DNS is set, Cloudflare Pages should complete HTTP validation and issue cer
 
 ## Remaining Optional Rule
 
-To force `www.sirinx.co` to `sirinx.co`, add a Cloudflare redirect rule after both domains validate:
+To force `sirinx.co` to `www.sirinx.co`, add a Cloudflare redirect rule after both domains validate:
 
 ```text
-If hostname equals www.sirinx.co
-Then static redirect to https://sirinx.co/$1
+If hostname equals sirinx.co
+Then static redirect to https://www.sirinx.co/$1
 Status code: 301
 Preserve path and query string
 ```

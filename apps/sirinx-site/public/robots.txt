@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sirinx.co/sitemap.xml
+Sitemap: https://www.sirinx.co/sitemap.xml
