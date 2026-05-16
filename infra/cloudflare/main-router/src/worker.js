@@ -73,10 +73,31 @@ function normalizeLeadValue(value, maxLength = 2000) {
   return String(value).trim().slice(0, maxLength) || null;
 }
 
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isNumericKeyedBatch(body) {
+  if (!isRecord(body)) return false;
+  const keys = Object.keys(body);
+  return keys.length > 0 && keys.every((key) => /^\d+$/.test(key));
+}
+
+function firstNumericBatchItem(body) {
+  if (!isNumericKeyedBatch(body)) return body;
+  const [firstKey] = Object.keys(body).sort((a, b) => Number(a) - Number(b));
+  return body[firstKey];
+}
+
+function unwrapTrpcInput(item) {
+  const input = item?.input ?? item;
+  return input?.json || item?.json || input || item;
+}
+
 function extractLeadPayload(body) {
-  const isBatch = Array.isArray(body);
-  const item = isBatch ? body[0] : body;
-  const json = item?.json || item?.input?.json || item?.input || item;
+  const isBatch = Array.isArray(body) || isNumericKeyedBatch(body);
+  const item = Array.isArray(body) ? body[0] : firstNumericBatchItem(body);
+  const json = unwrapTrpcInput(item);
   return {
     isBatch,
     lead: {
@@ -88,7 +109,12 @@ function extractLeadPayload(body) {
       interest: normalizeLeadValue(json?.interest, 160),
       budget: normalizeLeadValue(json?.budget, 160),
       timeline: normalizeLeadValue(json?.timeline, 160),
+      industry: normalizeLeadValue(json?.industry, 160),
+      systemSize: normalizeLeadValue(json?.systemSize, 80),
+      systemType: normalizeLeadValue(json?.systemType, 160),
       monthlyBill: normalizeLeadValue(json?.monthlyBill, 80),
+      bessInterest: normalizeLeadValue(json?.bessInterest, 40),
+      lineUserId: normalizeLeadValue(json?.lineUserId, 120),
       message: normalizeLeadValue(json?.message, 4000)
     }
   };
@@ -104,11 +130,16 @@ async function ensureLeadTable(db) {
         name TEXT NOT NULL,
         company TEXT,
         email TEXT,
-        phone TEXT NOT NULL,
+        phone TEXT,
+        industry TEXT,
         interest TEXT,
         budget TEXT,
         timeline TEXT,
+        system_size TEXT,
+        system_type TEXT,
         monthly_bill TEXT,
+        bess_interest TEXT,
+        line_user_id TEXT,
         message TEXT,
         status TEXT NOT NULL DEFAULT 'new',
         raw_json TEXT NOT NULL
@@ -134,8 +165,12 @@ async function handleLeadSubmit(request, env) {
   }
 
   const { lead, isBatch } = parsed;
-  if (!lead.name || !lead.phone) {
-    return trpcError("Name and phone are required", 400, isBatch);
+  if (!lead.name) {
+    return trpcError("Name is required", 400, isBatch);
+  }
+
+  if (!lead.phone && !lead.email && !lead.lineUserId) {
+    return trpcError("At least one contact channel is required", 400, isBatch);
   }
 
   if (!env?.LEAD_DB) {
@@ -148,9 +183,10 @@ async function handleLeadSubmit(request, env) {
   await env.LEAD_DB
     .prepare(
       `INSERT INTO contact_leads (
-        id, created_at, source, name, company, email, phone, interest, budget,
-        timeline, monthly_bill, message, raw_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        id, created_at, source, name, company, email, phone, industry, interest,
+        budget, timeline, system_size, system_type, monthly_bill, bess_interest,
+        line_user_id, message, raw_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .bind(
       id,
@@ -159,11 +195,16 @@ async function handleLeadSubmit(request, env) {
       lead.name,
       lead.company,
       lead.email,
-      lead.phone,
+      lead.phone || "",
+      lead.industry,
       lead.interest,
       lead.budget,
       lead.timeline,
+      lead.systemSize,
+      lead.systemType,
       lead.monthlyBill,
+      lead.bessInterest,
+      lead.lineUserId,
       lead.message,
       JSON.stringify(lead)
     )

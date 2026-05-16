@@ -20,6 +20,11 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Public Website Control");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Solis Load Balancing");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Telegram / LINE Bridge");
+    await expect(page.getByRole("heading", { name: "Capture Health" })).toBeVisible();
+    await expect(page.locator("#leadHealthStatus")).toHaveText(/Local ready|Lead blocked/);
+    await expect(page.locator("#leadHealthSummary")).toContainText("Local Handler");
+    await expect(page.locator("#leadHealthLocal")).toContainText("tRPC batch parser");
+    await expect(page.locator("#leadHealthProduction")).toContainText("Production POST");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -77,6 +82,12 @@ test.describe("Developer Command Center", () => {
     expect(inventory.mainWebsiteProtected).toBe(true);
     expect(inventory.externalWrites).toBe(false);
     expect(inventory.subdomains.some((entry) => entry.host === "www.sirinx.co" && entry.action === "do-not-touch")).toBe(true);
+    const leadHealthResponse = await page.request.get("http://127.0.0.1:8711/api/lead-health");
+    expect(leadHealthResponse.ok()).toBeTruthy();
+    const leadHealth = await leadHealthResponse.json();
+    expect(leadHealth.externalWrites).toBe(false);
+    expect(leadHealth.productionPostProbeRun).toBe(false);
+    expect(leadHealth.local.ok).toBe(true);
     expect(consoleErrors).toEqual([]);
   });
 
@@ -109,6 +120,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#approvalList")).toContainText("Local fallback approval");
     await expect(page.locator("#auditList")).toContainText("api_offline");
     await expect(page.locator("#vibeProcessLane")).toContainText("Control API unavailable");
+    await expect(page.locator("#leadHealthStatus")).toHaveText("Lead blocked");
+    await expect(page.locator("#leadHealthNextActions")).toContainText("Start the local control API");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

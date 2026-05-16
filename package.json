@@ -30,13 +30,14 @@
     "site:build": "pnpm --filter @sirinx/site build",
     "site:check": "pnpm --filter @sirinx/site build && pnpm --filter @sirinx/site check",
     "cloudflare:main-router:check": "node --check infra/cloudflare/main-router/src/worker.js",
+    "cloudflare:main-router:test": "vitest run infra/cloudflare/main-router/src/worker.test.js",
     "cloudflare:main-router:deploy": "wrangler deploy --config infra/cloudflare/main-router/wrangler.jsonc",
     "hq:status": "./scripts/ai-hq-status.sh",
     "hq:test": "./scripts/test-ai-hq.sh",
     "hq:digest": "./scripts/knowledge-digest.sh",
     "night-watch": "./scripts/hermes-night-watch-snapshot.sh",
     "dashboard:test": "./scripts/test-dashboard-brain.sh",
-    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs && node --check services/dev-control-api/src/switches.mjs && node --check services/dev-control-api/src/approval-queue.mjs && node --check services/dev-control-api/src/audit-events.mjs && node --check services/dev-control-api/src/public-website.mjs && node --check services/dev-control-api/src/project-inventory.mjs && node --check infra/cloudflare/main-router/src/worker.js"
+    "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs && node --check services/dev-control-api/src/switches.mjs && node --check services/dev-control-api/src/approval-queue.mjs && node --check services/dev-control-api/src/audit-events.mjs && node --check services/dev-control-api/src/public-website.mjs && node --check services/dev-control-api/src/project-inventory.mjs && node --check services/dev-control-api/src/lead-health.mjs && node --check infra/cloudflare/main-router/src/worker.js"
   },
   "workspaces": [
     "apps/*",

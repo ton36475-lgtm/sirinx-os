@@ -19,6 +19,11 @@ const vibeSummary = document.querySelector("#vibeSummary");
 const vibeRule = document.querySelector("#vibeRule");
 const vibeProcessLane = document.querySelector("#vibeProcessLane");
 const vibeFunctionGrid = document.querySelector("#vibeFunctionGrid");
+const leadHealthStatus = document.querySelector("#leadHealthStatus");
+const leadHealthSummary = document.querySelector("#leadHealthSummary");
+const leadHealthLocal = document.querySelector("#leadHealthLocal");
+const leadHealthProduction = document.querySelector("#leadHealthProduction");
+const leadHealthNextActions = document.querySelector("#leadHealthNextActions");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -184,6 +189,32 @@ const fallbackVibe = {
     }
   ],
   operatingRule: "Fallback mode only. No external writes are available."
+};
+
+const fallbackLeadHealth = {
+  status: "unavailable",
+  externalWrites: false,
+  productionPostProbeRun: false,
+  local: {
+    ok: false,
+    parser: {
+      batchPayloadSupported: false,
+      hasName: false,
+      hasContactChannel: false
+    },
+    mockD1: {
+      statements: 0,
+      inserted: false
+    }
+  },
+  production: {
+    reachable: false,
+    status: null,
+    routedToMainRouter: false,
+    externalWrites: false,
+    postProbeRun: false
+  },
+  nextActions: ["Start the local control API and refresh lead health."]
 };
 
 const fallbackExecutive = {
@@ -621,6 +652,112 @@ function renderVibe(vibe) {
   renderVibeSummary(data);
   renderVibeProcess(data);
   renderVibeFunctions(data);
+}
+
+function renderSignalList(container, rows) {
+  container.replaceChildren(
+    ...rows.map((row) => {
+      const item = document.createElement("article");
+      item.className = `signal-row ${row.ok ? "signal-ok" : "signal-warn"}`;
+
+      const content = document.createElement("div");
+      const title = document.createElement("p");
+      title.className = "signal-title";
+      title.textContent = row.title;
+
+      const detail = document.createElement("p");
+      detail.className = "signal-detail";
+      detail.textContent = row.detail;
+
+      content.append(title, detail);
+      item.append(content, makeStatusBadge(row.badge, row.ok));
+      return item;
+    })
+  );
+}
+
+function renderLeadHealth(health) {
+  const data = health || fallbackLeadHealth;
+  const localOk = Boolean(data.local?.ok);
+  const handlerObserved = Boolean(data.production?.leadHandlerObserved);
+  const routed = Boolean(data.production?.routedToMainRouter);
+  const reachable = Boolean(data.production?.reachable);
+
+  leadHealthStatus.textContent = localOk
+    ? handlerObserved
+      ? "Local ready / handler observed"
+      : routed
+        ? "Local ready / router proxying"
+        : "Local ready / staged"
+    : "Lead blocked";
+  leadHealthStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  leadHealthStatus.classList.add(localOk ? "status-safe" : "status-warn");
+
+  leadHealthSummary.replaceChildren(
+    makeSummaryCard("Local Handler", localOk ? "Ready" : "Blocked", data.status || "unknown"),
+    makeSummaryCard("Batch Parser", data.local?.parser?.batchPayloadSupported ? "Pass" : "Check", "tRPC batch body"),
+    makeSummaryCard("Mock D1", data.local?.mockD1?.inserted ? "Pass" : "Check", `${data.local?.mockD1?.statements || 0} statements`),
+    makeSummaryCard("Prod GET", data.production?.status ? `${data.production.status}` : "N/A", reachable ? "safe no-write probe" : "unreachable"),
+    makeSummaryCard("Prod POST", data.productionPostProbeRun ? "Run" : "Not run", "no production lead writes")
+  );
+
+  renderSignalList(leadHealthLocal, [
+    {
+      title: "tRPC batch parser",
+      detail: data.local?.parser?.batchPayloadSupported ? "Numeric-keyed and array batch payloads are supported." : "Batch payload support unavailable.",
+      ok: Boolean(data.local?.parser?.batchPayloadSupported),
+      badge: data.local?.parser?.batchPayloadSupported ? "pass" : "check"
+    },
+    {
+      title: "Required lead fields",
+      detail: data.local?.parser?.hasName && data.local?.parser?.hasContactChannel
+        ? "Name plus at least one contact channel are present."
+        : "Name/contact validation did not pass.",
+      ok: Boolean(data.local?.parser?.hasName && data.local?.parser?.hasContactChannel),
+      badge: data.local?.parser?.hasName && data.local?.parser?.hasContactChannel ? "pass" : "check"
+    },
+    {
+      title: "Mock D1 insert",
+      detail: data.local?.mockD1?.inserted ? "Local self-test inserted into mock D1 only." : "No mock insert recorded.",
+      ok: Boolean(data.local?.mockD1?.inserted),
+      badge: data.local?.mockD1?.inserted ? "mock" : "check"
+    }
+  ]);
+
+  renderSignalList(leadHealthProduction, [
+    {
+      title: "Safe production probe",
+      detail: data.production?.status ? `GET probe returned HTTP ${data.production.status}.` : data.production?.error || "No production status.",
+      ok: reachable,
+      badge: reachable ? "reachable" : "check"
+    },
+    {
+      title: "Main router header",
+      detail: data.production?.edgeRouter ? `x-sirinx-router=${data.production.edgeRouter}` : "Main router header not observed.",
+      ok: routed,
+      badge: routed ? "routed" : "staged"
+    },
+    {
+      title: "Lead handler route",
+      detail: handlerObserved ? "Safe GET matched the deployed lead handler shape." : "Safe GET did not match the lead handler yet; deploy is still pending.",
+      ok: handlerObserved,
+      badge: handlerObserved ? "active" : "pending"
+    },
+    {
+      title: "Production POST",
+      detail: "Not run from Command Center to avoid creating production leads before approval.",
+      ok: !data.productionPostProbeRun,
+      badge: "no-write"
+    }
+  ]);
+
+  leadHealthNextActions.replaceChildren(
+    ...(data.nextActions || []).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
 }
 
 function makeSummaryCard(label, value, note) {
@@ -1226,7 +1363,7 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   try {
-    const [health, gates, actions, switches, approvalQueue, auditEvents, vibe, hermes, executiveHq, projectInventory] = await Promise.all([
+    const [health, gates, actions, switches, approvalQueue, auditEvents, vibe, leadHealth, hermes, executiveHq, projectInventory] = await Promise.all([
       fetchJson("/health"),
       fetchJson("/api/gates"),
       fetchJson("/api/actions"),
@@ -1234,6 +1371,7 @@ async function loadDashboard() {
       fetchJson("/api/approval-queue"),
       fetchJson("/api/audit-events"),
       fetchJson("/api/vibe-command-center"),
+      fetchJson("/api/lead-health"),
       fetchJson("/api/hermes"),
       fetchJson("/api/executive-hq"),
       fetchJson("/api/project-inventory")
@@ -1246,6 +1384,7 @@ async function loadDashboard() {
     renderApprovalQueue(approvalQueue);
     renderAuditEvents(auditEvents);
     renderVibe(vibe);
+    renderLeadHealth(leadHealth);
     renderHermes(hermes);
     renderExecutive(executiveHq);
     renderProjectInventory(projectInventory);
@@ -1260,6 +1399,7 @@ async function loadDashboard() {
     renderApprovalQueue(fallbackApprovalQueue);
     renderAuditEvents(fallbackAuditTrail);
     renderVibe(fallbackVibe);
+    renderLeadHealth(fallbackLeadHealth);
     renderHermes(fallbackHermes);
     renderExecutive(fallbackExecutive);
     renderProjectInventory(fallbackProjectInventory);

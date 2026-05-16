@@ -60,6 +60,31 @@
         </div>
       </section>
 
+      <section class="panel lead-panel" aria-label="Lead backend health">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Lead Backend</p>
+            <h2>Capture Health</h2>
+          </div>
+          <span id="leadHealthStatus" class="status-pill status-warn">Lead checking</span>
+        </div>
+        <div id="leadHealthSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column" aria-label="Local lead handler">
+            <h3>Local Handler</h3>
+            <div id="leadHealthLocal" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Production lead probe">
+            <h3>Production Probe</h3>
+            <div id="leadHealthProduction" class="signal-list"></div>
+          </section>
+          <section class="tool-column tool-column-wide" aria-label="Lead next actions">
+            <h3>Next Actions</h3>
+            <ol id="leadHealthNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>

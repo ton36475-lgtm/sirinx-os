@@ -8,6 +8,7 @@ import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
+import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { switches } from "./src/switches.mjs";
 import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
 
@@ -458,6 +459,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/website") {
     sendJson(request, response, 200, await getPublicWebsiteStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/lead-health") {
+    sendJson(request, response, 200, await getLeadBackendHealth());
     return;
   }
 
