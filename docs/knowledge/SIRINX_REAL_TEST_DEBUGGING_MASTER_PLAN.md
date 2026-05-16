@@ -3,6 +3,8 @@
 Date: 2026-05-17
 Status: active local test plan
 
+Update 2026-05-17 03:06 +07: external gates were approved by the user and executed where credentials/tools allowed.
+
 ## Scope
 
 This plan defines the local real-test/debugging loop for the SIRINX stack after the Command Center design lock and lead backend local preflight.
@@ -13,7 +15,7 @@ Allowed now:
 - Run local syntax checks, unit tests, browser E2E tests, local service health checks, and local build checks.
 - Write summary/status notes to Obsidian.
 
-Not included in this approval:
+Original local-only approval did not include:
 
 - Cloudflare deploys, DNS changes, Worker route changes, D1 production writes, or secret writes.
 - GitHub push/PR.
@@ -74,12 +76,11 @@ pnpm build
 
 | Gate | Reason | Next action |
 | --- | --- | --- |
-| Cloudflare main-router deploy | Production Worker route and D1 binding write | Needs explicit deploy approval |
-| Production lead POST smoke | Creates a controlled production lead | Needs explicit test-lead approval |
-| Public website GitHub push/PR | External GitHub write | Needs push/PR approval |
 | Codex Mobile pairing | Human QR/MFA flow | User scans QR on phone |
-| Telegram/LINE production bridge | Real customer messaging and token safety | Rotate/revoke token and approve dry-run first |
-| Solis telemetry | Customer/site consent and credentials | Confirm consent and approved secret storage |
+| Public website PR merge | Updates origin/main and may trigger deployment | Review PR #1 and approve merge/release |
+| Telegram production bridge | Gateway connected but home target is not deliverable; channel directory empty | Start/add bot to intended chat, rotate/confirm token, update home channel |
+| LINE production bridge | No production-safe LINE adapter/credential found | Configure LINE OA secret/token/webhook and allowed recipients |
+| Solis telemetry | Customer/site consent, API ID/secret, and station mapping missing | Store credentials through approved secret storage and run read-only telemetry smoke |
 
 ## Latest Local Run
 
@@ -105,8 +106,12 @@ Debug fixes applied:
 Production state:
 
 - `/api/lead-health` reports local lead handler ready.
-- External writes remain false.
-- Production POST probe remains not run.
+- Cloudflare main-router deployed as version `4e66deca-89a5-4a1b-83a8-0dfaee4e3851`.
+- Safe production GET observes `x-sirinx-router: main-www` and `405` on the lead endpoint.
+- Controlled production POST smoke passed with D1 lead id `ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b`.
+- Public website branch `codex/public-website-production-ready-20260517` pushed and draft PR #1 opened.
+- Telegram smoke send failed because the configured home target is not deliverable.
+- Solis safety engine tests pass, but no real SolisCloud telemetry smoke was possible without API credentials and station mapping.
 
 ## Debugging Rule
 

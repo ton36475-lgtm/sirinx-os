@@ -18,12 +18,12 @@ export const commandCenterFunctions = [
     title: "Lead Backend Preflight",
     surface: "www.sirinx.co/api/trpc/lead.submit",
     owner: "Hermes backend integrator",
-    status: "local-ready-production-pending",
-    mode: "no-write-health-check",
+    status: "production-handler-live-smoke-passed",
+    mode: "production-monitor",
     command: "pnpm cloudflare:main-router:check && pnpm cloudflare:main-router:test",
     actionId: "lead-backend-preflight",
-    approvalGate: "Cloudflare deploy and production POST smoke test require explicit approval.",
-    evidence: ["local mock D1 self-test", "tRPC batch parser test", "production POST not run", "contact fallback retained"]
+    approvalGate: "Further schema, DNS, or D1 changes require explicit approval.",
+    evidence: ["local mock D1 self-test", "tRPC batch parser test", "Cloudflare main-router deployed", "production smoke lead ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b"]
   },
   {
     id: "hermes-runtime",
@@ -90,12 +90,12 @@ export const commandCenterFunctions = [
     title: "Telegram / LINE Bridge",
     surface: "Messaging integrations",
     owner: "Connector guard",
-    status: "blocked-for-production",
+    status: "telegram-gateway-connected-target-invalid",
     mode: "dry-run-only",
     command: "simulate bridge readiness only",
     actionId: "telegram-line-bridge-check",
-    approvalGate: "Real sends require token rotation, secret storage, webhook verification, and approval.",
-    evidence: ["customer messaging switch off", "Telegram blocker", "LINE planned"]
+    approvalGate: "Real sends require valid recipient target, token rotation/confirmation, secret storage, webhook verification, and approval.",
+    evidence: ["Telegram gateway connected", "home target not deliverable", "LINE not configured"]
   },
   {
     id: "obsidian-brain",
@@ -114,12 +114,12 @@ export const commandCenterFunctions = [
     title: "Cloudflare Release",
     surface: "Pages, Workers, DNS",
     owner: "Release operator",
-    status: "approval-required",
-    mode: "preflight-only",
+    status: "main-router-deployed",
+    mode: "monitor-and-review",
     command: "wrangler read-only inspection first",
     actionId: "cloudflare-subdomain-plan",
-    approvalGate: "Production deploy, DNS, Worker route, and secret writes require explicit approval.",
-    evidence: ["Cloud mutation switch off", "rollback required", "main router protected"]
+    approvalGate: "Additional DNS, route, Worker, Pages, and secret writes require explicit approval.",
+    evidence: ["sirinx-main-router deployed", "D1 binding verified", "www proxy protected"]
   }
 ];
 

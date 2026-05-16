@@ -224,26 +224,26 @@ const integrationGates = [
   {
     channel: "Telegram",
     currentSource: "Hermes gateway and sirinx-solar-energy scripts",
-    status: "blocked-for-production",
-    reason: "Legacy scripts include hardcoded bot-token patterns and direct-send utilities. Rotate token and move all values to secrets before enabling."
+    status: "gateway-connected-send-target-invalid",
+    reason: "Hermes gateway reports Telegram connected, but the configured home target is not deliverable and channel discovery is empty. Rotate/confirm the bot token, start or add the bot to the intended chat, then set a valid home channel."
   },
   {
     channel: "LINE OA",
     currentSource: "SIRINX docs and data models only",
-    status: "planned",
-    reason: "No production-safe LINE adapter was found. Keep LINE sends disabled until channel secret, webhook verification, and approval gates exist."
+    status: "not-configured",
+    reason: "No production-safe LINE adapter or channel credential was found in this flow. Keep LINE sends disabled until channel secret, webhook verification, and approval gates exist."
   },
   {
     channel: "GitHub",
     currentSource: "gh auth and shallow audit clones",
-    status: "read-only-ready",
-    reason: "Repository inventory can be inspected. Push/PR/deploy still requires explicit approval."
+    status: "public-website-pr-open",
+    reason: "Public website ahead commits were pushed to codex/public-website-production-ready-20260517 and draft PR #1 was opened against main."
   },
   {
     channel: "Cloudflare",
     currentSource: "Wrangler cached binary and existing OAuth session",
-    status: "read-only-ready",
-    reason: "Pages and Worker state can be inspected. DNS, route, deploy, and secret writes require explicit approval."
+    status: "main-router-deployed-smoke-passed",
+    reason: "sirinx-main-router was deployed to sirinx.co routes and the production lead handler passed a controlled POST smoke test against D1."
   },
   {
     channel: "Supabase",
@@ -276,11 +276,11 @@ const blockers = [
     requiredAction: "Deploy new surfaces only to subdomains and keep apex redirect/main router unchanged unless explicitly approved."
   },
   {
-    id: "lead-capture-backend",
-    severity: "high",
+    id: "lead-capture-backend-monitoring",
+    severity: "medium",
     area: "Public website",
-    summary: "Local main-router lead handler and Command Center health preflight are implemented. Production POST is not activated yet because Cloudflare deploy and controlled smoke test require approval.",
-    requiredAction: "Approve main-router deploy, verify D1 binding/route ownership, then run one controlled production POST smoke test."
+    summary: "Cloudflare main-router lead handler is deployed and a controlled production POST smoke test created D1 lead ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b.",
+    requiredAction: "Monitor real contact submissions and keep the public website contact fallback until production traffic has been observed."
   },
   {
     id: "oz-monorepo-dirty",
@@ -398,14 +398,14 @@ export async function getProjectInventory() {
     blockers,
     nextActions: [
       "Run pnpm night-watch before unattended periods so Hermes/Codex records current status into Obsidian.",
-      "Review /api/lead-health. Local lead handler is ready; production POST remains approval-gated.",
-      "Approve or defer Cloudflare main-router deploy for the lead handler. Do not run production POST smoke test before approval.",
+      "Review /api/lead-health. Production main-router is deployed and the handler is observed on safe GET probes.",
+      "Monitor production lead D1 rows after real traffic; controlled smoke lead id ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b can be archived later.",
       "Open Codex App on the Mac, use Set up Codex mobile or Settings > Connections, scan the QR from ChatGPT mobile, and confirm the same workspace.",
       "Use /Users/sirinx/sirinx-os/docs/knowledge/MAC_MINI_CODEX_HERMES_CONTROL_PLANE.md as the mobile operating runbook.",
       "Keep www.sirinx.co contact fallback as live mitigation until production lead POST is verified.",
       "Monitor the 77 province SEO routes and sitemap without changing www.sirinx.co unless a deploy is approved.",
-      "Rotate/revoke leaked Telegram bot credentials before enabling Telegram production sends.",
-      "Push or PR the public website repo after approval because /Users/sirinx/restore-sources/ton36475-lgtm-sirinx is ahead of origin by 5 commits.",
+      "Fix Telegram target setup: rotate/confirm token, start or add the bot to the intended chat, then update the Hermes home channel.",
+      "Review and merge public website PR #1 when ready; branch codex/public-website-production-ready-20260517 is pushed.",
       "Choose first subdomain candidate: dev.sirinx.co, admin.sirinx.co, customer.sirinx.co, or contractor.sirinx.co.",
       "Run build checks for the selected subdomain source without modifying www.sirinx.co.",
       "Prepare Cloudflare Access/DNS/Pages plan for review before any external write.",

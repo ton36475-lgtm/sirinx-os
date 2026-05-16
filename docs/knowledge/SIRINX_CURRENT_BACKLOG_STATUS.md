@@ -14,16 +14,19 @@ Status: current, no hidden backlog
 | Cloudflare `.com` cleanup scope | Documented | `SIRINX_CLOUDFLARE_DOMAIN_CONFIG_CLEANUP_PLAN.md` |
 | Local stack | Online | dev-control-api, dev-dashboard, solar-intelligence, sirinx-site |
 | Public website ahead commits | Locally verified | `pnpm check`, `pnpm test` 162/162, `pnpm build`, SEO province routes 77/77 |
+| Cloudflare main-router deploy | Done | `sirinx-main-router` deployed, version `4e66deca-89a5-4a1b-83a8-0dfaee4e3851` |
+| Production lead POST smoke test | Done | Controlled D1 lead `ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b` created with source `codex-production-smoke` |
+| Public website GitHub branch/PR | Done | Branch `codex/public-website-production-ready-20260517`, PR `https://github.com/ton36475-lgtm/sirinx/pull/1` |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is clean locally on branch `codex/urgent-backlog-execution`.
-- Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean but ahead of origin by 5 commits.
-- Those 5 public website commits have passed local typecheck, test, and production build verification.
-- Lead handler is ready locally but production POST is not activated.
-- Command Center lead health intentionally does not run production POST or create production leads.
-- Contact fallback stays live until production lead POST is approved and verified.
+- Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/public-website-production-ready-20260517`.
+- Those 5 public website commits have passed local typecheck, test, and production build verification, and are pushed to PR #1.
+- Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
+- Command Center lead health intentionally still uses safe GET probes and does not create production leads by itself.
+- Contact fallback stays live until real production lead traffic has been observed.
 
 ## Remaining Backlog By Type
 
@@ -31,19 +34,19 @@ Status: current, no hidden backlog
 
 | Item | Why blocked | Required approval |
 | --- | --- | --- |
-| Deploy main-router lead handler | Cloudflare Worker route and D1 binding are production external writes | Explicit Cloudflare deploy approval |
-| Production POST smoke test | Would create a controlled production lead row | Explicit approval for one test lead |
-| Push public website commits | GitHub external write | Explicit push/PR approval |
 | Expose `dev.sirinx.co` or other internal subdomains | DNS/Pages/Access changes are external writes | Explicit Cloudflare + Access approval |
-| Real Telegram/LINE sends | Customer-facing external messages | Token rotation, secret storage, allowed recipients, and send approval |
+| Merge public website PR #1 | Updates origin/main and may trigger GitHub/Pages deployment workflow | Explicit merge/release approval |
+| Additional Cloudflare route/DNS/secret changes | External cloud mutation beyond deployed main-router | Explicit Cloudflare approval |
+| Real Telegram/LINE sends | Customer-facing external messages | Valid recipient target, token rotation/confirmation, secret storage, and send approval |
 
 ### Credential Or Human Manual Gate
 
 | Item | Why blocked | Required action |
 | --- | --- | --- |
 | Codex Mobile pairing | QR/MFA must be completed by the human operator on phone | Open Codex App on Mac and scan QR in ChatGPT mobile |
-| Telegram production bridge | Legacy audit copy contains token patterns | Revoke/rotate token; move all values to approved secrets |
-| Solis production telemetry | Customer/site API consent and credentials are required | Confirm customer authorization and approved secret storage |
+| Telegram production bridge | Gateway connected, but home target is not deliverable and channel directory is empty | Start/add bot to intended chat, rotate/confirm token, update Hermes home channel |
+| LINE production bridge | No production-safe LINE adapter/credential found in this flow | Configure LINE OA channel secret, access token, webhook verification, and allowed recipients |
+| Solis production telemetry | Customer/site API consent, API ID/secret, and exact station mapping are required | Store credentials through approved secret storage, then run read-only telemetry smoke |
 | Supabase-backed subdomains | Env/RLS/schema must be reviewed | Review env names and RLS before connecting |
 
 ### Isolated Dirty Reference Repos
@@ -57,16 +60,16 @@ Status: current, no hidden backlog
 
 ## Next Strict Sequence
 
-1. Decide whether to approve Cloudflare main-router deploy for the lead handler.
-2. If approved, deploy main-router and run one controlled production POST smoke test.
-3. Record smoke result in Command Center and Obsidian.
-4. Decide whether to push/PR the public website repo ahead commits.
-5. Pair Codex Mobile manually via QR.
-6. Select exactly one subdomain candidate for build/auth review.
-7. Continue Solis read-only connector only after customer/API consent path is clear.
+1. Pair Codex Mobile manually via QR because tool policy blocks direct control of Codex App.
+2. Review/merge public website PR #1 when ready.
+3. Monitor production D1 lead rows after real website traffic.
+4. Fix Telegram target setup, then rerun a Telegram smoke send.
+5. Configure LINE only after channel credential and webhook verification exist.
+6. Store Solis API credentials through approved secret storage, then build read-only telemetry smoke.
+7. Select exactly one subdomain candidate for build/auth review.
 
 ## Stop Rules
 
-- Stop before any deploy, DNS route, Cloudflare secret, D1 production write, GitHub push, Telegram/LINE send, or Solis API credential use unless explicitly approved for that exact action.
+- Stop before any new deploy, DNS route, Cloudflare secret, D1 production write, GitHub merge/main push, Telegram/LINE send, or Solis API credential use unless explicitly approved for that exact action.
 - Do not read `.env` values.
 - Do not clean dirty external/reference repos by deleting or reverting user-created files.
