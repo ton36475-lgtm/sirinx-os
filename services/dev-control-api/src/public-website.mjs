@@ -11,10 +11,14 @@ const publicRoutes = [
   "https://www.sirinx.co/assessment",
   "https://www.sirinx.co/pricing",
   "https://www.sirinx.co/projects",
+  "https://www.sirinx.co/solar-carport/phitsanulok",
+  "https://www.sirinx.co/sitemap.xml",
   "https://sirinx.co/"
 ];
 
 const knownPreviewDeployments = [
+  "https://4840209e.sirinx-co.pages.dev",
+  "https://0c586301.sirinx-co.pages.dev",
   "https://3952deb7.sirinx-co.pages.dev",
   "https://8a643ab0.sirinx-co.pages.dev"
 ];
@@ -116,6 +120,7 @@ export async function getPublicWebsiteStatus() {
       requiresApprovalForDeploy: true,
       nextActions: [
         "Verify contact form lead delivery before paid traffic.",
+        "Keep 77 province SEO pages and sitemap monitored.",
         "Confirm apex sirinx.co routing remains 301 to www.",
         "Decide production analytics architecture.",
         "Push restore-source commits after approval."

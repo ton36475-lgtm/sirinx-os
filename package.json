@@ -34,6 +34,7 @@
     "hq:status": "./scripts/ai-hq-status.sh",
     "hq:test": "./scripts/test-ai-hq.sh",
     "hq:digest": "./scripts/knowledge-digest.sh",
+    "night-watch": "./scripts/hermes-night-watch-snapshot.sh",
     "dashboard:test": "./scripts/test-dashboard-brain.sh",
     "verify": "node --check apps/dev-dashboard/server.mjs && node --check apps/dev-dashboard/src/app.js && node --check services/dev-control-api/server.mjs && node --check services/dev-control-api/src/gates.mjs && node --check services/dev-control-api/src/brain.mjs && node --check services/dev-control-api/src/switches.mjs && node --check services/dev-control-api/src/approval-queue.mjs && node --check services/dev-control-api/src/audit-events.mjs && node --check services/dev-control-api/src/public-website.mjs && node --check services/dev-control-api/src/project-inventory.mjs && node --check infra/cloudflare/main-router/src/worker.js"
   },

@@ -390,8 +390,10 @@ export async function getProjectInventory() {
     integrationGates,
     blockers,
     nextActions: [
+      "Run pnpm night-watch before unattended periods so Hermes/Codex records current status into Obsidian.",
       "Open Codex App on the Mac, use Set up Codex mobile or Settings > Connections, scan the QR from ChatGPT mobile, and confirm the same workspace.",
       "Use /Users/sirinx/sirinx-os/docs/knowledge/MAC_MINI_CODEX_HERMES_CONTROL_PLANE.md as the mobile operating runbook.",
+      "Monitor the 77 province SEO routes and sitemap without changing www.sirinx.co unless a deploy is approved.",
       "Rotate/revoke leaked Telegram bot credentials before enabling Telegram production sends.",
       "Choose first subdomain candidate: dev.sirinx.co, admin.sirinx.co, customer.sirinx.co, or contractor.sirinx.co.",
       "Run build checks for the selected subdomain source without modifying www.sirinx.co.",
