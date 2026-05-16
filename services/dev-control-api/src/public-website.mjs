@@ -121,8 +121,9 @@ export async function getPublicWebsiteStatus() {
       externalWrites: false,
       requiresApprovalForDeploy: true,
       nextActions: [
-        "Contact form email/LINE fallback is live; build automatic backend capture before paid traffic.",
-        "Deploy Cloudflare Function/D1 or approved webhook for /api/trpc/lead.submit after binding/secrets review.",
+        "Contact form email/LINE fallback is live; keep it active until production lead POST is verified.",
+        "Local main-router lead handler is ready and covered by tests. Deploy only after explicit Cloudflare approval and D1 binding review.",
+        "Use GET /api/lead-health in Command Center to confirm local readiness and no-write production probe state.",
         "Keep 77 province SEO pages and sitemap monitored.",
         "Confirm apex sirinx.co routing remains 301 to www.",
         "Decide production analytics architecture.",

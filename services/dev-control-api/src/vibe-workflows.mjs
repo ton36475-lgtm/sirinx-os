@@ -11,7 +11,19 @@ export const commandCenterFunctions = [
     command: "pnpm check && pnpm test && pnpm build",
     actionId: "baseline-check",
     approvalGate: "Deploy or router changes require explicit approval.",
-    evidence: ["HTTP 200 baseline", "main website protected", "no internal dashboard routes"]
+    evidence: ["HTTP 200 baseline", "main website protected", "no internal dashboard routes", "contact fallback remains active"]
+  },
+  {
+    id: "lead-backend-preflight",
+    title: "Lead Backend Preflight",
+    surface: "www.sirinx.co/api/trpc/lead.submit",
+    owner: "Hermes backend integrator",
+    status: "local-ready-production-pending",
+    mode: "no-write-health-check",
+    command: "pnpm cloudflare:main-router:check && pnpm cloudflare:main-router:test",
+    actionId: "lead-backend-preflight",
+    approvalGate: "Cloudflare deploy and production POST smoke test require explicit approval.",
+    evidence: ["local mock D1 self-test", "tRPC batch parser test", "production POST not run", "contact fallback retained"]
   },
   {
     id: "hermes-runtime",
@@ -123,54 +135,86 @@ export const processLane = [
   {
     id: "phase-1",
     label: "Phase 1",
-    title: "Verify SIRINX OS And Hermes",
+    title: "Lock Command Center Design",
     status: "done",
-    nextCommand: "pnpm verify && pnpm dashboard:e2e",
-    output: "Local command center is safe to operate."
+    nextCommand: "git show ebc8cc4 --stat",
+    output: "System design, wiring plan, blockers, and test matrix are committed."
   },
   {
     id: "phase-2",
     label: "Phase 2",
+    title: "Lead Backend Local Preflight",
+    status: "done",
+    nextCommand: "pnpm cloudflare:main-router:test",
+    output: "Main-router lead handler supports tRPC batch payloads and mock D1 inserts."
+  },
+  {
+    id: "phase-3",
+    label: "Phase 3",
+    title: "Command Center Lead Health",
+    status: "done",
+    nextCommand: "GET /api/lead-health",
+    output: "Dashboard shows local handler readiness and no-write production probe state."
+  },
+  {
+    id: "phase-4",
+    label: "Phase 4",
+    title: "Cloudflare Domain Cleanup Plan",
+    status: "done",
+    nextCommand: "open docs/knowledge/SIRINX_CLOUDFLARE_DOMAIN_CONFIG_CLEANUP_PLAN.md",
+    output: "Legacy .com references are inventoried; no deploy or rewrite was performed."
+  },
+  {
+    id: "phase-5",
+    label: "Phase 5",
+    title: "Deploy Lead Handler",
+    status: "approval-gate",
+    nextCommand: "pnpm cloudflare:main-router:deploy",
+    output: "Requires explicit Cloudflare approval, D1 binding review, rollback plan, and controlled production POST smoke test."
+  },
+  {
+    id: "phase-6",
+    label: "Phase 6",
     title: "Connect Codex Mobile",
     status: "manual-gate",
     nextCommand: "Open Codex App > Set up Codex mobile > scan QR",
     output: "Mobile becomes command, review, and approval surface."
   },
   {
-    id: "phase-3",
-    label: "Phase 3",
+    id: "phase-7",
+    label: "Phase 7",
     title: "Review Repo And Subdomain Inventory",
     status: "ready",
     nextCommand: "GET /api/project-inventory",
-    output: "Choose one subdomain candidate without touching www."
+    output: "Dirty/reference repos are explicit; choose one subdomain candidate without touching www."
   },
   {
-    id: "phase-4",
-    label: "Phase 4",
+    id: "phase-8",
+    label: "Phase 8",
     title: "Build Solis Read-Only Connector",
-    status: "next",
+    status: "planned",
     nextCommand: "mock-first telemetry connector",
     output: "Telemetry can be inspected without control commands."
   },
   {
-    id: "phase-5",
-    label: "Phase 5",
+    id: "phase-9",
+    label: "Phase 9",
     title: "Draft Database Schema",
     status: "planned",
     nextCommand: "schema draft, no migration",
     output: "Customers, sites, devices, telemetry, approvals, audit events."
   },
   {
-    id: "phase-6",
-    label: "Phase 6",
+    id: "phase-10",
+    label: "Phase 10",
     title: "Dashboard Telemetry Cards",
     status: "planned",
     nextCommand: "local dashboard only",
     output: "Per-site PV/load/grid/battery/alarm visibility."
   },
   {
-    id: "phase-7",
-    label: "Phase 7",
+    id: "phase-11",
+    label: "Phase 11",
     title: "Dry-Run Approval Bridge",
     status: "planned",
     nextCommand: "LINE/Telegram mock only",
@@ -181,7 +225,13 @@ export const processLane = [
 export function getVibeCommandCenter() {
   const blocked = commandCenterFunctions.filter((item) => item.status.includes("blocked")).length;
   const dryRun = commandCenterFunctions.filter((item) => item.mode.includes("dry") || item.mode.includes("simulation")).length;
-  const ready = commandCenterFunctions.filter((item) => ["live-locked", "online-local", "ready-for-review", "active-local"].includes(item.status)).length;
+  const ready = commandCenterFunctions.filter((item) =>
+    item.status.includes("done") ||
+    item.status.includes("ready") ||
+    item.status.includes("online") ||
+    item.status.includes("live") ||
+    item.status.includes("active")
+  ).length;
 
   return {
     title: "Vibe Coding Command Center",
@@ -197,7 +247,7 @@ export function getVibeCommandCenter() {
     },
     functions: commandCenterFunctions,
     processLane,
-    operatingRule: "Work in order: baseline, verify, mobile setup, inventory, Solis read-only connector, schema, telemetry UI, approval bridge.",
+    operatingRule: "Work in order: public baseline, design lock, lead local preflight, lead health visibility, Cloudflare cleanup plan, deploy only after approval, then mobile/subdomain/Solis/schema work.",
     updatedAt: currentTimestamp()
   };
 }

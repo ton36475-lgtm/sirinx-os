@@ -265,8 +265,8 @@ const blockers = [
     id: "cloudflare-domain-rewrite",
     severity: "high",
     area: "Cloudflare",
-    summary: "Several legacy Cloudflare configs point at sirinx.com, while production target is sirinx.co.",
-    requiredAction: "Rewrite and review route patterns before any worker deploy."
+    summary: "Several legacy Cloudflare configs point at sirinx.com, while production target is sirinx.co. Cleanup scope is documented in SIRINX_CLOUDFLARE_DOMAIN_CONFIG_CLEANUP_PLAN.md.",
+    requiredAction: "Rewrite only the selected deployment source after route review; do not deploy legacy workers over www.sirinx.co."
   },
   {
     id: "main-site-protection",
@@ -279,8 +279,8 @@ const blockers = [
     id: "lead-capture-backend",
     severity: "high",
     area: "Public website",
-    summary: "Contact form now has a verified email/LINE fallback, but /api/trpc/lead.submit still returns 405 on production.",
-    requiredAction: "Add a production-safe Cloudflare Function/D1/notification path after binding and secret review."
+    summary: "Local main-router lead handler and Command Center health preflight are implemented. Production POST is not activated yet because Cloudflare deploy and controlled smoke test require approval.",
+    requiredAction: "Approve main-router deploy, verify D1 binding/route ownership, then run one controlled production POST smoke test."
   },
   {
     id: "oz-monorepo-dirty",
@@ -398,11 +398,14 @@ export async function getProjectInventory() {
     blockers,
     nextActions: [
       "Run pnpm night-watch before unattended periods so Hermes/Codex records current status into Obsidian.",
+      "Review /api/lead-health. Local lead handler is ready; production POST remains approval-gated.",
+      "Approve or defer Cloudflare main-router deploy for the lead handler. Do not run production POST smoke test before approval.",
       "Open Codex App on the Mac, use Set up Codex mobile or Settings > Connections, scan the QR from ChatGPT mobile, and confirm the same workspace.",
       "Use /Users/sirinx/sirinx-os/docs/knowledge/MAC_MINI_CODEX_HERMES_CONTROL_PLANE.md as the mobile operating runbook.",
-      "Treat www.sirinx.co contact fallback as live mitigation, then implement automatic lead capture backend.",
+      "Keep www.sirinx.co contact fallback as live mitigation until production lead POST is verified.",
       "Monitor the 77 province SEO routes and sitemap without changing www.sirinx.co unless a deploy is approved.",
       "Rotate/revoke leaked Telegram bot credentials before enabling Telegram production sends.",
+      "Push or PR the public website repo after approval because /Users/sirinx/restore-sources/ton36475-lgtm-sirinx is ahead of origin by 5 commits.",
       "Choose first subdomain candidate: dev.sirinx.co, admin.sirinx.co, customer.sirinx.co, or contractor.sirinx.co.",
       "Run build checks for the selected subdomain source without modifying www.sirinx.co.",
       "Prepare Cloudflare Access/DNS/Pages plan for review before any external write.",
