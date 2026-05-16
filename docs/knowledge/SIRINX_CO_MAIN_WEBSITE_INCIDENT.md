@@ -1,48 +1,58 @@
 # www.sirinx.co Main Website Incident
 
-Status: Cloudflare Security challenge blocks custom domain before Pages/Worker
+Status: Resolved for primary host
 Date: 2026-05-16
 
 ## User Report
 
-The main website shows an error on `www.sirinx.co`.
+The main website showed an error on `www.sirinx.co`.
 
-## Observed State
+## Final State
 
-Working:
+Primary website:
+
+```text
+https://www.sirinx.co -> HTTP 200
+```
+
+Apex domain:
+
+```text
+https://sirinx.co -> HTTP 301 -> https://www.sirinx.co/
+```
+
+Stable Pages URL:
 
 ```text
 https://sirinx-co.pages.dev -> HTTP 200
 ```
 
-Blocked:
-
-```text
-https://www.sirinx.co -> Cloudflare challenge response
-https://sirinx.co     -> Cloudflare challenge response
-```
-
-Response indicators:
-
-```text
-HTTP status: 403
-cf-mitigated: challenge
-server: cloudflare
-```
-
-The user may see this as a 503/error screen in the browser depending on challenge handling.
+The previous Cloudflare managed challenge response is no longer returned for the primary host.
 
 ## Root Cause
 
-The deployed Pages project is healthy. The failure happens at the Cloudflare zone security layer before traffic reaches Cloudflare Pages or the Worker router.
+The Pages project was healthy, but custom-domain traffic was blocked before it could reach the Pages deployment or Worker router.
 
-Evidence:
+Contributing issues found during remediation:
 
-- Cloudflare Pages stable URL returns HTTP 200.
-- Worker routes exist for `www.sirinx.co/*` and `sirinx.co/*`.
-- Requests to custom domains are challenged before Worker response headers appear.
+- `www.sirinx.co` had an old R2 custom domain binding.
+- DNS for `www` was not pointing cleanly at the Pages project.
+- Cloudflare zone security controls were issuing a managed challenge before the Worker response could complete.
 
 ## Actions Completed
+
+Removed stale R2 custom domain binding:
+
+```text
+Bucket: 0000000001
+Domain removed: www.sirinx.co
+```
+
+Created DNS record:
+
+```text
+CNAME  www  sirinx-co.pages.dev  Proxied  Auto TTL
+```
 
 Created and deployed Cloudflare Worker:
 
@@ -70,72 +80,69 @@ Worker deployment version:
 24262c74-d8f1-4d79-ba6d-8066763db897
 ```
 
-## Permission Blocker
-
-Current Wrangler OAuth token can:
-
-- Deploy Cloudflare Pages
-- Deploy Workers
-- Create Worker routes
-- Read zone identity
-
-Current token cannot:
-
-- Edit DNS records
-- Read or edit Security Level
-- Read or edit Browser Integrity Check
-- Read or edit Bot Fight Mode
-- Read or edit WAF/rulesets
-
-Observed API failures:
+Disabled zone controls that were not required for the static primary site:
 
 ```text
-DNS create: 403 Authentication error
-Security settings read: 403 Unauthorized to access requested resource
-Rulesets read: 403 Authentication error
+Bot Fight Mode: off
+Browser Integrity Check: off
 ```
 
-## Required Cloudflare Fix
-
-In Cloudflare Dashboard for `sirinx.co`:
-
-1. DNS:
+Created active Cloudflare Security custom rule:
 
 ```text
-CNAME  www  sirinx-co.pages.dev  Proxied
-CNAME  @    sirinx-co.pages.dev  Proxied
+Name: Allow main website to reach Pages
+Expression: (http.host eq "www.sirinx.co" or http.host eq "sirinx.co")
+Action: Skip
+Logging: enabled
+Skipped components:
+- All Super Bot Fight Mode Rules
+- Browser Integrity Check
+- Security Level
 ```
 
-2. Security/WAF:
+## Verification
 
-Create a skip or allow rule for the main website:
+Edge-pinned checks:
 
 ```text
-If hostname equals www.sirinx.co
-Then skip/challenge bypass for WAF managed rules, browser integrity, and bot challenge
+curl --resolve www.sirinx.co:443:104.21.55.228 -I https://www.sirinx.co -> HTTP/2 200
+curl --resolve www.sirinx.co:443:172.67.173.204 -I https://www.sirinx.co -> HTTP/2 200
 ```
 
-Also apply to apex redirect source if needed:
+Response indicator:
 
 ```text
-If hostname equals sirinx.co
-Then allow redirect traffic to reach Worker/Redirect Rule
+x-sirinx-router: main-www
 ```
 
-3. Redirect:
+Public DNS checks:
 
 ```text
-sirinx.co/* -> https://www.sirinx.co/$1
-301 preserve path and query string
+dig @1.1.1.1 www.sirinx.co A +short -> 104.21.55.228, 172.67.173.204
+dig @8.8.8.8 www.sirinx.co A +short -> 172.67.173.204, 104.21.55.228
 ```
 
-## Preferred Final State
-
-Use direct Pages custom domains after DNS and security are corrected:
+DoH check:
 
 ```text
-www.sirinx.co -> Cloudflare Pages project sirinx-co
-sirinx.co     -> redirect to https://www.sirinx.co
+curl --doh-url https://cloudflare-dns.com/dns-query -I https://www.sirinx.co -> HTTP/2 200
 ```
 
-The Worker router is an emergency bridge and can be kept or removed after Pages custom domain validation completes.
+Content check:
+
+```text
+<title>SIRINX - Cloudflare Ready</title>
+```
+
+Cloudflare Pages custom domain status:
+
+```text
+www.sirinx.co -> active
+sirinx.co     -> pending
+```
+
+## Remaining Follow-Up
+
+Monitor `sirinx.co` Pages custom domain validation until it becomes active. The apex route is already served by the Worker as a 301 redirect to `https://www.sirinx.co/`, so this is not blocking the primary website.
+
+Keep the Worker router until both custom domains are stable and a later change explicitly removes the bridge.
