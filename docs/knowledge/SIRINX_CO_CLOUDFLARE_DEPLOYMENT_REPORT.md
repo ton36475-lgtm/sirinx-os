@@ -38,13 +38,13 @@ main
 Deployment ID:
 
 ```text
-e3602602-58b3-4208-a42f-9940caa8e840
+ecae0323-9fd3-4881-a102-d9f6473a9640
 ```
 
 Deployment URL:
 
 ```text
-https://e3602602.sirinx-co.pages.dev
+https://ecae0323.sirinx-co.pages.dev
 ```
 
 Stable Pages URL:
@@ -62,7 +62,7 @@ apps/sirinx-site/dist
 Repository commit metadata used for deployment:
 
 ```text
-4de27ae chore: add local full-stack runner
+3412505 docs: define www primary domain routing
 ```
 
 ## Verification
@@ -77,7 +77,9 @@ Cloudflare verification after deploy:
 
 ```text
 https://sirinx-co.pages.dev returned HTTP 200
-Deployed HTML contains SIRINX and sirinx.co Cloudflare readiness content
+Deployed HTML contains SIRINX and www.sirinx.co primary-domain content
+Sitemap points to https://www.sirinx.co/
+Robots.txt points to https://www.sirinx.co/sitemap.xml
 _headers uploaded
 _redirects uploaded
 ```
