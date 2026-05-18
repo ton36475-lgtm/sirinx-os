@@ -1,4 +1,8 @@
-import { extractLeadPayload, handleLeadSubmit } from "../../../infra/cloudflare/main-router/src/worker.js";
+import {
+  extractLeadPayload,
+  getLeadIntakeSchema,
+  handleLeadSubmit
+} from "../../../infra/cloudflare/main-router/src/worker.js";
 
 const leadSubmitUrl = "https://www.sirinx.co/api/trpc/lead.submit?batch=1";
 
@@ -67,6 +71,7 @@ async function safeProductionMethodProbe() {
 
 async function runLocalLeadSelfTest() {
   const db = createMockD1();
+  const schema = getLeadIntakeSchema();
   const payload = {
     0: {
       json: {
@@ -78,8 +83,22 @@ async function runLocalLeadSelfTest() {
       }
     }
   };
+  const arrayPayload = [
+    {
+      input: {
+        json: {
+          source: "assessment",
+          name: "SIRINX Local Array Probe",
+          email: "array-probe@example.invalid",
+          systemSize: "10 kW",
+          bessInterest: "yes"
+        }
+      }
+    }
+  ];
 
   const extracted = extractLeadPayload(payload);
+  const arrayExtracted = extractLeadPayload(arrayPayload);
   const response = await handleLeadSubmit(
     new Request(leadSubmitUrl, {
       method: "POST",
@@ -94,10 +113,25 @@ async function runLocalLeadSelfTest() {
     ok: response.status === 200 && Array.isArray(body) && Boolean(body[0]?.result?.data?.json?.id),
     status: response.status,
     parser: {
-      batchPayloadSupported: extracted.isBatch === true,
+      batchPayloadSupported: extracted.isBatch === true && arrayExtracted.isBatch === true,
+      numericKeyedBatchSupported: extracted.isBatch === true,
+      arrayBatchSupported: arrayExtracted.isBatch === true,
       source: extracted.lead.source,
       hasName: Boolean(extracted.lead.name),
-      hasContactChannel: Boolean(extracted.lead.phone || extracted.lead.email || extracted.lead.lineUserId)
+      hasContactChannel: Boolean(extracted.lead.phone || extracted.lead.email || extracted.lead.lineUserId),
+      arrayHasContactChannel: Boolean(arrayExtracted.lead.phone || arrayExtracted.lead.email || arrayExtracted.lead.lineUserId)
+    },
+    schema: {
+      version: schema.version,
+      endpoint: schema.endpoint,
+      method: schema.method,
+      requiredAll: schema.required.all,
+      requiredOneOf: schema.required.oneOf,
+      acceptedPayloadShapes: schema.payloadShapes,
+      fieldCount: schema.fields.length,
+      piiFieldCount: schema.fields.filter((field) => field.pii).length,
+      contactChannelFields: schema.fields.filter((field) => field.contactChannel).map((field) => field.name),
+      dbColumns: schema.fields.map((field) => field.dbColumn)
     },
     mockD1: {
       externalWrites: false,
@@ -135,6 +169,12 @@ export async function getLeadBackendHealth() {
     title: "SIRINX lead backend health",
     mode: "local-self-test-and-safe-production-get-probe",
     status,
+    schema: {
+      ...local.schema,
+      reviewGates: getLeadIntakeSchema().reviewGates,
+      productionWriteBehavior: getLeadIntakeSchema().productionWriteBehavior,
+      commandCenterProbeBehavior: getLeadIntakeSchema().commandCenterProbeBehavior
+    },
     externalWrites: false,
     productionPostProbeRun: false,
     local,

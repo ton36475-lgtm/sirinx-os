@@ -23,7 +23,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.getByRole("heading", { name: "Capture Health" })).toBeVisible();
     await expect(page.locator("#leadHealthStatus")).toHaveText(/Local ready|Lead blocked/);
     await expect(page.locator("#leadHealthSummary")).toContainText("Local Handler");
+    await expect(page.locator("#leadHealthSummary")).toContainText("Schema");
     await expect(page.locator("#leadHealthLocal")).toContainText("tRPC batch parser");
+    await expect(page.locator("#leadHealthLocal")).toContainText("Lead intake schema");
     await expect(page.locator("#leadHealthProduction")).toContainText("Production POST");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
@@ -88,6 +90,9 @@ test.describe("Developer Command Center", () => {
     expect(leadHealth.externalWrites).toBe(false);
     expect(leadHealth.productionPostProbeRun).toBe(false);
     expect(leadHealth.local.ok).toBe(true);
+    expect(leadHealth.schema.version).toBe("2026-05-19.lead-intake.v1");
+    expect(leadHealth.schema.fieldCount).toBeGreaterThan(0);
+    expect(leadHealth.schema.contactChannelFields).toEqual(["email", "phone", "lineUserId"]);
     expect(consoleErrors).toEqual([]);
   });
 

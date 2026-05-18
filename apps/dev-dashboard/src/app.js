@@ -203,14 +203,25 @@ const fallbackVibe = {
 
 const fallbackLeadHealth = {
   status: "unavailable",
+  schema: {
+    version: "unavailable",
+    fieldCount: 0,
+    piiFieldCount: 0,
+    contactChannelFields: [],
+    acceptedPayloadShapes: [],
+    reviewGates: ["Start the local control API to load the lead intake schema."]
+  },
   externalWrites: false,
   productionPostProbeRun: false,
   local: {
     ok: false,
     parser: {
       batchPayloadSupported: false,
+      numericKeyedBatchSupported: false,
+      arrayBatchSupported: false,
       hasName: false,
-      hasContactChannel: false
+      hasContactChannel: false,
+      arrayHasContactChannel: false
     },
     mockD1: {
       statements: 0,
@@ -803,6 +814,7 @@ function renderLeadHealth(health) {
 
   leadHealthSummary.replaceChildren(
     makeSummaryCard("Local Handler", localOk ? "Ready" : "Blocked", data.status || "unknown"),
+    makeSummaryCard("Schema", data.schema?.fieldCount ? `${data.schema.fieldCount} fields` : "N/A", data.schema?.version || "schema unavailable"),
     makeSummaryCard("Batch Parser", data.local?.parser?.batchPayloadSupported ? "Pass" : "Check", "tRPC batch body"),
     makeSummaryCard("Mock D1", data.local?.mockD1?.inserted ? "Pass" : "Check", `${data.local?.mockD1?.statements || 0} statements`),
     makeSummaryCard("Prod GET", data.production?.status ? `${data.production.status}` : "N/A", reachable ? "safe no-write probe" : "unreachable"),
@@ -812,9 +824,19 @@ function renderLeadHealth(health) {
   renderSignalList(leadHealthLocal, [
     {
       title: "tRPC batch parser",
-      detail: data.local?.parser?.batchPayloadSupported ? "Numeric-keyed and array batch payloads are supported." : "Batch payload support unavailable.",
+      detail: data.local?.parser?.batchPayloadSupported
+        ? "Numeric-keyed and array batch payloads are supported."
+        : "Batch payload support unavailable.",
       ok: Boolean(data.local?.parser?.batchPayloadSupported),
       badge: data.local?.parser?.batchPayloadSupported ? "pass" : "check"
+    },
+    {
+      title: "Lead intake schema",
+      detail: data.schema?.fieldCount
+        ? `${data.schema.fieldCount} accepted fields, ${data.schema.piiFieldCount || 0} PII fields, contact via ${(data.schema.contactChannelFields || []).join(", ")}.`
+        : "Lead schema unavailable.",
+      ok: Boolean(data.schema?.fieldCount),
+      badge: data.schema?.fieldCount ? "schema" : "check"
     },
     {
       title: "Required lead fields",

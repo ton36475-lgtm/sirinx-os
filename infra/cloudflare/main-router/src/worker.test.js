@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractLeadPayload, handleLeadSubmit } from "./worker.js";
+import { extractLeadPayload, getLeadIntakeSchema, handleLeadSubmit } from "./worker.js";
 
 function createMockD1() {
   const statements = [];
@@ -32,6 +32,18 @@ async function readJson(response) {
 }
 
 describe("main-router lead payload extraction", () => {
+  it("exposes a read-only lead intake schema contract", () => {
+    const schema = getLeadIntakeSchema();
+
+    expect(schema.version).toBe("2026-05-19.lead-intake.v1");
+    expect(schema.endpoint).toBe("/api/trpc/lead.submit");
+    expect(schema.required.all).toContain("name");
+    expect(schema.required.oneOf).toEqual(["phone", "email", "lineUserId"]);
+    expect(schema.payloadShapes).toContain("tRPC numeric-keyed batch");
+    expect(schema.fields.map((field) => field.name)).toContain("monthlyBill");
+    expect(schema.reviewGates).toContain("production POST smoke requires explicit approval");
+  });
+
   it("extracts a tRPC numeric-keyed batch payload", () => {
     const result = extractLeadPayload({
       0: {

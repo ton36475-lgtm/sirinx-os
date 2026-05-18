@@ -3,6 +3,41 @@ const APEX_HOST = "sirinx.co";
 const PAGES_HOST = "sirinx-co.pages.dev";
 const LEAD_SUBMIT_PATH = "/api/trpc/lead.submit";
 
+const leadIntakeSchema = Object.freeze({
+  version: "2026-05-19.lead-intake.v1",
+  endpoint: LEAD_SUBMIT_PATH,
+  method: "POST",
+  productionWriteBehavior: "creates contact_leads row when LEAD_DB is configured",
+  commandCenterProbeBehavior: "GET only; never creates production leads",
+  payloadShapes: ["plain json", "tRPC array batch", "tRPC numeric-keyed batch", "input.json"],
+  required: {
+    all: ["name"],
+    oneOf: ["phone", "email", "lineUserId"]
+  },
+  fields: [
+    { name: "source", dbColumn: "source", maxLength: 40, required: false, pii: false, default: "contact" },
+    { name: "name", dbColumn: "name", maxLength: 160, required: true, pii: true },
+    { name: "company", dbColumn: "company", maxLength: 160, required: false, pii: true },
+    { name: "email", dbColumn: "email", maxLength: 180, required: false, pii: true, contactChannel: true },
+    { name: "phone", dbColumn: "phone", maxLength: 80, required: false, pii: true, contactChannel: true },
+    { name: "interest", dbColumn: "interest", maxLength: 160, required: false, pii: false },
+    { name: "budget", dbColumn: "budget", maxLength: 160, required: false, pii: false },
+    { name: "timeline", dbColumn: "timeline", maxLength: 160, required: false, pii: false },
+    { name: "industry", dbColumn: "industry", maxLength: 160, required: false, pii: false },
+    { name: "systemSize", dbColumn: "system_size", maxLength: 80, required: false, pii: false },
+    { name: "systemType", dbColumn: "system_type", maxLength: 160, required: false, pii: false },
+    { name: "monthlyBill", dbColumn: "monthly_bill", maxLength: 80, required: false, pii: false },
+    { name: "bessInterest", dbColumn: "bess_interest", maxLength: 40, required: false, pii: false },
+    { name: "lineUserId", dbColumn: "line_user_id", maxLength: 120, required: false, pii: true, contactChannel: true },
+    { name: "message", dbColumn: "message", maxLength: 4000, required: false, pii: true }
+  ],
+  reviewGates: [
+    "production POST smoke requires explicit approval",
+    "D1 binding must be reviewed before deploy",
+    "customer-facing CRM or messaging writes require separate approval"
+  ]
+});
+
 const jsonHeaders = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store",
@@ -118,6 +153,10 @@ function extractLeadPayload(body) {
       message: normalizeLeadValue(json?.message, 4000)
     }
   };
+}
+
+function getLeadIntakeSchema() {
+  return leadIntakeSchema;
 }
 
 async function ensureLeadTable(db) {
@@ -238,4 +277,4 @@ export default {
   }
 };
 
-export { extractLeadPayload, handleLeadSubmit };
+export { extractLeadPayload, getLeadIntakeSchema, handleLeadSubmit };
