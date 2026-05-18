@@ -25,6 +25,10 @@ const leadHealthSummary = document.querySelector("#leadHealthSummary");
 const leadHealthLocal = document.querySelector("#leadHealthLocal");
 const leadHealthProduction = document.querySelector("#leadHealthProduction");
 const leadHealthNextActions = document.querySelector("#leadHealthNextActions");
+const salesArtifactsStatus = document.querySelector("#salesArtifactsStatus");
+const salesArtifactsSummary = document.querySelector("#salesArtifactsSummary");
+const salesArtifactsList = document.querySelector("#salesArtifactsList");
+const salesArtifactsNextActions = document.querySelector("#salesArtifactsNextActions");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -245,6 +249,18 @@ const fallbackLeadHealth = {
     postProbeRun: false
   },
   nextActions: ["Start the local control API and refresh lead health."]
+};
+
+const fallbackSalesArtifacts = {
+  status: "unavailable",
+  proposalDraftReadiness: "blocked-local-artifacts",
+  mode: "local-fallback",
+  externalWrites: false,
+  summary: { artifacts: 0, ready: 0, missing: 0, incomplete: 0 },
+  items: [],
+  lanes: [],
+  reviewGates: ["Start the local control API to inspect sales artifacts."],
+  nextActions: ["Start the local control API and refresh sales artifacts."]
 };
 
 const fallbackExecutive = {
@@ -908,6 +924,51 @@ function renderLeadHealth(health) {
   );
 }
 
+function renderSalesArtifacts(status) {
+  const data = status || fallbackSalesArtifacts;
+  const ready = data.status === "ready-local";
+  const proposalReady = data.proposalDraftReadiness === "ready-local-draft";
+
+  salesArtifactsStatus.textContent = ready ? "Artifacts ready" : "Artifacts review";
+  salesArtifactsStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  salesArtifactsStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  salesArtifactsSummary.replaceChildren(
+    makeSummaryCard("Artifacts", `${data.summary?.ready || 0}/${data.summary?.artifacts || 0}`, data.mode || "local"),
+    makeSummaryCard("Proposal Draft", proposalReady ? "Ready" : "Blocked", data.proposalDraftReadiness || "unknown"),
+    makeSummaryCard("Missing", `${data.summary?.missing || 0}`, "local notes"),
+    makeSummaryCard("Incomplete", `${data.summary?.incomplete || 0}`, "required text")
+  );
+
+  const items = data.items || [];
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "gate-copy";
+    empty.textContent = "Sales artifacts are unavailable until the local control API is online.";
+    salesArtifactsList.replaceChildren(empty);
+  } else {
+    renderSignalList(
+      salesArtifactsList,
+      items.map((item) => ({
+        title: item.title,
+        detail: item.ready
+          ? `${item.type} / ${item.lane} / ${item.fileName}`
+          : `${item.exists ? "Incomplete" : "Missing"} / ${item.path}`,
+        ok: Boolean(item.ready),
+        badge: item.ready ? "ready" : "review"
+      }))
+    );
+  }
+
+  salesArtifactsNextActions.replaceChildren(
+    ...(data.nextActions || []).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -1546,6 +1607,12 @@ async function loadDashboard() {
     loadPanel("/api/audit-events", renderAuditEvents, () => renderAuditEvents(fallbackAuditTrail), "Audit events"),
     loadPanel("/api/vibe-command-center", renderVibe, () => renderVibe(fallbackVibe), "Vibe command"),
     loadPanel("/api/lead-health", renderLeadHealth, () => renderLeadHealth(fallbackLeadHealth), "Lead health"),
+    loadPanel(
+      "/api/sales-artifacts",
+      renderSalesArtifacts,
+      () => renderSalesArtifacts(fallbackSalesArtifacts),
+      "Sales artifacts"
+    ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),
     loadPanel(

@@ -89,6 +89,27 @@
         </div>
       </section>
 
+      <section class="panel sales-artifacts-panel" aria-label="Sales artifacts readiness">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Sales Engineering</p>
+            <h2>Sales Artifacts</h2>
+          </div>
+          <span id="salesArtifactsStatus" class="status-pill status-warn">Artifacts checking</span>
+        </div>
+        <div id="salesArtifactsSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Proposal artifacts">
+            <h3>Proposal Readiness</h3>
+            <div id="salesArtifactsList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Sales artifact next actions">
+            <h3>Next Actions</h3>
+            <ol id="salesArtifactsNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>

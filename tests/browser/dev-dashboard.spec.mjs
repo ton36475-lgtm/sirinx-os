@@ -31,6 +31,10 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#leadHealthLocal")).toContainText("Lead intake schema");
     await expect(page.locator("#leadHealthLocal")).toContainText("Qualification model");
     await expect(page.locator("#leadHealthProduction")).toContainText("Production POST");
+    await expect(page.getByRole("heading", { name: "Sales Artifacts" })).toBeVisible();
+    await expect(page.locator("#salesArtifactsStatus")).toHaveText(/Artifacts ready|Artifacts review/);
+    await expect(page.locator("#salesArtifactsSummary")).toContainText("Proposal Draft");
+    await expect(page.locator("#salesArtifactsList")).toContainText("Residential Solar ESS Proposal Template");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -100,6 +104,13 @@ test.describe("Developer Command Center", () => {
     expect(leadHealth.qualificationModel.modelVersion).toBe("2026-05-19.lead-qualification.v1");
     expect(leadHealth.qualificationModel.externalWrites).toBe(false);
     expect(leadHealth.qualificationModel.workflowLane).toBe("sales-engineering-review");
+    const salesArtifactsResponse = await page.request.get("http://127.0.0.1:8711/api/sales-artifacts");
+    expect(salesArtifactsResponse.ok()).toBeTruthy();
+    const salesArtifacts = await salesArtifactsResponse.json();
+    expect(salesArtifacts.externalWrites).toBe(false);
+    expect(salesArtifacts.status).toBe("ready-local");
+    expect(salesArtifacts.proposalDraftReadiness).toBe("ready-local-draft");
+    expect(salesArtifacts.items.some((item) => item.id === "proposal-template" && item.ready)).toBe(true);
     expect(consoleErrors).toEqual([]);
   });
 
@@ -134,6 +145,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#vibeProcessLane")).toContainText("Control API unavailable");
     await expect(page.locator("#leadHealthStatus")).toHaveText("Lead blocked");
     await expect(page.locator("#leadHealthNextActions")).toContainText("Start the local control API");
+    await expect(page.locator("#salesArtifactsStatus")).toHaveText("Artifacts review");
+    await expect(page.locator("#salesArtifactsNextActions")).toContainText("Start the local control API");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

@@ -9,6 +9,7 @@ import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
+import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
 import { switches } from "./src/switches.mjs";
 import { getRoninAgentTeam } from "./src/agent-team.mjs";
 import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
@@ -477,6 +478,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/lead-health") {
     sendJson(request, response, 200, await getLeadBackendHealth());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/sales-artifacts") {
+    sendJson(request, response, 200, await getSalesArtifactsStatus());
     return;
   }
 
