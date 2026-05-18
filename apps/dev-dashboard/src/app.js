@@ -45,6 +45,10 @@ const proposalDraftPreview = document.querySelector("#proposalDraftPreview");
 const proposalDraftNextActions = document.querySelector("#proposalDraftNextActions");
 const proposalDraftWriteButton = document.querySelector("#proposalDraftWriteButton");
 const proposalDraftWriteResult = document.querySelector("#proposalDraftWriteResult");
+const proposalReviewStatus = document.querySelector("#proposalReviewStatus");
+const proposalReviewSummary = document.querySelector("#proposalReviewSummary");
+const proposalReviewList = document.querySelector("#proposalReviewList");
+const proposalReviewNextActions = document.querySelector("#proposalReviewNextActions");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -315,6 +319,28 @@ const fallbackProposalDraft = {
     byteLength: 0
   },
   nextActions: ["Start the local control API and refresh proposal draft preview."]
+};
+
+const fallbackProposalReview = {
+  status: "blocked-external-send",
+  mode: "local-fallback",
+  localWorkflowReady: false,
+  canSendExternally: false,
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  summary: { items: 0, complete: 0, missing: 0, blocked: 0, reviewRequired: 0, blockingExternalSend: 1 },
+  items: [
+    {
+      id: "fallback",
+      title: "Proposal review unavailable",
+      detail: "Start the local control API to inspect external-send readiness.",
+      state: "blocked",
+      complete: false,
+      blocksExternalSend: true
+    }
+  ],
+  nextActions: ["Start the local control API and refresh proposal review."]
 };
 
 const fallbackExecutive = {
@@ -1107,6 +1133,41 @@ function renderProposalDraft(preview) {
     : "Local Obsidian writer waits for draft readiness.";
 }
 
+function renderProposalReview(review) {
+  const data = review || fallbackProposalReview;
+  const blocked = data.status === "blocked-external-send";
+  const summary = data.summary || fallbackProposalReview.summary;
+
+  proposalReviewStatus.textContent = blocked ? "Send blocked" : "Review ready";
+  proposalReviewStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  proposalReviewStatus.classList.add(blocked ? "status-warn" : "status-safe");
+
+  proposalReviewSummary.replaceChildren(
+    makeSummaryCard("Local Workflow", data.localWorkflowReady ? "Ready" : "Check", data.mode || "local"),
+    makeSummaryCard("Complete", `${summary.complete || 0}/${summary.items || 0}`, "review items"),
+    makeSummaryCard("Blocking", `${summary.blockingExternalSend || 0}`, "external send blockers"),
+    makeSummaryCard("External Sends", data.canSendExternally ? "Allowed" : "Blocked", data.customerVisible ? "customer visible" : "local only")
+  );
+
+  renderSignalList(
+    proposalReviewList,
+    (data.items || fallbackProposalReview.items).map((item) => ({
+      title: item.title,
+      detail: item.detail,
+      ok: Boolean(item.complete),
+      badge: item.state
+    }))
+  );
+
+  proposalReviewNextActions.replaceChildren(
+    ...(data.nextActions || fallbackProposalReview.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -1757,6 +1818,12 @@ async function loadDashboard() {
       renderProposalDraft,
       () => renderProposalDraft(fallbackProposalDraft),
       "Proposal draft"
+    ),
+    loadPanel(
+      "/api/proposal-review",
+      renderProposalReview,
+      () => renderProposalReview(fallbackProposalReview),
+      "Proposal review"
     ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),

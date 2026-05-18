@@ -53,6 +53,12 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalDraftWriteButton")).toBeVisible();
     await expect(page.locator("#proposalDraftWriteButton")).toBeEnabled();
     await expect(page.locator("#proposalDraftWriteResult")).toContainText("Proposal Drafts");
+    await expect(page.getByRole("heading", { name: "External Send Review" })).toBeVisible();
+    await expect(page.locator("#proposalReviewStatus")).toHaveText("Send blocked");
+    await expect(page.locator("#proposalReviewSummary")).toContainText("Blocked");
+    await expect(page.locator("#proposalReviewList")).toContainText("ROI preview");
+    await expect(page.locator("#proposalReviewList")).toContainText("PEA inverter verification");
+    await expect(page.locator("#proposalReviewNextActions")).toContainText("Keep CRM writes");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -174,6 +180,16 @@ test.describe("Developer Command Center", () => {
     expect(proposalDraftWriteDryRun.wouldWrite).toBe(true);
     expect(proposalDraftWriteDryRun.externalWrites).toBe(false);
     expect(proposalDraftWriteDryRun.targetPath).toContain("Proposal Drafts");
+    const proposalReviewResponse = await page.request.get("http://127.0.0.1:8711/api/proposal-review");
+    expect(proposalReviewResponse.ok()).toBeTruthy();
+    const proposalReview = await proposalReviewResponse.json();
+    expect(proposalReview.status).toBe("blocked-external-send");
+    expect(proposalReview.localWorkflowReady).toBe(true);
+    expect(proposalReview.canSendExternally).toBe(false);
+    expect(proposalReview.externalWrites).toBe(false);
+    expect(proposalReview.items.some((item) => item.id === "roi-preview" && item.complete)).toBe(true);
+    expect(proposalReview.items.some((item) => item.id === "pea-inverter-verification" && item.blocksExternalSend)).toBe(true);
+    expect(proposalReview.summary.blockingExternalSend).toBeGreaterThan(0);
     expect(consoleErrors).toEqual([]);
   });
 
@@ -217,6 +233,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalDraftPreview")).toContainText("unavailable");
     await expect(page.locator("#proposalDraftWriteButton")).toBeDisabled();
     await expect(page.locator("#proposalDraftWriteResult")).toContainText("waits for draft readiness");
+    await expect(page.locator("#proposalReviewStatus")).toHaveText("Send blocked");
+    await expect(page.locator("#proposalReviewList")).toContainText("Proposal review unavailable");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

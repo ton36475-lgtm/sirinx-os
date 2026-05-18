@@ -10,6 +10,7 @@ import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { getProposalDraftPreview, writeLocalProposalDraft } from "./src/proposal-draft.mjs";
+import { getProposalReviewStatus } from "./src/proposal-review.mjs";
 import { getRoiPreview } from "./src/roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
 import { switches } from "./src/switches.mjs";
@@ -490,6 +491,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/proposal-draft") {
     sendJson(request, response, 200, await getProposalDraftPreview());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/proposal-review") {
+    sendJson(request, response, 200, await getProposalReviewStatus());
     return;
   }
 

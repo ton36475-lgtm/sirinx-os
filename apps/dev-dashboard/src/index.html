@@ -187,6 +187,27 @@
         </div>
       </section>
 
+      <section class="panel proposal-review-panel" aria-label="Proposal external send review gate">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Proposal Gate</p>
+            <h2>External Send Review</h2>
+          </div>
+          <span id="proposalReviewStatus" class="status-pill status-warn">Review checking</span>
+        </div>
+        <div id="proposalReviewSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Proposal review checklist">
+            <h3>Checklist</h3>
+            <div id="proposalReviewList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Proposal review next actions">
+            <h3>Next Actions</h3>
+            <ol id="proposalReviewNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>
