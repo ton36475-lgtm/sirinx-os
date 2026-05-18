@@ -62,6 +62,12 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalReviewWriteButton")).toBeVisible();
     await expect(page.locator("#proposalReviewWriteButton")).toBeEnabled();
     await expect(page.locator("#proposalReviewWriteResult")).toContainText("Proposal Review Packets");
+    await expect(page.getByRole("heading", { name: "Mobile Review Packet" })).toBeVisible();
+    await expect(page.locator("#mobileReviewStatus")).toHaveText("Mobile packet ready");
+    await expect(page.locator("#mobileReviewSummary")).toContainText("Not From Packet");
+    await expect(page.locator("#mobileReviewCommandList")).toContainText("Review proposal gate status");
+    await expect(page.locator("#mobileReviewWriteButton")).toBeEnabled();
+    await expect(page.locator("#mobileReviewWriteResult")).toContainText("Codex Mobile Review Packets");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -204,6 +210,24 @@ test.describe("Developer Command Center", () => {
     expect(proposalReviewWriteDryRun.wouldWrite).toBe(true);
     expect(proposalReviewWriteDryRun.externalWrites).toBe(false);
     expect(proposalReviewWriteDryRun.targetPath).toContain("Proposal Review Packets");
+    const mobileReviewPacketResponse = await page.request.get("http://127.0.0.1:8711/api/mobile-review-packet");
+    expect(mobileReviewPacketResponse.ok()).toBeTruthy();
+    const mobileReviewPacket = await mobileReviewPacketResponse.json();
+    expect(mobileReviewPacket.status).toBe("ready-local-mobile-review");
+    expect(mobileReviewPacket.externalWrites).toBe(false);
+    expect(mobileReviewPacket.mobileCanApproveExternally).toBe(false);
+    expect(mobileReviewPacket.summary.pendingApprovals).toBeGreaterThanOrEqual(1);
+    expect(mobileReviewPacket.proposalReview.status).toBe("blocked-external-send");
+    const mobileReviewWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/mobile-review-packet/write", {
+      data: { dryRun: true }
+    });
+    expect(mobileReviewWriteDryRunResponse.ok()).toBeTruthy();
+    const mobileReviewWriteDryRun = await mobileReviewWriteDryRunResponse.json();
+    expect(mobileReviewWriteDryRun.status).toBe("dry-run-ready");
+    expect(mobileReviewWriteDryRun.didWrite).toBe(false);
+    expect(mobileReviewWriteDryRun.wouldWrite).toBe(true);
+    expect(mobileReviewWriteDryRun.externalWrites).toBe(false);
+    expect(mobileReviewWriteDryRun.targetPath).toContain("Codex Mobile Review Packets");
     expect(consoleErrors).toEqual([]);
   });
 
@@ -251,6 +275,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalReviewList")).toContainText("Proposal review unavailable");
     await expect(page.locator("#proposalReviewWriteButton")).toBeDisabled();
     await expect(page.locator("#proposalReviewWriteResult")).toContainText("waits for API readiness");
+    await expect(page.locator("#mobileReviewStatus")).toHaveText("Mobile packet blocked");
+    await expect(page.locator("#mobileReviewCommandList")).toContainText("Start the local control API");
+    await expect(page.locator("#mobileReviewWriteButton")).toBeDisabled();
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

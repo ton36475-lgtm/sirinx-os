@@ -51,6 +51,12 @@ const proposalReviewList = document.querySelector("#proposalReviewList");
 const proposalReviewNextActions = document.querySelector("#proposalReviewNextActions");
 const proposalReviewWriteButton = document.querySelector("#proposalReviewWriteButton");
 const proposalReviewWriteResult = document.querySelector("#proposalReviewWriteResult");
+const mobileReviewStatus = document.querySelector("#mobileReviewStatus");
+const mobileReviewSummary = document.querySelector("#mobileReviewSummary");
+const mobileReviewCommandList = document.querySelector("#mobileReviewCommandList");
+const mobileReviewNextActions = document.querySelector("#mobileReviewNextActions");
+const mobileReviewWriteButton = document.querySelector("#mobileReviewWriteButton");
+const mobileReviewWriteResult = document.querySelector("#mobileReviewWriteResult");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -344,6 +350,20 @@ const fallbackProposalReview = {
     }
   ],
   nextActions: ["Start the local control API and refresh proposal review."]
+};
+
+const fallbackMobileReviewPacket = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  mobileCanApproveExternally: false,
+  reviewPacketTargetRoot: "/Users/sirinx/Documents/Obsidian Vault/SIRINX/06_OPERATIONS/Codex Mobile Review Packets",
+  summary: { approvalItems: 0, pendingApprovals: 0, blockedApprovals: 0, proposalBlockingItems: 0, auditEvents: 0 },
+  proposalReview: { status: "unavailable", localWorkflowReady: false, canSendExternally: false, blockingExternalSend: 0 },
+  reviewCommands: ["Start the local control API to prepare a Codex Mobile review packet."],
+  nextActions: ["Start the local control API and refresh mobile review packet."]
 };
 
 const fallbackExecutive = {
@@ -1179,6 +1199,49 @@ function renderProposalReview(review) {
     : `Target: ${data.reviewPacketTargetRoot || fallbackProposalReview.reviewPacketTargetRoot}`;
 }
 
+function renderMobileReviewPacket(packet) {
+  const data = packet || fallbackMobileReviewPacket;
+  const ready = data.status === "ready-local-mobile-review";
+  const summary = data.summary || fallbackMobileReviewPacket.summary;
+
+  mobileReviewStatus.textContent = ready ? "Mobile packet ready" : "Mobile packet blocked";
+  mobileReviewStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  mobileReviewStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  mobileReviewSummary.replaceChildren(
+    makeSummaryCard("Approvals", `${summary.pendingApprovals || 0} pending`, `${summary.approvalItems || 0} total`),
+    makeSummaryCard("Proposal Gate", `${summary.proposalBlockingItems || 0} blockers`, data.proposalReview?.status || "unknown"),
+    makeSummaryCard("Audit Events", `${summary.auditEvents || 0}`, "local trail"),
+    makeSummaryCard("External Approval", data.mobileCanApproveExternally ? "Allowed" : "Not From Packet", data.externalWrites ? "writes armed" : "local only")
+  );
+
+  renderSignalList(
+    mobileReviewCommandList,
+    (data.reviewCommands || fallbackMobileReviewPacket.reviewCommands).map((command) => ({
+      title: command,
+      detail: data.mobileCanApproveExternally ? "External approval allowed" : "Review evidence only; no external action is armed.",
+      ok: !data.mobileCanApproveExternally,
+      badge: data.mobileCanApproveExternally ? "approval" : "local"
+    }))
+  );
+
+  mobileReviewNextActions.replaceChildren(
+    ...(data.nextActions || fallbackMobileReviewPacket.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+
+  mobileReviewWriteButton.disabled = !ready;
+  mobileReviewWriteButton.title = ready
+    ? `Write a local Codex Mobile packet under ${data.reviewPacketTargetRoot || fallbackMobileReviewPacket.reviewPacketTargetRoot}`
+    : "Local mobile packet writer is blocked until packet data is available.";
+  mobileReviewWriteResult.textContent = ready
+    ? `Target: ${data.reviewPacketTargetRoot || fallbackMobileReviewPacket.reviewPacketTargetRoot}`
+    : "Local mobile packet writer waits for API readiness.";
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -1836,6 +1899,12 @@ async function loadDashboard() {
       () => renderProposalReview(fallbackProposalReview),
       "Proposal review"
     ),
+    loadPanel(
+      "/api/mobile-review-packet",
+      renderMobileReviewPacket,
+      () => renderMobileReviewPacket(fallbackMobileReviewPacket),
+      "Mobile review packet"
+    ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),
     loadPanel(
@@ -1945,11 +2014,37 @@ async function writeProposalReviewPacketLocal() {
   }
 }
 
+async function writeMobileReviewPacketLocal() {
+  mobileReviewWriteButton.disabled = true;
+  mobileReviewWriteResult.textContent = "Writing local Codex Mobile review packet...";
+
+  try {
+    const result = await fetchJson("/api/mobile-review-packet/write", {
+      method: "POST",
+      body: JSON.stringify({ confirmLocalWrite: true })
+    });
+
+    if (result.didWrite) {
+      mobileReviewWriteResult.textContent = `Written: ${result.targetPath}`;
+      logEvent(`mobile review packet written locally: ${result.targetPath}`);
+    } else {
+      mobileReviewWriteResult.textContent = `${result.status}: ${result.reason || "no file written"}`;
+      logEvent(`mobile review packet write blocked: ${result.status}`);
+    }
+  } catch (error) {
+    mobileReviewWriteResult.textContent = `Local write failed: ${error.message}`;
+    logEvent(`mobile review packet write failed: ${error.message}`);
+  } finally {
+    mobileReviewWriteButton.disabled = false;
+  }
+}
+
 refreshButton.addEventListener("click", loadDashboard);
 toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
 proposalDraftWriteButton.addEventListener("click", writeProposalDraftLocal);
 roiAssumptionForm.addEventListener("submit", calculateRoiPreview);
 proposalReviewWriteButton.addEventListener("click", writeProposalReviewPacketLocal);
+mobileReviewWriteButton.addEventListener("click", writeMobileReviewPacketLocal);
 
 loadDashboard();

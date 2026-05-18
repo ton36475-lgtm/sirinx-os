@@ -212,6 +212,31 @@
         </div>
       </section>
 
+      <section class="panel mobile-review-panel" aria-label="Codex Mobile review packet">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Codex Mobile</p>
+            <h2>Mobile Review Packet</h2>
+          </div>
+          <span id="mobileReviewStatus" class="status-pill status-warn">Mobile packet checking</span>
+        </div>
+        <div id="mobileReviewSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Mobile review commands">
+            <h3>Review Commands</h3>
+            <div id="mobileReviewCommandList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Mobile review packet writer">
+            <h3>Packet Writer</h3>
+            <ol id="mobileReviewNextActions" class="next-action-list"></ol>
+            <div class="proposal-write-controls" aria-label="Local Codex Mobile review packet writer">
+              <button id="mobileReviewWriteButton" class="text-button" type="button" disabled>Write Mobile Packet</button>
+              <p id="mobileReviewWriteResult" class="write-result">Local mobile packet writer waits for API readiness.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>
