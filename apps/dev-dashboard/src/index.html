@@ -110,6 +110,27 @@
         </div>
       </section>
 
+      <section class="panel proposal-draft-panel" aria-label="Proposal draft preview">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Proposal</p>
+            <h2>Draft Preview</h2>
+          </div>
+          <span id="proposalDraftStatus" class="status-pill status-warn">Draft checking</span>
+        </div>
+        <div id="proposalDraftSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Proposal draft markdown preview">
+            <h3>Local Markdown</h3>
+            <pre id="proposalDraftPreview" class="code-preview"></pre>
+          </section>
+          <section class="tool-column" aria-label="Proposal draft next actions">
+            <h3>Next Actions</h3>
+            <ol id="proposalDraftNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>

@@ -29,6 +29,10 @@ const salesArtifactsStatus = document.querySelector("#salesArtifactsStatus");
 const salesArtifactsSummary = document.querySelector("#salesArtifactsSummary");
 const salesArtifactsList = document.querySelector("#salesArtifactsList");
 const salesArtifactsNextActions = document.querySelector("#salesArtifactsNextActions");
+const proposalDraftStatus = document.querySelector("#proposalDraftStatus");
+const proposalDraftSummary = document.querySelector("#proposalDraftSummary");
+const proposalDraftPreview = document.querySelector("#proposalDraftPreview");
+const proposalDraftNextActions = document.querySelector("#proposalDraftNextActions");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -261,6 +265,21 @@ const fallbackSalesArtifacts = {
   lanes: [],
   reviewGates: ["Start the local control API to inspect sales artifacts."],
   nextActions: ["Start the local control API and refresh sales artifacts."]
+};
+
+const fallbackProposalDraft = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  customerVisible: false,
+  readiness: { salesArtifacts: "unavailable", proposalDraft: "blocked-local-artifacts", artifactReadyCount: 0, artifactTotal: 0 },
+  draft: {
+    title: "Local Proposal Draft Preview",
+    markdown: "Proposal draft preview is unavailable until the local control API is online.",
+    sectionCount: 0,
+    byteLength: 0
+  },
+  nextActions: ["Start the local control API and refresh proposal draft preview."]
 };
 
 const fallbackExecutive = {
@@ -969,6 +988,31 @@ function renderSalesArtifacts(status) {
   );
 }
 
+function renderProposalDraft(preview) {
+  const data = preview || fallbackProposalDraft;
+  const ready = data.status === "ready-local-preview";
+
+  proposalDraftStatus.textContent = ready ? "Draft ready" : "Draft blocked";
+  proposalDraftStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  proposalDraftStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  proposalDraftSummary.replaceChildren(
+    makeSummaryCard("Mode", ready ? "Preview" : "Blocked", data.mode || "local"),
+    makeSummaryCard("Sections", `${data.draft?.sectionCount || 0}`, data.draft?.title || "draft"),
+    makeSummaryCard("Artifacts", `${data.readiness?.artifactReadyCount || 0}/${data.readiness?.artifactTotal || 0}`, data.readiness?.salesArtifacts || "unknown"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.customerVisible ? "customer visible" : "local only")
+  );
+
+  proposalDraftPreview.textContent = data.draft?.markdown || fallbackProposalDraft.draft.markdown;
+  proposalDraftNextActions.replaceChildren(
+    ...(data.nextActions || []).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -1612,6 +1656,12 @@ async function loadDashboard() {
       renderSalesArtifacts,
       () => renderSalesArtifacts(fallbackSalesArtifacts),
       "Sales artifacts"
+    ),
+    loadPanel(
+      "/api/proposal-draft",
+      renderProposalDraft,
+      () => renderProposalDraft(fallbackProposalDraft),
+      "Proposal draft"
     ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),
