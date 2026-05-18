@@ -1,9 +1,11 @@
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { getLeadBackendHealth } from "./lead-health.mjs";
 import { getSalesArtifactsStatus } from "./sales-artifacts.mjs";
 
 const templatePath =
   "/Users/sirinx/Documents/Obsidian Vault/SIRINX/14_TEMPLATES/Residential Solar ESS Proposal Template.md";
+const proposalDraftRoot =
+  "/Users/sirinx/Documents/Obsidian Vault/SIRINX/05_PROJECTS/Proposal Drafts";
 
 const packageMap = {
   "on-grid-og5": { id: "OG-5", type: "on-grid", size: "5 kW", battery: "none", price: "129,000 THB" },
@@ -98,6 +100,33 @@ ${qualification.nextAction || "Review lead manually."}
 `;
 }
 
+function timestampForFile(date = new Date()) {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+}
+
+function buildProposalFile(preview) {
+  return `---
+title: "${preview.draft.title}"
+created: ${new Date().toISOString()}
+status: local-draft
+system: SIRINX
+generated_by: sirinx-local-proposal-draft-writer
+external_writes: false
+customer_visible: false
+review_required: true
+proposal_source: command-center
+workflow_lane: ${preview.qualification?.workflowLane || "unknown"}
+package_lane: ${preview.qualification?.packageLane || "unknown"}
+---
+
+${preview.draft.markdown}
+
+## Review Gates Before External Use
+
+${preview.reviewGates.map((gate) => `- ${gate}`).join("\n")}
+`;
+}
+
 export async function getProposalDraftPreview() {
   const [leadHealth, salesArtifacts, template] = await Promise.all([
     getLeadBackendHealth(),
@@ -115,6 +144,7 @@ export async function getProposalDraftPreview() {
     customerVisible: false,
     sourceApis: ["/api/lead-health", "/api/sales-artifacts"],
     templatePath,
+    safeWriteTargetRoot: proposalDraftRoot,
     qualification: leadHealth.qualificationModel,
     readiness: {
       salesArtifacts: salesArtifacts.status,
@@ -140,5 +170,55 @@ export async function getProposalDraftPreview() {
       "Create a local markdown proposal file only after operator confirms target path."
     ],
     updatedAt: new Date().toISOString()
+  };
+}
+
+export async function writeLocalProposalDraft(options = {}) {
+  const preview = await getProposalDraftPreview();
+  const stamp = timestampForFile();
+  const targetPath = `${proposalDraftRoot}/SIRINX Local Proposal Draft ${stamp}.md`;
+  const payload = {
+    title: "SIRINX local proposal draft writer",
+    mode: "local-file-write-gated",
+    externalWrites: false,
+    productionWrites: false,
+    customerVisible: false,
+    targetRoot: proposalDraftRoot,
+    targetPath,
+    didWrite: false,
+    dryRun: Boolean(options.dryRun),
+    requiresConfirmLocalWrite: true,
+    status: "pending-confirmation",
+    reviewGates: preview.reviewGates,
+    updatedAt: new Date().toISOString()
+  };
+
+  if (options.dryRun) {
+    return {
+      ...payload,
+      status: "dry-run-ready",
+      wouldWrite: true,
+      byteLength: buildProposalFile(preview).length
+    };
+  }
+
+  if (options.confirmLocalWrite !== true) {
+    return {
+      ...payload,
+      status: "blocked-confirm-local-write-required",
+      wouldWrite: false,
+      reason: "Set confirmLocalWrite=true to write a local Obsidian proposal draft."
+    };
+  }
+
+  await mkdir(proposalDraftRoot, { recursive: true });
+  const content = buildProposalFile(preview);
+  await writeFile(targetPath, content, { encoding: "utf8", flag: "wx" });
+
+  return {
+    ...payload,
+    status: "written-local",
+    didWrite: true,
+    byteLength: content.length
   };
 }

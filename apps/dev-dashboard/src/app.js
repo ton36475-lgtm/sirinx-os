@@ -33,6 +33,8 @@ const proposalDraftStatus = document.querySelector("#proposalDraftStatus");
 const proposalDraftSummary = document.querySelector("#proposalDraftSummary");
 const proposalDraftPreview = document.querySelector("#proposalDraftPreview");
 const proposalDraftNextActions = document.querySelector("#proposalDraftNextActions");
+const proposalDraftWriteButton = document.querySelector("#proposalDraftWriteButton");
+const proposalDraftWriteResult = document.querySelector("#proposalDraftWriteResult");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -272,6 +274,7 @@ const fallbackProposalDraft = {
   mode: "local-fallback",
   externalWrites: false,
   customerVisible: false,
+  safeWriteTargetRoot: "/Users/sirinx/Documents/Obsidian Vault/SIRINX/05_PROJECTS/Proposal Drafts",
   readiness: { salesArtifacts: "unavailable", proposalDraft: "blocked-local-artifacts", artifactReadyCount: 0, artifactTotal: 0 },
   draft: {
     title: "Local Proposal Draft Preview",
@@ -1011,6 +1014,14 @@ function renderProposalDraft(preview) {
       return item;
     })
   );
+
+  proposalDraftWriteButton.disabled = !ready;
+  proposalDraftWriteButton.title = ready
+    ? `Write a local Obsidian draft under ${data.safeWriteTargetRoot || fallbackProposalDraft.safeWriteTargetRoot}`
+    : "Local draft writer is blocked until proposal preview is ready.";
+  proposalDraftWriteResult.textContent = ready
+    ? `Target: ${data.safeWriteTargetRoot || fallbackProposalDraft.safeWriteTargetRoot}`
+    : "Local Obsidian writer waits for draft readiness.";
 }
 
 function makeSummaryCard(label, value, note) {
@@ -1695,8 +1706,34 @@ async function runDryRun(actionId) {
   }
 }
 
+async function writeProposalDraftLocal() {
+  proposalDraftWriteButton.disabled = true;
+  proposalDraftWriteResult.textContent = "Writing local Obsidian proposal draft...";
+
+  try {
+    const result = await fetchJson("/api/proposal-draft/write", {
+      method: "POST",
+      body: JSON.stringify({ confirmLocalWrite: true })
+    });
+
+    if (result.didWrite) {
+      proposalDraftWriteResult.textContent = `Written: ${result.targetPath}`;
+      logEvent(`proposal draft written locally: ${result.targetPath}`);
+    } else {
+      proposalDraftWriteResult.textContent = `${result.status}: ${result.reason || "no file written"}`;
+      logEvent(`proposal draft write blocked: ${result.status}`);
+    }
+  } catch (error) {
+    proposalDraftWriteResult.textContent = `Local write failed: ${error.message}`;
+    logEvent(`proposal draft write failed: ${error.message}`);
+  } finally {
+    proposalDraftWriteButton.disabled = false;
+  }
+}
+
 refreshButton.addEventListener("click", loadDashboard);
 toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
+proposalDraftWriteButton.addEventListener("click", writeProposalDraftLocal);
 
 loadDashboard();

@@ -39,6 +39,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalDraftStatus")).toHaveText(/Draft ready|Draft blocked/);
     await expect(page.locator("#proposalDraftPreview")).toContainText("Local Proposal Draft Preview");
     await expect(page.locator("#proposalDraftPreview")).toContainText("Equipment Approval Evidence");
+    await expect(page.locator("#proposalDraftWriteButton")).toBeVisible();
+    await expect(page.locator("#proposalDraftWriteButton")).toBeEnabled();
+    await expect(page.locator("#proposalDraftWriteResult")).toContainText("Proposal Drafts");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -121,7 +124,18 @@ test.describe("Developer Command Center", () => {
     expect(proposalDraft.externalWrites).toBe(false);
     expect(proposalDraft.customerVisible).toBe(false);
     expect(proposalDraft.status).toBe("ready-local-preview");
+    expect(proposalDraft.safeWriteTargetRoot).toContain("Proposal Drafts");
     expect(proposalDraft.draft.markdown).toContain("PEA Smartlist exact inverter verification");
+    const proposalDraftWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/proposal-draft/write", {
+      data: { dryRun: true }
+    });
+    expect(proposalDraftWriteDryRunResponse.ok()).toBeTruthy();
+    const proposalDraftWriteDryRun = await proposalDraftWriteDryRunResponse.json();
+    expect(proposalDraftWriteDryRun.status).toBe("dry-run-ready");
+    expect(proposalDraftWriteDryRun.didWrite).toBe(false);
+    expect(proposalDraftWriteDryRun.wouldWrite).toBe(true);
+    expect(proposalDraftWriteDryRun.externalWrites).toBe(false);
+    expect(proposalDraftWriteDryRun.targetPath).toContain("Proposal Drafts");
     expect(consoleErrors).toEqual([]);
   });
 
@@ -160,6 +174,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#salesArtifactsNextActions")).toContainText("Start the local control API");
     await expect(page.locator("#proposalDraftStatus")).toHaveText("Draft blocked");
     await expect(page.locator("#proposalDraftPreview")).toContainText("unavailable");
+    await expect(page.locator("#proposalDraftWriteButton")).toBeDisabled();
+    await expect(page.locator("#proposalDraftWriteResult")).toContainText("waits for draft readiness");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

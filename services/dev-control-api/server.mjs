@@ -9,7 +9,7 @@ import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
-import { getProposalDraftPreview } from "./src/proposal-draft.mjs";
+import { getProposalDraftPreview, writeLocalProposalDraft } from "./src/proposal-draft.mjs";
 import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
 import { switches } from "./src/switches.mjs";
 import { getRoninAgentTeam } from "./src/agent-team.mjs";
@@ -489,6 +489,24 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/proposal-draft") {
     sendJson(request, response, 200, await getProposalDraftPreview());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/proposal-draft/write") {
+    try {
+      const body = await readJson(request);
+      const result = await writeLocalProposalDraft(body);
+      sendJson(request, response, 200, result);
+    } catch (error) {
+      sendJson(request, response, 500, {
+        error: "proposal_draft_write_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        requiresHumanReview: true
+      });
+    }
     return;
   }
 
