@@ -1,3 +1,5 @@
+import { getRoninAgentTeam } from "./agent-team.mjs";
+
 const currentTimestamp = () => new Date().toISOString();
 
 export const commandCenterFunctions = [
@@ -110,6 +112,18 @@ export const commandCenterFunctions = [
     evidence: ["Obsidian roots", "project docs", "Solis plan note"]
   },
   {
+    id: "ronin-agent-team",
+    title: "47 Ronin Agent Team",
+    surface: "Hermes profiles and Command Center",
+    owner: "shogun",
+    status: "profile-ready",
+    mode: "write-ready-approval-gated",
+    command: "hermes profile list && curl /api/vibe-command-center",
+    actionId: "agent-team-profile-check",
+    approvalGate: "External SaaS writes, messaging, deploys, and public website changes still require explicit target approval.",
+    evidence: ["12 active Hermes profiles", "47-role roster", "profile cwd locked to sirinx-os", "Telegram target still blocked"]
+  },
+  {
     id: "cloudflare-release",
     title: "Cloudflare Release",
     surface: "Pages, Workers, DNS",
@@ -168,9 +182,9 @@ export const processLane = [
     id: "phase-5",
     label: "Phase 5",
     title: "Deploy Lead Handler",
-    status: "approval-gate",
-    nextCommand: "pnpm cloudflare:main-router:deploy",
-    output: "Requires explicit Cloudflare approval, D1 binding review, rollback plan, and controlled production POST smoke test."
+    status: "done",
+    nextCommand: "git show bd729c9 --stat",
+    output: "Cloudflare main-router deployed, production lead POST smoke passed, and evidence recorded."
   },
   {
     id: "phase-6",
@@ -219,10 +233,19 @@ export const processLane = [
     status: "planned",
     nextCommand: "LINE/Telegram mock only",
     output: "Approval workflow works before customer sends."
+  },
+  {
+    id: "phase-12",
+    label: "Phase 12",
+    title: "Create 47 Ronin Agent Team",
+    status: "done",
+    nextCommand: "hermes profile list",
+    output: "12 active Hermes profiles are configured; 47 roles remain managed as a roster."
   }
 ];
 
 export function getVibeCommandCenter() {
+  const agentTeam = getRoninAgentTeam();
   const blocked = commandCenterFunctions.filter((item) => item.status.includes("blocked")).length;
   const dryRun = commandCenterFunctions.filter((item) => item.mode.includes("dry") || item.mode.includes("simulation")).length;
   const ready = commandCenterFunctions.filter((item) =>
@@ -243,11 +266,15 @@ export function getVibeCommandCenter() {
       ready,
       dryRun,
       blocked,
-      phases: processLane.length
+      phases: processLane.length,
+      activeProfiles: agentTeam.summary.activeProfiles,
+      readyProfiles: agentTeam.summary.readyProfiles,
+      rosterRoles: agentTeam.summary.rosterRoles
     },
     functions: commandCenterFunctions,
     processLane,
-    operatingRule: "Work in order: public baseline, design lock, lead local preflight, lead health visibility, Cloudflare cleanup plan, deploy only after approval, then mobile/subdomain/Solis/schema work.",
+    agentTeam,
+    operatingRule: "Work in order: public baseline, design lock, lead local preflight, lead health visibility, completed Cloudflare lead deploy evidence, then mobile/Telegram/Solis/SEO work through the 47 Ronin profile lanes.",
     updatedAt: currentTimestamp()
   };
 }

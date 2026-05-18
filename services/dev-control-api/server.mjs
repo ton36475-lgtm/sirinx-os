@@ -10,6 +10,7 @@ import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { switches } from "./src/switches.mjs";
+import { getRoninAgentTeam } from "./src/agent-team.mjs";
 import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -283,6 +284,7 @@ async function getExecutiveHq() {
   ]);
   const publicWebsite = await getPublicWebsiteStatus();
   const projectInventory = await getProjectInventory();
+  const roninTeam = getRoninAgentTeam();
 
   const kanbanTasks = parseKanbanTasks(kanbanList.output);
   const services = [
@@ -354,7 +356,8 @@ async function getExecutiveHq() {
   ];
 
   const onlineServices = services.filter((service) => service.online).length;
-  const agentCount = hermesAgents.length + thClawsAgents.length;
+  const roninProfileCount = roninTeam.summary.readyProfiles;
+  const agentCount = hermesAgents.length + thClawsAgents.length + roninProfileCount;
   const canRunNow = Boolean(
     dashboard.online &&
       controlApi.online &&
@@ -378,6 +381,7 @@ async function getExecutiveHq() {
       servicesTotal: services.length,
       hermesAgents: hermesAgents.length,
       thClawsAgents: thClawsAgents.length,
+      roninProfiles: roninProfileCount,
       skills: hermesSkills.length,
       kanbanReady: hermes.kanban.ready,
       kanbanRunning: hermes.kanban.stats.running,
@@ -385,6 +389,14 @@ async function getExecutiveHq() {
     },
     services,
     agentTeams: [
+      {
+        name: "SIRINX 47 Ronin Active Profiles",
+        agents: roninTeam.activeProfiles.map((profile) => ({
+          id: profile.name,
+          name: profile.name,
+          description: `${profile.title}: ${profile.responsibility}`
+        }))
+      },
       {
         name: "Hermes Agent Team",
         agents: hermesAgents
@@ -398,6 +410,7 @@ async function getExecutiveHq() {
     projects,
     kanbanTasks,
     hermes,
+    roninTeam,
     publicWebsite,
     projectInventory,
     updatedAt: new Date().toISOString()

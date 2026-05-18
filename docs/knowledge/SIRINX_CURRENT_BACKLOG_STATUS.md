@@ -1,7 +1,7 @@
 # SIRINX Current Backlog Status
 
-Date: 2026-05-17
-Status: current, no hidden backlog
+Date: 2026-05-19
+Status: current, no hidden backlog; local test/debug passed, commit/deploy gates remain explicit
 
 ## Cleared In This Pass
 
@@ -17,16 +17,21 @@ Status: current, no hidden backlog
 | Cloudflare main-router deploy | Done | `sirinx-main-router` deployed, version `4e66deca-89a5-4a1b-83a8-0dfaee4e3851` |
 | Production lead POST smoke test | Done | Controlled D1 lead `ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b` created with source `codex-production-smoke` |
 | Public website GitHub branch/PR | Done | Branch `codex/public-website-production-ready-20260517`, PR `https://github.com/ton36475-lgtm/sirinx/pull/1` |
+| Home Solution SEO/AEO page | Done locally and test/debug passed, pending commit/deploy gate | `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` contains uncommitted `/home-solution` route, SEO schema, sitemap entry, nav/footer link, responsive AVIF/JPEG image assets |
+| Command Center E2E stabilization | Done locally and test/debug passed, pending commit gate | `sirinx-os` dashboard now renders each API panel independently so the Vibe status does not wait for slower Hermes/Executive endpoints |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
-- `sirinx-os` is clean locally on branch `codex/urgent-backlog-execution`.
-- Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/public-website-production-ready-20260517`.
-- Those 5 public website commits have passed local typecheck, test, and production build verification, and are pushed to PR #1.
+- `sirinx-os` is on branch `codex/urgent-backlog-execution` and has local uncommitted Command Center, 47 Ronin, and documentation changes.
+- Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is on branch `codex/public-website-production-ready-20260517` and has a new uncommitted Home Solution change set.
+- Earlier 5 public website commits passed local typecheck, test, and production build verification, and were pushed to PR #1.
+- Current uncommitted Home Solution work passed fresh typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, and no-secret review.
+- Current uncommitted `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
 - Command Center lead health intentionally still uses safe GET probes and does not create production leads by itself.
 - Contact fallback stays live until real production lead traffic has been observed.
+- Obsidian Brain Hub contains summary-only notes for the Home Solution release checklist, Cloudflare deploy safety, SEO/AEO, image performance, secrets, approval gates, and Solis/agent readiness. These are knowledge records, not approval to deploy.
 
 ## Remaining Backlog By Type
 
@@ -34,6 +39,9 @@ Status: current, no hidden backlog
 
 | Item | Why blocked | Required approval |
 | --- | --- | --- |
+| Commit Home Solution local website changes | Creates Git history and may be pushed later | Explicit commit approval after test/debug evidence |
+| Commit `sirinx-os` Command Center changes | Creates Git history for local HQ/agent-team work | Explicit commit approval after reviewing mixed pre-existing local edits |
+| Deploy `/home-solution` to `www.sirinx.co` | Public customer-facing website change | Explicit Cloudflare/Pages or release approval after preview and rollback plan |
 | Expose `dev.sirinx.co` or other internal subdomains | DNS/Pages/Access changes are external writes | Explicit Cloudflare + Access approval |
 | Merge public website PR #1 | Updates origin/main and may trigger GitHub/Pages deployment workflow | Explicit merge/release approval |
 | Additional Cloudflare route/DNS/secret changes | External cloud mutation beyond deployed main-router | Explicit Cloudflare approval |
@@ -60,13 +68,16 @@ Status: current, no hidden backlog
 
 ## Next Strict Sequence
 
-1. Pair Codex Mobile manually via QR because tool policy blocks direct control of Codex App.
-2. Review/merge public website PR #1 when ready.
-3. Monitor production D1 lead rows after real website traffic.
-4. Fix Telegram target setup, then rerun a Telegram smoke send.
-5. Configure LINE only after channel credential and webhook verification exist.
-6. Store Solis API credentials through approved secret storage, then build read-only telemetry smoke.
-7. Select exactly one subdomain candidate for build/auth review.
+1. Review diffs for the tested Home Solution and Command Center change sets.
+2. Commit the Home Solution change set if approved.
+3. Commit the `sirinx-os` Command Center/47 Ronin/docs change set if approved after confirming all pre-existing local edits belong in the commit.
+4. Pair Codex Mobile manually via QR because tool policy blocks direct control of Codex App.
+5. Review/merge public website PR #1 or update it with the Home Solution work when release approval is given.
+6. Monitor production D1 lead rows after real website traffic.
+7. Fix Telegram target setup, then rerun a Telegram smoke send.
+8. Configure LINE only after channel credential and webhook verification exist.
+9. Store Solis API credentials through approved secret storage, then build read-only telemetry smoke.
+10. Select exactly one subdomain candidate for build/auth review.
 
 ## Stop Rules
 

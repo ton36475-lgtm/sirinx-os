@@ -19,6 +19,7 @@ const vibeSummary = document.querySelector("#vibeSummary");
 const vibeRule = document.querySelector("#vibeRule");
 const vibeProcessLane = document.querySelector("#vibeProcessLane");
 const vibeFunctionGrid = document.querySelector("#vibeFunctionGrid");
+const vibeAgentTeam = document.querySelector("#vibeAgentTeam");
 const leadHealthStatus = document.querySelector("#leadHealthStatus");
 const leadHealthSummary = document.querySelector("#leadHealthSummary");
 const leadHealthLocal = document.querySelector("#leadHealthLocal");
@@ -176,7 +177,7 @@ const fallbackVibe = {
   mode: "local-fallback",
   externalWrites: false,
   mainWebsiteProtected: true,
-  summary: { functions: 0, ready: 0, dryRun: 0, blocked: 0, phases: 0 },
+  summary: { functions: 0, ready: 0, dryRun: 0, blocked: 0, phases: 0, activeProfiles: 0, readyProfiles: 0, rosterRoles: 0 },
   functions: [],
   processLane: [
     {
@@ -188,6 +189,15 @@ const fallbackVibe = {
       output: "Process control returns when API is online."
     }
   ],
+  agentTeam: {
+    title: "SIRINX 47 Ronin Agent Team",
+    mode: "fallback",
+    summary: { activeProfiles: 0, readyProfiles: 0, aliases: 0, rosterRoles: 0, connectorPolicies: 0, backlogGates: 0 },
+    activeProfiles: [],
+    connectorPolicy: [],
+    backlogGates: [],
+    roleRoster: []
+  },
   operatingRule: "Fallback mode only. No external writes are available."
 };
 
@@ -228,6 +238,7 @@ const fallbackExecutive = {
     servicesTotal: 0,
     hermesAgents: 0,
     thClawsAgents: 0,
+    roninProfiles: 0,
     skills: 0,
     kanbanReady: 0,
     kanbanRunning: 0,
@@ -554,7 +565,8 @@ function renderVibeSummary(vibe) {
     makeSummaryCard("Ready", `${summary.ready}`, "Runnable locally"),
     makeSummaryCard("Dry Run", `${summary.dryRun}`, "No external writes"),
     makeSummaryCard("Blocked", `${summary.blocked}`, "Needs approval/fix"),
-    makeSummaryCard("Phases", `${summary.phases}`, "Strict sequence")
+    makeSummaryCard("Phases", `${summary.phases}`, "Strict sequence"),
+    makeSummaryCard("Ronin", `${summary.readyProfiles || 0}/${summary.activeProfiles || 0}`, `${summary.rosterRoles || 0} role roster`)
   );
 }
 
@@ -646,12 +658,108 @@ function renderVibeFunctions(vibe) {
   );
 }
 
+function renderVibeAgentTeam(vibe) {
+  const team = vibe.agentTeam || fallbackVibe.agentTeam;
+  const activeProfiles = team.activeProfiles || [];
+  const connectorPolicy = team.connectorPolicy || [];
+  const backlogGates = team.backlogGates || [];
+
+  const profilePanel = document.createElement("article");
+  profilePanel.className = "agent-team-card agent-team-wide";
+
+  const profileTitle = document.createElement("p");
+  profileTitle.className = "signal-title";
+  profileTitle.textContent = `${team.title || "SIRINX 47 Ronin Agent Team"} (${team.summary?.readyProfiles || 0}/${team.summary?.activeProfiles || 0} ready)`;
+
+  const profileDetail = document.createElement("p");
+  profileDetail.className = "signal-detail";
+  profileDetail.textContent = `${team.mode || "local"} - ${team.summary?.rosterRoles || 0} roles tracked, ${team.summary?.aliases || 0} aliases ready.`;
+
+  const profileGrid = document.createElement("div");
+  profileGrid.className = "agent-profile-grid";
+  for (const profile of activeProfiles) {
+    const card = document.createElement("div");
+    card.className = `role-chip role-chip-${statusTone(profile.status || "")}`;
+
+    const head = document.createElement("strong");
+    head.textContent = profile.name;
+
+    const detail = document.createElement("span");
+    detail.textContent = `${profile.title} / ${profile.lane}`;
+
+    const command = document.createElement("span");
+    command.textContent = profile.command;
+
+    card.append(head, detail, command);
+    profileGrid.append(card);
+  }
+  profilePanel.append(profileTitle, profileDetail, profileGrid);
+
+  const connectorPanel = document.createElement("article");
+  connectorPanel.className = "agent-team-card";
+
+  const connectorTitle = document.createElement("p");
+  connectorTitle.className = "signal-title";
+  connectorTitle.textContent = "Connector Policy";
+
+  const connectorList = document.createElement("div");
+  connectorList.className = "signal-list";
+  for (const policy of connectorPolicy) {
+    const row = document.createElement("article");
+    row.className = `signal-row ${policy.mode.includes("blocked") ? "signal-warn" : "signal-ok"}`;
+
+    const content = document.createElement("div");
+    const name = document.createElement("p");
+    name.className = "signal-title";
+    name.textContent = policy.connector;
+    const rule = document.createElement("p");
+    rule.className = "signal-detail";
+    rule.textContent = policy.rule;
+    content.append(name, rule);
+    row.append(content, makeToneBadge(policy.mode, policy.mode.includes("blocked") ? "warn" : "safe"));
+    connectorList.append(row);
+  }
+  connectorPanel.append(connectorTitle, connectorList);
+
+  const backlogPanel = document.createElement("article");
+  backlogPanel.className = "agent-team-card";
+
+  const backlogTitle = document.createElement("p");
+  backlogTitle.className = "signal-title";
+  backlogTitle.textContent = "Old Gates Mapped";
+
+  const backlogList = document.createElement("div");
+  backlogList.className = "signal-list";
+  for (const gate of backlogGates) {
+    const row = document.createElement("article");
+    row.className = `signal-row ${statusTone(gate.status) === "safe" ? "signal-ok" : "signal-warn"}`;
+
+    const content = document.createElement("div");
+    const name = document.createElement("p");
+    name.className = "signal-title";
+    name.textContent = gate.title;
+    const action = document.createElement("p");
+    action.className = "signal-detail";
+    action.textContent = gate.nextAction;
+    const meta = document.createElement("div");
+    meta.className = "action-meta";
+    meta.append(makeTag(`owner: ${gate.owner}`));
+    content.append(name, action, meta);
+    row.append(content, makeToneBadge(gate.status, statusTone(gate.status)));
+    backlogList.append(row);
+  }
+  backlogPanel.append(backlogTitle, backlogList);
+
+  vibeAgentTeam.replaceChildren(profilePanel, connectorPanel, backlogPanel);
+}
+
 function renderVibe(vibe) {
   const data = vibe || fallbackVibe;
   vibeRule.textContent = data.operatingRule || fallbackVibe.operatingRule;
   renderVibeSummary(data);
   renderVibeProcess(data);
   renderVibeFunctions(data);
+  renderVibeAgentTeam(data);
 }
 
 function renderSignalList(container, rows) {
@@ -1011,8 +1119,8 @@ function renderExecutive(hq) {
     ),
     makeSummaryCard(
       "Agents",
-      `${metrics.hermesAgents + metrics.thClawsAgents}`,
-      `${metrics.hermesAgents} Hermes / ${metrics.thClawsAgents} thClaws`
+      `${metrics.hermesAgents + metrics.thClawsAgents + (metrics.roninProfiles || 0)}`,
+      `${metrics.roninProfiles || 0} Ronin / ${metrics.hermesAgents} Hermes / ${metrics.thClawsAgents} thClaws`
     ),
     makeSummaryCard(
       "Skills",
@@ -1362,51 +1470,56 @@ async function fetchJson(path, options) {
 }
 
 async function loadDashboard() {
-  try {
-    const [health, gates, actions, switches, approvalQueue, auditEvents, vibe, leadHealth, hermes, executiveHq, projectInventory] = await Promise.all([
-      fetchJson("/health"),
-      fetchJson("/api/gates"),
-      fetchJson("/api/actions"),
-      fetchJson("/api/switches"),
-      fetchJson("/api/approval-queue"),
-      fetchJson("/api/audit-events"),
-      fetchJson("/api/vibe-command-center"),
-      fetchJson("/api/lead-health"),
-      fetchJson("/api/hermes"),
-      fetchJson("/api/executive-hq"),
-      fetchJson("/api/project-inventory")
-    ]);
+  let apiOnline = false;
 
-    setApiState("online", `API ${health.status}`);
-    renderGates(gates.gates);
-    renderActions(actions.actions);
-    renderSwitches(switches.switches);
-    renderApprovalQueue(approvalQueue);
-    renderAuditEvents(auditEvents);
-    renderVibe(vibe);
-    renderLeadHealth(leadHealth);
-    renderHermes(hermes);
-    renderExecutive(executiveHq);
-    renderProjectInventory(projectInventory);
-    lastUpdated.textContent = new Date().toLocaleString();
-    logEvent("Control API refreshed");
-    await loadBrain();
-  } catch (error) {
-    setApiState("offline", "API offline");
-    renderGates(fallbackGates);
-    renderActions(fallbackActions);
-    renderSwitches(fallbackSwitches);
-    renderApprovalQueue(fallbackApprovalQueue);
-    renderAuditEvents(fallbackAuditTrail);
-    renderVibe(fallbackVibe);
-    renderLeadHealth(fallbackLeadHealth);
-    renderHermes(fallbackHermes);
-    renderExecutive(fallbackExecutive);
-    renderProjectInventory(fallbackProjectInventory);
-    lastUpdated.textContent = "Fallback data";
-    logEvent(`Fallback mode: ${error.message}`);
-    await loadBrain();
-  }
+  const loadPanel = async (path, render, renderFallback, fallbackLabel) => {
+    try {
+      const data = await fetchJson(path);
+      render(data);
+      return data;
+    } catch (error) {
+      renderFallback(error);
+      logEvent(`${fallbackLabel} fallback: ${error.message}`);
+      return null;
+    }
+  };
+
+  const jobs = [
+    loadPanel(
+      "/health",
+      (health) => {
+        apiOnline = true;
+        setApiState("online", `API ${health.status}`);
+      },
+      () => setApiState("offline", "API offline"),
+      "Health"
+    ),
+    loadPanel("/api/gates", (gates) => renderGates(gates.gates), () => renderGates(fallbackGates), "Gates"),
+    loadPanel("/api/actions", (actions) => renderActions(actions.actions), () => renderActions(fallbackActions), "Actions"),
+    loadPanel("/api/switches", (switches) => renderSwitches(switches.switches), () => renderSwitches(fallbackSwitches), "Switches"),
+    loadPanel(
+      "/api/approval-queue",
+      renderApprovalQueue,
+      () => renderApprovalQueue(fallbackApprovalQueue),
+      "Approval queue"
+    ),
+    loadPanel("/api/audit-events", renderAuditEvents, () => renderAuditEvents(fallbackAuditTrail), "Audit events"),
+    loadPanel("/api/vibe-command-center", renderVibe, () => renderVibe(fallbackVibe), "Vibe command"),
+    loadPanel("/api/lead-health", renderLeadHealth, () => renderLeadHealth(fallbackLeadHealth), "Lead health"),
+    loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
+    loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),
+    loadPanel(
+      "/api/project-inventory",
+      renderProjectInventory,
+      () => renderProjectInventory(fallbackProjectInventory),
+      "Tool inventory"
+    )
+  ];
+
+  await Promise.allSettled(jobs);
+  lastUpdated.textContent = apiOnline ? new Date().toLocaleString() : "Fallback data";
+  logEvent(apiOnline ? "Control API refreshed" : "Fallback mode: Control API unavailable");
+  await loadBrain();
 }
 
 async function runDryRun(actionId) {

@@ -1,8 +1,8 @@
 # SIRINX Production Blockers And Test Matrix
 
-Date: 2026-05-17
-Status: design locked for review
-Scope: documentation only, no tests executed in this change
+Date: 2026-05-19
+Status: local test/debug evidence captured; commit/deploy gates remain explicit
+Scope: blocker/test matrix with current website release gate; no external deployment approval implied
 
 ## Purpose
 
@@ -26,6 +26,8 @@ The first implementation phase after these documents is lead backend repair.
 | B-010 | Medium | Marketing ops | Marketing repo may contain unrelated connectors | Filter to SIRINX-safe marketing functions | No external campaign automation yet |
 | B-011 | Medium | Analytics | Production analytics data policy is not fully locked | Define event schema, retention, privacy policy | Analytics remains limited |
 | B-012 | Medium | Obsidian memory | Brain must not store secrets or raw chat logs | Summary-only memory protocol | Knowledge capture stays safe |
+| B-013 | Medium | Home Solution release | `/home-solution` exists locally and passed local test/debug but is not committed, previewed, or deployed | Review diff, commit if approved, then obtain preview/release approval | New Home Solution page remains local until approved |
+| B-014 | Medium | Cloudflare release safety | Canonical, redirect, cache, preview, rollback, and Trace checks are documented but not executed on production | Execute only after deploy/preview approval and record evidence | Prevents accidental www/apex/cache/redirect regressions |
 
 ## Phase Gates
 
@@ -122,6 +124,20 @@ The public contact form must be able to submit leads automatically. If the backe
 | Internal links | homepage, solar carport, assessment, contact | Crawlable route graph |
 | Performance | image size, JS budget, lazy loading | No avoidable page weight regressions |
 | Claims | savings/ROI/payback wording | Estimates only, no guarantee |
+
+## Home Solution Release Test Matrix
+
+| Area | Check | Acceptance |
+| --- | --- | --- |
+| Route | `/home-solution` and `/home-solution/` local production server | Both return 200 locally; canonical points to `/home-solution` |
+| Static SEO | `dist/public/home-solution/index.html` | Title, description, canonical, OG image, `Service`, `FAQPage`, and `BreadcrumbList` are present |
+| Sitemap | `dist/public/sitemap.xml` | Contains exactly one `https://www.sirinx.co/home-solution` entry |
+| Images | responsive assets | Hero and gallery have AVIF/JPEG variants and source dimensions; no missing assets |
+| Mobile UI | 390px screenshot/browser QA | Hero text does not clip, CTAs remain readable, cards do not overflow |
+| Desktop UI | 1440px screenshot/browser QA | Hero image frames correctly, nav remains usable, page has no blank section |
+| Claims | visible copy and JSON-LD | No universal savings/payback guarantee, no hidden schema-only facts |
+| Public homepage | `/` smoke after build | Home page route remains unchanged and functional |
+| External effects | deployment/connectors | No deploy, DNS, external write, or customer send without explicit approval |
 
 ## Solis Safety Test Matrix
 

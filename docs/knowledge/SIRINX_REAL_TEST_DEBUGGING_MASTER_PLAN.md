@@ -1,7 +1,7 @@
 # SIRINX Real Test Debugging Master Plan
 
-Date: 2026-05-17
-Status: active local test plan
+Date: 2026-05-19
+Status: latest local test/debug pass captured; commit/deploy gates remain explicit
 
 Update 2026-05-17 03:06 +07: external gates were approved by the user and executed where credentials/tools allowed.
 
@@ -76,6 +76,8 @@ pnpm build
 
 | Gate | Reason | Next action |
 | --- | --- | --- |
+| Home Solution local change set | New public website route/assets are tested but uncommitted and undeployed | Review diff, then request commit/release approval |
+| Command Center local change set | `sirinx-os` dashboard, 47 Ronin, and documentation changes are tested but uncommitted | Review mixed local edits before commit |
 | Codex Mobile pairing | Human QR/MFA flow | User scans QR on phone |
 | Public website PR merge | Updates origin/main and may trigger deployment | Review PR #1 and approve merge/release |
 | Telegram production bridge | Gateway connected but home target is not deliverable; channel directory empty | Start/add bot to intended chat, rotate/confirm token, update home channel |
@@ -112,6 +114,42 @@ Production state:
 - Public website branch `codex/public-website-production-ready-20260517` pushed and draft PR #1 opened.
 - Telegram smoke send failed because the configured home target is not deliverable.
 - Solis safety engine tests pass, but no real SolisCloud telemetry smoke was possible without API credentials and station mapping.
+
+## Latest Local Test Run: Home Solution And Command Center
+
+Run time: 2026-05-19 01:54 +07
+
+Target:
+
+- `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx`
+- Route `/home-solution`
+- New responsive AVIF/JPEG image assets
+- Static SEO output and sitemap entry
+
+Required order:
+
+1. `corepack pnpm run check`
+2. `corepack pnpm run test`
+3. `corepack pnpm run build`
+4. Local production server smoke for `/`, `/home-solution`, and `/home-solution/`
+5. Static HTML checks for title, canonical, OG image, `Service`, `FAQPage`, `BreadcrumbList`
+6. Sitemap check for one `/home-solution` canonical entry
+7. Mobile and desktop screenshot/browser QA
+8. Git diff and untracked asset review
+9. Obsidian summary update
+
+Observed pass evidence:
+
+- Public website: `corepack pnpm run check`, `corepack pnpm run test`, and `corepack pnpm run build` passed.
+- Public website: local production smoke returned 200 for `/`, `/home-solution`, `/home-solution/`, and responsive Home Solution image assets.
+- Public website: static SEO checks found title, description, canonical, OG image, `Service`, `FAQPage`, `BreadcrumbList`, one sitemap entry, and no universal savings/payback guarantee.
+- Public website: desktop and mobile screenshots rendered without visible hero clipping or layout overflow.
+- SIRINX OS: `pnpm verify`, `pnpm dashboard:test`, `pnpm dashboard:e2e`, and `git diff --check` passed.
+- Command Center E2E issue fixed: `#vibeStatus` no longer waits for slower Hermes/Executive/Inventory endpoints before rendering.
+
+Stop before:
+
+- `git add`, commit, push, PR update, deploy, Cloudflare write, DNS write, Search Console write, Telegram/LINE send, Solis API call, or secret read.
 
 ## Debugging Rule
 

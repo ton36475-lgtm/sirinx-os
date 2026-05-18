@@ -83,6 +83,14 @@ export const actions = [
     mode: "dry-run"
   },
   {
+    id: "agent-team-profile-check",
+    title: "Review 47 Ronin agent team",
+    description: "Simulate profile, roster, connector policy, and backlog gate readiness without starting gateways or external writes.",
+    risk: "medium",
+    mode: "dry-run",
+    requiresApproval: true
+  },
+  {
     id: "telegram-line-bridge-check",
     title: "Check Telegram and LINE bridge gates",
     description: "Simulate messaging bridge readiness and prove production sends remain blocked.",

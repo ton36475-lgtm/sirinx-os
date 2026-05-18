@@ -225,6 +225,45 @@ h2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.vibe-team-section {
+  display: grid;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.vibe-team-section h3 {
+  margin: 0;
+  color: var(--blue);
+  font-size: 0.94rem;
+}
+
+.agent-team-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.25fr) minmax(260px, 0.9fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.agent-team-card {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.agent-team-wide {
+  grid-row: span 2;
+}
+
+.agent-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .process-card,
 .function-card {
   min-width: 0;
@@ -609,6 +648,18 @@ h2 {
   background: #fff;
 }
 
+.role-chip-safe {
+  border-left: 4px solid var(--green);
+}
+
+.role-chip-warn {
+  border-left: 4px solid var(--amber);
+}
+
+.role-chip-danger {
+  border-left: 4px solid var(--red);
+}
+
 .role-chip strong,
 .role-chip span {
   overflow-wrap: anywhere;
@@ -961,11 +1012,13 @@ h2 {
   }
 
   .tool-layout,
-  .vibe-layout {
+  .vibe-layout,
+  .agent-team-grid {
     grid-template-columns: 1fr;
   }
 
-  .tool-column-wide {
+  .tool-column-wide,
+  .agent-team-wide {
     grid-row: auto;
   }
 }
@@ -1008,6 +1061,7 @@ h2 {
 
   .executive-layout,
   .role-roster,
+  .agent-profile-grid,
   .subdomain-list,
   .function-grid {
     grid-template-columns: 1fr;
