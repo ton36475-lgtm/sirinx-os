@@ -25,16 +25,18 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | Codex Mobile review packet | Done and committed | `/api/mobile-review-packet` produces mobile-readable evidence without external approval authority |
 | External gate approval packets | Done and committed | `/api/external-gate-packets` defines 9 exact approval phrase packets with `canExecuteNow=false` |
 | External gate audit preflight | Done and committed | `/api/external-gate-preflight` marks 9 gates as ready/blocked/manual with `externalWrites=false` |
-| PR #1 dirty merge state | Resolved locally, pending Gate 1 push | Website repo has local merge commit `1901215 merge: sync public website branch with main`; no GitHub push performed |
+| PR #1 dirty merge state | Resolved and pushed | Website PR #1 now includes `1901215 merge: sync public website branch with main`; GitHub reports `mergeStateStatus=CLEAN` |
+| PR #1 review/check inspection | Done read-only | No PR comments, no reviews, no review threads, and no reported status checks |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is on branch `codex/urgent-backlog-execution` with Command Center local-only workflow phases committed through external gate audit preflight and refreshed backlog status.
 - Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/public-website-production-ready-20260517` and matches `origin/codex/public-website-production-ready-20260517`.
-- PR #1 is open at `https://github.com/ton36475-lgtm/sirinx/pull/1`, draft status is `true`, head is `codex/public-website-production-ready-20260517`, and base is `main`.
-- Public website branch has local merge commit `1901215 merge: sync public website branch with main`, resolving the `mergeStateStatus=DIRTY` condition locally. GitHub will still show old PR state until Gate 1 push updates the remote branch.
-- Public website local branch is clean and ahead of origin after merging `origin/main`.
+- PR #1 is open at `https://github.com/ton36475-lgtm/sirinx/pull/1`, draft status is `true`, head is `codex/public-website-production-ready-20260517`, base is `main`, and GitHub reports `mergeStateStatus=CLEAN`.
+- Public website branch has pushed merge commit `1901215 merge: sync public website branch with main`.
+- Public website local branch is clean and synced with origin after Gate 1 push.
+- PR #1 has no comments, no reviews, no review threads, and no reported status checks at the time of read-only inspection.
 - Home Solution work passed typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, and no-secret review before this backlog update.
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
@@ -48,7 +50,6 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 
 | Item | Why blocked | Required approval |
 | --- | --- | --- |
-| Push PR #1 local merge resolution | Local branch is clean and ahead of origin; GitHub PR still needs remote update | Exact Gate 1 approval phrase, clean status, and target confirmation |
 | Deploy `/home-solution` to `www.sirinx.co` | Public customer-facing website change | Explicit Cloudflare/Pages or release approval after preview and rollback plan |
 | Expose `dev.sirinx.co` or other internal subdomains | DNS/Pages/Access changes are external writes | Explicit Cloudflare + Access approval |
 | Merge public website PR #1 | Updates origin/main and may trigger GitHub/Pages deployment workflow | Explicit merge/release approval |
@@ -77,15 +78,15 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 ## Next Strict Sequence
 
 1. Keep `sirinx-os` clean after Phase 15-17 local status commits.
-2. Push/update PR #1 branch only after exact Gate 1 approval phrase is supplied.
+2. Gate 3A candidate: create Cloudflare preview only after confirming Pages project/build output and preserving production routes.
 3. Pair Codex Mobile manually via QR because MFA/SSO requires the human operator.
-4. Execute exactly one external gate only after its exact approval phrase is supplied.
-5. Gate 1 candidate: push local merge commit `1901215` to `origin/codex/public-website-production-ready-20260517`.
-6. Gate 3A candidate: create Cloudflare preview only after PR/build evidence is current.
-7. Gate 3B candidate: deploy production only after preview approval and rollback target are recorded.
-8. Fix Telegram/LINE target setup only after recipient/channel target is confirmed.
-9. Store Solis API credentials only through approved secret storage, then build read-only telemetry smoke.
-10. Select exactly one internal subdomain candidate for build/auth review.
+4. Execute exactly one external gate at a time and record verification before moving to the next gate.
+5. Gate 3B candidate: deploy production only after preview approval and rollback target are recorded.
+6. Fix Telegram/LINE target setup only after recipient/channel target is confirmed.
+7. Store Solis API credentials only through approved secret storage, then build read-only telemetry smoke.
+8. Select exactly one internal subdomain candidate for build/auth review.
+9. Keep PR #1 draft until preview/release evidence is attached.
+10. Monitor live lead capture after production release only; do not create extra production leads from Command Center.
 
 ## Stop Rules
 
