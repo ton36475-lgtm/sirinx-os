@@ -49,6 +49,8 @@ const proposalReviewStatus = document.querySelector("#proposalReviewStatus");
 const proposalReviewSummary = document.querySelector("#proposalReviewSummary");
 const proposalReviewList = document.querySelector("#proposalReviewList");
 const proposalReviewNextActions = document.querySelector("#proposalReviewNextActions");
+const proposalReviewWriteButton = document.querySelector("#proposalReviewWriteButton");
+const proposalReviewWriteResult = document.querySelector("#proposalReviewWriteResult");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -329,6 +331,7 @@ const fallbackProposalReview = {
   externalWrites: false,
   productionWrites: false,
   customerVisible: false,
+  reviewPacketTargetRoot: "/Users/sirinx/Documents/Obsidian Vault/SIRINX/06_OPERATIONS/Proposal Review Packets",
   summary: { items: 0, complete: 0, missing: 0, blocked: 0, reviewRequired: 0, blockingExternalSend: 1 },
   items: [
     {
@@ -1166,6 +1169,14 @@ function renderProposalReview(review) {
       return item;
     })
   );
+
+  proposalReviewWriteButton.disabled = data.mode === "local-fallback";
+  proposalReviewWriteButton.title = data.mode === "local-fallback"
+    ? "Local review packet writer is blocked until proposal review is available."
+    : `Write a local review packet under ${data.reviewPacketTargetRoot || fallbackProposalReview.reviewPacketTargetRoot}`;
+  proposalReviewWriteResult.textContent = data.mode === "local-fallback"
+    ? "Local review packet writer waits for API readiness."
+    : `Target: ${data.reviewPacketTargetRoot || fallbackProposalReview.reviewPacketTargetRoot}`;
 }
 
 function makeSummaryCard(label, value, note) {
@@ -1909,10 +1920,36 @@ async function calculateRoiPreview(event) {
   }
 }
 
+async function writeProposalReviewPacketLocal() {
+  proposalReviewWriteButton.disabled = true;
+  proposalReviewWriteResult.textContent = "Writing local Obsidian proposal review packet...";
+
+  try {
+    const result = await fetchJson("/api/proposal-review/write", {
+      method: "POST",
+      body: JSON.stringify({ confirmLocalWrite: true })
+    });
+
+    if (result.didWrite) {
+      proposalReviewWriteResult.textContent = `Written: ${result.targetPath}`;
+      logEvent(`proposal review packet written locally: ${result.targetPath}`);
+    } else {
+      proposalReviewWriteResult.textContent = `${result.status}: ${result.reason || "no file written"}`;
+      logEvent(`proposal review packet write blocked: ${result.status}`);
+    }
+  } catch (error) {
+    proposalReviewWriteResult.textContent = `Local write failed: ${error.message}`;
+    logEvent(`proposal review packet write failed: ${error.message}`);
+  } finally {
+    proposalReviewWriteButton.disabled = false;
+  }
+}
+
 refreshButton.addEventListener("click", loadDashboard);
 toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
 proposalDraftWriteButton.addEventListener("click", writeProposalDraftLocal);
 roiAssumptionForm.addEventListener("submit", calculateRoiPreview);
+proposalReviewWriteButton.addEventListener("click", writeProposalReviewPacketLocal);
 
 loadDashboard();

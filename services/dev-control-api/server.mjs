@@ -10,7 +10,7 @@ import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { getProposalDraftPreview, writeLocalProposalDraft } from "./src/proposal-draft.mjs";
-import { getProposalReviewStatus } from "./src/proposal-review.mjs";
+import { getProposalReviewStatus, writeProposalReviewPacket } from "./src/proposal-review.mjs";
 import { getRoiPreview } from "./src/roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
 import { switches } from "./src/switches.mjs";
@@ -496,6 +496,23 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/proposal-review") {
     sendJson(request, response, 200, await getProposalReviewStatus());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/proposal-review/write") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await writeProposalReviewPacket(body));
+    } catch (error) {
+      sendJson(request, response, 500, {
+        error: "proposal_review_packet_write_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        requiresHumanReview: true
+      });
+    }
     return;
   }
 

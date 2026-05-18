@@ -59,6 +59,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalReviewList")).toContainText("ROI preview");
     await expect(page.locator("#proposalReviewList")).toContainText("PEA inverter verification");
     await expect(page.locator("#proposalReviewNextActions")).toContainText("Keep CRM writes");
+    await expect(page.locator("#proposalReviewWriteButton")).toBeVisible();
+    await expect(page.locator("#proposalReviewWriteButton")).toBeEnabled();
+    await expect(page.locator("#proposalReviewWriteResult")).toContainText("Proposal Review Packets");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -190,6 +193,17 @@ test.describe("Developer Command Center", () => {
     expect(proposalReview.items.some((item) => item.id === "roi-preview" && item.complete)).toBe(true);
     expect(proposalReview.items.some((item) => item.id === "pea-inverter-verification" && item.blocksExternalSend)).toBe(true);
     expect(proposalReview.summary.blockingExternalSend).toBeGreaterThan(0);
+    expect(proposalReview.reviewPacketTargetRoot).toContain("Proposal Review Packets");
+    const proposalReviewWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/proposal-review/write", {
+      data: { dryRun: true }
+    });
+    expect(proposalReviewWriteDryRunResponse.ok()).toBeTruthy();
+    const proposalReviewWriteDryRun = await proposalReviewWriteDryRunResponse.json();
+    expect(proposalReviewWriteDryRun.status).toBe("dry-run-ready");
+    expect(proposalReviewWriteDryRun.didWrite).toBe(false);
+    expect(proposalReviewWriteDryRun.wouldWrite).toBe(true);
+    expect(proposalReviewWriteDryRun.externalWrites).toBe(false);
+    expect(proposalReviewWriteDryRun.targetPath).toContain("Proposal Review Packets");
     expect(consoleErrors).toEqual([]);
   });
 
@@ -235,6 +249,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalDraftWriteResult")).toContainText("waits for draft readiness");
     await expect(page.locator("#proposalReviewStatus")).toHaveText("Send blocked");
     await expect(page.locator("#proposalReviewList")).toContainText("Proposal review unavailable");
+    await expect(page.locator("#proposalReviewWriteButton")).toBeDisabled();
+    await expect(page.locator("#proposalReviewWriteResult")).toContainText("waits for API readiness");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

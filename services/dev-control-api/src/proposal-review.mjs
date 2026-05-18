@@ -1,7 +1,11 @@
+import { mkdir, writeFile } from "node:fs/promises";
 import { getLeadBackendHealth } from "./lead-health.mjs";
 import { getProposalDraftPreview } from "./proposal-draft.mjs";
 import { getRoiPreview } from "./roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./sales-artifacts.mjs";
+
+const reviewPacketRoot =
+  "/Users/sirinx/Documents/Obsidian Vault/SIRINX/06_OPERATIONS/Proposal Review Packets";
 
 function makeItem(id, title, detail, state, blocksExternalSend = true) {
   return {
@@ -23,6 +27,51 @@ function summarize(items) {
     reviewRequired: items.filter((item) => item.state === "review-required").length,
     blockingExternalSend: items.filter((item) => item.blocksExternalSend).length
   };
+}
+
+function timestampForFile(date = new Date()) {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+}
+
+function buildReviewPacket(status) {
+  return `---
+title: "SIRINX Proposal External Send Review Packet"
+created: ${new Date().toISOString()}
+status: ${status.status}
+system: SIRINX
+generated_by: sirinx-proposal-review-packet-writer
+external_writes: false
+customer_visible: false
+can_send_externally: ${status.canSendExternally}
+blocking_external_send: ${status.summary.blockingExternalSend}
+---
+
+# SIRINX Proposal External Send Review Packet
+
+## Summary
+
+- Status: ${status.status}
+- Local workflow ready: ${status.localWorkflowReady}
+- Can send externally: ${status.canSendExternally}
+- Complete items: ${status.summary.complete}/${status.summary.items}
+- Blocking external-send items: ${status.summary.blockingExternalSend}
+- External writes: ${status.externalWrites}
+- Customer visible: ${status.customerVisible}
+
+## Checklist
+
+| Item | State | Blocks External Send | Detail |
+|---|---|---:|---|
+${status.items.map((item) => `| ${item.title} | ${item.state} | ${item.blocksExternalSend ? "yes" : "no"} | ${item.detail.replace(/\|/g, "/")} |`).join("\n")}
+
+## Required Next Actions
+
+${status.nextActions.map((action) => `- ${action}`).join("\n")}
+
+## Guardrail
+
+This packet is a local review artifact. It is not approval to write CRM, send a customer message, run production POST smoke, deploy Cloudflare, edit DNS, call Supabase, call Solis, or write to any external SaaS.
+`;
 }
 
 export async function getProposalReviewStatus() {
@@ -117,6 +166,7 @@ export async function getProposalReviewStatus() {
     externalWrites: false,
     productionWrites: false,
     customerVisible: false,
+    reviewPacketTargetRoot: reviewPacketRoot,
     summary,
     items,
     nextActions: [
@@ -127,5 +177,56 @@ export async function getProposalReviewStatus() {
       "Keep CRM writes, customer messages, and production POST smoke separately approval-gated."
     ],
     updatedAt: new Date().toISOString()
+  };
+}
+
+export async function writeProposalReviewPacket(options = {}) {
+  const status = await getProposalReviewStatus();
+  const stamp = timestampForFile();
+  const targetPath = `${reviewPacketRoot}/SIRINX Proposal External Send Review Packet ${stamp}.md`;
+  const content = buildReviewPacket(status);
+  const payload = {
+    title: "SIRINX proposal review packet writer",
+    mode: "local-file-write-gated",
+    externalWrites: false,
+    productionWrites: false,
+    customerVisible: false,
+    targetRoot: reviewPacketRoot,
+    targetPath,
+    didWrite: false,
+    dryRun: Boolean(options.dryRun),
+    requiresConfirmLocalWrite: true,
+    status: "pending-confirmation",
+    reviewStatus: status.status,
+    blockingExternalSend: status.summary.blockingExternalSend,
+    updatedAt: new Date().toISOString()
+  };
+
+  if (options.dryRun) {
+    return {
+      ...payload,
+      status: "dry-run-ready",
+      wouldWrite: true,
+      byteLength: content.length
+    };
+  }
+
+  if (options.confirmLocalWrite !== true) {
+    return {
+      ...payload,
+      status: "blocked-confirm-local-write-required",
+      wouldWrite: false,
+      reason: "Set confirmLocalWrite=true to write a local Obsidian proposal review packet."
+    };
+  }
+
+  await mkdir(reviewPacketRoot, { recursive: true });
+  await writeFile(targetPath, content, { encoding: "utf8", flag: "wx" });
+
+  return {
+    ...payload,
+    status: "written-local",
+    didWrite: true,
+    byteLength: content.length
   };
 }
