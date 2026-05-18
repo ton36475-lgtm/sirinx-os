@@ -110,6 +110,58 @@
         </div>
       </section>
 
+      <section class="panel roi-preview-panel" aria-label="Local ROI preview">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Solar ROI</p>
+            <h2>Assumption Preview</h2>
+          </div>
+          <span id="roiPreviewStatus" class="status-pill status-warn">ROI checking</span>
+        </div>
+        <div id="roiPreviewSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column" aria-label="ROI assumptions">
+            <h3>Assumptions</h3>
+            <form id="roiAssumptionForm" class="roi-form">
+              <label>
+                <span>Monthly Bill THB</span>
+                <input id="roiMonthlyBill" type="number" min="0" step="100" inputmode="numeric">
+              </label>
+              <label>
+                <span>Daytime Load Ratio</span>
+                <input id="roiDaytimeRatio" type="number" min="0" max="1" step="0.01" inputmode="decimal">
+              </label>
+              <label>
+                <span>Backup Priority</span>
+                <select id="roiBackupPriority">
+                  <option value="medium">medium</option>
+                  <option value="high">high</option>
+                  <option value="critical">critical</option>
+                  <option value="low">low</option>
+                </select>
+              </label>
+              <label>
+                <span>Phase Type</span>
+                <select id="roiPhaseType">
+                  <option value="unknown">unknown</option>
+                  <option value="single-phase">single-phase</option>
+                  <option value="3-phase">3-phase</option>
+                </select>
+              </label>
+              <button id="roiCalculateButton" class="text-button" type="submit">Calculate Local ROI</button>
+            </form>
+          </section>
+          <section class="tool-column tool-column-wide" aria-label="ROI savings cases">
+            <h3>Savings Cases</h3>
+            <div id="roiCaseList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="ROI review gates">
+            <h3>Review Gates</h3>
+            <ol id="roiReviewGates" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel proposal-draft-panel" aria-label="Proposal draft preview">
         <div class="panel-head">
           <div>

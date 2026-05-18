@@ -10,6 +10,7 @@ import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { getProposalDraftPreview, writeLocalProposalDraft } from "./src/proposal-draft.mjs";
+import { getRoiPreview } from "./src/roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
 import { switches } from "./src/switches.mjs";
 import { getRoninAgentTeam } from "./src/agent-team.mjs";
@@ -489,6 +490,28 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/proposal-draft") {
     sendJson(request, response, 200, await getProposalDraftPreview());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/roi-preview") {
+    sendJson(request, response, 200, await getRoiPreview());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/roi-preview") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await getRoiPreview(body.assumptions || body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        error: "roi_preview_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        requiresHumanReview: true
+      });
+    }
     return;
   }
 

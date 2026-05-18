@@ -615,6 +615,32 @@ h2 {
   margin-top: 12px;
 }
 
+.roi-form {
+  display: grid;
+  gap: 10px;
+}
+
+.roi-form label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.roi-form input,
+.roi-form select {
+  width: 100%;
+  min-height: 36px;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
 .write-result {
   min-width: 0;
   margin: 0;

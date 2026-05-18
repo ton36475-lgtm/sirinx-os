@@ -35,6 +35,16 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#salesArtifactsStatus")).toHaveText(/Artifacts ready|Artifacts review/);
     await expect(page.locator("#salesArtifactsSummary")).toContainText("Proposal Draft");
     await expect(page.locator("#salesArtifactsList")).toContainText("Residential Solar ESS Proposal Template");
+    await expect(page.getByRole("heading", { name: "Assumption Preview" })).toBeVisible();
+    await expect(page.locator("#roiPreviewStatus")).toHaveText(/ROI ready|ROI blocked/);
+    await expect(page.locator("#roiCaseList")).toContainText("realistic case");
+    await expect(page.locator("#roiReviewGates")).toContainText("PEA Smartlist");
+    await page.locator("#roiMonthlyBill").fill("8500");
+    await page.locator("#roiDaytimeRatio").fill("0.45");
+    await page.locator("#roiBackupPriority").selectOption("high");
+    await page.locator("#roiPhaseType").selectOption("3-phase");
+    await page.getByRole("button", { name: "Calculate Local ROI" }).click();
+    await expect(page.locator("#roiPreviewSummary")).toContainText("H-10");
     await expect(page.getByRole("heading", { name: "Draft Preview" })).toBeVisible();
     await expect(page.locator("#proposalDraftStatus")).toHaveText(/Draft ready|Draft blocked/);
     await expect(page.locator("#proposalDraftPreview")).toContainText("Local Proposal Draft Preview");
@@ -118,6 +128,29 @@ test.describe("Developer Command Center", () => {
     expect(salesArtifacts.status).toBe("ready-local");
     expect(salesArtifacts.proposalDraftReadiness).toBe("ready-local-draft");
     expect(salesArtifacts.items.some((item) => item.id === "proposal-template" && item.ready)).toBe(true);
+    const roiPreviewResponse = await page.request.get("http://127.0.0.1:8711/api/roi-preview");
+    expect(roiPreviewResponse.ok()).toBeTruthy();
+    const roiPreview = await roiPreviewResponse.json();
+    expect(roiPreview.status).toBe("ready-local-roi-preview");
+    expect(roiPreview.externalWrites).toBe(false);
+    expect(roiPreview.customerVisible).toBe(false);
+    expect(roiPreview.result.recommendedPackage.id).toBe("H-20");
+    expect(roiPreview.result.cases).toHaveLength(3);
+    const customRoiPreviewResponse = await page.request.post("http://127.0.0.1:8711/api/roi-preview", {
+      data: {
+        assumptions: {
+          monthly_bill_thb: 8500,
+          daytime_load_ratio: 0.45,
+          backup_priority: "high",
+          phase_type: "3-phase"
+        }
+      }
+    });
+    expect(customRoiPreviewResponse.ok()).toBeTruthy();
+    const customRoiPreview = await customRoiPreviewResponse.json();
+    expect(customRoiPreview.externalWrites).toBe(false);
+    expect(customRoiPreview.result.recommendedPackage.id).toBe("H-10");
+    expect(customRoiPreview.result.cases.find((item) => item.name === "realistic").estimatedMonthlySavingsThb).toBeGreaterThan(0);
     const proposalDraftResponse = await page.request.get("http://127.0.0.1:8711/api/proposal-draft");
     expect(proposalDraftResponse.ok()).toBeTruthy();
     const proposalDraft = await proposalDraftResponse.json();
@@ -172,6 +205,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#leadHealthNextActions")).toContainText("Start the local control API");
     await expect(page.locator("#salesArtifactsStatus")).toHaveText("Artifacts review");
     await expect(page.locator("#salesArtifactsNextActions")).toContainText("Start the local control API");
+    await expect(page.locator("#roiPreviewStatus")).toHaveText("ROI blocked");
+    await expect(page.locator("#roiCaseList")).toContainText("unavailable");
+    await expect(page.locator("#roiCalculateButton")).toBeDisabled();
     await expect(page.locator("#proposalDraftStatus")).toHaveText("Draft blocked");
     await expect(page.locator("#proposalDraftPreview")).toContainText("unavailable");
     await expect(page.locator("#proposalDraftWriteButton")).toBeDisabled();

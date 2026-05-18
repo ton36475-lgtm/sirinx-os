@@ -29,6 +29,16 @@ const salesArtifactsStatus = document.querySelector("#salesArtifactsStatus");
 const salesArtifactsSummary = document.querySelector("#salesArtifactsSummary");
 const salesArtifactsList = document.querySelector("#salesArtifactsList");
 const salesArtifactsNextActions = document.querySelector("#salesArtifactsNextActions");
+const roiPreviewStatus = document.querySelector("#roiPreviewStatus");
+const roiPreviewSummary = document.querySelector("#roiPreviewSummary");
+const roiAssumptionForm = document.querySelector("#roiAssumptionForm");
+const roiMonthlyBill = document.querySelector("#roiMonthlyBill");
+const roiDaytimeRatio = document.querySelector("#roiDaytimeRatio");
+const roiBackupPriority = document.querySelector("#roiBackupPriority");
+const roiPhaseType = document.querySelector("#roiPhaseType");
+const roiCalculateButton = document.querySelector("#roiCalculateButton");
+const roiCaseList = document.querySelector("#roiCaseList");
+const roiReviewGates = document.querySelector("#roiReviewGates");
 const proposalDraftStatus = document.querySelector("#proposalDraftStatus");
 const proposalDraftSummary = document.querySelector("#proposalDraftSummary");
 const proposalDraftPreview = document.querySelector("#proposalDraftPreview");
@@ -267,6 +277,28 @@ const fallbackSalesArtifacts = {
   lanes: [],
   reviewGates: ["Start the local control API to inspect sales artifacts."],
   nextActions: ["Start the local control API and refresh sales artifacts."]
+};
+
+const fallbackRoiPreview = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  assumptions: {
+    monthly_bill_thb: 0,
+    daytime_load_ratio: 0.5,
+    backup_priority: "medium",
+    phase_type: "unknown"
+  },
+  result: {
+    recommendedPackage: { id: "unavailable", type: "manual", kw: 0, batteryKwh: 0, price: 0 },
+    estimatedMonthlyKwh: 0,
+    estimatedMonthlyPvKwh: 0,
+    cases: []
+  },
+  reviewGates: ["Start the local control API to calculate ROI assumptions."],
+  nextActions: ["Start the local control API and refresh ROI preview."]
 };
 
 const fallbackProposalDraft = {
@@ -991,6 +1023,57 @@ function renderSalesArtifacts(status) {
   );
 }
 
+function renderRoiPreview(preview) {
+  const data = preview || fallbackRoiPreview;
+  const ready = data.status === "ready-local-roi-preview";
+  const result = data.result || fallbackRoiPreview.result;
+  const recommendedPackage = result.recommendedPackage || fallbackRoiPreview.result.recommendedPackage;
+  const assumptions = data.assumptions || fallbackRoiPreview.assumptions;
+
+  roiPreviewStatus.textContent = ready ? "ROI ready" : "ROI blocked";
+  roiPreviewStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  roiPreviewStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  roiPreviewSummary.replaceChildren(
+    makeSummaryCard("Package", recommendedPackage.id || "unknown", `${recommendedPackage.kw || 0} kW / ${recommendedPackage.batteryKwh || 0} kWh`),
+    makeSummaryCard("Monthly Use", `${result.estimatedMonthlyKwh || 0} kWh`, `${assumptions.monthly_bill_thb || 0} THB bill`),
+    makeSummaryCard("PV Output", `${result.estimatedMonthlyPvKwh || 0} kWh`, "planning estimate"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.customerVisible ? "customer visible" : "local only")
+  );
+
+  roiMonthlyBill.value = assumptions.monthly_bill_thb || 0;
+  roiDaytimeRatio.value = assumptions.daytime_load_ratio ?? 0.5;
+  roiBackupPriority.value = assumptions.backup_priority || "medium";
+  roiPhaseType.value = assumptions.phase_type || "unknown";
+  roiCalculateButton.disabled = !ready;
+
+  const cases = result.cases || [];
+  if (!cases.length) {
+    const empty = document.createElement("p");
+    empty.className = "gate-copy";
+    empty.textContent = "ROI cases are unavailable until the local control API is online.";
+    roiCaseList.replaceChildren(empty);
+  } else {
+    renderSignalList(
+      roiCaseList,
+      cases.map((item) => ({
+        title: `${item.name} case`,
+        detail: `${item.estimatedMonthlySavingsThb} THB/month, ${item.capturedKwh} kWh captured, payback ${item.estimatedPaybackYears ?? "n/a"} years, self-consumption ${item.selfConsumption}`,
+        ok: item.name === "realistic",
+        badge: item.name
+      }))
+    );
+  }
+
+  roiReviewGates.replaceChildren(
+    ...(data.reviewGates || data.nextActions || []).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function renderProposalDraft(preview) {
   const data = preview || fallbackProposalDraft;
   const ready = data.status === "ready-local-preview";
@@ -1668,6 +1751,7 @@ async function loadDashboard() {
       () => renderSalesArtifacts(fallbackSalesArtifacts),
       "Sales artifacts"
     ),
+    loadPanel("/api/roi-preview", renderRoiPreview, () => renderRoiPreview(fallbackRoiPreview), "ROI preview"),
     loadPanel(
       "/api/proposal-draft",
       renderProposalDraft,
@@ -1731,9 +1815,37 @@ async function writeProposalDraftLocal() {
   }
 }
 
+async function calculateRoiPreview(event) {
+  event.preventDefault();
+  roiCalculateButton.disabled = true;
+
+  try {
+    const result = await fetchJson("/api/roi-preview", {
+      method: "POST",
+      body: JSON.stringify({
+        assumptions: {
+          monthly_bill_thb: Number(roiMonthlyBill.value || 0),
+          daytime_load_ratio: Number(roiDaytimeRatio.value || 0.5),
+          backup_priority: roiBackupPriority.value,
+          phase_type: roiPhaseType.value,
+          effective_tariff_thb_per_kwh: 4.2,
+          annual_yield_per_kwp: 1450
+        }
+      })
+    });
+    renderRoiPreview(result);
+    logEvent(`ROI preview calculated: ${result.result?.recommendedPackage?.id || "unknown"}`);
+  } catch (error) {
+    logEvent(`ROI preview unavailable (${error.message})`);
+  } finally {
+    roiCalculateButton.disabled = false;
+  }
+}
+
 refreshButton.addEventListener("click", loadDashboard);
 toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
 proposalDraftWriteButton.addEventListener("click", writeProposalDraftLocal);
+roiAssumptionForm.addEventListener("submit", calculateRoiPreview);
 
 loadDashboard();
