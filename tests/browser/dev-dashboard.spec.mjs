@@ -16,8 +16,10 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#vibeStatus")).toHaveText("Dry-run command");
     await expect(page.locator("#vibeRule")).toContainText("Work in order");
     await expect(page.locator("#vibeProcessLane")).toContainText("Freeze Public Website Baseline");
+    await expect(page.locator("#vibeProcessLane")).toContainText("Local Lead Qualification Routing");
     await expect(page.locator("#vibeProcessLane")).toContainText("Build Solis Read-Only Connector");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Public Website Control");
+    await expect(page.locator("#vibeFunctionGrid")).toContainText("Lead Qualification Routing");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Solis Load Balancing");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Telegram / LINE Bridge");
     await expect(page.getByRole("heading", { name: "Capture Health" })).toBeVisible();

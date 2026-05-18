@@ -28,6 +28,18 @@ export const commandCenterFunctions = [
     evidence: ["local mock D1 self-test", "tRPC batch parser test", "Cloudflare main-router deployed", "production smoke lead ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b"]
   },
   {
+    id: "lead-qualification-routing",
+    title: "Lead Qualification Routing",
+    surface: "Command Center /api/lead-health",
+    owner: "Hermes sales operator",
+    status: "active-local",
+    mode: "local-only",
+    command: "curl /api/lead-health",
+    actionId: "lead-backend-preflight",
+    approvalGate: "CRM writes and customer sends still require explicit target and approval.",
+    evidence: ["lead intake schema", "lead qualification model", "47 Ronin sales/backend lanes", "externalWrites=false"]
+  },
+  {
     id: "hermes-runtime",
     title: "Hermes Runtime",
     surface: "Local Command Center",
@@ -169,6 +181,14 @@ export const processLane = [
     status: "done",
     nextCommand: "GET /api/lead-health",
     output: "Dashboard shows local handler readiness and no-write production probe state."
+  },
+  {
+    id: "phase-3b",
+    label: "Phase 3B",
+    title: "Local Lead Qualification Routing",
+    status: "done",
+    nextCommand: "GET /api/lead-health",
+    output: "Command Center maps local lead probes into sales workflow lanes without CRM writes."
   },
   {
     id: "phase-4",

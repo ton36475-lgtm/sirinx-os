@@ -67,7 +67,7 @@ export const activeRoninProfiles = [
     name: "sales",
     title: "Sales Operator",
     lane: "leads",
-    responsibility: "Owns lead triage, CRM handoff, proposal workflow, and customer next actions.",
+    responsibility: "Owns lead triage, local qualification lanes, CRM handoff, proposal workflow, and customer next actions.",
     connectors: ["ClickUp", "Notion", "Google Drive", "Telegram", "LINE"],
     approvalGate: "Customer sends and CRM writes require valid recipient and approval."
   },
@@ -247,6 +247,13 @@ export const agentBacklogGates = [
     owner: "backend",
     status: "active-monitor",
     nextAction: "Monitor safe GET and existing production smoke evidence without creating duplicate leads."
+  },
+  {
+    id: "lead-qualification-routing",
+    title: "Local lead qualification routing",
+    owner: "sales",
+    status: "active-local",
+    nextAction: "Use /api/lead-health qualificationModel to route sales-engineering-review, qualification-follow-up, nurture, and missing-contact lanes before any CRM write."
   },
   {
     id: "obsidian-brain",

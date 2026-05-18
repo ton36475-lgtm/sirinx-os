@@ -1405,6 +1405,40 @@ These defaults are not quote guarantees. Replace with site data whenever bills, 
     ),
   ],
   [
+    "13_DATABASES/Lead Qualification Lane Database.md",
+    note(
+      "Lead Qualification Lane Database",
+      ["sirinx/database", "lead-qualification", "sales"],
+      `
+## Model
+
+\`2026-05-19.lead-qualification.v1\`
+
+## Lanes
+
+| Workflow Lane | Meaning | Owner | External Write |
+|---|---|---|---|
+| sales-engineering-review | High-intent/high-value lead ready for engineering-reviewed assumptions | sales + backend | blocked until CRM target approval |
+| qualification-follow-up | Needs bill, roof, phase, load split, or backup clarification | sales | blocked until recipient approval |
+| nurture-and-education | Early-stage or weak-data lead; education-first response | growth + sales | blocked until content/send approval |
+| missing-contact-channel | Lead cannot be routed until phone/email/LINE exists | sales | no send possible |
+
+## Package Lanes
+
+- on-grid-og5
+- on-grid-og10
+- hybrid-h5
+- hybrid-h10
+- hybrid-h15-engineered
+- hybrid-h20-engineered
+
+## Guardrail
+
+Qualification is not a quote and not a CRM mutation. It is a local triage signal that must be reviewed before any external action.
+      `,
+    ),
+  ],
+  [
     "12_DASHBOARDS/Sales Engineering Dashboard.md",
     note(
       "Sales Engineering Dashboard",
@@ -1418,6 +1452,23 @@ FROM #sirinx/proposal OR #sirinx/sales
 SORT file.mtime DESC
 \`\`\`
 
+## Local Qualification Lanes
+
+| Lane | Owner | Next Action |
+|---|---|---|
+| sales-engineering-review | sales + backend | Prepare site-survey checklist and engineer-reviewed proposal assumptions |
+| qualification-follow-up | sales | Request bill photo, roof photo, phase type, backup expectation, and usage split |
+| nurture-and-education | growth + sales | Educate first; avoid ROI claims until data is clearer |
+| missing-contact-channel | sales | Request a valid phone, email, or LINE contact before CRM/customer follow-up |
+
+## Command Center Source
+
+\`\`\`bash
+curl http://127.0.0.1:8711/api/lead-health
+\`\`\`
+
+Use \`qualificationModel.workflowLane\`, \`qualificationModel.packageLane\`, and \`qualificationModel.nextAction\` as local triage evidence only.
+
 ## Review Checklist
 
 - Customer bill captured.
@@ -1428,6 +1479,7 @@ SORT file.mtime DESC
 - PEA inverter check complete.
 - Site survey requirement clear.
 - No guarantee language beyond evidence.
+- CRM writes and customer sends remain blocked until target and approval are explicit.
       `,
     ),
   ],
