@@ -2,7 +2,7 @@
 
 Date: 2026-05-19
 Mode: local-safe execution plan
-Status: active until local commits are reviewable; external gates remain closed
+Status: local commits are reviewable; external gates are packetized and remain closed until explicit per-gate approval
 
 ## Goal
 
@@ -86,6 +86,12 @@ These remain blocked until explicit target approval:
 6. OpenAI API key setup for Hermes/thClaws.
 7. Supabase schema or data work.
 8. Solis read-only telemetry credential setup.
+
+Execution details for these gates now live in:
+
+- `/Users/sirinx/sirinx-os/docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md`
+
+Use those packet approval phrases exactly before running any external write, credential, deploy, push, customer-message, database, or Solis action.
 
 ## Verification
 
