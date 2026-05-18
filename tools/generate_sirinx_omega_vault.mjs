@@ -1230,6 +1230,244 @@ const templates = new Map([
   ],
 ]);
 
+const phase2KnowledgeDocs = new Map([
+  [
+    "07_RESEARCH/Thailand Residential Solar ESS Buyer Intelligence.md",
+    note(
+      "Thailand Residential Solar ESS Buyer Intelligence",
+      ["sirinx/sales", "thailand", "customer-intelligence"],
+      `
+## Buyer Segments
+
+### High-Load Luxury Residence
+
+Typical loads include multiple inverter air-conditioners, pool pumps, water pumps, EV charging, kitchens, security systems, home theater, and always-on networking. Purchase logic often blends comfort, status, backup power, and long-term energy independence.
+
+### Home Office Or Family Business Residence
+
+The sale is driven by uptime, predictable operating cost, staff productivity, and protection from grid interruption. Backup scope must be explicit: networking, lights, workstations, refrigerators, pumps, selected AC circuits, and security.
+
+### Large Village / Estate Project
+
+The decision may involve developer reputation, common-area energy cost, EV readiness, clubhouse load, future battery expansion, and long-term service contract.
+
+## Qualification Signals
+
+- Monthly electricity bill above 6,000 THB.
+- Heavy night-time AC usage.
+- Backup concern after outages or voltage instability.
+- EV purchase plan.
+- Existing generator dissatisfaction.
+- Desire for verifiable installation evidence rather than generic marketing.
+
+## Sales Guardrail
+
+Do not counter market distrust with vague guarantee language. Use evidence: installed project photos, commissioning records, monitoring screenshots, warranty documents, and clear assumptions.
+      `,
+    ),
+  ],
+  [
+    "06_OPERATIONS/Residential ESS Sales Qualification Workflow.md",
+    note(
+      "Residential ESS Sales Qualification Workflow",
+      ["sirinx/sales", "workflow", "qualification"],
+      `
+## Intake Questions
+
+1. Monthly electricity bill for the last 3-12 months.
+2. Daytime usage ratio and night-time usage ratio.
+3. Number and size of air-conditioners.
+4. Phase type: single-phase or three-phase.
+5. Roof area, direction, shading, and roof material.
+6. Critical loads requiring backup.
+7. Budget range.
+8. EV plan.
+9. Expansion plan.
+10. Motivation: savings, backup, comfort, independence, or property value.
+
+## Routing
+
+| Condition | Likely Path |
+|---|---|
+| High daytime load, low backup need | On-grid first |
+| Heavy night usage, backup expectation | Hybrid ESS |
+| Three-phase high peak load | H-15/H-20 or engineered project |
+| Budget sensitive | Smaller on-grid with future-ready design |
+| Critical uptime required | Hybrid plus critical-load panel design |
+
+## Required Output
+
+- Package recommendation.
+- Assumptions.
+- What the package does not cover.
+- ROI range.
+- Backup scope.
+- Next site-survey checklist.
+      `,
+    ),
+  ],
+  [
+    "06_OPERATIONS/Residential ESS Proposal Workflow.md",
+    note(
+      "Residential ESS Proposal Workflow",
+      ["sirinx/proposal", "workflow", "sales-engineering"],
+      `
+## Proposal Sections
+
+1. Customer load summary.
+2. Recommended package and why.
+3. Equipment approval status.
+4. PV and battery design assumptions.
+5. Backup scope.
+6. Savings model with best, realistic, and weak cases.
+7. Energy independence value.
+8. Installation workflow.
+9. Risks and exclusions.
+10. Next action.
+
+## Required Evidence Before Customer Release
+
+- Bill evidence or customer-declared bill marked as unverified.
+- Site photo or survey pending marker.
+- PEA Smartlist inverter verification.
+- Datasheet verification.
+- Roof and phase assumptions.
+- No unrealistic ROI claim.
+
+## Approval Gate
+
+Engineer or senior sales engineer must review proposal math before it is sent externally.
+      `,
+    ),
+  ],
+  [
+    "04_ENGINEERING/ECONOMICS/Solar ROI Model - Thailand Residential.md",
+    note(
+      "Solar ROI Model - Thailand Residential",
+      ["sirinx/roi", "economics", "thailand"],
+      `
+## Model Purpose
+
+Estimate conservative savings ranges for Thailand residential solar and hybrid ESS without promising exact returns.
+
+## Inputs
+
+- Monthly bill.
+- Effective energy tariff.
+- PV system size.
+- Package price.
+- Daytime self-consumption ratio.
+- Battery usable capacity.
+- Battery cycle behavior.
+- Backup reserve.
+- Export limitation.
+
+## Calculation Logic
+
+Monthly kWh estimate = monthly bill / effective tariff.
+
+On-grid savings depends mainly on daytime self-consumption. Hybrid savings depends on PV generation, battery cycling, round-trip efficiency, and night-load capture. Backup value is not converted into ROI unless the customer assigns an explicit outage cost.
+
+## Output Bands
+
+- Weak case: low daytime use, low battery cycling, high backup reserve.
+- Realistic case: measured load pattern or conservative declared usage.
+- Best case: high daytime load, effective load shifting, low curtailment.
+
+## Guardrail
+
+Payback must be shown as a range, and every range must state behavior assumptions.
+      `,
+    ),
+  ],
+  [
+    "13_DATABASES/Solar ROI Assumption Database.md",
+    note(
+      "Solar ROI Assumption Database",
+      ["sirinx/database", "roi", "assumptions"],
+      `
+## Default Assumptions
+
+| Assumption | Default | Reason |
+|---|---:|---|
+| Effective residential tariff | 4.2 THB/kWh | Conservative planning placeholder |
+| Annual PV yield per kWp | 1450 kWh/year | Thailand planning estimate; verify per site |
+| Hybrid round-trip efficiency | 0.9 | Conservative battery/inverter path |
+| Battery usable DoD | 0.9 | GSL prompt spec; verify datasheet |
+| Weak self-consumption | 0.35 | Low daytime use |
+| Realistic self-consumption | 0.60 | Mixed home load |
+| Strong self-consumption | 0.80 | High daytime or controlled load |
+
+## Review Rule
+
+These defaults are not quote guarantees. Replace with site data whenever bills, interval data, or inverter telemetry is available.
+      `,
+    ),
+  ],
+  [
+    "12_DASHBOARDS/Sales Engineering Dashboard.md",
+    note(
+      "Sales Engineering Dashboard",
+      ["sirinx/dashboard", "sales-engineering"],
+      `
+## Proposal Readiness
+
+\`\`\`dataview
+TABLE status, verification_status, risk_level, next_action
+FROM #sirinx/proposal OR #sirinx/sales
+SORT file.mtime DESC
+\`\`\`
+
+## Review Checklist
+
+- Customer bill captured.
+- Load ratio declared or measured.
+- Package selected.
+- ROI assumptions stated.
+- Backup scope stated.
+- PEA inverter check complete.
+- Site survey requirement clear.
+- No guarantee language beyond evidence.
+      `,
+    ),
+  ],
+  [
+    "14_TEMPLATES/Residential Solar ESS Proposal Template.md",
+    note(
+      "Residential Solar ESS Proposal Template",
+      ["sirinx/template", "proposal", "residential-ess"],
+      `
+## Customer Summary
+
+## Recommended System
+
+## Why This Package Fits
+
+## Savings Model
+
+### Weak Case
+
+### Realistic Case
+
+### Best Case
+
+## Energy Independence Value
+
+## Backup Scope
+
+## Equipment Approval Evidence
+
+## Installation Plan
+
+## Risks And Exclusions
+
+## Next Action
+      `,
+      { template_type: "residential_solar_ess_proposal" },
+    ),
+  ],
+]);
+
 const automationReadme = note(
   "Automation README",
   ["sirinx/automation", "local-first"],
@@ -1242,6 +1480,8 @@ Local utilities in this folder support safe vault maintenance. They do not call 
 
 - vault_ingest.py: scans markdown notes and creates a lightweight local index.
 - knowledge_freshness.py: reports notes that need review by updated date or verification status.
+- solar_roi_calculator.py: produces conservative on-grid/hybrid package and payback estimates from local JSON input.
+- proposal_brief_generator.py: turns a local customer JSON file into a proposal brief draft.
 
 ## Control Rule
 
@@ -1293,6 +1533,205 @@ def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"indexed {len(records)} markdown notes -> {OUT}")
+
+
+if __name__ == "__main__":
+    main()
+`;
+
+const solarRoiCalculatorPy = `#!/usr/bin/env python3
+# ${marker}
+from __future__ import annotations
+
+import argparse
+import json
+from dataclasses import dataclass, asdict
+from pathlib import Path
+from typing import Any
+
+
+PACKAGES = [
+    {"id": "OG-5", "type": "on-grid", "kw": 5, "battery_kwh": 0, "price": 129000, "target_min": 2000, "target_max": 4000},
+    {"id": "OG-10", "type": "on-grid", "kw": 10, "battery_kwh": 0, "price": 209000, "target_min": 4000, "target_max": 8000},
+    {"id": "H-5", "type": "hybrid", "kw": 5, "battery_kwh": 16, "price": 329000, "target_min": 4000, "target_max": 6000},
+    {"id": "H-10", "type": "hybrid", "kw": 10, "battery_kwh": 32, "price": 529000, "target_min": 6000, "target_max": 10000},
+    {"id": "H-15", "type": "hybrid", "kw": 15, "battery_kwh": 48, "price": 789000, "target_min": 10000, "target_max": 16000},
+    {"id": "H-20", "type": "hybrid", "kw": 20, "battery_kwh": 64, "price": 959000, "target_min": 16000, "target_max": 26000},
+]
+
+
+@dataclass
+class RoiCase:
+    name: str
+    self_consumption: float
+    estimated_monthly_savings_thb: int
+    estimated_payback_years: float | None
+
+
+def clamp(value: float, low: float, high: float) -> float:
+    return max(low, min(high, value))
+
+
+def choose_package(monthly_bill: float, backup_priority: str, phase_type: str) -> dict[str, Any]:
+    wants_backup = backup_priority.lower() in {"high", "critical", "yes", "true"}
+    candidates = [p for p in PACKAGES if (p["type"] == "hybrid") == wants_backup]
+    for package in candidates:
+        if package["target_min"] <= monthly_bill <= package["target_max"]:
+            return package
+    if wants_backup and phase_type.lower() in {"3", "3p", "three-phase", "3-phase"}:
+        return PACKAGES[4] if monthly_bill <= 16000 else PACKAGES[5]
+    return candidates[-1] if monthly_bill > candidates[-1]["target_max"] else candidates[0]
+
+
+def evaluate(customer: dict[str, Any]) -> dict[str, Any]:
+    monthly_bill = float(customer.get("monthly_bill_thb", 0))
+    tariff = float(customer.get("effective_tariff_thb_per_kwh", 4.2))
+    daytime_ratio = clamp(float(customer.get("daytime_load_ratio", 0.5)), 0, 1)
+    backup_priority = str(customer.get("backup_priority", "medium"))
+    phase_type = str(customer.get("phase_type", "unknown"))
+    annual_yield_per_kwp = float(customer.get("annual_yield_per_kwp", 1450))
+
+    package = choose_package(monthly_bill, backup_priority, phase_type)
+    monthly_kwh = monthly_bill / tariff if tariff > 0 else 0
+    monthly_pv_kwh = package["kw"] * annual_yield_per_kwp / 12
+
+    weak_sc = clamp(min(daytime_ratio, 0.35), 0.2, 0.45)
+    realistic_sc = clamp(max(daytime_ratio, 0.55 if package["type"] == "hybrid" else 0.5), 0.35, 0.75)
+    best_sc = clamp(max(daytime_ratio, 0.75 if package["type"] == "hybrid" else 0.7), 0.55, 0.9)
+    if package["type"] == "hybrid":
+        realistic_sc = clamp(realistic_sc + 0.1, 0.45, 0.85)
+        best_sc = clamp(best_sc + 0.05, 0.6, 0.92)
+
+    cases: list[RoiCase] = []
+    for name, sc in [("weak", weak_sc), ("realistic", realistic_sc), ("best", best_sc)]:
+        captured_kwh = min(monthly_kwh, monthly_pv_kwh * sc)
+        savings = int(round(captured_kwh * tariff))
+        annual = savings * 12
+        payback = round(package["price"] / annual, 1) if annual > 0 else None
+        cases.append(RoiCase(name, round(sc, 2), savings, payback))
+
+    return {
+        "customer": customer,
+        "recommended_package": package,
+        "estimated_monthly_kwh": round(monthly_kwh, 1),
+        "estimated_monthly_pv_kwh": round(monthly_pv_kwh, 1),
+        "cases": [asdict(case) for case in cases],
+        "warnings": [
+            "This is a planning model, not a production guarantee.",
+            "Verify roof, shading, phase type, inverter approval, export limits, and real load profile before proposal.",
+            "Battery resilience value is separate from financial payback.",
+        ],
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="SIRINX local solar ROI planning calculator")
+    parser.add_argument("--input", type=Path, help="Customer JSON input file")
+    parser.add_argument("--sample", action="store_true", help="Print sample input JSON")
+    args = parser.parse_args()
+
+    if args.sample:
+        print(json.dumps({
+            "customer_name": "Sample Home Office",
+            "monthly_bill_thb": 8500,
+            "daytime_load_ratio": 0.45,
+            "backup_priority": "high",
+            "phase_type": "3-phase",
+            "effective_tariff_thb_per_kwh": 4.2
+        }, indent=2))
+        return
+
+    if not args.input:
+        raise SystemExit("--input is required unless --sample is used")
+    customer = json.loads(args.input.read_text(encoding="utf-8"))
+    print(json.dumps(evaluate(customer), ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()
+`;
+
+const proposalBriefGeneratorPy = `#!/usr/bin/env python3
+# ${marker}
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+from solar_roi_calculator import evaluate
+
+
+def brief(customer: dict) -> str:
+    result = evaluate(customer)
+    package = result["recommended_package"]
+    cases = result["cases"]
+    customer_name = customer.get("customer_name", "Unnamed Customer")
+    critical_loads = customer.get("critical_loads", ["networking", "lights", "refrigerator"])
+    lines = [
+        f"# Residential Solar ESS Proposal Brief - {customer_name}",
+        "",
+        "## Customer Summary",
+        "",
+        f"- Monthly bill: {customer.get('monthly_bill_thb', 'unknown')} THB",
+        f"- Daytime load ratio: {customer.get('daytime_load_ratio', 'unknown')}",
+        f"- Backup priority: {customer.get('backup_priority', 'unknown')}",
+        f"- Phase type: {customer.get('phase_type', 'unknown')}",
+        "",
+        "## Recommended Package",
+        "",
+        f"- Package: {package['id']}",
+        f"- Type: {package['type']}",
+        f"- Inverter class: {package['kw']} kW",
+        f"- Battery: {package['battery_kwh']} kWh",
+        f"- Planning price: {package['price']} THB",
+        "",
+        "## Savings Range",
+        "",
+        "| Case | Self-consumption | Monthly savings | Payback |",
+        "|---|---:|---:|---:|",
+    ]
+    for case in cases:
+        payback = case["estimated_payback_years"]
+        payback_text = "n/a" if payback is None else f"{payback} years"
+        lines.append(
+            f"| {case['name']} | {case['self_consumption']} | {case['estimated_monthly_savings_thb']} THB | {payback_text} |"
+        )
+    lines.extend([
+        "",
+        "## Backup Scope Draft",
+        "",
+        *[f"- {load}" for load in critical_loads],
+        "",
+        "## Required Verification Before Sending",
+        "",
+        "- PEA Smartlist exact inverter model check.",
+        "- Roof and shading survey.",
+        "- Phase and load-panel verification.",
+        "- Export-limit requirement.",
+        "- Proposal math review by engineer or senior sales engineer.",
+        "",
+        "## Guardrail",
+        "",
+        "This brief is a local planning draft. It is not a customer-facing guarantee until evidence and approvals are attached.",
+    ])
+    return "\\n".join(lines) + "\\n"
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate SIRINX residential solar ESS proposal brief from local JSON")
+    parser.add_argument("--input", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+
+    customer = json.loads(args.input.read_text(encoding="utf-8"))
+    content = brief(customer)
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(content, encoding="utf-8")
+        print(args.output)
+    else:
+        print(content)
 
 
 if __name__ == "__main__":
@@ -1539,6 +1978,48 @@ Build proposal calculator and lead intake backend after this knowledge base is c
       `,
     ),
   ],
+  [
+    "SIRINX_SOLAR_ROI_PROPOSAL_ENGINE_PHASE_2.md",
+    note(
+      "SIRINX Solar ROI Proposal Engine Phase 2",
+      ["sirinx/roi", "proposal", "implementation"],
+      `
+## Scope
+
+Phase 2 adds a local sales-engineering layer on top of the Obsidian vault.
+
+## Added Artifacts
+
+- Residential ESS buyer intelligence.
+- Sales qualification workflow.
+- Proposal workflow.
+- Residential ROI model.
+- ROI assumption database.
+- Sales engineering dashboard.
+- Residential proposal template.
+- Local ROI calculator utility.
+- Local proposal brief generator.
+
+## Runtime Safety
+
+This phase does not touch the public website, Cloudflare, production lead endpoints, Supabase, Solis, Telegram, LINE, customer data, or external SaaS.
+
+## Validation
+
+Use a local JSON customer profile only:
+
+\`\`\`bash
+python3 "/Users/sirinx/Documents/Obsidian Vault/SIRINX/09_AUTOMATIONS/solar_roi_calculator.py" --sample
+python3 "/Users/sirinx/Documents/Obsidian Vault/SIRINX/09_AUTOMATIONS/solar_roi_calculator.py" --input /tmp/sirinx-sample-customer.json
+python3 "/Users/sirinx/Documents/Obsidian Vault/SIRINX/09_AUTOMATIONS/proposal_brief_generator.py" --input /tmp/sirinx-sample-customer.json
+\`\`\`
+
+## Next Phase
+
+After local proposal math is stable, wire a read-only lead intake schema and Command Center status model. Production lead POST must remain separately gated.
+      `,
+    ),
+  ],
 ]);
 
 async function main() {
@@ -1558,6 +2039,7 @@ async function main() {
     ...aiMemoryDocs,
     ...dashboards,
     ...templates,
+    ...phase2KnowledgeDocs,
     ["09_AUTOMATIONS/README.md", automationReadme],
   ]);
 
@@ -1567,6 +2049,8 @@ async function main() {
 
   await writeGenerated(path.join(vaultRoot, "09_AUTOMATIONS", "vault_ingest.py"), vaultIngestPy);
   await writeGenerated(path.join(vaultRoot, "09_AUTOMATIONS", "knowledge_freshness.py"), freshnessPy);
+  await writeGenerated(path.join(vaultRoot, "09_AUTOMATIONS", "solar_roi_calculator.py"), solarRoiCalculatorPy);
+  await writeGenerated(path.join(vaultRoot, "09_AUTOMATIONS", "proposal_brief_generator.py"), proposalBriefGeneratorPy);
   await writeGenerated(path.join(vaultRoot, ".obsidian", "snippets", "sirinx-industrial-cyberpunk.css"), cssTheme);
   await writeNewOnly(path.join(vaultRoot, "15_CANVAS", "ESS Topology.canvas"), canvas);
 
