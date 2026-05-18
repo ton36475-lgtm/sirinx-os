@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { getLeadBackendHealth } from "./lead-health.mjs";
+import { getRoiPreview } from "./roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./sales-artifacts.mjs";
 
 const templatePath =
@@ -16,7 +17,23 @@ const packageMap = {
   "hybrid-h20-engineered": { id: "H-20", type: "hybrid engineered", size: "20 kW 3-phase", battery: "64 kWh", price: "959,000 THB" }
 };
 
-function buildDraftMarkdown(leadHealth, salesArtifacts, template) {
+function buildRoiTable(roiPreview) {
+  const cases = roiPreview.result?.cases || [];
+  if (!cases.length) {
+    return "ROI cases pending local calculation.";
+  }
+
+  return [
+    "| Case | Self-consumption | Captured kWh/month | Monthly savings | Payback |",
+    "|---|---:|---:|---:|---:|",
+    ...cases.map((item) => {
+      const payback = item.estimatedPaybackYears === null ? "n/a" : `${item.estimatedPaybackYears} years`;
+      return `| ${item.name} | ${item.selfConsumption} | ${item.capturedKwh} | ${item.estimatedMonthlySavingsThb} THB | ${payback} |`;
+    })
+  ].join("\n");
+}
+
+function buildDraftMarkdown(leadHealth, salesArtifacts, template, roiPreview) {
   const qualification = leadHealth.qualificationModel || {};
   const packageInfo = packageMap[qualification.packageLane] || {
     id: "manual-review",
@@ -26,6 +43,7 @@ function buildDraftMarkdown(leadHealth, salesArtifacts, template) {
     price: "pending"
   };
   const templateSections = (template.match(/^##\s+.+$/gm) || []).map((line) => line.replace(/^##\s+/, ""));
+  const roiPackage = roiPreview.result?.recommendedPackage || {};
 
   return `# Local Proposal Draft Preview - SIRINX Solar ESS
 
@@ -52,17 +70,20 @@ This draft is based on local qualification signals only. It indicates a high-loa
 
 ## Savings Model
 
-### Weak Case
+This savings model is a local planning preview only. It must be replaced with reviewed customer bill, roof, phase, load profile, export-limit, and PEA approval evidence before any customer-facing proposal.
 
-Pending customer bill and load profile evidence.
+### Local ROI Planning Preview
 
-### Realistic Case
+- ROI endpoint: /api/roi-preview.
+- ROI package: ${roiPackage.id || "unknown"}.
+- Estimated monthly consumption: ${roiPreview.result?.estimatedMonthlyKwh || 0} kWh.
+- Estimated monthly PV output: ${roiPreview.result?.estimatedMonthlyPvKwh || 0} kWh.
 
-Pending daytime/nighttime usage split, roof survey, and export-limit review.
+${buildRoiTable(roiPreview)}
 
-### Best Case
+### ROI Guardrail
 
-Pending measured load behavior, high self-consumption, and verified battery cycling assumptions.
+Savings, ROI, payback, and cashflow are estimates, not guarantees. Battery resilience value is separate from financial payback.
 
 ## Energy Independence Value
 
@@ -128,12 +149,13 @@ ${preview.reviewGates.map((gate) => `- ${gate}`).join("\n")}
 }
 
 export async function getProposalDraftPreview() {
-  const [leadHealth, salesArtifacts, template] = await Promise.all([
+  const [leadHealth, salesArtifacts, template, roiPreview] = await Promise.all([
     getLeadBackendHealth(),
     getSalesArtifactsStatus(),
-    readFile(templatePath, "utf8")
+    readFile(templatePath, "utf8"),
+    getRoiPreview()
   ]);
-  const markdown = buildDraftMarkdown(leadHealth, salesArtifacts, template);
+  const markdown = buildDraftMarkdown(leadHealth, salesArtifacts, template, roiPreview);
 
   return {
     title: "SIRINX local proposal draft preview",
@@ -146,6 +168,12 @@ export async function getProposalDraftPreview() {
     templatePath,
     safeWriteTargetRoot: proposalDraftRoot,
     qualification: leadHealth.qualificationModel,
+    roiPreview: {
+      status: roiPreview.status,
+      recommendedPackage: roiPreview.result?.recommendedPackage?.id || "unknown",
+      caseCount: roiPreview.result?.cases?.length || 0,
+      externalWrites: roiPreview.externalWrites
+    },
     readiness: {
       salesArtifacts: salesArtifacts.status,
       proposalDraft: salesArtifacts.proposalDraftReadiness,

@@ -49,6 +49,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#proposalDraftStatus")).toHaveText(/Draft ready|Draft blocked/);
     await expect(page.locator("#proposalDraftPreview")).toContainText("Local Proposal Draft Preview");
     await expect(page.locator("#proposalDraftPreview")).toContainText("Equipment Approval Evidence");
+    await expect(page.locator("#proposalDraftPreview")).toContainText("Local ROI Planning Preview");
     await expect(page.locator("#proposalDraftWriteButton")).toBeVisible();
     await expect(page.locator("#proposalDraftWriteButton")).toBeEnabled();
     await expect(page.locator("#proposalDraftWriteResult")).toContainText("Proposal Drafts");
@@ -158,7 +159,11 @@ test.describe("Developer Command Center", () => {
     expect(proposalDraft.customerVisible).toBe(false);
     expect(proposalDraft.status).toBe("ready-local-preview");
     expect(proposalDraft.safeWriteTargetRoot).toContain("Proposal Drafts");
+    expect(proposalDraft.roiPreview.recommendedPackage).toBe("H-20");
+    expect(proposalDraft.roiPreview.externalWrites).toBe(false);
     expect(proposalDraft.draft.markdown).toContain("PEA Smartlist exact inverter verification");
+    expect(proposalDraft.draft.markdown).toContain("Local ROI Planning Preview");
+    expect(proposalDraft.draft.markdown).toContain("| realistic |");
     const proposalDraftWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/proposal-draft/write", {
       data: { dryRun: true }
     });
