@@ -237,6 +237,31 @@
         </div>
       </section>
 
+      <section class="panel external-gate-panel" aria-label="External gate approval packets">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">External Gates</p>
+            <h2>Approval Phrase Packets</h2>
+          </div>
+          <span id="externalGateStatus" class="status-pill status-warn">Packets checking</span>
+        </div>
+        <div id="externalGateSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="External gate approval packet list">
+            <h3>Packets</h3>
+            <div id="externalGateList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="External gate packet writer">
+            <h3>Packet Writer</h3>
+            <ol id="externalGateNextActions" class="next-action-list"></ol>
+            <div class="proposal-write-controls" aria-label="Local external gate packet writer">
+              <button id="externalGateWriteButton" class="text-button" type="button" disabled>Write Gate Packets</button>
+              <p id="externalGateWriteResult" class="write-result">Local gate packet writer waits for API readiness.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>

@@ -57,6 +57,12 @@ const mobileReviewCommandList = document.querySelector("#mobileReviewCommandList
 const mobileReviewNextActions = document.querySelector("#mobileReviewNextActions");
 const mobileReviewWriteButton = document.querySelector("#mobileReviewWriteButton");
 const mobileReviewWriteResult = document.querySelector("#mobileReviewWriteResult");
+const externalGateStatus = document.querySelector("#externalGateStatus");
+const externalGateSummary = document.querySelector("#externalGateSummary");
+const externalGateList = document.querySelector("#externalGateList");
+const externalGateNextActions = document.querySelector("#externalGateNextActions");
+const externalGateWriteButton = document.querySelector("#externalGateWriteButton");
+const externalGateWriteResult = document.querySelector("#externalGateWriteResult");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -364,6 +370,29 @@ const fallbackMobileReviewPacket = {
   proposalReview: { status: "unavailable", localWorkflowReady: false, canSendExternally: false, blockingExternalSend: 0 },
   reviewCommands: ["Start the local control API to prepare a Codex Mobile review packet."],
   nextActions: ["Start the local control API and refresh mobile review packet."]
+};
+
+const fallbackExternalGatePackets = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  canExecuteNow: false,
+  packetTargetRoot: "/Users/sirinx/Documents/Obsidian Vault/SIRINX/06_OPERATIONS/External Gate Approval Packets",
+  summary: { packets: 0, highRisk: 0, mediumRisk: 0, canExecuteNow: 0, externalWrites: false },
+  packets: [
+    {
+      id: "fallback",
+      gate: "Fallback",
+      title: "External gate packets unavailable",
+      approvalPhrase: "Start the local control API to inspect external gate packets.",
+      risk: "medium",
+      canExecuteNow: false,
+      externalWrites: false
+    }
+  ],
+  nextActions: ["Start the local control API and refresh external gate packets."]
 };
 
 const fallbackExecutive = {
@@ -1242,6 +1271,49 @@ function renderMobileReviewPacket(packet) {
     : "Local mobile packet writer waits for API readiness.";
 }
 
+function renderExternalGatePackets(packetSet) {
+  const data = packetSet || fallbackExternalGatePackets;
+  const ready = data.status === "ready-local-packets";
+  const summary = data.summary || fallbackExternalGatePackets.summary;
+
+  externalGateStatus.textContent = ready ? "Packets ready" : "Packets blocked";
+  externalGateStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  externalGateStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  externalGateSummary.replaceChildren(
+    makeSummaryCard("Packets", `${summary.packets || 0}`, `${summary.highRisk || 0} high risk`),
+    makeSummaryCard("Executable Now", `${summary.canExecuteNow || 0}`, "requires exact phrase"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.canExecuteNow ? "actionable" : "packet only"),
+    makeSummaryCard("Mode", ready ? "Local" : "Fallback", data.mode || "local")
+  );
+
+  renderSignalList(
+    externalGateList,
+    (data.packets || fallbackExternalGatePackets.packets).map((packet) => ({
+      title: `${packet.gate}: ${packet.title}`,
+      detail: `${packet.approvalPhrase} Target: ${packet.target || "unavailable"}`,
+      ok: packet.canExecuteNow === false && packet.externalWrites === false,
+      badge: packet.risk || "packet"
+    }))
+  );
+
+  externalGateNextActions.replaceChildren(
+    ...(data.nextActions || fallbackExternalGatePackets.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+
+  externalGateWriteButton.disabled = !ready;
+  externalGateWriteButton.title = ready
+    ? `Write local external gate packets under ${data.packetTargetRoot || fallbackExternalGatePackets.packetTargetRoot}`
+    : "Local gate packet writer is blocked until packet data is available.";
+  externalGateWriteResult.textContent = ready
+    ? `Target: ${data.packetTargetRoot || fallbackExternalGatePackets.packetTargetRoot}`
+    : "Local gate packet writer waits for API readiness.";
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -1905,6 +1977,12 @@ async function loadDashboard() {
       () => renderMobileReviewPacket(fallbackMobileReviewPacket),
       "Mobile review packet"
     ),
+    loadPanel(
+      "/api/external-gate-packets",
+      renderExternalGatePackets,
+      () => renderExternalGatePackets(fallbackExternalGatePackets),
+      "External gate packets"
+    ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),
     loadPanel(
@@ -2039,6 +2117,31 @@ async function writeMobileReviewPacketLocal() {
   }
 }
 
+async function writeExternalGatePacketsLocal() {
+  externalGateWriteButton.disabled = true;
+  externalGateWriteResult.textContent = "Writing local external gate approval packets...";
+
+  try {
+    const result = await fetchJson("/api/external-gate-packets/write", {
+      method: "POST",
+      body: JSON.stringify({ confirmLocalWrite: true })
+    });
+
+    if (result.didWrite) {
+      externalGateWriteResult.textContent = `Written: ${result.targetPath}`;
+      logEvent(`external gate packets written locally: ${result.targetPath}`);
+    } else {
+      externalGateWriteResult.textContent = `${result.status}: ${result.reason || "no file written"}`;
+      logEvent(`external gate packet write blocked: ${result.status}`);
+    }
+  } catch (error) {
+    externalGateWriteResult.textContent = `Local write failed: ${error.message}`;
+    logEvent(`external gate packet write failed: ${error.message}`);
+  } finally {
+    externalGateWriteButton.disabled = false;
+  }
+}
+
 refreshButton.addEventListener("click", loadDashboard);
 toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
@@ -2046,5 +2149,6 @@ proposalDraftWriteButton.addEventListener("click", writeProposalDraftLocal);
 roiAssumptionForm.addEventListener("submit", calculateRoiPreview);
 proposalReviewWriteButton.addEventListener("click", writeProposalReviewPacketLocal);
 mobileReviewWriteButton.addEventListener("click", writeMobileReviewPacketLocal);
+externalGateWriteButton.addEventListener("click", writeExternalGatePacketsLocal);
 
 loadDashboard();

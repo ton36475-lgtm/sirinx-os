@@ -68,6 +68,13 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#mobileReviewCommandList")).toContainText("Review proposal gate status");
     await expect(page.locator("#mobileReviewWriteButton")).toBeEnabled();
     await expect(page.locator("#mobileReviewWriteResult")).toContainText("Codex Mobile Review Packets");
+    await expect(page.getByRole("heading", { name: "Approval Phrase Packets" })).toBeVisible();
+    await expect(page.locator("#externalGateStatus")).toHaveText("Packets ready");
+    await expect(page.locator("#externalGateSummary")).toContainText("Off");
+    await expect(page.locator("#externalGateList")).toContainText("Gate 1: GitHub Push And PR Update");
+    await expect(page.locator("#externalGateList")).toContainText("Approve Gate 8");
+    await expect(page.locator("#externalGateWriteButton")).toBeEnabled();
+    await expect(page.locator("#externalGateWriteResult")).toContainText("External Gate Approval Packets");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -228,6 +235,25 @@ test.describe("Developer Command Center", () => {
     expect(mobileReviewWriteDryRun.wouldWrite).toBe(true);
     expect(mobileReviewWriteDryRun.externalWrites).toBe(false);
     expect(mobileReviewWriteDryRun.targetPath).toContain("Codex Mobile Review Packets");
+    const externalGateResponse = await page.request.get("http://127.0.0.1:8711/api/external-gate-packets");
+    expect(externalGateResponse.ok()).toBeTruthy();
+    const externalGatePackets = await externalGateResponse.json();
+    expect(externalGatePackets.status).toBe("ready-local-packets");
+    expect(externalGatePackets.externalWrites).toBe(false);
+    expect(externalGatePackets.canExecuteNow).toBe(false);
+    expect(externalGatePackets.summary.packets).toBe(9);
+    expect(externalGatePackets.packets.some((item) => item.id === "gate-3b-cloudflare-production" && item.approvalPhrase.includes("rollback target"))).toBe(true);
+    expect(externalGatePackets.packets.every((item) => item.canExecuteNow === false)).toBe(true);
+    const externalGateWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/external-gate-packets/write", {
+      data: { dryRun: true }
+    });
+    expect(externalGateWriteDryRunResponse.ok()).toBeTruthy();
+    const externalGateWriteDryRun = await externalGateWriteDryRunResponse.json();
+    expect(externalGateWriteDryRun.status).toBe("dry-run-ready");
+    expect(externalGateWriteDryRun.didWrite).toBe(false);
+    expect(externalGateWriteDryRun.wouldWrite).toBe(true);
+    expect(externalGateWriteDryRun.externalWrites).toBe(false);
+    expect(externalGateWriteDryRun.targetPath).toContain("External Gate Approval Packets");
     expect(consoleErrors).toEqual([]);
   });
 
@@ -278,6 +304,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#mobileReviewStatus")).toHaveText("Mobile packet blocked");
     await expect(page.locator("#mobileReviewCommandList")).toContainText("Start the local control API");
     await expect(page.locator("#mobileReviewWriteButton")).toBeDisabled();
+    await expect(page.locator("#externalGateStatus")).toHaveText("Packets blocked");
+    await expect(page.locator("#externalGateList")).toContainText("External gate packets unavailable");
+    await expect(page.locator("#externalGateWriteButton")).toBeDisabled();
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");
