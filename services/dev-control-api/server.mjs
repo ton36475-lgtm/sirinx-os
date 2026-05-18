@@ -6,6 +6,7 @@ import { listApprovalQueue } from "./src/approval-queue.mjs";
 import { listAuditEvents, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { getExternalGatePackets, writeExternalGatePackets } from "./src/external-gate-packets.mjs";
+import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/external-gate-preflight.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
@@ -508,6 +509,28 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/external-gate-packets") {
     sendJson(request, response, 200, getExternalGatePackets());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/external-gate-preflight") {
+    sendJson(request, response, 200, getExternalGatePreflight());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/external-gate-preflight/write") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await writeExternalGatePreflight(body));
+    } catch (error) {
+      sendJson(request, response, 500, {
+        error: "external_gate_preflight_write_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        requiresHumanReview: true
+      });
+    }
     return;
   }
 

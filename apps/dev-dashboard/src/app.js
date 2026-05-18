@@ -63,6 +63,12 @@ const externalGateList = document.querySelector("#externalGateList");
 const externalGateNextActions = document.querySelector("#externalGateNextActions");
 const externalGateWriteButton = document.querySelector("#externalGateWriteButton");
 const externalGateWriteResult = document.querySelector("#externalGateWriteResult");
+const externalGatePreflightStatus = document.querySelector("#externalGatePreflightStatus");
+const externalGatePreflightSummary = document.querySelector("#externalGatePreflightSummary");
+const externalGatePreflightList = document.querySelector("#externalGatePreflightList");
+const externalGatePreflightNextActions = document.querySelector("#externalGatePreflightNextActions");
+const externalGatePreflightWriteButton = document.querySelector("#externalGatePreflightWriteButton");
+const externalGatePreflightWriteResult = document.querySelector("#externalGatePreflightWriteResult");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -393,6 +399,41 @@ const fallbackExternalGatePackets = {
     }
   ],
   nextActions: ["Start the local control API and refresh external gate packets."]
+};
+
+const fallbackExternalGatePreflight = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  canExecuteNow: false,
+  preflightTargetRoot: "/Users/sirinx/Documents/Obsidian Vault/SIRINX/06_OPERATIONS/External Gate Audit Preflight",
+  summary: {
+    entries: 0,
+    reviewed: 0,
+    blocked: 1,
+    readyForTargetedApproval: 0,
+    manualHumanGates: 0,
+    canExecuteNow: 0,
+    externalWrites: false
+  },
+  entries: [
+    {
+      id: "fallback",
+      gate: "Fallback",
+      title: "External gate preflight unavailable",
+      owner: "shogun",
+      status: "blocked-api-offline",
+      reviewState: "blocked",
+      target: "control-api",
+      blockingReason: "Start the local control API to inspect gate preflight state.",
+      nextLocalAction: "Start the local control API and refresh external gate preflight.",
+      canExecuteNow: false,
+      externalWrites: false
+    }
+  ],
+  nextActions: ["Start the local control API and refresh external gate preflight."]
 };
 
 const fallbackExecutive = {
@@ -1314,6 +1355,50 @@ function renderExternalGatePackets(packetSet) {
     : "Local gate packet writer waits for API readiness.";
 }
 
+function renderExternalGatePreflight(preflight) {
+  const data = preflight || fallbackExternalGatePreflight;
+  const ready = data.status === "ready-local-preflight";
+  const summary = data.summary || fallbackExternalGatePreflight.summary;
+
+  externalGatePreflightStatus.textContent = ready ? "Preflight ready" : "Preflight blocked";
+  externalGatePreflightStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  externalGatePreflightStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  externalGatePreflightSummary.replaceChildren(
+    makeSummaryCard("Entries", `${summary.entries || 0}`, `${summary.reviewed || 0} reviewed`),
+    makeSummaryCard("Ready", `${summary.readyForTargetedApproval || 0}`, "targeted approval only"),
+    makeSummaryCard("Blocked", `${summary.blocked || 0}`, `${summary.manualHumanGates || 0} manual gates`),
+    makeSummaryCard("Executable Now", `${summary.canExecuteNow || 0}`, "always zero in preflight"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.canExecuteNow ? "actionable" : "audit only")
+  );
+
+  renderSignalList(
+    externalGatePreflightList,
+    (data.entries || fallbackExternalGatePreflight.entries).map((entry) => ({
+      title: `${entry.gate}: ${entry.title}`,
+      detail: `${entry.status}; owner ${entry.owner}; ${entry.blockingReason || entry.nextLocalAction || "ready for exact targeted approval"}`,
+      ok: entry.reviewState === "reviewed" && entry.externalWrites === false && entry.canExecuteNow === false,
+      badge: entry.status
+    }))
+  );
+
+  externalGatePreflightNextActions.replaceChildren(
+    ...(data.nextActions || fallbackExternalGatePreflight.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+
+  externalGatePreflightWriteButton.disabled = !ready;
+  externalGatePreflightWriteButton.title = ready
+    ? `Write local external gate preflight under ${data.preflightTargetRoot || fallbackExternalGatePreflight.preflightTargetRoot}`
+    : "Local gate preflight writer is blocked until preflight data is available.";
+  externalGatePreflightWriteResult.textContent = ready
+    ? `Target: ${data.preflightTargetRoot || fallbackExternalGatePreflight.preflightTargetRoot}`
+    : "Local preflight writer waits for API readiness.";
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -1983,6 +2068,12 @@ async function loadDashboard() {
       () => renderExternalGatePackets(fallbackExternalGatePackets),
       "External gate packets"
     ),
+    loadPanel(
+      "/api/external-gate-preflight",
+      renderExternalGatePreflight,
+      () => renderExternalGatePreflight(fallbackExternalGatePreflight),
+      "External gate preflight"
+    ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),
     loadPanel(
@@ -2142,6 +2233,31 @@ async function writeExternalGatePacketsLocal() {
   }
 }
 
+async function writeExternalGatePreflightLocal() {
+  externalGatePreflightWriteButton.disabled = true;
+  externalGatePreflightWriteResult.textContent = "Writing local external gate audit preflight...";
+
+  try {
+    const result = await fetchJson("/api/external-gate-preflight/write", {
+      method: "POST",
+      body: JSON.stringify({ confirmLocalWrite: true })
+    });
+
+    if (result.didWrite) {
+      externalGatePreflightWriteResult.textContent = `Written: ${result.targetPath}`;
+      logEvent(`external gate preflight written locally: ${result.targetPath}`);
+    } else {
+      externalGatePreflightWriteResult.textContent = `${result.status}: ${result.reason || "no file written"}`;
+      logEvent(`external gate preflight write blocked: ${result.status}`);
+    }
+  } catch (error) {
+    externalGatePreflightWriteResult.textContent = `Local write failed: ${error.message}`;
+    logEvent(`external gate preflight write failed: ${error.message}`);
+  } finally {
+    externalGatePreflightWriteButton.disabled = false;
+  }
+}
+
 refreshButton.addEventListener("click", loadDashboard);
 toolRefreshButton.addEventListener("click", loadProjectInventory);
 clearLogButton.addEventListener("click", () => eventLog.replaceChildren());
@@ -2150,5 +2266,6 @@ roiAssumptionForm.addEventListener("submit", calculateRoiPreview);
 proposalReviewWriteButton.addEventListener("click", writeProposalReviewPacketLocal);
 mobileReviewWriteButton.addEventListener("click", writeMobileReviewPacketLocal);
 externalGateWriteButton.addEventListener("click", writeExternalGatePacketsLocal);
+externalGatePreflightWriteButton.addEventListener("click", writeExternalGatePreflightLocal);
 
 loadDashboard();

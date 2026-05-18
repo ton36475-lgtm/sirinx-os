@@ -75,6 +75,14 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#externalGateList")).toContainText("Approve Gate 8");
     await expect(page.locator("#externalGateWriteButton")).toBeEnabled();
     await expect(page.locator("#externalGateWriteResult")).toContainText("External Gate Approval Packets");
+    await expect(page.getByRole("heading", { name: "Gate Audit Preflight" })).toBeVisible();
+    await expect(page.locator("#externalGatePreflightStatus")).toHaveText("Preflight ready");
+    await expect(page.locator("#externalGatePreflightSummary")).toContainText("Off");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("Gate 1: GitHub Push And PR Update");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("Gate 8: Solis Read-Only Telemetry");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("blocked-consent-required");
+    await expect(page.locator("#externalGatePreflightWriteButton")).toBeEnabled();
+    await expect(page.locator("#externalGatePreflightWriteResult")).toContainText("External Gate Audit Preflight");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -254,6 +262,27 @@ test.describe("Developer Command Center", () => {
     expect(externalGateWriteDryRun.wouldWrite).toBe(true);
     expect(externalGateWriteDryRun.externalWrites).toBe(false);
     expect(externalGateWriteDryRun.targetPath).toContain("External Gate Approval Packets");
+    const externalGatePreflightResponse = await page.request.get("http://127.0.0.1:8711/api/external-gate-preflight");
+    expect(externalGatePreflightResponse.ok()).toBeTruthy();
+    const externalGatePreflight = await externalGatePreflightResponse.json();
+    expect(externalGatePreflight.status).toBe("ready-local-preflight");
+    expect(externalGatePreflight.externalWrites).toBe(false);
+    expect(externalGatePreflight.canExecuteNow).toBe(false);
+    expect(externalGatePreflight.summary.entries).toBe(9);
+    expect(externalGatePreflight.summary.canExecuteNow).toBe(0);
+    expect(externalGatePreflight.entries.some((item) => item.id === "gate-1-github-pr-push" && item.status === "ready-for-targeted-approval")).toBe(true);
+    expect(externalGatePreflight.entries.some((item) => item.id === "gate-8-solis-readonly-telemetry" && item.status === "blocked-consent-required")).toBe(true);
+    expect(externalGatePreflight.entries.every((item) => item.canExecuteNow === false && item.externalWrites === false)).toBe(true);
+    const externalGatePreflightWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/external-gate-preflight/write", {
+      data: { dryRun: true }
+    });
+    expect(externalGatePreflightWriteDryRunResponse.ok()).toBeTruthy();
+    const externalGatePreflightWriteDryRun = await externalGatePreflightWriteDryRunResponse.json();
+    expect(externalGatePreflightWriteDryRun.status).toBe("dry-run-ready");
+    expect(externalGatePreflightWriteDryRun.didWrite).toBe(false);
+    expect(externalGatePreflightWriteDryRun.wouldWrite).toBe(true);
+    expect(externalGatePreflightWriteDryRun.externalWrites).toBe(false);
+    expect(externalGatePreflightWriteDryRun.targetPath).toContain("External Gate Audit Preflight");
     expect(consoleErrors).toEqual([]);
   });
 
@@ -307,6 +336,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#externalGateStatus")).toHaveText("Packets blocked");
     await expect(page.locator("#externalGateList")).toContainText("External gate packets unavailable");
     await expect(page.locator("#externalGateWriteButton")).toBeDisabled();
+    await expect(page.locator("#externalGatePreflightStatus")).toHaveText("Preflight blocked");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("External gate preflight unavailable");
+    await expect(page.locator("#externalGatePreflightWriteButton")).toBeDisabled();
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

@@ -1,7 +1,7 @@
 # SIRINX Current Backlog Status
 
 Date: 2026-05-19
-Status: current, no hidden backlog; local test/debug passed, commit/deploy gates remain explicit
+Status: current, no hidden backlog; local test/debug passed, external execution gates remain explicit
 
 ## Cleared In This Pass
 
@@ -18,16 +18,22 @@ Status: current, no hidden backlog; local test/debug passed, commit/deploy gates
 | Production lead POST smoke test | Done | Controlled D1 lead `ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b` created with source `codex-production-smoke` |
 | Public website GitHub branch/PR | Done | Branch `codex/public-website-production-ready-20260517`, PR `https://github.com/ton36475-lgtm/sirinx/pull/1` |
 | Home Solution SEO/AEO page | Done locally and test/debug passed, pending commit/deploy gate | `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` contains uncommitted `/home-solution` route, SEO schema, sitemap entry, nav/footer link, responsive AVIF/JPEG image assets |
-| Command Center E2E stabilization | Done locally and test/debug passed, pending commit gate | `sirinx-os` dashboard now renders each API panel independently so the Vibe status does not wait for slower Hermes/Executive endpoints |
+| Command Center E2E stabilization | Done and committed | Dashboard renders each API panel independently so the Vibe status does not wait for slower Hermes/Executive endpoints |
+| Local proposal writer | Done and committed | `POST /api/proposal-draft/write` writes local Obsidian drafts only after `confirmLocalWrite=true` |
+| Local ROI preview | Done and committed | `GET/POST /api/roi-preview` routes assumptions to local package/payback previews with `externalWrites=false` |
+| Proposal external-send review | Done and committed | `/api/proposal-review` and local review packet writer keep customer sends blocked until evidence is complete |
+| Codex Mobile review packet | Done and committed | `/api/mobile-review-packet` produces mobile-readable evidence without external approval authority |
+| External gate approval packets | Done and committed | `/api/external-gate-packets` defines 9 exact approval phrase packets with `canExecuteNow=false` |
+| External gate audit preflight | Done locally and test/debug passed, pending this commit | `/api/external-gate-preflight` marks 9 gates as ready/blocked/manual with `externalWrites=false` |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
-- `sirinx-os` is on branch `codex/urgent-backlog-execution` and has local uncommitted Command Center, 47 Ronin, and documentation changes.
+- `sirinx-os` is on branch `codex/urgent-backlog-execution` with Command Center local-only workflow phases committed through external gate approval packets; Phase 15 audit preflight is the current local commit candidate.
 - Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is on branch `codex/public-website-production-ready-20260517` and has a new uncommitted Home Solution change set.
 - Earlier 5 public website commits passed local typecheck, test, and production build verification, and were pushed to PR #1.
 - Current uncommitted Home Solution work passed fresh typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, and no-secret review.
-- Current uncommitted `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, and diff whitespace checks.
+- Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
 - Command Center lead health intentionally still uses safe GET probes and does not create production leads by itself.
 - Contact fallback stays live until real production lead traffic has been observed.
@@ -40,7 +46,6 @@ Status: current, no hidden backlog; local test/debug passed, commit/deploy gates
 | Item | Why blocked | Required approval |
 | --- | --- | --- |
 | Commit Home Solution local website changes | Creates Git history and may be pushed later | Explicit commit approval after test/debug evidence |
-| Commit `sirinx-os` Command Center changes | Creates Git history for local HQ/agent-team work | Explicit commit approval after reviewing mixed pre-existing local edits |
 | Deploy `/home-solution` to `www.sirinx.co` | Public customer-facing website change | Explicit Cloudflare/Pages or release approval after preview and rollback plan |
 | Expose `dev.sirinx.co` or other internal subdomains | DNS/Pages/Access changes are external writes | Explicit Cloudflare + Access approval |
 | Merge public website PR #1 | Updates origin/main and may trigger GitHub/Pages deployment workflow | Explicit merge/release approval |
@@ -68,16 +73,16 @@ Status: current, no hidden backlog; local test/debug passed, commit/deploy gates
 
 ## Next Strict Sequence
 
-1. Review diffs for the tested Home Solution and Command Center change sets.
-2. Commit the Home Solution change set if approved.
-3. Commit the `sirinx-os` Command Center/47 Ronin/docs change set if approved after confirming all pre-existing local edits belong in the commit.
-4. Pair Codex Mobile manually via QR because tool policy blocks direct control of Codex App.
-5. Review/merge public website PR #1 or update it with the Home Solution work when release approval is given.
-6. Monitor production D1 lead rows after real website traffic.
-7. Fix Telegram target setup, then rerun a Telegram smoke send.
-8. Configure LINE only after channel credential and webhook verification exist.
-9. Store Solis API credentials through approved secret storage, then build read-only telemetry smoke.
-10. Select exactly one subdomain candidate for build/auth review.
+1. Commit the Phase 15 `sirinx-os` audit preflight change set after final local verification.
+2. Review diffs for the tested Home Solution website change set.
+3. Commit the Home Solution change set if approved.
+4. Pair Codex Mobile manually via QR because MFA/SSO requires the human operator.
+5. Execute exactly one external gate only after its exact approval phrase is supplied.
+6. Gate 1 candidate: push/update PR #1 only if local status is clean and target is confirmed.
+7. Gate 3A candidate: create Cloudflare preview only after PR/build evidence is current.
+8. Gate 3B candidate: deploy production only after preview approval and rollback target are recorded.
+9. Fix Telegram/LINE target setup only after recipient/channel target is confirmed.
+10. Store Solis API credentials only through approved secret storage, then build read-only telemetry smoke.
 
 ## Stop Rules
 

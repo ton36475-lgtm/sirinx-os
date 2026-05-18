@@ -262,6 +262,31 @@
         </div>
       </section>
 
+      <section class="panel external-gate-preflight-panel" aria-label="External gate audit preflight">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">External Gates</p>
+            <h2>Gate Audit Preflight</h2>
+          </div>
+          <span id="externalGatePreflightStatus" class="status-pill status-warn">Preflight checking</span>
+        </div>
+        <div id="externalGatePreflightSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="External gate preflight entries">
+            <h3>Preflight Entries</h3>
+            <div id="externalGatePreflightList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="External gate preflight writer">
+            <h3>Audit Writer</h3>
+            <ol id="externalGatePreflightNextActions" class="next-action-list"></ol>
+            <div class="proposal-write-controls" aria-label="Local external gate preflight writer">
+              <button id="externalGatePreflightWriteButton" class="text-button" type="button" disabled>Write Preflight</button>
+              <p id="externalGatePreflightWriteResult" class="write-result">Local preflight writer waits for API readiness.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>
