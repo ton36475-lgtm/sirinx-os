@@ -3,6 +3,7 @@ import {
   getLeadIntakeSchema,
   handleLeadSubmit
 } from "../../../infra/cloudflare/main-router/src/worker.js";
+import { qualifyLead } from "./lead-qualification.mjs";
 
 const leadSubmitUrl = "https://www.sirinx.co/api/trpc/lead.submit?batch=1";
 
@@ -75,11 +76,13 @@ async function runLocalLeadSelfTest() {
   const payload = {
     0: {
       json: {
-        source: "contact",
+        source: "assessment",
         name: "SIRINX Local Health Probe",
         phone: "0800000000",
-        interest: "Solar Carport",
-        monthlyBill: "45000"
+        interest: "Hybrid Solar Carport + BESS",
+        monthlyBill: "45000",
+        bessInterest: "yes",
+        timeline: "this month"
       }
     }
   };
@@ -99,6 +102,7 @@ async function runLocalLeadSelfTest() {
 
   const extracted = extractLeadPayload(payload);
   const arrayExtracted = extractLeadPayload(arrayPayload);
+  const qualification = qualifyLead(extracted.lead);
   const response = await handleLeadSubmit(
     new Request(leadSubmitUrl, {
       method: "POST",
@@ -133,6 +137,7 @@ async function runLocalLeadSelfTest() {
       contactChannelFields: schema.fields.filter((field) => field.contactChannel).map((field) => field.name),
       dbColumns: schema.fields.map((field) => field.dbColumn)
     },
+    qualification,
     mockD1: {
       externalWrites: false,
       statements: db.statements.length,
@@ -174,6 +179,10 @@ export async function getLeadBackendHealth() {
       reviewGates: getLeadIntakeSchema().reviewGates,
       productionWriteBehavior: getLeadIntakeSchema().productionWriteBehavior,
       commandCenterProbeBehavior: getLeadIntakeSchema().commandCenterProbeBehavior
+    },
+    qualificationModel: {
+      ...local.qualification,
+      externalWrites: false
     },
     externalWrites: false,
     productionPostProbeRun: false,

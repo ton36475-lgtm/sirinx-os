@@ -211,6 +211,15 @@ const fallbackLeadHealth = {
     acceptedPayloadShapes: [],
     reviewGates: ["Start the local control API to load the lead intake schema."]
   },
+  qualificationModel: {
+    modelVersion: "unavailable",
+    score: 0,
+    priority: "unknown",
+    workflowLane: "unavailable",
+    packageLane: "unavailable",
+    externalWrites: false,
+    nextAction: "Start the local control API to load lead qualification status."
+  },
   externalWrites: false,
   productionPostProbeRun: false,
   local: {
@@ -815,6 +824,7 @@ function renderLeadHealth(health) {
   leadHealthSummary.replaceChildren(
     makeSummaryCard("Local Handler", localOk ? "Ready" : "Blocked", data.status || "unknown"),
     makeSummaryCard("Schema", data.schema?.fieldCount ? `${data.schema.fieldCount} fields` : "N/A", data.schema?.version || "schema unavailable"),
+    makeSummaryCard("Lead Lane", data.qualificationModel?.workflowLane || "N/A", data.qualificationModel?.priority || "priority unavailable"),
     makeSummaryCard("Batch Parser", data.local?.parser?.batchPayloadSupported ? "Pass" : "Check", "tRPC batch body"),
     makeSummaryCard("Mock D1", data.local?.mockD1?.inserted ? "Pass" : "Check", `${data.local?.mockD1?.statements || 0} statements`),
     makeSummaryCard("Prod GET", data.production?.status ? `${data.production.status}` : "N/A", reachable ? "safe no-write probe" : "unreachable"),
@@ -845,6 +855,14 @@ function renderLeadHealth(health) {
         : "Name/contact validation did not pass.",
       ok: Boolean(data.local?.parser?.hasName && data.local?.parser?.hasContactChannel),
       badge: data.local?.parser?.hasName && data.local?.parser?.hasContactChannel ? "pass" : "check"
+    },
+    {
+      title: "Qualification model",
+      detail: data.qualificationModel?.workflowLane
+        ? `${data.qualificationModel.workflowLane}; ${data.qualificationModel.packageLane}; next: ${data.qualificationModel.nextAction}`
+        : "Qualification model unavailable.",
+      ok: data.qualificationModel?.externalWrites === false && Boolean(data.qualificationModel?.workflowLane),
+      badge: data.qualificationModel?.priority || "check"
     },
     {
       title: "Mock D1 insert",
