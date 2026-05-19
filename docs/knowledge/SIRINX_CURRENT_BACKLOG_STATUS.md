@@ -16,8 +16,8 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | Public website ahead commits | Locally verified | `pnpm check`, `pnpm test` 162/162, `pnpm build`, SEO province routes 77/77 |
 | Cloudflare main-router deploy | Done | `sirinx-main-router` deployed, version `4e66deca-89a5-4a1b-83a8-0dfaee4e3851` |
 | Production lead POST smoke test | Done | Controlled D1 lead `ec8dd128-a57c-4d6d-b0f8-4b91c1b94c2b` created with source `codex-production-smoke` |
-| Public website GitHub branch/PR | Done | Branch `codex/public-website-production-ready-20260517`, PR `https://github.com/ton36475-lgtm/sirinx/pull/1` |
-| Home Solution SEO/AEO page | Done, committed, and pushed to PR branch | `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on `codex/public-website-production-ready-20260517`; latest commit `2d5270a fix: polish pagespeed follow-up` |
+| Public website GitHub branch/PR | Done and merged | PR `https://github.com/ton36475-lgtm/sirinx/pull/1` merged to `main` as `1804e81 Merge public website production-ready release` |
+| Home Solution SEO/AEO page | Done, deployed, and verified live | `www.sirinx.co/home-solution/` is live with indexable metadata, AEO schema, Home Solution content, and desktop/mobile browser verification |
 | Command Center E2E stabilization | Done and committed | Dashboard renders each API panel independently so the Vibe status does not wait for slower Hermes/Executive endpoints |
 | Local proposal writer | Done and committed | `POST /api/proposal-draft/write` writes local Obsidian drafts only after `confirmLocalWrite=true` |
 | Local ROI preview | Done and committed | `GET/POST /api/roi-preview` routes assumptions to local package/payback previews with `externalWrites=false` |
@@ -27,17 +27,21 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | External gate audit preflight | Done and committed | `/api/external-gate-preflight` marks 9 gates as ready/blocked/manual with `externalWrites=false` |
 | PR #1 dirty merge state | Resolved and pushed | Website PR #1 now includes `1901215 merge: sync public website branch with main`; GitHub reports `mergeStateStatus=CLEAN` |
 | PR #1 review/check inspection | Done read-only | No PR comments, no reviews, no review threads, and no reported status checks |
+| Cloudflare Pages preview | Done | Preview `d641924d` source `aacad5e` passed HTTP, browser smoke, and Lighthouse checks |
+| Public website production deploy | Done | Production deployment `ab4731e9` source `cfb1a72` is active for `www.sirinx.co` |
+| Home Solution hydration SEO hotfix | Done | Commits `f594027` and `cfb1a72` keep `/home-solution/` robots `index, follow` and canonical trailing slash after React hydration |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is on branch `codex/urgent-backlog-execution` with Command Center local-only workflow phases committed through external gate audit preflight and refreshed backlog status.
-- Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/public-website-production-ready-20260517` and matches `origin/codex/public-website-production-ready-20260517`.
-- PR #1 is open at `https://github.com/ton36475-lgtm/sirinx/pull/1`, draft status is `true`, head is `codex/public-website-production-ready-20260517`, base is `main`, and GitHub reports `mergeStateStatus=CLEAN`.
-- Public website branch has pushed merge commit `1901215 merge: sync public website branch with main`.
-- Public website local branch is clean and synced with origin after Gate 1 push.
-- PR #1 has no comments, no reviews, no review threads, and no reported status checks at the time of read-only inspection.
-- Home Solution work passed typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, and no-secret review before this backlog update.
+- Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/home-solution-seo-hydration` and tracks `origin/main`.
+- GitHub `main` is at `cfb1a72 fix: align client canonical urls with static seo`.
+- PR #1 is merged. It is no longer a release blocker.
+- Public website production is deployed on Cloudflare Pages as `ab4731e9-44c8-4b51-8821-f18826528bc2`, branch `main`, source `cfb1a72`, URL `https://ab4731e9.sirinx-co.pages.dev`.
+- Rollback candidates are `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
+- Home Solution work passed typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, no-secret review, Cloudflare preview, production deploy, and live hydration SEO checks.
+- Final live Lighthouse lab result: homepage SEO 100/accessibility 100, Home Solution SEO 100/accessibility 100, CLS 0.001. Mobile performance remains a separate optimization backlog (`home perf 35`, `home-solution perf 39` in the final lab run).
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
 - Command Center lead health intentionally still uses safe GET probes and does not create production leads by itself.
@@ -50,9 +54,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 
 | Item | Why blocked | Required approval |
 | --- | --- | --- |
-| Deploy `/home-solution` to `www.sirinx.co` | Public customer-facing website change | Explicit Cloudflare/Pages or release approval after preview and rollback plan |
 | Expose `dev.sirinx.co` or other internal subdomains | DNS/Pages/Access changes are external writes | Explicit Cloudflare + Access approval |
-| Merge public website PR #1 | Updates origin/main and may trigger GitHub/Pages deployment workflow | Explicit merge/release approval |
 | Additional Cloudflare route/DNS/secret changes | External cloud mutation beyond deployed main-router | Explicit Cloudflare approval |
 | Real Telegram/LINE sends | Customer-facing external messages | Valid recipient target, token rotation/confirmation, secret storage, and send approval |
 
@@ -77,16 +79,14 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 
 ## Next Strict Sequence
 
-1. Keep `sirinx-os` clean after Phase 15-17 local status commits.
-2. Gate 3A candidate: create Cloudflare preview only after confirming Pages project/build output and preserving production routes.
-3. Pair Codex Mobile manually via QR because MFA/SSO requires the human operator.
-4. Execute exactly one external gate at a time and record verification before moving to the next gate.
-5. Gate 3B candidate: deploy production only after preview approval and rollback target are recorded.
-6. Fix Telegram/LINE target setup only after recipient/channel target is confirmed.
-7. Store Solis API credentials only through approved secret storage, then build read-only telemetry smoke.
-8. Select exactly one internal subdomain candidate for build/auth review.
-9. Keep PR #1 draft until preview/release evidence is attached.
-10. Monitor live lead capture after production release only; do not create extra production leads from Command Center.
+1. Keep `sirinx-os` clean after recording the production website release evidence.
+2. Monitor live website health without creating extra production lead writes.
+3. Run a dedicated PageSpeed performance pass focused on JavaScript/main-thread reduction; do not alter the live background graphics unless a later task explicitly targets that area.
+4. Pair Codex Mobile manually via QR because MFA/SSO requires the human operator.
+5. Fix Telegram/LINE target setup only after recipient/channel target is confirmed.
+6. Store Solis API credentials only through approved secret storage, then build read-only telemetry smoke.
+7. Select exactly one internal subdomain candidate for build/auth review.
+8. Continue Command Center/Hermes orchestration work from the current clean public website baseline.
 
 ## Stop Rules
 
