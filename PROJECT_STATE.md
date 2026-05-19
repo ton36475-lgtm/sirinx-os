@@ -48,7 +48,8 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Marketing/CRM schema comparison | docs locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md` |
 | Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
 | policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
-| Hermes inbox implementation | not started | design required before code |
+| Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
+| Hermes inbox implementation | not started | dry-run normalizer required before adapters |
 
 ## Verification Commands
 

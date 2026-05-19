@@ -24,18 +24,18 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Verification: `pnpm policy-core:test`, `pnpm policy-core:api-test`, `pnpm verify`, `pnpm dashboard:e2e`.
   - Stop rule: external actions still return `approval_required` or `blocked` until exact target evidence exists.
 
-## Immediate
-
-- [ ] Task 1.1: Design Hermes inbox before runtime code
+- [x] Task 1.1: Design Hermes inbox before runtime code
   - Goal: define local `POST /hermes/inbox` contract, auth/HMAC strategy, audit event shape, and dry-run behavior.
-  - File scope: `docs/knowledge/`, `services/hermes-api/README.md`.
-  - Verification: design review and no runtime mutation.
+  - File scope: `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md`, `services/hermes-api/README.md`.
+  - Verification: design review, `pnpm verify`, `git diff --check`.
   - Stop rule: do not connect Telegram/LINE until recipient/token evidence exists.
 
-- [ ] Task 1.3: Design Hermes inbox policy handoff
-  - Goal: define how Hermes inbox calls `policy-core` before any dry-run or future approval queue action.
-  - File scope: `docs/knowledge/`, `services/hermes-api/README.md`.
-  - Verification: design review plus API contract test before implementation.
+## Immediate
+
+- [ ] Task 1.3: Implement Hermes inbox dry-run normalizer
+  - Goal: add pure request normalization and tests for the locked Hermes inbox contract.
+  - File scope: `services/hermes-api/` or `services/dev-control-api/src/` local-only preview route.
+  - Verification: unit tests plus `pnpm verify`, `pnpm dashboard:e2e`.
   - Stop rule: no Telegram/LINE/Solis/Cloudflare adapter execution.
 
 ## Scheduled

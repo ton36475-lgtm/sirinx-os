@@ -1,13 +1,13 @@
 # services/hermes-api
 
-Status: Phase 1 docs-only scaffold
+Status: Phase 1 contract designed
 Date: 2026-05-20
 
 ## Purpose
 
 `hermes-api` is the proposed command gateway for SIRINXDev Unified Project OS.
 
-It is not implemented yet. This scaffold records the contract boundary before runtime code is written.
+It is not implemented yet. The current contract boundary is locked in `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` before runtime code is written.
 
 ## Proposed Ingress
 
@@ -24,6 +24,8 @@ Required behavior:
 - write non-secret audit event
 - return dry-run plan unless execution is explicitly approved
 
+Phase 1 implementation should start with a local dry-run preview route before any external connector source is enabled.
+
 ## Forbidden In Phase 1
 
 - no Telegram/LINE send
@@ -33,6 +35,10 @@ Required behavior:
 - no arbitrary shell execution
 - no secret value logging
 
-## Next Design Artifact
+## Locked Design Artifact
 
-Create `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` before implementation.
+- `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md`
+
+## Next Implementation Step
+
+Implement pure request normalization and tests only. Do not connect Telegram, LINE, Solis, Cloudflare, GitHub, Supabase, or arbitrary shell execution.
