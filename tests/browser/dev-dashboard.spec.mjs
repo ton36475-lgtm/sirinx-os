@@ -214,6 +214,11 @@ test.describe("Developer Command Center", () => {
     const hermesInbox = await hermesInboxResponse.json();
     expect(hermesInbox.status).toBe("allowed");
     expect(hermesInbox.externalWrites).toBe(false);
+    await expect(page.getByRole("heading", { name: "Policy Dry-Run Preview" })).toBeVisible();
+    await expect(page.locator("#hermesInboxStatus")).toContainText("Ready");
+    await page.getByRole("button", { name: "Run Local Inbox Dry-Run" }).click();
+    await expect(page.locator("#hermesInboxStatus")).toContainText("Allowed local");
+    await expect(page.locator("#hermesInboxRunResult")).toContainText("externalWrites=false");
     const salesArtifactsResponse = await page.request.get("http://127.0.0.1:8711/api/sales-artifacts");
     expect(salesArtifactsResponse.ok()).toBeTruthy();
     const salesArtifacts = await salesArtifactsResponse.json();

@@ -36,12 +36,18 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Verification: unit tests plus `pnpm verify`, `pnpm dashboard:e2e`.
   - Stop rule: no Telegram/LINE/Solis/Cloudflare adapter execution.
 
-## Immediate
-
-- [ ] Task 1.4: Add dashboard presentation for Hermes inbox dry-run
+- [x] Task 1.4: Add dashboard presentation for Hermes inbox dry-run
   - Goal: show local inbox decisions and audit result in Command Center UI.
   - File scope: `apps/dev-dashboard/`, browser tests.
   - Verification: `pnpm dashboard:e2e`, local mobile width check.
+  - Stop rule: no external connector execution.
+
+## Immediate
+
+- [ ] Task 1.5: Implement Hermes inbox approval packet integration
+  - Goal: map `approval_required` inbox decisions into the existing local approval queue format.
+  - File scope: `services/hermes-api/`, `services/dev-control-api/src/approval-queue.mjs`, tests.
+  - Verification: unit tests, `pnpm verify`, `pnpm dashboard:e2e`.
   - Stop rule: no external connector execution.
 
 ## Scheduled

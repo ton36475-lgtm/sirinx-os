@@ -16,6 +16,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Lead qualification is local-only through `GET /api/lead-health` and model `2026-05-20.lead-qualification.v2`.
 - Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
 - Hermes inbox dry-run preview is local-only through `POST /api/hermes-inbox/dry-run`.
+- Command Center displays Hermes inbox policy dry-run results through the `Policy Dry-Run Preview` panel.
 - External writes remain blocked by default.
 - Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
 

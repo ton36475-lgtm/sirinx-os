@@ -287,6 +287,30 @@
         </div>
       </section>
 
+      <section class="panel hermes-inbox-panel" aria-label="Hermes inbox dry-run">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Hermes Inbox</p>
+            <h2>Policy Dry-Run Preview</h2>
+          </div>
+          <span id="hermesInboxStatus" class="status-pill status-warn">Inbox idle</span>
+        </div>
+        <div id="hermesInboxSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Hermes inbox policy decision">
+            <h3>Decision</h3>
+            <div id="hermesInboxList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Hermes inbox dry-run controls">
+            <h3>Local Preview</h3>
+            <div class="proposal-write-controls" aria-label="Local Hermes inbox dry-run">
+              <button id="hermesInboxRunButton" class="text-button" type="button">Run Local Inbox Dry-Run</button>
+              <p id="hermesInboxRunResult" class="write-result">Local dry-run waits for API readiness.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-panel" aria-label="Hermes connection">
         <div class="panel-head">
           <div>

@@ -69,6 +69,11 @@ const externalGatePreflightList = document.querySelector("#externalGatePreflight
 const externalGatePreflightNextActions = document.querySelector("#externalGatePreflightNextActions");
 const externalGatePreflightWriteButton = document.querySelector("#externalGatePreflightWriteButton");
 const externalGatePreflightWriteResult = document.querySelector("#externalGatePreflightWriteResult");
+const hermesInboxStatus = document.querySelector("#hermesInboxStatus");
+const hermesInboxSummary = document.querySelector("#hermesInboxSummary");
+const hermesInboxList = document.querySelector("#hermesInboxList");
+const hermesInboxRunButton = document.querySelector("#hermesInboxRunButton");
+const hermesInboxRunResult = document.querySelector("#hermesInboxRunResult");
 const hermesDashboardState = document.querySelector("#hermesDashboardState");
 const hermesDashboardMeta = document.querySelector("#hermesDashboardMeta");
 const hermesGatewayState = document.querySelector("#hermesGatewayState");
@@ -445,6 +450,23 @@ const fallbackExternalGatePreflight = {
     }
   ],
   nextActions: ["Start the local control API and refresh external gate preflight."]
+};
+
+const fallbackHermesInbox = {
+  status: "ready-local-dry-run",
+  result: "not-run",
+  externalWrites: false,
+  requiresHumanApproval: false,
+  policy: {
+    decision: "not-run",
+    target: "docs/knowledge/SIRINX_PLAN.md",
+    hardBlocks: [],
+    approvalReasons: []
+  },
+  auditEvent: {
+    result: "not-run",
+    source: "hermes-inbox-dry-run"
+  }
 };
 
 const fallbackExecutive = {
@@ -1476,6 +1498,57 @@ function renderExternalGatePreflight(preflight) {
     : "Local preflight writer waits for API readiness.";
 }
 
+function renderHermesInbox(result) {
+  const data = result || fallbackHermesInbox;
+  const policy = data.policy || fallbackHermesInbox.policy;
+  const allowed = data.status === "allowed";
+  const blocked = data.status === "blocked" || data.status === "auth_required" || data.status === "execution_disabled";
+  const tone = allowed ? "status-safe" : blocked ? "status-lock" : "status-warn";
+
+  hermesInboxStatus.textContent = allowed
+    ? "Allowed local"
+    : blocked
+      ? "Blocked"
+      : data.status === "approval_required"
+        ? "Approval required"
+        : "Ready";
+  hermesInboxStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  hermesInboxStatus.classList.add(tone);
+
+  hermesInboxSummary.replaceChildren(
+    makeSummaryCard("Decision", data.status || "not-run", "policy-core result"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "False", "dry-run only"),
+    makeSummaryCard("Approval", data.requiresHumanApproval ? "Required" : "Not required", "target gate"),
+    makeSummaryCard("Target", policy.target || "local-doc", "normalized action")
+  );
+
+  renderSignalList(hermesInboxList, [
+    {
+      ok: allowed,
+      title: "Policy decision",
+      detail: `${policy.decision || data.status || "not-run"} for ${policy.target || "local target"}`,
+      badge: policy.decision || data.status || "not-run"
+    },
+    {
+      ok: !data.externalWrites,
+      title: "External write guard",
+      detail: data.externalWrites ? "External write path is armed." : "External writes remain false.",
+      badge: data.externalWrites ? "write" : "local"
+    },
+    {
+      ok: !(policy.hardBlocks || []).length,
+      title: "Hard blocks",
+      detail: (policy.hardBlocks || []).join(", ") || "No hard blocks for this local preview.",
+      badge: `${(policy.hardBlocks || []).length}`
+    }
+  ]);
+
+  hermesInboxRunResult.textContent =
+    data.result === "not-run"
+      ? "Ready to run local dry-run preview."
+      : `${data.status}: ${data.result}; externalWrites=${Boolean(data.externalWrites)}`;
+}
+
 function makeSummaryCard(label, value, note) {
   const item = document.createElement("article");
   item.className = "hq-stat";
@@ -2160,6 +2233,7 @@ async function fetchJson(path, options) {
 
 async function loadDashboard() {
   let apiOnline = false;
+  renderHermesInbox(fallbackHermesInbox);
 
   const loadPanel = async (path, render, renderFallback, fallbackLabel) => {
     try {
@@ -2267,6 +2341,45 @@ async function runDryRun(actionId) {
     await loadAuditEvents();
   } catch (error) {
     logEvent(`${actionId}: dry-run unavailable (${error.message})`);
+  }
+}
+
+async function runHermesInboxDryRun() {
+  hermesInboxRunButton.disabled = true;
+  hermesInboxRunResult.textContent = "Running local Hermes inbox dry-run...";
+
+  try {
+    const result = await fetchJson("/api/hermes-inbox/dry-run", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        requestId: "dashboard-hermes-inbox-local-doc",
+        source: "codex-local",
+        target: { id: "docs/knowledge/SIRINX_PLAN.md" },
+        intent: {
+          type: "local-doc-write",
+          summary: "Dashboard Hermes inbox local preview",
+          rawTextIncluded: false
+        },
+        action: {
+          id: "dashboard-hermes-inbox-local-doc",
+          type: "local-doc-write",
+          externalWrite: false
+        },
+        dryRun: true
+      })
+    });
+
+    renderHermesInbox(result);
+    logEvent(`Hermes inbox dry-run: ${result.result}`);
+    await loadAuditEvents();
+  } catch (error) {
+    hermesInboxRunResult.textContent = `Hermes inbox dry-run failed: ${error.message}`;
+    logEvent(`Hermes inbox dry-run failed: ${error.message}`);
+  } finally {
+    hermesInboxRunButton.disabled = false;
   }
 }
 
@@ -2431,5 +2544,6 @@ proposalReviewWriteButton.addEventListener("click", writeProposalReviewPacketLoc
 mobileReviewWriteButton.addEventListener("click", writeMobileReviewPacketLocal);
 externalGateWriteButton.addEventListener("click", writeExternalGatePacketsLocal);
 externalGatePreflightWriteButton.addEventListener("click", writeExternalGatePreflightLocal);
+hermesInboxRunButton.addEventListener("click", runHermesInboxDryRun);
 
 loadDashboard();
