@@ -461,6 +461,10 @@ h2 {
   min-width: 0;
 }
 
+.lead-audit-layout {
+  margin-top: 14px;
+}
+
 .tool-column {
   display: grid;
   gap: 9px;

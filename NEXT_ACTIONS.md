@@ -62,7 +62,11 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `services/dev-control-api/src/lead-event-audit.mjs`, tests, API route.
   - Verification: `pnpm lead-event-audit:test`, `pnpm verify`, API smoke, no production POST.
 
-- [ ] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.
+- [x] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.
+  - Goal: display lead event audit lane, risk flags, blocked handoffs, and evidence checklist in the Lead Backend panel.
+  - File scope: `apps/dev-dashboard/src/`, browser tests.
+  - Verification: `pnpm dashboard:e2e`, `pnpm verify`, API smoke.
+
 - [ ] Map `sirinx-solar-energy` entities into a local-only solar ops contract.
 - [ ] Map `oz-corp-omega-dual-node` safe-command and memory ideas into a docs-only policy.
 - [ ] Compare marketing/CRM schemas against SIRINX lead entity before any database work.

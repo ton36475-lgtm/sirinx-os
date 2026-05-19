@@ -20,6 +20,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Hermes inbox `approval_required` decisions are queued locally in `GET /api/approval-queue`.
 - Approval queue evidence snapshots are local-only through `GET /api/approval-evidence` and `POST /api/approval-evidence/write`.
 - Command Center displays Hermes inbox policy dry-run results through the `Policy Dry-Run Preview` panel.
+- Command Center displays lead event audit lane, risk flags, external handoff blocks, and evidence checklist inside the Lead Backend panel.
 - External writes remain blocked by default.
 - Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
 
@@ -53,6 +54,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Marketing/CRM schema comparison | docs locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md` |
 | Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
 | Lead event audit preview | done local | `services/dev-control-api/src/lead-event-audit.mjs`, `GET /api/lead-event-audit` |
+| Lead audit Command Center view | done local | `apps/dev-dashboard/src/app.js`, `apps/dev-dashboard/src/index.html` |
 | policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
 | Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
 | Hermes inbox dry-run normalizer | done local | `services/hermes-api/src/inbox.mjs`, `POST /api/hermes-inbox/dry-run` |

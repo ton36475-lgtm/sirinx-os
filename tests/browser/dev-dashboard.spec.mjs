@@ -35,6 +35,11 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#leadHealthLocal")).toContainText("Lead quality reasons");
     await expect(page.locator("#leadHealthLocal")).toContainText("Attribution and risk");
     await expect(page.locator("#leadHealthProduction")).toContainText("Production POST");
+    await expect(page.locator("#leadAuditEvent")).toContainText("Lead lane");
+    await expect(page.locator("#leadAuditEvent")).toContainText("Risk flags");
+    await expect(page.locator("#leadAuditBlocks")).toContainText("crm-write");
+    await expect(page.locator("#leadAuditBlocks")).toContainText("production-lead-post");
+    await expect(page.locator("#leadAuditEvidence")).toContainText("At least one valid contact channel");
     await expect(page.getByRole("heading", { name: "Sales Artifacts" })).toBeVisible();
     await expect(page.locator("#salesArtifactsStatus")).toHaveText(/Artifacts ready|Artifacts review/);
     await expect(page.locator("#salesArtifactsSummary")).toContainText("Proposal Draft");

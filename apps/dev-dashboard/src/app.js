@@ -25,6 +25,9 @@ const leadHealthSummary = document.querySelector("#leadHealthSummary");
 const leadHealthLocal = document.querySelector("#leadHealthLocal");
 const leadHealthProduction = document.querySelector("#leadHealthProduction");
 const leadHealthNextActions = document.querySelector("#leadHealthNextActions");
+const leadAuditEvent = document.querySelector("#leadAuditEvent");
+const leadAuditBlocks = document.querySelector("#leadAuditBlocks");
+const leadAuditEvidence = document.querySelector("#leadAuditEvidence");
 const salesArtifactsStatus = document.querySelector("#salesArtifactsStatus");
 const salesArtifactsSummary = document.querySelector("#salesArtifactsSummary");
 const salesArtifactsList = document.querySelector("#salesArtifactsList");
@@ -304,6 +307,35 @@ const fallbackLeadHealth = {
     postProbeRun: false
   },
   nextActions: ["Start the local control API and refresh lead health."]
+};
+
+const fallbackLeadAudit = {
+  status: "unavailable",
+  externalWrites: false,
+  productionPostProbeRun: false,
+  crmWrites: false,
+  supabaseWrites: false,
+  leadEvent: {
+    workflowLane: "unavailable",
+    packageLane: "unavailable",
+    score: 0,
+    priority: "unknown",
+    contactEvidence: {
+      contactChannelCount: 0,
+      rawContactValuesStored: false
+    },
+    routing: {
+      primaryProfile: "sales",
+      supportProfiles: [],
+      commandCenterLane: "leads",
+      backlogStatus: "offline"
+    },
+    riskFlags: [],
+    allowedLocalUses: []
+  },
+  evidenceChecklist: [],
+  blockedExternalActions: [],
+  nextActions: ["Start the local control API and refresh lead event audit."]
 };
 
 const fallbackSalesArtifacts = {
@@ -1192,6 +1224,66 @@ function renderLeadHealth(health) {
       item.textContent = text;
       return item;
     })
+  );
+}
+
+function renderLeadAudit(audit) {
+  const data = audit || fallbackLeadAudit;
+  const event = data.leadEvent || fallbackLeadAudit.leadEvent;
+  const contactEvidence = event.contactEvidence || fallbackLeadAudit.leadEvent.contactEvidence;
+  const routing = event.routing || fallbackLeadAudit.leadEvent.routing;
+
+  renderSignalList(leadAuditEvent, [
+    {
+      title: "Audit model",
+      detail: `${data.status || "unknown"}; externalWrites=${data.externalWrites}; productionPostProbeRun=${data.productionPostProbeRun}.`,
+      ok: data.externalWrites === false && data.productionPostProbeRun === false,
+      badge: data.externalWrites === false ? "local" : "check"
+    },
+    {
+      title: "Lead lane",
+      detail: `${event.workflowLane || "unknown"}; ${event.packageLane || "package unavailable"}; score ${event.score ?? 0}; priority ${event.priority || "unknown"}.`,
+      ok: Boolean(event.workflowLane) && data.externalWrites === false,
+      badge: event.priority || "check"
+    },
+    {
+      title: "Contact evidence",
+      detail: `${contactEvidence.contactChannelCount || 0} channel(s); raw values stored: ${contactEvidence.rawContactValuesStored}.`,
+      ok: contactEvidence.rawContactValuesStored === false,
+      badge: contactEvidence.contactChannelCount ? "present" : "missing"
+    },
+    {
+      title: "Agent routing",
+      detail: `${routing.primaryProfile || "sales"} owns it; support: ${(routing.supportProfiles || []).join(", ") || "none"}; lane: ${routing.commandCenterLane || "leads"}.`,
+      ok: Boolean(routing.primaryProfile),
+      badge: routing.backlogStatus || "route"
+    },
+    {
+      title: "Risk flags",
+      detail: (event.riskFlags || []).length ? event.riskFlags.join(", ") : "none",
+      ok: data.externalWrites === false,
+      badge: (event.riskFlags || []).length ? "review" : "clear"
+    }
+  ]);
+
+  renderSignalList(
+    leadAuditBlocks,
+    (data.blockedExternalActions || []).map((action) => ({
+      title: action.id || "blocked-action",
+      detail: `${action.target || "external target"}: ${action.reason || "approval required"}`,
+      ok: action.externalWrites === false && action.requiresHumanApproval === true,
+      badge: action.status || "blocked"
+    }))
+  );
+
+  renderSignalList(
+    leadAuditEvidence,
+    (data.evidenceChecklist || []).map((item) => ({
+      title: item.label || item.id,
+      detail: `${item.status || "unknown"} before ${item.requiredBefore || "next stage"}.`,
+      ok: ["present-local", "estimated-from-intake"].includes(item.status) || item.externalWrites === false,
+      badge: item.status || "check"
+    }))
   );
 }
 
@@ -2269,6 +2361,7 @@ async function loadDashboard() {
     loadPanel("/api/audit-events", renderAuditEvents, () => renderAuditEvents(fallbackAuditTrail), "Audit events"),
     loadPanel("/api/vibe-command-center", renderVibe, () => renderVibe(fallbackVibe), "Vibe command"),
     loadPanel("/api/lead-health", renderLeadHealth, () => renderLeadHealth(fallbackLeadHealth), "Lead health"),
+    loadPanel("/api/lead-event-audit", renderLeadAudit, () => renderLeadAudit(fallbackLeadAudit), "Lead event audit"),
     loadPanel(
       "/api/sales-artifacts",
       renderSalesArtifacts,
