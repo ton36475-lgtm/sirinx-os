@@ -11,6 +11,7 @@ Run local checks first:
 ```bash
 cd /Users/sirinx/sirinx-os
 pnpm external-gates:check
+pnpm external-gates:evidence-check
 pnpm external-gates:write
 ```
 
@@ -172,8 +173,8 @@ unless exact rule, affected path, rollback path, and verification plan are recor
 | Check | Command | Expected |
 | --- | --- | --- |
 | Local gate readiness | `pnpm external-gates:check` | `Hard failures: 0` |
+| Evidence completeness | `pnpm external-gates:evidence-check` | no unsafe secret-like content; gates become ready only after required evidence checkboxes are complete |
 | Local packet write | `pnpm external-gates:write` | writes only local Obsidian gate packet/preflight |
 | Command Center E2E | `pnpm dashboard:e2e` | `8 passed` |
 | Static verification | `pnpm verify` | passes |
 | Public repo safety | `git -C /Users/sirinx/restore-sources/ton36475-lgtm-sirinx status --short` | no changes |
-

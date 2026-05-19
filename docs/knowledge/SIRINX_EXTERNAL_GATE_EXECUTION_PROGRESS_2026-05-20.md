@@ -34,8 +34,11 @@ Added:
 - `scripts/external-gate-readiness.sh`
 - package script `pnpm external-gates:check`
 - `scripts/external-gate-write-local-records.sh`
+- `scripts/external-gate-evidence-check.mjs`
 - package script `pnpm external-gates:write`
+- package script `pnpm external-gates:evidence-check`
 - `SIRINX_EXTERNAL_GATE_OPERATOR_RUNBOOK_2026-05-20.md`
+- `docs/knowledge/external-gates/` evidence intake templates
 
 The runner checks:
 
@@ -62,6 +65,7 @@ Latest result:
 
 - `pnpm external-gates:check` passed with `Hard failures: 0`.
 - `pnpm external-gates:write` wrote local approval packet and audit preflight records into Obsidian with `externalWrites=false`.
+- `pnpm external-gates:evidence-check` returned `ready=0`, `blocked=4`, and `unsafe=0`, which is the expected state until the operator supplies QR/MFA, recipient/token, Solis consent/mapping, or Cloudflare permission evidence.
 
 ### Part 3 - Dashboard E2E Alignment
 
