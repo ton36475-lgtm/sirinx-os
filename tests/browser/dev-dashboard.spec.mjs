@@ -195,6 +195,18 @@ test.describe("Developer Command Center", () => {
     expect(leadHealth.qualificationModel.workflowLane).toBe("sales-engineering-review");
     expect(Array.isArray(leadHealth.qualificationModel.reasons)).toBe(true);
     expect(Array.isArray(leadHealth.qualificationModel.riskFlags)).toBe(true);
+    const leadAuditResponse = await page.request.get("http://127.0.0.1:8711/api/lead-event-audit");
+    expect(leadAuditResponse.ok()).toBeTruthy();
+    const leadAudit = await leadAuditResponse.json();
+    expect(leadAudit.status).toBe("ready-local-lead-event-audit");
+    expect(leadAudit.externalWrites).toBe(false);
+    expect(leadAudit.productionPostProbeRun).toBe(false);
+    expect(leadAudit.crmWrites).toBe(false);
+    expect(leadAudit.supabaseWrites).toBe(false);
+    expect(leadAudit.leadEvent.workflowLane).toBe("sales-engineering-review");
+    expect(leadAudit.leadEvent.contactEvidence.rawContactValuesStored).toBe(false);
+    expect(leadAudit.blockedExternalActions.some((action) => action.id === "crm-write")).toBe(true);
+    expect(leadAudit.blockedExternalActions.some((action) => action.id === "production-lead-post")).toBe(true);
     const policyCoreResponse = await page.request.get("http://127.0.0.1:8711/api/policy-core");
     expect(policyCoreResponse.ok()).toBeTruthy();
     const policyCore = await policyCoreResponse.json();

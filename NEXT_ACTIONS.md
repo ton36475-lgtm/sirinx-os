@@ -57,12 +57,11 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `services/dev-control-api/src/approval-evidence.mjs`, `scripts/approval-evidence-write-local.mjs`.
   - Verification: `pnpm approval-evidence:test`, `pnpm approval-evidence:dry-run`, local confirmed Obsidian write, no external writes.
 
-- [ ] Task 1.7: Implement local lead-event/audit proposal
+- [x] Task 1.7: Implement local lead-event/audit proposal
   - Goal: define local lead event evidence shape before any CRM/Supabase/production lead writes.
-  - File scope: `services/dev-control-api/src/`, tests, docs if needed.
-  - Verification: unit tests, `pnpm verify`, no production POST.
+  - File scope: `services/dev-control-api/src/lead-event-audit.mjs`, tests, API route.
+  - Verification: `pnpm lead-event-audit:test`, `pnpm verify`, API smoke, no production POST.
 
-- [ ] Implement local lead-event/audit proposal after lead qualification v2.
 - [ ] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.
 - [ ] Map `sirinx-solar-energy` entities into a local-only solar ops contract.
 - [ ] Map `oz-corp-omega-dual-node` safe-command and memory ideas into a docs-only policy.

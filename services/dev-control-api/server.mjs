@@ -13,6 +13,7 @@ import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getGithubIntegrationInventory } from "./src/github-integration.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
+import { getLeadEventAuditPreview } from "./src/lead-event-audit.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { getMobileReviewPacket, writeMobileReviewPacket } from "./src/mobile-review-packet.mjs";
 import { getPolicyCoreStatus } from "./src/policy-core-status.mjs";
@@ -548,6 +549,32 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/lead-health") {
     sendJson(request, response, 200, await getLeadBackendHealth());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/lead-event-audit") {
+    sendJson(request, response, 200, getLeadEventAuditPreview());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/lead-event-audit/preview") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, getLeadEventAuditPreview(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_lead_event_audit_request",
+        error: "lead_event_audit_preview_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        productionPostProbeRun: false,
+        crmWrites: false,
+        supabaseWrites: false,
+        customerVisible: false,
+        requiresHumanApproval: true
+      });
+    }
     return;
   }
 
