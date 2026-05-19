@@ -77,7 +77,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `docs/knowledge/SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md`, status docs.
   - Verification: `pnpm verify`, `git diff --check`; no runtime command runner added.
 
-- [ ] Compare marketing/CRM schemas against SIRINX lead entity before any database work.
+- [x] Compare marketing/CRM schemas against SIRINX lead entity before any database work.
+  - Goal: map old marketing/CRM source fields to SIRINX lead contact, solar qualification, attribution, quality, and audit groups before any external CRM/database write.
+  - File scope: `services/dev-control-api/src/lead-crm-contract.mjs`, tests, `docs/knowledge/SIRINX_LEAD_CRM_HANDOFF_CONTRACT_2026-05-20.md`.
+  - Verification: `pnpm lead-crm-contract:test`, `pnpm verify`, `/api/lead-crm-contract` smoke.
 
 ## Approval-Gated
 

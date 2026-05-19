@@ -15,6 +15,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - GitHub repo integration inventory is local-only through `GET /api/github-integration`.
 - Lead qualification is local-only through `GET /api/lead-health` and model `2026-05-20.lead-qualification.v2`.
 - Lead event audit preview is local-only through `GET /api/lead-event-audit` and `POST /api/lead-event-audit/preview`; it stores no raw contact values and performs no CRM/Supabase/production writes.
+- Lead CRM handoff comparison is local-only through `GET /api/lead-crm-contract`; database/CRM writes remain disabled.
 - Solar ops entity mapping from `sirinx-solar-energy` is local-only through `GET /api/solar-ops-contract`; it does not apply Supabase schema, copy mock PII, or deploy Cloudflare workers.
 - `oz-corp-omega-dual-node` safe-command and continuity-memory ideas are mapped as docs-only policy; no runtime command runner or worker is imported.
 - Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
@@ -54,10 +55,11 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Solar ops extraction | contract locked | `SIRINX_SOLAR_OPS_EXTRACTION_PLAN_2026-05-20.md`, `SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md` |
 | Agent runtime extraction | docs locked | `SIRINX_AGENT_RUNTIME_EXTRACTION_PLAN_2026-05-20.md` |
 | Safe command and memory policy | docs locked | `SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md` |
-| Marketing/CRM schema comparison | docs locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md` |
+| Marketing/CRM schema comparison | contract locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md`, `SIRINX_LEAD_CRM_HANDOFF_CONTRACT_2026-05-20.md` |
 | Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
 | Lead event audit preview | done local | `services/dev-control-api/src/lead-event-audit.mjs`, `GET /api/lead-event-audit` |
 | Lead audit Command Center view | done local | `apps/dev-dashboard/src/app.js`, `apps/dev-dashboard/src/index.html` |
+| Lead CRM handoff contract | done local | `services/dev-control-api/src/lead-crm-contract.mjs`, `GET /api/lead-crm-contract` |
 | Solar ops entity contract | done local | `services/dev-control-api/src/solar-ops-contract.mjs`, `GET /api/solar-ops-contract` |
 | policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
 | Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
@@ -73,6 +75,7 @@ Use these before commit-ready status:
 pnpm verify
 pnpm exec vitest run services/dev-control-api/src/lead-qualification.test.mjs
 pnpm lead-event-audit:test
+pnpm lead-crm-contract:test
 pnpm solar-ops-contract:test
 pnpm policy-core:test
 pnpm policy-core:api-test

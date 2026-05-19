@@ -212,6 +212,15 @@ test.describe("Developer Command Center", () => {
     expect(leadAudit.leadEvent.contactEvidence.rawContactValuesStored).toBe(false);
     expect(leadAudit.blockedExternalActions.some((action) => action.id === "crm-write")).toBe(true);
     expect(leadAudit.blockedExternalActions.some((action) => action.id === "production-lead-post")).toBe(true);
+    const leadCrmResponse = await page.request.get("http://127.0.0.1:8711/api/lead-crm-contract");
+    expect(leadCrmResponse.ok()).toBeTruthy();
+    const leadCrm = await leadCrmResponse.json();
+    expect(leadCrm.status).toBe("ready-local-lead-crm-contract");
+    expect(leadCrm.externalWrites).toBe(false);
+    expect(leadCrm.crmWrites).toBe(false);
+    expect(leadCrm.supabaseWrites).toBe(false);
+    expect(leadCrm.summary.databaseWorkReady).toBe(false);
+    expect(leadCrm.sirinxLeadGroups.some((group) => group.id === "audit")).toBe(true);
     const solarOpsResponse = await page.request.get("http://127.0.0.1:8711/api/solar-ops-contract");
     expect(solarOpsResponse.ok()).toBeTruthy();
     const solarOps = await solarOpsResponse.json();

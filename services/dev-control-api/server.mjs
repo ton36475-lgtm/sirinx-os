@@ -12,6 +12,7 @@ import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/exte
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getGithubIntegrationInventory } from "./src/github-integration.mjs";
+import { getLeadCrmContract } from "./src/lead-crm-contract.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadEventAuditPreview } from "./src/lead-event-audit.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
@@ -555,6 +556,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/lead-event-audit") {
     sendJson(request, response, 200, getLeadEventAuditPreview());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/lead-crm-contract") {
+    sendJson(request, response, 200, getLeadCrmContract());
     return;
   }
 
