@@ -5,113 +5,80 @@ const preflightRoot =
   "/Users/sirinx/Documents/Obsidian Vault/SIRINX/06_OPERATIONS/External Gate Audit Preflight";
 
 const preflightRules = {
-  "gate-1-github-pr-push": {
-    status: "ready-for-targeted-approval",
-    reviewState: "reviewed",
-    owner: "devops",
-    blockingReason: "",
-    evidenceRequired: [
-      "Local git status is clean.",
-      "PR target is ton36475-lgtm/sirinx PR #1.",
-      "Exact approval phrase and rollback rule are visible before push."
-    ],
-    nextLocalAction: "Wait for exact Gate 1 phrase, then run push/PR commands only for the named target."
-  },
-  "gate-2-coderabbit-review": {
-    status: "blocked-prerequisite",
-    reviewState: "blocked",
-    owner: "qa",
-    blockingReason: "Requires Gate 1 push/PR state to be current before CodeRabbit review threads are authoritative.",
-    evidenceRequired: [
-      "PR #1 is updated.",
-      "Review status is no longer stale.",
-      "Autofix proposals are shown as local diff before any commit."
-    ],
-    nextLocalAction: "Keep CodeRabbit as inspect-only until PR branch is pushed and review target is current."
-  },
-  "gate-3a-cloudflare-preview": {
-    status: "blocked-prerequisite",
-    reviewState: "blocked",
-    owner: "devops",
-    blockingReason: "Requires current PR/build artifact and explicit preview-only target before Cloudflare preview work.",
-    evidenceRequired: [
-      "Preview target is not production.",
-      "Build artifact path is recorded.",
-      "Homepage live background lock is recorded."
-    ],
-    nextLocalAction: "Prepare preview command only after PR/build status is clean."
-  },
-  "gate-3b-cloudflare-production": {
-    status: "blocked-prerequisite",
-    reviewState: "blocked",
-    owner: "devops",
-    blockingReason: "Requires approved preview result and rollback deployment target before production deployment.",
-    evidenceRequired: [
-      "Cloudflare preview passed.",
-      "Rollback deployment is recorded.",
-      "Production smoke matrix is ready."
-    ],
-    nextLocalAction: "Do not deploy production until preview evidence and rollback target are attached."
-  },
-  "gate-4-codex-mobile-pairing": {
+  "gate-codex-mobile-qr-mfa": {
     status: "manual-human-gate",
     reviewState: "reviewed",
     owner: "shogun",
     blockingReason: "QR/MFA pairing must be completed by the human operator on the Mac and phone.",
     evidenceRequired: [
       "Same ChatGPT account/workspace on host and phone.",
-      "Codex host appears on ChatGPT mobile.",
+      "Codex host appears in ChatGPT mobile.",
       "Mac stays online and awake."
+    ],
+    currentEvidence: [
+      "Local runbooks exist.",
+      "Hermes pairing list currently reports no pending pairings."
     ],
     nextLocalAction: "Open Codex App on Mac and complete QR/MFA pairing manually."
   },
-  "gate-5-telegram-line-target": {
-    status: "blocked-target-required",
+  "gate-telegram-line-target-token": {
+    status: "blocked-target-and-token-required",
     reviewState: "blocked",
     owner: "backend",
-    blockingReason: "Chat target and LINE webhook target are not confirmed; delivery is unsafe.",
+    blockingReason:
+      "Messaging target, credential rotation/confirmation, and LINE webhook verification are not complete.",
     evidenceRequired: [
-      "Confirmed recipient has messaged the bot or joined the intended chat.",
+      "Confirmed Telegram recipient has messaged the bot or joined the intended chat.",
       "Token value is never printed.",
+      "LINE OA webhook signature verification exists before any LINE send.",
       "One smoke send target is explicitly named."
     ],
-    nextLocalAction: "Collect target metadata without sending until the exact recipient is confirmed."
-  },
-  "gate-6-openai-key": {
-    status: "blocked-exact-confirmation-required",
-    reviewState: "blocked",
-    owner: "backend",
-    blockingReason: "OpenAI key creation requires the exact key name, path, and storage confirmation.",
-    evidenceRequired: [
-      "Exact approval phrase is present.",
-      ".env.local is ignored.",
-      "Key value will not be printed or committed."
+    currentEvidence: [
+      "Hermes gateway is running.",
+      "Hermes status reports Telegram configured with home target 8719485384, but delivery is not proven.",
+      "/Users/sirinx/.local/bin/hermes-telegram-test --help attempted a Telegram request and returned 403; do not run it again until credential and target are confirmed.",
+      "No production-safe LINE adapter is confirmed in the current handoff."
     ],
-    nextLocalAction: "Use secure OpenAI key flow only after exact phrase is repeated."
+    nextLocalAction: "Rotate or confirm Telegram credential and recipient target; prepare LINE OA webhook verification."
   },
-  "gate-7-supabase-schema-draft": {
-    status: "ready-for-targeted-approval",
-    reviewState: "reviewed",
-    owner: "data",
-    blockingReason: "",
-    evidenceRequired: [
-      "Read-only schema/config inspection only.",
-      "No migration, seed, RLS mutation, or data write.",
-      "Local migration plan includes rollback notes."
-    ],
-    nextLocalAction: "Wait for exact Gate 7 phrase, then inspect schema read-only and draft local plan."
-  },
-  "gate-8-solis-readonly-telemetry": {
-    status: "blocked-consent-required",
+  "gate-solis-readonly-telemetry": {
+    status: "blocked-consent-credential-mapping-required",
     reviewState: "blocked",
     owner: "solis",
-    blockingReason: "Customer consent, credential storage path, station mapping, and engineer signoff are missing.",
+    blockingReason:
+      "Customer consent, SolisCloud credentials, station mapping, and engineer signoff are missing.",
     evidenceRequired: [
-      "Written consent exists.",
+      "Written customer/site consent exists.",
       "Credential storage path is defined without printing credentials.",
-      "Read-only smoke excludes control/schedule/export-limit commands."
+      "Station, inverter, logger, meter, and customer/site mapping are known.",
+      "Read-only smoke excludes control, schedule, export-limit, battery dispatch, and load commands."
     ],
-    nextLocalAction: "Prepare local telemetry checklist; do not call Solis until consent and credentials are approved."
+    currentEvidence: [
+      "Solis policy exists in read-only/dry-run mode.",
+      "Local safety engine exists and does not call SolisCloud.",
+      "No verified live Solis telemetry adapter has been approved in this flow."
+    ],
+    nextLocalAction: "Collect consent, credential storage path, and station mapping before any Solis API call."
+  },
+  "gate-cloudflare-bot-management-review": {
+    status: "optional-official-review",
+    reviewState: "reviewed",
+    owner: "devops",
+    blockingReason:
+      "Production PageSpeed gate is mitigated by CSP, but official Bot Management/WAF policy review still needs Cloudflare permission.",
+    evidenceRequired: [
+      "Current CSP allowlist remains live.",
+      "Public pages do not load /cdn-cgi/challenge-platform/scripts/jsd/main.js.",
+      "Admin/API/auth/webhook/telemetry routes are not loosened.",
+      "Rollback path is recorded before any dashboard/API security rule change."
+    ],
+    currentEvidence: [
+      "Production CSP mitigation is live.",
+      "Homepage mobile Lighthouse reached performance 76 with TBT 30ms and CLS 0.",
+      "Home Solution mobile Lighthouse reached performance 77 with TBT 10ms and CLS 0."
+    ],
+    nextLocalAction:
+      "Keep CSP mitigation unless Cloudflare dashboard/API Bot Management write permission is available for a reversible official rule."
   }
 };
 
@@ -129,6 +96,7 @@ function summarize(entries) {
     reviewed: entries.filter((entry) => entry.reviewState === "reviewed").length,
     blocked: entries.filter((entry) => entry.reviewState === "blocked").length,
     readyForTargetedApproval: entries.filter((entry) => entry.status === "ready-for-targeted-approval").length,
+    optionalOfficialReview: entries.filter((entry) => entry.status === "optional-official-review").length,
     manualHumanGates: entries.filter((entry) => entry.status === "manual-human-gate").length,
     canExecuteNow: entries.filter((entry) => entry.canExecuteNow).length,
     externalWrites: entries.some((entry) => entry.externalWrites)
@@ -142,6 +110,7 @@ function buildEntry(packet) {
     owner: "shogun",
     blockingReason: "Packet is not mapped to a local preflight rule.",
     evidenceRequired: ["Add a local preflight rule before external action."],
+    currentEvidence: [],
     nextLocalAction: "Map this packet before execution."
   };
 
@@ -161,6 +130,7 @@ function buildEntry(packet) {
     stopRule: packet.stopRule,
     blockingReason: rule.blockingReason,
     evidenceRequired: rule.evidenceRequired,
+    currentEvidence: rule.currentEvidence,
     nextLocalAction: rule.nextLocalAction,
     canExecuteNow: false,
     externalWrites: false,
@@ -175,7 +145,7 @@ export function getExternalGatePreflight() {
   const entries = packetSet.packets.map(buildEntry);
 
   return {
-    title: "SIRINX external gate audit preflight",
+    title: "SIRINX current external gate audit preflight",
     mode: "local-audit-preflight",
     status: "ready-local-preflight",
     externalWrites: false,
@@ -188,8 +158,9 @@ export function getExternalGatePreflight() {
     entries,
     nextActions: [
       "Use this preflight as local evidence only; it is not permission to execute external work.",
-      "Resolve blocked entries by collecting the named target, consent, rollback, or prerequisite evidence.",
-      "Move one gate at a time from ready-for-targeted-approval to execution only after the exact gate phrase is supplied."
+      "Complete Codex Mobile QR/MFA manually before using the phone as the approval surface.",
+      "Resolve blocked entries by collecting the named recipient, credential, consent, station mapping, or Cloudflare permission.",
+      "Move one gate at a time only after the exact gate phrase is supplied."
     ],
     updatedAt: new Date().toISOString()
   };
@@ -197,7 +168,7 @@ export function getExternalGatePreflight() {
 
 function buildExternalGatePreflightFile(preflight) {
   return `---
-title: "SIRINX External Gate Audit Preflight"
+title: "SIRINX Current External Gate Audit Preflight"
 created: ${new Date().toISOString()}
 status: ${preflight.status}
 system: SIRINX
@@ -206,10 +177,11 @@ external_writes: false
 can_execute_now: false
 entry_count: ${preflight.summary.entries}
 blocked_entries: ${preflight.summary.blocked}
-ready_for_targeted_approval: ${preflight.summary.readyForTargetedApproval}
+manual_human_gates: ${preflight.summary.manualHumanGates}
+optional_official_review: ${preflight.summary.optionalOfficialReview}
 ---
 
-# SIRINX External Gate Audit Preflight
+# SIRINX Current External Gate Audit Preflight
 
 ## Summary
 
@@ -217,8 +189,8 @@ ready_for_targeted_approval: ${preflight.summary.readyForTargetedApproval}
 - Entries: ${preflight.summary.entries}
 - Reviewed: ${preflight.summary.reviewed}
 - Blocked: ${preflight.summary.blocked}
-- Ready for targeted approval: ${preflight.summary.readyForTargetedApproval}
 - Manual human gates: ${preflight.summary.manualHumanGates}
+- Optional official review: ${preflight.summary.optionalOfficialReview}
 - Can execute now: ${preflight.canExecuteNow}
 - External writes: ${preflight.externalWrites}
 
@@ -240,6 +212,8 @@ ${preflight.entries.map((entry) => `### ${entry.gate}: ${entry.title}
 - External writes: ${entry.externalWrites}
 - Blocking reason: ${entry.blockingReason || "none"}
 - Next local action: ${entry.nextLocalAction}
+- Current evidence:
+${entry.currentEvidence.map((item) => `  - ${item}`).join("\n") || "  - none"}
 - Evidence required:
 ${entry.evidenceRequired.map((item) => `  - ${item}`).join("\n")}
 - Verification commands:
@@ -256,10 +230,10 @@ This preflight file is local audit evidence only. It is not approval to push, de
 export async function writeExternalGatePreflight(options = {}) {
   const preflight = getExternalGatePreflight();
   const stamp = timestampForFile();
-  const targetPath = `${preflightRoot}/SIRINX External Gate Audit Preflight ${stamp}.md`;
+  const targetPath = `${preflightRoot}/SIRINX Current External Gate Audit Preflight ${stamp}.md`;
   const content = buildExternalGatePreflightFile(preflight);
   const payload = {
-    title: "SIRINX external gate audit preflight writer",
+    title: "SIRINX current external gate audit preflight writer",
     mode: "local-file-write-gated",
     externalWrites: false,
     productionWrites: false,

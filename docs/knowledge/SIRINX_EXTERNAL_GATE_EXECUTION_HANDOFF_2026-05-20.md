@@ -20,6 +20,12 @@ Rules:
 
 ## Preflight Result
 
+Command Center status:
+
+- `/api/external-gate-packets` now exposes only these four remaining external gates.
+- `/api/external-gate-preflight` returns 4 entries, 2 reviewed, 2 blocked, 1 manual human gate, 1 optional official review, `canExecuteNow=false`, and `externalWrites=false`.
+- Dashboard summary cards now show Manual, Official Review, Blocked, Executable Now, and External Writes so the old completed release gates are not treated as active work.
+
 | Gate | Current state | Next blocker |
 | --- | --- | --- |
 | Codex Mobile | Local runbooks exist. Hermes pairing list reports no pending pairings. | Human must open Codex App on Mac, show QR, scan in ChatGPT mobile, and complete MFA/SSO/passkey. |

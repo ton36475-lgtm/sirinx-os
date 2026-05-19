@@ -414,6 +414,7 @@ const fallbackExternalGatePreflight = {
     reviewed: 0,
     blocked: 1,
     readyForTargetedApproval: 0,
+    optionalOfficialReview: 0,
     manualHumanGates: 0,
     canExecuteNow: 0,
     externalWrites: false
@@ -1366,7 +1367,8 @@ function renderExternalGatePreflight(preflight) {
 
   externalGatePreflightSummary.replaceChildren(
     makeSummaryCard("Entries", `${summary.entries || 0}`, `${summary.reviewed || 0} reviewed`),
-    makeSummaryCard("Ready", `${summary.readyForTargetedApproval || 0}`, "targeted approval only"),
+    makeSummaryCard("Manual", `${summary.manualHumanGates || 0}`, "human approval gates"),
+    makeSummaryCard("Official Review", `${summary.optionalOfficialReview || 0}`, "Cloudflare policy check"),
     makeSummaryCard("Blocked", `${summary.blocked || 0}`, `${summary.manualHumanGates || 0} manual gates`),
     makeSummaryCard("Executable Now", `${summary.canExecuteNow || 0}`, "always zero in preflight"),
     makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.canExecuteNow ? "actionable" : "audit only")
