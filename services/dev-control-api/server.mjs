@@ -3,7 +3,8 @@ import { execFile } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { listApprovalQueue } from "./src/approval-queue.mjs";
-import { listAuditEvents, recordDryRunAuditEvent } from "./src/audit-events.mjs";
+import { evaluateHermesInboxDryRun } from "../hermes-api/src/inbox.mjs";
+import { listAuditEvents, recordAuditEvent, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { getExternalGatePackets, writeExternalGatePackets } from "./src/external-gate-packets.mjs";
 import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/external-gate-preflight.mjs";
@@ -471,6 +472,33 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/hermes") {
     sendJson(request, response, 200, await getHermesStatus());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/hermes-inbox/dry-run") {
+    try {
+      const body = await readJson(request);
+      const result = evaluateHermesInboxDryRun(body, {
+        source: request.headers["x-sirinx-source"],
+        signatureVerified: false
+      });
+
+      if (result.body.auditEvent) {
+        recordAuditEvent(result.body.auditEvent);
+      }
+
+      sendJson(request, response, result.status, result.body);
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_request",
+        error: "hermes_inbox_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        requiresHumanApproval: true
+      });
+    }
     return;
   }
 

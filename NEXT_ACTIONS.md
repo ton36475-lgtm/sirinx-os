@@ -30,13 +30,19 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Verification: design review, `pnpm verify`, `git diff --check`.
   - Stop rule: do not connect Telegram/LINE until recipient/token evidence exists.
 
-## Immediate
-
-- [ ] Task 1.3: Implement Hermes inbox dry-run normalizer
+- [x] Task 1.3: Implement Hermes inbox dry-run normalizer
   - Goal: add pure request normalization and tests for the locked Hermes inbox contract.
-  - File scope: `services/hermes-api/` or `services/dev-control-api/src/` local-only preview route.
+  - File scope: `services/hermes-api/src/inbox.mjs`, `services/dev-control-api/server.mjs`.
   - Verification: unit tests plus `pnpm verify`, `pnpm dashboard:e2e`.
   - Stop rule: no Telegram/LINE/Solis/Cloudflare adapter execution.
+
+## Immediate
+
+- [ ] Task 1.4: Add dashboard presentation for Hermes inbox dry-run
+  - Goal: show local inbox decisions and audit result in Command Center UI.
+  - File scope: `apps/dev-dashboard/`, browser tests.
+  - Verification: `pnpm dashboard:e2e`, local mobile width check.
+  - Stop rule: no external connector execution.
 
 ## Scheduled
 

@@ -15,6 +15,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - GitHub repo integration inventory is local-only through `GET /api/github-integration`.
 - Lead qualification is local-only through `GET /api/lead-health` and model `2026-05-20.lead-qualification.v2`.
 - Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
+- Hermes inbox dry-run preview is local-only through `POST /api/hermes-inbox/dry-run`.
 - External writes remain blocked by default.
 - Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
 
@@ -49,7 +50,8 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
 | policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
 | Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
-| Hermes inbox implementation | not started | dry-run normalizer required before adapters |
+| Hermes inbox dry-run normalizer | done local | `services/hermes-api/src/inbox.mjs`, `POST /api/hermes-inbox/dry-run` |
+| Hermes external adapters | blocked | connector evidence required before any adapter execution |
 
 ## Verification Commands
 
@@ -60,6 +62,7 @@ pnpm verify
 pnpm exec vitest run services/dev-control-api/src/lead-qualification.test.mjs
 pnpm policy-core:test
 pnpm policy-core:api-test
+pnpm hermes-inbox:test
 pnpm dashboard:e2e
 pnpm external-gates:check
 git diff --check

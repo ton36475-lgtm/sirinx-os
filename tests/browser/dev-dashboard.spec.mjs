@@ -115,7 +115,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#approvalList")).toContainText("blocked");
     await expect(page.getByRole("heading", { name: "Local API Events" })).toBeVisible();
     const initialAuditText = await page.locator("#auditList").innerText();
-    expect(initialAuditText).toMatch(/No local API audit events recorded yet\.|dry-run \/ dry-run action/);
+    expect(initialAuditText).toMatch(/No local API audit events recorded yet\.|dry-run \/ dry-run action|hermes-inbox-dry-run/);
     await expect(page.locator("#actionList")).toContainText("Run dashboard QA checklist");
     await expect(page.locator("#actionList")).toContainText("External adapter smoke");
     await expect(page.locator("#actionList")).toContainText("Prepare subdomain build preflight");
@@ -193,6 +193,27 @@ test.describe("Developer Command Center", () => {
       blocked: 2,
       externalWrites: false
     });
+    const hermesInboxResponse = await page.request.post("http://127.0.0.1:8711/api/hermes-inbox/dry-run", {
+      data: {
+        requestId: "e2e-hermes-inbox",
+        source: "codex-local",
+        target: { id: "docs/knowledge/SIRINX_PLAN.md" },
+        intent: { type: "local-doc-write", summary: "E2E dry-run", rawTextIncluded: false },
+        action: {
+          id: "e2e-hermes-inbox",
+          type: "local-doc-write",
+          externalWrite: false
+        },
+        dryRun: true
+      },
+      headers: {
+        "x-sirinx-source": "codex-local"
+      }
+    });
+    expect(hermesInboxResponse.ok()).toBeTruthy();
+    const hermesInbox = await hermesInboxResponse.json();
+    expect(hermesInbox.status).toBe("allowed");
+    expect(hermesInbox.externalWrites).toBe(false);
     const salesArtifactsResponse = await page.request.get("http://127.0.0.1:8711/api/sales-artifacts");
     expect(salesArtifactsResponse.ok()).toBeTruthy();
     const salesArtifacts = await salesArtifactsResponse.json();
