@@ -72,7 +72,11 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `services/dev-control-api/src/solar-ops-contract.mjs`, tests, `docs/knowledge/SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md`.
   - Verification: `pnpm solar-ops-contract:test`, `pnpm verify`, `/api/solar-ops-contract` smoke.
 
-- [ ] Map `oz-corp-omega-dual-node` safe-command and memory ideas into a docs-only policy.
+- [x] Map `oz-corp-omega-dual-node` safe-command and memory ideas into a docs-only policy.
+  - Goal: extract allowlisted command and continuity-memory rules without importing runtime code.
+  - File scope: `docs/knowledge/SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md`, status docs.
+  - Verification: `pnpm verify`, `git diff --check`; no runtime command runner added.
+
 - [ ] Compare marketing/CRM schemas against SIRINX lead entity before any database work.
 
 ## Approval-Gated

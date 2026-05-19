@@ -16,6 +16,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Lead qualification is local-only through `GET /api/lead-health` and model `2026-05-20.lead-qualification.v2`.
 - Lead event audit preview is local-only through `GET /api/lead-event-audit` and `POST /api/lead-event-audit/preview`; it stores no raw contact values and performs no CRM/Supabase/production writes.
 - Solar ops entity mapping from `sirinx-solar-energy` is local-only through `GET /api/solar-ops-contract`; it does not apply Supabase schema, copy mock PII, or deploy Cloudflare workers.
+- `oz-corp-omega-dual-node` safe-command and continuity-memory ideas are mapped as docs-only policy; no runtime command runner or worker is imported.
 - Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
 - Hermes inbox dry-run preview is local-only through `POST /api/hermes-inbox/dry-run`.
 - Hermes inbox `approval_required` decisions are queued locally in `GET /api/approval-queue`.
@@ -52,6 +53,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | GitHub repo inventory | done local | `services/dev-control-api/src/github-integration.mjs` |
 | Solar ops extraction | contract locked | `SIRINX_SOLAR_OPS_EXTRACTION_PLAN_2026-05-20.md`, `SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md` |
 | Agent runtime extraction | docs locked | `SIRINX_AGENT_RUNTIME_EXTRACTION_PLAN_2026-05-20.md` |
+| Safe command and memory policy | docs locked | `SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md` |
 | Marketing/CRM schema comparison | docs locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md` |
 | Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
 | Lead event audit preview | done local | `services/dev-control-api/src/lead-event-audit.mjs`, `GET /api/lead-event-audit` |
