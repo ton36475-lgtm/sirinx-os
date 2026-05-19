@@ -27,9 +27,13 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#leadHealthSummary")).toContainText("Local Handler");
     await expect(page.locator("#leadHealthSummary")).toContainText("Schema");
     await expect(page.locator("#leadHealthSummary")).toContainText("Lead Lane");
+    await expect(page.locator("#leadHealthSummary")).toContainText("Traffic");
+    await expect(page.locator("#leadHealthSummary")).toContainText("Risk Flags");
     await expect(page.locator("#leadHealthLocal")).toContainText("tRPC batch parser");
     await expect(page.locator("#leadHealthLocal")).toContainText("Lead intake schema");
     await expect(page.locator("#leadHealthLocal")).toContainText("Qualification model");
+    await expect(page.locator("#leadHealthLocal")).toContainText("Lead quality reasons");
+    await expect(page.locator("#leadHealthLocal")).toContainText("Attribution and risk");
     await expect(page.locator("#leadHealthProduction")).toContainText("Production POST");
     await expect(page.getByRole("heading", { name: "Sales Artifacts" })).toBeVisible();
     await expect(page.locator("#salesArtifactsStatus")).toHaveText(/Artifacts ready|Artifacts review/);
@@ -126,6 +130,9 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#githubIntegrationSummary")).toContainText("GitHub audit clones");
     await expect(page.locator("#githubIntegrationList")).toContainText("sirinx-solar-energy");
     await expect(page.locator("#githubIntegrationList")).toContainText("oz-corp-omega-dual-node");
+    await expect(page.locator("#githubExtractionList")).toContainText("solar-ops-workflow-map");
+    await expect(page.locator("#githubExtractionList")).toContainText("agent-runtime-safe-command-map");
+    await expect(page.locator("#githubExtractionList")).toContainText("marketing-crm-schema-comparison");
     await expect(page.locator("#githubIntegrationNextActions")).toContainText("bounded extraction tasks");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
@@ -155,6 +162,9 @@ test.describe("Developer Command Center", () => {
     expect(githubIntegration.status).toBe("inventory-ready");
     expect(githubIntegration.externalWrites).toBe(false);
     expect(githubIntegration.summary.repositories).toBe(12);
+    expect(githubIntegration.summary.extractionTasks).toBeGreaterThanOrEqual(7);
+    expect(githubIntegration.extractionTasks.some((task) => task.id === "solar-ops-workflow-map" && task.repo === "sirinx-solar-energy")).toBe(true);
+    expect(githubIntegration.extractionTasks.some((task) => task.id === "mobile-companion-sensitive-gate" && task.status === "blocked-sensitive-file")).toBe(true);
     expect(githubIntegration.repositories.some((repo) => repo.name === "sirinx" && repo.priority === "P0")).toBe(true);
     expect(githubIntegration.repositories.some((repo) => repo.name === "oz-corp-omega-dual-node" && repo.status === "quarantine-reference")).toBe(true);
     const leadHealthResponse = await page.request.get("http://127.0.0.1:8711/api/lead-health");
@@ -166,9 +176,11 @@ test.describe("Developer Command Center", () => {
     expect(leadHealth.schema.version).toBe("2026-05-19.lead-intake.v1");
     expect(leadHealth.schema.fieldCount).toBeGreaterThan(0);
     expect(leadHealth.schema.contactChannelFields).toEqual(["email", "phone", "lineUserId"]);
-    expect(leadHealth.qualificationModel.modelVersion).toBe("2026-05-19.lead-qualification.v1");
+    expect(leadHealth.qualificationModel.modelVersion).toBe("2026-05-20.lead-qualification.v2");
     expect(leadHealth.qualificationModel.externalWrites).toBe(false);
     expect(leadHealth.qualificationModel.workflowLane).toBe("sales-engineering-review");
+    expect(Array.isArray(leadHealth.qualificationModel.reasons)).toBe(true);
+    expect(Array.isArray(leadHealth.qualificationModel.riskFlags)).toBe(true);
     const salesArtifactsResponse = await page.request.get("http://127.0.0.1:8711/api/sales-artifacts");
     expect(salesArtifactsResponse.ok()).toBeTruthy();
     const salesArtifacts = await salesArtifactsResponse.json();
@@ -365,6 +377,7 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#projectInventoryStatus")).toContainText("0 repos");
     await expect(page.locator("#githubIntegrationStatus")).toContainText("0 repos");
     await expect(page.locator("#githubIntegrationList")).toContainText("Fallback");
+    await expect(page.locator("#githubExtractionList")).toContainText("Fallback");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("dry-run unavailable");

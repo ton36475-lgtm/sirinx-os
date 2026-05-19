@@ -25,7 +25,9 @@ Add a local-only lead qualification model that maps incoming lead payloads into 
 
 ## Model Version
 
-`2026-05-19.lead-qualification.v1`
+Superseded by `2026-05-20.lead-qualification.v2`.
+
+See `SIRINX_LEAD_QUALIFICATION_V2_STATUS_2026-05-20.md`.
 
 ## Output Fields
 
@@ -36,6 +38,11 @@ Add a local-only lead qualification model that maps incoming lead payloads into 
 - `monthlyBill`
 - `wantsBackupOrBattery`
 - `contactChannelCount`
+- `trafficStatus`
+- `solarSegment`
+- `attribution`
+- `reasons`
+- `riskFlags`
 - `nextAction`
 - `reviewGates`
 

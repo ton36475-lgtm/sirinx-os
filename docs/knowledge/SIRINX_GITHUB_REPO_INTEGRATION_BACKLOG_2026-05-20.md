@@ -167,6 +167,20 @@ Rule:
 | Cloudflare Bot Management | Dashboard/API policy gate | Review official Bot/WAF rule only if replacing CSP mitigation. |
 | Mobile signing | Sensitive-file gate | Review keystore/signing policy before any mobile build reuse. |
 
+## Part 8 - Workstreams Now Exposed In Command Center
+
+The local API `GET /api/github-integration` now exposes the extraction workstreams as structured data. Current task ids:
+
+- `solar-ops-workflow-map`
+- `solar-roi-calculator-crosscheck`
+- `solar-worker-boundary-review`
+- `agent-runtime-safe-command-map`
+- `agent-app-feature-harvest`
+- `marketing-crm-schema-comparison`
+- `mobile-companion-sensitive-gate`
+
+These are local planning/control tasks. They do not execute repo code, deploy workers, send messages, write CRM/Supabase data, or modify the public website.
+
 ## Done Criteria For Each Future Extraction Task
 
 1. Source repo and file list are named.

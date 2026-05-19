@@ -171,9 +171,140 @@ const repositories = [
   }
 ];
 
-function summarize(items) {
+const extractionTasks = [
+  {
+    id: "solar-ops-workflow-map",
+    part: "Part 1",
+    repo: "sirinx-solar-energy",
+    lane: "solar-ops",
+    priority: "P1",
+    status: "ready-doc-mapping",
+    sourceFiles: [
+      "database/schema.sql",
+      "sirinx-app/src/services/leads.ts",
+      "sirinx-app/src/services/customers.ts",
+      "sirinx-app/src/services/installations.ts",
+      "sirinx-app/src/services/contractors.ts",
+      "sirinx-customer/src/**",
+      "sirinx-contractor/src/**"
+    ],
+    finding:
+      "The repo already models lead, customer, installation, contractor, SEO page, agent task, campaign, and metrics entities with mock fallback service functions.",
+    target: "Command Center solar operations backlog and future Supabase schema review.",
+    allowedNextStep: "Create file-level extraction plan and map entities to existing lead-health, ROI, proposal, and sales-artifact modules.",
+    blockedBy: ["No Supabase writes until RLS/env/schema review.", "No deploy scripts during extraction."]
+  },
+  {
+    id: "solar-roi-calculator-crosscheck",
+    part: "Part 1",
+    repo: "sirinx-solar-energy",
+    lane: "solar-ops",
+    priority: "P1",
+    status: "ready-logic-review",
+    sourceFiles: ["sirinx-app/src/app/calculator/page.tsx", "sirinx-app/src/components/seo/SavingsCalculator.tsx"],
+    finding:
+      "Legacy calculator uses simple bill, province peak-hour, roof-area, NPV, and payback assumptions that can cross-check the current local ROI preview.",
+    target: "services/dev-control-api/src/roi-preview.mjs",
+    allowedNextStep: "Compare assumptions only; do not replace current Thailand ESS package model without reviewed tests.",
+    blockedBy: ["Customer-facing ROI claims require senior sales/engineering review."]
+  },
+  {
+    id: "solar-worker-boundary-review",
+    part: "Part 1",
+    repo: "sirinx-solar-energy",
+    lane: "cloudflare-workers",
+    priority: "P2",
+    status: "gated-cloudflare",
+    sourceFiles: [
+      "cloudflare/worker-seo-pages/index.js",
+      "cloudflare/worker-image-optimizer/index.js",
+      "cloudflare/worker-api-proxy/index.js",
+      "cloudflare/cache-rules.json"
+    ],
+    finding:
+      "Worker code and cache rules may be useful for subdomain/internal tooling, but deploy scripts are present and must remain blocked.",
+    target: "infra/cloudflare review backlog",
+    allowedNextStep: "Document route ownership and overlap with current main-router before any code import.",
+    blockedBy: ["Cloudflare deploy/DNS/API writes require exact approval."]
+  },
+  {
+    id: "agent-runtime-safe-command-map",
+    part: "Part 2",
+    repo: "oz-corp-omega-dual-node",
+    lane: "agent-runtime",
+    priority: "P1",
+    status: "ready-doc-mapping",
+    sourceFiles: [
+      "services/hermes-agent/src/tools/safe-command-tool.ts",
+      "services/hermes-agent/src/index.ts",
+      "services/hermes-agent/src/memory/continuity.ts",
+      "services/openclaw-worker/src/memory/continuity-manager.ts"
+    ],
+    finding:
+      "The repo has a useful safe-command allowlist concept and continuity memory pattern, but it targets a separate experimental runtime.",
+    target: "Hermes/Command Center safe command and memory policy.",
+    allowedNextStep: "Map allowlisted command categories into SIRINX docs and tests before creating any runtime adapter.",
+    blockedBy: ["Large experimental repo; no bulk copy.", "No local LLM/Ollama runtime assumption without local doctor evidence."]
+  },
+  {
+    id: "agent-app-feature-harvest",
+    part: "Part 2",
+    repo: "oz-corp-omega-dual-node",
+    lane: "agent-runtime",
+    priority: "P2",
+    status: "quarantine-reference",
+    sourceFiles: [
+      "apps/sirinx-app/src/app/command-center/page.tsx",
+      "apps/sirinx-app/src/app/ess-monitor/page.tsx",
+      "apps/sirinx-app/src/components/seo/**",
+      "apps/sirinx-app/src/agents/**/skills/**/SKILL.md"
+    ],
+    finding:
+      "The repo contains many duplicated SIRINX app, SEO, ESS monitor, and embedded skill concepts. They are useful as feature references only.",
+    target: "Future Command Center feature backlog.",
+    allowedNextStep: "Create one feature candidate at a time with file provenance and ownership.",
+    blockedBy: ["No nested skill bundle import until license/scope/path review."]
+  },
+  {
+    id: "marketing-crm-schema-comparison",
+    part: "Part 3",
+    repo: "automated-marketing-agency + chokma-growth-os",
+    lane: "marketing-crm",
+    priority: "P1",
+    status: "ready-schema-map",
+    sourceFiles: [
+      "automated-marketing-agency/drizzle/schema.ts",
+      "automated-marketing-agency/server/routers.ts",
+      "chokma-growth-os/drizzle/schema.ts",
+      "chokma-growth-os/server/routers.ts",
+      "chokma-growth-os/server/leadQuality.ts"
+    ],
+    finding:
+      "Marketing repos provide campaign, lead, event, CRM profile, broadcast queue, automation run, and quality-scoring patterns that can enrich SIRINX lead qualification.",
+    target: "SIRINX lead qualification and CRM handoff model.",
+    allowedNextStep: "Keep as schema comparison first; import no DB migrations until SIRINX entity contract is approved.",
+    blockedBy: ["No external notification send.", "No CRM workspace write.", "No schema migration."]
+  },
+  {
+    id: "mobile-companion-sensitive-gate",
+    part: "Part 4",
+    repo: "automation-mobile-app + ghost-claw-os + oz_mobile_app",
+    lane: "mobile",
+    priority: "P3",
+    status: "blocked-sensitive-file",
+    sourceFiles: ["architecture docs only"],
+    finding:
+      "Mobile repos may contain useful companion UX ideas, but signing material filenames exist in two repos.",
+    target: "Codex Mobile/Hermes mobile control UX docs.",
+    allowedNextStep: "Review docs and screenshots only after signing-file policy is recorded.",
+    blockedBy: ["Do not read or copy keystore files.", "Codex Mobile QR/MFA remains a human gate."]
+  }
+];
+
+function summarize(items, tasks) {
   const laneCounts = new Map();
   const blocked = items.filter((item) => item.status.startsWith("blocked"));
+  const gatedTasks = tasks.filter((item) => item.status.includes("gated") || item.status.includes("blocked"));
   for (const item of items) {
     laneCounts.set(item.lane, (laneCounts.get(item.lane) || 0) + 1);
   }
@@ -185,6 +316,9 @@ function summarize(items) {
     p2: items.filter((item) => item.priority === "P2").length,
     p3: items.filter((item) => item.priority === "P3").length,
     blocked: blocked.length,
+    extractionTasks: tasks.length,
+    extractionReady: tasks.length - gatedTasks.length,
+    extractionGated: gatedTasks.length,
     externalWrites: false
   };
 }
@@ -198,8 +332,9 @@ export function getGithubIntegrationInventory() {
     externalWrites: false,
     productionWrites: false,
     customerVisible: false,
-    summary: summarize(repositories),
+    summary: summarize(repositories, extractionTasks),
     repositories,
+    extractionTasks,
     lanes: [
       {
         id: "public-website",

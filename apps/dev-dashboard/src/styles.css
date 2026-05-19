@@ -380,6 +380,7 @@ h2 {
 .integration-row,
 .blocker-row,
 .repo-row,
+.repo-card,
 .subdomain-card {
   min-width: 0;
   padding: 11px 12px;

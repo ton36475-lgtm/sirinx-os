@@ -96,6 +96,7 @@ const toolNextActions = document.querySelector("#toolNextActions");
 const githubIntegrationStatus = document.querySelector("#githubIntegrationStatus");
 const githubIntegrationSummary = document.querySelector("#githubIntegrationSummary");
 const githubIntegrationList = document.querySelector("#githubIntegrationList");
+const githubExtractionList = document.querySelector("#githubExtractionList");
 const githubIntegrationNextActions = document.querySelector("#githubIntegrationNextActions");
 const eventLog = document.querySelector("#eventLog");
 const auditStatus = document.querySelector("#auditStatus");
@@ -265,6 +266,11 @@ const fallbackLeadHealth = {
     priority: "unknown",
     workflowLane: "unavailable",
     packageLane: "unavailable",
+    trafficStatus: "unavailable",
+    solarSegment: "unavailable",
+    attribution: {},
+    reasons: [],
+    riskFlags: [],
     externalWrites: false,
     nextAction: "Start the local control API to load lead qualification status."
   },
@@ -516,6 +522,9 @@ const fallbackGithubIntegration = {
     p2: 0,
     p3: 0,
     blocked: 0,
+    extractionTasks: 0,
+    extractionReady: 0,
+    extractionGated: 0,
     externalWrites: false
   },
   repositories: [
@@ -527,6 +536,20 @@ const fallbackGithubIntegration = {
       integrationTarget: "Start the local control API to inspect GitHub repo integration.",
       nextAction: "Run pnpm dashboard:run.",
       blockers: ["Control API unavailable."]
+    }
+  ],
+  extractionTasks: [
+    {
+      id: "Fallback",
+      part: "fallback",
+      repo: "control-api",
+      lane: "control-api",
+      priority: "P0",
+      status: "api-offline",
+      target: "Start the local control API to inspect extraction workstreams.",
+      allowedNextStep: "Run pnpm dashboard:run.",
+      sourceFiles: [],
+      blockedBy: ["Control API unavailable."]
     }
   ],
   nextActions: ["Start the local control API to inspect GitHub repository integration."]
@@ -1051,6 +1074,8 @@ function renderLeadHealth(health) {
     makeSummaryCard("Local Handler", localOk ? "Ready" : "Blocked", data.status || "unknown"),
     makeSummaryCard("Schema", data.schema?.fieldCount ? `${data.schema.fieldCount} fields` : "N/A", data.schema?.version || "schema unavailable"),
     makeSummaryCard("Lead Lane", data.qualificationModel?.workflowLane || "N/A", data.qualificationModel?.priority || "priority unavailable"),
+    makeSummaryCard("Traffic", data.qualificationModel?.trafficStatus || "N/A", data.qualificationModel?.solarSegment || "segment unavailable"),
+    makeSummaryCard("Risk Flags", `${data.qualificationModel?.riskFlags?.length || 0}`, "local scoring only"),
     makeSummaryCard("Batch Parser", data.local?.parser?.batchPayloadSupported ? "Pass" : "Check", "tRPC batch body"),
     makeSummaryCard("Mock D1", data.local?.mockD1?.inserted ? "Pass" : "Check", `${data.local?.mockD1?.statements || 0} statements`),
     makeSummaryCard("Prod GET", data.production?.status ? `${data.production.status}` : "N/A", reachable ? "safe no-write probe" : "unreachable"),
@@ -1085,10 +1110,24 @@ function renderLeadHealth(health) {
     {
       title: "Qualification model",
       detail: data.qualificationModel?.workflowLane
-        ? `${data.qualificationModel.workflowLane}; ${data.qualificationModel.packageLane}; next: ${data.qualificationModel.nextAction}`
+        ? `${data.qualificationModel.workflowLane}; ${data.qualificationModel.packageLane}; ${data.qualificationModel.trafficStatus || "traffic unknown"}; next: ${data.qualificationModel.nextAction}`
         : "Qualification model unavailable.",
       ok: data.qualificationModel?.externalWrites === false && Boolean(data.qualificationModel?.workflowLane),
       badge: data.qualificationModel?.priority || "check"
+    },
+    {
+      title: "Lead quality reasons",
+      detail: data.qualificationModel?.reasons?.length
+        ? data.qualificationModel.reasons.slice(0, 3).join(" | ")
+        : "No scoring reasons available.",
+      ok: data.qualificationModel?.externalWrites === false && Array.isArray(data.qualificationModel?.reasons),
+      badge: data.qualificationModel?.trafficStatus || "check"
+    },
+    {
+      title: "Attribution and risk",
+      detail: `UTM source: ${data.qualificationModel?.attribution?.utmSource || "none"}; campaign: ${data.qualificationModel?.attribution?.utmCampaign || "none"}; risk: ${(data.qualificationModel?.riskFlags || []).join(", ") || "none"}.`,
+      ok: data.qualificationModel?.externalWrites === false,
+      badge: data.qualificationModel?.riskFlags?.length ? "review" : "clear"
     },
     {
       title: "Mock D1 insert",
@@ -1674,7 +1713,8 @@ function renderGithubIntegration(inventory) {
   githubIntegrationSummary.replaceChildren(
     makeSummaryCard("Repos", `${summary.repositories}`, "GitHub audit clones"),
     makeSummaryCard("P0/P1", `${summary.p0 || 0}/${summary.p1 || 0}`, "primary integration"),
-    makeSummaryCard("Blocked", `${summary.blocked || 0}`, "needs review"),
+    makeSummaryCard("Tasks", `${summary.extractionReady || 0}/${summary.extractionTasks || 0}`, "ready extraction"),
+    makeSummaryCard("Gated", `${summary.extractionGated || summary.blocked || 0}`, "needs review"),
     makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.mode || "read-only")
   );
 
@@ -1701,6 +1741,38 @@ function renderGithubIntegration(inventory) {
       next.textContent = repo.nextAction || "No next action.";
 
       row.append(head, detail, next);
+      return row;
+    })
+  );
+
+  githubExtractionList.replaceChildren(
+    ...(data.extractionTasks || fallbackGithubIntegration.extractionTasks).map((task) => {
+      const row = document.createElement("article");
+      const tone = task.status?.includes("blocked") || task.status?.includes("gated") ? "warn" : "safe";
+      row.className = `repo-card integration-${tone}`;
+
+      const head = document.createElement("div");
+      head.className = "subdomain-head";
+
+      const title = document.createElement("p");
+      title.className = "repo-path";
+      title.textContent = task.id;
+
+      head.append(title, makeToneBadge(task.status || task.priority || "task", tone));
+
+      const detail = document.createElement("p");
+      detail.className = "signal-detail";
+      detail.textContent = `${task.part || "part"} | ${task.repo || "repo"} | ${task.target || "target pending"}`;
+
+      const finding = document.createElement("p");
+      finding.className = "metric-note";
+      finding.textContent = task.finding || task.allowedNextStep || "No finding recorded.";
+
+      const source = document.createElement("p");
+      source.className = "metric-note";
+      source.textContent = `Source: ${(task.sourceFiles || []).slice(0, 3).join(", ") || "not listed"}`;
+
+      row.append(head, detail, finding, source);
       return row;
     })
   );
