@@ -301,6 +301,27 @@
         </div>
       </section>
 
+      <section class="panel external-gate-evidence-panel" aria-label="External gate evidence status">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">External Gates</p>
+            <h2>Evidence Readiness</h2>
+          </div>
+          <span id="externalGateEvidenceStatus" class="status-pill status-warn">Evidence checking</span>
+        </div>
+        <div id="externalGateEvidenceSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="External gate evidence entries">
+            <h3>Evidence Files</h3>
+            <div id="externalGateEvidenceList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="External gate evidence next actions">
+            <h3>Next Actions</h3>
+            <ol id="externalGateEvidenceNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-inbox-panel" aria-label="Hermes inbox dry-run">
         <div class="panel-head">
           <div>

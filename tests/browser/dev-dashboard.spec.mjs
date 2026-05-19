@@ -96,6 +96,11 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#externalGatePreflightList")).toContainText("blocked-consent-credential-mapping-required");
     await expect(page.locator("#externalGatePreflightWriteButton")).toBeEnabled();
     await expect(page.locator("#externalGatePreflightWriteResult")).toContainText("External Gate Audit Preflight");
+    await expect(page.getByRole("heading", { name: "Evidence Readiness" })).toBeVisible();
+    await expect(page.locator("#externalGateEvidenceStatus")).toHaveText("Evidence blocked");
+    await expect(page.locator("#externalGateEvidenceSummary")).toContainText("Unsafe");
+    await expect(page.locator("#externalGateEvidenceList")).toContainText("Codex Mobile QR/MFA Pairing");
+    await expect(page.locator("#externalGateEvidenceList")).toContainText("incomplete-evidence");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -424,6 +429,16 @@ test.describe("Developer Command Center", () => {
     expect(externalGatePreflightWriteDryRun.wouldWrite).toBe(true);
     expect(externalGatePreflightWriteDryRun.externalWrites).toBe(false);
     expect(externalGatePreflightWriteDryRun.targetPath).toContain("External Gate Audit Preflight");
+    const externalGateEvidenceResponse = await page.request.get("http://127.0.0.1:8711/api/external-gate-evidence");
+    expect(externalGateEvidenceResponse.ok()).toBeTruthy();
+    const externalGateEvidence = await externalGateEvidenceResponse.json();
+    expect(externalGateEvidence.status).toBe("blocked-evidence-incomplete");
+    expect(externalGateEvidence.externalWrites).toBe(false);
+    expect(externalGateEvidence.canExecuteExternally).toBe(false);
+    expect(externalGateEvidence.summary.gates).toBe(4);
+    expect(externalGateEvidence.summary.ready).toBe(0);
+    expect(externalGateEvidence.summary.incomplete).toBe(4);
+    expect(externalGateEvidence.summary.unsafe).toBe(0);
     expect(consoleErrors).toEqual([]);
   });
 
@@ -480,6 +495,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#externalGatePreflightStatus")).toHaveText("Preflight blocked");
     await expect(page.locator("#externalGatePreflightList")).toContainText("External gate preflight unavailable");
     await expect(page.locator("#externalGatePreflightWriteButton")).toBeDisabled();
+    await expect(page.locator("#externalGateEvidenceStatus")).toHaveText("Evidence unavailable");
+    await expect(page.locator("#externalGateEvidenceList")).toContainText("External gate evidence unavailable");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

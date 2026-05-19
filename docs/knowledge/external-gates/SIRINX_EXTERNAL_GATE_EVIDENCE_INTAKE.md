@@ -20,7 +20,7 @@ Templates live in:
 
 - `docs/knowledge/external-gates/templates/`
 
-Operator-filled evidence should be copied into:
+Operator-filled evidence now lives in these working files:
 
 - `docs/knowledge/external-gates/evidence/codex-mobile-qr-mfa.md`
 - `docs/knowledge/external-gates/evidence/telegram-line-recipient-token.md`
@@ -38,7 +38,13 @@ pnpm external-gates:write
 
 Expected behavior:
 
-- Missing evidence is reported as blocked, not as a runtime failure.
+- Missing evidence or incomplete evidence is reported as blocked, not as a runtime failure.
 - Secret-like content exits non-zero.
 - No external writes are performed.
 
+Current operator flow:
+
+1. Fill only non-secret evidence labels in the matching working file.
+2. Check only items that are actually complete.
+3. Run `pnpm external-gates:evidence-check`.
+4. Continue to the related external gate only when that gate reports `ready-for-human-review`.

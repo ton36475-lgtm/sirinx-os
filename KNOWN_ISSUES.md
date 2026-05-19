@@ -17,6 +17,8 @@ Mode: current known issues
 
 - `pnpm external-gates:check` currently reports hard failures `0`, with expected warnings for the manual gates above.
 - `docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md` is the current execution queue and supersedes the older 2026-05-19 public website release packets.
+- Evidence working files exist under `docs/knowledge/external-gates/evidence/`; they are intentionally unchecked until real operator evidence is supplied.
+- Command Center now surfaces evidence readiness from local files through `/api/external-gate-evidence`; this endpoint is read-only and reports `externalWrites=false`.
 - Public website worktree is separate and protected.
 - Command Center is local-only and dry-run by default.
 - Cloudflare challenge-platform script injection is observed in live HTML, but current CSP blocks challenge-platform script execution.

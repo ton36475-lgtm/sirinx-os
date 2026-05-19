@@ -100,3 +100,5 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [x] Create `RUNBOOK_LIVE_START.md`.
 - [x] Create `KNOWN_ISSUES.md`.
 - [x] Refresh `docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md` to the current four-gate execution queue plus the separate `sirinx-os` publish gate.
+- [x] Materialize pending evidence files for Codex Mobile, Telegram/LINE, Solis, and Cloudflare Bot Management so the checker reports incomplete evidence instead of missing files.
+- [x] Add local `/api/external-gate-evidence` and Command Center Evidence Readiness panel so Hermes/Codex can inspect gate evidence without terminal parsing.

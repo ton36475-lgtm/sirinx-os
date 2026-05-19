@@ -72,6 +72,10 @@ const externalGatePreflightList = document.querySelector("#externalGatePreflight
 const externalGatePreflightNextActions = document.querySelector("#externalGatePreflightNextActions");
 const externalGatePreflightWriteButton = document.querySelector("#externalGatePreflightWriteButton");
 const externalGatePreflightWriteResult = document.querySelector("#externalGatePreflightWriteResult");
+const externalGateEvidenceStatus = document.querySelector("#externalGateEvidenceStatus");
+const externalGateEvidenceSummary = document.querySelector("#externalGateEvidenceSummary");
+const externalGateEvidenceList = document.querySelector("#externalGateEvidenceList");
+const externalGateEvidenceNextActions = document.querySelector("#externalGateEvidenceNextActions");
 const hermesInboxStatus = document.querySelector("#hermesInboxStatus");
 const hermesInboxSummary = document.querySelector("#hermesInboxSummary");
 const hermesInboxList = document.querySelector("#hermesInboxList");
@@ -482,6 +486,41 @@ const fallbackExternalGatePreflight = {
     }
   ],
   nextActions: ["Start the local control API and refresh external gate preflight."]
+};
+
+const fallbackExternalGateEvidence = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  canExecuteExternally: false,
+  evidenceRoot: "/Users/sirinx/sirinx-os/docs/knowledge/external-gates/evidence",
+  summary: {
+    gates: 0,
+    ready: 0,
+    blocked: 1,
+    missingEvidenceFiles: 0,
+    incomplete: 1,
+    unsafe: 0,
+    checkedItems: 0,
+    requiredItems: 0
+  },
+  results: [
+    {
+      id: "fallback",
+      title: "External gate evidence unavailable",
+      owner: "shogun",
+      status: "blocked-api-offline",
+      ready: false,
+      unsafe: false,
+      checkedCount: 0,
+      requiredCount: 0,
+      missingCount: 0,
+      nextAction: "Start the local control API to inspect evidence readiness."
+    }
+  ],
+  nextActions: ["Start the local control API and refresh external gate evidence."]
 };
 
 const fallbackHermesInbox = {
@@ -1590,6 +1629,43 @@ function renderExternalGatePreflight(preflight) {
     : "Local preflight writer waits for API readiness.";
 }
 
+function renderExternalGateEvidence(evidence) {
+  const data = evidence || fallbackExternalGateEvidence;
+  const apiReady = data.status !== "unavailable";
+  const complete = data.status === "ready-for-human-review";
+  const unsafe = (data.summary?.unsafe || 0) > 0;
+  const summary = data.summary || fallbackExternalGateEvidence.summary;
+
+  externalGateEvidenceStatus.textContent = complete ? "Evidence ready" : unsafe ? "Evidence unsafe" : apiReady ? "Evidence blocked" : "Evidence unavailable";
+  externalGateEvidenceStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  externalGateEvidenceStatus.classList.add(complete ? "status-safe" : unsafe ? "status-lock" : "status-warn");
+
+  externalGateEvidenceSummary.replaceChildren(
+    makeSummaryCard("Ready", `${summary.ready || 0}`, `${summary.gates || 0} gates`),
+    makeSummaryCard("Incomplete", `${summary.incomplete || 0}`, `${summary.missingEvidenceFiles || 0} missing files`),
+    makeSummaryCard("Unsafe", `${summary.unsafe || 0}`, "secret-like findings"),
+    makeSummaryCard("Checked Items", `${summary.checkedItems || 0}/${summary.requiredItems || 0}`, "operator evidence")
+  );
+
+  renderSignalList(
+    externalGateEvidenceList,
+    (data.results || fallbackExternalGateEvidence.results).map((entry) => ({
+      title: entry.title || entry.id,
+      detail: `${entry.status}; ${entry.checkedCount || 0}/${entry.requiredCount || 0} checked; ${entry.nextAction || "no next action"}`,
+      ok: entry.ready === true && entry.unsafe === false,
+      badge: entry.owner || "evidence"
+    }))
+  );
+
+  externalGateEvidenceNextActions.replaceChildren(
+    ...(data.nextActions || fallbackExternalGateEvidence.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function renderHermesInbox(result) {
   const data = result || fallbackHermesInbox;
   const policy = data.policy || fallbackHermesInbox.policy;
@@ -2398,6 +2474,12 @@ async function loadDashboard() {
       renderExternalGatePreflight,
       () => renderExternalGatePreflight(fallbackExternalGatePreflight),
       "External gate preflight"
+    ),
+    loadPanel(
+      "/api/external-gate-evidence",
+      renderExternalGateEvidence,
+      () => renderExternalGateEvidence(fallbackExternalGateEvidence),
+      "External gate evidence"
     ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),

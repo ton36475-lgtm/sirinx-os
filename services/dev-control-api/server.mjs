@@ -8,6 +8,7 @@ import { evaluateHermesInboxDryRun } from "../hermes-api/src/inbox.mjs";
 import { listAuditEvents, recordAuditEvent, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { getExternalGatePackets, writeExternalGatePackets } from "./src/external-gate-packets.mjs";
+import { getExternalGateEvidenceStatus } from "./src/external-gate-evidence.mjs";
 import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/external-gate-preflight.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
@@ -617,6 +618,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/external-gate-packets") {
     sendJson(request, response, 200, getExternalGatePackets());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/external-gate-evidence") {
+    sendJson(request, response, 200, await getExternalGateEvidenceStatus());
     return;
   }
 

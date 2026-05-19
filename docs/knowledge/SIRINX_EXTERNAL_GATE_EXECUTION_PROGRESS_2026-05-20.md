@@ -107,6 +107,28 @@ Result:
 - robots remain `index, follow`
 - each route logs one expected CSP block for Cloudflare's injected challenge script
 
+### Part 5 - Evidence Readiness Workbench
+
+Added:
+
+- working evidence files under `docs/knowledge/external-gates/evidence/`
+- shared evidence checker module `services/dev-control-api/src/external-gate-evidence.mjs`
+- test coverage `services/dev-control-api/src/external-gate-evidence.test.mjs`
+- local API `GET /api/external-gate-evidence`
+- Command Center `Evidence Readiness` panel
+
+Current evidence state:
+
+- 4 gates
+- `ready=0`
+- `blocked=4`
+- `missingEvidenceFiles=0`
+- `incomplete=4`
+- `unsafe=0`
+- checked items `0/20`
+
+This means the evidence files now exist and are safe to fill, but no external execution is authorized yet.
+
 ## Current Gate Status
 
 | Gate | Status | Current blocker |
