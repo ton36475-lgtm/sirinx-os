@@ -32,18 +32,20 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | Home Solution hydration SEO hotfix | Done | Commits `f594027` and `cfb1a72` keep `/home-solution/` robots `index, follow` and canonical trailing slash after React hydration |
 | Public website preload/main-thread pass | Done, deployed, and verified | Commit `8c47afb perf: reduce public page initial load pressure`; Cloudflare production deployment `7d12e73a-6319-4a24-b1b3-9c1f033ddd12` |
 | Cloudflare JavaScript Detection diagnosis | Done, external gate identified | Lighthouse attributes live mobile TBT mostly to `/cdn-cgi/challenge-platform/scripts/jsd/main.js`; current Wrangler OAuth can deploy Pages but cannot change Bot Management API (`403`) |
+| Province route hydration SEO hard audit | Done, fixed, deployed, and verified | Commit `ff20cf1 fix: keep province solar routes indexable after hydration`; Cloudflare production deployment `9062be52-2f3d-4597-b9f1-0347f0215b7e`; live mobile and desktop hydration passed `94/94` sitemap routes |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is on branch `codex/urgent-backlog-execution` with Command Center local-only workflow phases committed through external gate audit preflight and refreshed backlog status.
 - Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/home-solution-seo-hydration` and tracks `origin/main`.
-- GitHub `main` is at `8c47afb perf: reduce public page initial load pressure`.
+- GitHub `main` is at `ff20cf1 fix: keep province solar routes indexable after hydration`.
 - PR #1 is merged. It is no longer a release blocker.
-- Public website production is deployed on Cloudflare Pages as `7d12e73a-6319-4a24-b1b3-9c1f033ddd12`, branch `main`, source `8c47afb`, URL `https://7d12e73a.sirinx-co.pages.dev`.
-- Rollback candidates are `ab4731e9` source `cfb1a72`, `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
+- Public website production is deployed on Cloudflare Pages as `9062be52-2f3d-4597-b9f1-0347f0215b7e`, branch `main`, source `ff20cf1`, URL `https://9062be52.sirinx-co.pages.dev`.
+- Rollback candidates are `7d12e73a` source `8c47afb`, `ab4731e9` source `cfb1a72`, `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
 - Home Solution work passed typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, no-secret review, Cloudflare preview, production deploy, and live hydration SEO checks.
-- Final live Lighthouse lab result after `8c47afb`: homepage SEO 100/accessibility 100, Home Solution SEO 100/accessibility 100, CLS <= 0.001. Desktop performance improved to `home 64` and `home-solution 67`; mobile remains blocked by Cloudflare JavaScript Detection overhead (`home 35`, `home-solution 37`) rather than app JavaScript alone.
+- Hard live audit after `ff20cf1`: sitemap static audit passed `94/94` routes with no route/link/asset failures, live mobile hydration passed `94/94`, and live desktop hydration passed `94/94`; no runtime errors, no unexpected `noindex`, no horizontal overflow, no weak root content, and no old internal/AI-WarRoom homepage text found.
+- Final live Lighthouse lab result after `ff20cf1`: homepage SEO 100/accessibility 100, Home Solution SEO 100/accessibility 100, province page SEO 100/accessibility 100, CLS <= 0.015. Desktop performance is `home 84`, `home-solution 88`, `province 80`; mobile performance is `home 54`, `home-solution 49`, `province 53`, still limited mainly by Cloudflare JavaScript Detection and mobile main-thread/LCP cost.
 - Local Lighthouse without Cloudflare challenge script improved materially after the preload pass: mobile performance `63` for both homepage and Home Solution, desktop performance `91` homepage and `90` Home Solution, with TBT `0-22ms`.
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
