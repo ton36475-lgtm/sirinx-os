@@ -67,7 +67,11 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `apps/dev-dashboard/src/`, browser tests.
   - Verification: `pnpm dashboard:e2e`, `pnpm verify`, API smoke.
 
-- [ ] Map `sirinx-solar-energy` entities into a local-only solar ops contract.
+- [x] Map `sirinx-solar-energy` entities into a local-only solar ops contract.
+  - Goal: map legacy solar leads/customers/installations/contractors/SEO/campaign/tasks/metrics into SIRINX-owned local contract before any schema migration.
+  - File scope: `services/dev-control-api/src/solar-ops-contract.mjs`, tests, `docs/knowledge/SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md`.
+  - Verification: `pnpm solar-ops-contract:test`, `pnpm verify`, `/api/solar-ops-contract` smoke.
+
 - [ ] Map `oz-corp-omega-dual-node` safe-command and memory ideas into a docs-only policy.
 - [ ] Compare marketing/CRM schemas against SIRINX lead entity before any database work.
 

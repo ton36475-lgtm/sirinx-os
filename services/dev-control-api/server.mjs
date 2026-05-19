@@ -21,6 +21,7 @@ import { getProposalDraftPreview, writeLocalProposalDraft } from "./src/proposal
 import { getProposalReviewStatus, writeProposalReviewPacket } from "./src/proposal-review.mjs";
 import { getRoiPreview } from "./src/roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
+import { getSolarOpsContract } from "./src/solar-ops-contract.mjs";
 import { switches } from "./src/switches.mjs";
 import { getRoninAgentTeam } from "./src/agent-team.mjs";
 import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
@@ -585,6 +586,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/sales-artifacts") {
     sendJson(request, response, 200, await getSalesArtifactsStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/solar-ops-contract") {
+    sendJson(request, response, 200, getSolarOpsContract());
     return;
   }
 
