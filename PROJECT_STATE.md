@@ -17,6 +17,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
 - Hermes inbox dry-run preview is local-only through `POST /api/hermes-inbox/dry-run`.
 - Hermes inbox `approval_required` decisions are queued locally in `GET /api/approval-queue`.
+- Approval queue evidence snapshots are local-only through `GET /api/approval-evidence` and `POST /api/approval-evidence/write`.
 - Command Center displays Hermes inbox policy dry-run results through the `Policy Dry-Run Preview` panel.
 - External writes remain blocked by default.
 - Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
@@ -53,6 +54,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
 | Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
 | Hermes inbox dry-run normalizer | done local | `services/hermes-api/src/inbox.mjs`, `POST /api/hermes-inbox/dry-run` |
+| Approval evidence snapshots | done local | `services/dev-control-api/src/approval-evidence.mjs`, `pnpm approval-evidence:dry-run` |
 | Hermes external adapters | blocked | connector evidence required before any adapter execution |
 
 ## Verification Commands
@@ -65,6 +67,7 @@ pnpm exec vitest run services/dev-control-api/src/lead-qualification.test.mjs
 pnpm policy-core:test
 pnpm policy-core:api-test
 pnpm hermes-inbox:test
+pnpm approval-evidence:test
 pnpm dashboard:e2e
 pnpm external-gates:check
 git diff --check

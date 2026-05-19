@@ -3,6 +3,7 @@ import { execFile } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { ensureApprovalRequest, listApprovalQueue } from "./src/approval-queue.mjs";
+import { getApprovalEvidenceSnapshot, writeApprovalEvidenceSnapshot } from "./src/approval-evidence.mjs";
 import { evaluateHermesInboxDryRun } from "../hermes-api/src/inbox.mjs";
 import { listAuditEvents, recordAuditEvent, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
@@ -462,6 +463,28 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/approval-queue") {
     sendJson(request, response, 200, listApprovalQueue());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/approval-evidence") {
+    sendJson(request, response, 200, getApprovalEvidenceSnapshot());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/approval-evidence/write") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await writeApprovalEvidenceSnapshot(body));
+    } catch (error) {
+      sendJson(request, response, 500, {
+        error: "approval_evidence_write_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        requiresHumanReview: true
+      });
+    }
     return;
   }
 

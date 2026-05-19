@@ -113,6 +113,20 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#approvalList")).toContainText("Evaluate release preflight");
     await expect(page.locator("#approvalList")).toContainText("Customer message send");
     await expect(page.locator("#approvalList")).toContainText("blocked");
+    const approvalEvidenceResponse = await page.request.get("http://127.0.0.1:8711/api/approval-evidence");
+    expect(approvalEvidenceResponse.ok()).toBeTruthy();
+    const approvalEvidence = await approvalEvidenceResponse.json();
+    expect(approvalEvidence.status).toBe("ready-local-approval-evidence");
+    expect(approvalEvidence.externalWrites).toBe(false);
+    expect(approvalEvidence.summary.items).toBeGreaterThan(0);
+    const approvalEvidenceDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/approval-evidence/write", {
+      data: { dryRun: true }
+    });
+    expect(approvalEvidenceDryRunResponse.ok()).toBeTruthy();
+    const approvalEvidenceDryRun = await approvalEvidenceDryRunResponse.json();
+    expect(approvalEvidenceDryRun.status).toBe("dry-run-ready");
+    expect(approvalEvidenceDryRun.didWrite).toBe(false);
+    expect(approvalEvidenceDryRun.externalWrites).toBe(false);
     await expect(page.getByRole("heading", { name: "Local API Events" })).toBeVisible();
     const initialAuditText = await page.locator("#auditList").innerText();
     expect(initialAuditText).toMatch(/No local API audit events recorded yet\.|dry-run \/ dry-run action|hermes-inbox-dry-run/);

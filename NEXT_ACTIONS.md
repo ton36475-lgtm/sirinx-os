@@ -52,10 +52,15 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Scheduled
 
-- [ ] Task 1.6: Add durable approval evidence files
+- [x] Task 1.6: Add durable approval evidence files
   - Goal: write local approval queue snapshots into Obsidian only when requested.
-  - File scope: local writer script and docs only.
-  - Verification: dry-run writer plus no external writes.
+  - File scope: `services/dev-control-api/src/approval-evidence.mjs`, `scripts/approval-evidence-write-local.mjs`.
+  - Verification: `pnpm approval-evidence:test`, `pnpm approval-evidence:dry-run`, local confirmed Obsidian write, no external writes.
+
+- [ ] Task 1.7: Implement local lead-event/audit proposal
+  - Goal: define local lead event evidence shape before any CRM/Supabase/production lead writes.
+  - File scope: `services/dev-control-api/src/`, tests, docs if needed.
+  - Verification: unit tests, `pnpm verify`, no production POST.
 
 - [ ] Implement local lead-event/audit proposal after lead qualification v2.
 - [ ] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.
