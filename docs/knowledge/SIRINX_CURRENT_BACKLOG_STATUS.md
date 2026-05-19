@@ -49,6 +49,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | External gate evidence intake kit | Done locally | `docs/knowledge/external-gates/` contains templates plus `pnpm external-gates:evidence-check`; current state is `ready=0`, `blocked=4`, `unsafe=0` because no human/credential evidence has been supplied yet |
 | SIRINXDev Unified Project OS architecture report | Done locally | `SIRINXDEV_UNIFIED_PROJECT_OS_ARCHITECTURE_REPORT.md`, `SIRINXDEV_UNIFIED_PROJECT_OS_INSTALLATION_CONTROL_PLAN.md`, and `SIRINXDEV_OPERATING_FILE_STACK_PROPOSAL.md` capture the target architecture while separating verified state from assumptions |
 | Command Center E2E gate alignment | Done locally | `pnpm dashboard:e2e` now validates the current 4-gate workflow and passed `8/8` |
+| GitHub repository integration inventory | Done locally | All 12 `ton36475-lgtm` repos are cloned/updated under `/Users/sirinx/restore-sources/github-audit`; Command Center exposes read-only `/api/github-integration`; `SIRINX_GITHUB_REPO_INTEGRATION_INVENTORY_2026-05-20.md` and `SIRINX_GITHUB_REPO_INTEGRATION_BACKLOG_2026-05-20.md` define bounded extraction rules with `externalWrites=false` |
 
 ## Current Truth
 
@@ -77,6 +78,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 - Live smoke after `41dced7`: `/`, `/solar-carport/`, `/assessment/`, `/projects/`, `/pricing/`, `/contact/`, and `/home-solution/` passed mobile DOM checks with no horizontal overflow, live energy/avatar present, main runtime loaded, robots `index, follow`, and `challengeLoaded=false`.
 - Local Lighthouse without Cloudflare challenge script improved materially after the preload pass: homepage mobile performance `64`, Home Solution mobile performance `67`, desktop performance `91` homepage and `90` Home Solution, with low TBT and CLS `0`.
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
+- GitHub repository integration truth: 12 repositories from `ton36475-lgtm` are available as read-only audit clones under `/Users/sirinx/restore-sources/github-audit`. `sirinx` is the P0 public website source mirror, `sirinx-solar-energy` and `oz-corp-omega-dual-node` are P1 extraction candidates, marketing/CRM repos are P2 schema references, mobile repos stay blocked where signing material filenames exist, and `sirinx-co` remains archive-only. Command Center now surfaces this map through `/api/github-integration`; no old repo code was bulk-copied into the public website.
 - Current external-gate preflight after PageSpeed release: Command Center now tracks exactly 4 remaining external gates: Codex Mobile QR/MFA, Telegram/LINE recipient/token setup, Solis read-only telemetry consent/credential/station mapping, and Cloudflare Bot Management official review. Hermes profiles exist for `shogun`, `planner`, `frontend`, `backend`, `devops`, `qa`, `growth`, `sales`, `data`, `solis`, `design`, and `scribe`; default gateway is running; Hermes pairing list has no pending pairings; Telegram is configured but not proven deliverable; LINE and Solis remain credential/consent blocked.
 - Live Cloudflare/CSP truth after the readiness runner: Cloudflare still injects a challenge-platform tag into fetched public HTML, but the current CSP does not allow `/cdn-cgi/challenge-platform`; Playwright browser smoke confirms `challengeLoaded=false` while logging one expected CSP block. This keeps PageSpeed mitigation active, but an official Bot Management/WAF review is still cleaner long term.
 - Telegram caution: `/Users/sirinx/.local/bin/hermes-telegram-test --help` attempted a Telegram request and returned `403`, so do not run that helper again until token and recipient target are rotated or confirmed. No token value was printed.
@@ -125,6 +127,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 6. Select exactly one internal subdomain candidate for build/auth review.
 7. Review Cloudflare Bot Management officially when dashboard/API write permission is available, keeping the current CSP mitigation until a cleaner rule is approved.
 8. Continue Command Center/Hermes orchestration work from the current clean public website baseline.
+9. Execute GitHub repo integration only as bounded extraction tasks: first `sirinx-solar-energy` workflow mapping, then `oz-corp-omega-dual-node` agent/messaging module mapping, then marketing/CRM schema comparison.
 
 ## Stop Rules
 

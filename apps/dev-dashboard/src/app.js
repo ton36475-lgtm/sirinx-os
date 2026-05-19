@@ -93,6 +93,10 @@ const toolRepoList = document.querySelector("#toolRepoList");
 const toolIntegrationList = document.querySelector("#toolIntegrationList");
 const toolBlockerList = document.querySelector("#toolBlockerList");
 const toolNextActions = document.querySelector("#toolNextActions");
+const githubIntegrationStatus = document.querySelector("#githubIntegrationStatus");
+const githubIntegrationSummary = document.querySelector("#githubIntegrationSummary");
+const githubIntegrationList = document.querySelector("#githubIntegrationList");
+const githubIntegrationNextActions = document.querySelector("#githubIntegrationNextActions");
 const eventLog = document.querySelector("#eventLog");
 const auditStatus = document.querySelector("#auditStatus");
 const auditList = document.querySelector("#auditList");
@@ -494,6 +498,38 @@ const fallbackProjectInventory = {
   ],
   blockers: [],
   nextActions: ["Start the local control API and refresh the tool inventory."]
+};
+
+const fallbackGithubIntegration = {
+  title: "GitHub integration inventory unavailable",
+  mode: "local-fallback",
+  auditRoot: "/Users/sirinx/restore-sources/github-audit",
+  status: "unavailable",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  summary: {
+    repositories: 0,
+    lanes: 0,
+    p0: 0,
+    p1: 0,
+    p2: 0,
+    p3: 0,
+    blocked: 0,
+    externalWrites: false
+  },
+  repositories: [
+    {
+      name: "Fallback",
+      status: "api-offline",
+      lane: "control-api",
+      priority: "P0",
+      integrationTarget: "Start the local control API to inspect GitHub repo integration.",
+      nextAction: "Run pnpm dashboard:run.",
+      blockers: ["Control API unavailable."]
+    }
+  ],
+  nextActions: ["Start the local control API to inspect GitHub repository integration."]
 };
 
 function logEvent(message) {
@@ -1630,6 +1666,54 @@ function renderProjectInventory(inventory) {
   renderToolNextActions(data);
 }
 
+function renderGithubIntegration(inventory) {
+  const data = inventory || fallbackGithubIntegration;
+  const summary = data.summary || fallbackGithubIntegration.summary;
+
+  githubIntegrationStatus.textContent = `${summary.repositories} repos / ${summary.lanes} lanes`;
+  githubIntegrationSummary.replaceChildren(
+    makeSummaryCard("Repos", `${summary.repositories}`, "GitHub audit clones"),
+    makeSummaryCard("P0/P1", `${summary.p0 || 0}/${summary.p1 || 0}`, "primary integration"),
+    makeSummaryCard("Blocked", `${summary.blocked || 0}`, "needs review"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.mode || "read-only")
+  );
+
+  githubIntegrationList.replaceChildren(
+    ...(data.repositories || fallbackGithubIntegration.repositories).map((repo) => {
+      const row = document.createElement("article");
+      row.className = "repo-card";
+
+      const head = document.createElement("div");
+      head.className = "subdomain-head";
+
+      const title = document.createElement("p");
+      title.className = "repo-path";
+      title.textContent = repo.name;
+
+      head.append(title, makeToneBadge(repo.priority || "P?", actionTone(repo.status || "")));
+
+      const detail = document.createElement("p");
+      detail.className = "signal-detail";
+      detail.textContent = `${repo.lane || "lane"} | ${repo.status || "unknown"} | ${repo.integrationTarget || ""}`;
+
+      const next = document.createElement("p");
+      next.className = "metric-note";
+      next.textContent = repo.nextAction || "No next action.";
+
+      row.append(head, detail, next);
+      return row;
+    })
+  );
+
+  githubIntegrationNextActions.replaceChildren(
+    ...(data.nextActions || fallbackGithubIntegration.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function renderExecutive(hq) {
   const data = hq || fallbackExecutive;
   const metrics = data.metrics || fallbackExecutive.metrics;
@@ -2083,6 +2167,12 @@ async function loadDashboard() {
       renderProjectInventory,
       () => renderProjectInventory(fallbackProjectInventory),
       "Tool inventory"
+    ),
+    loadPanel(
+      "/api/github-integration",
+      renderGithubIntegration,
+      () => renderGithubIntegration(fallbackGithubIntegration),
+      "GitHub integration"
     )
   ];
 

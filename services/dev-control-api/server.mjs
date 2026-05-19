@@ -9,6 +9,7 @@ import { getExternalGatePackets, writeExternalGatePackets } from "./src/external
 import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/external-gate-preflight.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
+import { getGithubIntegrationInventory } from "./src/github-integration.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { getMobileReviewPacket, writeMobileReviewPacket } from "./src/mobile-review-packet.mjs";
@@ -627,6 +628,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/project-inventory") {
     sendJson(request, response, 200, await getProjectInventory());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/github-integration") {
+    sendJson(request, response, 200, getGithubIntegrationInventory());
     return;
   }
 

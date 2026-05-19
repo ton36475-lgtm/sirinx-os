@@ -122,6 +122,11 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#toolIntegrationList")).toContainText("Telegram");
     await expect(page.locator("#toolBlockerList")).toContainText("telegram-token-rotation");
     await expect(page.locator("#toolRepoList")).toContainText("sirinx");
+    await expect(page.locator("#githubIntegrationStatus")).toContainText("12 repos");
+    await expect(page.locator("#githubIntegrationSummary")).toContainText("GitHub audit clones");
+    await expect(page.locator("#githubIntegrationList")).toContainText("sirinx-solar-energy");
+    await expect(page.locator("#githubIntegrationList")).toContainText("oz-corp-omega-dual-node");
+    await expect(page.locator("#githubIntegrationNextActions")).toContainText("bounded extraction tasks");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("simulated_only");
@@ -144,6 +149,14 @@ test.describe("Developer Command Center", () => {
     expect(inventory.mainWebsiteProtected).toBe(true);
     expect(inventory.externalWrites).toBe(false);
     expect(inventory.subdomains.some((entry) => entry.host === "www.sirinx.co" && entry.action === "do-not-touch")).toBe(true);
+    const githubIntegrationResponse = await page.request.get("http://127.0.0.1:8711/api/github-integration");
+    expect(githubIntegrationResponse.ok()).toBeTruthy();
+    const githubIntegration = await githubIntegrationResponse.json();
+    expect(githubIntegration.status).toBe("inventory-ready");
+    expect(githubIntegration.externalWrites).toBe(false);
+    expect(githubIntegration.summary.repositories).toBe(12);
+    expect(githubIntegration.repositories.some((repo) => repo.name === "sirinx" && repo.priority === "P0")).toBe(true);
+    expect(githubIntegration.repositories.some((repo) => repo.name === "oz-corp-omega-dual-node" && repo.status === "quarantine-reference")).toBe(true);
     const leadHealthResponse = await page.request.get("http://127.0.0.1:8711/api/lead-health");
     expect(leadHealthResponse.ok()).toBeTruthy();
     const leadHealth = await leadHealthResponse.json();
@@ -350,6 +363,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");
     await expect(page.locator("#projectInventoryStatus")).toContainText("0 repos");
+    await expect(page.locator("#githubIntegrationStatus")).toContainText("0 repos");
+    await expect(page.locator("#githubIntegrationList")).toContainText("Fallback");
 
     await page.getByRole("button", { name: "Dry run" }).first().click();
     await expect(page.locator("#eventLog")).toContainText("dry-run unavailable");
