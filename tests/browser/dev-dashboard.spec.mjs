@@ -71,16 +71,20 @@ test.describe("Developer Command Center", () => {
     await expect(page.getByRole("heading", { name: "Approval Phrase Packets" })).toBeVisible();
     await expect(page.locator("#externalGateStatus")).toHaveText("Packets ready");
     await expect(page.locator("#externalGateSummary")).toContainText("Off");
-    await expect(page.locator("#externalGateList")).toContainText("Gate 1: GitHub Push And PR Update");
-    await expect(page.locator("#externalGateList")).toContainText("Approve Gate 8");
+    await expect(page.locator("#externalGateList")).toContainText("Gate 1: Codex Mobile QR/MFA Pairing");
+    await expect(page.locator("#externalGateList")).toContainText("Gate 2: Telegram/LINE Recipient And Token Setup");
+    await expect(page.locator("#externalGateList")).toContainText("Gate 3: Solis API Consent And Read-Only Telemetry");
+    await expect(page.locator("#externalGateList")).toContainText("Gate 4: Cloudflare Bot Management Official Review");
     await expect(page.locator("#externalGateWriteButton")).toBeEnabled();
     await expect(page.locator("#externalGateWriteResult")).toContainText("External Gate Approval Packets");
     await expect(page.getByRole("heading", { name: "Gate Audit Preflight" })).toBeVisible();
     await expect(page.locator("#externalGatePreflightStatus")).toHaveText("Preflight ready");
     await expect(page.locator("#externalGatePreflightSummary")).toContainText("Off");
-    await expect(page.locator("#externalGatePreflightList")).toContainText("Gate 1: GitHub Push And PR Update");
-    await expect(page.locator("#externalGatePreflightList")).toContainText("Gate 8: Solis Read-Only Telemetry");
-    await expect(page.locator("#externalGatePreflightList")).toContainText("blocked-consent-required");
+    await expect(page.locator("#externalGatePreflightSummary")).toContainText("Manual");
+    await expect(page.locator("#externalGatePreflightSummary")).toContainText("Official Review");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("Gate 1: Codex Mobile QR/MFA Pairing");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("Gate 3: Solis API Consent And Read-Only Telemetry");
+    await expect(page.locator("#externalGatePreflightList")).toContainText("blocked-consent-credential-mapping-required");
     await expect(page.locator("#externalGatePreflightWriteButton")).toBeEnabled();
     await expect(page.locator("#externalGatePreflightWriteResult")).toContainText("External Gate Audit Preflight");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
@@ -249,8 +253,9 @@ test.describe("Developer Command Center", () => {
     expect(externalGatePackets.status).toBe("ready-local-packets");
     expect(externalGatePackets.externalWrites).toBe(false);
     expect(externalGatePackets.canExecuteNow).toBe(false);
-    expect(externalGatePackets.summary.packets).toBe(9);
-    expect(externalGatePackets.packets.some((item) => item.id === "gate-3b-cloudflare-production" && item.approvalPhrase.includes("rollback target"))).toBe(true);
+    expect(externalGatePackets.summary.packets).toBe(4);
+    expect(externalGatePackets.packets.some((item) => item.id === "gate-codex-mobile-qr-mfa" && item.approvalPhrase.includes("Set up Codex mobile"))).toBe(true);
+    expect(externalGatePackets.packets.some((item) => item.id === "gate-cloudflare-bot-management-review" && item.approvalPhrase.includes("Bot Management"))).toBe(true);
     expect(externalGatePackets.packets.every((item) => item.canExecuteNow === false)).toBe(true);
     const externalGateWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/external-gate-packets/write", {
       data: { dryRun: true }
@@ -268,10 +273,12 @@ test.describe("Developer Command Center", () => {
     expect(externalGatePreflight.status).toBe("ready-local-preflight");
     expect(externalGatePreflight.externalWrites).toBe(false);
     expect(externalGatePreflight.canExecuteNow).toBe(false);
-    expect(externalGatePreflight.summary.entries).toBe(9);
+    expect(externalGatePreflight.summary.entries).toBe(4);
+    expect(externalGatePreflight.summary.manualHumanGates).toBe(1);
+    expect(externalGatePreflight.summary.optionalOfficialReview).toBe(1);
     expect(externalGatePreflight.summary.canExecuteNow).toBe(0);
-    expect(externalGatePreflight.entries.some((item) => item.id === "gate-1-github-pr-push" && item.status === "ready-for-targeted-approval")).toBe(true);
-    expect(externalGatePreflight.entries.some((item) => item.id === "gate-8-solis-readonly-telemetry" && item.status === "blocked-consent-required")).toBe(true);
+    expect(externalGatePreflight.entries.some((item) => item.id === "gate-codex-mobile-qr-mfa" && item.status === "manual-human-gate")).toBe(true);
+    expect(externalGatePreflight.entries.some((item) => item.id === "gate-solis-readonly-telemetry" && item.status === "blocked-consent-credential-mapping-required")).toBe(true);
     expect(externalGatePreflight.entries.every((item) => item.canExecuteNow === false && item.externalWrites === false)).toBe(true);
     const externalGatePreflightWriteDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/external-gate-preflight/write", {
       data: { dryRun: true }
