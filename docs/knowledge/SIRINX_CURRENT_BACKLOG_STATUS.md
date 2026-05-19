@@ -33,19 +33,22 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | Public website preload/main-thread pass | Done, deployed, and verified | Commit `8c47afb perf: reduce public page initial load pressure`; Cloudflare production deployment `7d12e73a-6319-4a24-b1b3-9c1f033ddd12` |
 | Cloudflare JavaScript Detection diagnosis | Done, external gate identified | Lighthouse attributes live mobile TBT mostly to `/cdn-cgi/challenge-platform/scripts/jsd/main.js`; current Wrangler OAuth can deploy Pages but cannot change Bot Management API (`403`) |
 | Province route hydration SEO hard audit | Done, fixed, deployed, and verified | Commit `ff20cf1 fix: keep province solar routes indexable after hydration`; Cloudflare production deployment `9062be52-2f3d-4597-b9f1-0347f0215b7e`; live mobile and desktop hydration passed `94/94` sitemap routes |
+| Hero live energy background restoration | Done, deployed, and verified | Commit `80266c7 fix: restore hero live energy background`; Cloudflare production deployment `594a7ce3-ce28-4c55-b9f5-44fd26ea4ce3`; live desktop/mobile DOM confirmed energy overlay and CSS animation |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is on branch `codex/urgent-backlog-execution` with Command Center local-only workflow phases committed through external gate audit preflight and refreshed backlog status.
 - Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/home-solution-seo-hydration` and tracks `origin/main`.
-- GitHub `main` is at `ff20cf1 fix: keep province solar routes indexable after hydration`.
+- GitHub `main` is at `80266c7 fix: restore hero live energy background`.
 - PR #1 is merged. It is no longer a release blocker.
-- Public website production is deployed on Cloudflare Pages as `9062be52-2f3d-4597-b9f1-0347f0215b7e`, branch `main`, source `ff20cf1`, URL `https://9062be52.sirinx-co.pages.dev`.
-- Rollback candidates are `7d12e73a` source `8c47afb`, `ab4731e9` source `cfb1a72`, `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
+- Public website production is deployed on Cloudflare Pages as `594a7ce3-ce28-4c55-b9f5-44fd26ea4ce3`, branch `main`, source `80266c7`, URL `https://594a7ce3.sirinx-co.pages.dev`.
+- Rollback candidates are `9062be52` source `ff20cf1`, `7d12e73a` source `8c47afb`, `ab4731e9` source `cfb1a72`, `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
 - Home Solution work passed typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, no-secret review, Cloudflare preview, production deploy, and live hydration SEO checks.
 - Hard live audit after `ff20cf1`: sitemap static audit passed `94/94` routes with no route/link/asset failures, live mobile hydration passed `94/94`, and live desktop hydration passed `94/94`; no runtime errors, no unexpected `noindex`, no horizontal overflow, no weak root content, and no old internal/AI-WarRoom homepage text found.
 - Final live Lighthouse lab result after `ff20cf1`: homepage SEO 100/accessibility 100, Home Solution SEO 100/accessibility 100, province page SEO 100/accessibility 100, CLS <= 0.015. Desktop performance is `home 84`, `home-solution 88`, `province 80`; mobile performance is `home 54`, `home-solution 49`, `province 53`, still limited mainly by Cloudflare JavaScript Detection and mobile main-thread/LCP cost.
+- Hero live energy background note: the original motion feel was lost when `c902ddd` replaced `framer-motion` with `static-motion` for PageSpeed and `8c47afb` delayed first hero rotation. `80266c7` restores the live energy effect using lightweight CSS-only overlay classes on `HeroSlideshow`; do not remove `.energy-live-overlay`, `.energy-grid`, `.energy-beam`, or `.energy-pulse` during future performance passes without an explicit visual replacement.
+- Live validation after `80266c7`: desktop and mobile DOM confirmed overlay/grid/3 beams/2 pulses, CSS animation `sirinx-energy-beam`, robots `index, follow`, no overflow, and no runtime errors. Home Lighthouse after restoration: mobile performance `54`, desktop performance `86`, SEO/accessibility `100`, CLS `0.001`.
 - Local Lighthouse without Cloudflare challenge script improved materially after the preload pass: mobile performance `63` for both homepage and Home Solution, desktop performance `91` homepage and `90` Home Solution, with TBT `0-22ms`.
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
