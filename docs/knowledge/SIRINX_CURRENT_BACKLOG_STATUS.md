@@ -41,6 +41,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | Mobile PageSpeed first-paint pass | Done, deployed, and verified | Commits `c26199f perf: improve mobile first paint` and `41dced7 perf: restrict public scripts to assets`; Cloudflare Pages production deployment `70e67cd5`; live homepage mobile Lighthouse performance `76`, Home Solution mobile `77`, SEO/accessibility `100`, TBT `10-30ms`, CLS `0` |
 | Cloudflare challenge script performance gate | Mitigated in production | Public CSP now allowlists `/assets/` scripts and Cloudflare Insights while blocking `/cdn-cgi/challenge-platform`; live browser smoke confirmed `challengeLoaded=false`, React/chunks/chat still load, no console/log errors |
 | Mobile route hard smoke | Done | Live mobile checks passed for `/`, `/solar-carport/`, `/assessment/`, `/projects/`, `/pricing/`, `/contact/`, and `/home-solution/`: no horizontal overflow, robots `index, follow`, live energy/avatar present, main runtime loaded, challenge script not loaded |
+| External gate execution handoff | Done | `SIRINX_EXTERNAL_GATE_EXECUTION_HANDOFF_2026-05-20.md` records Codex Mobile, Telegram/LINE, Solis, and Cloudflare Bot Management next actions with blockers, stop rules, and current preflight results |
 
 ## Current Truth
 
@@ -69,6 +70,8 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 - Live smoke after `41dced7`: `/`, `/solar-carport/`, `/assessment/`, `/projects/`, `/pricing/`, `/contact/`, and `/home-solution/` passed mobile DOM checks with no horizontal overflow, live energy/avatar present, main runtime loaded, robots `index, follow`, and `challengeLoaded=false`.
 - Local Lighthouse without Cloudflare challenge script improved materially after the preload pass: homepage mobile performance `64`, Home Solution mobile performance `67`, desktop performance `91` homepage and `90` Home Solution, with low TBT and CLS `0`.
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
+- Current external-gate preflight after PageSpeed release: Hermes profiles exist for `shogun`, `planner`, `frontend`, `backend`, `devops`, `qa`, `growth`, `sales`, `data`, `solis`, `design`, and `scribe`; default gateway is running; Hermes pairing list has no pending pairings; Telegram is configured but not proven deliverable; LINE and Solis remain credential/consent blocked.
+- Telegram caution: `/Users/sirinx/.local/bin/hermes-telegram-test --help` attempted a Telegram request and returned `403`, so do not run that helper again until token and recipient target are rotated or confirmed. No token value was printed.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
 - Command Center lead health intentionally still uses safe GET probes and does not create production leads by itself.
 - Contact fallback stays live until real production lead traffic has been observed.
