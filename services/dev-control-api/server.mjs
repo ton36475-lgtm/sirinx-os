@@ -10,6 +10,7 @@ import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { getExternalGatePackets, writeExternalGatePackets } from "./src/external-gate-packets.mjs";
 import { getExternalGateEvidenceStatus } from "./src/external-gate-evidence.mjs";
 import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/external-gate-preflight.mjs";
+import { getExternalGateRunnerStatus } from "./src/external-gate-runner.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getGithubIntegrationInventory } from "./src/github-integration.mjs";
@@ -623,6 +624,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/external-gate-evidence") {
     sendJson(request, response, 200, await getExternalGateEvidenceStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/external-gate-runner") {
+    sendJson(request, response, 200, await getExternalGateRunnerStatus());
     return;
   }
 

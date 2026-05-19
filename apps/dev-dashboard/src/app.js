@@ -76,6 +76,10 @@ const externalGateEvidenceStatus = document.querySelector("#externalGateEvidence
 const externalGateEvidenceSummary = document.querySelector("#externalGateEvidenceSummary");
 const externalGateEvidenceList = document.querySelector("#externalGateEvidenceList");
 const externalGateEvidenceNextActions = document.querySelector("#externalGateEvidenceNextActions");
+const externalGateRunnerStatus = document.querySelector("#externalGateRunnerStatus");
+const externalGateRunnerSummary = document.querySelector("#externalGateRunnerSummary");
+const externalGateRunnerList = document.querySelector("#externalGateRunnerList");
+const externalGateRunnerNextActions = document.querySelector("#externalGateRunnerNextActions");
 const hermesInboxStatus = document.querySelector("#hermesInboxStatus");
 const hermesInboxSummary = document.querySelector("#hermesInboxSummary");
 const hermesInboxList = document.querySelector("#hermesInboxList");
@@ -521,6 +525,37 @@ const fallbackExternalGateEvidence = {
     }
   ],
   nextActions: ["Start the local control API and refresh external gate evidence."]
+};
+
+const fallbackExternalGateRunner = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  canExecuteNow: false,
+  summary: {
+    gates: 0,
+    readyForHumanReview: 0,
+    blocked: 1,
+    unsafe: 0,
+    externalWrites: false,
+    executableNow: 0
+  },
+  runs: [
+    {
+      id: "fallback",
+      title: "External gate runner unavailable",
+      lane: "shogun",
+      status: "blocked-api-offline",
+      localChecks: ["Start the local control API"],
+      blockedExternalActions: ["all external actions"],
+      operatorNextStep: "Start the local control API to inspect runner readiness.",
+      canExecuteNow: false,
+      externalWrites: false
+    }
+  ],
+  nextActions: ["Start the local control API and refresh external gate runner readiness."]
 };
 
 const fallbackHermesInbox = {
@@ -1666,6 +1701,42 @@ function renderExternalGateEvidence(evidence) {
   );
 }
 
+function renderExternalGateRunner(runner) {
+  const data = runner || fallbackExternalGateRunner;
+  const apiReady = data.status !== "unavailable";
+  const unsafe = (data.summary?.unsafe || 0) > 0;
+  const summary = data.summary || fallbackExternalGateRunner.summary;
+
+  externalGateRunnerStatus.textContent = unsafe ? "Runner unsafe" : apiReady ? "Runner blocked" : "Runner unavailable";
+  externalGateRunnerStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  externalGateRunnerStatus.classList.add(unsafe ? "status-lock" : "status-warn");
+
+  externalGateRunnerSummary.replaceChildren(
+    makeSummaryCard("Gates", `${summary.gates || 0}`, `${summary.blocked || 0} blocked`),
+    makeSummaryCard("Executable Now", `${summary.executableNow || 0}`, "external writes stay off"),
+    makeSummaryCard("Human Review", `${summary.readyForHumanReview || 0}`, "evidence-ready gates"),
+    makeSummaryCard("External Writes", data.externalWrites ? "Armed" : "Off", data.canExecuteNow ? "actionable" : "runner only")
+  );
+
+  renderSignalList(
+    externalGateRunnerList,
+    (data.runs || fallbackExternalGateRunner.runs).map((run) => ({
+      title: run.title || run.id,
+      detail: `${run.status}; lane ${run.lane || run.owner}; local checks: ${(run.localChecks || []).join(", ")}`,
+      ok: run.canExecuteNow === false && run.externalWrites === false && run.evidenceUnsafe !== true,
+      badge: run.lane || "runner"
+    }))
+  );
+
+  externalGateRunnerNextActions.replaceChildren(
+    ...(data.nextActions || fallbackExternalGateRunner.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function renderHermesInbox(result) {
   const data = result || fallbackHermesInbox;
   const policy = data.policy || fallbackHermesInbox.policy;
@@ -2480,6 +2551,12 @@ async function loadDashboard() {
       renderExternalGateEvidence,
       () => renderExternalGateEvidence(fallbackExternalGateEvidence),
       "External gate evidence"
+    ),
+    loadPanel(
+      "/api/external-gate-runner",
+      renderExternalGateRunner,
+      () => renderExternalGateRunner(fallbackExternalGateRunner),
+      "External gate runner"
     ),
     loadPanel("/api/hermes", renderHermes, () => renderHermes(fallbackHermes), "Hermes"),
     loadPanel("/api/executive-hq", renderExecutive, () => renderExecutive(fallbackExecutive), "Executive HQ"),

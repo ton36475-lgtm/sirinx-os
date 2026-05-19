@@ -322,6 +322,27 @@
         </div>
       </section>
 
+      <section class="panel external-gate-runner-panel" aria-label="External gate runner readiness">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">External Gates</p>
+            <h2>Gate Runner Readiness</h2>
+          </div>
+          <span id="externalGateRunnerStatus" class="status-pill status-warn">Runner checking</span>
+        </div>
+        <div id="externalGateRunnerSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="External gate runner list">
+            <h3>Runner Queue</h3>
+            <div id="externalGateRunnerList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="External gate runner next actions">
+            <h3>Blocked Actions</h3>
+            <ol id="externalGateRunnerNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel hermes-inbox-panel" aria-label="Hermes inbox dry-run">
         <div class="panel-head">
           <div>

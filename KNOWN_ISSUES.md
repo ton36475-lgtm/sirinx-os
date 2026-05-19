@@ -19,6 +19,7 @@ Mode: current known issues
 - `docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md` is the current execution queue and supersedes the older 2026-05-19 public website release packets.
 - Evidence working files exist under `docs/knowledge/external-gates/evidence/`; they are intentionally unchecked until real operator evidence is supplied.
 - Command Center now surfaces evidence readiness from local files through `/api/external-gate-evidence`; this endpoint is read-only and reports `externalWrites=false`.
+- Command Center now surfaces local runner readiness through `/api/external-gate-runner`; it lists local checks and blocked external actions, but always reports `canExecuteNow=false`.
 - Public website worktree is separate and protected.
 - Command Center is local-only and dry-run by default.
 - Cloudflare challenge-platform script injection is observed in live HTML, but current CSP blocks challenge-platform script execution.

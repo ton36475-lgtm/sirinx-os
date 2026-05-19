@@ -101,6 +101,11 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#externalGateEvidenceSummary")).toContainText("Unsafe");
     await expect(page.locator("#externalGateEvidenceList")).toContainText("Codex Mobile QR/MFA Pairing");
     await expect(page.locator("#externalGateEvidenceList")).toContainText("incomplete-evidence");
+    await expect(page.getByRole("heading", { name: "Gate Runner Readiness" })).toBeVisible();
+    await expect(page.locator("#externalGateRunnerStatus")).toHaveText("Runner blocked");
+    await expect(page.locator("#externalGateRunnerSummary")).toContainText("Executable Now");
+    await expect(page.locator("#externalGateRunnerList")).toContainText("SIRINX OS GitHub Publish Target");
+    await expect(page.locator("#externalGateRunnerList")).toContainText("git remote -v");
     await expect(page.getByRole("heading", { name: "Agent Connection" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Executive Live Command View" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Repo, Subdomain, And Integration Control" })).toBeVisible();
@@ -439,6 +444,15 @@ test.describe("Developer Command Center", () => {
     expect(externalGateEvidence.summary.ready).toBe(0);
     expect(externalGateEvidence.summary.incomplete).toBe(5);
     expect(externalGateEvidence.summary.unsafe).toBe(0);
+    const externalGateRunnerResponse = await page.request.get("http://127.0.0.1:8711/api/external-gate-runner");
+    expect(externalGateRunnerResponse.ok()).toBeTruthy();
+    const externalGateRunner = await externalGateRunnerResponse.json();
+    expect(externalGateRunner.status).toBe("blocked-external-execution");
+    expect(externalGateRunner.externalWrites).toBe(false);
+    expect(externalGateRunner.canExecuteNow).toBe(false);
+    expect(externalGateRunner.summary.gates).toBe(5);
+    expect(externalGateRunner.summary.executableNow).toBe(0);
+    expect(externalGateRunner.runs.some((item) => item.id === "sirinx-os-github-publish" && item.blockedExternalActions.includes("git push"))).toBe(true);
     expect(consoleErrors).toEqual([]);
   });
 
@@ -497,6 +511,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#externalGatePreflightWriteButton")).toBeDisabled();
     await expect(page.locator("#externalGateEvidenceStatus")).toHaveText("Evidence unavailable");
     await expect(page.locator("#externalGateEvidenceList")).toContainText("External gate evidence unavailable");
+    await expect(page.locator("#externalGateRunnerStatus")).toHaveText("Runner unavailable");
+    await expect(page.locator("#externalGateRunnerList")).toContainText("External gate runner unavailable");
     await expect(page.locator("#actionList")).toContainText("Freeze Mac live baseline");
     await expect(page.locator("#executiveStatus")).toHaveText("HQ partial");
     await expect(page.locator("#toolSubdomainList")).toContainText("www.sirinx.co");

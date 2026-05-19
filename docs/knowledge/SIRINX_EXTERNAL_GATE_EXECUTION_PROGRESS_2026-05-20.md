@@ -129,6 +129,31 @@ Current evidence state:
 
 This means the evidence files now exist and are safe to fill, but no external execution is authorized yet.
 
+### Part 6 - Gate Runner Readiness
+
+Added:
+
+- `services/dev-control-api/src/external-gate-runner.mjs`
+- `services/dev-control-api/src/external-gate-runner.test.mjs`
+- `scripts/external-gate-runner.mjs`
+- local API `GET /api/external-gate-runner`
+- Command Center `Gate Runner Readiness` panel
+
+The runner lists:
+
+- safe local checks for each gate
+- blocked external actions for each gate
+- operator next step
+- `canExecuteNow=false`
+- `externalWrites=false`
+
+Current runner state:
+
+- 5 gates
+- executable now `0`
+- external writes `false`
+- all external actions still blocked until evidence is ready and exact target approval exists
+
 ## Current Gate Status
 
 | Gate | Status | Current blocker |
