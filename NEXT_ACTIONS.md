@@ -44,13 +44,18 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Immediate
 
-- [ ] Task 1.5: Implement Hermes inbox approval packet integration
+- [x] Task 1.5: Implement Hermes inbox approval packet integration
   - Goal: map `approval_required` inbox decisions into the existing local approval queue format.
   - File scope: `services/hermes-api/`, `services/dev-control-api/src/approval-queue.mjs`, tests.
   - Verification: unit tests, `pnpm verify`, `pnpm dashboard:e2e`.
   - Stop rule: no external connector execution.
 
 ## Scheduled
+
+- [ ] Task 1.6: Add durable approval evidence files
+  - Goal: write local approval queue snapshots into Obsidian only when requested.
+  - File scope: local writer script and docs only.
+  - Verification: dry-run writer plus no external writes.
 
 - [ ] Implement local lead-event/audit proposal after lead qualification v2.
 - [ ] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.

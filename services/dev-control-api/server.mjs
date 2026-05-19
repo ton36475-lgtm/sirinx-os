@@ -2,7 +2,7 @@ import { createServer } from "node:http";
 import { execFile } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { promisify } from "node:util";
-import { listApprovalQueue } from "./src/approval-queue.mjs";
+import { ensureApprovalRequest, listApprovalQueue } from "./src/approval-queue.mjs";
 import { evaluateHermesInboxDryRun } from "../hermes-api/src/inbox.mjs";
 import { listAuditEvents, recordAuditEvent, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
@@ -482,6 +482,17 @@ const server = createServer(async (request, response) => {
         source: request.headers["x-sirinx-source"],
         signatureVerified: false
       });
+
+      if (result.status === 202 && result.body.normalizedAction) {
+        result.body.approvalRequest = ensureApprovalRequest(
+          {
+            id: result.body.normalizedAction.id,
+            title: `Hermes inbox: ${result.body.normalizedAction.id}`,
+            risk: result.body.normalizedAction.productionWrite || result.body.normalizedAction.customerVisible ? "high" : "medium"
+          },
+          []
+        );
+      }
 
       if (result.body.auditEvent) {
         recordAuditEvent(result.body.auditEvent);

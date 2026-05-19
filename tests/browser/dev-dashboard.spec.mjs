@@ -214,6 +214,28 @@ test.describe("Developer Command Center", () => {
     const hermesInbox = await hermesInboxResponse.json();
     expect(hermesInbox.status).toBe("allowed");
     expect(hermesInbox.externalWrites).toBe(false);
+    const hermesInboxApprovalResponse = await page.request.post("http://127.0.0.1:8711/api/hermes-inbox/dry-run", {
+      data: {
+        requestId: "e2e-hermes-inbox-approval",
+        source: "codex-local",
+        target: { id: "cloudflare:main-router" },
+        intent: { type: "cloudflare-deploy", summary: "E2E approval dry-run", rawTextIncluded: false },
+        action: {
+          id: "e2e-hermes-cloudflare",
+          type: "cloudflare-deploy",
+          externalWrite: true,
+          productionWrite: true
+        },
+        dryRun: true
+      }
+    });
+    expect(hermesInboxApprovalResponse.status()).toBe(202);
+    const hermesInboxApproval = await hermesInboxApprovalResponse.json();
+    expect(hermesInboxApproval.status).toBe("approval_required");
+    expect(hermesInboxApproval.externalWrites).toBe(false);
+    expect(hermesInboxApproval.approvalRequest.status).toBe("pending");
+    const approvalQueueAfterInbox = await (await page.request.get("http://127.0.0.1:8711/api/approval-queue")).json();
+    expect(approvalQueueAfterInbox.items.some((item) => item.actionId === "e2e-hermes-cloudflare")).toBe(true);
     await expect(page.getByRole("heading", { name: "Policy Dry-Run Preview" })).toBeVisible();
     await expect(page.locator("#hermesInboxStatus")).toContainText("Ready");
     await page.getByRole("button", { name: "Run Local Inbox Dry-Run" }).click();
