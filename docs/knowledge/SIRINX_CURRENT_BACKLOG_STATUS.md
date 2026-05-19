@@ -44,6 +44,8 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | External gate execution handoff | Done | `SIRINX_EXTERNAL_GATE_EXECUTION_HANDOFF_2026-05-20.md` records Codex Mobile, Telegram/LINE, Solis, and Cloudflare Bot Management next actions with blockers, stop rules, and current preflight results |
 | Command Center current external-gate packet refresh | Done locally | `/api/external-gate-packets` and `/api/external-gate-preflight` now expose only the 4 remaining external gates; local smoke on port `8791` returned 4 packets, 4 preflight entries, `canExecuteNow=false`, and `externalWrites=false` |
 | External gate readiness runner | Done locally | `pnpm external-gates:check` checks current four-gate API shape, dashboard availability, Hermes pairing readability, Telegram/LINE blocked state, Solis policy presence, and live Cloudflare CSP state with `Hard failures: 0` |
+| External gate local packet writer | Done locally | `pnpm external-gates:write` writes current approval packets and audit preflight into Obsidian local files with `externalWrites=false` |
+| External gate operator runbook | Done locally | `SIRINX_EXTERNAL_GATE_OPERATOR_RUNBOOK_2026-05-20.md` defines the exact manual/credential evidence needed for Codex Mobile, Telegram/LINE, Solis, and Cloudflare Bot Management |
 | Command Center E2E gate alignment | Done locally | `pnpm dashboard:e2e` now validates the current 4-gate workflow and passed `8/8` |
 
 ## Current Truth

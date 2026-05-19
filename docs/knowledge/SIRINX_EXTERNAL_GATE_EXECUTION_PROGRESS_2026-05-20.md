@@ -33,6 +33,9 @@ Added:
 
 - `scripts/external-gate-readiness.sh`
 - package script `pnpm external-gates:check`
+- `scripts/external-gate-write-local-records.sh`
+- package script `pnpm external-gates:write`
+- `SIRINX_EXTERNAL_GATE_OPERATOR_RUNBOOK_2026-05-20.md`
 
 The runner checks:
 
@@ -58,6 +61,7 @@ The runner intentionally does not:
 Latest result:
 
 - `pnpm external-gates:check` passed with `Hard failures: 0`.
+- `pnpm external-gates:write` wrote local approval packet and audit preflight records into Obsidian with `externalWrites=false`.
 
 ### Part 3 - Dashboard E2E Alignment
 
