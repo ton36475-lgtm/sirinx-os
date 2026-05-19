@@ -25,6 +25,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Command Center displays Hermes inbox policy dry-run results through the `Policy Dry-Run Preview` panel.
 - Command Center displays lead event audit lane, risk flags, external handoff blocks, and evidence checklist inside the Lead Backend panel.
 - External writes remain blocked by default.
+- Release/handoff/live-start/known-issues docs are locked locally at root for future operators.
 - Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
 
 ## Services

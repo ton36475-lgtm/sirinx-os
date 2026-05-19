@@ -92,8 +92,8 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Backlog
 
-- [ ] Create `RELEASE_GATE.md`.
-- [ ] Create `VALIDATION_MATRIX.md`.
-- [ ] Create `HANDOFF_PROTOCOL.md`.
-- [ ] Create `RUNBOOK_LIVE_START.md`.
-- [ ] Create `KNOWN_ISSUES.md`.
+- [x] Create `RELEASE_GATE.md`.
+- [x] Create `VALIDATION_MATRIX.md`.
+- [x] Create `HANDOFF_PROTOCOL.md`.
+- [x] Create `RUNBOOK_LIVE_START.md`.
+- [x] Create `KNOWN_ISSUES.md`.
