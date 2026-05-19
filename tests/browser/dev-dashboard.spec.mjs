@@ -435,9 +435,9 @@ test.describe("Developer Command Center", () => {
     expect(externalGateEvidence.status).toBe("blocked-evidence-incomplete");
     expect(externalGateEvidence.externalWrites).toBe(false);
     expect(externalGateEvidence.canExecuteExternally).toBe(false);
-    expect(externalGateEvidence.summary.gates).toBe(4);
+    expect(externalGateEvidence.summary.gates).toBe(5);
     expect(externalGateEvidence.summary.ready).toBe(0);
-    expect(externalGateEvidence.summary.incomplete).toBe(4);
+    expect(externalGateEvidence.summary.incomplete).toBe(5);
     expect(externalGateEvidence.summary.unsafe).toBe(0);
     expect(consoleErrors).toEqual([]);
   });

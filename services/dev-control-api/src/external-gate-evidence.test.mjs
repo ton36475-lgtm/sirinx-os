@@ -27,10 +27,10 @@ describe("external gate evidence status", () => {
     expect(status.externalWrites).toBe(false);
     expect(status.canExecuteExternally).toBe(false);
     expect(status.summary).toMatchObject({
-      gates: 4,
+      gates: 5,
       ready: 0,
-      blocked: 4,
-      missingEvidenceFiles: 4,
+      blocked: 5,
+      missingEvidenceFiles: 5,
       unsafe: 0
     });
   });

@@ -65,7 +65,7 @@ Latest result:
 
 - `pnpm external-gates:check` passed with `Hard failures: 0`.
 - `pnpm external-gates:write` wrote local approval packet and audit preflight records into Obsidian with `externalWrites=false`.
-- `pnpm external-gates:evidence-check` returned `ready=0`, `blocked=4`, and `unsafe=0`, which is the expected state until the operator supplies QR/MFA, recipient/token, Solis consent/mapping, or Cloudflare permission evidence.
+- `pnpm external-gates:evidence-check` initially returned `ready=0`, `blocked=4`, and `unsafe=0` for the operational gates. It now also tracks the separate `sirinx-os` GitHub publish target so push/PR evidence is not outside the checker.
 
 ### Part 3 - Dashboard E2E Alignment
 
@@ -119,13 +119,13 @@ Added:
 
 Current evidence state:
 
-- 4 gates
+- 5 gates, including the separate `sirinx-os` GitHub publish target
 - `ready=0`
-- `blocked=4`
+- `blocked=5`
 - `missingEvidenceFiles=0`
-- `incomplete=4`
+- `incomplete=5`
 - `unsafe=0`
-- checked items `0/20`
+- checked items `0/25`
 
 This means the evidence files now exist and are safe to fill, but no external execution is authorized yet.
 

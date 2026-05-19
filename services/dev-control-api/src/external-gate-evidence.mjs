@@ -7,6 +7,20 @@ const defaultEvidenceRoot = path.join(defaultRoot, "docs/knowledge/external-gate
 
 export const externalGateEvidenceRules = [
   {
+    id: "sirinx-os-github-publish",
+    title: "SIRINX OS GitHub Publish Target",
+    file: "sirinx-os-github-publish.md",
+    owner: "devops",
+    nextAction: "Record the exact GitHub owner/repo, remote URL, branch, PR target, and rollback rule before any push.",
+    required: [
+      "target GitHub owner/repo confirmed",
+      "target remote URL recorded",
+      "target branch and base branch recorded",
+      "PR title/body approved",
+      "no force-push rollback rule recorded"
+    ]
+  },
+  {
     id: "codex-mobile-qr-mfa",
     title: "Codex Mobile QR/MFA Pairing",
     file: "codex-mobile-qr-mfa.md",

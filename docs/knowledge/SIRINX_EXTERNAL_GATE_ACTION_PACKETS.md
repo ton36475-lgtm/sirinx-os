@@ -23,7 +23,7 @@ No packet is self-approved by this document. Broad permission does not override 
 | Public website latest source | `41dced7 perf: restrict public scripts to assets` |
 | Public website production | deployed and verified on `www.sirinx.co`; do not modify in this gate queue |
 | Command Center | local API `http://127.0.0.1:8711`, dashboard `http://127.0.0.1:8710` |
-| External gate evidence check | `ready=0`, `blocked=4`, `unsafe=0` |
+| External gate evidence check | `ready=0`, `blocked=5`, `unsafe=0` |
 | External writes | `false` |
 
 ## Execution Rule
@@ -65,6 +65,10 @@ Required evidence:
 - base branch name
 - PR title/body approval
 - rollback rule, usually no force-push and close PR if wrong target
+
+Required evidence file:
+
+- `docs/knowledge/external-gates/evidence/sirinx-os-github-publish.md`
 
 Allowed after exact approval:
 
@@ -251,10 +255,11 @@ Stop rule:
 1. Keep `www.sirinx.co` protected and unchanged.
 2. Pair Codex Mobile manually.
 3. Fill the matching evidence file for Packet 1 and rerun `pnpm external-gates:evidence-check`.
-4. Fix Telegram/LINE target evidence, then run one approved smoke only after final target approval.
-5. Collect Solis consent and station mapping, then run read-only smoke only after evidence is ready.
-6. Review Cloudflare Bot Management only with dashboard/API permission and a rollback plan.
-7. Publish `sirinx-os` to GitHub only after the exact target remote/branch/PR is approved.
+4. Fill `sirinx-os` GitHub publish evidence before any remote/push/PR operation.
+5. Fix Telegram/LINE target evidence, then run one approved smoke only after final target approval.
+6. Collect Solis consent and station mapping, then run read-only smoke only after evidence is ready.
+7. Review Cloudflare Bot Management only with dashboard/API permission and a rollback plan.
+8. Publish `sirinx-os` to GitHub only after the exact target remote/branch/PR is approved.
 
 ## Current Recommendation
 

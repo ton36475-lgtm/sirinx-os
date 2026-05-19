@@ -1,6 +1,6 @@
 # SIRINX External Gate Evidence Intake
 
-Status: active evidence intake for the four remaining external gates
+Status: active evidence intake for the current external gates
 
 ## Purpose
 
@@ -26,6 +26,7 @@ Operator-filled evidence now lives in these working files:
 - `docs/knowledge/external-gates/evidence/telegram-line-recipient-token.md`
 - `docs/knowledge/external-gates/evidence/solis-readonly-telemetry.md`
 - `docs/knowledge/external-gates/evidence/cloudflare-bot-management-review.md`
+- `docs/knowledge/external-gates/evidence/sirinx-os-github-publish.md`
 
 ## Commands
 

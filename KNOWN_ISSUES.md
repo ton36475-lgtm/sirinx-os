@@ -11,7 +11,7 @@ Mode: current known issues
 | Telegram/LINE recipient/token setup | blocked credential/recipient | Rotate/store token safely, confirm allowed recipient, then run approved smoke send. |
 | Solis API consent/credential/read-only telemetry | blocked consent/secret storage | Collect consent, store credentials safely, map station/site IDs. |
 | Cloudflare Bot Management dashboard review | optional | Only needed if replacing CSP mitigation with dashboard rules. |
-| GitHub push/PR for `sirinx-os` branch | blocked external write | Requires exact remote/owner/repo/branch/PR approval; current `git remote -v` prints no configured remote. |
+| GitHub push/PR for `sirinx-os` branch | blocked external write | Requires exact remote/owner/repo/branch/PR approval in `docs/knowledge/external-gates/evidence/sirinx-os-github-publish.md`; current `git remote -v` prints no configured remote. |
 
 ## Operational Notes
 
