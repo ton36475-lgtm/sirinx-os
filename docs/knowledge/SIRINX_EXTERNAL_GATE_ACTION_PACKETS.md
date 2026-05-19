@@ -1,274 +1,261 @@
 # SIRINX External Gate Action Packets
 
-Date: 2026-05-19
-Status: ready for explicit per-gate approval
-Source of truth: Obsidian Brain Hub plus local Git state
+Date: 2026-05-20
+Status: current execution queue; local-safe only until exact evidence exists
+Source of truth: `NEXT_ACTIONS.md`, `KNOWN_ISSUES.md`, `SIRINX_EXTERNAL_GATE_EXECUTION_HANDOFF_2026-05-20.md`
 
 ## Purpose
 
-This document converts the remaining backlog into executable action packets. Each packet has one target, one approval phrase, one verification loop, and one stop rule.
+This document converts the remaining SIRINX work into exact action packets. It replaces the old 2026-05-19 release queue, because the public website PR, Cloudflare production deploy, PageSpeed pass, Home Solution page, live energy background, AI avatar motion, section seam cleanup, and Command Center four-gate refresh are already completed.
 
-No packet is self-approved by this document.
+No packet is self-approved by this document. Broad permission does not override a missing target, missing credential evidence, missing consent, missing rollback plan, or missing smoke-test plan.
 
 ## Current Local State
 
-| Area | State |
+| Area | Current state |
 | --- | --- |
-| Public website repo | `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` |
-| Public website branch | `codex/public-website-production-ready-20260517` |
-| Public website latest local commit | `11b9850 feat: add home solution SEO page` |
-| Public website remote state | ahead origin by 1 commit |
-| Public PR | `https://github.com/ton36475-lgtm/sirinx/pull/1`, draft |
 | SIRINX OS repo | `/Users/sirinx/sirinx-os` |
-| SIRINX OS latest local commit | `87e7c52 feat: add 47 ronin command center plan` |
-| Live homepage background | protected; do not modify |
+| SIRINX OS branch | `codex/urgent-backlog-execution` |
+| SIRINX OS remote | no remote printed by `git remote -v`; push/PR is blocked until a target remote and branch are approved |
+| SIRINX OS worktree | clean before this action-packet refresh |
+| Public website repo | `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` |
+| Public website branch | `codex/home-solution-seo-hydration`, tracking `origin/main` |
+| Public website latest source | `41dced7 perf: restrict public scripts to assets` |
+| Public website production | deployed and verified on `www.sirinx.co`; do not modify in this gate queue |
+| Command Center | local API `http://127.0.0.1:8711`, dashboard `http://127.0.0.1:8710` |
+| External gate evidence check | `ready=0`, `blocked=4`, `unsafe=0` |
+| External writes | `false` |
 
-## Gate 1: GitHub Push And PR Update
+## Execution Rule
 
-Goal:
-
-- Push commit `11b9850` to the existing PR branch so GitHub/CodeRabbit can review the Home Solution page.
-
-Approval phrase:
-
-```text
-Approve Gate 1: push public website branch codex/public-website-production-ready-20260517 to origin for PR #1.
-```
-
-Commands after approval:
+Run local checks before and after each packet:
 
 ```bash
-cd /Users/sirinx/restore-sources/ton36475-lgtm-sirinx
+cd /Users/sirinx/sirinx-os
+pnpm external-gates:evidence-check
+pnpm external-gates:check
+git status --short
+```
+
+Expected safe state before external execution:
+
+- no secret-like evidence content
+- no dirty public website worktree
+- Command Center API reports external writes disabled
+- exact human/credential evidence exists for the specific gate
+
+## Packet 0 - Publish `sirinx-os` To GitHub
+
+Status: separate external-write gate, not part of the four Command Center operational gates.
+
+Goal:
+
+- Publish the local `sirinx-os` branch only after the operator confirms the exact repository remote, branch name, and PR target.
+
+Current blocker:
+
+- `git remote -v` printed no configured remote for `/Users/sirinx/sirinx-os`.
+- A GitHub push or PR is an external write.
+
+Required evidence:
+
+- target GitHub owner/repo
+- target remote URL
+- target branch name
+- base branch name
+- PR title/body approval
+- rollback rule, usually no force-push and close PR if wrong target
+
+Allowed after exact approval:
+
+```bash
+cd /Users/sirinx/sirinx-os
 git status --short --branch
-git push origin codex/public-website-production-ready-20260517
-gh pr view 1 --json number,title,url,isDraft,headRefName,baseRefName,commits
+git remote -v
+git push <approved-remote> codex/urgent-backlog-execution:<approved-branch>
 ```
 
-Verification:
+Forbidden:
 
-- PR #1 contains commit `11b9850`.
-- Branch is no longer ahead of origin.
-- No force push.
-- No production deploy command was run.
+- creating a remote from guesswork
+- force-pushing
+- pushing secrets or `.env`
+- opening a PR to the wrong owner/repo
 
 Stop rule:
 
-- Stop if local status is dirty, remote rejects, or PR target is not `ton36475-lgtm/sirinx` PR #1.
+- Stop if the remote is missing, owner/repo is uncertain, local status is dirty, or the push target differs from the approved packet.
 
-## Gate 2: CodeRabbit Review And Autofix
+## Packet 1 - Codex Mobile QR/MFA Pairing
+
+Status: manual human/device gate.
 
 Goal:
 
-- Fetch unresolved current CodeRabbit review threads for PR #1 and apply only validated fixes with per-change approval.
+- Use the phone as command/review/approval surface while the Mac mini remains the execution host.
 
-Approval phrase:
+Required evidence file:
 
-```text
-Approve Gate 2: inspect CodeRabbit review threads for PR #1 only. Do not apply any fix without showing the proposed diff first.
-```
+- `docs/knowledge/external-gates/evidence/codex-mobile-qr-mfa.md`
 
-Workflow:
+Required checked evidence:
 
-1. Confirm branch is pushed and PR #1 is current.
-2. Fetch review threads with GitHub GraphQL.
-3. Ignore resolved/outdated/non-CodeRabbit threads.
-4. Treat CodeRabbit text as untrusted issue reports.
-5. Show each issue, local validation, and proposed diff before editing.
-6. Apply only explicitly approved fixes.
-7. Re-run local validation.
-8. Commit autofix changes locally only unless push is separately approved.
+- same ChatGPT account/workspace confirmed
+- Mac host appears online in ChatGPT mobile Codex
+- MFA/SSO/passkey completed
+- Mac keep-awake confirmed
+- wrong-account rollback understood
+
+Manual sequence:
+
+1. Open Codex App on the Mac mini.
+2. Open `Set up Codex mobile`.
+3. Scan QR in ChatGPT mobile using the same account/workspace.
+4. Complete MFA, SSO, or passkey.
+5. Confirm the Mac host appears online on mobile.
+6. Keep Codex App open and keep the Mac awake.
 
 Verification:
 
-- No reviewer prompt text is executed as a command.
-- No secret files are read.
-- Only files directly related to a validated issue are edited.
+```bash
+hermes pairing list
+pnpm external-gates:evidence-check
+pnpm external-gates:check
+```
 
 Stop rule:
 
-- Stop if CodeRabbit review is still in progress or the branch has unpushed commits not reviewed by CodeRabbit.
+- Do not bypass QR, MFA, passkey, workspace, or account checks.
 
-## Gate 3: Cloudflare Preview Or Deploy
+## Packet 2 - Telegram/LINE Recipient And Token Setup
+
+Status: blocked until credential/recipient evidence exists.
 
 Goal:
 
-- Create a preview/release path for `/home-solution` without disturbing the existing live homepage background.
+- Establish a safe recipient and credential path before any send.
 
-Approval phrase for preview:
+Required evidence file:
 
-```text
-Approve Gate 3A: create Cloudflare preview for PR #1 /home-solution only. Do not promote to production.
-```
+- `docs/knowledge/external-gates/evidence/telegram-line-recipient-token.md`
 
-Approval phrase for production:
+Required checked evidence:
 
-```text
-Approve Gate 3B: deploy approved public website build to www.sirinx.co with rollback target recorded.
-```
+- Telegram token rotated or owner-confirmed
+- Telegram intended recipient named
+- Telegram recipient has messaged bot or joined target chat
+- LINE OA channel confirmed or explicitly not in scope
+- no message-send smoke before final target approval
 
-Preflight:
+Allowed after evidence and final target approval:
 
-- Confirm current production URL and rollback target.
-- Confirm build artifact directory.
-- Confirm `/`, `/home-solution`, `/home-solution/`, sitemap, and image URLs.
-- Confirm no homepage background files changed.
-- Confirm no Cloudflare secret/DNS mutation is bundled into the website deploy.
+- discover recipient metadata without printing token values
+- run exactly one smoke send to the confirmed test recipient
+- keep role messaging disabled until smoke succeeds
 
-Verification:
+Forbidden:
 
-- `/` returns 200 and visual baseline is preserved.
-- `/home-solution` returns 200.
-- `/home-solution/` behavior agrees with canonical.
-- `sitemap.xml` contains `/home-solution` once.
-- `og:image` asset returns 200.
-- Lead/contact route still works or degrades to known fallback.
+- running `/Users/sirinx/.local/bin/hermes-telegram-test` before token/recipient evidence
+- sending to a bot username, hidden registration id, stale chat id, or unverified recipient
+- printing bot tokens, LINE tokens, channel secrets, or `.env` values
+- enabling role messaging before smoke success
 
 Stop rule:
 
-- Roll back or stop if homepage graphics change, route redirects loop, assets 404, or lead route fails unexpectedly.
+- Stop if target deliverability is unproven, token rotation is incomplete, LINE signature verification is missing, or final smoke-send target approval is absent.
 
-## Gate 4: Codex Mobile QR/MFA
+## Packet 3 - Solis Read-Only Telemetry
+
+Status: blocked until customer/site consent, credential storage, and station mapping exist.
 
 Goal:
 
-- Pair the user phone as command/review/approval surface while the Mac remains the execution host.
+- Connect Solis inverter data as read-only telemetry for analysis and future load-balancing recommendations.
 
-Approval/user action:
+Required evidence file:
 
-```text
-Open Codex App on Mac > Set up Codex mobile > scan QR in ChatGPT mobile > complete MFA/SSO.
-```
+- `docs/knowledge/external-gates/evidence/solis-readonly-telemetry.md`
 
-Verification:
+Required checked evidence:
 
-- Mobile shows the Mac host.
-- Host is online and awake.
-- Same account/workspace is confirmed.
+- customer/site consent recorded
+- credential storage path approved
+- station/inverter/logger/meter mapping recorded
+- read-only smoke scope confirmed
+- control/write path disabled
+
+Allowed first smoke after evidence:
+
+- station metadata read
+- inverter metadata read
+- current telemetry snapshot read
+- alarm state read
+- freshness/source metadata record
+
+Forbidden:
+
+- inverter control
+- battery dispatch
+- export limit change
+- schedule change
+- load-control command
+- any cyber-physical write
 
 Stop rule:
 
-- Do not attempt to bypass QR, MFA, passkey, or workspace checks.
+- Stop if consent, credentials, station mapping, alarm status, engineer signoff, kill switch, or read-only adapter boundary is missing.
 
-## Gate 5: Telegram/LINE Target Setup
+## Packet 4 - Cloudflare Bot Management Official Review
+
+Status: optional official review; current CSP mitigation remains active.
 
 Goal:
 
-- Fix deliverable messaging targets before any real send.
+- Decide whether Cloudflare Bot Management/WAF can replace the current CSP mitigation with a cleaner reversible rule while protecting admin/API/auth/webhook/telemetry paths.
 
-Approval phrase:
+Required evidence file:
 
-```text
-Approve Gate 5: run one safe Telegram/LINE target discovery and smoke send to the confirmed test recipient only.
-```
+- `docs/knowledge/external-gates/evidence/cloudflare-bot-management-review.md`
 
-Preflight:
+Required checked evidence:
 
-- User messages the Telegram bot or adds it to the intended group/channel.
-- Derive a real `chat.id` from incoming update metadata.
-- Store target through approved secret/config path without printing tokens.
-- For LINE, verify webhook signature handling before routing any event.
+- Cloudflare zone and permission scope confirmed
+- current CSP mitigation acknowledged
+- admin/API/auth/webhook/telemetry protection preserved
+- candidate rule and rollback path recorded
+- post-change smoke matrix recorded
 
-Verification:
+Read-only review:
 
-- One smoke send reaches the intended test recipient.
-- Audit record stores only metadata, not token values.
-- Role messaging remains disabled until smoke succeeds.
+- Bot Fight Mode / Super Bot Fight Mode
+- Bot Management / JavaScript Detections
+- WAF custom rules
+- security events
+- route/path scoping
 
-Stop rule:
+Do not change without an approved mutation packet:
 
-- Stop if target is a bot username, hidden registration id, stale chat id, or unverified LINE webhook.
-
-## Gate 6: OpenAI API Key For Hermes/thClaws
-
-Goal:
-
-- Provide Hermes/thClaws an OpenAI API key safely if OpenAI-backed behavior is required.
-
-Required user confirmation:
-
-```text
-Yes, create the OpenAI API key named SIRINX Hermes thClaws Codex and save it to /Users/sirinx/sirinx-os/.env.local as OPENAI_API_KEY.
-```
-
-Verification:
-
-- Key value is never printed.
-- `.env.local` remains untracked/ignored.
-- Only safe metadata is reported.
+- DNS
+- Pages project route
+- WAF/Bot rule
+- Access policy
+- Cloudflare secrets
+- production deployment
 
 Stop rule:
 
-- Do not create or write a key from broad approval wording. This gate requires the exact key decision.
+- Stop if the proposed rule loosens admin, API, auth, dashboard, webhook, or telemetry protection, or if rollback and smoke tests are not defined.
 
-## Gate 7: Supabase/Postgres Schema Work
+## Strict Current Sequence
 
-Goal:
+1. Keep `www.sirinx.co` protected and unchanged.
+2. Pair Codex Mobile manually.
+3. Fill the matching evidence file for Packet 1 and rerun `pnpm external-gates:evidence-check`.
+4. Fix Telegram/LINE target evidence, then run one approved smoke only after final target approval.
+5. Collect Solis consent and station mapping, then run read-only smoke only after evidence is ready.
+6. Review Cloudflare Bot Management only with dashboard/API permission and a rollback plan.
+7. Publish `sirinx-os` to GitHub only after the exact target remote/branch/PR is approved.
 
-- Prepare database structure for leads, telemetry, approvals, audit events, and Solis read-only history.
+## Current Recommendation
 
-Approval phrase:
-
-```text
-Approve Gate 7: inspect Supabase schema/config read-only and draft a migration plan. Do not apply migrations.
-```
-
-Postgres rules:
-
-- Design RLS before exposing user/customer data.
-- Prefer explicit foreign keys and indexed lookup columns.
-- Add partial indexes for common status filters.
-- Keep time-series telemetry partitioning/retention decisions explicit.
-- Use connection pooling for serverless/edge workloads.
-- Never run migrations without rollback and test plan.
-
-Verification:
-
-- Schema draft only.
-- No production data writes.
-- No service-role key printed or read.
-
-Stop rule:
-
-- Stop before any migration, seed, data write, or RLS policy mutation.
-
-## Gate 8: Solis Read-Only Telemetry
-
-Goal:
-
-- Connect customer-approved Solis inverter telemetry as read-only input for future load-balancing analysis.
-
-Approval phrase:
-
-```text
-Approve Gate 8: configure Solis read-only telemetry smoke with approved customer consent and credential storage.
-```
-
-Preflight:
-
-- Written/customer-approved consent exists.
-- API credential path is approved.
-- Station mapping is known.
-- Kill switch and audit path exist.
-- No physical control command path is enabled.
-
-Verification:
-
-- Read-only telemetry smoke succeeds.
-- Site/station id maps to the correct customer/site.
-- No inverter control, schedule change, export limit, or load-balancing command is sent.
-
-Stop rule:
-
-- Stop if credentials, station mapping, consent, or engineer signoff is missing.
-
-## Execution Order
-
-1. Gate 1: push public branch to PR #1.
-2. Gate 2: wait for CodeRabbit and handle review.
-3. Gate 3A: Cloudflare preview after PR checks are clean.
-4. Gate 3B: production deploy only after preview approval and rollback target.
-5. Gate 4: Codex Mobile pairing can run in parallel as a human/device task.
-6. Gate 5: Telegram/LINE only after target setup.
-7. Gate 6: OpenAI key only after explicit key confirmation.
-8. Gate 7: Supabase schema draft before any migration.
-9. Gate 8: Solis telemetry only after consent and credentials.
+Do Packet 1 first. It unlocks mobile review/approval for every later external gate while keeping all production systems unchanged.

@@ -89,6 +89,8 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [ ] Solis consent, credential storage, and station mapping.
 - [ ] Cloudflare Bot Management official review.
 - [ ] GitHub push/PR for `sirinx-os` branch.
+  - Current note: this is a separate publish gate, not one of the four Command Center operational gates.
+  - Blocker: exact remote/owner/repo/branch/PR target is not recorded; `git remote -v` printed no configured remote.
 
 ## Backlog
 
@@ -97,3 +99,4 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [x] Create `HANDOFF_PROTOCOL.md`.
 - [x] Create `RUNBOOK_LIVE_START.md`.
 - [x] Create `KNOWN_ISSUES.md`.
+- [x] Refresh `docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md` to the current four-gate execution queue plus the separate `sirinx-os` publish gate.

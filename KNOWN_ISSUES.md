@@ -11,11 +11,12 @@ Mode: current known issues
 | Telegram/LINE recipient/token setup | blocked credential/recipient | Rotate/store token safely, confirm allowed recipient, then run approved smoke send. |
 | Solis API consent/credential/read-only telemetry | blocked consent/secret storage | Collect consent, store credentials safely, map station/site IDs. |
 | Cloudflare Bot Management dashboard review | optional | Only needed if replacing CSP mitigation with dashboard rules. |
-| GitHub push/PR for `sirinx-os` branch | blocked external write | Requires exact push/PR approval and target branch. |
+| GitHub push/PR for `sirinx-os` branch | blocked external write | Requires exact remote/owner/repo/branch/PR approval; current `git remote -v` prints no configured remote. |
 
 ## Operational Notes
 
 - `pnpm external-gates:check` currently reports hard failures `0`, with expected warnings for the manual gates above.
+- `docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md` is the current execution queue and supersedes the older 2026-05-19 public website release packets.
 - Public website worktree is separate and protected.
 - Command Center is local-only and dry-run by default.
 - Cloudflare challenge-platform script injection is observed in live HTML, but current CSP blocks challenge-platform script execution.
