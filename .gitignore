@@ -32,8 +32,10 @@ archive/
 # Secret/key material
 *.pem
 *.key
+*.keystore
 *.p12
 *.pfx
+secrets/
 SIRINX_SECRET_BACKUP*.tar.gz
 SIRINX_SECRET_BACKUP*.tar.gz.enc
 
