@@ -30,18 +30,21 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | Cloudflare Pages preview | Done | Preview `d641924d` source `aacad5e` passed HTTP, browser smoke, and Lighthouse checks |
 | Public website production deploy | Done | Production deployment `ab4731e9` source `cfb1a72` is active for `www.sirinx.co` |
 | Home Solution hydration SEO hotfix | Done | Commits `f594027` and `cfb1a72` keep `/home-solution/` robots `index, follow` and canonical trailing slash after React hydration |
+| Public website preload/main-thread pass | Done, deployed, and verified | Commit `8c47afb perf: reduce public page initial load pressure`; Cloudflare production deployment `7d12e73a-6319-4a24-b1b3-9c1f033ddd12` |
+| Cloudflare JavaScript Detection diagnosis | Done, external gate identified | Lighthouse attributes live mobile TBT mostly to `/cdn-cgi/challenge-platform/scripts/jsd/main.js`; current Wrangler OAuth can deploy Pages but cannot change Bot Management API (`403`) |
 
 ## Current Truth
 
 - `www.sirinx.co` remains protected as the public Solar company website.
 - `sirinx-os` is on branch `codex/urgent-backlog-execution` with Command Center local-only workflow phases committed through external gate audit preflight and refreshed backlog status.
 - Public website source `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx` is clean on branch `codex/home-solution-seo-hydration` and tracks `origin/main`.
-- GitHub `main` is at `cfb1a72 fix: align client canonical urls with static seo`.
+- GitHub `main` is at `8c47afb perf: reduce public page initial load pressure`.
 - PR #1 is merged. It is no longer a release blocker.
-- Public website production is deployed on Cloudflare Pages as `ab4731e9-44c8-4b51-8821-f18826528bc2`, branch `main`, source `cfb1a72`, URL `https://ab4731e9.sirinx-co.pages.dev`.
-- Rollback candidates are `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
+- Public website production is deployed on Cloudflare Pages as `7d12e73a-6319-4a24-b1b3-9c1f033ddd12`, branch `main`, source `8c47afb`, URL `https://7d12e73a.sirinx-co.pages.dev`.
+- Rollback candidates are `ab4731e9` source `cfb1a72`, `ff6ab27c` source `f594027`, `cfecbf8c` source `1804e81`, and pre-release `fdacecc8` source `2d5270a`.
 - Home Solution work passed typecheck, tests, production build, static SEO checks, route checks, image asset checks, desktop/mobile browser QA, no-secret review, Cloudflare preview, production deploy, and live hydration SEO checks.
-- Final live Lighthouse lab result: homepage SEO 100/accessibility 100, Home Solution SEO 100/accessibility 100, CLS 0.001. Mobile performance remains a separate optimization backlog (`home perf 35`, `home-solution perf 39` in the final lab run).
+- Final live Lighthouse lab result after `8c47afb`: homepage SEO 100/accessibility 100, Home Solution SEO 100/accessibility 100, CLS <= 0.001. Desktop performance improved to `home 64` and `home-solution 67`; mobile remains blocked by Cloudflare JavaScript Detection overhead (`home 35`, `home-solution 37`) rather than app JavaScript alone.
+- Local Lighthouse without Cloudflare challenge script improved materially after the preload pass: mobile performance `63` for both homepage and Home Solution, desktop performance `91` homepage and `90` Home Solution, with TBT `0-22ms`.
 - Current `sirinx-os` dashboard work passed syntax verification, dashboard brain checks, desktop/mobile Playwright E2E, screenshot review, local Obsidian write smoke, strict secret scan, and diff whitespace checks.
 - Lead handler is deployed through Cloudflare main-router and production POST smoke passed.
 - Command Center lead health intentionally still uses safe GET probes and does not create production leads by itself.
@@ -56,6 +59,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 | --- | --- | --- |
 | Expose `dev.sirinx.co` or other internal subdomains | DNS/Pages/Access changes are external writes | Explicit Cloudflare + Access approval |
 | Additional Cloudflare route/DNS/secret changes | External cloud mutation beyond deployed main-router | Explicit Cloudflare approval |
+| Cloudflare Bot Management / JavaScript Detection tuning | Live mobile TBT is dominated by `/cdn-cgi/challenge-platform/scripts/jsd/main.js`; Wrangler OAuth can deploy Pages but Bot Management API returned `403` | Cloudflare dashboard/API token with Bot Management write permission, then decide whether to disable JS Detection or create a lower-friction rule for the public marketing site |
 | Real Telegram/LINE sends | Customer-facing external messages | Valid recipient target, token rotation/confirmation, secret storage, and send approval |
 
 ### Credential Or Human Manual Gate
@@ -81,7 +85,7 @@ Status: current, no hidden backlog; local test/debug passed, external execution 
 
 1. Keep `sirinx-os` clean after recording the production website release evidence.
 2. Monitor live website health without creating extra production lead writes.
-3. Run a dedicated PageSpeed performance pass focused on JavaScript/main-thread reduction; do not alter the live background graphics unless a later task explicitly targets that area.
+3. Resolve the Cloudflare JavaScript Detection/Bot Management performance gate or accept that Lighthouse mobile TBT is security-script dominated.
 4. Pair Codex Mobile manually via QR because MFA/SSO requires the human operator.
 5. Fix Telegram/LINE target setup only after recipient/channel target is confirmed.
 6. Store Solis API credentials only through approved secret storage, then build read-only telemetry smoke.
