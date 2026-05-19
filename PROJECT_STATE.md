@@ -14,6 +14,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Command Center source is this repo: `/Users/sirinx/sirinx-os`.
 - GitHub repo integration inventory is local-only through `GET /api/github-integration`.
 - Lead qualification is local-only through `GET /api/lead-health` and model `2026-05-20.lead-qualification.v2`.
+- Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
 - External writes remain blocked by default.
 - Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
 
@@ -46,8 +47,8 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Agent runtime extraction | docs locked | `SIRINX_AGENT_RUNTIME_EXTRACTION_PLAN_2026-05-20.md` |
 | Marketing/CRM schema comparison | docs locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md` |
 | Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
+| policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
 | Hermes inbox implementation | not started | design required before code |
-| policy-core implementation | not started | docs-first scaffold only |
 
 ## Verification Commands
 
@@ -56,6 +57,8 @@ Use these before commit-ready status:
 ```bash
 pnpm verify
 pnpm exec vitest run services/dev-control-api/src/lead-qualification.test.mjs
+pnpm policy-core:test
+pnpm policy-core:api-test
 pnpm dashboard:e2e
 pnpm external-gates:check
 git diff --check

@@ -13,6 +13,7 @@ import { getGithubIntegrationInventory } from "./src/github-integration.mjs";
 import { getPublicWebsiteStatus } from "./src/public-website.mjs";
 import { getLeadBackendHealth } from "./src/lead-health.mjs";
 import { getMobileReviewPacket, writeMobileReviewPacket } from "./src/mobile-review-packet.mjs";
+import { getPolicyCoreStatus } from "./src/policy-core-status.mjs";
 import { getProposalDraftPreview, writeLocalProposalDraft } from "./src/proposal-draft.mjs";
 import { getProposalReviewStatus, writeProposalReviewPacket } from "./src/proposal-review.mjs";
 import { getRoiPreview } from "./src/roi-preview.mjs";
@@ -485,6 +486,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/lead-health") {
     sendJson(request, response, 200, await getLeadBackendHealth());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/policy-core") {
+    sendJson(request, response, 200, getPolicyCoreStatus());
     return;
   }
 

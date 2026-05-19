@@ -4,19 +4,27 @@ Date: 2026-05-20
 Mode: strict ordered queue
 Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
-## Immediate
+## Completed This Session
 
-- [ ] Task 0.1: Verify Phase 0/1 operating file stack
+- [x] Task 0.1: Verify Phase 0/1 operating file stack
   - Goal: confirm root operating files exist and match safety posture.
   - File scope: root markdown files, `scripts/check-operating-files.mjs`.
   - Verification: `pnpm project-os:check`, `pnpm verify`, `git diff --check`.
   - Stop rule: stop if any file claims external writes are allowed by default.
 
-- [ ] Task 0.2: Keep current local control plane healthy
+- [x] Task 0.2: Keep current local control plane healthy
   - Goal: maintain local Command Center availability for review.
   - File scope: no code changes unless a test fails.
   - Verification: `pnpm dashboard:run`, `curl http://127.0.0.1:8711/health`, `pnpm dashboard:e2e`.
   - Stop rule: do not expose local ports publicly.
+
+- [x] Task 1.2: Implement policy-core contract
+  - Goal: define gate decisions, autonomy levels, external-write decisions, and audit outputs.
+  - File scope: `packages/policy-core/`, `services/dev-control-api/src/policy-core-status.mjs`.
+  - Verification: `pnpm policy-core:test`, `pnpm policy-core:api-test`, `pnpm verify`, `pnpm dashboard:e2e`.
+  - Stop rule: external actions still return `approval_required` or `blocked` until exact target evidence exists.
+
+## Immediate
 
 - [ ] Task 1.1: Design Hermes inbox before runtime code
   - Goal: define local `POST /hermes/inbox` contract, auth/HMAC strategy, audit event shape, and dry-run behavior.
@@ -24,11 +32,11 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Verification: design review and no runtime mutation.
   - Stop rule: do not connect Telegram/LINE until recipient/token evidence exists.
 
-- [ ] Task 1.2: Draft policy-core contract
-  - Goal: define gate decisions, autonomy levels, external-write decisions, and audit outputs.
-  - File scope: `packages/policy-core/README.md`, docs only.
-  - Verification: checker confirms no production action path is armed.
-  - Stop rule: do not enforce policy in runtime until tests exist.
+- [ ] Task 1.3: Design Hermes inbox policy handoff
+  - Goal: define how Hermes inbox calls `policy-core` before any dry-run or future approval queue action.
+  - File scope: `docs/knowledge/`, `services/hermes-api/README.md`.
+  - Verification: design review plus API contract test before implementation.
+  - Stop rule: no Telegram/LINE/Solis/Cloudflare adapter execution.
 
 ## Scheduled
 

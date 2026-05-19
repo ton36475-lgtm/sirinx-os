@@ -1,13 +1,13 @@
 # packages/policy-core
 
-Status: Phase 1 docs-only scaffold
+Status: Phase 1 local evaluator implemented
 Date: 2026-05-20
 
 ## Purpose
 
-`policy-core` is the proposed shared decision layer for SIRINX action gates.
+`policy-core` is the shared local decision layer for SIRINX action gates.
 
-It should eventually answer:
+It answers:
 
 ```text
 Is this action allowed, blocked, or approval-required?
@@ -26,13 +26,21 @@ Is this action allowed, blocked, or approval-required?
 
 ## Initial Decision Outputs
 
-- `allow`
+- `allowed`
 - `approval_required`
 - `blocked`
-- `reason`
-- `required_evidence`
-- `audit_event`
+- `hardBlocks`
+- `approvalReasons`
+- `externalWrites`
+- `requiresApproval`
 
 ## Phase 1 Boundary
 
-No runtime package is implemented yet. Do not import this package from services until tests and contracts exist.
+Implemented locally only:
+
+- package entry: `packages/policy-core/src/index.mjs`
+- package tests: `packages/policy-core/src/index.test.mjs`
+- API status adapter: `services/dev-control-api/src/policy-core-status.mjs`
+- read-only endpoint: `GET /api/policy-core`
+
+External actions can evaluate to `allowed` only when exact target approval evidence is provided to the evaluator. The current Command Center status endpoint does not execute external writes and reports `externalWrites=false`.

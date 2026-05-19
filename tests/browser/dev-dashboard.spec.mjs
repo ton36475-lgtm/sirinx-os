@@ -181,6 +181,18 @@ test.describe("Developer Command Center", () => {
     expect(leadHealth.qualificationModel.workflowLane).toBe("sales-engineering-review");
     expect(Array.isArray(leadHealth.qualificationModel.reasons)).toBe(true);
     expect(Array.isArray(leadHealth.qualificationModel.riskFlags)).toBe(true);
+    const policyCoreResponse = await page.request.get("http://127.0.0.1:8711/api/policy-core");
+    expect(policyCoreResponse.ok()).toBeTruthy();
+    const policyCore = await policyCoreResponse.json();
+    expect(policyCore.status).toBe("local-policy-engine-ready");
+    expect(policyCore.externalWrites).toBe(false);
+    expect(policyCore.summary).toMatchObject({
+      samples: 5,
+      allowed: 1,
+      approval_required: 2,
+      blocked: 2,
+      externalWrites: false
+    });
     const salesArtifactsResponse = await page.request.get("http://127.0.0.1:8711/api/sales-artifacts");
     expect(salesArtifactsResponse.ok()).toBeTruthy();
     const salesArtifacts = await salesArtifactsResponse.json();
