@@ -22,6 +22,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 - Hermes inbox dry-run preview is local-only through `POST /api/hermes-inbox/dry-run`.
 - Hermes inbox `approval_required` decisions are queued locally in `GET /api/approval-queue`.
 - Approval queue evidence snapshots are local-only through `GET /api/approval-evidence` and `POST /api/approval-evidence/write`.
+- Pending work ledger is local-only through `GET /api/pending-work` and `pnpm pending-work:check`; it reports `hiddenBacklog=false`, strict gate order, and `externalWrites=false`.
 - Command Center displays Hermes inbox policy dry-run results through the `Policy Dry-Run Preview` panel.
 - Command Center displays lead event audit lane, risk flags, external handoff blocks, and evidence checklist inside the Lead Backend panel.
 - External writes remain blocked by default.
@@ -43,10 +44,10 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Gate | Status | Evidence | Next Action |
 | --- | --- | --- | --- |
 | Codex Mobile QR/MFA | blocked manual | `docs/knowledge/external-gates/evidence/codex-mobile-qr-mfa.md` expected | Human operator pairs Mac host with phone. |
+| SIRINX OS GitHub publish | blocked remote/PR target | `docs/knowledge/external-gates/evidence/sirinx-os-github-publish.md` expected | Record owner/repo, remote URL, branch, base branch, PR text, and rollback before any push/PR. |
 | Telegram/LINE | blocked credential/recipient | evidence template under `docs/knowledge/external-gates/evidence/` | Confirm recipient/channel and rotate/store token before smoke send. |
 | Solis API | blocked consent/credential | evidence template under `docs/knowledge/external-gates/evidence/` | Confirm consent, read-only credentials, and station mapping. |
 | Cloudflare Bot Management | optional official review | current CSP mitigation documented | Review dashboard/API rule only if replacing CSP mitigation. |
-| Mobile signing | blocked sensitive-file policy | GitHub integration docs | Do not read or copy keystore files. |
 
 ## Current Integration Workstreams
 
@@ -66,6 +67,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
 | Hermes inbox dry-run normalizer | done local | `services/hermes-api/src/inbox.mjs`, `POST /api/hermes-inbox/dry-run` |
 | Approval evidence snapshots | done local | `services/dev-control-api/src/approval-evidence.mjs`, `pnpm approval-evidence:dry-run` |
+| Pending work ledger | done local | `services/dev-control-api/src/pending-work.mjs`, `GET /api/pending-work`, `pnpm pending-work:check` |
 | Hermes external adapters | blocked | connector evidence required before any adapter execution |
 
 ## Verification Commands
@@ -82,6 +84,8 @@ pnpm policy-core:test
 pnpm policy-core:api-test
 pnpm hermes-inbox:test
 pnpm approval-evidence:test
+pnpm pending-work:test
+pnpm pending-work:check
 pnpm dashboard:e2e
 pnpm external-gates:check
 git diff --check

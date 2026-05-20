@@ -11,6 +11,7 @@ import { getExternalGatePackets, writeExternalGatePackets } from "./src/external
 import { getExternalGateEvidenceStatus } from "./src/external-gate-evidence.mjs";
 import { getExternalGatePreflight, writeExternalGatePreflight } from "./src/external-gate-preflight.mjs";
 import { getExternalGateRunnerStatus } from "./src/external-gate-runner.mjs";
+import { getPendingWorkLedger } from "./src/pending-work.mjs";
 import { actions, createDryRunResult, gates } from "./src/gates.mjs";
 import { getProjectInventory } from "./src/project-inventory.mjs";
 import { getGithubIntegrationInventory } from "./src/github-integration.mjs";
@@ -629,6 +630,11 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/external-gate-runner") {
     sendJson(request, response, 200, await getExternalGateRunnerStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/pending-work") {
+    sendJson(request, response, 200, await getPendingWorkLedger());
     return;
   }
 

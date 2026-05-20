@@ -60,6 +60,10 @@ const mobileReviewCommandList = document.querySelector("#mobileReviewCommandList
 const mobileReviewNextActions = document.querySelector("#mobileReviewNextActions");
 const mobileReviewWriteButton = document.querySelector("#mobileReviewWriteButton");
 const mobileReviewWriteResult = document.querySelector("#mobileReviewWriteResult");
+const pendingWorkStatus = document.querySelector("#pendingWorkStatus");
+const pendingWorkSummary = document.querySelector("#pendingWorkSummary");
+const pendingWorkList = document.querySelector("#pendingWorkList");
+const pendingWorkNextActions = document.querySelector("#pendingWorkNextActions");
 const externalGateStatus = document.querySelector("#externalGateStatus");
 const externalGateSummary = document.querySelector("#externalGateSummary");
 const externalGateList = document.querySelector("#externalGateList");
@@ -556,6 +560,41 @@ const fallbackExternalGateRunner = {
     }
   ],
   nextActions: ["Start the local control API and refresh external gate runner readiness."]
+};
+
+const fallbackPendingWork = {
+  status: "unavailable",
+  mode: "local-fallback",
+  externalWrites: false,
+  productionWrites: false,
+  customerVisible: false,
+  canExecuteNow: false,
+  mainWebsiteProtected: true,
+  summary: {
+    pendingItems: 0,
+    blockedExternalGates: 1,
+    readyForHumanReview: 0,
+    unsafeEvidence: 0,
+    localOnlyRunnable: 0,
+    hiddenBacklog: false,
+    externalWrites: false,
+    executableNow: 0
+  },
+  pendingItems: [
+    {
+      id: "fallback",
+      part: 1,
+      title: "Pending work ledger unavailable",
+      lane: "shogun",
+      status: "blocked-api-offline",
+      checkedCount: 0,
+      requiredCount: 0,
+      nextAction: "Start the local control API to inspect the current pending work queue.",
+      canExecuteNow: false,
+      externalWrites: false
+    }
+  ],
+  nextActions: ["Start the local control API and refresh the pending work ledger."]
 };
 
 const fallbackHermesInbox = {
@@ -1619,6 +1658,43 @@ function renderExternalGatePackets(packetSet) {
     : "Local gate packet writer waits for API readiness.";
 }
 
+function renderPendingWork(ledger) {
+  const data = ledger || fallbackPendingWork;
+  const apiReady = data.status !== "unavailable";
+  const unsafe = (data.summary?.unsafeEvidence || 0) > 0;
+  const summary = data.summary || fallbackPendingWork.summary;
+
+  pendingWorkStatus.textContent = unsafe ? "Evidence unsafe" : apiReady ? "External gates blocked" : "Ledger unavailable";
+  pendingWorkStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  pendingWorkStatus.classList.add(unsafe ? "status-lock" : "status-warn");
+
+  pendingWorkSummary.replaceChildren(
+    makeSummaryCard("Pending", `${summary.pendingItems || 0}`, `${summary.blockedExternalGates || 0} blocked`),
+    makeSummaryCard("Human Review", `${summary.readyForHumanReview || 0}`, "evidence-ready"),
+    makeSummaryCard("Hidden Backlog", summary.hiddenBacklog ? "Yes" : "No", "local ledger"),
+    makeSummaryCard("Executable Now", `${summary.executableNow || 0}`, data.externalWrites ? "external armed" : "external off"),
+    makeSummaryCard("Main Site", data.mainWebsiteProtected ? "Protected" : "Check", "www.sirinx.co")
+  );
+
+  renderSignalList(
+    pendingWorkList,
+    (data.pendingItems || fallbackPendingWork.pendingItems).map((item) => ({
+      title: `Part ${item.part || "?"}: ${item.title || item.id}`,
+      detail: `${item.status}; ${item.checkedCount || 0}/${item.requiredCount || 0} evidence checked; ${item.nextAction || "no next action"}`,
+      ok: item.externalWrites === false && item.canExecuteNow === false && item.evidenceStatus !== "unsafe-secret-like-content",
+      badge: item.lane || item.owner || "pending"
+    }))
+  );
+
+  pendingWorkNextActions.replaceChildren(
+    ...(data.nextActions || fallbackPendingWork.nextActions).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+}
+
 function renderExternalGatePreflight(preflight) {
   const data = preflight || fallbackExternalGatePreflight;
   const ready = data.status === "ready-local-preflight";
@@ -2533,6 +2609,12 @@ async function loadDashboard() {
       renderMobileReviewPacket,
       () => renderMobileReviewPacket(fallbackMobileReviewPacket),
       "Mobile review packet"
+    ),
+    loadPanel(
+      "/api/pending-work",
+      renderPendingWork,
+      () => renderPendingWork(fallbackPendingWork),
+      "Pending work"
     ),
     loadPanel(
       "/api/external-gate-packets",

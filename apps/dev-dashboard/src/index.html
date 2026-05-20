@@ -251,6 +251,27 @@
         </div>
       </section>
 
+      <section class="panel pending-work-panel" aria-label="Current pending work ledger">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Execution Ledger</p>
+            <h2>Current Pending Work</h2>
+          </div>
+          <span id="pendingWorkStatus" class="status-pill status-warn">Ledger checking</span>
+        </div>
+        <div id="pendingWorkSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Pending work strict order">
+            <h3>Strict Order</h3>
+            <div id="pendingWorkList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Pending work next actions">
+            <h3>Next Actions</h3>
+            <ol id="pendingWorkNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel external-gate-panel" aria-label="External gate approval packets">
         <div class="panel-head">
           <div>

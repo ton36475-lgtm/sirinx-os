@@ -77,6 +77,12 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#mobileReviewCommandList")).toContainText("Review proposal gate status");
     await expect(page.locator("#mobileReviewWriteButton")).toBeEnabled();
     await expect(page.locator("#mobileReviewWriteResult")).toContainText("Codex Mobile Review Packets");
+    await expect(page.getByRole("heading", { name: "Current Pending Work" })).toBeVisible();
+    await expect(page.locator("#pendingWorkStatus")).toHaveText("External gates blocked");
+    await expect(page.locator("#pendingWorkSummary")).toContainText("Hidden Backlog");
+    await expect(page.locator("#pendingWorkSummary")).toContainText("No");
+    await expect(page.locator("#pendingWorkList")).toContainText("Part 1: Codex Mobile QR/MFA Pairing");
+    await expect(page.locator("#pendingWorkList")).toContainText("Part 2: SIRINX OS GitHub Publish Target");
     await expect(page.getByRole("heading", { name: "Approval Phrase Packets" })).toBeVisible();
     await expect(page.locator("#externalGateStatus")).toHaveText("Packets ready");
     await expect(page.locator("#externalGateSummary")).toContainText("Off");
@@ -453,6 +459,18 @@ test.describe("Developer Command Center", () => {
     expect(externalGateRunner.summary.gates).toBe(5);
     expect(externalGateRunner.summary.executableNow).toBe(0);
     expect(externalGateRunner.runs.some((item) => item.id === "sirinx-os-github-publish" && item.blockedExternalActions.includes("git push"))).toBe(true);
+    const pendingWorkResponse = await page.request.get("http://127.0.0.1:8711/api/pending-work");
+    expect(pendingWorkResponse.ok()).toBeTruthy();
+    const pendingWork = await pendingWorkResponse.json();
+    expect(pendingWork.status).toBe("blocked-external-gates");
+    expect(pendingWork.externalWrites).toBe(false);
+    expect(pendingWork.canExecuteNow).toBe(false);
+    expect(pendingWork.summary.pendingItems).toBe(5);
+    expect(pendingWork.summary.hiddenBacklog).toBe(false);
+    expect(pendingWork.pendingItems.map((item) => item.id).slice(0, 2)).toEqual([
+      "codex-mobile-qr-mfa",
+      "sirinx-os-github-publish"
+    ]);
     expect(consoleErrors).toEqual([]);
   });
 
@@ -503,6 +521,8 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#mobileReviewStatus")).toHaveText("Mobile packet blocked");
     await expect(page.locator("#mobileReviewCommandList")).toContainText("Start the local control API");
     await expect(page.locator("#mobileReviewWriteButton")).toBeDisabled();
+    await expect(page.locator("#pendingWorkStatus")).toHaveText("Ledger unavailable");
+    await expect(page.locator("#pendingWorkList")).toContainText("Pending work ledger unavailable");
     await expect(page.locator("#externalGateStatus")).toHaveText("Packets blocked");
     await expect(page.locator("#externalGateList")).toContainText("External gate packets unavailable");
     await expect(page.locator("#externalGateWriteButton")).toBeDisabled();

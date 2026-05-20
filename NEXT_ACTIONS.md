@@ -62,6 +62,12 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `services/dev-control-api/src/lead-event-audit.mjs`, tests, API route.
   - Verification: `pnpm lead-event-audit:test`, `pnpm verify`, API smoke, no production POST.
 
+- [x] Task 1.8: Implement current pending-work ledger
+  - Goal: expose the remaining work in one ordered local-only ledger so Hermes/Command Center cannot hide or reorder old gates.
+  - File scope: `services/dev-control-api/src/pending-work.mjs`, `scripts/pending-work-ledger.mjs`, `apps/dev-dashboard/`, tests, `docs/knowledge/SIRINX_PENDING_WORK_LEDGER_2026-05-20.md`.
+  - Verification: `pnpm pending-work:test`, `pnpm pending-work:check`, `pnpm verify`, `pnpm dashboard:e2e`.
+  - Stop rule: ledger may report evidence and blockers, but it must never arm external writes.
+
 - [x] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.
   - Goal: display lead event audit lane, risk flags, blocked handoffs, and evidence checklist in the Lead Backend panel.
   - File scope: `apps/dev-dashboard/src/`, browser tests.
@@ -104,3 +110,4 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [x] Add local `/api/external-gate-evidence` and Command Center Evidence Readiness panel so Hermes/Codex can inspect gate evidence without terminal parsing.
 - [x] Add `sirinx-os` GitHub publish evidence into the same evidence checker so the push/PR gate is not tracked outside the system.
 - [x] Add local Gate Runner Readiness so Hermes/Codex can see allowed local checks and blocked external actions for each gate.
+- [x] Add local Pending Work Ledger so Hermes/Codex can see strict operator order and confirm `hiddenBacklog=false`.
