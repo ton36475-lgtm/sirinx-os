@@ -26,8 +26,13 @@ logs/
 
 # Local control/state folders
 .thclaws/
+.hermes/
 data/
 archive/
+
+# Python runtime cache
+__pycache__/
+*.py[cod]
 
 # Secret/key material
 *.pem

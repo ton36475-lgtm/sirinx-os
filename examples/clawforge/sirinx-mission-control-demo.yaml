@@ -1,0 +1,32 @@
+version: 1
+id: sirinx-mission-control-demo
+title: SIRINXDev Mission Control Demo
+mode: validate-only
+safety:
+  localOnly: true
+  allowedHosts:
+    - localhost
+    - 127.0.0.1
+  forbidden:
+    - external-upload
+    - public-publish
+    - billing-screen
+    - secrets
+    - private-message
+    - customer-data
+scenes:
+  - id: intro
+    target: http://127.0.0.1:3000
+    action: show-mission-control
+    narration: "SIRINXDev governs agent work through local approvals, evidence, and vault updates."
+  - id: command-flow
+    target: http://127.0.0.1:3000
+    action: show-command-to-approval
+    narration: "Every command moves from plan to issue to job to verification before approval."
+  - id: evidence
+    target: http://127.0.0.1:3000
+    action: show-evidence-pack
+    narration: "Evidence is prepared locally for review. Upload and submission remain blocked."
+outputs:
+  video: vault/evidence/sirinx-mission-control-demo.mp4
+  evidence: vault/evidence/sirinx-mission-control-demo.json
