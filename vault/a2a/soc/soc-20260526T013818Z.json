@@ -1,0 +1,70 @@
+{
+  "title": "A2ASync-1CeoAgent SOC monitor",
+  "status": "ready-local",
+  "mode": "dual-target-local-only",
+  "target": "mac-local",
+  "externalWrites": false,
+  "productionWrites": false,
+  "customerVisible": false,
+  "snapshot": {
+    "timestamp": "2026-05-26T01:38:18.906Z",
+    "cpu": {
+      "percent": null,
+      "loadAverage": [
+        2.26,
+        3.51,
+        2.88
+      ]
+    },
+    "memory": {
+      "usedGb": 7.93,
+      "totalGb": 8,
+      "percent": 99.1
+    },
+    "disk": {
+      "usedGb": 117.65,
+      "totalGb": 228.27,
+      "percent": 51.5
+    },
+    "docker": {
+      "state": "not_run",
+      "containers": [],
+      "note": "Docker inspection is disabled in the local SOC checker; Ubuntu install pack can enable a read-only docker inspect collector."
+    },
+    "errors": []
+  },
+  "truthStates": {
+    "cpu": "observed",
+    "memory": "observed",
+    "disk": "observed",
+    "docker": "observed",
+    "telegram": "blocked"
+  },
+  "a2aQueue": {
+    "path": "/Users/sirinx/sirinx-os/vault/a2a/soc",
+    "itemCount": 1,
+    "status": "local-only"
+  },
+  "telegram": {
+    "status": "blocked-evidence-incomplete",
+    "readyForHumanReview": false,
+    "unsafe": false,
+    "canSend": false,
+    "checkedCount": 1,
+    "requiredCount": 5,
+    "nextAction": "Rotate or confirm messaging credentials and recipient target before any smoke send.",
+    "evidenceRoot": "/Users/sirinx/sirinx-os/docs/knowledge/external-gates/evidence"
+  },
+  "installPack": {
+    "status": "planned-local-only",
+    "macLocal": "validate collectors and dashboard from sirinx-os first",
+    "ubuntuDocker": "prepare systemd/cron install pack after local dry-run is proven",
+    "externalSend": "blocked until Telegram/LINE evidence and exact approval exist"
+  },
+  "nextActions": [
+    "Use `pnpm soc:check` for read-only local validation.",
+    "Use `pnpm soc:dry-run` only when local JSON/A2A artifact writes are intended.",
+    "Complete Telegram/LINE recipient and token evidence before any send attempt."
+  ],
+  "stopPoint": "A2ASYNC-1CEOAGENT READY LOCAL-ONLY — TELEGRAM DELIVERY BLOCKED UNTIL APPROVAL"
+}
