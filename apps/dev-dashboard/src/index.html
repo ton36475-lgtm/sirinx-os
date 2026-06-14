@@ -64,6 +64,348 @@
         </section>
       </section>
 
+      <section class="panel vibe-agent-panel" aria-label="Local vibe coding agent">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Local Execution Agent</p>
+            <h2>Vibe Coding Agent</h2>
+          </div>
+          <span id="vibeAgentStatus" class="status-pill status-warn">Agent checking</span>
+        </div>
+        <div id="vibeAgentSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Vibe agent local safe actions">
+            <h3>Safe Local Actions</h3>
+            <div id="vibeAgentSafeActions" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Vibe agent blocked external gates">
+            <h3>Blocked Gates</h3>
+            <div id="vibeAgentBlockedGates" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Vibe agent human review queue">
+            <h3>Human Review</h3>
+            <div id="vibeAgentReviewQueue" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Vibe agent approval packet">
+            <h3>Approval Packet</h3>
+            <div id="vibeAgentApprovalPacket" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel connector-panel" aria-label="Mission Control connector registry">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Gateway Mesh</p>
+            <h2>Connector Panel</h2>
+          </div>
+          <span id="connectorPanelStatus" class="status-pill status-warn">Registry checking</span>
+        </div>
+        <div id="connectorPanelSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="connectorStopPoint" class="connector-stop">Connector registry waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Connector owner lanes">
+            <h3>Owner Lanes</h3>
+            <div id="connectorOwnerList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Connector registry records">
+            <h3>Connectors</h3>
+            <div id="connectorList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Connector blocked gates">
+            <h3>Blocked Gates</h3>
+            <div id="connectorGateList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel agent-launch-panel" aria-label="Ollama agent launch gate">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Ollama</p>
+            <h2>Agent Launch Gate</h2>
+          </div>
+          <span id="agentLaunchStatus" class="status-pill status-warn">Launch gate checking</span>
+        </div>
+        <div id="agentLaunchSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="agentLaunchStopPoint" class="agent-launch-stop">Agent launch gate waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Ollama launch commands">
+            <h3>Manual Commands</h3>
+            <div id="agentLaunchCommandList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Agent launch health gates">
+            <h3>Health Gates</h3>
+            <div id="agentLaunchHealthList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Agent launch blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="agentLaunchBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel agent-driver-panel" aria-label="Agent Driver local smoke gate">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Local Smoke</p>
+            <h2>Agent Driver</h2>
+          </div>
+          <span id="agentDriverStatus" class="status-pill status-warn">Agent driver checking</span>
+        </div>
+        <div id="agentDriverSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="agentDriverStopPoint" class="agent-launch-stop">Agent driver waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Agent driver lanes">
+            <h3>Driver Lanes</h3>
+            <div id="agentDriverLaneList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Agent driver evidence">
+            <h3>Evidence</h3>
+            <div id="agentDriverEvidenceList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Agent driver blocked work">
+            <h3>Blocked Work</h3>
+            <div id="agentDriverBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel centerbrain-panel" aria-label="CenterBrain Hub adaptive sync">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">A2A2 Adaptive Sync</p>
+            <h2>CenterBrain Hub</h2>
+          </div>
+          <span id="centerBrainStatus" class="status-pill status-warn">CenterBrain checking</span>
+        </div>
+        <div id="centerBrainSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="centerBrainStopPoint" class="agent-launch-stop">CenterBrain waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="CenterBrain AI and device nodes">
+            <h3>Nodes</h3>
+            <div id="centerBrainNodeList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="CenterBrain stack lanes">
+            <h3>Stack Lanes</h3>
+            <div id="centerBrainStackList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="CenterBrain blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="centerBrainBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel team-runtime-panel" aria-label="Team Runtime Bridge for Qwen OpenRouter and Antigravity">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Runtime Bridge</p>
+            <h2>Hermes Team + Qwen + Antigravity</h2>
+          </div>
+          <span id="teamRuntimeStatus" class="status-pill status-warn">Team runtime checking</span>
+        </div>
+        <div id="teamRuntimeSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="teamRuntimeStopPoint" class="agent-launch-stop">Team runtime bridge waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Team runtime lanes">
+            <h3>Runtime Lanes</h3>
+            <div id="teamRuntimeLaneList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Team runtime model lanes">
+            <h3>Model Lanes</h3>
+            <div id="teamRuntimeModelList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Team runtime blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="teamRuntimeBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel openrouter-qwen-adapter-panel" aria-label="OpenRouter Qwen Adapter local policy gate">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Model Routing Gate</p>
+            <h2>OpenRouter Qwen Adapter</h2>
+          </div>
+          <span id="openRouterQwenAdapterStatus" class="status-pill status-warn">Adapter checking</span>
+        </div>
+        <div id="openRouterQwenAdapterSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="OpenRouter Qwen Adapter policy">
+            <h3>Policy</h3>
+            <div id="openRouterQwenAdapterPolicyList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="OpenRouter Qwen Adapter blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="openRouterQwenAdapterBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel model-routing-approval-panel" aria-label="OpenRouter Qwen model routing approval gate">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Approval Gate</p>
+            <h2>Model Routing Approval</h2>
+          </div>
+          <span id="modelRoutingApprovalStatus" class="status-pill status-warn">Approval checking</span>
+        </div>
+        <div id="modelRoutingApprovalSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Model routing approval evidence">
+            <h3>Evidence</h3>
+            <div id="modelRoutingApprovalEvidenceList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Model routing blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="modelRoutingApprovalBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel adaptive-command-gateway-panel" aria-label="Hermes Adaptive Command Gateway status">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Telegram Gateway</p>
+            <h2>Hermes Adaptive Command Gateway</h2>
+          </div>
+          <span id="adaptiveCommandGatewayStatus" class="status-pill status-warn">Gateway checking</span>
+        </div>
+        <div id="adaptiveCommandGatewaySummary" class="executive-summary" aria-live="polite"></div>
+        <div id="adaptiveCommandGatewayStopPoint" class="agent-launch-stop">Adaptive command gateway waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Adaptive gateway commands">
+            <h3>Commands</h3>
+            <div id="adaptiveCommandGatewayCommandList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Adaptive gateway model split">
+            <h3>Model Split</h3>
+            <div id="adaptiveCommandGatewayModelList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Adaptive gateway blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="adaptiveCommandGatewayBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel spec-first-swarm-panel" aria-label="Hermes Spec-First Swarm workflow gate">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Spec-First Workflow</p>
+            <h2>Hermes Spec-First Swarm</h2>
+          </div>
+          <span id="specFirstSwarmStatus" class="status-pill status-warn">Spec-first checking</span>
+        </div>
+        <div id="specFirstSwarmSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="specFirstSwarmStopPoint" class="agent-launch-stop">Spec-first swarm waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Hermes Spec-First source of truth">
+            <h3>Source Of Truth</h3>
+            <div id="specFirstSwarmFileList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Hermes Spec-First agent roles">
+            <h3>Agent Roles</h3>
+            <div id="specFirstSwarmRoleList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Hermes Spec-First blocked actions">
+            <h3>Blocked Actions</h3>
+            <div id="specFirstSwarmBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel local-rag-panel" aria-label="Mission Control local RAG prototype">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Local Memory</p>
+            <h2>RAG / turbovec</h2>
+          </div>
+          <span id="localRagStatus" class="status-pill status-warn">RAG checking</span>
+        </div>
+        <div id="localRagSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="localRagStopPoint" class="local-rag-stop">Local RAG waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Local RAG corpus">
+            <h3>Corpus</h3>
+            <div id="localRagCorpusList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Local RAG dependencies">
+            <h3>Dependencies</h3>
+            <div id="localRagDependencyList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Local RAG blocked gates">
+            <h3>Blocked Gates</h3>
+            <div id="localRagBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel image-edit-panel" aria-label="Hermes image edit gateway">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Hermes Media</p>
+            <h2>Image-to-Image Gateway</h2>
+          </div>
+          <span id="imageEditStatus" class="status-pill status-warn">Image edit checking</span>
+        </div>
+        <div id="imageEditSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="imageEditStopPoint" class="image-edit-stop">Image edit contract waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Image edit contract">
+            <h3>Contract</h3>
+            <div id="imageEditContractList" class="signal-list"></div>
+          </section>
+          <section class="tool-column tool-column-wide" aria-label="Image edit acceptance packet">
+            <h3>Acceptance Packet</h3>
+            <div id="imageEditAcceptanceList" class="signal-list"></div>
+          </section>
+          <section class="tool-column tool-column-wide" aria-label="Image edit evidence fields">
+            <h3>Evidence</h3>
+            <div id="imageEditEvidenceList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Image edit invalid usage">
+            <h3>Invalid Usage</h3>
+            <div id="imageEditInvalidList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Image edit blocked actions">
+            <h3>Blocked Gates</h3>
+            <div id="imageEditBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel soc-panel" aria-label="SOC and truth protocol">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">A2ASync-1CeoAgent</p>
+            <h2>SOC Truth Protocol</h2>
+          </div>
+          <span id="socStatus" class="status-pill status-warn">SOC checking</span>
+        </div>
+        <div id="socSummary" class="executive-summary" aria-live="polite"></div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Host metrics snapshot">
+            <h3>Read-Only Snapshot</h3>
+            <div id="socSnapshotList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="SOC delivery gates">
+            <h3>Delivery Gates</h3>
+            <div id="socGateList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Truth protocol report rules">
+            <h3>Truth Rules</h3>
+            <div id="truthRuleList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="SOC next actions">
+            <h3>Next Actions</h3>
+            <ol id="socNextActions" class="next-action-list"></ol>
+          </section>
+        </div>
+      </section>
+
       <section class="panel lead-panel" aria-label="Lead backend health">
         <div class="panel-head">
           <div>

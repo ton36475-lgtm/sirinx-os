@@ -1,0 +1,83 @@
+{
+  "status": "local-plan-only",
+  "approval": "APPROVE_CLOUDFLARE_DEV_PLAN_LOCAL_ONLY",
+  "deployApprovalRequired": "APPROVE_CLOUDFLARE_PRIVATE_DEV_DEPLOY",
+  "cloudflareApiCall": false,
+  "externalWrite": false,
+  "secretRequired": false,
+  "hosts": [
+    {
+      "host": "dev.sirinx.co",
+      "purpose": "private mission control",
+      "boundary": "Cloudflare Access"
+    },
+    {
+      "host": "agents.sirinx.co",
+      "purpose": "private edge agent runtime",
+      "boundary": "Cloudflare Access"
+    },
+    {
+      "host": "mcp.sirinx.co",
+      "purpose": "remote MCP portal",
+      "boundary": "Cloudflare Access plus OAuth/scoped MCP permissions"
+    }
+  ],
+  "bindings": [
+    {
+      "name": "EDGE_ORCHESTRATOR",
+      "type": "durable_object",
+      "purpose": "EdgeOrchestratorAgent state",
+      "created": false
+    },
+    {
+      "name": "SIRINX_AGENT_DB",
+      "type": "d1",
+      "purpose": "agent runs, approvals, audit events, cost ledger",
+      "created": false
+    },
+    {
+      "name": "SIRINX_EVIDENCE_BUCKET",
+      "type": "r2",
+      "purpose": "private evidence artifacts",
+      "created": false
+    },
+    {
+      "name": "AGENT_JOBS",
+      "type": "queue",
+      "purpose": "async approved jobs",
+      "created": false
+    },
+    {
+      "name": "SIRINX_POLICY_MEMORY",
+      "type": "vectorize",
+      "purpose": "policy and project retrieval memory",
+      "created": false
+    },
+    {
+      "name": "AI_GATEWAY_ROUTE",
+      "type": "ai_gateway",
+      "purpose": "model traffic policy and cost control",
+      "created": false
+    }
+  ],
+  "secretNamesOnly": [
+    "CLOUDFLARE_API_TOKEN",
+    "CLOUDFLARE_ACCOUNT_ID",
+    "CLOUDFLARE_ZONE_ID",
+    "SIRINX_ACCESS_SERVICE_TOKEN_ID",
+    "SIRINX_ACCESS_SERVICE_TOKEN_SECRET"
+  ],
+  "stopBefore": [
+    "wrangler deploy",
+    "wrangler secret put",
+    "dns edit",
+    "access policy write",
+    "d1 create",
+    "r2 bucket create",
+    "queue create",
+    "vectorize create",
+    "ai gateway mutation",
+    "remote mcp registration",
+    "cloudflare api mcp mutation"
+  ]
+}

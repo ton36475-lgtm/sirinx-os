@@ -22,6 +22,158 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Lead Qualification Routing");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Solis Load Balancing");
     await expect(page.locator("#vibeFunctionGrid")).toContainText("Telegram / LINE Bridge");
+    await expect(page.getByRole("heading", { name: "Vibe Coding Agent" })).toBeVisible();
+    await expect(page.locator("#vibeAgentStatus")).toHaveText(/Agent local ready|Agent blocked/);
+    await expect(page.locator("#vibeAgentSummary")).toContainText("Safe Actions");
+    await expect(page.locator("#vibeAgentSafeActions")).toContainText("Verify Local Workspace");
+    await expect(page.locator("#vibeAgentSafeActions")).toContainText("pnpm verify:workspace");
+    await expect(page.locator("#vibeAgentBlockedGates")).toContainText("Telegram/LINE Recipient");
+    await expect(page.locator("#vibeAgentApprovalPacket")).toContainText("human review");
+    await expect(page.getByRole("heading", { name: "Connector Panel" })).toBeVisible();
+    await expect(page.locator("#connectorPanelStatus")).toHaveText("Registry local ready");
+    await expect(page.locator("#connectorPanelSummary")).toContainText("15");
+    await expect(page.locator("#connectorPanelSummary")).toContainText("7");
+    await expect(page.locator("#connectorPanelSummary")).toContainText("47");
+    await expect(page.locator("#connectorOwnerList")).toContainText("shogun");
+    await expect(page.locator("#connectorOwnerList")).toContainText("planner");
+    await expect(page.locator("#connectorOwnerList")).toContainText("backend");
+    await expect(page.locator("#connectorOwnerList")).toContainText("scribe");
+    await expect(page.locator("#connectorOwnerList")).toContainText("qa");
+    await expect(page.locator("#connectorOwnerList")).toContainText("devops");
+    await expect(page.locator("#connectorOwnerList")).toContainText("security");
+    await expect(page.locator("#connectorList")).toContainText("OpenAI Developers");
+    await expect(page.locator("#connectorList")).toContainText("Supabase");
+    await expect(page.locator("#connectorList")).toContainText("GitHub");
+    await expect(page.locator("#connectorList")).toContainText("LOCKED / LOCAL-ONLY");
+    await expect(page.locator("#connectorGateList")).toContainText("external_connector_activation");
+    await expect(page.locator("#connectorGateList")).toContainText("real_mcp_execution");
+    await expect(page.locator("#connectorGateList")).toContainText("telegram_send");
+    await expect(page.locator("#connectorGateList")).toContainText("paid_api_call");
+    await expect(page.locator("#connectorGateList")).toContainText("secret_read_or_print");
+    await expect(page.locator("#connectorStopPoint")).toContainText("WAITING FOR HUMAN APPROVAL");
+    await expect(page.locator(".connector-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Agent Launch Gate" })).toBeVisible();
+    await expect(page.locator("#agentLaunchStatus")).toHaveText(/Launch gate local ready|local-launch-gate-ready|Launch gate blocked/);
+    await expect(page.locator("#agentLaunchSummary")).toContainText("Manual Only");
+    await expect(page.locator("#agentLaunchCommandList")).toContainText("Codex");
+    await expect(page.locator("#agentLaunchBlockedList")).toContainText("agent_auto_execute");
+    await expect(page.getByRole("heading", { name: "Agent Driver" })).toBeVisible();
+    await expect(page.locator("#agentDriverStatus")).toHaveText(/Agent driver local ready|agent-driver-ready-local-only|Agent driver blocked/);
+    await expect(page.locator("#agentDriverSummary")).toContainText("Passed");
+    await expect(page.locator("#agentDriverSummary")).toContainText("Executed");
+    await expect(page.locator("#agentDriverLaneList")).toContainText("Codex");
+    await expect(page.locator("#agentDriverLaneList")).toContainText("passed");
+    await expect(page.locator("#agentDriverLaneList")).toContainText("Hermes Agent");
+    await expect(page.locator("#agentDriverLaneList")).toContainText("side_effectful");
+    await expect(page.locator("#agentDriverEvidenceList")).toContainText("SIRINX_AGENT_DRIVER_V1.md");
+    await expect(page.locator("#agentDriverEvidenceList")).toContainText("dry-run-only");
+    await expect(page.locator("#agentDriverBlockedList")).toContainText("file_edit_by_agent");
+    await expect(page.locator("#agentDriverBlockedList")).toContainText("mcp_server_start");
+    await expect(page.locator("#agentDriverBlockedList")).toContainText("install_packages");
+    await expect(page.locator(".agent-driver-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "CenterBrain Hub" })).toBeVisible();
+    await expect(page.locator("#centerBrainStatus")).toHaveText(/CenterBrain local ready|centerbrain-hub-ready-local-only|CenterBrain blocked/);
+    await expect(page.locator("#centerBrainSummary")).toContainText("AI Nodes");
+    await expect(page.locator("#centerBrainSummary")).toContainText("Live Actions");
+    await expect(page.locator("#centerBrainNodeList")).toContainText("Codex");
+    await expect(page.locator("#centerBrainNodeList")).toContainText("Mac mini");
+    await expect(page.locator("#centerBrainNodeList")).toContainText("Mobile phone");
+    await expect(page.locator("#centerBrainStackList")).toContainText("Next.js");
+    await expect(page.locator("#centerBrainStackList")).toContainText("Tailwind");
+    await expect(page.locator("#centerBrainStackList")).toContainText("Go");
+    await expect(page.locator("#centerBrainBlockedList")).toContainText("external_connector_activation");
+    await expect(page.locator("#centerBrainBlockedList")).toContainText("device_remote_control");
+    await expect(page.locator("#centerBrainBlockedList")).toContainText("mobile_push_notification");
+    await expect(page.locator(".centerbrain-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Hermes Team + Qwen + Antigravity" })).toBeVisible();
+    await expect(page.locator("#teamRuntimeStatus")).toHaveText(/Team runtime bridge ready|Team runtime blocked/);
+    await expect(page.locator("#teamRuntimeSummary")).toContainText("Cloud Models");
+    await expect(page.locator("#teamRuntimeSummary")).toContainText("Paid API Exec");
+    await expect(page.locator("#teamRuntimeLaneList")).toContainText("Hermes Agent Team");
+    await expect(page.locator("#teamRuntimeLaneList")).toContainText("Antigravity CLI Watch");
+    await expect(page.locator("#teamRuntimeModelList")).toContainText("qwen/qwen3.7-max");
+    await expect(page.locator("#teamRuntimeModelList")).toContainText("OpenRouter");
+    await expect(page.locator("#teamRuntimeBlockedList")).toContainText("openrouter_provider_call");
+    await expect(page.locator("#teamRuntimeBlockedList")).toContainText("antigravity_cli_auto_run");
+    await expect(page.locator(".team-runtime-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "OpenRouter Qwen Adapter" })).toBeVisible();
+    await expect(page.locator("#openRouterQwenAdapterStatus")).toHaveText(/Adapter ready|Adapter blocked/);
+    await expect(page.locator("#openRouterQwenAdapterSummary")).toContainText("qwen/qwen3.7-max");
+    await expect(page.locator("#openRouterQwenAdapterSummary")).toContainText("qwen/qwen3-max");
+    await expect(page.locator("#openRouterQwenAdapterPolicyList")).toContainText("response_format");
+    await expect(page.locator("#openRouterQwenAdapterPolicyList")).toContainText("provider.zdr");
+    await expect(page.locator("#openRouterQwenAdapterPolicyList")).toContainText("explicit-cache-control");
+    await expect(page.locator("#openRouterQwenAdapterBlockedList")).toContainText("openrouter_provider_call");
+    await expect(page.locator("#openRouterQwenAdapterBlockedList")).toContainText("provider_credit_spend");
+    await expect(page.locator(".openrouter-qwen-adapter-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Model Routing Approval" })).toBeVisible();
+    await expect(page.locator("#modelRoutingApprovalStatus")).toHaveText(/Approval ready|Approval blocked/);
+    await expect(page.locator("#modelRoutingApprovalSummary")).toContainText("qwen/qwen3.7-max");
+    await expect(page.locator("#modelRoutingApprovalSummary")).toContainText("qwen/qwen3-max");
+    await expect(page.locator("#modelRoutingApprovalEvidenceList")).toContainText("model_slug_locked");
+    await expect(page.locator("#modelRoutingApprovalEvidenceList")).toContainText("one_future_smoke_requires_approval");
+    await expect(page.locator("#modelRoutingApprovalBlockedList")).toContainText("openrouter_provider_call");
+    await expect(page.locator("#modelRoutingApprovalBlockedList")).toContainText("non_dry_run_model_smoke");
+    await expect(page.locator(".model-routing-approval-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Hermes Adaptive Command Gateway" })).toBeVisible();
+    await expect(page.locator("#adaptiveCommandGatewayStatus")).toHaveText(/Adaptive gateway ready|Gateway blocked/);
+    await expect(page.locator("#adaptiveCommandGatewaySummary")).toContainText("Fast ACK");
+    await expect(page.locator("#adaptiveCommandGatewayCommandList")).toContainText("/clear");
+    await expect(page.locator("#adaptiveCommandGatewayCommandList")).toContainText("/kanban boards switch <slug>");
+    await expect(page.locator("#adaptiveCommandGatewayModelList")).toContainText("qwen/qwen3.7-max");
+    await expect(page.locator("#adaptiveCommandGatewayModelList")).toContainText("qwen/qwen3.7-max");
+    await expect(page.locator("#adaptiveCommandGatewayBlockedList")).toContainText("message_send");
+    await expect(page.locator("#adaptiveCommandGatewayBlockedList")).toContainText("provider_call");
+    await expect(page.locator(".adaptive-command-gateway-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Hermes Spec-First Swarm" })).toBeVisible();
+    await expect(page.locator("#specFirstSwarmStatus")).toHaveText(/Spec-first state ready|Spec-first blocked/);
+    await expect(page.locator("#specFirstSwarmSummary")).toContainText("APPROVE_IMPLEMENTATION");
+    await expect(page.locator("#specFirstSwarmSummary")).toContainText("APPROVAL_GATE");
+    await expect(page.locator("#specFirstSwarmFileList")).toContainText(".hermes/context.md");
+    await expect(page.locator("#specFirstSwarmFileList")).toContainText("docs/03-technical-spec.md");
+    await expect(page.locator("#specFirstSwarmRoleList")).toContainText("Hermes Orchestrator");
+    await expect(page.locator("#specFirstSwarmRoleList")).toContainText("Coder Agent");
+    await expect(page.locator("#specFirstSwarmBlockedList")).toContainText("write_code_before_approval");
+    await expect(page.locator("#specFirstSwarmBlockedList")).toContainText("install_packages");
+    await expect(page.locator("#specFirstSwarmBlockedList")).toContainText("paid_api_call");
+    await expect(page.locator(".spec-first-swarm-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "RAG / turbovec" })).toBeVisible();
+    await expect(page.locator("#localRagStatus")).toHaveText(/RAG local ready|RAG blocked/);
+    await expect(page.locator("#localRagSummary")).toContainText("Full Repo");
+    await expect(page.locator("#localRagSummary")).toContainText("turbovec");
+    await expect(page.locator("#localRagDependencyList")).toContainText("turbovec");
+    await expect(page.locator("#localRagCorpusList")).toContainText("full-repo-safe-text");
+    await expect(page.locator("#localRagBlockedList")).toContainText("paid_api_call");
+    await expect(page.locator("#localRagBlockedList")).toContainText("secret_read_or_print");
+    await expect(page.locator("#localRagStopPoint")).toContainText("WAITING FOR HUMAN APPROVAL");
+    await expect(page.locator(".local-rag-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Image-to-Image Gateway" })).toBeVisible();
+    await expect(page.locator("#imageEditStatus")).toHaveText(/Image edit local ready|Image edit blocked/);
+    await expect(page.locator("#imageEditSummary")).toContainText("Required");
+    await expect(page.locator("#imageEditSummary")).toContainText("Blocked");
+    await expect(page.locator("#imageEditContractList")).toContainText("image_edit");
+    await expect(page.locator("#imageEditContractList")).toContainText("prompt");
+    await expect(page.locator("#imageEditContractList")).toContainText("image_ref");
+    await expect(page.locator("#imageEditAcceptanceList")).toContainText("patch_ready");
+    await expect(page.locator("#imageEditAcceptanceList")).toContainText("gateway_restart_required");
+    await expect(page.locator("#imageEditAcceptanceList")).toContainText("needs_manual_probe");
+    await expect(page.locator("#imageEditAcceptanceList")).toContainText("text_to_image_fallback");
+    await expect(page.locator("#imageEditEvidenceList")).toContainText("image_ref_preserved");
+    await expect(page.locator("#imageEditEvidenceList")).toContainText("image_edit_selected");
+    await expect(page.locator("#imageEditEvidenceList")).toContainText("image_generate_not_selected");
+    await expect(page.locator("#imageEditEvidenceList")).toContainText("Human review stays pending");
+    await expect(page.locator("#imageEditInvalidList")).toContainText("separate turns");
+    await expect(page.locator("#imageEditBlockedList")).toContainText("text_to_image_fallback_when_source_image_exists");
+    await expect(page.locator("#imageEditStopPoint")).toContainText("WAITING");
+    await expect(page.locator(".image-edit-panel button")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "SOC Truth Protocol" })).toBeVisible();
+    await expect(page.locator("#socStatus")).toHaveText(/SOC local ready|SOC blocked/);
+    await expect(page.locator("#socSummary")).toContainText("Telegram");
+    await expect(page.locator("#socSnapshotList")).toContainText("CPU");
+    await expect(page.locator("#socSnapshotList")).toContainText("Memory");
+    await expect(page.locator("#socGateList")).toContainText("Telegram delivery");
+    await expect(page.locator("#truthRuleList")).toContainText("Telegram delivery");
+    await expect(page.locator("#socNextActions")).toContainText("Complete Telegram/LINE");
     await expect(page.getByRole("heading", { name: "Capture Health" })).toBeVisible();
     await expect(page.locator("#leadHealthStatus")).toHaveText(/Local ready|Lead blocked/);
     await expect(page.locator("#leadHealthSummary")).toContainText("Local Handler");
@@ -148,6 +300,291 @@ test.describe("Developer Command Center", () => {
     expect(approvalEvidenceDryRun.status).toBe("dry-run-ready");
     expect(approvalEvidenceDryRun.didWrite).toBe(false);
     expect(approvalEvidenceDryRun.externalWrites).toBe(false);
+    const vibeAgentResponse = await page.request.get("http://127.0.0.1:8711/api/vibe-coding-agent");
+    expect(vibeAgentResponse.ok()).toBeTruthy();
+    const vibeAgent = await vibeAgentResponse.json();
+    expect(vibeAgent.status).toBe("local-agent-ready");
+    expect(vibeAgent.externalWrites).toBe(false);
+    expect(vibeAgent.canExecuteExternally).toBe(false);
+    expect(vibeAgent.canRunMcp).toBe(false);
+    expect(vibeAgent.safeActions.some((action) => action.command === "pnpm verify:workspace")).toBe(true);
+    expect(vibeAgent.blockedActions).toContain("deploy");
+    const gatewayAgentResponse = await page.request.get("http://127.0.0.1:8711/api/gateway-agent");
+    expect(gatewayAgentResponse.ok()).toBeTruthy();
+    const gatewayAgent = await gatewayAgentResponse.json();
+    expect(gatewayAgent.externalWrites).toBe(false);
+    expect(gatewayAgent.canRunMcp).toBe(false);
+    expect(gatewayAgent.connectorRegistry.summary.connectorsTotal).toBe(15);
+    const aiTeamPairingResponse = await page.request.get("http://127.0.0.1:8711/api/ai-team-pairing");
+    expect(aiTeamPairingResponse.ok()).toBeTruthy();
+    const aiTeamPairing = await aiTeamPairingResponse.json();
+    expect(aiTeamPairing.canSendMessages).toBe(false);
+    expect(aiTeamPairing.summary.pairedRoles).toBe(47);
+    const connectorRegistryResponse = await page.request.get("http://127.0.0.1:8711/api/connector-registry");
+    expect(connectorRegistryResponse.ok()).toBeTruthy();
+    const connectorRegistry = await connectorRegistryResponse.json();
+    expect(connectorRegistry.summary.connectorsTotal).toBe(15);
+    expect(connectorRegistry.summary.ownerLanes).toBe(7);
+    expect(connectorRegistry.summary.activatableConnectors).toBe(0);
+    expect(connectorRegistry.connectors.every((connector) => connector.canActivate === false)).toBe(true);
+    expect(connectorRegistry.connectors.every((connector) => connector.canRunMcp === false)).toBe(true);
+    const launchGateResponse = await page.request.get("http://127.0.0.1:8711/api/agent-launch-gate");
+    expect(launchGateResponse.ok()).toBeTruthy();
+    const launchGate = await launchGateResponse.json();
+    expect(launchGate.status).toBe("local-launch-gate-ready");
+    expect(launchGate.summary.agentsTotal).toBe(9);
+    expect(launchGate.summary.autoExecutable).toBe(0);
+    expect(launchGate.canLaunchAgents).toBe(false);
+    expect(launchGate.canRunMcp).toBe(false);
+    expect(launchGate.canReadSecrets).toBe(false);
+    expect(launchGate.agents.every((agent) => agent.command.startsWith("ollama launch "))).toBe(true);
+    const launchGateDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/agent-launch-gate/plan/dry-run", {
+      data: { agentId: "codex-app", goal: "manual smoke only" }
+    });
+    expect(launchGateDryRunResponse.ok()).toBeTruthy();
+    const launchGateDryRun = await launchGateDryRunResponse.json();
+    expect(launchGateDryRun.status).toBe("dry-run-agent-launch-plan-ready");
+    expect(launchGateDryRun.commandExecuted).toBe(false);
+    expect(launchGateDryRun.manualCommand).toBe("ollama launch codex-app");
+    const agentDriverResponse = await page.request.get("http://127.0.0.1:8711/api/agent-driver");
+    expect(agentDriverResponse.ok()).toBeTruthy();
+    const agentDriver = await agentDriverResponse.json();
+    expect(agentDriver.status).toBe("agent-driver-ready-local-only");
+    expect(agentDriver.summary.agentsTotal).toBe(9);
+    expect(agentDriver.summary.commandExecuted).toBe(0);
+    expect(agentDriver.nextRecommendedAgent.id).toBe("codex");
+    expect(agentDriver.canEditFiles).toBe(false);
+    expect(agentDriver.canStartMcp).toBe(false);
+    expect(agentDriver.canInstallPackages).toBe(false);
+    expect(agentDriver.canSendMessages).toBe(false);
+    expect(agentDriver.canDeploy).toBe(false);
+    const agentDriverDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/agent-driver/smoke/dry-run", {
+      data: { agentId: "codex", goal: "read-only smoke" }
+    });
+    expect(agentDriverDryRunResponse.ok()).toBeTruthy();
+    const agentDriverDryRun = await agentDriverDryRunResponse.json();
+    expect(agentDriverDryRun.status).toBe("dry-run-agent-driver-smoke-ready");
+    expect(agentDriverDryRun.classification).toBe("passed");
+    expect(agentDriverDryRun.commandExecuted).toBe(false);
+    expect(agentDriverDryRun.approvedReadOnlyCommand).toContain("--help");
+    expect(agentDriverDryRun.nextRecommendedAgent.id).toBe("claude-code");
+    const centerBrainResponse = await page.request.get("http://127.0.0.1:8711/api/centerbrain-hub");
+    expect(centerBrainResponse.ok()).toBeTruthy();
+    const centerBrain = await centerBrainResponse.json();
+    expect(centerBrain.status).toBe("centerbrain-hub-ready-local-only");
+    expect(centerBrain.summary.aiNodes).toBe(9);
+    expect(centerBrain.summary.deviceNodes).toBe(3);
+    expect(centerBrain.summary.connectorLanes).toBe(15);
+    expect(centerBrain.summary.liveExternalActions).toBe(0);
+    expect(centerBrain.canActivateConnectors).toBe(false);
+    expect(centerBrain.canRunMcp).toBe(false);
+    expect(centerBrain.canSendMessages).toBe(false);
+    expect(centerBrain.canDeploy).toBe(false);
+    const centerBrainDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/centerbrain-hub/sync/dry-run", {
+      data: { requestId: "browser-centerbrain", goal: "local-only adaptive sync", targetDevices: ["mac", "pc", "mobile"] }
+    });
+    expect(centerBrainDryRunResponse.ok()).toBeTruthy();
+    const centerBrainDryRun = await centerBrainDryRunResponse.json();
+    expect(centerBrainDryRun.status).toBe("dry-run-centerbrain-sync-ready");
+    expect(centerBrainDryRun.syncPlan.devices.map((device) => device.id)).toEqual(["mac", "pc", "mobile"]);
+    expect(centerBrainDryRun.canActivateConnectors).toBe(false);
+    expect(centerBrainDryRun.canRunMcp).toBe(false);
+    const teamRuntimeResponse = await page.request.get("http://127.0.0.1:8711/api/team-runtime-bridge");
+    expect(teamRuntimeResponse.ok()).toBeTruthy();
+    const teamRuntime = await teamRuntimeResponse.json();
+    expect(teamRuntime.status).toBe("team-runtime-bridge-ready-local-only");
+    expect(teamRuntime.selectedCloudModelId).toBe("qwen/qwen3.7-max");
+    expect(teamRuntime.summary.paidApiExecutable).toBe(0);
+    expect(teamRuntime.canCallPaidApi).toBe(false);
+    expect(teamRuntime.canRunAntigravityCli).toBe(false);
+    expect(teamRuntime.canReadSecrets).toBe(false);
+    expect(teamRuntime.openRouterQwenAdapter.primaryModel).toBe("qwen/qwen3.7-max");
+    expect(teamRuntime.openRouterQwenAdapter.canCallPaidApi).toBe(false);
+    const qwenAdapterResponse = await page.request.get("http://127.0.0.1:8711/api/openrouter-qwen-adapter");
+    expect(qwenAdapterResponse.ok()).toBeTruthy();
+    const qwenAdapter = await qwenAdapterResponse.json();
+    expect(qwenAdapter.status).toBe("openrouter-qwen-adapter-ready-local-only");
+    expect(qwenAdapter.providerCalled).toBe(false);
+    expect(qwenAdapter.secretsRead).toBe(false);
+    expect(qwenAdapter.canCallPaidApi).toBe(false);
+    const qwenAdapterDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/openrouter-qwen-adapter/plan/dry-run", {
+      data: {
+        requestId: "browser-openrouter-qwen",
+        goal: "plan Hermes routing with Qwen 3.7 Max",
+        mode: "jsonStrict",
+        sensitivity: "internal_repo_analysis"
+      }
+    });
+    expect(qwenAdapterDryRunResponse.ok()).toBeTruthy();
+    const qwenAdapterDryRun = await qwenAdapterDryRunResponse.json();
+    expect(qwenAdapterDryRun.status).toBe("dry-run-openrouter-qwen-adapter-ready");
+    expect(qwenAdapterDryRun.providerCalled).toBe(false);
+    expect(qwenAdapterDryRun.commandExecuted).toBe(false);
+    expect(qwenAdapterDryRun.requestPreview.body.models).toEqual(["qwen/qwen3.7-max", "qwen/qwen3-max"]);
+    const modelRoutingApprovalResponse = await page.request.get("http://127.0.0.1:8711/api/model-routing-approval/openrouter-qwen");
+    expect(modelRoutingApprovalResponse.ok()).toBeTruthy();
+    const modelRoutingApproval = await modelRoutingApprovalResponse.json();
+    expect(modelRoutingApproval.status).toBe("openrouter-qwen-model-routing-approval-ready-local-only");
+    expect(modelRoutingApproval.modelSlugLocked).toBe("qwen/qwen3.7-max");
+    expect(modelRoutingApproval.providerCalled).toBe(false);
+    expect(modelRoutingApproval.keyValuePrinted).toBe(false);
+    expect(modelRoutingApproval.canCallPaidApi).toBe(false);
+    const modelRoutingApprovalDryRunResponse = await page.request.post(
+      "http://127.0.0.1:8711/api/model-routing-approval/openrouter-qwen/dry-run",
+      {
+        data: {
+          requestId: "browser-model-routing-approval",
+          goal: "prepare one future qwen smoke approval"
+        }
+      }
+    );
+    expect(modelRoutingApprovalDryRunResponse.ok()).toBeTruthy();
+    const modelRoutingApprovalDryRun = await modelRoutingApprovalDryRunResponse.json();
+    expect(modelRoutingApprovalDryRun.status).toBe("dry-run-openrouter-qwen-model-routing-approval-ready");
+    expect(modelRoutingApprovalDryRun.providerCalled).toBe(false);
+    expect(modelRoutingApprovalDryRun.commandExecuted).toBe(false);
+    expect(modelRoutingApprovalDryRun.approvalPacket.path).toBe("docs/approvals/OPENROUTER_QWEN_MODEL_ROUTING_APPROVAL.md");
+    const adaptiveGatewayResponse = await page.request.get("http://127.0.0.1:8711/api/hermes-adaptive-command-gateway");
+    expect(adaptiveGatewayResponse.ok()).toBeTruthy();
+    const adaptiveGateway = await adaptiveGatewayResponse.json();
+    expect(adaptiveGateway.status).toBe("hermes-adaptive-command-gateway-ready-local-only");
+    expect(adaptiveGateway.aliases.clear).toBe("reset");
+    expect(adaptiveGateway.commandRegistry).toContain("/clear");
+    expect(adaptiveGateway.modelPolicy.router.model).toBe("qwen/qwen3.7-max");
+    expect(adaptiveGateway.modelPolicy.planner.model).toBe("qwen/qwen3.7-max");
+    expect(adaptiveGateway.messageSent).toBe(false);
+    expect(adaptiveGateway.providerCalled).toBe(false);
+    expect(adaptiveGateway.canExecuteAgents).toBe(false);
+    const adaptiveGatewayDryRunResponse = await page.request.post(
+      "http://127.0.0.1:8711/api/hermes-adaptive-command-gateway/telegram/dry-run",
+      {
+        data: {
+          requestId: "browser-adaptive-gateway",
+          source: "telegram",
+          command: '/mission route "HERMES>CODEX>ANTIGRAVITY" --provider openrouter --sync pc,mobile --mode adaptive'
+        }
+      }
+    );
+    expect(adaptiveGatewayDryRunResponse.ok()).toBeTruthy();
+    const adaptiveGatewayDryRun = await adaptiveGatewayDryRunResponse.json();
+    expect(adaptiveGatewayDryRun.status).toBe("long_job_queued_dry_run");
+    expect(adaptiveGatewayDryRun.ack.shouldRespondImmediately).toBe(true);
+    expect(adaptiveGatewayDryRun.job.status).toBe("QUEUED");
+    expect(adaptiveGatewayDryRun.mission.status).toBe("WAITING_APPROVAL");
+    expect(adaptiveGatewayDryRun.messageSent).toBe(false);
+    expect(adaptiveGatewayDryRun.providerCalled).toBe(false);
+    expect(adaptiveGatewayDryRun.commandExecuted).toBe(false);
+    const specFirstSwarmResponse = await page.request.get("http://127.0.0.1:8711/api/hermes-spec-first-swarm");
+    expect(specFirstSwarmResponse.ok()).toBeTruthy();
+    const specFirstSwarm = await specFirstSwarmResponse.json();
+    expect(specFirstSwarm.status).toBe("hermes-spec-first-swarm-ready-live-local-state");
+    expect(specFirstSwarm.currentPhase).toBe("APPROVAL_GATE");
+    expect(specFirstSwarm.approvalPhrase).toBe("APPROVE_IMPLEMENTATION");
+    expect(specFirstSwarm.canModifySource).toBe(false);
+    expect(specFirstSwarm.canInstallPackages).toBe(false);
+    expect(specFirstSwarm.canStartMcp).toBe(false);
+    expect(specFirstSwarm.canCallProvider).toBe(false);
+    const specFirstSwarmDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/hermes-spec-first-swarm/plan/dry-run", {
+      data: {
+        requestId: "browser-spec-first-swarm",
+        goal: "write requirements for a local-only dashboard feature",
+        phase: "GRILLING"
+      }
+    });
+    expect(specFirstSwarmDryRunResponse.ok()).toBeTruthy();
+    const specFirstSwarmDryRun = await specFirstSwarmDryRunResponse.json();
+    expect(specFirstSwarmDryRun.status).toBe("dry-run-hermes-spec-first-swarm-ready");
+    expect(specFirstSwarmDryRun.selectedPhase).toBe("GRILLING");
+    expect(specFirstSwarmDryRun.commandExecuted).toBe(false);
+    expect(specFirstSwarmDryRun.canModifySource).toBe(false);
+    const teamRuntimeDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/team-runtime-bridge/plan/dry-run", {
+      data: { requestId: "browser-team-runtime", goal: "local-only qwen openrouter bridge", requestedModel: "qwen 3.7 max" }
+    });
+    expect(teamRuntimeDryRunResponse.ok()).toBeTruthy();
+    const teamRuntimeDryRun = await teamRuntimeDryRunResponse.json();
+    expect(teamRuntimeDryRun.status).toBe("dry-run-team-runtime-bridge-ready");
+    expect(teamRuntimeDryRun.selectedModel.modelId).toBe("qwen/qwen3.7-max");
+    expect(teamRuntimeDryRun.providerCalled).toBe(false);
+    expect(teamRuntimeDryRun.commandExecuted).toBe(false);
+    expect(teamRuntimeDryRun.secretsRead).toBe(false);
+    const localRagResponse = await page.request.get("http://127.0.0.1:8711/api/local-rag");
+    expect(localRagResponse.ok()).toBeTruthy();
+    const localRag = await localRagResponse.json();
+    expect(localRag.status).toBe("local-rag-prototype-ready");
+    expect(localRag.corpusScope.id).toBe("full-repo-safe-text");
+    expect(localRag.canCallPaidApi).toBe(false);
+    expect(localRag.canReadSecrets).toBe(false);
+    const localRagQueryResponse = await page.request.post("http://127.0.0.1:8711/api/local-rag/query/dry-run", {
+      data: { query: "gateway approval evidence", source: "playwright" }
+    });
+    expect(localRagQueryResponse.ok()).toBeTruthy();
+    const localRagQuery = await localRagQueryResponse.json();
+    expect(localRagQuery.status).toBe("dry-run-local-rag-query-ready");
+    expect(localRagQuery.embeddingBackend).toBe("deterministic-local-fixture");
+    expect(localRagQuery.externalWrites).toBe(false);
+    expect(localRagQuery.canCallPaidApi).toBe(false);
+    const imageEditResponse = await page.request.get("http://127.0.0.1:8711/api/hermes-image-edit");
+    expect(imageEditResponse.ok()).toBeTruthy();
+    const imageEdit = await imageEditResponse.json();
+    expect(imageEdit.status).toBe("ready-local-only");
+    expect(imageEdit.image_edit).toBe(true);
+    expect(imageEdit.caption_required).toBe(true);
+    expect(imageEdit.fallback_text_to_image_blocked).toBe(true);
+    expect(imageEdit.canRunMcp).toBe(false);
+    expect(imageEdit.canReadSecrets).toBe(false);
+    expect(imageEdit.acceptancePacket).toMatchObject({
+      patch_ready: true,
+      gateway_restart_required: true,
+      provider_edit_capability: "needs_manual_probe",
+      text_to_image_fallback: "blocked",
+      canRestartGateway: false,
+      canCallProvider: false
+    });
+    const imageEditDryRunResponse = await page.request.post("http://127.0.0.1:8711/api/hermes-image-edit/dry-run", {
+      data: {
+        image_ref: "/tmp/food.png",
+        caption: "change only the plate from black to white"
+      }
+    });
+    expect(imageEditDryRunResponse.ok()).toBeTruthy();
+    const imageEditDryRun = await imageEditDryRunResponse.json();
+    expect(imageEditDryRun.status).toBe("dry-run-image-edit-ready");
+    expect(imageEditDryRun.externalWrites).toBe(false);
+    expect(imageEditDryRun.hermesInbox.imageEdit.image_ref).toBe("/tmp/food.png");
+    expect(imageEditDryRun.hermesInbox.imageEdit.fallback_text_to_image_blocked).toBe(true);
+    const acceptanceDryRunResponse = await page.request.post(
+      "http://127.0.0.1:8711/api/hermes-image-edit/acceptance/dry-run",
+      {
+        data: {
+          image_ref: "/tmp/food.png",
+          caption: "change only the plate from black to white"
+        }
+      }
+    );
+    expect(acceptanceDryRunResponse.ok()).toBeTruthy();
+    const acceptanceDryRun = await acceptanceDryRunResponse.json();
+    expect(acceptanceDryRun.status).toBe("acceptance-dry-run-ready");
+    expect(acceptanceDryRun.externalWrites).toBe(false);
+    expect(acceptanceDryRun.canRestartGateway).toBe(false);
+    expect(acceptanceDryRun.canCallProvider).toBe(false);
+    expect(acceptanceDryRun.providerCapabilityCheck.checkedLive).toBe(false);
+    expect(acceptanceDryRun.gatewayRestartChecklist.autoRestart).toBe(false);
+    expect(acceptanceDryRun.evidence.image_ref_preserved).toBe(true);
+    expect(acceptanceDryRun.evidence.image_generate_not_selected).toBe(true);
+    const socStatusResponse = await page.request.get("http://127.0.0.1:8711/api/soc/status");
+    expect(socStatusResponse.ok()).toBeTruthy();
+    const socStatus = await socStatusResponse.json();
+    expect(socStatus.externalWrites).toBe(false);
+    expect(socStatus.telegram.canSend).toBe(false);
+    expect(socStatus.snapshot.cpu).toBeTruthy();
+    expect(socStatus.truthStates.cpu).toBe("observed");
+    expect(socStatus.telegram.status).toBe("blocked-evidence-incomplete");
+    const truthProtocolResponse = await page.request.get("http://127.0.0.1:8711/api/truth-protocol");
+    expect(truthProtocolResponse.ok()).toBeTruthy();
+    const truthProtocol = await truthProtocolResponse.json();
+    expect(truthProtocol.status).toBe("local-truth-protocol-ready");
+    expect(truthProtocol.externalWrites).toBe(false);
+    expect(truthProtocol.reportRules.some((rule) => rule.id === "telegram-delivery" && rule.requiredState === "observed")).toBe(true);
     await expect(page.getByRole("heading", { name: "Local API Events" })).toBeVisible();
     const initialAuditText = await page.locator("#auditList").innerText();
     expect(initialAuditText).toMatch(/No local API audit events recorded yet\.|dry-run \/ dry-run action|hermes-inbox-dry-run/);
@@ -503,6 +940,10 @@ test.describe("Developer Command Center", () => {
     await expect(page.locator("#approvalList")).toContainText("Local fallback approval");
     await expect(page.locator("#auditList")).toContainText("api_offline");
     await expect(page.locator("#vibeProcessLane")).toContainText("Control API unavailable");
+    await expect(page.locator("#connectorPanelStatus")).toHaveText("Registry blocked");
+    await expect(page.locator("#connectorPanelSummary")).toContainText("0");
+    await expect(page.locator("#connectorList")).toContainText("Connector registry unavailable");
+    await expect(page.locator("#connectorGateList")).toContainText("Start the local control API");
     await expect(page.locator("#leadHealthStatus")).toHaveText("Lead blocked");
     await expect(page.locator("#leadHealthNextActions")).toContainText("Start the local control API");
     await expect(page.locator("#salesArtifactsStatus")).toHaveText("Artifacts review");

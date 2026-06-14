@@ -27,6 +27,58 @@ function pickTarget(body) {
   return "";
 }
 
+function pickAttachments(body, actionInput = {}) {
+  const candidates = [
+    body.attachments,
+    body.media,
+    body.message?.attachments,
+    actionInput.attachments
+  ];
+
+  return candidates.find((value) => Array.isArray(value)) || [];
+}
+
+function pickImageAttachment(attachments) {
+  return attachments.find((attachment) => {
+    if (!isObject(attachment)) {
+      return false;
+    }
+    const type = String(attachment.type || attachment.kind || "").toLowerCase();
+    const mime = String(attachment.mimeType || attachment.mime_type || attachment.contentType || "").toLowerCase();
+    return type === "image" || type === "photo" || mime.startsWith("image/");
+  }) || null;
+}
+
+function pickImageRef(body, actionInput, imageAttachment) {
+  return String(
+    actionInput.image_ref ||
+      actionInput.imageRef ||
+      body.image_ref ||
+      body.imageRef ||
+      imageAttachment?.image_ref ||
+      imageAttachment?.imageRef ||
+      imageAttachment?.path ||
+      imageAttachment?.url ||
+      imageAttachment?.id ||
+      ""
+  ).trim();
+}
+
+function pickImageEditInstruction(body, actionInput, intent, imageAttachment) {
+  return String(
+    actionInput.prompt ||
+      actionInput.instruction ||
+      actionInput.caption ||
+      body.caption ||
+      body.instruction ||
+      body.message?.caption ||
+      imageAttachment?.caption ||
+      intent.caption ||
+      intent.instruction ||
+      ""
+  ).trim();
+}
+
 function bool(value) {
   return value === true;
 }
@@ -44,11 +96,41 @@ export function normalizeHermesInboxRequest(body = {}, context = {}) {
   const source = pickSource(body, context);
   const actionInput = isObject(body.action) ? body.action : {};
   const intent = isObject(body.intent) ? body.intent : {};
-  const target = pickTarget(body);
+  const attachments = pickAttachments(body, actionInput);
+  const imageAttachment = pickImageAttachment(attachments);
+  const imageRef = pickImageRef(body, actionInput, imageAttachment);
+  const editInstruction = pickImageEditInstruction(body, actionInput, intent, imageAttachment);
   const actionType = String(actionInput.type || intent.type || "local-review");
+  const wantsImageEdit = actionType === "image-edit" || intent.type === "image-edit" || Boolean(imageRef && editInstruction);
+  const target = pickTarget(body) || (wantsImageEdit ? "hermes:image-edit" : "");
   const actionId = String(actionInput.id || body.requestId || actionType);
   const rawTextIncluded = bool(intent.rawTextIncluded) || bool(body.rawTextIncluded);
   const dryRun = body.dryRun !== false;
+  const imageEdit = wantsImageEdit
+    ? {
+        image_edit: true,
+        imageEdit: true,
+        mode: imageRef && editInstruction ? "image-to-image" : "caption-bound-image-edit-required",
+        tool: "image_edit",
+        image_ref: imageRef,
+        imageRef,
+        edit_instruction: editInstruction,
+        editInstruction,
+        caption_required: true,
+        captionRequired: true,
+        fallback_text_to_image_blocked: true,
+        fallbackTextToImageBlocked: true,
+        externalWrites: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        providerMustSupportEdit: true,
+        status: imageRef && editInstruction ? "ready" : "caption_required",
+        message: imageRef && editInstruction
+          ? "Caption-bound image edit is ready for local dry-run only."
+          : "True image-to-image editing requires the source image and instruction in the same image caption."
+      }
+    : null;
 
   if (!actionId || actionId === "undefined") {
     return {
@@ -90,7 +172,8 @@ export function normalizeHermesInboxRequest(body = {}, context = {}) {
       printsSecrets: bool(actionInput.printsSecrets),
       rawChatToMemory: bool(actionInput.rawChatToMemory) || rawTextIncluded,
       readOnly: bool(actionInput.readOnly),
-      evidence: body.evidence || actionInput.evidence || {}
+      evidence: body.evidence || actionInput.evidence || {},
+      imageEdit
     }
   };
 }
@@ -187,6 +270,30 @@ export function evaluateHermesInboxDryRun(body = {}, context = {}) {
     return phaseExecutionFailure(normalized);
   }
 
+  if (normalized.action.imageEdit?.status === "caption_required") {
+    return {
+      status: 400,
+      body: {
+        status: "image_edit_caption_required",
+        phase: PHASE,
+        requestId: normalized.requestId,
+        source: normalized.source,
+        dryRun: true,
+        result: "blocked_caption_required",
+        image_edit: true,
+        imageEdit: normalized.action.imageEdit,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true,
+        message: normalized.action.imageEdit.message
+      }
+    };
+  }
+
   const policyDecision = evaluatePolicy(normalized.action, {
     approval: body.evidence?.approval || body.approval || null
   });
@@ -205,6 +312,8 @@ export function evaluateHermesInboxDryRun(body = {}, context = {}) {
       externalWrites: false,
       productionWrites: false,
       customerVisible: false,
+      image_edit: Boolean(normalized.action.imageEdit),
+      imageEdit: normalized.action.imageEdit,
       requiresHumanApproval: decisionSummary.requiresApproval || policyDecision.decision !== "allowed",
       normalizedAction: normalized.action,
       policy: decisionSummary,

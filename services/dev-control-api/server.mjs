@@ -5,6 +5,10 @@ import { promisify } from "node:util";
 import { ensureApprovalRequest, listApprovalQueue } from "./src/approval-queue.mjs";
 import { getApprovalEvidenceSnapshot, writeApprovalEvidenceSnapshot } from "./src/approval-evidence.mjs";
 import { evaluateHermesInboxDryRun } from "../hermes-api/src/inbox.mjs";
+import {
+  createAdaptiveCommandDryRun,
+  getAdaptiveCommandGatewayStatus
+} from "../hermes-api/src/adaptive-command-gateway.mjs";
 import { listAuditEvents, recordAuditEvent, recordDryRunAuditEvent } from "./src/audit-events.mjs";
 import { getBrainNote, listBrainNotes } from "./src/brain.mjs";
 import { getExternalGatePackets, writeExternalGatePackets } from "./src/external-gate-packets.mjs";
@@ -26,9 +30,42 @@ import { getProposalReviewStatus, writeProposalReviewPacket } from "./src/propos
 import { getRoiPreview } from "./src/roi-preview.mjs";
 import { getSalesArtifactsStatus } from "./src/sales-artifacts.mjs";
 import { getSolarOpsContract } from "./src/solar-ops-contract.mjs";
+import { getSocStatus } from "./src/soc-status.mjs";
 import { switches } from "./src/switches.mjs";
+import { getTruthProtocolStatus } from "./src/truth-protocol.mjs";
 import { getRoninAgentTeam } from "./src/agent-team.mjs";
+import { getVibeCodingAgentStatus } from "./src/vibe-coding-agent.mjs";
 import { getVibeCommandCenter } from "./src/vibe-workflows.mjs";
+import { createGatewayAgentDryRunPlan, getGatewayAgentStatus } from "./src/gateway-agent.mjs";
+import { createAiTeamPairingDryRun, getAiTeamPairingStatus } from "./src/ai-team-pairing.mjs";
+import { createConnectorRegistryDryRun, getConnectorRegistryStatus } from "./src/connector-registry.mjs";
+import { createLocalRagQueryDryRun, createLocalRagScanDryRun, getLocalRagStatus } from "./src/local-rag.mjs";
+import { createAgentLaunchGateDryRun, getAgentLaunchGateStatus } from "./src/agent-launch-gate.mjs";
+import { createAgentDriverSmokeDryRun, getAgentDriverStatus } from "./src/agent-driver.mjs";
+import { createCenterBrainSyncDryRun, getCenterBrainHubStatus } from "./src/centerbrain-hub.mjs";
+import { createRepoIntakeReviewDryRun, getRepoIntakeGateStatus } from "./src/repo-intake-gate.mjs";
+import { createTeamRuntimeBridgeDryRun, getTeamRuntimeBridgeStatus } from "./src/team-runtime-bridge.mjs";
+import {
+  createOpenRouterQwenAdapterDryRun,
+  getOpenRouterQwenAdapterStatus
+} from "./src/openrouter-qwen-adapter.mjs";
+import {
+  createOpenRouterQwenModelRoutingApprovalDryRun,
+  getOpenRouterQwenModelRoutingApproval
+} from "./src/model-routing-approval.mjs";
+import {
+  createHermesSpecFirstSwarmDryRun,
+  getHermesSpecFirstSwarmStatus
+} from "./src/hermes-spec-first-swarm.mjs";
+import {
+  createHermesAgentAuditApprovalDryRun,
+  getHermesAgentAuditStatus
+} from "./src/hermes-agent-audit.mjs";
+import {
+  createHermesImageEditAcceptanceDryRun,
+  createHermesImageEditDryRun,
+  getHermesImageEditStatus
+} from "./src/hermes-image-edit.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -434,7 +471,7 @@ async function getExecutiveHq() {
   };
 }
 
-const server = createServer(async (request, response) => {
+export async function handleRequest(request, response) {
   const url = new URL(request.url || "/", `http://${host}:${port}`);
 
   if (request.method === "OPTIONS") {
@@ -501,6 +538,73 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/hermes") {
     sendJson(request, response, 200, await getHermesStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/hermes-agent-audit") {
+    sendJson(request, response, 200, await getHermesAgentAuditStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/hermes-adaptive-command-gateway") {
+    sendJson(request, response, 200, getAdaptiveCommandGatewayStatus());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/hermes-adaptive-command-gateway/telegram/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createAdaptiveCommandDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_hermes_adaptive_command_gateway_request",
+        error: "hermes_adaptive_command_gateway_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        commandExecuted: false,
+        providerCalled: false,
+        secretsRead: false,
+        messageSent: false,
+        telegramMessageSent: false,
+        canSendTelegram: false,
+        canCallProvider: false,
+        canExecuteAgents: false,
+        canStartMcp: false,
+        canInstallPackages: false,
+        canDeploy: false,
+        canPush: false,
+        canPublish: false,
+        shouldForwardToLlm: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/hermes-agent-audit/approval/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createHermesAgentAuditApprovalDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_hermes_agent_audit_approval_request",
+        error: "hermes_agent_audit_approval_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canRestartGateway: false,
+        canSendMessages: false,
+        canRunMcp: false,
+        commandExecuted: false,
+        gatewayRestarted: false,
+        messageSent: false,
+        secretsRead: false,
+        requiresHumanApproval: true
+      });
+    }
     return;
   }
 
@@ -590,6 +694,16 @@ const server = createServer(async (request, response) => {
 
   if (request.method === "GET" && url.pathname === "/api/policy-core") {
     sendJson(request, response, 200, getPolicyCoreStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/soc/status") {
+    sendJson(request, response, 200, await getSocStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/truth-protocol") {
+    sendJson(request, response, 200, getTruthProtocolStatus());
     return;
   }
 
@@ -766,6 +880,440 @@ const server = createServer(async (request, response) => {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/vibe-coding-agent") {
+    sendJson(request, response, 200, await getVibeCodingAgentStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/gateway-agent") {
+    sendJson(request, response, 200, await getGatewayAgentStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/ai-team-pairing") {
+    sendJson(request, response, 200, await getAiTeamPairingStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/connector-registry") {
+    sendJson(request, response, 200, await getConnectorRegistryStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/agent-launch-gate") {
+    sendJson(request, response, 200, getAgentLaunchGateStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/agent-driver") {
+    sendJson(request, response, 200, getAgentDriverStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/centerbrain-hub") {
+    sendJson(request, response, 200, await getCenterBrainHubStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/repo-intake-gate") {
+    sendJson(request, response, 200, getRepoIntakeGateStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/team-runtime-bridge") {
+    sendJson(request, response, 200, await getTeamRuntimeBridgeStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/openrouter-qwen-adapter") {
+    sendJson(request, response, 200, getOpenRouterQwenAdapterStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/model-routing-approval/openrouter-qwen") {
+    sendJson(request, response, 200, getOpenRouterQwenModelRoutingApproval());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/hermes-spec-first-swarm") {
+    sendJson(request, response, 200, getHermesSpecFirstSwarmStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/local-rag") {
+    sendJson(request, response, 200, await getLocalRagStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/hermes-image-edit") {
+    sendJson(request, response, 200, getHermesImageEditStatus());
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/hermes-image-edit/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createHermesImageEditDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_hermes_image_edit_dry_run_request",
+        error: "hermes_image_edit_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/hermes-image-edit/acceptance/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createHermesImageEditAcceptanceDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_hermes_image_edit_acceptance_request",
+        error: "hermes_image_edit_acceptance_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        canCallProvider: false,
+        canRestartGateway: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/local-rag/scan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createLocalRagScanDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_local_rag_scan_request",
+        error: "local_rag_scan_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canCallPaidApi: false,
+        canActivateConnector: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/local-rag/query/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createLocalRagQueryDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_local_rag_query_request",
+        error: "local_rag_query_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canCallPaidApi: false,
+        canActivateConnector: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/connector-registry/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createConnectorRegistryDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_connector_registry_dry_run_request",
+        error: "connector_registry_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canActivateConnectors: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/agent-launch-gate/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createAgentLaunchGateDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_agent_launch_gate_dry_run_request",
+        error: "agent_launch_gate_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canLaunchAgents: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/agent-driver/smoke/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createAgentDriverSmokeDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_agent_driver_smoke_dry_run_request",
+        error: "agent_driver_smoke_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canLaunchAgents: false,
+        canEditFiles: false,
+        canStartMcp: false,
+        canInstallPackages: false,
+        canSendMessages: false,
+        canDeploy: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/centerbrain-hub/sync/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createCenterBrainSyncDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_centerbrain_sync_dry_run_request",
+        error: "centerbrain_sync_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canActivateConnectors: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        canSendMessages: false,
+        canDeploy: false,
+        canRemoteControlDevices: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/repo-intake-gate/review/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createRepoIntakeReviewDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_repo_intake_review_dry_run_request",
+        error: "repo_intake_review_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCloneRepo: false,
+        canInstallPackages: false,
+        canRunPostinstall: false,
+        canExecuteCode: false,
+        canReadSecrets: false,
+        canRunMcp: false,
+        canStartMcp: false,
+        canSendMessages: false,
+        canDeploy: false,
+        canPush: false,
+        canPublish: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/team-runtime-bridge/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createTeamRuntimeBridgeDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_team_runtime_bridge_dry_run_request",
+        error: "team_runtime_bridge_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCallPaidApi: false,
+        canRunAntigravityCli: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        canStartHermesTeam: false,
+        canSendMessages: false,
+        canDeploy: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-qwen-adapter/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createOpenRouterQwenAdapterDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_qwen_adapter_dry_run_request",
+        error: "openrouter_qwen_adapter_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCallPaidApi: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        providerCalled: false,
+        secretsRead: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/model-routing-approval/openrouter-qwen/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createOpenRouterQwenModelRoutingApprovalDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_qwen_model_routing_approval_request",
+        error: "openrouter_qwen_model_routing_approval_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCallPaidApi: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        providerCalled: false,
+        secretsRead: false,
+        keyValuePrinted: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/ai-team-pairing/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createAiTeamPairingDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_ai_team_pairing_dry_run_request",
+        error: "ai_team_pairing_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canSendMessages: false,
+        canStartGateways: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/hermes-spec-first-swarm/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createHermesSpecFirstSwarmDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_hermes_spec_first_swarm_dry_run_request",
+        error: "hermes_spec_first_swarm_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        commandExecuted: false,
+        canExecuteExternally: false,
+        canModifySource: false,
+        canInstallPackages: false,
+        canStartMcp: false,
+        canRunMcp: false,
+        canCallProvider: false,
+        canReadSecrets: false,
+        canSendMessages: false,
+        canDeploy: false,
+        canPush: false,
+        canPublish: false,
+        canAutoStartAgents: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/gateway-agent/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createGatewayAgentDryRunPlan(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_gateway_agent_dry_run_request",
+        error: "gateway_agent_plan_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canRunMcp: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/brain") {
     try {
       sendJson(request, response, 200, await listBrainNotes());
@@ -806,8 +1354,12 @@ const server = createServer(async (request, response) => {
   }
 
   sendJson(request, response, 404, { error: "not_found" });
-});
+}
 
-server.listen(port, host, () => {
-  console.log(`SIRINX dev control API listening on http://${host}:${port}`);
-});
+const server = createServer(handleRequest);
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  server.listen(port, host, () => {
+    console.log(`SIRINX dev control API listening on http://${host}:${port}`);
+  });
+}

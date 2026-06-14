@@ -124,7 +124,12 @@ h2 {
 .metric {
   display: grid;
   gap: 8px;
+  min-width: 0;
   padding: 18px;
+}
+
+.metric > * {
+  min-width: 0;
 }
 
 .metric-label,
@@ -136,6 +141,7 @@ h2 {
 
 .metric strong {
   font-size: 1.35rem;
+  overflow-wrap: anywhere;
 }
 
 .hermes-panel {
@@ -174,6 +180,74 @@ h2 {
 
 .vibe-panel {
   margin-bottom: 14px;
+}
+
+.connector-panel {
+  margin-bottom: 14px;
+}
+
+.agent-launch-panel {
+  margin-bottom: 14px;
+}
+
+.spec-first-swarm-panel {
+  margin-bottom: 14px;
+}
+
+.local-rag-panel {
+  margin-bottom: 14px;
+}
+
+.image-edit-panel {
+  margin-bottom: 14px;
+}
+
+.connector-stop {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid #d6c69d;
+  border-radius: 8px;
+  background: #fff8e7;
+  color: var(--amber);
+  font-size: 0.88rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.agent-launch-stop {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-size: 0.88rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.local-rag-stop {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-size: 0.88rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.image-edit-stop {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid #d6c69d;
+  border-radius: 8px;
+  background: #fff8e7;
+  color: var(--amber);
+  font-size: 0.88rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
 }
 
 .executive-summary,
@@ -332,8 +406,13 @@ h2 {
   background: #fbfcfa;
 }
 
+.hq-stat > * {
+  min-width: 0;
+}
+
 .hq-stat strong {
   font-size: 1.18rem;
+  overflow-wrap: anywhere;
 }
 
 .executive-layout {

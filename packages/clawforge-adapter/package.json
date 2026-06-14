@@ -1,0 +1,10 @@
+{
+  "name": "@sirinx/clawforge-adapter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/validateDemoSpec.mjs",
+    "./validate-demo-spec": "./src/validateDemoSpec.mjs"
+  }
+}
