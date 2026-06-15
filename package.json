@@ -92,6 +92,8 @@
     "telegram-command-router:test": "pnpm exec vitest run services/dev-control-api/src/telegram-command-router.test.mjs",
     "codex-task-runner:test": "pnpm exec vitest run services/dev-control-api/src/codex-task-runner.test.mjs",
     "agent-loop-runtime:test": "pnpm exec vitest run services/dev-control-api/src/agent-loop-runtime.test.mjs",
+    "autoglow:test": "pnpm exec vitest run packages/autoglow-core/src/index.test.ts apps/agm-autoglow-extension/manifest.test.mjs",
+    "autoglow:extension:check": "node --check apps/agm-autoglow-extension/service-worker.js && node --check apps/agm-autoglow-extension/content-script.js && node --check apps/agm-autoglow-extension/sidepanel.js",
     "model-routing-approval:test": "pnpm exec vitest run services/dev-control-api/src/model-routing-approval.test.mjs",
     "spec-first-swarm:test": "pnpm exec vitest run services/dev-control-api/src/hermes-spec-first-swarm.test.mjs",
     "centerbrain-shell:dev": "pnpm --filter @sirinx/centerbrain-shell dev",

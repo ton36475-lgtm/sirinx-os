@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "AGM AUTOGLOW Assistant",
+  "version": "0.1.0",
+  "description": "Creative workflow assistant for Google Flow and AI video production.",
+  "permissions": ["storage", "sidePanel", "activeTab"],
+  "host_permissions": ["https://labs.google/*"],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Open AUTOGLOW Panel"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://labs.google/*"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
