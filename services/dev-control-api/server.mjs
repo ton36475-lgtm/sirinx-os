@@ -50,6 +50,10 @@ import {
   getOpenRouterQwenAdapterStatus
 } from "./src/openrouter-qwen-adapter.mjs";
 import {
+  createOpenRouterFusionRouterDryRun,
+  getOpenRouterFusionRouterStatus
+} from "./src/openrouter-fusion-router.mjs";
+import {
   createOpenRouterQwenModelRoutingApprovalDryRun,
   getOpenRouterQwenModelRoutingApproval
 } from "./src/model-routing-approval.mjs";
@@ -930,6 +934,11 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/openrouter-fusion-router") {
+    sendJson(request, response, 200, getOpenRouterFusionRouterStatus());
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/model-routing-approval/openrouter-qwen") {
     sendJson(request, response, 200, getOpenRouterQwenModelRoutingApproval());
     return;
@@ -1209,6 +1218,32 @@ export async function handleRequest(request, response) {
         canReadSecrets: false,
         providerCalled: false,
         secretsRead: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-fusion-router/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createOpenRouterFusionRouterDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_fusion_router_dry_run_request",
+        error: "openrouter_fusion_router_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCallPaidApi: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        providerCalled: false,
+        secretsRead: false,
+        keyValuePrinted: false,
         commandExecuted: false,
         requiresHumanApproval: true
       });

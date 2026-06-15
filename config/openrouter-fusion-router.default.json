@@ -1,0 +1,43 @@
+{
+  "status": "local-only-template",
+  "provider": "OpenRouter",
+  "router_model": "openrouter/fusion",
+  "entrypoint": "plugin",
+  "judge_model": "~openai/gpt-latest",
+  "analysis_models": [
+    "~anthropic/claude-opus-latest",
+    "~openai/gpt-latest",
+    "~google/gemini-pro-latest",
+    "deepseek/deepseek-v3.2",
+    "~moonshotai/kimi-latest"
+  ],
+  "limits": {
+    "max_analysis_models": 8,
+    "max_tool_calls": 8,
+    "max_completion_tokens": 4096
+  },
+  "parameters": {
+    "temperature": 0.2,
+    "reasoning": {
+      "effort": "medium",
+      "max_tokens": 2048
+    }
+  },
+  "blocked_without_separate_approval": [
+    "provider_call",
+    "api_key_read",
+    "provider_credit_spend",
+    "telegram_send",
+    "line_send",
+    "deploy",
+    "push",
+    "publish",
+    "package_install",
+    "mcp_start"
+  ],
+  "required_runtime_gate": {
+    "thclaws_version": "0.61.0",
+    "local_observed_version": "0.8.8",
+    "status": "upgrade-required-before-live-use"
+  }
+}
