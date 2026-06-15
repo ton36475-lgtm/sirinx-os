@@ -1,6 +1,9 @@
+import { readRuntimeSecret } from "./runtime-foundation.mjs";
+
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const OPENROUTER_CHAT_COMPLETIONS_ENDPOINT = `${OPENROUTER_BASE_URL}/chat/completions`;
 const FUSION_MODEL = "openrouter/fusion";
+const DEFAULT_LIVE_SMOKE_MODEL = "openai/gpt-4o-mini";
 const STOP_POINT = "OPENROUTER FUSION ROUTER READY - LOCAL ONLY - NO PROVIDER CALL TAKEN";
 const APPROVAL_DOC_PATH = "docs/approvals/OPENROUTER_FUSION_ROUTER_APPROVAL.md";
 const KNOWLEDGE_DOC_PATH = "docs/knowledge/SIRINX_OPENROUTER_FUSION_ROUTER_V1.md";
@@ -290,10 +293,10 @@ function makeEvidenceChecklist(status) {
       evidence: "local binary observed as 0.8.8 in this run; v0.61.0 requires separate install/upgrade"
     },
     {
-      id: "future_smoke_requires_approval",
-      label: "Future fusion smoke requires explicit approval",
+      id: "live_smoke_is_bounded",
+      label: "Live fusion smoke route is bounded and approval-gated",
       status: "passed",
-      evidence: "non-dry-run fusion route not implemented"
+      evidence: "route exists; key and explicit request still required"
     }
   ];
 }
@@ -347,7 +350,7 @@ export function getOpenRouterFusionRouterStatus(options = {}) {
       futureApprovalPhrase:
         "Approve exactly one OpenRouter Fusion Router read-only smoke after confirming budget, key presence, panel models, judge model, max_tool_calls, and prompt scope.",
       canApproveProviderCallNow: false,
-      providerCallRouteExists: false,
+      providerCallRouteExists: true,
       humanApprovalRequired: true
     },
     nextRecommendedAction:
@@ -417,4 +420,245 @@ export function createOpenRouterFusionRouterDryRun(body = {}, options = {}) {
     stopPoint: STOP_POINT,
     updatedAt: nowIso(options)
   };
+}
+
+export function classifyOpenRouterFusionError(status) {
+  if (status === 401) return "AUTH_ERROR_INVALID_KEY";
+  if (status === 402) return "BILLING_ERROR_NO_CREDIT";
+  if (status === 403) return "POLICY_OR_PROVIDER_FORBIDDEN";
+  if (status === 404) return "MODEL_NOT_FOUND_OR_BAD_SLUG";
+  if (status === 408) return "REQUEST_TIMEOUT";
+  if (status === 429) return "RATE_LIMITED";
+  if (status >= 500) return "PROVIDER_OR_GATEWAY_ERROR";
+  return "UNKNOWN_OPENROUTER_ERROR";
+}
+
+function buildLiveSmokeInput(body = {}) {
+  const requestedModels = body.analysis_models || body.analysisModels;
+  const limitedModels = requestedModels
+    ? normalizeAnalysisModels(requestedModels).models.slice(0, 2)
+    : [DEFAULT_LIVE_SMOKE_MODEL];
+  const entrypoint = safeString(body.entrypoint, "plugin");
+  const judgeModel = safeString(body.model, DEFAULT_LIVE_SMOKE_MODEL);
+  const normalizedEntrypoint = ["plugin", "server-tool"].includes(entrypoint) ? entrypoint : "plugin";
+  const input = {
+    requestId: safeString(body.requestId, "openrouter-fusion-live-smoke"),
+    goal: safeString(
+      body.goal,
+      "Run one bounded SIRINX OpenRouter Fusion smoke and return a concise JSON readiness summary."
+    ),
+    entrypoint: normalizedEntrypoint,
+    analysis_models: limitedModels,
+    model: judgeModel,
+    max_tool_calls: clampNumber(body.max_tool_calls ?? body.maxToolCalls, 1, 1, 2),
+    max_completion_tokens: clampNumber(body.max_completion_tokens ?? body.maxCompletionTokens, 256, 64, 512),
+    temperature: clampNumber(body.temperature, 0, 0, 0.4),
+    forceFusion: body.forceFusion === undefined ? true : Boolean(body.forceFusion),
+    serverToolFallback: body.serverToolFallback === undefined ? true : Boolean(body.serverToolFallback)
+  };
+
+  if (normalizedEntrypoint === "server-tool") {
+    input.outerModel = safeString(body.outerModel || body.outer_model || body.fallbackOuterModel, judgeModel);
+  }
+
+  return input;
+}
+
+function sanitizeOpenRouterResponse(json, text) {
+  const choice = json?.choices?.[0];
+  return {
+    idPresent: Boolean(json?.id),
+    model: typeof json?.model === "string" ? json.model : "",
+    choiceCount: Array.isArray(json?.choices) ? json.choices.length : 0,
+    finishReason: choice?.finish_reason || "",
+    messagePreview: safeString(choice?.message?.content || text).slice(0, 600),
+    usage: json?.usage
+      ? {
+          prompt_tokens: json.usage.prompt_tokens,
+          completion_tokens: json.usage.completion_tokens,
+          total_tokens: json.usage.total_tokens
+        }
+      : null
+  };
+}
+
+export async function runOpenRouterFusionLiveSmoke(body = {}, options = {}) {
+  const startedAt = nowIso(options);
+  const input = buildLiveSmokeInput(body);
+  const openRouterCredential = options.apiKey
+    ? { ok: true, present: true, value: options.apiKey, error: null }
+    : await readRuntimeSecret("OPENROUTER_API_KEY", options);
+
+  if (!openRouterCredential.ok) {
+    return {
+      title: "OpenRouter Fusion Router Live Smoke",
+      status: "blocked-openrouter-fusion-live-smoke",
+      mode: "bounded-provider-smoke",
+      requestId: input.requestId,
+      provider: "OpenRouter",
+      model: FUSION_MODEL,
+      providerCalled: false,
+      commandExecuted: false,
+      secretsRead: true,
+      keyValuePrinted: false,
+      canCallPaidApi: false,
+      blockedReason: openRouterCredential.error || "missing_openrouter_api_key_value",
+      nextRecommendedAction: "Add a non-empty OPENROUTER_API_KEY value to the Hermes profile env file, then rerun the smoke.",
+      startedAt,
+      updatedAt: nowIso(options)
+    };
+  }
+
+  const requestPreview = buildOpenRouterFusionRequestPreview(input);
+  const fetchImpl = options.fetchImpl || globalThis.fetch;
+  const referer = safeString(process.env.HERMES_SITE_URL, "https://dev.sirinx.local");
+  const title = safeString(process.env.HERMES_APP_TITLE, "SIRINX Fusion Router");
+
+  try {
+    const sendRequest = async (preview) => {
+      const response = await fetchImpl(preview.endpoint, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${openRouterCredential.value}`,
+          "content-type": "application/json",
+          "http-referer": referer,
+          "x-openrouter-title": title
+        },
+        body: JSON.stringify(preview.body)
+      });
+      const text = await response.text();
+      let json = null;
+      try {
+        json = text ? JSON.parse(text) : null;
+      } catch {
+        json = null;
+      }
+
+      return { response, text, json };
+    };
+
+    const makeFailureResult = ({ response, text, json, fallback = null }) => ({
+      title: "OpenRouter Fusion Router Live Smoke",
+      status: "failed-openrouter-fusion-live-smoke",
+      mode: "bounded-provider-smoke",
+      requestId: input.requestId,
+      provider: "OpenRouter",
+      model: FUSION_MODEL,
+      entrypoint: requestPreview.entrypoint,
+      providerCalled: true,
+      commandExecuted: false,
+      secretsRead: true,
+      keyValuePrinted: false,
+      canCallPaidApi: true,
+      httpStatus: response.status,
+      errorClass: classifyOpenRouterFusionError(response.status),
+      responsePreview: safeString(json?.error?.message || text).slice(0, 600),
+      ...(fallback ? { fallback } : {}),
+      startedAt,
+      updatedAt: nowIso(options)
+    });
+
+    const { response, text, json } = await sendRequest(requestPreview);
+
+    if (
+      !response.ok &&
+      response.status >= 500 &&
+      input.serverToolFallback &&
+      requestPreview.entrypoint !== "server-tool"
+    ) {
+      const originalErrorClass = classifyOpenRouterFusionError(response.status);
+      const fallbackPreview = buildOpenRouterFusionRequestPreview({
+        ...input,
+        entrypoint: "server-tool",
+        outerModel: input.outerModel || input.model,
+        forceFusion: true
+      });
+      const fallbackRun = await sendRequest(fallbackPreview);
+
+      if (fallbackRun.response.ok) {
+        return {
+          title: "OpenRouter Fusion Router Live Smoke",
+          status: "passed-openrouter-fusion-server-tool-fallback-smoke",
+          mode: "bounded-provider-smoke",
+          requestId: input.requestId,
+          provider: "OpenRouter",
+          model: FUSION_MODEL,
+          entrypoint: "server-tool",
+          providerCalled: true,
+          commandExecuted: false,
+          secretsRead: true,
+          keyValuePrinted: false,
+          canCallPaidApi: true,
+          httpStatus: fallbackRun.response.status,
+          fallback: {
+            reason: "fusion_alias_or_plugin_gateway_5xx",
+            originalEntrypoint: requestPreview.entrypoint,
+            originalHttpStatus: response.status,
+            originalErrorClass,
+            recoveredEntrypoint: fallbackPreview.entrypoint
+          },
+          response: sanitizeOpenRouterResponse(fallbackRun.json, fallbackRun.text),
+          startedAt,
+          updatedAt: nowIso(options)
+        };
+      }
+
+      return makeFailureResult({
+        response: fallbackRun.response,
+        text: fallbackRun.text,
+        json: fallbackRun.json,
+        fallback: {
+          reason: "fusion_alias_or_plugin_gateway_5xx",
+          originalEntrypoint: requestPreview.entrypoint,
+          originalHttpStatus: response.status,
+          originalErrorClass,
+          recoveredEntrypoint: fallbackPreview.entrypoint,
+          recoveredHttpStatus: fallbackRun.response.status,
+          recoveredErrorClass: classifyOpenRouterFusionError(fallbackRun.response.status)
+        }
+      });
+    }
+
+    if (!response.ok) {
+      return makeFailureResult({ response, text, json });
+    }
+
+    return {
+      title: "OpenRouter Fusion Router Live Smoke",
+      status: "passed-openrouter-fusion-live-smoke",
+      mode: "bounded-provider-smoke",
+      requestId: input.requestId,
+      provider: "OpenRouter",
+      model: FUSION_MODEL,
+      entrypoint: requestPreview.entrypoint,
+      providerCalled: true,
+      commandExecuted: false,
+      secretsRead: true,
+      keyValuePrinted: false,
+      canCallPaidApi: true,
+      httpStatus: response.status,
+      response: sanitizeOpenRouterResponse(json, text),
+      startedAt,
+      updatedAt: nowIso(options)
+    };
+  } catch (error) {
+    return {
+      title: "OpenRouter Fusion Router Live Smoke",
+      status: "failed-openrouter-fusion-live-smoke",
+      mode: "bounded-provider-smoke",
+      requestId: input.requestId,
+      provider: "OpenRouter",
+      model: FUSION_MODEL,
+      entrypoint: input.entrypoint,
+      providerCalled: true,
+      commandExecuted: false,
+      secretsRead: true,
+      keyValuePrinted: false,
+      canCallPaidApi: true,
+      errorClass: error.name === "AbortError" ? "REQUEST_TIMEOUT" : "NETWORK_OR_FETCH_ERROR",
+      responsePreview: safeString(error.message).slice(0, 300),
+      startedAt,
+      updatedAt: nowIso(options)
+    };
+  }
 }

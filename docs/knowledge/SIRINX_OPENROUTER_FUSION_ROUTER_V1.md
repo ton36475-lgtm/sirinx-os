@@ -24,8 +24,11 @@ It does not read `OPENROUTER_API_KEY`, call OpenRouter, install SDKs, spend cred
 
 - `GET /api/openrouter-fusion-router`
 - `POST /api/openrouter-fusion-router/plan/dry-run`
+- `POST /api/openrouter-fusion-router/smoke`
 
 Dry-run output is JSON only. It returns `providerCalled:false`, `secretsRead:false`, `canCallPaidApi:false`, `keyValuePrinted:false`, and `commandExecuted:false`.
+
+The smoke route is approval-gated and bounded. It may read only key presence/value for the request header, must never print the key, and returns `keyValuePrinted:false`.
 
 ## Fusion Contract
 
@@ -80,6 +83,40 @@ Uses a normal outer model plus an OpenRouter Fusion server tool:
 ```
 
 This preview is useful for clients that expose Fusion as a tool rather than a model/plugin alias.
+
+## Runtime Recovery Note
+
+Live evidence from the SIRINX runtime lane showed that the normal OpenRouter provider path can succeed while the `openrouter/fusion` alias/plugin path may return HTTP `500`.
+
+Root-cause classification:
+
+- OpenRouter key: valid enough for normal provider calls
+- network path: working
+- normal chat completion: working
+- Fusion alias/plugin gateway: can fail with `PROVIDER_OR_GATEWAY_ERROR`
+- Fusion server-tool path: available as the recovery path
+
+When `/api/openrouter-fusion-router/smoke` receives a `5xx` from the alias/plugin path, it retries once through the explicit server-tool form:
+
+```json
+{
+  "model": "openai/gpt-4o-mini",
+  "tools": [
+    {
+      "type": "openrouter:fusion"
+    }
+  ],
+  "tool_choice": "required"
+}
+```
+
+Successful recovery returns:
+
+```text
+passed-openrouter-fusion-server-tool-fallback-smoke
+```
+
+This is still a provider call and still requires explicit approval. It does not deploy, push, publish, send Telegram/LINE messages, start MCP servers, or mutate external systems.
 
 ## thClaws Readiness
 

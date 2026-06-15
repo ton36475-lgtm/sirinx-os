@@ -51,8 +51,13 @@ import {
 } from "./src/openrouter-qwen-adapter.mjs";
 import {
   createOpenRouterFusionRouterDryRun,
-  getOpenRouterFusionRouterStatus
+  getOpenRouterFusionRouterStatus,
+  runOpenRouterFusionLiveSmoke
 } from "./src/openrouter-fusion-router.mjs";
+import { getRuntimeFoundationStatus, writeRuntimeFoundationAudit } from "./src/runtime-foundation.mjs";
+import { getCodexTaskRunnerStatus, runCodexTask } from "./src/codex-task-runner.mjs";
+import { getAgentLoopRuntimeStatus, runAgentLoop } from "./src/agent-loop-runtime.mjs";
+import { getTelegramCommandRouterStatus, handleTelegramCommand } from "./src/telegram-command-router.mjs";
 import {
   createOpenRouterQwenModelRoutingApprovalDryRun,
   getOpenRouterQwenModelRoutingApproval
@@ -939,6 +944,26 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/runtime-foundation") {
+    sendJson(request, response, 200, await getRuntimeFoundationStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/codex-task-runner") {
+    sendJson(request, response, 200, getCodexTaskRunnerStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/agent-loop-runtime") {
+    sendJson(request, response, 200, getAgentLoopRuntimeStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/telegram-command-router") {
+    sendJson(request, response, 200, getTelegramCommandRouterStatus());
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/model-routing-approval/openrouter-qwen") {
     sendJson(request, response, 200, getOpenRouterQwenModelRoutingApproval());
     return;
@@ -1246,6 +1271,92 @@ export async function handleRequest(request, response) {
         keyValuePrinted: false,
         commandExecuted: false,
         requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-fusion-router/smoke") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await runOpenRouterFusionLiveSmoke(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_fusion_router_smoke_request",
+        error: "openrouter_fusion_router_smoke_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        providerCalled: false,
+        commandExecuted: false,
+        keyValuePrinted: false
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/runtime-foundation/audit") {
+    try {
+      sendJson(request, response, 200, await writeRuntimeFoundationAudit());
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_runtime_foundation_audit_request",
+        error: "runtime_foundation_audit_failed",
+        message: error.message,
+        keyValuePrinted: false
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/codex-task-runner/run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await runCodexTask(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_codex_task_runner_request",
+        error: "codex_task_runner_failed",
+        message: error.message,
+        externalWrites: false,
+        providerCalled: false,
+        telegramSent: false
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/agent-loop-runtime/run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await runAgentLoop(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_agent_loop_runtime_request",
+        error: "agent_loop_runtime_failed",
+        message: error.message,
+        externalWrites: false,
+        providerCalled: false,
+        telegramSent: false
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/telegram-command-router/run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await handleTelegramCommand(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_telegram_command_router_request",
+        error: "telegram_command_router_failed",
+        message: error.message,
+        externalWrites: false,
+        providerCalled: false,
+        telegramSent: false,
+        keyValuePrinted: false
       });
     }
     return;
