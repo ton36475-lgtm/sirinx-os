@@ -1,0 +1,11 @@
+{
+  "name": "@sirinx/agm-autoglow-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "test": "vitest run src/autoglow-dashboard-core.test.mjs src/autoglow-backend-store.test.mjs",
+    "verify": "node --check server.mjs && node --check src/autoglow-dashboard-core.mjs && node --check src/autoglow-backend-store.mjs && node --check src/app.js && vitest run src/autoglow-dashboard-core.test.mjs src/autoglow-backend-store.test.mjs"
+  }
+}

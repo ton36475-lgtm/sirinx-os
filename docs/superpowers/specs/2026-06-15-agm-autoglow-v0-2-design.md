@@ -5,6 +5,10 @@ Date: 2026-06-15
 Sales name: AGM AUTOGLOW  
 Internal system: AutoFlow Engine
 
+Research artifact:
+
+- `docs/research/2026-06-15-agm-autoglow-google-flow-automation-research.md`
+
 ## Product Position
 
 AGM AUTOGLOW is an AI Creative Production OS for turning a product or idea into a script, storyboard, prompt pack, voiceover script, and delivery files for Google Flow, Veo, Reels, TikTok, Shopee Video, and related production workflows.

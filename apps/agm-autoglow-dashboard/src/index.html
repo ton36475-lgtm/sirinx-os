@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AGM AUTOGLOW Dashboard</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="stars" aria-hidden="true"></div>
+    <main class="dashboard-shell">
+      <aside class="sidebar" aria-label="AGM AUTOGLOW navigation">
+        <div class="brand-mark">
+          <span class="brand-symbol">AG</span>
+          <div>
+            <strong>AGM AUTOGLOW</strong>
+            <small>AI Creative Production OS</small>
+          </div>
+        </div>
+        <nav>
+          <a class="active" href="#dashboard">Dashboard</a>
+          <a href="#intake">Project Intake</a>
+          <a href="#storyboard">Storyboard</a>
+          <a href="#prompt">Prompt Engine</a>
+          <a href="#voiceover">Voiceover</a>
+          <a href="#export">Export Pack</a>
+          <a href="#handoff">Extension Handoff</a>
+          <a href="#api">API Wiring</a>
+        </nav>
+        <section class="local-card">
+          <span>Local Sync</span>
+          <strong>100%</strong>
+          <small>Last synced in this browser</small>
+          <div class="sync-line"></div>
+        </section>
+        <section class="storage-card">
+          <span>Local Storage</span>
+          <strong>Browser only</strong>
+          <small>No provider call / no publish</small>
+        </section>
+      </aside>
+
+      <section class="main-stage">
+        <header class="topbar" id="dashboard">
+          <div>
+            <p class="eyebrow">LOCAL-FIRST / SAFE-BY-DESIGN</p>
+            <h1>Creative Production Command Center</h1>
+          </div>
+          <div class="top-actions">
+            <span class="mode-chip">Local Mode</span>
+            <button type="button" id="resetDemo">Reset Demo</button>
+            <span class="avatar">AD</span>
+          </div>
+        </header>
+
+        <section id="metrics" class="metrics-grid" aria-label="Dashboard metrics"></section>
+
+        <section class="workspace-grid">
+          <div class="workspace-primary">
+            <article class="panel project-panel">
+              <div class="panel-head">
+                <h2>Demo Product Video</h2>
+                <span>Active local draft</span>
+              </div>
+              <div id="projectSummary" class="project-summary"></div>
+            </article>
+
+            <section class="panel storyboard-panel" id="storyboard">
+              <div class="panel-head">
+                <h2>Storyboard Cards</h2>
+                <span>Edit scenes before production</span>
+              </div>
+              <div id="storyboardGrid" class="storyboard-grid"></div>
+            </section>
+          </div>
+
+          <article class="panel intake-panel" id="intake">
+            <div class="panel-head">
+              <h2>Project Intake</h2>
+              <span>Live local form</span>
+            </div>
+            <form id="intakeForm" class="intake-form">
+              <label>Brand<input name="brandName"></label>
+              <label>Business<input name="businessName"></label>
+              <label>Product<input name="productName"></label>
+              <label>Audience<textarea name="targetAudience"></textarea></label>
+              <label>Objective<textarea name="objective"></textarea></label>
+              <label>Duration<select name="durationSec"><option>15</option><option selected>30</option><option>45</option><option>60</option></select></label>
+              <label>Aspect Ratio<select name="aspectRatio"><option selected>9:16</option><option>1:1</option><option>16:9</option></select></label>
+              <label>Tone<input name="tone"></label>
+              <label>Visual Style<textarea name="visualStyle"></textarea></label>
+              <label>Reference Notes<textarea name="referenceNotes"></textarea></label>
+            </form>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel workflow-panel" id="api">
+            <div class="panel-head">
+              <h2>API Wiring / Workflow Map</h2>
+              <span class="live-dot">Live local</span>
+            </div>
+            <div class="workflow-map">
+              <div>Intake API<small>v1.0 OK</small></div>
+              <div>Storyboard Engine<small>v1.2 OK</small></div>
+              <div>Prompt Compiler<small>v2.1 OK</small></div>
+              <div>Voiceover Planner<small>v1.4 local</small></div>
+              <div>QC Engine<small>v1.1 OK</small></div>
+              <div>Export Service<small>v1.3 OK</small></div>
+              <div>Extension Handoff<small>v1.0 OK</small></div>
+            </div>
+          </article>
+
+          <article class="panel status-panel">
+            <div class="panel-head">
+              <h2>Queue & Scene Status</h2>
+              <span>Local only</span>
+            </div>
+            <ul id="statusList" class="status-list"></ul>
+          </article>
+
+          <article class="panel handoff-panel" id="handoff">
+            <div class="panel-head">
+              <h2>Chrome Extension Handoff</h2>
+              <span>Manual-assisted</span>
+            </div>
+            <div class="ready-state">
+              <strong>Ready for local handoff</strong>
+              <small>No private API replay / no hidden automation</small>
+            </div>
+            <button type="button" id="copyHandoff">Copy Handoff JSON</button>
+            <pre id="handoffPreview"></pre>
+          </article>
+
+          <article class="panel export-panel" id="export">
+            <div class="panel-head">
+              <h2>Export Pack</h2>
+              <span>Client-ready files</span>
+            </div>
+            <div class="export-actions">
+              <button type="button" id="exportMarkdown">Copy Markdown</button>
+              <button type="button" id="exportCsv">Copy CSV</button>
+            </div>
+            <ul id="exportFiles" class="export-files"></ul>
+          </article>
+        </section>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
