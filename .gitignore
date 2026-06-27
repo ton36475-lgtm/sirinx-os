@@ -27,6 +27,7 @@ logs/
 # Local control/state folders
 .thclaws/
 .hermes/
+.ghostclaw_runtime/
 data/
 archive/
 
