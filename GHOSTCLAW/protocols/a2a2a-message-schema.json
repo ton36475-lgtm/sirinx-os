@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/ghostclaw/a2a2a-message-v2.0",
+  "title": "A2A2A Message Protocol v2.0",
+  "description": "Agent → Agent → Action message format for GHOSTCLAW Hermes Commander OS",
+  "type": "object",
+  "required": ["a2a2a_version", "mission_id", "correlation_id", "from", "to", "action_requested", "timestamp"],
+  "properties": {
+    "a2a2a_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "mission_id": {
+      "type": "string",
+      "pattern": "^M-\\d{4}-\\d{4}-\\d{3}$",
+      "description": "Mission identifier: M-YYYY-MMDD-NNN"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^sirinx-a2a2a-[a-z0-9]{8}$"
+    },
+    "from": {
+      "type": "object",
+      "required": ["agent", "role"],
+      "properties": {
+        "agent": {
+          "type": "string",
+          "enum": ["hermes-commander", "opus-architect", "codex-captain", "glm-worker", "deepseek-worker", "kob-validator", "command-broker", "human-operator"]
+        },
+        "role": {
+          "type": "string",
+          "enum": ["mission-commander", "chief-architect", "build-captain", "coding-worker", "reasoning-worker", "validator", "broker", "operator"]
+        }
+      }
+    },
+    "to": {
+      "type": "object",
+      "required": ["agent", "role"],
+      "properties": {
+        "agent": {
+          "type": "string",
+          "enum": ["hermes-commander", "opus-architect", "codex-captain", "glm-worker", "deepseek-worker", "kob-validator", "command-broker", "human-operator"]
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "action_requested": {
+      "type": "string",
+      "enum": [
+        "design_architecture",
+        "review_design",
+        "build_scaffold",
+        "write_module",
+        "fix_bug",
+        "refactor",
+        "integrate_patches",
+        "run_tests",
+        "run_lint",
+        "validate",
+        "stage_commit",
+        "update_brain",
+        "report_status",
+        "stop_mission",
+        "approve_action"
+      ]
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "goal": { "type": "string" },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "lane": { "type": "string" },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "depends_on": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "response_expected": {
+      "type": "object",
+      "properties": {
+        "format": { "type": "string" },
+        "within_lane": { "type": "string" },
+        "max_turns": { "type": "integer", "default": 3 }
+      }
+    },
+    "human_approval_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ttl_seconds": {
+      "type": "integer",
+      "default": 600,
+      "maximum": 3600
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PENDING", "ROUTED", "PROCESSING", "ACTION_PENDING", "ACTION_EXECUTING", "COMPLETED", "BLOCKED", "FAILED", "CANCELLED"]
+    }
+  }
+}

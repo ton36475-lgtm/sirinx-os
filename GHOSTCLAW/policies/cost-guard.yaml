@@ -1,0 +1,49 @@
+# Cost Guard Policy
+# Part of: GHOSTCLAW Hermes Commander A2A2A OS v2.0
+
+cost_guard:
+  version: "2.0"
+  enabled: true
+
+  spend_limits:
+    max_per_task_usd: 5
+    max_per_mission_usd: 20
+    max_per_day_usd: 50
+    max_per_month_usd: 200
+
+  api_limits:
+    max_calls_per_minute: 10
+    max_calls_per_hour: 100
+    paid_api_enabled: false  # Must be explicitly set to true
+
+  token_budgets:
+    hermes_commander_per_turn: 4096
+    opus_architect_per_turn: 8192   # Reasoning needs more
+    codex_captain_per_turn: 4096
+    worker_per_turn: 4096
+    kob_validator_per_turn: 1024    # Mostly deterministic
+
+  model_costs:
+    ollama_hermes_prime_lite:
+      cost_per_1k_tokens: 0.0  # Local
+    ollama_deepseek_r1_lite:
+      cost_per_1k_tokens: 0.0  # Local
+    glm_5_2_cloud:
+      cost_per_1k_tokens: 0.002
+      requires_approval: true
+    deepseek_api_cloud:
+      cost_per_1k_tokens: 0.001
+      requires_approval: true
+
+  tracking:
+    log_all_costs: true
+    correlation_id_required: true
+    alert_on_50pct_budget: true
+    alert_on_90pct_budget: true
+
+  on_breach: BLOCK_AND_NOTIFY_OPERATOR
+
+  exemptions:
+    - local_model_inference  # Free
+    - test_runs              # Local
+    - file_reads             # No cost

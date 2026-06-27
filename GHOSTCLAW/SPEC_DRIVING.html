@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHOSTCLAW — SPEC DRIVING v2.0</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --panel: #12121a;
+    --border: #1e1e2e;
+    --text: #c9d1d9;
+    --dim: #6e7681;
+    --cyan: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d2991d;
+    --red: #f85149;
+    --purple: #a371f7;
+    --orange: #d2664b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Fira Code', monospace;
+    padding: 2rem;
+    line-height: 1.6;
+  }
+  h1 { color: var(--cyan); font-size: 1.8rem; margin-bottom: 0.5rem; }
+  h2 { color: var(--purple); font-size: 1.3rem; margin: 2rem 0 1rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+  h3 { color: var(--green); font-size: 1.1rem; margin: 1.2rem 0 0.6rem; }
+  .subtitle { color: var(--dim); font-size: 0.9rem; margin-bottom: 2rem; }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+  .badge-active { background: var(--green); color: #000; }
+  .badge-v2 { background: var(--cyan); color: #000; }
+  .badge-a5 { background: var(--yellow); color: #000; }
+  .badge-a4 { background: var(--orange); color: #000; }
+  .badge-a3 { background: var(--purple); color: #fff; }
+  .badge-a2 { background: var(--dim); color: #fff; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin: 1rem 0;
+  }
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  th, td { padding: 0.5rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--cyan); font-weight: 600; font-size: 0.85rem; }
+  td { font-size: 0.85rem; }
+  .allow { color: var(--green); }
+  .deny { color: var(--red); }
+  .warn { color: var(--yellow); }
+  .flow-arrow { color: var(--dim); text-align: center; font-size: 1.2rem; }
+  .agent-card {
+    background: var(--panel);
+    border-left: 3px solid var(--cyan);
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .agent-card.opus { border-left-color: var(--purple); }
+  .agent-card.codex { border-left-color: var(--green); }
+  .agent-card.worker { border-left-color: var(--orange); }
+  .agent-card.kob { border-left-color: var(--dim); }
+  .agent-name { font-weight: 700; font-size: 1rem; }
+  .agent-role { color: var(--dim); font-size: 0.8rem; }
+  .sep { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  .spec-version { color: var(--dim); font-size: 0.7rem; text-align: right; margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<h1>⚡ GHOSTCLAW</h1>
+<div class="subtitle">
+  <span class="badge badge-active">ACTIVE</span>
+  <span class="badge badge-v2">v2.0</span>
+  Hermes Commander A2A2A OS — SPEC DRIVING
+</div>
+
+<!-- AUTHORITY STACK -->
+<h2>1. Authority Stack</h2>
+
+<div class="panel" style="text-align:center; font-family: monospace; line-height: 2.2;">
+  <div style="color:var(--dim);">┌──────────────────────────────┐</div>
+  <div style="color:var(--dim);">│      Obsidian Brain          │</div>
+  <div style="color:var(--dim);">│  (Central Knowledge / Vault) │</div>
+  <div style="color:var(--dim);">└──────────────┬───────────────┘</div>
+  <div style="color:var(--dim);">               │</div>
+  <div style="color:var(--dim);">┌──────────────▼───────────────┐</div>
+  <div style="color:var(--cyan);">│  🎯 Hermes Mission Commander │</div>
+  <div style="color:var(--dim);">│  Supreme Commander · A5      │</div>
+  <div style="color:var(--dim);">└──────────────┬───────────────┘</div>
+  <div style="color:var(--dim);">               │</div>
+  <div style="color:var(--dim);">┌──────────────▼───────────────┐</div>
+  <div style="color:var(--purple);">│  🏗️ Opus Chief Architect     │</div>
+  <div style="color:var(--dim);">│  System Designer · A3        │</div>
+  <div style="color:var(--dim);">└──────────────┬───────────────┘</div>
+  <div style="color:var(--dim);">               │</div>
+  <div style="color:var(--dim);">┌──────────────▼───────────────┐</div>
+  <div style="color:var(--green);">│  ⚓ Codex Build Captain       │</div>
+  <div style="color:var(--dim);">│  Repo Integrator · A4        │</div>
+  <div style="color:var(--dim);">└──────┬───────────┬───────────┘</div>
+  <div style="color:var(--dim);">       │           │</div>
+  <div style="color:var(--dim);">  ┌────▼──┐   ┌───▼────┐</div>
+  <div style="color:var(--orange);">  │ GLM   │   │DeepSeek│</div>
+  <div style="color:var(--dim);">  │ A3    │   │ A3     │</div>
+  <div style="color:var(--dim);">  └───┬───┘   └───┬────┘</div>
+  <div style="color:var(--dim);">      └─────┬──────┘</div>
+  <div style="color:var(--dim);">            │</div>
+  <div style="color:var(--dim);">  ┌─────────▼──────────┐</div>
+  <div style="color:var(--dim);">  │  🔍 KOB Validator   │</div>
+  <div style="color:var(--dim);">  │  Test/Lint · A2     │</div>
+  <div style="color:var(--dim);">  └─────────┬──────────┘</div>
+  <div style="color:var(--dim);">            │</div>
+  <div style="color:var(--dim);">  ┌─────────▼──────────┐</div>
+  <div style="color:var(--yellow);">  │  🛡️ Command Broker  │</div>
+  <div style="color:var(--dim);">  │  Execution Gate·A5  │</div>
+  <div style="color:var(--dim);">  └─────────┬──────────┘</div>
+  <div style="color:var(--dim);">            │</div>
+  <div style="color:var(--dim);">  ┌─────────▼──────────┐</div>
+  <div style="color:var(--dim);">  │  📊 Mission Control │</div>
+  <div style="color:var(--dim);">  │  Audit/Vault/Status │</div>
+  <div style="color:var(--dim);">  └────────────────────┘</div>
+</div>
+
+<!-- AGENT ROSTER -->
+<h2>2. Agent Roster</h2>
+
+<div class="agent-card">
+  <div class="agent-name">🎯 Hermes</div>
+  <div class="agent-role">Mission Commander · A5</div>
+  <div style="margin-top:0.4rem; font-size:0.85rem;">
+    Routes missions, creates lanes, reads Brain, prevents loops & collisions.<br>
+    <span class="deny">No direct repo writes.</span>
+    <span class="warn">Approval required for push/deploy.</span>
+  </div>
+</div>
+
+<div class="agent-card opus">
+  <div class="agent-name">🏗️ Opus</div>
+  <div class="agent-role">Chief Architect · A3</div>
+  <div style="margin-top:0.4rem; font-size:0.85rem;">
+    Designs architecture, data models, protocols. Outputs design docs only.<br>
+    <span class="deny">No repo writes, no commits, no deploy.</span>
+  </div>
+</div>
+
+<div class="agent-card codex">
+  <div class="agent-name">⚓ Codex</div>
+  <div class="agent-role">Build Captain · A4</div>
+  <div style="margin-top:0.4rem; font-size:0.85rem;">
+    Scaffolds, integrates patches, runs tests, stages commits.<br>
+    <span class="deny">No push/merge without approval.</span>
+  </div>
+</div>
+
+<div class="agent-card worker">
+  <div class="agent-name">👷 GLM-5.2</div>
+  <div class="agent-role">Coding Worker · A3</div>
+  <div style="margin-top:0.4rem; font-size:0.85rem;">
+    Writes modules, tests, bug fixes within assigned lane.<br>
+    <span class="deny">No architecture decisions, no cross-lane writes.</span>
+  </div>
+</div>
+
+<div class="agent-card worker">
+  <div class="agent-name">🧠 DeepSeek</div>
+  <div class="agent-role">Reasoning Worker · A3</div>
+  <div style="margin-top:0.4rem; font-size:0.85rem;">
+    Deep debugging, refactoring, algorithm work within assigned lane.<br>
+    <span class="deny">No UI work, no architecture, no integration.</span>
+  </div>
+</div>
+
+<div class="agent-card kob">
+  <div class="agent-name">🔍 KOB</div>
+  <div class="agent-role">Validator · A2</div>
+  <div style="margin-top:0.4rem; font-size:0.85rem;">
+    Runs tests, lint, typecheck. Allowlisted commands only.<br>
+    <span class="deny">No file writes, no git ops, no arbitrary shell.</span>
+  </div>
+</div>
+
+<!-- FLEET -->
+<h2>3. Fleet Structure</h2>
+
+<table>
+  <tr><th>Ship</th><th>Captain</th><th>Crew (Co-Workers)</th></tr>
+  <tr><td>🚢 Flagship</td><td>Hermes</td><td>🧭 Opus · 📜 Brain · 🛠️ Skills</td></tr>
+  <tr><td>🚢 Build Ops</td><td>Codex</td><td>👷 GLM · 🧠 DeepSeek · 🔍 KOB</td></tr>
+  <tr><td>🚢 Integration</td><td>Bridge</td><td>💻 MacOp · 🔭 Research</td></tr>
+  <tr><td>🚢 QA & Security</td><td>QA Agent</td><td>🧠 Adaptive · 🛡️ Security</td></tr>
+  <tr><td>🚢 Frontend/Backend</td><td>Lead</td><td>🖥️ Frontend · ⚙️ Backend</td></tr>
+</table>
+
+<!-- 5 CO-WORKERS -->
+<h2>4. 5 Co-Worker Roles</h2>
+
+<div class="grid grid-2">
+  <div class="panel">
+    <h3>🧭 Navigator</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Plans the route. Opus designs architecture before anyone builds.</p>
+  </div>
+  <div class="panel">
+    <h3>👷 Engineer</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Builds and integrates. Codex + GLM/DeepSeek write the code.</p>
+  </div>
+  <div class="panel">
+    <h3>💻 Operator</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Runs and validates. KOB runs tests, lint, typecheck.</p>
+  </div>
+  <div class="panel">
+    <h3>🛡️ Sentinel</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Watches for danger. QA + Adaptive Control review safety.</p>
+  </div>
+  <div class="panel" style="grid-column: 1 / -1;">
+    <h3>📜 Scribe</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Records everything. Brain Curator writes to KMS, Obsidian, Vault.</p>
+  </div>
+</div>
+
+<!-- A2A2A -->
+<h2>5. A2A2A Protocol</h2>
+
+<div class="panel" style="text-align:center; font-size:1.5rem; letter-spacing:0.3rem;">
+  Agent → Agent → Action
+</div>
+
+<div class="grid grid-3">
+  <div class="panel">
+    <h3>A₁ Agent Request</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Hermes issues structured mission order with goal, lane, constraints, TTL.</p>
+  </div>
+  <div class="panel">
+    <h3>A₂ Agent Process</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">Opus/Codex/Workers analyze, design, write, integrate within lanes.</p>
+  </div>
+  <div class="panel">
+    <h3>A₃ Action</h3>
+    <p style="font-size:0.85rem; color:var(--dim);">KOB validates. Command Broker gates execution. Mission Control records.</p>
+  </div>
+</div>
+
+<!-- APPROVAL MATRIX -->
+<h2>6. Approval Matrix</h2>
+
+<table>
+  <tr><th>Action</th><th>Worker</th><th>Codex</th><th>Hermes</th><th>Human</th></tr>
+  <tr><td>Read file</td><td class="allow">✓</td><td class="allow">✓</td><td class="allow">✓</td><td class="allow">✓</td></tr>
+  <tr><td>Write within lane</td><td class="deny">✗</td><td class="allow">✓</td><td class="allow">✓</td><td class="allow">✓</td></tr>
+  <tr><td>Cross-lane write</td><td class="deny">✗</td><td class="deny">✗</td><td class="allow">✓</td><td class="allow">✓</td></tr>
+  <tr><td>Git commit</td><td class="deny">✗</td><td class="deny">✗</td><td class="allow">✓</td><td class="allow">✓</td></tr>
+  <tr><td>Git push</td><td class="deny">✗</td><td class="deny">✗</td><td class="deny">✗</td><td class="allow">✓</td></tr>
+  <tr><td>Deploy</td><td class="deny">✗</td><td class="deny">✗</td><td class="deny">✗</td><td class="allow">✓</td></tr>
+  <tr><td>External API</td><td class="deny">✗</td><td class="deny">✗</td><td class="deny">✗</td><td class="allow">✓</td></tr>
+</table>
+
+<!-- MISSION FLOW -->
+<h2>7. Mission Lifecycle</h2>
+
+<div class="panel" style="font-family: monospace; font-size: 0.82rem; line-height: 1.8;">
+1. OPERATOR → <span style="color:var(--cyan);">Hermes</span>: "Build feature X"<br>
+2. <span style="color:var(--cyan);">Hermes</span> → <span style="color:var(--purple);">Opus</span>: Design architecture<br>
+3. <span style="color:var(--purple);">Opus</span> → <span style="color:var(--cyan);">Hermes</span>: architecture.md<br>
+4. <span style="color:var(--cyan);">Hermes</span> → <span style="color:var(--green);">Codex</span>: Build X per architecture<br>
+5. <span style="color:var(--green);">Codex</span> → <span style="color:var(--orange);">GLM</span> / <span style="color:var(--orange);">DeepSeek</span>: Write modules<br>
+6. Workers → <span style="color:var(--green);">Codex</span>: Patches<br>
+7. <span style="color:var(--green);">Codex</span> integrates + local tests<br>
+8. <span style="color:var(--green);">Codex</span> → <span style="color:var(--dim);">KOB</span>: Validate<br>
+9. <span style="color:var(--dim);">KOB</span> → <span style="color:var(--green);">Codex</span>: validation-report.json<br>
+10. <span style="color:var(--green);">Codex</span> → <span style="color:var(--yellow);">Command Broker</span>: Request commit<br>
+11. <span style="color:var(--yellow);">Broker</span> gates → allows/blocks<br>
+12. <span style="color:var(--cyan);">Hermes</span> → 📜 Scribe: Record mission<br>
+13. <span style="color:var(--cyan);">Hermes</span> → OPERATOR: ✅ MISSION COMPLETE
+</div>
+
+<!-- SAFETY -->
+<h2>8. Safety Rules</h2>
+
+<div class="panel">
+  <span class="deny">✗</span> No deploy without human approval<br>
+  <span class="deny">✗</span> No git push without human approval<br>
+  <span class="deny">✗</span> No cloud mutation without human approval<br>
+  <span class="deny">✗</span> No .env reads<br>
+  <span class="deny">✗</span> No secrets in context<br>
+  <span class="deny">✗</span> No cross-lane writes without routing<br>
+  <span class="deny">✗</span> No worker-to-worker direct comms<br>
+  <span class="warn">⚠</span> Dry-run first for external actions<br>
+  <span class="warn">⚠</span> Loop guard: max 2 retries, circuit breaker at 3
+</div>
+
+<hr class="sep">
+<div class="spec-version">
+  GHOSTCLAW Hermes Commander A2A2A OS v2.0 · SPEC_DRIVING · 2026-06-27 · SIRINX OS
+</div>
+
+</body>
+</html>

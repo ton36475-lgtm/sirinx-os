@@ -1,0 +1,105 @@
+# Approval Matrix
+# Part of: GHOSTCLAW Hermes Commander A2A2A OS v2.0
+
+matrix:
+  version: "2.0"
+
+  tiers:
+    T0_auto:
+      description: "Always allowed, no approval"
+      actions:
+        - file_read
+        - git_status
+        - git_diff
+        - git_log
+        - brain_query
+        - kms_read
+        - agent_status
+        - mission_status
+
+    T1_lane_scoped:
+      description: "Allowed within assigned lane"
+      approver: none
+      actions:
+        - file_write            # lane only
+        - file_delete           # lane only
+        - git_add               # lane only
+        - test_run
+        - lint_run
+        - typecheck_run
+        - build_run             # lane only
+
+    T2_hermes_approval:
+      description: "Requires Hermes Commander approval"
+      approver: hermes-commander
+      actions:
+        - git_commit
+        - git_branch_create
+        - git_stash
+        - file_move_cross_lane
+        - cross_lane_write
+        - dependency_install
+        - new_file_outside_lane
+        - brain_write
+        - kms_write
+
+    T3_human_approval:
+      description: "Requires Human Operator approval"
+      approver: human-operator
+      actions:
+        - git_push
+        - git_merge
+        - git_rebase
+        - deploy
+        - cloud_mutation
+        - external_api_write
+        - customer_message_send
+        - paid_api_call
+        - package_publish
+        - database_migration
+
+    T4_prohibited:
+      description: "Never allowed"
+      actions:
+        - rm_rf_outside_workspace
+        - sudo
+        - system_shutdown
+        - network_scan_external
+        - credential_extraction
+        - bypass_approval
+
+  role_permissions:
+    hermes-commander:
+      max_tier: T2
+      can_approve: [T0, T1, T2]
+
+    opus-architect:
+      max_tier: T1
+      can_approve: [T0, T1]
+      note: "No repo writes — outputs design docs only via Hermes"
+
+    codex-captain:
+      max_tier: T1
+      can_approve: [T0, T1]
+      note: "Can write within build lane. T2 requires Hermes approval"
+
+    glm-worker:
+      max_tier: T1
+      can_approve: [T0]
+      note: "File writes only within assigned lane, routed through Codex"
+
+    deepseek-worker:
+      max_tier: T1
+      can_approve: [T0]
+      note: "File writes only within assigned lane, routed through Codex"
+
+    kob-validator:
+      max_tier: T1
+      can_approve: [T0]
+      note: "Read + test execution only. No file writes"
+
+  emergency_override:
+    enabled: false
+    requires: human-operator + hermes-commander
+    max_duration_minutes: 15
+    audit_required: true
