@@ -255,8 +255,56 @@
         "evidence_pack_required": { "type": "boolean" },
         "decision_id_required": { "type": "boolean" },
         "receipt_required": { "type": "boolean" },
-        "final_tier": { "type": "string", "enum": ["A", "B", "C", "D", "X"] },
-        "reason": { "type": "string" }
+        "action_tier_cap": {
+          "type": "string",
+          "enum": ["A", "B", "C", "D", "X"]
+        },
+        "safe_replacement_actions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "safe_execution_v3": {
+      "type": "object",
+      "description": "Optional Autonomous Safe Execution Mode v3 metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "mode": { "type": "string", "enum": ["disabled", "human_required", "no_human_prompt_safe_autonomy"] },
+        "human_prompt_required": { "type": "boolean" },
+        "stall_on_block": { "type": "boolean" },
+        "safe_replacement_enabled": { "type": "boolean" },
+        "receipt_format": {
+          "type": "string",
+          "enum": ["ghostclaw.receipt.v2", "ghostclaw.receipt.v3_1"]
+        },
+        "blocked_action_behavior": {
+          "type": "string",
+          "enum": ["auto_block_and_continue", "auto_block_and_halt", "human_prompt"]
+        },
+        "replacement_action_classes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "performance_slo": {
+          "type": "object",
+          "properties": {
+            "decision_latency_ms": { "type": "integer" },
+            "quorum_target_ms": { "type": "integer" }
+          }
+        },
+        "runtime_telemetry_gate": {
+          "type": "object",
+          "properties": {
+            "enforce_deterministic_fallback": { "type": "boolean" },
+            "suppress_interactive_prompts": { "type": "boolean" },
+            "log_level": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+            "receipt_format": {
+              "type": "string",
+              "enum": ["ghostclaw.receipt.v3_1"]
+            }
+          }
+        }
       }
     }
   }
