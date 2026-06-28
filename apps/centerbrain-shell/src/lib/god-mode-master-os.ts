@@ -1,7 +1,7 @@
 export type GodModeLayerStatus = "unknown" | "blocked" | "planned" | "active";
 export type GodModeTaskStatus = "blocked" | "r0-gate" | "todo";
 export type GodModePriority = "P0" | "P1" | "P2" | "P3" | "P4";
-export type GodModeLayerId = "L0" | "L1" | "L2" | "L3" | "L4" | "L5";
+export type GodModeLayerId = "L0" | "L1" | "L2" | "L3" | "L4" | "L5" | "L6";
 
 export type GodModeLayer = {
   id: GodModeLayerId;
@@ -183,6 +183,31 @@ export const GOD_MODE_LAYERS: GodModeLayer[] = [
       },
     ],
   },
+  {
+    id: "L6",
+    name: "Pocket Hatchery MVP",
+    color: "#14b8a6",
+    status: "active",
+    icon: "PH",
+    components: [
+      {
+        name: "Creature Catalog",
+        detail: "Deterministic creatures - egg -> hatch -> evolve; no paid randomness",
+      },
+      {
+        name: "Wallet Flow",
+        detail: "Public: WAX Cloud Wallet / My Cloud Wallet. Internal signer: waxwing (office-only).",
+      },
+      {
+        name: "Contract Actions",
+        detail: "mintCreature, feed, evolve, pause, unpause - testnet-first, no loot box / cash-out.",
+      },
+      {
+        name: "Release Gate",
+        detail: "Score 34/100 - blocked until contract tests + wallet flow + pause/unpause evidence.",
+      },
+    ],
+  },
 ];
 
 export const GOD_MODE_QUEUE: GodModeTask[] = [
@@ -312,6 +337,42 @@ export const GOD_MODE_QUEUE: GodModeTask[] = [
     agent: "Claude Code",
     layer: "L5",
   },
+  {
+    id: "P1-4",
+    p: "P1",
+    title: "Pocket Hatchery: creature catalog schema + deterministic state machine",
+    cmd: "Implement apps/pocket-hatchery/ data schemas and state machine",
+    status: "todo",
+    agent: "Codex",
+    layer: "L6",
+  },
+  {
+    id: "P2-4",
+    p: "P2",
+    title: "Pocket Hatchery: contract action table + wallet flow",
+    cmd: "Document safe contract actions and public wallet path",
+    status: "todo",
+    agent: "Opus",
+    layer: "L6",
+  },
+  {
+    id: "P0-3",
+    p: "P0",
+    title: "Pocket Hatchery: security sentinel - public waxwing exposure",
+    cmd: "Run WORKSPACE_SCAFFOLD/tests/test_public_signer_exposure.py",
+    status: "blocked",
+    agent: "Hermes",
+    layer: "L6",
+  },
+  {
+    id: "R0-PH-1",
+    p: "P1",
+    title: "Pocket Hatchery: R0 testnet deploy",
+    cmd: "R0 gate - testnet deploy requires Pitoon approval",
+    status: "r0-gate",
+    agent: "Pitoon",
+    layer: "L6",
+  },
 ];
 
 export const GOD_MODE_R0_GATES = [
@@ -320,6 +381,9 @@ export const GOD_MODE_R0_GATES = [
   "GhostClaws Mission Control production deploy",
   "Hermes Kanban first real run",
   "osmGemma LaunchAgent load",
+  "Pocket Hatchery testnet deploy",
+  "Pocket Hatchery mainnet deploy",
+  "Pocket Hatchery real wallet connector",
 ] as const;
 
 export const GOD_MODE_SECURITY_FLAGS = [
@@ -327,6 +391,7 @@ export const GOD_MODE_SECURITY_FLAGS = [
   { label: "MiniMax API BLOCKED", detail: "China National Intelligence Law 2017" },
   { label: "APPROVE_ injection defense", detail: "hashtag injection blocked in pipeline" },
   { label: "No auto-publish/deploy/push", detail: "all 5 R0 gates require human approval" },
+  { label: "Pocket Hatchery safe scope", detail: "no gambling / loot box / cash-out / public waxwing" },
 ] as const;
 
 export const GOD_MODE_MODEL_ROUTING = [

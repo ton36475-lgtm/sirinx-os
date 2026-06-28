@@ -1,0 +1,24 @@
+{
+  "project": "pocket-hatchery",
+  "version": "0.1.0",
+  "network": "testnet",
+  "flags": {
+    "paid_randomness": false,
+    "loot_box": false,
+    "cash_out": false,
+    "real_money_prize_pool": false,
+    "public_waxwing_exposure": false,
+    "production_deploy": false
+  },
+  "public_wallet_path": ["WAX Cloud Wallet", "My Cloud Wallet"],
+  "internal_signer": "waxwing (office-only)",
+  "required_evidence": [
+    "pause_unpause_tests",
+    "wallet_flow_evidence",
+    "metadata_permission_audit",
+    "contract_action_tests",
+    "rollback_plan_review"
+  ],
+  "score": 34,
+  "score_max": 100
+}

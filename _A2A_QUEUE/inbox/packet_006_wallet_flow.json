@@ -1,0 +1,12 @@
+{
+  "id": "packet_006",
+  "project": "pocket-hatchery",
+  "priority": "P2",
+  "title": "Draft wallet connection flow using public wallet path",
+  "agent": "codex",
+  "status": "inbox",
+  "risk": "medium",
+  "input": [],
+  "output": ["apps/pocket-hatchery/web/wallet_flow.md"],
+  "approval_required": false
+}

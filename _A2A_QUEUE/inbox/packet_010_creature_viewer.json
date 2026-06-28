@@ -1,0 +1,12 @@
+{
+  "id": "packet_010",
+  "project": "pocket-hatchery",
+  "priority": "P3",
+  "title": "Build read-only creature viewer scaffold",
+  "agent": "codex",
+  "status": "inbox",
+  "risk": "safe",
+  "input": ["apps/pocket-hatchery/data/sample_creatures.json"],
+  "output": ["apps/pocket-hatchery/web/viewer.md"],
+  "approval_required": false
+}

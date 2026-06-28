@@ -1,0 +1,12 @@
+{
+  "id": "packet_003",
+  "project": "pocket-hatchery",
+  "priority": "P1",
+  "title": "Generate deterministic hatch/evolve state transition spec",
+  "agent": "codex",
+  "status": "inbox",
+  "risk": "safe",
+  "input": [],
+  "output": ["apps/pocket-hatchery/data/hatch_state_machine.md"],
+  "approval_required": false
+}

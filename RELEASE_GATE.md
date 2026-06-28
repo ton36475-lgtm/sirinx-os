@@ -1,8 +1,17 @@
 # RELEASE_GATE
 
-Date: 2026-05-20
+Date: 2026-06-28
 Mode: local release gate checklist
 External writes: blocked by default
+
+## Additional Pocket Hatchery Gates
+
+| Gate | Requirement | Evidence |
+| --- | --- | --- |
+| 11 No gambling | No paid randomness / loot box / cash-out / real-money prize pool | `apps/pocket-hatchery/contracts/contract_actions.md` |
+| 12 Public signer | `waxwing` remains office-internal | `apps/pocket-hatchery/web/wallet_flow.md` |
+| 13 Testnet first | Deploy only to testnet before mainnet | `apps/pocket-hatchery/ops/release_gate_evidence.md` |
+| 14 Pause/unpause | Emergency stop documented and tested | `WORKSPACE_SCAFFOLD/tests/test_pause_unpause.py` |
 
 ## Purpose
 

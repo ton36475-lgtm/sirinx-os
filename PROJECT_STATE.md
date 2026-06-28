@@ -1,15 +1,19 @@
 # PROJECT_STATE
 
-Date: 2026-05-20
+Date: 2026-06-28
 Repo: `/Users/sirinx/sirinx-os`
-Branch: `codex/urgent-backlog-execution`
+Branch: `staging/godmode-master-os-v2`
 Runtime mode: local control plane, dry-run only
 Canonical protocol: `AGENTS.md`
-Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extraction workstreams`
+Last verified baseline: `28b8ea1 chore(staging): GhostClaws GodMode Mission Control integration`
 
 ## Current Truth
 
 - `www.sirinx.co` remains the protected public company website.
+- **Pocket Hatchery is the flagship MVP** under GhostClaws Agent Factory v4.
+- Public wallet path: WAX Cloud Wallet / My Cloud Wallet.
+- `waxwing` signer remains office-internal only during Sprint 1.
+- No gambling, paid random loot box, cash-out, or real-money prize pool mechanics.
 - Public website source is `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx`.
 - Command Center source is this repo: `/Users/sirinx/sirinx-os`.
 - GitHub repo integration inventory is local-only through `GET /api/github-integration`.
@@ -35,6 +39,7 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | --- | --- | --- | --- | --- |
 | dev-control-api | `http://127.0.0.1:8711` | local when `pnpm dashboard:run` is active | blocked | API reports `dryRunOnly=true` and `externalWrites=false`. |
 | dev-dashboard | `http://127.0.0.1:8710` | local when `pnpm dashboard:run` is active | blocked | Command Center UI for local review. |
+| pocket-hatchery | `apps/pocket-hatchery/` | local scaffold | blocked | Testnet-first; no real signer or randomness. |
 | public website | `https://www.sirinx.co` | production site, protected | approval required | Do not change from this repo without exact public-site task. |
 | Hermes gateway | local runtime | readable through external gate check | approval required for messages | Pairing/send gates remain manual. |
 | Solis telemetry | not active | blocked | blocked | Requires consent, credential storage, and station mapping. |
@@ -44,16 +49,19 @@ Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extr
 | Gate | Status | Evidence | Next Action |
 | --- | --- | --- | --- |
 | Codex Mobile QR/MFA | blocked manual | `docs/knowledge/external-gates/evidence/codex-mobile-qr-mfa.md` expected | Human operator pairs Mac host with phone. |
-| SIRINX OS GitHub publish | blocked remote/PR target | `docs/knowledge/external-gates/evidence/sirinx-os-github-publish.md` expected | Record owner/repo, remote URL, branch, base branch, PR text, and rollback before any push/PR. |
+| SIRINX OS GitHub publish | **pushed to `staging/godmode-master-os-v2`** | commit `28b8ea1` | Await PR/merge approval. |
 | Telegram/LINE | blocked credential/recipient | evidence template under `docs/knowledge/external-gates/evidence/` | Confirm recipient/channel and rotate/store token before smoke send. |
 | Solis API | blocked consent/credential | evidence template under `docs/knowledge/external-gates/evidence/` | Confirm consent, read-only credentials, and station mapping. |
 | Cloudflare Bot Management | optional official review | current CSP mitigation documented | Review dashboard/API rule only if replacing CSP mitigation. |
+| Pocket Hatchery testnet deploy | blocked R0 | `apps/pocket-hatchery/ops/release_gate_evidence.md` | Approve R0 gate individually. |
 
 ## Current Integration Workstreams
 
 | Workstream | Status | Source |
 | --- | --- | --- |
 | GitHub repo inventory | done local | `services/dev-control-api/src/github-integration.mjs` |
+| **GhostClaws GodMode Mission Control** | **pushed to staging** | `apps/centerbrain-shell/`, `services/dev-control-api/src/centerbrain-hub.mjs` |
+| **Pocket Hatchery MVP scaffold** | **done local** | `apps/pocket-hatchery/`, `WORKSPACE_SCAFFOLD/` |
 | Solar ops extraction | contract locked | `SIRINX_SOLAR_OPS_EXTRACTION_PLAN_2026-05-20.md`, `SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md` |
 | Agent runtime extraction | docs locked | `SIRINX_AGENT_RUNTIME_EXTRACTION_PLAN_2026-05-20.md` |
 | Safe command and memory policy | docs locked | `SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md` |
@@ -88,6 +96,8 @@ pnpm pending-work:test
 pnpm pending-work:check
 pnpm dashboard:e2e
 pnpm external-gates:check
+python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v
+python3 WORKSPACE_SCAFFOLD/scripts/status_report.py --root .
 git diff --check
 ```
 
