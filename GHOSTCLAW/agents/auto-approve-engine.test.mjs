@@ -1,81 +1,126 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { describe, expect, it } from "vitest";
+import { AutoApproveEngine, createEngine } from "./auto-approve-engine.mjs";
 
-import {
-  ACTION_TIER_CAP,
-  HARD_VIOLATIONS,
-  assignSafeTier,
-  computeFinalConfidence,
-  evaluateAutoApproval
-} from "./auto-approve-engine.mjs";
+describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
+  const engine = new AutoApproveEngine();
 
-test("computeFinalConfidence caps effective score at 100 and preserves display score", () => {
-  const result = computeFinalConfidence(82, 30, [10, 15.9]);
-
-  assert.equal(result.base_brainstorm, 82);
-  assert.equal(result.latent_bonus, 30);
-  assert.equal(result.modifier_total, 25.9);
-  assert.ok(Math.abs(result.raw_score - 137.9) < Number.EPSILON * 100);
-  assert.equal(result.capped_score, 100);
-  assert.ok(Math.abs(result.display_score - 137.9) < Number.EPSILON * 100);
-});
-
-test("assignSafeTier caps a high score to the action class maximum", () => {
-  const result = assignSafeTier(100, "write_lane", []);
-
-  assert.equal(ACTION_TIER_CAP.write_lane, "B");
-  assert.equal(result.base_tier, "A");
-  assert.equal(result.final_tier, "B");
-  assert.match(result.reason, /action_tier_cap/);
-});
-
-test("hard violations force tier X regardless of confidence", () => {
-  const result = assignSafeTier(100, "read", ["secret_access_requested"]);
-
-  assert.ok(HARD_VIOLATIONS.has("secret_access_requested"));
-  assert.equal(result.base_tier, "A");
-  assert.equal(result.final_tier, "X");
-  assert.match(result.reason, /hard_violation/);
-});
-
-test("external or blocked action classes cannot be auto-approved", () => {
-  const result = evaluateAutoApproval({
-    base_brainstorm: 96,
-    latent_bonus: 8,
-    standard_modifiers: [4],
-    action_class: "customer_message_send",
-    violations: []
+  it("should evaluate tier thresholds correctly based on scores", () => {
+    expect(engine.scoreToTier(95)).toBe("A");
+    expect(engine.scoreToTier(80)).toBe("B");
+    expect(engine.scoreToTier(65)).toBe("C");
+    expect(engine.scoreToTier(59.99)).toBe("D");
   });
 
-  assert.equal(result.raw_score, 108);
-  assert.equal(result.capped_score, 100);
-  assert.equal(result.base_tier, "A");
-  assert.equal(result.final_tier, "X");
-  assert.match(result.reason, /customer_message_send/);
-});
-
-test("structured evaluation returns score, tier, and reason fields", () => {
-  const result = evaluateAutoApproval({
-    base_brainstorm: 72,
-    latent_bonus: 4,
-    standard_modifiers: { retrieval: 3, safety: -2 },
-    action_class: "validate",
-    violations: []
+  it("should cap effective scores at 100 while maintaining display_score flexibility", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "read_only",
+      display_score: 150,
+      decision_id: "test-dec-001",
+      evidence_pack: { file: "test.mjs" }
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.effective_score).toBe(100);
+    expect(res.display_score).toBe(150);
+    expect(res.confidence_label).toBe("A+");
+    expect(res.status).toBe("approved");
+    expect(res.human_approval_required).toBe(false);
   });
 
-  assert.deepEqual(Object.keys(result).sort(), [
-    "action_class",
-    "base_tier",
-    "capped_score",
-    "display_score",
-    "final_tier",
-    "latent_bonus",
-    "modifier_total",
-    "raw_score",
-    "reason"
-  ]);
-  assert.equal(result.raw_score, 77);
-  assert.equal(result.capped_score, 77);
-  assert.equal(result.base_tier, "C");
-  assert.equal(result.final_tier, "C");
+  it("should correctly resolve mappings for action tier caps", () => {
+    expect(engine.getActionTierCap("read_only")).toBe("A");
+    expect(engine.getActionTierCap("local_commit_allowed_scope")).toBe("B");
+    expect(engine.getActionTierCap("lockfile_bound_dependency_repair")).toBe("C");
+    expect(engine.getActionTierCap("dependency_install")).toBe("D");
+    expect(engine.getActionTierCap("push")).toBe("X");
+    expect(engine.getActionTierCap("unknown_hacker_action")).toBe("D");
+  });
+
+  it("should strictly enforce mutual approval rules and disallow self-approval", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "codex",
+      action_class: "read_only",
+      display_score: 95,
+      decision_id: "test-dec-002",
+      evidence_pack: {}
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.human_approval_required).toBe(false);
+    expect(res.reason).toMatch(/self_approval/);
+  });
+
+  it("should auto-block missing critical metadata targets", () => {
+    const ctx = {
+      requester_agent: "hermes",
+      approver_agent: "codex",
+      action_class: "read_only",
+      display_score: 95
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.human_approval_required).toBe(false);
+    expect(res.reason).toBe("missing_required_metadata_fields");
+  });
+
+  it("should enforce auto-block on Tier D and X without flagging human interaction required", () => {
+    const ctx = {
+      requester_agent: "hermes",
+      approver_agent: "codex",
+      action_class: "push",
+      display_score: 99,
+      decision_id: "test-dec-003",
+      evidence_pack: {}
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.human_approval_required).toBe(false);
+    expect(res.final_tier).toBe("X");
+  });
+
+  it("should auto-block dependency install without human approval prompt", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "dependency_install",
+      display_score: 99,
+      decision_id: "test-dec-004",
+      evidence_pack: {}
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("D");
+    expect(res.human_approval_required).toBe(false);
+  });
+
+  it("should auto-block hard violations immediately", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "read_only",
+      display_score: 99,
+      decision_id: "test-dec-005",
+      evidence_pack: {},
+      violations: ["secret_access_requested"]
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.human_approval_required).toBe(false);
+  });
+
+  it("should normalize legacy aliases to canonical action classes", () => {
+    expect(engine.getCanonicalActionClass("write_lane")).toBe("runtime_artifact_write");
+    expect(engine.getCanonicalActionClass("git_push")).toBe("push");
+    expect(engine.getCanonicalActionClass("read_env")).toBe("secret_access");
+  });
+
+  it("createEngine helper returns a configured engine", () => {
+    const e = createEngine();
+    expect(e).toBeInstanceOf(AutoApproveEngine);
+    expect(e.getActionTierCap("read_only")).toBe("A");
+  });
 });

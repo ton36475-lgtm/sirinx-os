@@ -1,160 +1,377 @@
-const TIER_RANK = Object.freeze({
-  X: 0,
-  D: 1,
-  C: 2,
-  B: 3,
-  A: 4
-});
+import fs from "fs";
+import path from "path";
 
-export const HARD_VIOLATIONS = new Set([
-  "secret_access_requested",
-  "ambiguous_input",
-  "blocked_action_attempted"
-]);
+const DEFAULT_POLICY_PATH = "/Users/sirinx/sirinx-os/GHOSTCLAW/policies/action-tier-cap.yaml";
 
-export const ACTION_TIER_CAP = Object.freeze({
-  read: "A",
-  file_read: "A",
-  git_status: "A",
-  git_diff: "A",
-  brain_query: "A",
-  mission_status: "A",
-  plan: "A",
-  report_status: "A",
-  validate: "A",
-  run_tests: "A",
-  run_lint: "A",
-  debug_probe: "A",
+const EMBEDDED_POLICY = {
+  schema: "ghostclaw.action_tier_cap.v2",
+  mode: "autonomous_mutual_approval",
+  metadata: {
+    version: "2.0.0",
+    effective_date: "2026-06-29",
+    description: "Enforces zero-human-interaction policy loops via agent mutual approval and policy gates"
+  },
+  autonomous_mutual_approval: {
+    enabled: true,
+    human_approval_required: false,
+    fallback_behavior: "auto_block"
+  },
+  agents: {
+    allowed_approvers: ["hermes", "codex", "manus", "kob"],
+    no_self_approval: true
+  },
+  tier_rank: { A: 4, B: 3, C: 2, D: 1, X: 0 },
+  action_tier_cap: {
+    read_only: "A",
+    runtime_artifact_write: "A",
+    governance_doc_write: "A",
+    no_install_validation: "B",
+    allowed_path_staging: "B",
+    source_mutation_allowed_path: "B",
+    schema_upgrade_allowed_path: "B",
+    code_patch_allowed_path: "B",
+    local_commit_allowed_scope: "B",
+    lockfile_bound_dependency_repair: "C",
+    non_production_branch_push: "C",
+    staging_deploy_with_rollback: "C",
+    dependency_install: "D",
+    model_download: "D",
+    gpu_inference: "D",
+    external_network_write: "D",
+    push: "X",
+    deploy: "X",
+    production_action: "X",
+    secret_access: "X",
+    ambiguous_input: "X",
+    recursive_codex_launch: "X",
+    recursive_moa_launch: "X",
+    kv_only_protocol: "X"
+  },
+  action_class_aliases: {
+    read: "read_only",
+    read_only: "read_only",
+    file_read: "read_only",
+    git_status: "read_only",
+    git_diff: "read_only",
+    brain_query: "read_only",
+    mission_status: "read_only",
+    plan: "read_only",
+    report_status: "read_only",
+    validate: "read_only",
+    run_tests: "read_only",
+    run_lint: "read_only",
+    debug_probe: "read_only",
 
-  brainstorm: "B",
-  moa_review: "B",
-  write_lane: "B",
-  write_module: "B",
-  fix_bug: "B",
-  refactor: "B",
+    runtime_artifact_write: "runtime_artifact_write",
+    write_runtime_artifact: "runtime_artifact_write",
+    write_lane: "runtime_artifact_write",
+    write_module: "runtime_artifact_write",
+    fix_bug: "runtime_artifact_write",
+    refactor: "runtime_artifact_write",
 
-  integrate: "C",
-  integrate_patches: "C",
-  update_brain: "C",
+    governance_doc_write: "governance_doc_write",
+    write_governance_doc: "governance_doc_write",
 
-  commit: "D",
-  stage_commit: "D",
-  approve_action: "D",
-  dependency_install: "D",
+    validation_no_install: "no_install_validation",
+    no_install_validation: "no_install_validation",
+    brainstorm: "no_install_validation",
+    moa_review: "no_install_validation",
 
-  push: "X",
-  deploy: "X",
-  external_api_write: "X",
-  customer_message_send: "X",
-  cloud_mutation: "X",
-  secret_access: "X",
-  model_download: "X",
-  gpu_inference: "X",
-  blocked_action: "X"
-});
+    allowed_path_staging: "allowed_path_staging",
+    stage_allowed_files: "allowed_path_staging",
+    git_add_allowed_scope: "allowed_path_staging",
 
-function scoreToTier(cappedScore) {
-  if (cappedScore >= 95) return "A";
-  if (cappedScore >= 85) return "B";
-  if (cappedScore >= 70) return "C";
-  if (cappedScore >= 50) return "D";
-  return "X";
-}
+    allowed_path_mutation: "source_mutation_allowed_path",
+    source_mutation_allowed_path: "source_mutation_allowed_path",
+    integrate: "source_mutation_allowed_path",
+    integrate_patches: "source_mutation_allowed_path",
+    update_brain: "source_mutation_allowed_path",
 
-function normalizeNumber(value, label) {
-  const numeric = Number(value);
-  if (!Number.isFinite(numeric)) {
-    throw new TypeError(`${label} must be a finite number`);
+    schema_upgrade: "schema_upgrade_allowed_path",
+    schema_upgrade_allowed_path: "schema_upgrade_allowed_path",
+
+    code_patch: "code_patch_allowed_path",
+    code_patch_allowed_path: "code_patch_allowed_path",
+
+    local_commit: "local_commit_allowed_scope",
+    local_commit_allowed_scope: "local_commit_allowed_scope",
+    git_commit_local_scope: "local_commit_allowed_scope",
+
+    dependency_repair: "lockfile_bound_dependency_repair",
+    lockfile_bound_dependency_repair: "lockfile_bound_dependency_repair",
+
+    install_dependencies: "dependency_install",
+    dependency_install: "dependency_install",
+
+    gpu_inference: "gpu_inference",
+    model_download: "model_download",
+
+    commit: "commit",
+    git_commit: "commit",
+    stage_commit: "commit",
+
+    push: "push",
+    git_push: "push",
+
+    deploy: "deploy",
+    production_deploy: "deploy",
+    production_action: "production_action",
+
+    read_env: "secret_access",
+    read_secret: "secret_access",
+    secret_access: "secret_access",
+
+    ambiguous_input: "ambiguous_input",
+    blocked_action_attempted: "ambiguous_input",
+    blocked_action: "ambiguous_input",
+    external_api_write: "ambiguous_input",
+    customer_message_send: "ambiguous_input",
+    cloud_mutation: "ambiguous_input",
+
+    recursive_codex_launch: "recursive_codex_launch",
+    recursive_moa_launch: "recursive_moa_launch",
+    kv_only_protocol: "kv_only_protocol"
+  },
+  auto_approve_tiers: ["A", "B"],
+  agent_quorum_tiers: ["C"],
+  auto_block_tiers: ["D", "X"],
+  hard_violations_force_x: [
+    "self_approval_attempted",
+    "secret_access_requested",
+    "ambiguous_input",
+    "blocked_action_attempted",
+    "production_action_requested",
+    "model_download_requested",
+    "gpu_live_inference_requested",
+    "kv_only_protocol_requested",
+    "recursive_codex_launch_requested",
+    "recursive_moa_launch_requested"
+  ],
+  unknown_action_class_default: "D"
+};
+
+function loadYamlPolicy(policyPath) {
+  try {
+    const text = fs.readFileSync(policyPath, "utf8");
+    return parseMinimalYaml(text);
+  } catch {
+    return null;
   }
-  return numeric;
 }
 
-function normalizeScore(value) {
-  return Number(value.toFixed(4));
-}
+function parseMinimalYaml(text) {
+  const lines = text.split(/\r?\n/);
+  const root = {};
+  const stack = [{ obj: root, indent: -1 }];
 
-function sumModifiers(modifiers) {
-  if (modifiers == null) return 0;
-  if (typeof modifiers === "number") return normalizeNumber(modifiers, "standard_modifiers");
-  if (Array.isArray(modifiers)) {
-    return modifiers.reduce((total, modifier, index) => {
-      return total + normalizeNumber(modifier, `standard_modifiers[${index}]`);
-    }, 0);
+  for (let raw of lines) {
+    const trimmed = raw.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const indent = raw.length - raw.trimStart().length;
+    const last = stack[stack.length - 1];
+
+    while (indent <= last.indent && stack.length > 1) {
+      stack.pop();
+    }
+
+    const current = stack[stack.length - 1].obj;
+
+    if (trimmed.startsWith("- ")) {
+      const value = trimmed.slice(2).trim();
+      if (!Array.isArray(current)) {
+        // This simplistic parser expects well-ordered lists under scalar keys
+        continue;
+      }
+      const parsedValue = parseScalar(value);
+      current.push(parsedValue);
+    } else if (trimmed.includes(":")) {
+      const idx = trimmed.indexOf(":");
+      const key = trimmed.slice(0, idx).trim();
+      let value = trimmed.slice(idx + 1).trim();
+
+      if (value === "") {
+        const newObj = {};
+        if (Array.isArray(current)) {
+          current.push(newObj);
+        } else {
+          current[key] = newObj;
+        }
+        stack.push({ obj: newObj, indent });
+      } else {
+        const parsedValue = parseScalar(value);
+        if (Array.isArray(current)) {
+          current.push({ [key]: parsedValue });
+        } else {
+          current[key] = parsedValue;
+        }
+      }
+    }
   }
-  if (typeof modifiers === "object") {
-    return Object.entries(modifiers).reduce((total, [key, modifier]) => {
-      return total + normalizeNumber(modifier, `standard_modifiers.${key}`);
-    }, 0);
+
+  return root;
+}
+
+function parseScalar(value) {
+  if (value === "true") return true;
+  if (value === "false") return false;
+  if (/^-?\d+$/.test(value)) return Number(value);
+  if (/^-?\d+\.\d+$/.test(value)) return Number(value);
+  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    return value.slice(1, -1);
   }
-  throw new TypeError("standard_modifiers must be a number, array, or object");
+  return value;
 }
 
-function capTier(baseTier, capTierValue) {
-  return TIER_RANK[baseTier] > TIER_RANK[capTierValue] ? capTierValue : baseTier;
-}
+export class AutoApproveEngine {
+  constructor(policyPath = DEFAULT_POLICY_PATH) {
+    const loaded = loadYamlPolicy(policyPath);
+    this.policy = loaded && Object.keys(loaded).length > 0 && Array.isArray(loaded.hard_violations_force_x)
+      ? loaded
+      : EMBEDDED_POLICY;
+  }
 
-export function computeFinalConfidence(baseBrainstorm, latentBonus = 0, standardModifiers = []) {
-  const base_brainstorm = normalizeNumber(baseBrainstorm, "base_brainstorm");
-  const latent_bonus = normalizeNumber(latentBonus, "latent_bonus");
-  const modifier_total = normalizeScore(sumModifiers(standardModifiers));
-  const raw_score = normalizeScore(base_brainstorm + latent_bonus + modifier_total);
-  const capped_score = normalizeScore(Math.min(Math.max(raw_score, 0), 100));
+  scoreToTier(score) {
+    if (score >= 90) return "A";
+    if (score >= 75) return "B";
+    if (score >= 60) return "C";
+    return "D";
+  }
 
-  return {
-    base_brainstorm,
-    latent_bonus,
-    modifier_total,
-    raw_score,
-    capped_score,
-    display_score: raw_score
-  };
-}
+  confidenceLabel(score) {
+    if (score > 100) return "A+";
+    if (score >= 90) return "A";
+    if (score >= 75) return "B";
+    if (score >= 60) return "C";
+    return "D";
+  }
 
-export function assignSafeTier(cappedScore, actionClass, violations = []) {
-  const capped_score = normalizeNumber(cappedScore, "capped_score");
-  const action_class = typeof actionClass === "string" && actionClass.length > 0 ? actionClass : "unknown";
-  const normalizedViolations = Array.isArray(violations) ? violations : [violations];
-  const base_tier = scoreToTier(capped_score);
-  const hardViolation = normalizedViolations.find((violation) => HARD_VIOLATIONS.has(violation));
+  normalizeActionClass(actionClass) {
+    if (!actionClass) return "unknown";
+    return String(actionClass).trim().toLowerCase();
+  }
 
-  if (hardViolation) {
-    return {
-      base_tier,
-      final_tier: "X",
-      reason: `hard_violation:${hardViolation}`
+  getCanonicalActionClass(actionClass) {
+    const normalized = this.normalizeActionClass(actionClass);
+    const aliases = this.policy.action_class_aliases || {};
+    return aliases[normalized] || normalized;
+  }
+
+  getActionTierCap(actionClass) {
+    const canonical = this.getCanonicalActionClass(actionClass);
+    const mapping = this.policy.action_tier_cap || {};
+    return mapping[canonical] || this.policy.unknown_action_class_default || "D";
+  }
+
+  hasHardViolation(violations = []) {
+    const hard = new Set(this.policy.hard_violations_force_x || []);
+    return violations.some((v) => hard.has(v));
+  }
+
+  applyActionTierCap(scoreTier, actionClass) {
+    const tierRank = this.policy.tier_rank || { A: 4, B: 3, C: 2, D: 1, X: 0 };
+    const policyTier = this.getActionTierCap(actionClass);
+    const scoreRank = tierRank[scoreTier] ?? tierRank.D;
+    const policyRank = tierRank[policyTier] ?? tierRank.D;
+    const finalRank = Math.min(scoreRank, policyRank);
+    return Object.entries(tierRank).find(([, r]) => r === finalRank)?.[0] || "D";
+  }
+
+  evaluateAutonomousApproval(context) {
+    const {
+      requester_agent,
+      approver_agent,
+      action_class,
+      display_score = 0,
+      decision_id,
+      evidence_pack,
+      violations = [],
+      receipt_id
+    } = context;
+
+    if (!decision_id || !evidence_pack) {
+      return this.buildDecision({
+        status: "auto_blocked",
+        final_tier: "X",
+        human_approval_required: false,
+        reason: "missing_required_metadata_fields"
+      }, context);
+    }
+
+    if (!requester_agent || !approver_agent || requester_agent === approver_agent) {
+      return this.buildDecision({
+        status: "auto_blocked",
+        final_tier: "X",
+        human_approval_required: false,
+        reason: "self_approval_not_allowed_or_missing_agent"
+      }, context);
+    }
+
+    if (this.hasHardViolation(violations)) {
+      return this.buildDecision({
+        status: "auto_blocked",
+        final_tier: "X",
+        human_approval_required: false,
+        reason: "hard_violation_detected",
+        violations
+      }, context);
+    }
+
+    const effective_score = Math.min(100, Math.max(0, Number(display_score) || 0));
+    const scoreTier = this.scoreToTier(effective_score);
+    const final_tier = this.applyActionTierCap(scoreTier, action_class);
+
+    let status = "auto_blocked";
+    if ((this.policy.auto_approve_tiers || []).includes(final_tier)) {
+      status = "approved";
+    } else if ((this.policy.agent_quorum_tiers || []).includes(final_tier)) {
+      status = "quorum_required";
+    }
+
+    return this.buildDecision({
+      status,
+      final_tier,
+      effective_score,
+      display_score: Number(display_score),
+      confidence_label: this.confidenceLabel(display_score),
+      human_approval_required: false,
+      reason: status === "approved"
+        ? "autonomous_mutual_approval_passed"
+        : status === "quorum_required"
+          ? "agent_quorum_required"
+          : "policy_tier_auto_blocked"
+    }, context, receipt_id);
+  }
+
+  buildDecision(decision, context, receiptId) {
+    const receipt = {
+      schema: "ghostclaw.receipt.v2",
+      receipt_id: receiptId || `rcp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      decision_id: context.decision_id,
+      timestamp: new Date().toISOString(),
+      evaluation: decision,
+      context: {
+        requester: context.requester_agent,
+        approver: context.approver_agent,
+        action: context.action_class
+      }
     };
+
+    const runtimeDir = "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a";
+    try {
+      if (!fs.existsSync(runtimeDir)) fs.mkdirSync(runtimeDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(runtimeDir, `receipt_${context.decision_id}.json`),
+        JSON.stringify(receipt, null, 2)
+      );
+    } catch {
+      // Non-blocking: isolated tests should not fail due to fs issues
+    }
+
+    return { ...decision, receipt_id: receipt.receipt_id };
   }
-
-  const actionCap = ACTION_TIER_CAP[action_class] ?? "X";
-  const final_tier = capTier(base_tier, actionCap);
-  const reasonPrefix = ACTION_TIER_CAP[action_class] == null ? "unknown_action_class" : "action_tier_cap";
-
-  return {
-    base_tier,
-    final_tier,
-    reason: `${reasonPrefix}:${action_class}:${actionCap}`
-  };
 }
 
-export function evaluateAutoApproval({
-  base_brainstorm,
-  latent_bonus = 0,
-  standard_modifiers = [],
-  action_class,
-  violations = []
-}) {
-  const confidence = computeFinalConfidence(base_brainstorm, latent_bonus, standard_modifiers);
-  const tier = assignSafeTier(confidence.capped_score, action_class, violations);
-
-  return {
-    action_class,
-    base_tier: tier.base_tier,
-    capped_score: confidence.capped_score,
-    display_score: confidence.display_score,
-    final_tier: tier.final_tier,
-    latent_bonus: confidence.latent_bonus,
-    modifier_total: confidence.modifier_total,
-    raw_score: confidence.raw_score,
-    reason: tier.reason
-  };
+export function createEngine(policyPath) {
+  return new AutoApproveEngine(policyPath);
 }

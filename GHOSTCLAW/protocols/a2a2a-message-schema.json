@@ -237,6 +237,27 @@
     "status": {
       "type": "string",
       "enum": ["PENDING", "ROUTED", "PROCESSING", "ACTION_PENDING", "ACTION_EXECUTING", "COMPLETED", "BLOCKED", "FAILED", "CANCELLED"]
+    },
+    "autonomous_approval": {
+      "type": "object",
+      "description": "Optional autonomous mutual approval metadata. If absent, legacy human_approval_required field remains in effect.",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "mode": {
+          "type": "string",
+          "enum": ["disabled", "human_required", "agent_mutual_approval", "agent_quorum_approval", "auto_block"]
+        },
+        "requester_agent": { "type": "string" },
+        "approver_agent": { "type": "string" },
+        "human_approval_required": { "type": "boolean" },
+        "self_approval_allowed": { "type": "boolean" },
+        "evidence_pack_required": { "type": "boolean" },
+        "decision_id_required": { "type": "boolean" },
+        "receipt_required": { "type": "boolean" },
+        "final_tier": { "type": "string", "enum": ["A", "B", "C", "D", "X"] },
+        "reason": { "type": "string" }
+      }
     }
   }
 }
