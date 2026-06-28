@@ -19,6 +19,134 @@
       "type": "string",
       "pattern": "^sirinx-a2a2a-[a-z0-9]{8}$"
     },
+    "brainstorm_id": {
+      "type": "string",
+      "description": "Optional canonical brainstorm identifier for LatentMAS shadow-plane correlation."
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "brainstorm.round1.question",
+        "brainstorm.round1.answer",
+        "brainstorm.round2.question",
+        "brainstorm.round2.answer",
+        "brainstorm.inspect_answer",
+        "moa.review",
+        "moa.gated_brainstorm",
+        "latent.shadow_probe",
+        "p0_completed",
+        "p1_completed",
+        "p2_completed",
+        "p3_completed",
+        "p4_completed",
+        "p5_completed",
+        "p6_completed",
+        "p7_completed",
+        "blocked",
+        "completed"
+      ],
+      "description": "Optional LatentMAS/GhostClaw phase marker. Existing producers may omit it."
+    },
+    "terminology_policy": {
+      "type": "object",
+      "description": "Optional brainstorm terminology compatibility policy.",
+      "properties": {
+        "canonical": {
+          "type": "string",
+          "const": "brainstorm"
+        },
+        "canonical_term": {
+          "type": "string",
+          "const": "brainstorm"
+        },
+        "deprecated_aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["beststorm"]
+          }
+        },
+        "invalid_typos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["beststrom"]
+          }
+        },
+        "emit_only_canonical": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "latent_plane": {
+      "type": "object",
+      "description": "Optional non-authoritative latent-plane status. JSON control plane remains authority.",
+      "properties": {
+        "compatible": {
+          "type": "boolean"
+        },
+        "fallback": {
+          "type": "string",
+          "enum": ["json_control_plane", "shadow_only", "disabled"]
+        },
+        "latent_enabled": {
+          "type": "boolean"
+        },
+        "authority": {
+          "type": "string",
+          "const": "shadow"
+        },
+        "debug_probe_mode": {
+          "type": "string",
+          "enum": ["parallel_text_probe"]
+        }
+      }
+    },
+    "moa_summary": {
+      "type": "object",
+      "description": "Optional mixture-of-agents summary metadata.",
+      "properties": {
+        "consensus": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "aggregator_certainty": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "safety_disagreement": {
+          "type": "boolean"
+        }
+      }
+    },
+    "moa_gated_brainstorm": {
+      "type": "object",
+      "description": "Optional gated brainstorm metadata; does not authorize action by itself.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "gate_status": {
+          "type": "string",
+          "enum": ["pending", "passed", "blocked", "requires_human"]
+        },
+        "required_human_review": {
+          "type": "boolean"
+        },
+        "action_tier_cap": {
+          "type": "string",
+          "enum": ["A", "B", "C", "D", "X"]
+        },
+        "veto_window_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3600
+        }
+      }
+    },
     "from": {
       "type": "object",
       "required": ["agent", "role"],

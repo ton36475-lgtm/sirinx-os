@@ -1,0 +1,84 @@
+# Action Tier Cap Policy
+# Part of: GHOSTCLAW LatentMAS x A2A2A integration
+
+action_tier_cap:
+  version: "1.0"
+  status: active
+  adr_ref: ADR-LATENT-001
+  owner: hermes
+  correlation_id: corr_codex_latent_r0r1r2_001
+
+  score_bands:
+    A:
+      minimum_capped_score: 95
+      meaning: "auto-safe read/report/validation class"
+    B:
+      minimum_capped_score: 85
+      meaning: "lane-scoped write candidate"
+    C:
+      minimum_capped_score: 70
+      meaning: "integration or brain-write candidate; review expected"
+    D:
+      minimum_capped_score: 50
+      meaning: "approval-required local action"
+    X:
+      minimum_capped_score: 0
+      meaning: "blocked or insufficient confidence"
+
+  rules:
+    raw_score_formula: "base_brainstorm + latent_bonus + sum(standard_modifiers)"
+    capped_score_formula: "min(max(raw_score, 0), 100)"
+    display_score: "raw_score; may exceed 100 for observability only"
+    approval_score: capped_score
+    unknown_action_class_cap: X
+    hard_violations_force: X
+
+  hard_violations:
+    - secret_access_requested
+    - ambiguous_input
+    - blocked_action_attempted
+
+  caps:
+    read: A
+    file_read: A
+    git_status: A
+    git_diff: A
+    brain_query: A
+    mission_status: A
+    plan: A
+    report_status: A
+    validate: A
+    run_tests: A
+    run_lint: A
+    debug_probe: A
+
+    brainstorm: B
+    moa_review: B
+    write_lane: B
+    write_module: B
+    fix_bug: B
+    refactor: B
+
+    integrate: C
+    integrate_patches: C
+    update_brain: C
+
+    commit: D
+    stage_commit: D
+    approve_action: D
+    dependency_install: D
+
+    push: X
+    deploy: X
+    external_api_write: X
+    customer_message_send: X
+    cloud_mutation: X
+    secret_access: X
+    model_download: X
+    gpu_inference: X
+    blocked_action: X
+
+  enforcement:
+    json_control_plane_authority: true
+    latent_plane_authority: false
+    engine_runtime_wired: false
