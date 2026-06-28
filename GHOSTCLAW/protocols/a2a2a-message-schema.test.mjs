@@ -27,5 +27,15 @@ describe("A2A2A message schema", () => {
       enforce_deterministic_fallback: { type: "boolean" },
       suppress_interactive_prompts: { type: "boolean" }
     });
+    expect(schema.properties.safe_execution_v3.properties.receipt_format.enum).toContain(
+      "ghostclaw.receipt.v3_2"
+    );
+    expect(schema.properties.safe_execution_v3.properties.full_auto_team_contract.properties.roles.items.properties).toMatchObject({
+      agent: { type: "string" },
+      role: { type: "string" }
+    });
+    expect(schema.properties.safe_execution_v3.properties.zero_prompting_non_blocking_runtime).toMatchObject({
+      type: "boolean"
+    });
   });
 });

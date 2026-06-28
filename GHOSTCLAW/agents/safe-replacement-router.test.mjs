@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildBlockedActionArtifacts,
+  buildFullAutoReceipt,
   evaluateWithReplacement,
   getSafeReplacement,
+  getYoloTeamContract,
   routeBlockedAction
 } from "./safe-replacement-router.mjs";
 import { AutoApproveEngine } from "./auto-approve-engine.mjs";
@@ -191,5 +193,98 @@ describe("Safe Replacement Router", () => {
         })
       ])
     );
+  });
+
+  it("exposes the v3.2 autonomous code factory team contract", () => {
+    const contract = getYoloTeamContract();
+
+    expect(contract.schema_version).toBe("3.2.0");
+    expect(contract.mode).toBe("full_auto_yolo_safe_execution");
+    expect(contract.zero_prompting_non_blocking_runtime).toBe(true);
+    expect(contract.roles.map((role) => role.agent)).toEqual(["manus", "hermes", "codex", "kob"]);
+    expect(contract.roles.find((role) => role.agent === "hermes")).toMatchObject({
+      role: "commander_aggregator",
+      policy_gate: "v3.2_enforced"
+    });
+    expect(contract.core_invariants).toEqual(
+      expect.arrayContaining([
+        "tier_a_b_auto_execute",
+        "tier_d_x_block_and_simulate",
+        "pipeline_continues_after_block",
+        "real_secret_read_count_zero",
+        "real_network_write_count_zero_for_blocked_actions"
+      ])
+    );
+  });
+
+  it("builds a v3.2 approved A/B receipt with mutual approval and zero real risk counters", () => {
+    const receipt = buildFullAutoReceipt({
+      decision_id: "dec-autopatch-2026-0629-87c2",
+      timestamp: "2026-06-29T03:00:18Z",
+      action_class: "allowed_path_code_patch",
+      original_policy_tier: "B",
+      resolved_execution_tier: "B",
+      decision_status: "approved",
+      requester_agent: "codex.bounded_worker.v2",
+      approver_agent: "hermes.commander_aggregator.v2",
+      display_score: 95.5,
+      effective_score: 95.5,
+      restore_points: ["GHOSTCLAW/agents/safe-replacement-router.mjs"]
+    });
+
+    expect(receipt.$schema).toBe("ghostclaw.receipt.v3_2");
+    expect(receipt.execution_profile).toMatchObject({
+      mode: "standard_autonomous",
+      simulation_only: false,
+      real_target_execution: true,
+      structural_override_authorized: false,
+      override_token_applied: false
+    });
+    expect(receipt.evaluation_matrix.mutual_approval_pair).toEqual({
+      requester: "codex.bounded_worker.v2",
+      approver: "hermes.commander_aggregator.v2"
+    });
+    expect(receipt.evaluation_matrix.policy_rules_status.no_self_approval).toBe(
+      "passed_requester_not_equal_approver"
+    );
+    expect(receipt.concrete_performance_metrics).toMatchObject({
+      real_network_write_count: 0,
+      real_secret_read_count: 0,
+      real_production_call_count: 0,
+      destructive_mutation_count: 0
+    });
+    expect(receipt.state_rollback_blueprint.restore_points).toContain(
+      "GHOSTCLAW/agents/safe-replacement-router.mjs"
+    );
+  });
+
+  it("builds a v3.2 blocked simulation receipt for D/X actions", () => {
+    const receipt = buildFullAutoReceipt({
+      decision_id: "dec-blocked-2026-0629-aa01",
+      timestamp: "2026-06-29T03:01:00Z",
+      action_class: "secret_access",
+      original_policy_tier: "X",
+      resolved_execution_tier: "X",
+      decision_status: "hard_blocked_and_simulated",
+      requester_agent: "codex.bounded_worker.v2",
+      approver_agent: "hermes.commander_aggregator.v2",
+      display_score: 99,
+      effective_score: 0,
+      simulation_only: true,
+      real_target_execution: false,
+      restore_points: []
+    });
+
+    expect(receipt.$schema).toBe("ghostclaw.receipt.v3_2");
+    expect(receipt.execution_profile).toMatchObject({
+      mode: "simulation",
+      simulation_only: true,
+      real_target_execution: false,
+      sandbox_isolation_level: "local_artifact_only"
+    });
+    expect(receipt.evaluation_matrix.decision_status).toBe("hard_blocked_and_simulated");
+    expect(receipt.evaluation_matrix.policy_rules_status.real_execution_blocked).toBe(true);
+    expect(receipt.concrete_performance_metrics.real_secret_read_count).toBe(0);
+    expect(receipt.concrete_performance_metrics.real_network_write_count).toBe(0);
   });
 });

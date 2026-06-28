@@ -270,17 +270,62 @@
       "description": "Optional Autonomous Safe Execution Mode v3 metadata.",
       "additionalProperties": true,
       "properties": {
-        "mode": { "type": "string", "enum": ["disabled", "human_required", "no_human_prompt_safe_autonomy"] },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "human_required",
+            "no_human_prompt_safe_autonomy",
+            "full_auto_yolo_safe_execution"
+          ]
+        },
         "human_prompt_required": { "type": "boolean" },
         "stall_on_block": { "type": "boolean" },
         "safe_replacement_enabled": { "type": "boolean" },
+        "zero_prompting_non_blocking_runtime": { "type": "boolean" },
         "receipt_format": {
           "type": "string",
-          "enum": ["ghostclaw.receipt.v2", "ghostclaw.receipt.v3_1"]
+          "enum": ["ghostclaw.receipt.v2", "ghostclaw.receipt.v3_1", "ghostclaw.receipt.v3_2"]
+        },
+        "full_auto_team_contract": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "schema_version": { "type": "string" },
+            "mode": { "type": "string" },
+            "protocol": { "type": "string" },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "required": ["agent", "role"],
+                "properties": {
+                  "agent": { "type": "string" },
+                  "role": { "type": "string" },
+                  "policy_gate": { "type": "string" },
+                  "responsibilities": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "core_invariants": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
         },
         "blocked_action_behavior": {
           "type": "string",
-          "enum": ["auto_block_and_continue", "auto_block_and_halt", "human_prompt"]
+          "enum": [
+            "auto_block_and_continue",
+            "auto_block_and_halt",
+            "auto_block_and_simulate",
+            "hard_block_and_simulate",
+            "human_prompt"
+          ]
         },
         "replacement_action_classes": {
           "type": "array",
@@ -301,7 +346,7 @@
             "log_level": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
             "receipt_format": {
               "type": "string",
-              "enum": ["ghostclaw.receipt.v3_1"]
+              "enum": ["ghostclaw.receipt.v3_1", "ghostclaw.receipt.v3_2"]
             }
           }
         }

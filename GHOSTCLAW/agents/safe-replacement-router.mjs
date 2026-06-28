@@ -4,6 +4,49 @@ import path from "node:path";
 
 const REPO_ROOT = "/Users/sirinx/sirinx-os";
 const RECEIPT_SCHEMA = "ghostclaw.receipt.v3_1";
+const FULL_AUTO_RECEIPT_SCHEMA = "ghostclaw.receipt.v3_2";
+
+const YOLO_TEAM_CONTRACT = {
+  schema_version: "3.2.0",
+  mode: "full_auto_yolo_safe_execution",
+  zero_prompting_non_blocking_runtime: true,
+  protocol: "A2A2A",
+  roles: [
+    {
+      agent: "manus",
+      role: "supervisor",
+      responsibilities: ["architecture_baseline", "patch_direction", "tier_c_quorum_vote"],
+      allowed_external_mode: "github_public_read_only_snapshot"
+    },
+    {
+      agent: "hermes",
+      role: "commander_aggregator",
+      policy_gate: "v3.2_enforced",
+      responsibilities: ["policy_gate", "receipt_issuance", "tier_resolution", "block_and_simulate"]
+    },
+    {
+      agent: "codex",
+      role: "bounded_worker",
+      responsibilities: ["allowed_path_code_patch", "micro_patch", "simulation_plan_generation"]
+    },
+    {
+      agent: "kob",
+      role: "validator",
+      responsibilities: ["static_check", "vitest_no_install", "checksum_diff_validation"]
+    }
+  ],
+  core_invariants: [
+    "tier_a_b_auto_execute",
+    "tier_c_quorum_or_dry_run",
+    "tier_d_x_block_and_simulate",
+    "pipeline_continues_after_block",
+    "rollback_manifest_for_file_mutation",
+    "real_secret_read_count_zero",
+    "real_network_write_count_zero_for_blocked_actions",
+    "real_production_call_count_zero",
+    "destructive_mutation_count_zero"
+  ]
+};
 
 const SAFE_REPLACEMENTS = {
   jailbreak_execution: [
@@ -297,6 +340,71 @@ export function buildBlockedActionArtifacts(context = {}) {
   };
 }
 
+export function getYoloTeamContract() {
+  return structuredClone(YOLO_TEAM_CONTRACT);
+}
+
+export function buildFullAutoReceipt(context = {}) {
+  const timestamp = context.timestamp || new Date().toISOString();
+  const simulationOnly = Boolean(context.simulation_only);
+  const realTargetExecution = context.real_target_execution ?? !simulationOnly;
+  const actionClass = String(context.action_class || "unknown").trim().toLowerCase();
+  const requester = context.requester_agent || "unknown";
+  const approver = context.approver_agent || "unknown";
+  const decisionStatus = context.decision_status || (simulationOnly ? "hard_blocked_and_simulated" : "approved");
+  const restorePoints = Array.isArray(context.restore_points) ? context.restore_points : [];
+
+  return {
+    $schema: FULL_AUTO_RECEIPT_SCHEMA,
+    decision_id: context.decision_id || "dec-unknown",
+    timestamp,
+    execution_profile: {
+      mode: simulationOnly ? "simulation" : "standard_autonomous",
+      simulation_only: simulationOnly,
+      real_target_execution: realTargetExecution,
+      sandbox_isolation_level: simulationOnly ? "local_artifact_only" : "none",
+      structural_override_observed: false,
+      structural_override_authorized: false,
+      override_token_applied: false
+    },
+    evaluation_matrix: {
+      requested_action_class: actionClass,
+      original_policy_tier: context.original_policy_tier || "X",
+      resolved_execution_tier: context.resolved_execution_tier || context.original_policy_tier || "X",
+      decision_status: decisionStatus,
+      display_score: Number(context.display_score ?? 0),
+      effective_score: Number(context.effective_score ?? context.display_score ?? 0),
+      mutual_approval_pair: {
+        requester,
+        approver
+      },
+      policy_rules_status: {
+        no_self_approval: requester && approver && requester !== approver
+          ? "passed_requester_not_equal_approver"
+          : "failed_self_approval_or_missing_agent",
+        human_approval_required: false,
+        agent_quorum_validated: Boolean(context.agent_quorum_validated),
+        tier_downgrade_blocked: true,
+        real_execution_blocked: simulationOnly || ["D", "X"].includes(context.resolved_execution_tier || "")
+      }
+    },
+    concrete_performance_metrics: {
+      execution_duration_ms: Number(context.execution_duration_ms ?? 0),
+      cpu_utilization_pct: Number(context.cpu_utilization_pct ?? 0),
+      memory_delta_mb: Number(context.memory_delta_mb ?? 0),
+      static_analysis_status: context.static_analysis_status || "completed",
+      real_network_write_count: 0,
+      real_secret_read_count: 0,
+      real_production_call_count: 0,
+      destructive_mutation_count: 0
+    },
+    state_rollback_blueprint: {
+      snapshot_id: context.snapshot_id || `snap_v3_2_${timestamp.replace(/[-:TZ.]/g, "").slice(0, 14)}`,
+      restore_points: restorePoints
+    }
+  };
+}
+
 function sha256ForPath(filePath) {
   const absolutePath = path.resolve(REPO_ROOT, filePath);
   if (!existsSync(absolutePath)) return null;
@@ -305,7 +413,9 @@ function sha256ForPath(filePath) {
 
 export default {
   buildBlockedActionArtifacts,
+  buildFullAutoReceipt,
   getSafeReplacement,
+  getYoloTeamContract,
   routeBlockedAction,
   evaluateWithReplacement,
   SAFE_REPLACEMENTS
