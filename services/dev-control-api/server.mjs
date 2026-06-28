@@ -75,6 +75,7 @@ import {
   createHermesImageEditDryRun,
   getHermesImageEditStatus
 } from "./src/hermes-image-edit.mjs";
+import { createLatentmasBenchDryRun, getLatentmasStatus } from "./src/latentmas-status.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -979,6 +980,11 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/latentmas") {
+    sendJson(request, response, 200, await getLatentmasStatus());
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/hermes-image-edit") {
     sendJson(request, response, 200, getHermesImageEditStatus());
     return;
@@ -1066,6 +1072,28 @@ export async function handleRequest(request, response) {
         canActivateConnector: false,
         canRunMcp: false,
         canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/latentmas/bench/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createLatentmasBenchDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_latentmas_bench_dry_run_request",
+        error: "latentmas_bench_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        commandExecuted: false,
+        canRunGpuInference: false,
+        canReadSecrets: false,
+        canDeploy: false,
         requiresHumanApproval: true
       });
     }

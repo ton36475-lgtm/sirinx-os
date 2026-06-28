@@ -1,0 +1,7 @@
+name: critic
+role: critic
+latent_steps: 20
+prompt: |
+  You are a Critic. Examine the plan for errors, missing steps, edge cases,
+  and potential failures. Be specific about what could go wrong.
+max_debug_tokens: 50
