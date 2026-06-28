@@ -1,0 +1,18 @@
+{
+  "id": "packet_008",
+  "project": "pocket-hatchery",
+  "priority": "P2",
+  "title": "Run Security Sentinel for waxwing exposure",
+  "agent": "hermes",
+  "status": "done",
+  "risk": "safe",
+  "input": [
+    "/Users/sirinx/sirinx-os"
+  ],
+  "output": [
+    "WORKSPACE_SCAFFOLD/security_scan_waxwing.json"
+  ],
+  "approval_required": false,
+  "completed_at": "2026-06-28T23:00:00Z",
+  "notes": "Completed during v4 scaffold integration."
+}

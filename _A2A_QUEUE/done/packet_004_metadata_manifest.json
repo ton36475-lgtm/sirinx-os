@@ -1,0 +1,16 @@
+{
+  "id": "packet_004",
+  "project": "pocket-hatchery",
+  "priority": "P1",
+  "title": "Generate metadata manifest draft",
+  "agent": "codex",
+  "status": "done",
+  "risk": "safe",
+  "input": [],
+  "output": [
+    "apps/pocket-hatchery/data/metadata_manifest.schema.json"
+  ],
+  "approval_required": false,
+  "completed_at": "2026-06-28T23:00:00Z",
+  "notes": "Completed during v4 scaffold integration."
+}

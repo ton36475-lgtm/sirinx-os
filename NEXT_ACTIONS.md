@@ -18,20 +18,35 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Immediate
 
-- [ ] Task 2.1: Implement pause/unpause acceptance tests for Pocket Hatchery.
+- [x] Task 2.1: Implement pause/unpause acceptance tests for Pocket Hatchery.
   - Goal: verify contract action table documents pause/unpause and rollback plan triggers it.
   - File scope: `WORKSPACE_SCAFFOLD/tests/test_pause_unpause.py`.
-  - Verification: `python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v`.
+  - Status: ✅ completed; tests pass.
 
-- [ ] Task 2.2: Build read-only creature viewer scaffold.
+- [x] Task 2.2: Build read-only creature viewer scaffold.
   - Goal: static markdown/HTML viewer for `sample_creatures.json`.
   - File scope: `apps/pocket-hatchery/web/viewer.md`.
-  - Verification: manual review, no external calls.
+  - Status: ✅ completed; pending actual Next.js page component.
 
-- [ ] Task 2.3: Run Security Sentinel for waxwing exposure.
+- [x] Task 2.3: Run Security Sentinel for waxwing exposure.
   - Goal: scan public-facing docs for `waxwing` leakage.
   - File scope: `WORKSPACE_SCAFFOLD/tests/test_public_signer_exposure.py`.
-  - Verification: test passes.
+  - Status: ✅ completed; test passes.
+
+- [ ] Task 2.4: Create actual Next.js creature viewer page.
+  - Goal: `/pocket-hatchery` route in `apps/centerbrain-shell`.
+  - File scope: `apps/centerbrain-shell/app/pocket-hatchery/page.tsx`.
+  - Status: pending; data ready.
+
+- [ ] Task 2.5: Generate security scan evidence report.
+  - Goal: write `WORKSPACE_SCAFFOLD/security_scan_waxwing.json` with findings.
+  - File scope: `WORKSPACE_SCAFFOLD/security_scan_waxwing.json`.
+  - Status: pending.
+
+- [ ] Task 2.6: Push release gate score to ≥ 80.
+  - Goal: fill remaining required evidence (contract action tests, wallet flow evidence, metadata permission audit, rollback plan review).
+  - File scope: `apps/pocket-hatchery/ops/release_gate_evidence.md`, `WORKSPACE_SCAFFOLD/config/pocket_hatchery_release_gate.json`.
+  - Status: pending.
 
 ## Approval-Gated
 

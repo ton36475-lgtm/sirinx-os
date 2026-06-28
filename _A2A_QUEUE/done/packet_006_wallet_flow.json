@@ -1,0 +1,16 @@
+{
+  "id": "packet_006",
+  "project": "pocket-hatchery",
+  "priority": "P2",
+  "title": "Draft wallet connection flow using public wallet path",
+  "agent": "codex",
+  "status": "done",
+  "risk": "medium",
+  "input": [],
+  "output": [
+    "apps/pocket-hatchery/web/wallet_flow.md"
+  ],
+  "approval_required": false,
+  "completed_at": "2026-06-28T23:00:00Z",
+  "notes": "Completed during v4 scaffold integration."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "packet_007",
+  "project": "pocket-hatchery",
+  "priority": "P2",
+  "title": "Create pause/unpause acceptance tests",
+  "agent": "codex",
+  "status": "done",
+  "risk": "safe",
+  "input": [],
+  "output": [
+    "WORKSPACE_SCAFFOLD/tests/test_pause_unpause.py"
+  ],
+  "approval_required": false,
+  "completed_at": "2026-06-28T23:00:00Z",
+  "notes": "Completed during v4 scaffold integration."
+}
