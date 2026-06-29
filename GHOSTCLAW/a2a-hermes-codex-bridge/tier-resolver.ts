@@ -31,7 +31,7 @@ export const TIER_RULES: TierRule[] = [
     actionClass: "PLAN",
     behavior: "auto_execute",
     humanRequired: false,
-    examples: ["design_architecture", "review_design"],
+    examples: ["design_architecture", "review_design", "goal_define", "mission_create", "brainstorm_deliberate"],
   },
   {
     tier: "C",
@@ -97,6 +97,9 @@ const ACTION_TO_CLASS: Record<string, ActionClass> = {
 
   design_architecture: "PLAN",
   review_design: "PLAN",
+  goal_define: "PLAN",
+  mission_create: "PLAN",
+  brainstorm_deliberate: "PLAN",
 
   run_tests: "VALIDATE",
   run_lint: "VALIDATE",

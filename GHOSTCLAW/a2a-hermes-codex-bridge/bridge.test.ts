@@ -46,6 +46,18 @@ describe("A2A Hermes-Codex Command Broker", () => {
     expect(receipt.decision_status).toBe("allowed");
   });
 
+  it("Tier B: goal, mission, and brainstorm command intents are plan-only", () => {
+    for (const action of ["goal_define", "mission_create", "brainstorm_deliberate"]) {
+      const msg = makeMessage(action, ["docs/superpowers/plans/2026-06-29-a2a-sync-hermes-goal-mission-brainstorm.md"]);
+      const { verdict, receipt } = evaluateCommand(msg);
+
+      expect(verdict.allowed).toBe(true);
+      expect(verdict.tier).toBe("B");
+      expect(receipt.action_class).toBe("PLAN");
+      expect(receipt.decision_status).toBe("allowed");
+    }
+  });
+
   it("Tier C: stage_commit requires quorum", () => {
     const msg = makeMessage("stage_commit");
     const { verdict, receipt } = evaluateCommand(msg);

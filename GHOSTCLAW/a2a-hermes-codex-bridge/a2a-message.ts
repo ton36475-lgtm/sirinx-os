@@ -47,6 +47,13 @@ export interface A2AContext {
   lane?: string;
   files?: string[];
   depends_on?: string[];
+  deliverables?: string[];
+  command_source?: "goal" | "mission" | "brainstorm";
+  license_policy?: {
+    requested_license: "MIT";
+    repo_license_file_present: boolean;
+    assertion: "intent_only_until_license_file_exists";
+  };
 }
 
 export interface A2AMessage {

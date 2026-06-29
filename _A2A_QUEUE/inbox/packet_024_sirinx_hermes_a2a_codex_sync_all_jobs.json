@@ -1,0 +1,78 @@
+{
+  "project": "sirinx-hermes-a2a-codex-sync",
+  "priority": "P0",
+  "title": "Hermes A2A Codex goal command",
+  "agent": "hermes",
+  "status": "inbox",
+  "risk": "safe",
+  "input": [
+    "docs/superpowers/decisions/2026-06-29-a2a-sync-hermes-goal-mission-brainstorm.md",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts"
+  ],
+  "output": [],
+  "approval_required": false,
+  "created_at": "2026-06-29T10:09:07.822Z",
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-03208cd6",
+    "correlation_id": "sirinx-a2a2a-b19dc4cc",
+    "phase": "command_intent:goal",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "mission-commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build-captain"
+    },
+    "action_requested": "goal_define",
+    "context": {
+      "goal": "Sync all Hermes A2A Codex jobs under high-level godmode skill boundaries with MIT license intent recorded as policy note",
+      "files": [
+        "docs/superpowers/decisions/2026-06-29-a2a-sync-hermes-goal-mission-brainstorm.md",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts"
+      ],
+      "lane": "GHOSTCLAW/a2a-hermes-codex-bridge",
+      "constraints": [
+        "dry_run=true",
+        "runtime_queue_execution=false",
+        "provider_call=false",
+        "external_message_send=false",
+        "deploy=false",
+        "push=false",
+        "secret_read=false",
+        "no_real_codex_cli_execution",
+        "no_live_send",
+        "no_blanket_approval",
+        "mit_license_intent_only_until_license_file_exists"
+      ],
+      "deliverables": [
+        "local_inbox_packet",
+        "dry_run_sidecar_preview",
+        "operator_review_status",
+        "no_external_action"
+      ],
+      "command_source": "goal",
+      "license_policy": {
+        "requested_license": "MIT",
+        "repo_license_file_present": false,
+        "assertion": "intent_only_until_license_file_exists"
+      }
+    },
+    "response_expected": {
+      "format": "packet_and_dry_run_preview",
+      "within_lane": "local_file_bus_only",
+      "max_turns": 1
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-06-29T10:09:07.821Z",
+    "ttl_seconds": 900,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "notes": "dry_run=true; runtime_queue_execution=false; provider_call=false; external_message_send=false; deploy=false; push=false; secret_read=false; requested_license=MIT; license_assertion=intent_only_until_license_file_exists",
+  "id": "packet_024_sirinx_hermes_a2a_codex_sync_all_jobs"
+}
