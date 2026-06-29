@@ -221,6 +221,8 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [x] Add Hermes gateway current recheck packet.
   - Status: `packet_023` records current read-only localhost gateway probes; `127.0.0.1:9000` is still unreachable, no restart was attempted, no decision was recorded, no queue item executed, and `BLOCK-HERMES-GATEWAY` remains open.
   - Evidence: `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py`.
+- [x] Push A2A Sync Hermes checkpoint to `origin/staging/godmode-master-os-v2` via `GATE-PUSH-001-20260629-001`.
+  - Status: pushed `0a1d892..eb664e4`; approval packet is consumed; push receipt at `_A2A_QUEUE/outbox/receipt_gate_push_001_2026-06-29.json`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.
