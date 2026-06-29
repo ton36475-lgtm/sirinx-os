@@ -160,6 +160,12 @@
       "state": "local_ignored_present"
     },
     {
+      "path": "data/pathspecs/sirinx_a2a_local_autopilot_status_2026-06-29.json",
+      "doc_mirror": "docs/knowledge/SIRINX_A2A_LOCAL_AUTOPILOT_STATUS_2026-06-29.md",
+      "ignore_rule": ".gitignore:31:data/",
+      "state": "local_ignored_present"
+    },
+    {
       "path": "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
       "doc_mirror": "docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md",
       "ignore_rule": ".gitignore:31:data/",
@@ -180,6 +186,12 @@
     {
       "path": "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
       "doc_mirror": "docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md",
+      "ignore_rule": ".gitignore:31:data/",
+      "state": "local_ignored_present"
+    },
+    {
+      "path": "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+      "doc_mirror": "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
       "ignore_rule": ".gitignore:31:data/",
       "state": "local_ignored_present"
     },

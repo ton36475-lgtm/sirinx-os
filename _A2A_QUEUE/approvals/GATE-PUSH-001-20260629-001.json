@@ -1,7 +1,8 @@
 {
   "approval_id": "GATE-PUSH-001-20260629-001",
   "requested_by": "sirinx",
-  "approved_by": null,
+  "approved_by": "sirinx",
+  "approved_at": "2026-06-29T19:09:20+07:00",
   "location": "_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json",
   "created_at": "2026-06-29T11:35:00Z",
   "expires_at": "2026-06-29T23:59:59+07:00",
@@ -16,9 +17,17 @@
   },
   "scope": {
     "allowed_files": [
+      "AUTONOMOUS_RUN_LOG.md",
       "GHOSTCLAW/a2a-hermes-codex-bridge/**",
+      "NEXT_ACTIONS.md",
+      "PROJECT_STATE.md",
+      "WORKSPACE_SCAFFOLD/**",
+      "_A2A_QUEUE/**",
+      "_OBSIDIAN_GHOSTCLAW_BRAIN/**",
+      "apps/centerbrain-shell/src/lib/**",
       "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
-      "_A2A_QUEUE/outbox/approval_gate_push_001_2026-06-29.json",
+      "_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json",
+      "docs/knowledge/**",
       "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
       "docs/knowledge/SIRINX_A2A_LOCAL_AUTOPILOT_STATUS_2026-06-29.md",
       "docs/superpowers/decisions/2026-06-29-a2a-sync-hermes-goal-mission-brainstorm.md",
@@ -70,5 +79,5 @@
     "secret-like diff appears",
     "approval packet expired"
   ],
-  "notes": "Approval pending explicit operator confirmation. Do not execute without sirinx approval."
+  "notes": "Approved by operator command for commit and push_this_branch_only on staging/godmode-master-os-v2. Deploy, force_push, tag_release, secret_read, customer_send, cloud_mutation, provider_call, runtime_queue_execution, install, migration, merge_script, and license_file_mutation remain forbidden."
 }

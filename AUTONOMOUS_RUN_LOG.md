@@ -1985,3 +1985,109 @@
 - The active goal remains in progress and not complete.
 - `BLOCK-CHAT-EXPORT`, `BLOCK-LANE1-OPUS-PACKET`, `BLOCK-HERMES-GATEWAY`, `BLOCK-V3-3-ARTIFACT`, and `BLOCK-R0-APPROVALS` remain open.
 - No deploy, push, cloud mutation, customer send, secret read, paid/provider call, provider call, runtime queue execution, merge script, install, migration, wallet action, Telegram live send, or external message send was performed.
+
+## Run 2026-06-29 17:22 +07 - Hermes A2A Codex Sync-All Jobs Packet 024
+
+- **Agent:** Codex local worker
+- **Mode:** local-only, TDD, goal-command packet only, no runtime queue execution, no provider call, no license claim
+- **Scope:** Record the user's Hermes A2A Codex sync-all-jobs command as a reviewable local `/goal` inbox packet while keeping packet_013 as the current actionable Hermes decision lane.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Added the `goal`, `mission`, and `brainstorm` command-intent bridge in `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts`.
+- Added tests for command-intent mapping, legacy `BestStorm`/`beststrom` rejection, packet writing, and dry-run Codex sidecar preview behavior.
+- Extended A2A messages and tier resolution so `goal_define`, `mission_create`, and `brainstorm_deliberate` remain Tier B PLAN actions.
+- Added `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json`.
+- Added `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json` and `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md`.
+- Refreshed Codex/Hermes A2A queue status to `inbox=5 outbox=14 working=1 done=8 blocked=0 total=28`.
+- Linked packet_024 from the execution queue, active-goal index, context packet registry, durability manifest, Project State, Next Actions, status board, unified continuation board, completion audit/matrix, and GodMode Mission Control static data.
+- Recorded `requested_license=MIT` as intent only; no root `LICENSE` or `COPYING` file exists and no license claim was made.
+
+### Verification
+
+- RED checks failed first for missing `command-intents.ts` and missing packet_024/pathspec coverage.
+- Bridge tests: `./node_modules/.bin/vitest run GHOSTCLAW/a2a-hermes-codex-bridge/*.test.ts` - passed, 3 files and 27 tests.
+- Bridge typecheck: `./node_modules/.bin/tsc --noEmit -p GHOSTCLAW/a2a-hermes-codex-bridge/tsconfig.json` - passed.
+- Focused packet/queue/index/manifest check - passed, 33 Python tests.
+- Full Python check: `python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v` - passed, 257 tests; expected fail-closed JSON output remains for missing decision, missing final Opus packet, and missing R0 approval packet.
+- Full relevant Vitest check: `./node_modules/.bin/vitest run GHOSTCLAW/a2a-hermes-codex-bridge/*.test.ts apps/centerbrain-shell/src/lib/*.test.ts services/dev-control-api/src/centerbrain-hub.test.mjs` - passed, 8 files and 51 tests.
+- Centerbrain-shell typecheck: `./node_modules/.bin/tsc --noEmit -p apps/centerbrain-shell/tsconfig.json` - passed.
+- JSON validation passed for packet_024 pathspec, queue status, queue report, execution queue, active-goal index, context registry, and durability manifest.
+- `node scripts/check-operating-files.mjs` - passed, 14 files.
+- `git diff --check` - passed.
+
+### Blocked Actions
+
+- No Hermes runtime queue item was executed.
+- No real Codex CLI sidecar was executed.
+- No provider/model call was performed.
+- No external message or Telegram message was sent.
+- No deploy, push, cloud mutation, customer send, secret read, install, migration, merge script, or state mutation was performed.
+- No `LICENSE` file was created or changed; MIT remains an intent note only.
+- Packet_013 remains the current actionable Hermes decision lane.
+- The final Opus architecture packet, Hermes decision artifact, all-chat export source, exact v3.3 artifact, and gate-specific R0 approvals remain missing/open.
+
+## Run 2026-06-29 18:05 +07 - A2A Local Autopilot Runner
+
+- **Agent:** Codex local worker
+- **Mode:** TDD, local-only autopilot, report/status generation only, no queue folder mutation
+- **Scope:** Make A2A usable immediately through a safe local autopilot pass that indexes packets, classifies blockers, auto-acknowledges safe local packets, and writes local reports without opening external or runtime gates.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Added failing test `WORKSPACE_SCAFFOLD/tests/test_a2a_local_autopilot.py` first.
+- RED check failed because the autopilot runner, JSON reports, and markdown status did not exist.
+- Added `WORKSPACE_SCAFFOLD/scripts/run_a2a_local_autopilot.py`.
+- Generated `data/pathspecs/sirinx_a2a_local_autopilot_status_2026-06-29.json`.
+- Generated `WORKSPACE_SCAFFOLD/reports/a2a_local_autopilot_status_latest_2026-06-29.json`.
+- Added `docs/knowledge/SIRINX_A2A_LOCAL_AUTOPILOT_STATUS_2026-06-29.md`.
+- Registered the new ignored pathspec in the active-goal local evidence durability manifest and doc mirror.
+- Updated `PROJECT_STATE.md` and `NEXT_ACTIONS.md`.
+
+### Current Autopilot Status
+
+- Queue counts remain `inbox=5 outbox=14 working=1 done=8 blocked=0 total=28`.
+- `packet_024_sirinx_hermes_a2a_codex_sync_all_jobs` is `auto_acknowledge_local_only`.
+- `packet_013` remains `blocked_requires_gate_specific_approval` because `approval_required` and `hermes_decision_missing` are still true.
+- Autopilot counts: `auto_acknowledge_local_only=6`, `observe_working_local_only=1`, `blocked_requires_gate_specific_approval=15`, `already_done=6`.
+
+### Verification
+
+- RED check: `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_a2a_local_autopilot -v` failed before implementation with missing script/status/doc artifacts.
+- GREEN check: `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_a2a_local_autopilot -v` - passed, 7 tests.
+- Manifest/index check: `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_local_evidence_durability_manifest WORKSPACE_SCAFFOLD.tests.test_active_goal_systematic_work_index -v` - passed, 10 tests.
+
+### Blocked Actions
+
+- No queue file was moved.
+- No Hermes runtime packet was executed.
+- No provider/model/paid call was performed.
+- No customer or Telegram live message was sent.
+- No deploy, push, cloud mutation, secret read, install, migration, merge script, license-file mutation, connector read, or external action was performed.
+
+## Run 2026-06-29 18:39 +07 - Pending Approval Gate Segregation
+
+- **Agent:** Codex local worker
+- **Mode:** TDD, local-only queue indexing guard, no push/deploy execution
+- **Scope:** Keep `_A2A_QUEUE/outbox/approval_gate_push_001_2026-06-29.json` as pending approval evidence without treating it as an executable A2A packet.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Observed `_A2A_QUEUE/outbox/approval_gate_push_001_2026-06-29.json` with `approved_by=null` and note `Approval pending explicit operator confirmation`.
+- Added a failing synthetic queue test proving `approval_gate_*.json` files were incorrectly counted as outbox packets.
+- Updated `WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py` so `approval_gate_*.json` files are excluded from A2A packet counts.
+- Regenerated queue and autopilot reports; counts remain `inbox=5 outbox=14 working=1 done=8 blocked=0 total=28`.
+
+### Verification
+
+- RED check: `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_a2a_queue_status.CodexHermesA2AQueueStatusTests.test_builder_indexes_synthetic_queue_without_executing -v` failed with `AssertionError: 2 != 1` before the filter.
+- GREEN check: same focused unittest passed after the filter.
+
+### Blocked Actions
+
+- No push was performed.
+- No deploy, cloud mutation, customer send, Telegram live send, secret read, provider/model/paid call, runtime queue execution, install, migration, merge script, or license-file mutation was performed.
+- `approval_gate_push_001_2026-06-29.json` remains pending approval evidence only, not an authorization.

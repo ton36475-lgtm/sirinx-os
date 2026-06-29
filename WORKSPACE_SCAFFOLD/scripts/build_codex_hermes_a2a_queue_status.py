@@ -101,6 +101,8 @@ def iter_packet_files(queue_root: Path) -> list[tuple[str, Path]]:
         if not folder_root.exists():
             continue
         for path in sorted(folder_root.glob("*.json")):
+            if path.name.startswith("approval_gate_"):
+                continue
             if path.is_file():
                 packet_files.append((folder, path))
     return packet_files

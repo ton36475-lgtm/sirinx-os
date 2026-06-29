@@ -35,6 +35,7 @@ healthy, and does not clear any R0 gate.
 | `ctx-active-goal-index` | `data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json` | Codex local worker | generated and updated 2026-06-29 | local_read_only | high | workstream and blocker index | active objective changes or blockers clear |
 | `ctx-codex-hermes-queue` | `data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json` | Codex / Hermes | generated and updated 2026-06-29 | local_read_only | high | ordered Codex/Hermes queue | Hermes decision or blocker clear |
 | `ctx-codex-hermes-a2a-queue-status` | `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json` | Codex / Hermes | generated from current `_A2A_QUEUE` files | local_read_only | high | file-bus packet counts and non-execution boundary | queue move or Hermes decision |
+| `ctx-hermes-a2a-codex-sync-all-jobs-packet` | `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json` | Hermes / Codex local worker | generated from packet_024 and command-intents bridge evidence | local_read_only | high | local `/goal` command packet for sync-all-jobs coordination, not runtime execution or license claim | packet_024 superseded, packet_013 decision exists, or LICENSE added through approval |
 | `ctx-a2a-adaptive-sync-control-status` | `data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json` | Codex / Hermes review | generated from current A2A file-bus queue status and packet_020 evidence | local_read_only | high | current local A2A adaptive sync control status, not runtime execution or approval | queue state changes or a blocker clearance validates |
 | `ctx-a2a-next-safe-action-sequencer` | `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json` | Codex / Hermes review | generated from packet_021 control status and current execution queue | local_read_only | high | next safe action sequence, not a decision or approval | Hermes decision, blocker clearance, or queue state change |
 | `ctx-hermes-gateway-current-recheck-packet` | `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json` | Codex / Hermes runtime | generated from current localhost probes after packet_022 | local_read_only | high | current gateway blocker proof, not restart/decision/execution | current gateway health proof or operator starts gateway |
@@ -75,6 +76,9 @@ Use this registry to choose source refreshes by freshness and confidence:
 6. Keep packet_013 blocked until Hermes records a decision artifact.
 7. Treat packet_023 as gateway blocker evidence only; it does not restart
    Hermes or prove live routing.
-8. After a separate Hermes decision artifact and final Opus packet exist, run
+8. Treat packet_024 as a local `/goal` command only; it does not execute Codex,
+   call a provider, or claim the repo is MIT licensed while no `LICENSE` file
+   exists.
+9. After a separate Hermes decision artifact and final Opus packet exist, run
    the Opus packet gate validator and transition guard before any recorder-gate,
    Opus-packet state, or LANE_2 state change.

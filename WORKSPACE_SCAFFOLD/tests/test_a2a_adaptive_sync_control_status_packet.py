@@ -104,12 +104,12 @@ class A2AAdaptiveSyncControlStatusPacketTests(unittest.TestCase):
         self.assertEqual(
             queue_status["packet_counts"],
             {
-                "inbox": 4,
-                "outbox": 11,
+                "inbox": 5,
+                "outbox": 14,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 24,
+                "total": 28,
             },
         )
         packet = next(item for item in queue_status["packets"] if item["id"] == "packet_021")
@@ -122,7 +122,7 @@ class A2AAdaptiveSyncControlStatusPacketTests(unittest.TestCase):
         self.assertFalse(packet["secret_read"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=4 outbox=11 working=1 done=8 blocked=0 total=24", text)
+        self.assertIn("packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28", text)
         self.assertIn(str(PACKET.relative_to(ROOT)), text)
 
     def test_status_surfaces_across_queue_index_registry_manifest_and_mission_control(self):

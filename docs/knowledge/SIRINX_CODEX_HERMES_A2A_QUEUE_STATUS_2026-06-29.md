@@ -30,8 +30,15 @@ WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py
 ## Queue Counts
 
 ```text
-packet_counts: inbox=4 outbox=11 working=1 done=8 blocked=0 total=24
+packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28
 ```
+
+## Approval Gate Artifacts
+
+- Push approval artifact observed: `_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json`
+- Approval state: `approved_by=sirinx`
+- Queue-index state: approval artifacts are excluded from A2A packet counts because they are not executable queue packets.
+- Execution state: this approval only permits preflight, commit, and `push_this_branch_only` for `origin/staging/godmode-master-os-v2`; deploy, force push, tag release, cloud mutation, customer send, secret read, provider call, runtime queue execution, install, migration, merge script, and license-file mutation remain unauthorized.
 
 ## Current Actionable Packet
 
@@ -114,6 +121,17 @@ packet_counts: inbox=4 outbox=11 working=1 done=8 blocked=0 total=24
 - Runtime state: `runtime_queue_execution=false`
 - Provider state: `provider_call=false`
 - LANE_2 state: `lane2_authorized=false`
+
+## Latest Inbox Hermes A2A Codex Sync-All Jobs Command
+
+- Packet: `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json`
+- Purpose: record the operator `/goal` command for Hermes A2A Codex sync-all-jobs coordination as a local review packet.
+- Command state: `goal_command_inbox_ready_local_only`
+- Current actionable state: `packet_024_is_current_actionable=false`; `packet_013` remains current.
+- Runtime state: `runtime_queue_execution=false`
+- Provider state: `provider_call=false`
+- License state: `requested_license=MIT`, `license_assertion=intent_only_until_license_file_exists`
+- License file state: no root `LICENSE` or `COPYING` file exists in the current repo scan.
 
 ## Non-Actions
 

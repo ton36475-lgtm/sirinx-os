@@ -56,7 +56,7 @@ export type GodModeActiveGoalIndex = {
 export type GodModeCodexHermesQueueItem = {
   id: string;
   priority: GodModePriority;
-  owner: "Hermes" | "Codex" | "Operator";
+  owner: "Hermes" | "Codex" | "Operator" | "Hermes / Codex";
   status: string;
   gate: string;
   nextAction: string;
@@ -504,6 +504,11 @@ export const GOD_MODE_ACTIVE_GOAL_INDEX: GodModeActiveGoalIndex = {
     "docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md",
     "WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json",
     "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py",
+    "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+    "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+    "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts",
     "data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json",
     "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_MODEL_CHOICE_BOUNDARY_2026-06-29.md",
     "data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json",
@@ -1124,6 +1129,49 @@ export const GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE: GodModeCodexHermesExecutionQ
       ],
     },
     {
+      id: "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
+      priority: "P0",
+      owner: "Hermes / Codex",
+      status: "goal_command_inbox_ready_local_only",
+      gate: "local_read_only_goal_command_review",
+      nextAction:
+        "Review packet_024 as a local /goal command for Hermes A2A Codex sync-all-jobs coordination; do not execute Codex CLI, runtime queues, provider calls, external sends, or license changes.",
+      evidence: [
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts",
+        "docs/superpowers/decisions/2026-06-29-a2a-sync-hermes-goal-mission-brainstorm.md",
+      ],
+      blockedBy: [
+        "packet_013_decision_still_current_actionable",
+        "license_file_absent",
+        "runtime_queue_execution_not_approved",
+      ],
+      allowedActions: ["read_local_files", "review_goal_command_packet", "run_local_tests", "update_status_docs"],
+      forbiddenActions: [
+        "deploy",
+        "push",
+        "secret_read",
+        "paid_provider_call",
+        "provider_call",
+        "runtime_queue_execution",
+        "real_codex_cli_execution",
+        "cloud_mutation",
+        "customer_send",
+        "telegram_live_send",
+        "external_message_send",
+        "merge_script_execution",
+        "install",
+        "migration",
+        "state_mutation",
+        "lane2_authorization",
+        "license_file_creation_without_approval",
+        "license_claim_without_license_file",
+      ],
+    },
+    {
       id: "MISSION-CONTROL-READONLY-EVIDENCE",
       priority: "P2",
       owner: "Codex",
@@ -1367,6 +1415,11 @@ export const GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE: GodModeCodexHermesExecutionQ
         "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
         "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
         "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts",
         "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_draft.py",
     "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py",
     "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py",
@@ -1416,12 +1469,12 @@ export const GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS: GodModeCodexHermesA2AQueueS
   lane2Authorized: false,
   externalWrites: false,
   packetCounts: {
-    inbox: 4,
-    outbox: 11,
+    inbox: 5,
+    outbox: 14,
     working: 1,
     done: 8,
     blocked: 0,
-    total: 24,
+    total: 28,
   },
   evidenceFiles: [
     "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
@@ -1437,6 +1490,7 @@ export const GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS: GodModeCodexHermesA2AQueueS
     "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
     "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
     "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+    "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
     "data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json",
     "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_REQUEST_PACKET_2026-06-29.md",
     "data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json",
@@ -1448,9 +1502,13 @@ export const GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS: GodModeCodexHermesA2AQueueS
     "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
     "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
     "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py",
+    "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+    "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts",
   ],
   nextAction:
-    "Review packet_023 as current gateway evidence; use the file-bus snapshot for local Codex/Hermes coordination only.",
+    "Review packet_024 as local goal-command evidence and packet_023 as gateway evidence; use the file-bus snapshot for local Codex/Hermes coordination only.",
 };
 
 export const GOD_MODE_SECURITY_FLAGS = [

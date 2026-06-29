@@ -85,12 +85,12 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
         self.assertEqual(
             status["packet_counts"],
             {
-                "inbox": 4,
-                "outbox": 11,
+                "inbox": 5,
+                "outbox": 14,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 24,
+                "total": 28,
             },
         )
         packet = next(item for item in status["packets"] if item["id"] == "packet_016")
@@ -104,7 +104,7 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
         self.assertFalse(packet["lane2_authorized"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=4 outbox=11 working=1 done=8 blocked=0 total=24", text)
+        self.assertIn("packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28", text)
         self.assertIn("_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json", text)
         self.assertIn("_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json", text)
         self.assertIn("_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json", text)
@@ -125,8 +125,8 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
         self.assertIn("runtime_queue_execution", handoff_item["forbidden_actions"])
 
         self.assertIn(rel_packet, mission)
-        self.assertIn("outbox: 11", mission)
-        self.assertIn("total: 24", mission)
+        self.assertIn("outbox: 14", mission)
+        self.assertIn("total: 28", mission)
 
 
 if __name__ == "__main__":

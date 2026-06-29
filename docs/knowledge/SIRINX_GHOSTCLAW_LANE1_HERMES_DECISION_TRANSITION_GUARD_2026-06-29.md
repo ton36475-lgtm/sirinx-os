@@ -23,7 +23,7 @@ provider_call=false
 ## Machine-Readable Guard
 
 ```text
-/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/tmplre5a6qd/transition-guard.json
+/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/tmp4knd52g6/transition-guard.json
 WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py
 ```
 

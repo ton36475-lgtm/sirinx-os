@@ -34,6 +34,11 @@ packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28
 current_actionable_packet=packet_013
 current_actionable_packet_folder=inbox
 
+Approval artifacts:
+
+- `_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json` is not counted as an A2A packet because approval artifacts are not executable queue packets.
+- Current push gate state: `approved_by=sirinx`; scope is limited to preflight, commit, and `push_this_branch_only` for `origin/staging/godmode-master-os-v2`.
+
 Autopilot decisions:
 
 - `packet_024_sirinx_hermes_a2a_codex_sync_all_jobs=auto_acknowledge_local_only`

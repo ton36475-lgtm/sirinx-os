@@ -52,6 +52,10 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
             "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
             queue["source_indexes"],
         )
+        self.assertIn(
+            "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+            queue["source_indexes"],
+        )
 
         boundary = queue["blocked_actions"]
         for action in (
@@ -71,7 +75,7 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
         ids = [item["id"] for item in items]
 
         self.assertEqual(
-            ids[:14],
+            ids[:15],
             [
                 "LANE1-HERMES-DECISION-PACKET-013",
                 "LANE1-HERMES-DECISION-DRAFT-PACKET-015",
@@ -85,6 +89,7 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
                 "A2A-ADAPTIVE-SYNC-CONTROL-STATUS-PACKET-021",
                 "A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022",
                 "HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023",
+                "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
                 "GHOSTCLAW-V3-3-ARTIFACT-INTAKE",
                 "R0-GATE-SPECIFIC-APPROVALS",
             ],
@@ -164,6 +169,18 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
         self.assertIn("decision_record", guard["forbidden_actions"])
         self.assertIn("state_mutation", guard["forbidden_actions"])
 
+        sync_all = next(item for item in items if item["id"] == "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024")
+        self.assertEqual(sync_all["owner"], "Hermes / Codex")
+        self.assertEqual(sync_all["status"], "goal_command_inbox_ready_local_only")
+        self.assertEqual(sync_all["gate"], "local_read_only_goal_command_review")
+        self.assertIn("data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json", sync_all["evidence"])
+        self.assertIn("_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json", sync_all["evidence"])
+        self.assertIn("GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts", sync_all["evidence"])
+        self.assertIn("real_codex_cli_execution", sync_all["forbidden_actions"])
+        self.assertIn("runtime_queue_execution", sync_all["forbidden_actions"])
+        self.assertIn("provider_call", sync_all["forbidden_actions"])
+        self.assertIn("license_claim_without_license_file", sync_all["forbidden_actions"])
+
     def test_each_queue_item_has_auditable_fields(self):
         queue = self.load_queue()
         required = {
@@ -206,6 +223,7 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
             "A2A-ADAPTIVE-SYNC-CONTROL-STATUS-PACKET-021",
             "A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022",
             "HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023",
+            "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
             "current_actionable_packet=packet_013",
             "GHOSTCLAW-V3-3-ARTIFACT-INTAKE",
             "R0-GATE-SPECIFIC-APPROVALS",
@@ -221,6 +239,8 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
             "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
             "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
             "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+            "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+            "license_claim_without_license_file",
         ]
         missing = [item for item in required if item not in text]
         self.assertEqual(missing, [])

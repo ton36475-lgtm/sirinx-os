@@ -40,16 +40,17 @@ does not record a Hermes decision, and does not approve LANE_2.
 | 10 | `A2A-ADAPTIVE-SYNC-CONTROL-STATUS-PACKET-021` | Codex | `a2a_adaptive_sync_control_status_ready_local_only` | `local_read_only_status_review` | Review packet_021 as the current local A2A adaptive sync control status; choose one separate gated blocker-clearing lane. |
 | 11 | `A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022` | Codex | `a2a_next_safe_action_sequencer_ready_local_only` | `local_read_only_next_lane_review` | Review packet_022 as a deterministic local sequencer; Hermes still records a separate packet_013 decision before any state change. |
 | 12 | `HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023` | Codex | `hermes_gateway_current_recheck_ready_local_only` | `local_read_only_gateway_status_review` | Review packet_023 as current localhost gateway evidence; Hermes/operator must start or verify the gateway separately before live routing or packet_013 decision claims. |
-| 13 | `GHOSTCLAW-V3-3-ARTIFACT-INTAKE` | Codex | `blocked_exact_artifact_missing` | `exact_artifact_required` | Re-run metadata-only artifact intake after the exact `ghostclaw_repo_merge_kit_v3_3.zip` path exists. |
-| 14 | `R0-GATE-SPECIFIC-APPROVALS` | Operator | `blocked_approval_missing` | `r0_gate_specific_approval_required` | Approve one named R0 gate with target, environment, rollback, and evidence path before external action. |
-| 15 | `ACTIVE-GOAL-BLOCKER-RECHECK` | Codex | `done_current_state` | `local_read_only_probe_only` | Run or inspect the read-only probe runner output before claiming completion or choosing the next safe lane. |
-| 16 | `MISSION-CONTROL-READONLY-EVIDENCE` | Codex | `done_local_readonly` | `no_runtime_gate_unlock` | Keep panels sourced from static evidence unless a runtime integration gate is approved. |
-| 17 | `CODEX-HERMES-A2A-QUEUE-STATUS` | Codex | `local_queue_indexed_not_executed` | `local_file_bus_only` | Use the `_A2A_QUEUE` status snapshot for local coordination only; do not execute queue items. |
-| 18 | `COMPLETION-REQUIREMENTS-MATRIX` | Codex | `requirements_mapped_not_complete` | `no_completion_claim_without_requirement_proof` | Use requirement-level evidence before any active-goal completion claim. |
-| 19 | `SOURCE-FILE-RECEIPT` | Codex | `current_local_scan_partial` | `local_file_evidence_only` | Use the source-file receipt to separate current local files from user-message summaries before any all-files-read claim. |
-| 20 | `CODEX-HERMES-WORK-REPORT-DRAFT` | Codex | `telegram_draft_ready` | `telegram_live_send_gate_closed` | Use the local Telegram-safe draft and `packet_014` outbox evidence for operator review; live Telegram delivery requires `APPROVE_TELEGRAM_WORK_REPORT_SEND`. |
-| 21 | `OBSIDIAN-BRAIN-SYNC-PULSE` | Codex | `active_after_meaningful_work` | `no_secrets_no_raw_logs` | Append concise memory pulses after verified local work. |
-| 22 | `LOCAL-EVIDENCE-DURABILITY` | Codex | `done_local_manifest` | `no_force_add_ignored_data` | Use the manifest and docs mirror as the review surface for ignored `data/pathspecs` artifacts. |
+| 13 | `HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024` | Hermes / Codex | `goal_command_inbox_ready_local_only` | `local_read_only_goal_command_review` | Review packet_024 as a local `/goal` command; do not execute Codex CLI, runtime queues, provider calls, external sends, or license changes. |
+| 14 | `GHOSTCLAW-V3-3-ARTIFACT-INTAKE` | Codex | `blocked_exact_artifact_missing` | `exact_artifact_required` | Re-run metadata-only artifact intake after the exact `ghostclaw_repo_merge_kit_v3_3.zip` path exists. |
+| 15 | `R0-GATE-SPECIFIC-APPROVALS` | Operator | `blocked_approval_missing` | `r0_gate_specific_approval_required` | Approve one named R0 gate with target, environment, rollback, and evidence path before external action. |
+| 16 | `ACTIVE-GOAL-BLOCKER-RECHECK` | Codex | `done_current_state` | `local_read_only_probe_only` | Run or inspect the read-only probe runner output before claiming completion or choosing the next safe lane. |
+| 17 | `MISSION-CONTROL-READONLY-EVIDENCE` | Codex | `done_local_readonly` | `no_runtime_gate_unlock` | Keep panels sourced from static evidence unless a runtime integration gate is approved. |
+| 18 | `CODEX-HERMES-A2A-QUEUE-STATUS` | Codex | `local_queue_indexed_not_executed` | `local_file_bus_only` | Use the `_A2A_QUEUE` status snapshot for local coordination only; do not execute queue items. |
+| 19 | `COMPLETION-REQUIREMENTS-MATRIX` | Codex | `requirements_mapped_not_complete` | `no_completion_claim_without_requirement_proof` | Use requirement-level evidence before any active-goal completion claim. |
+| 20 | `SOURCE-FILE-RECEIPT` | Codex | `current_local_scan_partial` | `local_file_evidence_only` | Use the source-file receipt to separate current local files from user-message summaries before any all-files-read claim. |
+| 21 | `CODEX-HERMES-WORK-REPORT-DRAFT` | Codex | `telegram_draft_ready` | `telegram_live_send_gate_closed` | Use the local Telegram-safe draft and `packet_014` outbox evidence for operator review; live Telegram delivery requires `APPROVE_TELEGRAM_WORK_REPORT_SEND`. |
+| 22 | `OBSIDIAN-BRAIN-SYNC-PULSE` | Codex | `active_after_meaningful_work` | `no_secrets_no_raw_logs` | Append concise memory pulses after verified local work. |
+| 23 | `LOCAL-EVIDENCE-DURABILITY` | Codex | `done_local_manifest` | `no_force_add_ignored_data` | Use the manifest and docs mirror as the review surface for ignored `data/pathspecs` artifacts. |
 
 ## Current Actionable Packet
 
@@ -88,6 +89,10 @@ does not record a Hermes decision, and does not approve LANE_2.
 - Hermes gateway current recheck packet: `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`
 - Hermes gateway current recheck JSON: `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`
 - Hermes gateway current recheck doc: `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`
+- Hermes A2A Codex sync-all-jobs packet: `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json`
+- Hermes A2A Codex sync-all-jobs JSON: `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json`
+- Hermes A2A Codex sync-all-jobs doc: `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md`
+- Hermes A2A command-intents bridge: `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts`
 - Decision transition guard: `data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json`
 - Decision transition guard doc: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md`
 - Decision validator: `data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json`
@@ -116,6 +121,11 @@ Until then, the Codex recorder gate remains closed.
 - `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`
 - `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`
 - `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`
+- `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json`
+- `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md`
+- `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json`
+- `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts`
+- `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts`
 - `data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json`
 - `data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json`
 - `data/pathspecs/sirinx_active_goal_blocker_clearance_validator_2026-06-29.json`
@@ -210,6 +220,7 @@ python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_request_packet
 python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_a2a_adaptive_sync_control_status_packet -v
 python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_a2a_next_safe_action_sequencer_packet -v
 python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_r0_gate_specific_approval_contract -v
+python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_hermes_a2a_codex_sync_all_jobs_packet -v
 python3 -m json.tool data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json > /dev/null
 node scripts/check-operating-files.mjs
 git diff --check
@@ -232,6 +243,12 @@ for review.
 The `CODEX-HERMES-A2A-QUEUE-STATUS` item indexes the local file-bus only. It
 does not move packets, execute queue items, record a Hermes decision, open the
 Codex recorder gate, or authorize LANE_2.
+
+The `HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024` item records a local `/goal`
+command only. It forbids `real_codex_cli_execution`, `runtime_queue_execution`,
+provider calls, external sends, `license_file_creation_without_approval`, and
+`license_claim_without_license_file`; MIT remains an intent note until a real
+root `LICENSE` file exists through a separate approval path.
 
 The `LANE1-HERMES-DECISION-DRAFT-PACKET-015` item is only a draft decision aid.
 It does not record a Hermes decision, call a provider, execute the runtime

@@ -80,12 +80,12 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
         self.assertEqual(
             status["packet_counts"],
             {
-                "inbox": 4,
-                "outbox": 11,
+                "inbox": 5,
+                "outbox": 14,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 24,
+                "total": 28,
             },
         )
         packet_013 = next(packet for packet in status["packets"] if packet["id"] == "packet_013")
@@ -152,6 +152,21 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
         self.assertFalse(packet_023["state_mutation"])
         self.assertFalse(packet_023["lane2_authorized"])
 
+        packet_024 = next(
+            packet for packet in status["packets"] if packet["id"] == "packet_024_sirinx_hermes_a2a_codex_sync_all_jobs"
+        )
+        self.assertEqual(packet_024["folder"], "inbox")
+        self.assertEqual(packet_024["agent"], "hermes")
+        self.assertEqual(packet_024["status"], "inbox")
+        self.assertEqual(packet_024["risk"], "safe")
+        self.assertFalse(packet_024["runtime_queue_execution"])
+        self.assertFalse(packet_024["provider_call"])
+        self.assertFalse(packet_024["deploy"])
+        self.assertFalse(packet_024["push"])
+        self.assertFalse(packet_024["secret_read"])
+        self.assertFalse(packet_024["state_mutation"])
+        self.assertFalse(packet_024["lane2_authorized"])
+
         packet_018 = next(packet for packet in status["packets"] if packet["id"] == "packet_018")
         self.assertEqual(packet_018["folder"], "outbox")
         self.assertEqual(packet_018["agent"], "codex")
@@ -197,6 +212,17 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             )
             (queue_root / "outbox" / "packet_901_report.json").write_text(
                 json.dumps({"id": "packet_901", "title": "Synthetic report", "agent": "hermes"}),
+                encoding="utf-8",
+            )
+            (queue_root / "outbox" / "approval_gate_push_999.json").write_text(
+                json.dumps(
+                    {
+                        "approval_id": "GATE-PUSH-999",
+                        "gate": "GATE-PUSH",
+                        "approved_by": None,
+                        "notes": "Approval pending explicit operator confirmation.",
+                    }
+                ),
                 encoding="utf-8",
             )
 
@@ -278,7 +304,10 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "local_queue_indexed_not_executed",
             "evidence_boundary=local_file_bus_only",
             "current_actionable_packet=packet_013",
-            "packet_counts: inbox=4 outbox=11 working=1 done=8 blocked=0 total=24",
+            "packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28",
+            "_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json",
+            "approved_by=sirinx",
+            "push_this_branch_only",
             "_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json",
             "_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json",
             "_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json",
@@ -286,6 +315,8 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
             "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
             "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+            "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+            "license_assertion=intent_only_until_license_file_exists",
             "runtime_queue_execution=false",
             "hermes_decision_recorded=false",
             "lane2_authorized=false",

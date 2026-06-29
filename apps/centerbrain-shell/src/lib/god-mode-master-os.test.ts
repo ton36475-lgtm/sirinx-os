@@ -106,6 +106,10 @@ describe("god mode master os contract", () => {
         "docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md",
         "WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json",
         "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py",
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
         "data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json",
         "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_DRAFT_2026-06-29.md",
         "_A2A_QUEUE/outbox/packet_015_ghostclaw_lane1_hermes_decision_draft.json",
@@ -149,8 +153,10 @@ describe("god mode master os contract", () => {
     expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.claimsAllChatsRead).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.lane2Authorized).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.runtimeQueueExecution).toBe(false);
-    expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items).toHaveLength(22);
-    expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items[0]).toMatchObject({
+    expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items).toHaveLength(23);
+    const firstQueueItem = GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items[0];
+    expect(firstQueueItem).toBeDefined();
+    expect(firstQueueItem).toMatchObject({
       id: "LANE1-HERMES-DECISION-PACKET-013",
       owner: "Hermes",
       status: "waiting_for_decision",
@@ -158,7 +164,7 @@ describe("god mode master os contract", () => {
       currentActionablePacket: "packet_013",
       lane2Authorized: false,
     });
-    expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items[0].evidence).toEqual(
+    expect(firstQueueItem?.evidence).toEqual(
       expect.arrayContaining([
         "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json",
         "data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json",
@@ -174,6 +180,7 @@ describe("god mode master os contract", () => {
         "A2A-ADAPTIVE-SYNC-CONTROL-STATUS-PACKET-021",
         "A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022",
         "HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023",
+        "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
         "LANE1-HERMES-DECISION-DRAFT-PACKET-015",
         "LANE1-HERMES-DECISION-HANDOFF-PACKET-016",
         "LANE1-HERMES-DECISION-PREFLIGHT-PACKET-017",
@@ -541,6 +548,39 @@ describe("god mode master os contract", () => {
       )?.forbiddenActions,
     ).toEqual(expect.arrayContaining(["restart_hermes", "decision_record", "runtime_queue_execution"]));
     expect(
+      GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find(
+        (item) => item.id === "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
+      ),
+    ).toMatchObject({
+      owner: "Hermes / Codex",
+      status: "goal_command_inbox_ready_local_only",
+      gate: "local_read_only_goal_command_review",
+    });
+    expect(
+      GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find(
+        (item) => item.id === "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
+      )?.evidence,
+    ).toEqual(
+      expect.arrayContaining([
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+      ]),
+    );
+    expect(
+      GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find(
+        (item) => item.id === "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
+      )?.forbiddenActions,
+    ).toEqual(
+      expect.arrayContaining([
+        "real_codex_cli_execution",
+        "runtime_queue_execution",
+        "provider_call",
+        "license_claim_without_license_file",
+      ]),
+    );
+    expect(
       GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find((item) => item.id === "GHOSTCLAW-V3-3-ARTIFACT-INTAKE")
         ?.evidence,
     ).toEqual(
@@ -664,6 +704,10 @@ describe("god mode master os contract", () => {
         "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
         "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
         "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
         "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_draft.py",
         "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py",
         "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py",
@@ -713,12 +757,12 @@ describe("god mode master os contract", () => {
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.lane2Authorized).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.externalWrites).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts).toEqual({
-      inbox: 4,
-      outbox: 11,
+      inbox: 5,
+      outbox: 14,
       working: 1,
       done: 8,
       blocked: 0,
-      total: 24,
+      total: 28,
     });
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.evidenceFiles).toEqual(
       expect.arrayContaining([
@@ -738,12 +782,16 @@ describe("god mode master os contract", () => {
         "WORKSPACE_SCAFFOLD/tests/test_a2a_adaptive_sync_control_status_packet.py",
         "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
         "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
         "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
         "docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md",
         "WORKSPACE_SCAFFOLD/tests/test_a2a_next_safe_action_sequencer_packet.py",
         "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
         "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
         "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py",
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
       ]),
     );
   });

@@ -97,6 +97,7 @@
 | 2026-06-29 | Codex/Hermes queue Mission Control panel added | Codex local worker |
 | 2026-06-29 | Hermes model-choice boundary artifact recorded | Codex local worker |
 | 2026-06-29 | Codex/Hermes A2A queue status indexed | Codex local worker |
+| 2026-06-29 | Hermes A2A Codex sync-all-jobs packet 024 recorded local-only | Codex local worker |
 | 2026-06-29 | LANE_1 packet 013 Hermes decision draft prepared | Codex local worker |
 | 2026-06-29 | LANE_1 Hermes decision intake handoff recorded | Codex local worker |
 | 2026-06-29 | LANE_1 Hermes decision handoff outbox packet recorded | Codex local worker |
@@ -174,6 +175,7 @@
 | A2A next-safe-action sequencer doc | `docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md` |
 | A2A next-safe-action sequencer JSON | `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json` |
 | Hermes gateway current recheck packet | `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json` |
+| Hermes A2A Codex sync-all-jobs packet | `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json` |
 | Hermes gateway current recheck doc | `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md` |
 | Hermes gateway current recheck JSON | `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json` |
 | GhostClaw v3.3 artifact gate validator | `data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json` |
@@ -205,6 +207,8 @@
 | Codex/Hermes A2A queue status | `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json` |
 | Codex/Hermes A2A queue status doc | `docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md` |
 | Codex/Hermes A2A queue status report | `WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json` |
+| Hermes A2A Codex sync-all-jobs pathspec | `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json` |
+| Hermes A2A Codex sync-all-jobs doc | `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md` |
 | Codex/Hermes queue Mission Control panel | `apps/centerbrain-shell/app/ui/GodModeMasterOS.tsx` |
 | Unified Codex/Hermes board | `docs/knowledge/SIRINX_CODEX_HERMES_UNIFIED_CONTINUATION_2026-06-29.md` |
 | Acceptance criteria | `_OBSIDIAN_GHOSTCLAW_BRAIN/17_ACCEPTANCE_CRITERIA.md` |
