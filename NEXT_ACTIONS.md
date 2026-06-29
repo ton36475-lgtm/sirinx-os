@@ -223,6 +223,9 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Evidence: `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py`.
 - [x] Push A2A Sync Hermes checkpoint to `origin/staging/godmode-master-os-v2` via `GATE-PUSH-001-20260629-001`.
   - Status: pushed `0a1d892..eb664e4`; approval packet is consumed; push receipt at `_A2A_QUEUE/outbox/receipt_gate_push_001_2026-06-29.json`.
+- [x] Record GhostClaw LANE_1 Hermes review decision for `packet_013`.
+  - Status: decision `route_to_opus` recorded; `codex_recorder_gate_open=false`, `lane2_authorized=false`, final Opus packet still required.
+  - Evidence: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md`, `_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json`, `_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.

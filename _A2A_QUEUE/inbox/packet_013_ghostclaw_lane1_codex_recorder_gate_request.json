@@ -4,8 +4,12 @@
   "priority": "P0",
   "title": "Hermes gate request to open Codex-as-recorder path for LANE_1 architecture packet",
   "agent": "hermes",
-  "status": "inbox",
+  "status": "decided",
   "risk": "safe",
+  "decision": "route_to_opus",
+  "decision_record": true,
+  "decision_id": "HERMES-LANE1-DECISION-013-20260629-001",
+  "decision_path": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
   "input": [
     "_A2A_QUEUE/inbox/packet_012_ghostclaw_lane1_hermes_draft_review.json",
     "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DRAFT_REVIEW_REQUEST_2026-06-29.md",
@@ -39,21 +43,6 @@
     "open_codex_recorder_gate",
     "block"
   ],
-  "decision_record": false,
-  "hermes_model_selection": {
-    "allowed_for_vibe_coding_drafts": true,
-    "models": "any",
-    "scope": "assist Hermes with vibe coding draft creation and architecture wording only",
-    "separate_action_gate_required": true,
-    "does_not_authorize": [
-      "deploy",
-      "push",
-      "cloud_mutation",
-      "customer_send",
-      "secret_read",
-      "runtime_queue_execution"
-    ]
-  },
   "external_action_approval": {
     "blanket_approval_actionable": false,
     "requires_gate_specific_approval": true,
@@ -79,5 +68,5 @@
     "exact_v3_3_artifact": "not_found",
     "chat_export": "not_found_user_export"
   },
-  "notes": "Local file-bus gate request only. This packet requests that Hermes decide whether to open the Codex-as-recorder path. It is not a Hermes decision, does not open the gate, does not create the final Opus packet, and does not authorize LANE_2."
+  "notes": "Hermes decision recorded: route_to_opus. Codex recorder gate remains closed. LANE_2 remains blocked. Final Opus architecture packet is still required before any build authorization."
 }
