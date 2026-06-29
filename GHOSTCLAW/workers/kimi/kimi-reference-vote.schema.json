@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GHOSTCLAW Kimi K2.7 Code MoA Reference Vote",
+  "description": "Schema for the reference vote produced by the Kimi coding worker during Mixture-of-Agents (MoA) voting.",
+  "type": "object",
+  "required": [
+    "vote_id",
+    "voter",
+    "proposal_id",
+    "vote",
+    "confidence",
+    "rationale",
+    "code_quality_score",
+    "safety_check",
+    "timestamp",
+    "receipt_hash"
+  ],
+  "properties": {
+    "vote_id": {
+      "type": "string",
+      "description": "Unique identifier for this MoA reference vote",
+      "pattern": "^VOTE-"
+    },
+    "voter": {
+      "type": "string",
+      "const": "kimi_coding_worker",
+      "description": "Fixed voter identity for Kimi worker"
+    },
+    "proposal_id": {
+      "type": "string",
+      "description": "ID of the proposal being voted on"
+    },
+    "vote": {
+      "type": "string",
+      "enum": ["approve", "reject", "abstain"],
+      "description": "The vote decision"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score from 0.0 to 1.0"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Reasoning behind the vote"
+    },
+    "code_quality_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Assessment of code quality for coding proposals (0.0 to 1.0)"
+    },
+    "safety_check": {
+      "type": "boolean",
+      "description": "Whether the proposal passes safety constraints (true = passes)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp"
+    },
+    "receipt_hash": {
+      "type": "string",
+      "description": "Deterministic integrity hash over vote_id|proposal_id|vote|timestamp"
+    },
+    "suggestions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional improvement suggestions"
+    }
+  },
+  "additionalProperties": false
+}

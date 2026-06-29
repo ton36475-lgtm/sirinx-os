@@ -238,6 +238,80 @@
       "type": "string",
       "enum": ["PENDING", "ROUTED", "PROCESSING", "ACTION_PENDING", "ACTION_EXECUTING", "COMPLETED", "BLOCKED", "FAILED", "CANCELLED"]
     },
+    "task_id": {
+      "type": "string",
+      "description": "Optional task identifier for worker dispatch tracking."
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Optional decision identifier for autonomous mutual approval."
+    },
+    "worker_id": {
+      "type": "string",
+      "description": "Optional worker identifier from the worker registry."
+    },
+    "action_class": {
+      "type": "string",
+      "description": "Optional action class for policy gate evaluation (e.g. read_only, code_patch_allowed_path)."
+    },
+    "evidence_pack": {
+      "type": "object",
+      "description": "Optional evidence pack for autonomous approval.",
+      "additionalProperties": true,
+      "properties": {
+        "files": { "type": "array", "items": { "type": "string" } },
+        "validation_results": { "type": "object" },
+        "test_output": { "type": "string" }
+      }
+    },
+    "control_plane_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, JSON control plane is required as source of truth."
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, a receipt must be written for this message."
+    },
+    "browser_use": {
+      "type": "object",
+      "description": "Optional browser use worker metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["setup_required", "ready", "smoke_passed", "smoke_failed", "blocked"] },
+        "url": { "type": "string" },
+        "http_status": { "type": "integer" },
+        "console_errors": { "type": "array", "items": { "type": "string" } },
+        "blocked_flows": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "edgeone": {
+      "type": "object",
+      "description": "Optional EdgeOne readiness metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "readiness_level": { "type": "string", "enum": ["R3", "R4", "R5"] },
+        "status": { "type": "string", "enum": ["ready", "not_ready", "deployed", "blocked"] },
+        "environment": { "type": "string", "enum": ["preview", "production"] },
+        "deploy_packet_path": { "type": "string" },
+        "smoke_test_receipt_path": { "type": "string" }
+      }
+    },
+    "model_swap": {
+      "type": "object",
+      "description": "Optional model swap router metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "from_model": { "type": "string" },
+        "to_model": { "type": "string" },
+        "reason": { "type": "string" },
+        "policy_gate_overridden": { "type": "boolean" },
+        "receipt_path": { "type": "string" }
+      }
+    },
     "autonomous_approval": {
       "type": "object",
       "description": "Optional autonomous mutual approval metadata. If absent, legacy human_approval_required field remains in effect.",

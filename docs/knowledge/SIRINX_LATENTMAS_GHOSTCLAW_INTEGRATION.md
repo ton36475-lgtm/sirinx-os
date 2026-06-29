@@ -1,121 +1,94 @@
-# SIRINX LatentMAS x GhostClaw Integration
+# SIRINX LatentMAS × GhostClaw Integration
 
-Date: 2026-06-29
-Status: R0-R2 local scaffold
-Scope: GHOSTCLAW A2A2A governance, schema compatibility, and local auto-approve scoring
+**Status:** ACTIVE
+**Authority:** ADR-LATENT-001
 
-## Authority
+---
 
-The JSON control plane is the authority for A2A2A routing, approvals, tiers, receipts, and audit. The latent plane is a shadow acceleration layer only. It can propose context, consensus, confidence bonuses, and debug signals, but it cannot approve, execute, deploy, send, mutate cloud resources, or override the JSON control plane.
+## 1. Dual-Plane Architecture
 
-Dual-plane lock:
-
-- JSON control plane: authoritative state, action class, violations, approval tier, final tier, receipts.
-- Latent plane: non-authoritative shadow state for acceleration and comparison.
-- Conflict rule: if JSON control plane and latent plane disagree, JSON wins and the action is capped or blocked.
-
-## Terminology
-
-Canonical term: `brainstorm`.
-
-Deprecated alias: `beststorm`. Inbound compatibility may normalize it to `brainstorm`, but new fields and artifacts must not emit it.
-
-Invalid typo: `beststrom`. Inbound use is an error and outbound use is prohibited.
-
-MoA naming:
-
-- Use `moa_summary` for consensus metadata.
-- Use `moa_gated_brainstorm` for gated brainstorm approval metadata.
-
-## Compatibility
-
-Inbound compatibility:
-
-- Accept `brainstorm` fields.
-- Accept deprecated `beststorm` aliases only for legacy input and normalize them to `brainstorm`.
-- Reject `beststrom` typo fields.
-- Preserve existing A2A2A required fields and message contracts.
-
-Outbound compatibility:
-
-- Emit only canonical `brainstorm` field names.
-- Keep all LatentMAS extension fields optional.
-- Do not require latent fields for existing A2A2A producers or consumers.
-
-## Claim Lock
-
-Do not claim guaranteed LatentMAS performance such as `4.3x`, `83.7%`, or `+13.3%` without a local benchmark artifact linked to the mission receipt. Treat those values as research targets or upstream claims until verified on the Mac mini or approved staging hardware.
-
-## Confidence And Tiering
-
-Corrected formula:
-
-```text
-raw_score = base_brainstorm + latent_bonus + sum(standard_modifiers)
-capped_score = min(max(raw_score, 0), 100)
-display_score = raw_score
+```
+CONTROL PLANE (JSON)  = source of truth
+LATENT PLANE (KV)     = shadow / acceleration only
+SAFETY PLANE          = always active, final authority
 ```
 
-`display_score` may exceed 100 for observability, but approval uses only `capped_score`.
+### Invariant
 
-`action_tier_cap` limits the highest tier allowed by action class. Hard violations force final tier `X` regardless of score.
-
-Hard violations:
-
-- `secret_access_requested`
-- `ambiguous_input`
-- `blocked_action_attempted`
-
-## KV Compatibility Gate
-
-Before any latent KV state can influence a brainstorm, a compatibility gate must confirm these 12 fields:
-
-1. `schema_version`
-2. `brainstorm_id`
-3. `mission_id`
-4. `correlation_id`
-5. `authority_plane`
-6. `latent_enabled`
-7. `kv_namespace`
-8. `kv_key`
-9. `kv_digest`
-10. `created_at`
-11. `expires_at`
-12. `fallback_policy`
-
-The gate must fail closed when required fields are missing, malformed, expired, or mapped to a non-shadow authority plane.
-
-## Debug Probe Mode
-
-Debug probes run as parallel text probes. They compare control-plane output against latent-plane suggestions and write diagnostics only. They do not decode from KV, mutate runtime state, or trigger actions.
-
-Required probe settings:
-
-```yaml
-mode: parallel_text_probe
-decode_from_kv: false
-write_actions_enabled: false
-external_send_enabled: false
+```
+JSON receipt + policy gate > latent score  (always)
 ```
 
-## Phase Roadmap
+## 2. Plane Definitions
 
-P0: Terminology and claim lock.
+### Control Plane (JSON)
+- Source of truth for all decisions
+- Receipts, decisions, evidence packs, worker messages
+- `autonomous_approval` metadata
+- `action_tier_cap` enforcement
 
-P1: Backward-compatible A2A2A schema extension.
+### Latent Plane (KV)
+- Shadow / acceleration only
+- Never authoritative
+- May provide `latent_bonus` to `display_score`
+- `effective_score` remains capped at 100
+- Fallback to JSON control plane on any mismatch
 
-P2: Local auto-approve scoring scaffold with action tier cap.
+### Safety Plane
+- Always active
+- Policy gate is final authority
+- Hard violations force tier X
+- No score (MoA, latent, confidence) can override
 
-P3: Read-only receipt and dashboard visibility.
+## 3. KV Compatibility Gate
 
-P4: Shadow latent-plane probe with no runtime authority.
+A KV bundle is compatible only if all 12 fields match exactly and the backend exposes `past_key_values`:
 
-P5: KV compatibility gate test corpus.
+```python
+KV_REQUIRED_FIELDS = [
+  "model_id", "model_revision", "tokenizer_hash", "config_hash",
+  "num_layers", "hidden_size", "num_attention_heads", "num_key_value_heads",
+  "rope_scaling", "dtype", "quantization_mode", "cache_schema_hash"
+]
+```
 
-P6: MoA-gated brainstorm review lane.
+On mismatch: fallback to JSON text Brainstorm, log mismatch, `latent_bonus = 0`.
 
-P7: Human-approved staging integration after local benchmark evidence.
+## 4. Debug Probe
 
-## Current Stop Point
+- Mode: `parallel_text_probe`
+- `decode_from_kv` = **false**
+- Debug probe runs in parallel with text probe, not from KV
+- No KV-only protocol is allowed
 
-R0-R2 does not wire the auto-approve engine into runtime. It creates governance artifacts, optional schema fields, policy caps, and unit-tested local scoring only.
+## 5. Claims Lock
+
+Until a local benchmark is run, never state these as facts:
+- "4.3x faster inference"
+- "83.7% fewer tokens"
+- "+13.3% accuracy"
+- "guaranteed speedup"
+
+Allowed: "empirical results from arXiv:2511.20639v3 on specific benchmarks", "shadow latent metrics (not yet validated)".
+
+## 6. Auto-Approve Score Invariant
+
+```python
+effective_score = min(100, base_brainstorm + latent_bonus + standard_modifiers)
+```
+
+- `display_score` may exceed 100 for confidence signaling only
+- `effective_score` is capped at 100
+- Base tier: A≥90, B≥75, C≥60, D<60
+- `action_tier_cap` overrides base tier: `final_tier = min(base_tier, cap)`
+- Hard violations force tier X
+
+## 7. Runtime Directory
+
+LatentMAS runtime files are stored under `.ghostclaw_runtime/latent/`.
+
+## 8. Terminology
+
+- `brainstorm` = canonical
+- `beststorm` = deprecated legacy alias (inbound read only)
+- `beststrom` = invalid typo (reject)

@@ -1,0 +1,171 @@
+# GHOSTCLAW Browser Use Worker Policy
+# Phase 4 — Browser Automation Safety Policy
+#
+# Autonomy Level: A4 (Bounded agent — local dashboard only)
+# Authority: GHOSTCLAW Hermes Commander
+# Parent Policy: GHOSTCLAW/policies/autonomous-safe-execution-v3.yaml
+
+schema: ghostclaw.browser_use.policy.v1
+version: "1.0.0"
+status: active
+owner: hermes
+effective_date: "2026-06-30"
+
+worker:
+  id: browser-use-worker
+  version: "1.0.0"
+  autonomy_level: "A4"
+  description: >-
+    Bounded browser automation worker for local dashboard smoke testing.
+    Uses Playwright or browser-use to open, capture, click, and verify
+    local dashboard pages. All sensitive actions are hard-blocked.
+
+scope:
+  allowed_urls:
+    - "http://127.0.0.1:8721"
+    - "http://localhost:8721"
+    - "http://127.0.0.1:3000"
+    - "http://localhost:3000"
+  allowed_domains:
+    - "127.0.0.1"
+    - "localhost"
+  description: >-
+    Only local dashboard URLs are permitted. No external or production URLs.
+
+allowed_actions:
+  - id: open_url
+    description: "Navigate to a local dashboard URL"
+    tier: A
+    auto_execute: true
+  - id: capture_page
+    description: "Take a screenshot of the current page"
+    tier: A
+    auto_execute: true
+  - id: safe_click
+    description: "Click on body or non-sensitive visible elements"
+    tier: B
+    auto_execute: true
+    constraints:
+      - "No clicking on login forms"
+      - "No clicking on payment buttons"
+      - "No clicking on security settings"
+      - "No clicking on delete/destructive buttons"
+  - id: visible_text_check
+    description: "Extract and verify visible text content"
+    tier: A
+    auto_execute: true
+  - id: console_error_capture
+    description: "Capture browser console errors for debugging"
+    tier: A
+    auto_execute: true
+  - id: write_smoke_receipt
+    description: "Write smoke test receipt to receipts directory"
+    tier: B
+    auto_execute: true
+  - id: append_run_log
+    description: "Append summary to AUTONOMOUS_RUN_LOG.md"
+    tier: B
+    auto_execute: true
+  - id: detect_dependencies
+    description: "Check for browser-use and Playwright availability"
+    tier: A
+    auto_execute: true
+  - id: generate_setup_instructions
+    description: "Generate setup instructions for missing dependencies"
+    tier: A
+    auto_execute: true
+
+blocked_actions:
+  - id: login_with_credentials
+    description: "Any login or authentication flow using credentials"
+    tier: X
+    reason: "Security risk — credentials must never be entered by automation"
+    safe_replacement: "Manual login by human operator"
+  - id: payment
+    description: "Any payment, checkout, or financial transaction"
+    tier: X
+    reason: "Financial risk — payments require human approval and execution"
+    safe_replacement: "Manual payment by human operator"
+  - id: security_setting_change
+    description: "Modifying security settings, passwords, 2FA, or permissions"
+    tier: X
+    reason: "Security risk — settings changes can lock out or expose system"
+    safe_replacement: "Manual security configuration by human operator"
+  - id: private_data_scraping
+    description: "Scraping or extracting private/sensitive user data"
+    tier: X
+    reason: "Privacy risk — PII must never be extracted by automation"
+    safe_replacement: "Manual data review with PII masking"
+  - id: captcha_bypass
+    description: "Bypassing CAPTCHA or similar human-verification mechanisms"
+    tier: X
+    reason: "Anti-abuse bypass is prohibited"
+    safe_replacement: "No replacement — action is forbidden"
+  - id: rate_limit_bypass
+    description: "Circumventing rate limits or throttling mechanisms"
+    tier: X
+    reason: "Anti-abuse bypass is prohibited"
+    safe_replacement: "No replacement — action is forbidden"
+  - id: customer_send_flow
+    description: "Sending messages to customers via any channel"
+    tier: X
+    reason: "External communication requires human approval"
+    safe_replacement: "Draft message for human review queue"
+  - id: telegram_live_send
+    description: "Sending messages via Telegram bot or API"
+    tier: X
+    reason: "External communication requires human approval"
+    safe_replacement: "Draft message for human review queue"
+
+dependency_policy:
+  auto_install: false
+  on_missing: "write_setup_instructions"
+  on_missing_status: "setup_required"
+  description: >-
+    If browser-use or Playwright is missing, the worker must NOT install
+    automatically. It must write setup instructions and set status=setup_required.
+
+execution_rules:
+  - "Only local dashboard URLs (127.0.0.1, localhost) are permitted"
+  - "Headless mode is required for all automated browser actions"
+  - "Screenshots are stored locally in receipts/screenshots/"
+  - "Every smoke run must produce a receipt JSON file"
+  - "Every smoke run must append a summary to AUTONOMOUS_RUN_LOG.md"
+  - "Blocked actions must produce a blocked receipt with safe replacement"
+  - "Console errors must be captured but never sent externally"
+  - "No browser cookies or sessions may be persisted between runs"
+
+receipt_policy:
+  format: json
+  directory: "GHOSTCLAW/workers/browser-use/receipts/"
+  required_fields:
+    - receipt_id
+    - worker_id
+    - worker_version
+    - timestamp
+    - status
+    - autonomy_level
+  statuses:
+    - ready
+    - running
+    - completed
+    - pass
+    - pass_with_warnings
+    - failed
+    - blocked
+    - setup_required
+    - partial
+
+terminology:
+  canonical: brainstorm
+  deprecated_aliases:
+    - beststorm
+  invalid_typos:
+    - beststrom
+  emit_only_canonical: true
+
+audit:
+  log_to: "AUTONOMOUS_RUN_LOG.md"
+  include_blocked: true
+  include_setup_required: true
+  evidence_pack_required: true

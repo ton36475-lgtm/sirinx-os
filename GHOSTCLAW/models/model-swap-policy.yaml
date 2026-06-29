@@ -1,0 +1,93 @@
+schema: ghostclaw.model_swap_policy.v1
+version: "1.0.0"
+effective_date: "2026-06-30"
+description: "Policy rules governing model swap operations in the GHOSTCLAW Model Auto Swap Router"
+canonical_terminology:
+  brainstorm: canonical
+  beststorm: legacy_alias
+  beststrom: invalid_typo
+
+authority:
+  primary: action_tier_cap
+  description: "The action_tier_cap (GHOSTCLAW/policies/action-tier-cap.yaml) remains the final authority over all model swap decisions. A model swap never overrides the policy gate."
+
+immutable_rules:
+  - id: rule_001
+    rule: "model_swap_never_overrides_policy_gate"
+    description: "A model swap operation must never override, bypass, or supersede the action_tier_cap policy gate. The policy gate is final authority."
+    enforce: always
+
+  - id: rule_002
+    rule: "action_tier_cap_remains_final_authority"
+    description: "The action_tier_cap YAML file defines allowable tiers A through X. Model swap decisions operate only within tiers A and B. Any action falling under tier D or X is auto-blocked regardless of model swap state."
+    enforce: always
+
+  - id: rule_003
+    rule: "d_x_actions_auto_block"
+    description: "Actions classified as D (dependency_install, model_download, gpu_inference, external_network_write) or X (push, deploy, production_action, secret_access, ambiguous_input, recursive_codex_launch, recursive_moa_launch, kv_only_protocol) are auto-blocked. No model swap can reclassify or permit these."
+    enforce: always
+
+  - id: rule_004
+    rule: "no_live_provider_call"
+    description: "The model router and model swap worker must not make any live provider API calls. All routing is metadata-based and deterministic."
+    enforce: always
+
+  - id: rule_005
+    rule: "no_api_key_read"
+    description: "The model router and model swap worker must not read, access, or reference any API keys, tokens, or credentials."
+    enforce: always
+
+  - id: rule_006
+    rule: "no_env_read"
+    description: "The model router and model swap worker must not read .env files or any environment variable containing secrets."
+    enforce: always
+
+  - id: rule_007
+    rule: "no_model_download"
+    description: "The model router and model swap worker must not trigger any model download, pull, or fetch operation."
+    enforce: always
+
+  - id: rule_008
+    rule: "no_gpu_inference"
+    description: "The model router and model swap worker must not trigger any GPU inference or local model execution."
+    enforce: always
+
+swap_rules:
+  allowed: true
+  scope: "routing_metadata_only"
+  triggers:
+    - task_type_change
+    - lane_reassignment
+    - health_check_degradation
+  constraints:
+    - swap_is_metadata_only
+    - swap_does_not_provision_resources
+    - swap_does_not_invoke_provider
+    - swap_does_not_modify_policy
+    - swap_does_not_change_tier_classification
+
+receipt_requirements:
+  required: true
+  template: ".ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json"
+  fields:
+    - swap_id
+    - timestamp
+    - from_model
+    - to_model
+    - task_type
+    - triggered_by
+    - policy_version
+    - action_tier_cap_version
+    - approved_by
+    - receipt_hash
+
+hard_stop_conditions:
+  - policy_gate_blocks_swap
+  - action_tier_x_detected
+  - action_tier_d_detected
+  - secret_access_attempted
+  - env_read_attempted
+  - live_provider_call_attempted
+  - model_download_attempted
+  - gpu_inference_attempted
+  - self_approval_attempted

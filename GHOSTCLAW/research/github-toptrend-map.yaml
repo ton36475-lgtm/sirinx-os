@@ -1,0 +1,40 @@
+# GitHub Toptrend Research Map
+# Part of: GHOSTCLAW Research Worker
+
+schema: ghostclaw.github_toptrend_map.v1
+mode: public_read_only
+output_dir: .ghostclaw_runtime/research/github_trending/
+
+topics:
+  - ai-agent
+  - multi-agent
+  - agent-framework
+  - agent-orchestration
+  - browser-use
+  - mcp
+  - a2a
+  - autonomous-agent
+  - workflow-automation
+  - edgeone
+  - kimi
+  - deepseek
+  - glm
+  - openai agents
+  - claude opus
+
+allowed:
+  - public_metadata_only
+  - gh_search_repos_metadata_only
+  - save_output_under_runtime_research
+
+blocked:
+  - clone_trending_repo
+  - install_trending_repo_packages
+  - execute_unknown_code
+  - network_scan_external
+  - credential_extraction
+
+canonical_terminology:
+  brainstorm: canonical
+  beststorm: legacy_alias
+  beststrom: invalid_typo

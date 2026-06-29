@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GHOSTCLAW Worker Capabilities Schema",
+  "description": "Schema for defining worker capabilities in the GHOSTCLAW sub-agent worker registry",
+  "type": "object",
+  "required": ["id", "role", "model_lane", "capabilities", "allowed_actions", "blocked_actions", "input_schema", "output_schema", "heartbeat_required", "receipt_required", "self_approval_allowed"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the worker",
+      "pattern": "^[a-z_]+$"
+    },
+    "role": {
+      "type": "string",
+      "description": "Functional role of the worker (e.g., orchestrator, builder, mapper)"
+    },
+    "model_lane": {
+      "type": "string",
+      "description": "Model lane the worker operates in (e.g., hermes, codex, kimi, glm, deepseek, opus, any)",
+      "enum": ["hermes", "codex", "kimi", "glm", "deepseek", "opus", "any"]
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of capability strings this worker possesses",
+      "uniqueItems": true
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Actions this worker is permitted to execute",
+      "uniqueItems": true
+    },
+    "blocked_actions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Actions this worker is explicitly prohibited from executing",
+      "uniqueItems": true
+    },
+    "input_schema": {
+      "type": "object",
+      "description": "JSON schema for the worker's input messages",
+      "required": ["type", "required", "properties"]
+    },
+    "output_schema": {
+      "type": "object",
+      "description": "JSON schema for the worker's output messages",
+      "required": ["type", "required", "properties"]
+    },
+    "heartbeat_required": {
+      "type": "boolean",
+      "description": "Whether the worker must emit periodic heartbeats",
+      "default": true
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "description": "Whether every worker action requires a receipt",
+      "default": true
+    },
+    "self_approval_allowed": {
+      "type": "boolean",
+      "description": "Whether self-approval is permitted. Must always be false per GHOSTCLAW autonomous mutual approval policy.",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

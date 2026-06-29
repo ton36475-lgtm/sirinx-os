@@ -1,0 +1,76 @@
+{
+  "schema_version": "ghostclaw.worker_registry.v2",
+  "version": "2.0.0",
+  "effective_date": "2026-06-30",
+  "description": "GHOSTCLAW worker registry — canonical list of all worker lanes",
+  "canonical_terminology": {
+    "brainstorm": "canonical",
+    "beststorm": "legacy_alias",
+    "beststrom": "invalid_typo"
+  },
+  "workers": [
+    {
+      "name": "kimi_coding_worker",
+      "model": "kimi_k2_7_code",
+      "display_name": "Kimi K2.7 Code",
+      "provider": "moonshot_ai",
+      "lane": "code_patch",
+      "role": "coding_tool_use_reference",
+      "autonomy_level": "A2",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+      "vote_schema": "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "allowed_roles": [
+        "coding_tool_use_reference",
+        "coding_worker",
+        "patch_planner",
+        "test_planner",
+        "moa_reference_vote_worker"
+      ],
+      "blocked_actions": [
+        "model_download",
+        "gpu_live_inference",
+        "secret_access",
+        "deploy",
+        "push",
+        "production_action",
+        "env_read",
+        "api_key_read",
+        "install_dependencies",
+        "live_provider_call",
+        "run_shell_command",
+        "cross_lane_write"
+      ]
+    },
+    {
+      "name": "model_swap_worker",
+      "model": "metadata_only",
+      "display_name": "Model Swap Worker",
+      "provider": "internal",
+      "lane": "model_swap",
+      "role": "metadata_router",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/workers/model-swap/model-swap.policy.yaml",
+      "receipt_template": ".ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json",
+      "allowed_actions": [
+        "route_task_to_model_lane",
+        "generate_swap_receipt",
+        "read_model_registry_metadata",
+        "record_swap_decision"
+      ],
+      "blocked_actions": [
+        "live_provider_call",
+        "api_key_read",
+        "env_read",
+        "model_download",
+        "gpu_inference",
+        "push",
+        "deploy",
+        "production_action",
+        "secret_access",
+        "override_action_tier_cap"
+      ]
+    }
+  ]
+}

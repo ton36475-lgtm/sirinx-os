@@ -1,0 +1,79 @@
+schema: ghostclaw.model_swap_worker.policy.v1
+version: "1.0.0"
+effective_date: "2026-06-30"
+description: "Policy for the GHOSTCLAW Model Swap Worker"
+canonical_terminology:
+  brainstorm: canonical
+  beststorm: legacy_alias
+  beststrom: invalid_typo
+
+scope: GHOSTCLAW/workers/model-swap/model-swap-worker.mjs
+
+authority:
+  primary: action_tier_cap
+  policy_reference: GHOSTCLAW/policies/action-tier-cap.yaml
+  model_swap_policy: GHOSTCLAW/models/model-swap-policy.yaml
+
+ruby: "model_swap_worker_operates_within_tier_A_and_B_only"
+
+allowed_actions:
+  - route_task_to_model_lane
+  - generate_swap_receipt
+  - read_model_registry_metadata
+  - record_swap_decision
+
+forbidden_actions:
+  - live_provider_call
+  - api_key_read
+  - env_read
+  - model_download
+  - gpu_inference
+  - push
+  - deploy
+  - production_action
+  - secret_access
+  - override_action_tier_cap
+  - reclassify_d_or_x_action
+
+auto_block:
+  tier_d: true
+  tier_x: true
+  description: "D/X action classes are auto-blocked. No model swap can reclassify or permit these."
+
+receipt:
+  required: true
+  template: ".ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json"
+  min_fields:
+    - swap_id
+    - timestamp
+    - from_model
+    - to_model
+    - task_type
+    - triggered_by
+    - policy_version
+    - action_tier_cap_version
+    - approved_by
+    - receipt_hash
+    - blocked
+
+hard_stop:
+  conditions:
+    - policy_gate_blocks_swap
+    - action_tier_x_detected
+    - action_tier_d_detected
+    - secret_access_attempted
+    - env_read_attempted
+    - live_provider_call_attempted
+    - model_download_attempted
+    - gpu_inference_attempted
+  behavior: "Immediately return blocked receipt. Do not route. Do not swap."
+
+autonomy_level: "A2"
+
+invariants:
+  - "model swap worker never makes live provider calls"
+  - "model swap worker never reads API keys or .env"
+  - "model swap worker never downloads models or runs GPU inference"
+  - "action_tier_cap remains final authority"
+  - "D/X actions are auto-blocked with a blocked receipt"
+  - "every swap produces a receipt with receipt_hash"

@@ -1,0 +1,254 @@
+---
+name: ghostclaw-agent-ghostclaws-thai-jarvis
+version: "1.0.0"
+author: sirinx-os
+description: >
+  GHOSTCLAW Thai Jarvis Agent — the unified agent skill for SIRINX OS.
+  Covers Zero Prompting workflow, Hermes/Codex mutual approval, Worker Build
+  Runtime, Browser Use Worker, Vibe Coding Agent, A2A Sync Team, MoA-gated
+  brainstorm, LatentMAS dual-plane architecture, Model Auto Swap Router,
+  Kimi Worker lane, EdgeOne deployment readiness, GitHub Toptrend public
+  read-only research, validation/receipt/archive, and hard stop conditions.
+
+# Skill metadata
+phase_coverage: "1-7"
+canonical_terminology:
+  brainstorm: canonical
+  beststorm: legacy_alias
+  beststrom: invalid_typo
+autonomy_default: "A2"
+authority_chain:
+  - human_operator
+  - hermes_mission_commander
+  - opus_chief_architect
+  - codex_build_captain
+  - glm52_dekimi_workers
+  - kob_validator
+  - command_broker
+---
+
+# GHOSTCLAW Thai Jarvis Agent Skill
+
+## 1. Zero Prompting Workflow
+
+GHOSTCLAW implements a **Zero Prompting** workflow. Agents do not receive free-form prompt strings that could bypass safety. Instead, tasks are dispatched as structured Mission Cards containing:
+
+- Goal
+- Constraints
+- File Scope (allowed / forbidden)
+- Expected Result
+- Verification
+- Report Format
+
+This prevents prompt injection and ambiguous dispatch.
+
+## 2. Hermes/Codex Mutual Approval
+
+All non-trivial actions require **mutual approval** between Hermes (Commander) and Codex (Build Captain). The autonomous mutual approval engine (`GHOSTCLAW/agents/auto-approve-engine.mjs`) enforces:
+
+- No self-approval (requester ≠ approver)
+- Safe actions (tier A/B) auto-approve
+- Medium actions (tier C) require agent quorum
+- Dangerous actions (tier D/X) auto-block
+
+## 3. Worker Build Runtime
+
+Workers operate under the GHOSTCLAW Worker Build Runtime. Each worker has:
+
+- An assigned lane
+- A policy file (`.policy.yaml`)
+- An autonomy level (default A2)
+- A report-to chain (no worker-to-worker direct communication)
+- Blocked actions list
+
+Workers registered in `GHOSTCLAW/workers/registry/worker-registry.json`:
+
+- `kimi_coding_worker` — Phase 7 coding lane
+- `model_swap_worker` — Phase 6 metadata routing
+
+## 4. Browser Use Worker
+
+The Browser Use Worker lane enables read-only browser inspection via Chrome DevTools MCP. It is an A4 autonomy agent with:
+
+- **Allowed:** navigate, inspect DOM, screenshot, network panel read
+- **Blocked:** click-to-action, form submission, authentication, download
+
+No production action is taken through the browser.
+
+## 5. Vibe Coding Agent
+
+The Vibe Coding Agent provides iterative code generation within a bounded scope:
+
+1. Architect (Opus) defines the scope
+2. Codex dispatches to Kimi/GML workers
+3. Worker produces a patch plan
+4. Codex reviews and applies (within allowed path)
+5. KOB validates
+6. Hermes signs off
+
+## 6. A2A Sync Team
+
+The A2A (Agent-to-Agent) sync protocol connects Hermes and Codex via a lane-registry, packet-bus, and manifest-store. The runtime lives in `GHOSTCLAW/a2a-hermes-codex-bridge/`.
+
+Key files:
+
+- `a2a-message.ts` — message schema
+- `a2a-sync-runner.mjs` — sync runner
+- `command-broker.ts` — command broker
+- `tier-resolver.ts` — tier resolution
+
+## 7. MoA-Gated Brainstorm
+
+Mixture-of-Agents (MoA) voting gates brainstorm sessions. The canonical term is **brainstorm** (`beststorm` is a legacy alias; `beststrom` is an invalid typo and rejected).
+
+MoA flow:
+
+1. Hermes proposes a brainstorm topic
+2. Multiple agents produce proposals
+3. Reference workers (like Kimi) produce structured votes
+4. Quorum is reached
+5. Decision is recorded with receipt
+
+No recursive MoA launch is permitted (tier X).
+
+## 8. LatentMAS Dual-Plane Architecture
+
+GHOSTCLAW implements the **LatentMAS** dual-plane architecture:
+
+- **Latent plane:** Internal scoring, reasoning, and policy evaluation — not externally visible
+- **Manifest plane:** Structured decision artifacts (JSON receipts) that are the source of truth
+
+The manifest plane always wins over the latent plane. A JSON decision artifact overrides any latent score.
+
+## 9. Model Auto Swap Router (Phase 6)
+
+The Model Auto Swap Router provides metadata-only routing of tasks to model lanes.
+
+**Files:**
+
+- `GHOSTCLAW/models/model-registry.yaml` — 5 registered models
+- `GHOSTCLAW/models/model-swap-policy.yaml` — immutable swap policy
+- `GHOSTCLAW/models/model-router.mjs` — `ModelRouter` class
+  - `route(taskType)` → returns a model lane or blocked result
+- `GHOSTCLAW/models/model-router.test.mjs` — Vitest suite
+- `GHOSTCLAW/models/provider-health.mjs` — health check stub
+- `GHOSTCLAW/workers/model-swap/model-swap-worker.mjs` — swap worker with receipts
+- `.ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json` — receipt template
+
+**Lane assignments:**
+
+```text
+code_patch      → Kimi K2.7 Code
+repo_mapping    → GLM 5.2 Max
+architecture    → DeepSeek V4 Pro
+final_decision  → GPT-5.5
+critic_review   → Claude Opus 4.8
+fallback        → GLM 5.2 Max
+```
+
+**Immutable safety constraints:**
+
+- Model swap never overrides policy gate
+- `action_tier_cap` remains final authority
+- D/X actions auto-blocked
+- No live provider call
+- No API key read
+- No `.env` read
+- No model download
+- No GPU inference
+
+## 10. Kimi Worker Lane (Phase 7)
+
+The Kimi K2.7 Code Worker is the coding lane in GHOSTCLAW.
+
+**Roles:**
+
+- coding_tool_use_reference
+- coding_worker
+- patch_planner
+- test_planner
+- MoA reference vote worker
+
+**Blocked:**
+
+- model_download
+- gpu_live_inference
+- secret_access
+- deploy
+- push
+- production_action
+
+**Files:**
+
+- `GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml` — policy
+- `GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json` — MoA vote schema
+- `GHOSTCLAW/workers/registry/worker-registry.json` — registry entry
+- `docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md` — documentation
+
+## 11. EdgeOne Deployment Readiness
+
+GHOSTCLAW tracks EdgeOne deployment readiness as a separate gate. Deployment requires:
+
+- All tests pass
+- KOB validator sign-off
+- Hermes approval
+- Human approval (tier A5 minimum)
+
+No deployment action is taken automatically. EdgeOne readiness is a reporting status only.
+
+## 12. GitHub Toptrend Public Read-Only Research
+
+The `GHOSTCLAW/research/github-toptrend-scan.mjs` module performs public read-only research on GitHub trending repositories. It:
+
+- Reads public APIs only
+- Does not clone repos
+- Does not execute external code
+- Produces a research report
+
+## 13. Validation, Receipt, Archive
+
+Every GHOSTCLAW operation produces:
+
+1. **Validation** — KOB validator runs tests and checks
+2. **Receipt** — structured JSON artifact with hash, timestamp, decision
+3. **Archive** — receipt stored in `.ghostclaw_runtime/a2a2a/receipt/` or appropriate runtime directory
+
+Receipt types:
+
+- Task receipts
+- Decision receipts
+- Model swap receipts (Phase 6)
+- MoA vote records (Phase 7)
+
+## 14. Hard Stop Conditions
+
+GHOSTCLAW enters hard stop when:
+
+- Policy gate blocks an action
+- Action tier X detected (push, deploy, production_action, secret_access, etc.)
+- Action tier D detected (dependency_install, model_download, gpu_inference, etc.)
+- Secret access attempted
+- `.env` read attempted
+- Live provider call attempted
+- Model download attempted
+- GPU inference attempted
+- Self-approval attempted
+- Recursive Codex/MoA launch attempted
+- KV-only protocol requested
+
+On hard stop:
+
+1. Return a blocked receipt immediately
+2. Do not proceed
+3. Escalate to the authority chain
+4. Log to audit trail
+
+---
+
+## Canonical Terminology
+
+| Term | Status |
+|---|---|
+| `brainstorm` | **canonical** |
+| `beststorm` | legacy alias |
+| `beststrom` | invalid typo (rejected) |
