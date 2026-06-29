@@ -75,7 +75,7 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
         ids = [item["id"] for item in items]
 
         self.assertEqual(
-            ids[:15],
+            ids[:16],
             [
                 "LANE1-HERMES-DECISION-PACKET-013",
                 "LANE1-HERMES-DECISION-DRAFT-PACKET-015",
@@ -90,6 +90,7 @@ class CodexHermesExecutionQueueTests(unittest.TestCase):
                 "A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022",
                 "HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023",
                 "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
+                "BROWSER-USE-CANDIDATE-LANE-PACKET-025",
                 "GHOSTCLAW-V3-3-ARTIFACT-INTAKE",
                 "R0-GATE-SPECIFIC-APPROVALS",
             ],

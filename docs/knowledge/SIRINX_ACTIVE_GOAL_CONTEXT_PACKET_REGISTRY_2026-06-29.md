@@ -39,6 +39,7 @@ healthy, and does not clear any R0 gate.
 | `ctx-a2a-adaptive-sync-control-status` | `data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json` | Codex / Hermes review | generated from current A2A file-bus queue status and packet_020 evidence | local_read_only | high | current local A2A adaptive sync control status, not runtime execution or approval | queue state changes or a blocker clearance validates |
 | `ctx-a2a-next-safe-action-sequencer` | `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json` | Codex / Hermes review | generated from packet_021 control status and current execution queue | local_read_only | high | next safe action sequence, not a decision or approval | Hermes decision, blocker clearance, or queue state change |
 | `ctx-hermes-gateway-current-recheck-packet` | `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json` | Codex / Hermes runtime | generated from current localhost probes after packet_022 | local_read_only | high | current gateway blocker proof, not restart/decision/execution | current gateway health proof or operator starts gateway |
+| `ctx-browser-use-candidate-lane` | `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json` | Codex / Browser QA review | generated from public Browser Use metadata and local policy guardrails | public_metadata_and_local_read_only | high | Browser Use candidate intake, not install or browser execution | after Browser Use is installed, rejected, or a newer upstream release changes the integration boundary |
 | `ctx-blocker-recheck` | `data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json` | Codex local worker | current probe snapshot | local_read_only | high | current blocker proof | after contradicting proof exists |
 | `ctx-read-only-probe-runner` | `WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py` | Codex local worker | reusable runner plus latest report | local_read_only | high | reproducible filename/TCP blocker probe | probe scope or blocker set changes |
 | `ctx-completion-audit` | `docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md` | Codex local worker | current audit doc | local_read_only | high | requirement completion audit | blocker clear or new source import |
@@ -79,6 +80,9 @@ Use this registry to choose source refreshes by freshness and confidence:
 8. Treat packet_024 as a local `/goal` command only; it does not execute Codex,
    call a provider, or claim the repo is MIT licensed while no `LICENSE` file
    exists.
-9. After a separate Hermes decision artifact and final Opus packet exist, run
+9. Treat packet_025 as Browser Use candidate evidence only; it does not install
+   Browser Use, open pages, use Browser Use Cloud, sync profiles, read cookies,
+   submit forms, call providers, or execute runtime queues.
+10. After a separate Hermes decision artifact and final Opus packet exist, run
    the Opus packet gate validator and transition guard before any recorder-gate,
    Opus-packet state, or LANE_2 state change.

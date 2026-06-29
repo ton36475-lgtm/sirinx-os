@@ -176,8 +176,11 @@
 | A2A next-safe-action sequencer JSON | `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json` |
 | Hermes gateway current recheck packet | `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json` |
 | Hermes A2A Codex sync-all-jobs packet | `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json` |
+| Browser Use candidate lane packet | `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json` |
 | Hermes gateway current recheck doc | `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md` |
 | Hermes gateway current recheck JSON | `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json` |
+| Browser Use candidate lane doc | `docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md` |
+| Browser Use candidate lane JSON | `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json` |
 | GhostClaw v3.3 artifact gate validator | `data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json` |
 | GhostClaw v3.3 artifact gate validator doc | `docs/knowledge/SIRINX_GHOSTCLAW_V3_3_ARTIFACT_GATE_VALIDATOR_2026-06-29.md` |
 | Hermes/Codex/A2A Godmode v3 HTML recheck | `data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json` |
@@ -217,7 +220,12 @@
 
 ## Next Safe Action
 
-Operator/Hermes can first review `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`
+Operator/Hermes can first review `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json`
+as Browser Use candidate evidence. It records public metadata and policy
+guardrails only; it does not install Browser Use, open pages, use Browser Use
+Cloud, sync profiles, access cookies, submit forms, call providers, execute
+runtime queues, or send messages. Then review
+`_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`
 as current gateway blocker evidence. It records read-only connection-refused
 probes only; it does not restart Hermes, record a decision, or mutate state. Then
 review `_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json`

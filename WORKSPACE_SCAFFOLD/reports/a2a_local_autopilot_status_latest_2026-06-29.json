@@ -2,7 +2,7 @@
   "autonomous_local_coordination": true,
   "autopilot_counts": {
     "already_done": 6,
-    "auto_acknowledge_local_only": 6,
+    "auto_acknowledge_local_only": 7,
     "blocked_requires_gate_specific_approval": 15,
     "observe_working_local_only": 1
   },
@@ -461,6 +461,29 @@
       "title": "Hermes gateway current recheck"
     },
     {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_025",
+      "path": "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Browser Use candidate lane intake for SIRINX/Hermes"
+    },
+    {
       "agent": "kob",
       "allowed_operations": [
         "read_packet",
@@ -697,8 +720,8 @@
     "blocked": 0,
     "done": 8,
     "inbox": 5,
-    "outbox": 14,
-    "total": 28,
+    "outbox": 15,
+    "total": 29,
     "working": 1
   },
   "paid_provider_call": false,

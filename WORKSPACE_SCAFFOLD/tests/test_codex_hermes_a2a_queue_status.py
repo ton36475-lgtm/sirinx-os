@@ -81,11 +81,11 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 14,
+                "outbox": 15,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 28,
+                "total": 29,
             },
         )
         packet_013 = next(packet for packet in status["packets"] if packet["id"] == "packet_013")
@@ -304,7 +304,7 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "local_queue_indexed_not_executed",
             "evidence_boundary=local_file_bus_only",
             "current_actionable_packet=packet_013",
-            "packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28",
+            "packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29",
             "_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json",
             "approved_by=sirinx",
             "push_this_branch_only",
@@ -316,12 +316,14 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
             "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
             "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+            "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
             "license_assertion=intent_only_until_license_file_exists",
+            "browser_use_candidate_lane_ready_local_only",
             "runtime_queue_execution=false",
             "hermes_decision_recorded=false",
             "lane2_authorized=false",
             "No queue item was executed.",
-            "No deploy, push, cloud mutation, customer send, secret read, paid/provider call, runtime queue execution, Telegram live send, external message send, merge script, install, or migration is authorized.",
+            "No deploy, push, cloud mutation, customer send, secret read, paid/provider call, runtime queue execution, Telegram live send, external message send, merge script, install, migration, Browser Use package install, browser automation command, Browser Use Cloud action, profile sync, cookie access, form submit, or transaction confirmation is authorized.",
         ]
         missing = [item for item in required if item not in text]
         self.assertEqual(missing, [])

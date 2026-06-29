@@ -55,6 +55,7 @@ WORKSPACE_SCAFFOLD/manifests/active_goal_local_evidence_durability_2026-06-29.js
 | `data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json` | `docs/knowledge/SIRINX_CODEX_HERMES_EXECUTION_QUEUE_2026-06-29.md` | `.gitignore:31:data/` |
 | `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json` | `docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md` | `.gitignore:31:data/` |
 | `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json` | `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md` | `.gitignore:31:data/` |
+| `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json` | `docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md` | `.gitignore:31:data/` |
 | `data/pathspecs/sirinx_codex_hermes_work_report_contract_2026-06-29.json` | `docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_DRAFT_2026-06-29.md` | `.gitignore:31:data/` |
 | `data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json` | `docs/knowledge/SIRINX_GHOSTCLAW_V3_3_ARTIFACT_GATE_VALIDATOR_2026-06-29.md` | `.gitignore:31:data/` |
 | `data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json` | `docs/knowledge/SIRINX_HERMES_CODEX_A2A_GODMODE_V3_HTML_RECHECK_2026-06-29.md` | `.gitignore:31:data/` |

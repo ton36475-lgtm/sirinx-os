@@ -24,7 +24,7 @@ decision, and not a license claim.
 ## Queue State
 
 ```text
-packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28
+packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29
 current_actionable_packet=packet_013
 packet_024_folder=inbox
 ```
@@ -32,6 +32,11 @@ packet_024_folder=inbox
 `packet_013` remains the current actionable Hermes decision lane. `packet_024`
 adds a local goal-command intake record for sync-all-jobs coordination, but it
 does not supersede packet_013 or clear any blocker.
+
+`packet_025` is now present in outbox as Browser Use candidate evidence. It
+does not install Browser Use, run browser automation, use Browser Use Cloud,
+sync profiles, access cookies, submit forms, call providers, or execute runtime
+queues.
 
 ## MIT License Boundary
 
@@ -47,6 +52,9 @@ MIT license claim is authorized by this packet.
 - `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts`
 - `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json`
 - `WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json`
+- `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json`
+- `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json`
+- `docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md`
 
 ## Non-Actions
 
@@ -55,6 +63,8 @@ MIT license claim is authorized by this packet.
 - No provider/model call was performed.
 - No deploy, push, cloud mutation, customer send, secret read, install,
   migration, Telegram live send, or external message send was performed.
+- No Browser Use package was installed and no Browser Use/browser automation
+  command was executed.
 - No `LICENSE` file was created or changed.
 
 ## Next Safe Action

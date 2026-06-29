@@ -153,7 +153,7 @@ describe("god mode master os contract", () => {
     expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.claimsAllChatsRead).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.lane2Authorized).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.runtimeQueueExecution).toBe(false);
-    expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items).toHaveLength(23);
+    expect(GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items).toHaveLength(24);
     const firstQueueItem = GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items[0];
     expect(firstQueueItem).toBeDefined();
     expect(firstQueueItem).toMatchObject({
@@ -181,6 +181,7 @@ describe("god mode master os contract", () => {
         "A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022",
         "HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023",
         "HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024",
+        "BROWSER-USE-CANDIDATE-LANE-PACKET-025",
         "LANE1-HERMES-DECISION-DRAFT-PACKET-015",
         "LANE1-HERMES-DECISION-HANDOFF-PACKET-016",
         "LANE1-HERMES-DECISION-PREFLIGHT-PACKET-017",
@@ -581,6 +582,44 @@ describe("god mode master os contract", () => {
       ]),
     );
     expect(
+      GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find(
+        (item) => item.id === "BROWSER-USE-CANDIDATE-LANE-PACKET-025",
+      ),
+    ).toMatchObject({
+      owner: "Codex",
+      status: "browser_use_candidate_lane_ready_local_only",
+      gate: "candidate_review_only_install_gate_required",
+    });
+    expect(
+      GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find(
+        (item) => item.id === "BROWSER-USE-CANDIDATE-LANE-PACKET-025",
+      )?.evidence,
+    ).toEqual(
+      expect.arrayContaining([
+        "data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json",
+        "docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+        "WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py",
+      ]),
+    );
+    expect(
+      GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find(
+        (item) => item.id === "BROWSER-USE-CANDIDATE-LANE-PACKET-025",
+      )?.forbiddenActions,
+    ).toEqual(
+      expect.arrayContaining([
+        "install_browser_use",
+        "browser_execution",
+        "browser_use_cloud",
+        "profile_sync",
+        "cookie_export",
+        "real_chrome_profile",
+        "form_submit",
+        "provider_call",
+        "runtime_queue_execution",
+      ]),
+    );
+    expect(
       GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.find((item) => item.id === "GHOSTCLAW-V3-3-ARTIFACT-INTAKE")
         ?.evidence,
     ).toEqual(
@@ -708,6 +747,10 @@ describe("god mode master os contract", () => {
         "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
         "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
         "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+        "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+        "data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json",
+        "docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py",
         "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_draft.py",
         "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py",
         "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py",
@@ -758,11 +801,11 @@ describe("god mode master os contract", () => {
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.externalWrites).toBe(false);
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts).toEqual({
       inbox: 5,
-      outbox: 14,
+      outbox: 15,
       working: 1,
       done: 8,
       blocked: 0,
-      total: 28,
+      total: 29,
     });
     expect(GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.evidenceFiles).toEqual(
       expect.arrayContaining([
@@ -783,6 +826,7 @@ describe("god mode master os contract", () => {
         "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
         "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
         "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
         "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
         "docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md",
         "WORKSPACE_SCAFFOLD/tests/test_a2a_next_safe_action_sequencer_packet.py",
@@ -791,6 +835,9 @@ describe("god mode master os contract", () => {
         "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py",
         "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
         "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json",
+        "docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py",
         "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
       ]),
     );

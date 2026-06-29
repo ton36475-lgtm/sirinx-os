@@ -2091,3 +2091,32 @@
 - No push was performed.
 - No deploy, cloud mutation, customer send, Telegram live send, secret read, provider/model/paid call, runtime queue execution, install, migration, merge script, or license-file mutation was performed.
 - `approval_gate_push_001_2026-06-29.json` remains pending approval evidence only, not an authorization.
+
+## Run 2026-06-29 21:24 +07 - Browser Use Candidate Lane Intake
+
+- **Agent:** Codex local worker
+- **Mode:** TDD, public-metadata review, local-only A2A packet intake
+- **Scope:** Capture `browser-use/browser-use` as a candidate Browser QA tool for SIRINX/Hermes without installing it or opening any page through it.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Added failing guardrail test `WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py` first.
+- Recorded Browser Use public metadata and policy boundary in `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json`.
+- Added doc mirror `docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md`.
+- Added local outbox packet `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json`.
+- Refreshed queue/autopilot reports to `inbox=5 outbox=15 working=1 done=8 blocked=0 total=29`.
+- Linked packet_025 from the execution queue, queue-status doc, active-goal index, context registry, durability manifest, Project State, Next Actions, status board, and Mission Control static data.
+
+### Verification
+
+- RED check failed first because Browser Use lane JSON/doc/packet did not exist and queue counts were still `outbox=14 total=28`.
+- GREEN/final verification is recorded in the terminal run for this task after the docs and Mission Control contract are synchronized.
+
+### Blocked Actions
+
+- No Browser Use package was installed.
+- No browser automation command was executed.
+- No Browser Use Cloud, tunnel, profile sync, cookie import/export, real Chrome profile, form submit, or transaction confirmation was performed.
+- No provider/model/paid call was performed.
+- No deploy, push, cloud mutation, customer send, Telegram live send, secret read, runtime queue execution, install, migration, merge script, license-file mutation, or external message send was performed.

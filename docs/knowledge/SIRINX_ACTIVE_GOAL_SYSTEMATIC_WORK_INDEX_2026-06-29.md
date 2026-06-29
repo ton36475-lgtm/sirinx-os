@@ -39,6 +39,10 @@ WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json
 data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json
 docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md
 _A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json
+data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json
+docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md
+_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json
+WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py
 GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts
 GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts
 data/pathspecs/sirinx_codex_hermes_work_report_contract_2026-06-29.json
@@ -122,6 +126,7 @@ _A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json
 | `a2a_next_safe_action_sequencer` | Sequencer ready local-only | `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json`, `docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json` | Review packet_022; Hermes records a separate packet_013 decision before any transition guard or recorder-gate state change |
 | `hermes_gateway_current_recheck_packet` | Current gateway recheck ready local-only | `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json` | Review packet_023; Hermes/operator starts or verifies `127.0.0.1:9000` separately before any live routing or packet_013 decision claim |
 | `hermes_a2a_codex_sync_all_jobs_packet` | Goal command inbox ready local-only | `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md`, `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json`, command-intents bridge tests | Review packet_024 as a local `/goal` command for sync-all-jobs coordination; keep packet_013 current and keep MIT as intent-only until a LICENSE file exists |
+| `browser_use_candidate_lane` | Browser Use candidate lane ready local-only | `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json`, `docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json`, `WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py` | Review Browser Use as candidate evidence only; use a gate-specific approval before install, page opening, cloud/profile/cookie paths, provider calls, or form submission |
 | `active_goal_blocker_recheck` | Blockers still open from current read-only probes; clearance validator ready | `data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json`, `data/pathspecs/sirinx_active_goal_blocker_clearance_validator_2026-06-29.json`, `data/pathspecs/sirinx_active_goal_current_blocker_refresh_2026-06-29.json` | Validate one proposed blocker clearance packet before any blocker or completion claim changes |
 | `active_goal_read_only_probe_runner` | Runner ready local-only | `WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py`, `data/pathspecs/sirinx_active_goal_read_only_probe_runner_2026-06-29.json`, `WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json` | Run before refreshing blocker evidence; candidate discovery still requires the relevant gate validator |
 | `active_goal_completion_requirements_matrix` | Requirements mapped, not complete | `data/pathspecs/sirinx_active_goal_completion_requirements_matrix_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_REQUIREMENTS_MATRIX_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_completion_requirements_matrix.py` | Use requirement-level evidence before any active-goal completion claim |
@@ -177,7 +182,7 @@ task=SIRINX active goal systematic work index
 audit=local-only
 files=data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json,docs/knowledge/SIRINX_ACTIVE_GOAL_SYSTEMATIC_WORK_INDEX_2026-06-29.md,data/pathspecs/sirinx_active_goal_source_file_receipt_2026-06-29.json,data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json,data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json
 current_actionable_packet=packet_013
-latest_outbox_packet=packet_022
+latest_outbox_packet=packet_025
 blockers=BLOCK-CHAT-EXPORT,BLOCK-LANE1-OPUS-PACKET,BLOCK-HERMES-GATEWAY,BLOCK-V3-3-ARTIFACT,BLOCK-R0-APPROVALS
 next_step=Hermes records LANE_1 decision for packet_013
 dry_run=true

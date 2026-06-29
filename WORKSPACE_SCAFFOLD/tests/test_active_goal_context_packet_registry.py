@@ -50,7 +50,10 @@ class ActiveGoalContextPacketRegistryTests(unittest.TestCase):
         self.assertGreaterEqual(len(packets), 10)
         for packet in packets:
             self.assertTrue(required_fields.issubset(packet), f"Missing context fields in {packet.get('id')}")
-            self.assertIn(packet["permission"], {"local_read_only", "operator_required", "blocked"})
+            self.assertIn(
+                packet["permission"],
+                {"local_read_only", "public_metadata_and_local_read_only", "operator_required", "blocked"},
+            )
             self.assertIn(packet["confidence"], {"high", "medium", "low"})
 
     def test_registry_covers_core_active_goal_sources(self):

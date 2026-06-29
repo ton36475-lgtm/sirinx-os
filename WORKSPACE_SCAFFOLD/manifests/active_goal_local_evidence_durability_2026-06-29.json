@@ -224,6 +224,12 @@
       "doc_mirror": "docs/knowledge/SIRINX_R0_GATE_SPECIFIC_APPROVAL_CONTRACT_2026-06-29.md",
       "ignore_rule": ".gitignore:31:data/",
       "state": "local_ignored_present"
+    },
+    {
+      "path": "data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json",
+      "doc_mirror": "docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md",
+      "ignore_rule": ".gitignore:31:data/",
+      "state": "local_ignored_present"
     }
   ],
   "next_safe_action": "Keep the docs and WORKSPACE_SCAFFOLD manifest as the review surface for ignored local pathspecs; do not force-add ignored data or claim completion without explicit gate review."

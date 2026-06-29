@@ -29,8 +29,8 @@
     "blocked": 0,
     "done": 8,
     "inbox": 5,
-    "outbox": 14,
-    "total": 28,
+    "outbox": 15,
+    "total": 29,
     "working": 1
   },
   "packets": [
@@ -527,6 +527,32 @@
       "status": "outbox",
       "telegram_live_send": false,
       "title": "Hermes gateway current recheck"
+    },
+    {
+      "agent": "codex",
+      "approval_required": false,
+      "cloud_mutation": false,
+      "customer_send": false,
+      "decision_record": false,
+      "deploy": false,
+      "external_message_send": false,
+      "final_packet_record": false,
+      "folder": "outbox",
+      "id": "packet_025",
+      "lane2_authorized": false,
+      "paid_provider_call": false,
+      "path": "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+      "priority": "P1",
+      "project": "sirinx-browser-use",
+      "provider_call": false,
+      "push": false,
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "state_mutation": false,
+      "status": "outbox",
+      "telegram_live_send": false,
+      "title": "Browser Use candidate lane intake for SIRINX/Hermes"
     },
     {
       "agent": "kob",

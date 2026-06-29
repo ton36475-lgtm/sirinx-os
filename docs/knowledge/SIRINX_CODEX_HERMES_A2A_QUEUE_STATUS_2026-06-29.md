@@ -30,7 +30,7 @@ WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py
 ## Queue Counts
 
 ```text
-packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28
+packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29
 ```
 
 ## Approval Gate Artifacts
@@ -133,11 +133,22 @@ packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28
 - License state: `requested_license=MIT`, `license_assertion=intent_only_until_license_file_exists`
 - License file state: no root `LICENSE` or `COPYING` file exists in the current repo scan.
 
+## Latest Outbox Browser Use Candidate Lane
+
+- Packet: `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json`
+- Purpose: record Browser Use as a candidate browser QA tool for SIRINX/Hermes review.
+- Candidate state: `browser_use_candidate_lane_ready_local_only`
+- Install state: `install_performed=false`
+- Browser state: `browser_execution=false`
+- Cloud/profile state: `cloud_browser_use=false`, `profile_sync=false`, `cookie_access=false`
+- Provider state: `provider_call=false`, `paid_provider_call=false`
+- Required future gate: `APPROVE_INSTALL_BROWSER_USE_SANDBOX` for dependency changes or `APPROVE_BROWSER_USE_LOCALHOST_QA` for any bounded page-opening run.
+
 ## Non-Actions
 
 No queue item was executed.
 
-No deploy, push, cloud mutation, customer send, secret read, paid/provider call, runtime queue execution, Telegram live send, external message send, merge script, install, or migration is authorized.
+No deploy, push, cloud mutation, customer send, secret read, paid/provider call, runtime queue execution, Telegram live send, external message send, merge script, install, migration, Browser Use package install, browser automation command, Browser Use Cloud action, profile sync, cookie access, form submit, or transaction confirmation is authorized.
 
 This snapshot may be used as a local evidence surface for Mission Control and
 future Hermes/Codex handoff, but it cannot clear `BLOCK-LANE1-OPUS-PACKET`,

@@ -29,7 +29,7 @@ license_file_mutation=false
 
 ## Current Queue Snapshot
 
-packet_counts: inbox=5 outbox=14 working=1 done=8 blocked=0 total=28
+packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29
 
 current_actionable_packet=packet_013
 current_actionable_packet_folder=inbox
@@ -41,6 +41,7 @@ Approval artifacts:
 
 Autopilot decisions:
 
+- `packet_025_sirinx_browser_use_candidate_lane=auto_acknowledge_local_only`
 - `packet_024_sirinx_hermes_a2a_codex_sync_all_jobs=auto_acknowledge_local_only`
 - `packet_013=blocked_requires_gate_specific_approval`
 - `packet_009=observe_working_local_only`
@@ -53,6 +54,7 @@ The local autopilot can:
 - Classify packet safety and blockers.
 - Write local report/status JSON.
 - Keep packet_024 available as a local goal-command acknowledgement.
+- Keep packet_025 available as Browser Use candidate evidence without installing or executing Browser Use.
 - Keep packet_013 blocked until Hermes decision evidence exists.
 
 The local autopilot does not:
@@ -63,6 +65,7 @@ The local autopilot does not:
 - Read secrets.
 - Send customer or Telegram messages.
 - Deploy, push, mutate cloud resources, install, migrate, run merge scripts, or change license files.
+- Install Browser Use, run Browser Use commands, use Browser Use Cloud, sync profiles, access cookies, submit forms, or confirm transactions.
 
 ## Operator Boundary
 
