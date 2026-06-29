@@ -1,0 +1,28 @@
+{
+  "id": "packet_011",
+  "project": "ghostclaw",
+  "priority": "P0",
+  "title": "Route LANE_1 Opus architecture request through Hermes",
+  "agent": "hermes",
+  "status": "inbox",
+  "risk": "safe",
+  "input": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_REQUEST_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE0_STATUS_REFRESH_2026-06-29.md",
+    "_OBSIDIAN_GHOSTCLAW_BRAIN/16_STATUS_BOARD.md",
+    "_OBSIDIAN_GHOSTCLAW_BRAIN/17_ACCEPTANCE_CRITERIA.md",
+    "docs/OPUS_ARCHITECTURE_FIRST_WORKFLOW.md"
+  ],
+  "output": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_ROUTE_DRAFT_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md"
+  ],
+  "approval_required": false,
+  "dry_run": true,
+  "live_send": false,
+  "provider_call": false,
+  "external_message_send": false,
+  "deploy": false,
+  "push": false,
+  "notes": "Local routing packet only. Hermes should route the request to Opus for a docs-only architecture packet. Codex must not begin LANE_2 until Hermes approves the Opus packet."
+}

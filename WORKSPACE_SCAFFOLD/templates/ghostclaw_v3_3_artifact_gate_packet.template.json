@@ -1,0 +1,25 @@
+{
+  "schema": "sirinx.ghostclaw_v3_3.artifact_gate_packet.v1",
+  "status": "template_not_artifact_gate_pass",
+  "artifact_path": "/Users/sirinx/Downloads/ghostclaw_repo_merge_kit_v3_3.zip",
+  "policy_evidence_path": "",
+  "artifact_gate_passed": false,
+  "policy_tests_passed": false,
+  "claims_artifact_present": false,
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false,
+    "feature_branch_creation": false,
+    "wallet_transaction": false,
+    "live_send": false
+  },
+  "notes": "Template only. Populate only after the exact local artifact exists and bundled policy test evidence is available."
+}

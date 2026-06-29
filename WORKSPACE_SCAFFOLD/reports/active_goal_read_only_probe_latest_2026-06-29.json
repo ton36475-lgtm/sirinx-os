@@ -1,0 +1,69 @@
+{
+  "artifact_candidates": [],
+  "blocked_actions": {
+    "cloud_mutation": false,
+    "customer_send": false,
+    "deploy": false,
+    "install": false,
+    "live_send": false,
+    "merge_script_execution": false,
+    "migration": false,
+    "paid_provider_call": false,
+    "push": false,
+    "runtime_queue_execution": false,
+    "secret_read": false,
+    "wallet_action": false
+  },
+  "chat_export_candidate_found": false,
+  "chat_export_candidates": [],
+  "claims_all_chats_read": false,
+  "claims_goal_complete": false,
+  "completion_blockers": [
+    {
+      "id": "BLOCK-CHAT-EXPORT",
+      "required_evidence": "Connector-backed export or metadata-only intake map from an operator-supplied export.",
+      "status": "open"
+    },
+    {
+      "id": "BLOCK-LANE1-OPUS-PACKET",
+      "required_evidence": "Final Opus architecture packet plus validated Hermes decision record.",
+      "status": "open"
+    },
+    {
+      "id": "BLOCK-HERMES-GATEWAY",
+      "required_evidence": "Read-only Hermes gateway health/status proof or approved local-only alternative.",
+      "status": "open"
+    },
+    {
+      "id": "BLOCK-V3-3-ARTIFACT",
+      "required_evidence": "Exact v3.3 zip and bundled policy test pass evidence.",
+      "status": "open"
+    },
+    {
+      "id": "BLOCK-R0-APPROVALS",
+      "required_evidence": "One valid gate-specific approval packet per R0 action.",
+      "status": "open"
+    }
+  ],
+  "exact_v3_3_artifact_found": false,
+  "external_action_authorized": false,
+  "hermes_gateway_available": false,
+  "hermes_gateway_probe": {
+    "available": false,
+    "error": "ConnectionRefusedError",
+    "host": "127.0.0.1",
+    "port": 9000
+  },
+  "install_or_migration": false,
+  "local_read_only": true,
+  "merge_script_execution": false,
+  "notes": "Read-only filename/TCP probe only. Candidate discovery does not clear blockers or authorize actions.",
+  "scanned_roots": [
+    "/Users/sirinx/Downloads",
+    "/Users/sirinx/sirinx-os",
+    "/Users/sirinx/project-hermes"
+  ],
+  "schema": "sirinx.active_goal.read_only_probe.v1",
+  "secret_like_files_read": [],
+  "status": "probe_completed_local_only"
+}

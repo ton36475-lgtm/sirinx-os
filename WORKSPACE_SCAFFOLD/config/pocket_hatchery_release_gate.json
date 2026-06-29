@@ -19,6 +19,13 @@
     "contract_action_tests",
     "rollback_plan_review"
   ],
-  "score": 34,
+  "evidence_files": {
+    "pause_unpause_tests": "WORKSPACE_SCAFFOLD/tests/test_pause_unpause.py",
+    "wallet_flow_evidence": "apps/pocket-hatchery/ops/wallet_flow_evidence.md",
+    "metadata_permission_audit": "apps/pocket-hatchery/ops/metadata_permission_audit.md",
+    "contract_action_tests": "WORKSPACE_SCAFFOLD/tests/test_pause_unpause.py",
+    "rollback_plan_review": "apps/pocket-hatchery/ops/rollback_plan_review.md"
+  },
+  "score": 84,
   "score_max": 100
 }

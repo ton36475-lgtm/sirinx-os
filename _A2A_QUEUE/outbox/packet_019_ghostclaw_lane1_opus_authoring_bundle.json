@@ -1,0 +1,36 @@
+{
+  "id": "packet_019",
+  "project": "ghostclaw",
+  "priority": "P0",
+  "title": "GhostClaw LANE_1 Opus architecture packet authoring bundle",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": true,
+  "approval_scope": "opus_authoring_bundle_review_only",
+  "current_actionable_packet": "packet_013",
+  "final_packet_record": false,
+  "decision_record": false,
+  "lane2_authorized": false,
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "customer_send": false,
+  "secret_read": false,
+  "telegram_live_send": false,
+  "external_message_send": false,
+  "input": [
+    "data/pathspecs/ghostclaw_lane1_opus_authoring_bundle_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_AUTHORING_BUNDLE_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET_GATE_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_2026-06-29.md"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json"
+  ],
+  "next_action": "Hermes/Opus reviews the local authoring bundle; final packet and Hermes decision remain separate required artifacts.",
+  "notes": "Authoring bundle only. Not a final packet, not a Hermes decision, not runtime queue execution, and not LANE_2 authorization."
+}

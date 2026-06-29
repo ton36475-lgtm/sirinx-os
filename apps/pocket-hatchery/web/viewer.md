@@ -19,4 +19,4 @@ Static, read-only creature viewer that loads `apps/pocket-hatchery/schemas/sampl
 
 - [x] Sample data exists.
 - [x] Wallet flow documented.
-- [ ] Next.js page component (pending packet_010).
+- [x] Next.js page component exists at `apps/centerbrain-shell/app/pocket-hatchery/page.tsx`.

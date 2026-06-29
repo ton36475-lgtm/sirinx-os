@@ -1,0 +1,37 @@
+{
+  "agent": "codex",
+  "approval_required": true,
+  "approval_scope": "hermes_decision_review_only",
+  "cloud_mutation": false,
+  "codex_recorder_gate_open": false,
+  "customer_send": false,
+  "decision_record": false,
+  "deploy": false,
+  "draft_decision": "route_to_opus",
+  "dry_run": true,
+  "external_message_send": false,
+  "id": "packet_015",
+  "input": [
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json"
+  ],
+  "lane2_authorized": false,
+  "live_send": false,
+  "notes": "Local outbox draft only. Hermes must record a separate final decision file before any gate state changes.",
+  "output": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_DRAFT_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_015_ghostclaw_lane1_hermes_decision_draft.json"
+  ],
+  "paid_provider_call": false,
+  "priority": "P0",
+  "project": "ghostclaw",
+  "provider_call": false,
+  "push": false,
+  "risk": "safe",
+  "runtime_queue_execution": false,
+  "secret_read": false,
+  "status": "outbox",
+  "telegram_live_send": false,
+  "title": "Draft-only Hermes decision aid for LANE_1 packet_013"
+}

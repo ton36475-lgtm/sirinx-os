@@ -3,10 +3,14 @@
 import type { CSSProperties, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import {
+  GOD_MODE_ACTIVE_GOAL_INDEX,
   GOD_MODE_AGENTS,
+  GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS,
+  GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE,
   GOD_MODE_INFRA_ENDPOINTS,
   GOD_MODE_LAYERS,
   GOD_MODE_MODEL_ROUTING,
+  GOD_MODE_POCKET_HATCHERY_RELEASE,
   GOD_MODE_PRIORITY_COLORS,
   GOD_MODE_QUEUE,
   GOD_MODE_R0_GATES,
@@ -131,7 +135,7 @@ export function GodModeMasterOS() {
       <div className="grid min-h-[calc(100vh-62px)] grid-cols-1 gap-0 xl:grid-cols-[280px_minmax(0,1fr)_260px]">
         <aside className="min-w-0 border-b border-[#0f2040] p-3.5 xl:border-b-0 xl:border-r">
           <p className="mb-2.5 text-[9px] uppercase text-slate-600" style={{ letterSpacing: "0.12em" }}>
-            Master Architecture - 6 Layers
+            Master Architecture - {GOD_MODE_LAYERS.length} Layers
           </p>
 
           {GOD_MODE_LAYERS.map((layer) => {
@@ -352,6 +356,181 @@ export function GodModeMasterOS() {
               <p className="mb-3 text-[9px] uppercase text-slate-600" style={{ letterSpacing: "0.12em" }}>
                 R0 Security Gates - human approval required before execution
               </p>
+              <section className="mb-3 rounded-lg border border-sky-900 bg-[#06101f] p-3.5">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge label="Active Goal" color="#38bdf8" />
+                      <Badge label={GOD_MODE_ACTIVE_GOAL_INDEX.status} color="#f59e0b" />
+                      <Badge
+                        label={
+                          GOD_MODE_ACTIVE_GOAL_INDEX.claimsAllChatsRead ? "all chats claimed" : "local evidence only"
+                        }
+                        color="#38bdf8"
+                      />
+                    </div>
+                    <h2 className="mt-3 text-lg font-black text-sky-100">
+                      Current packet {GOD_MODE_ACTIVE_GOAL_INDEX.currentActionablePacket}
+                    </h2>
+                    <p className="mt-1.5 text-[11px] leading-6 text-sky-700">
+                      {GOD_MODE_ACTIVE_GOAL_INDEX.nextAction}
+                    </p>
+                  </div>
+                  <div className="grid min-w-48 grid-cols-1 gap-1.5 text-[10px] sm:grid-cols-2 lg:grid-cols-1">
+                    {GOD_MODE_ACTIVE_GOAL_INDEX.blockers.map((blocker) => (
+                      <span
+                        key={blocker}
+                        className="rounded border border-amber-900 bg-[#14100a] px-2 py-1.5 font-black uppercase text-amber-300"
+                      >
+                        {blocker}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-3 grid gap-1.5">
+                  {GOD_MODE_ACTIVE_GOAL_INDEX.evidenceFiles.map((file) => (
+                    <code
+                      key={file}
+                      className="block rounded border border-sky-950 bg-[#020609] px-2.5 py-1.5 text-[10px] leading-5 text-sky-700"
+                    >
+                      {file}
+                    </code>
+                  ))}
+                </div>
+              </section>
+              <section className="mb-3 rounded-lg border border-cyan-900 bg-[#041317] p-3.5">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge label="Codex/Hermes Queue" color="#22d3ee" />
+                      <Badge label={GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.status} color="#38bdf8" />
+                      <Badge
+                        label={
+                          GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.runtimeQueueExecution
+                            ? "runtime on"
+                            : "runtime off"
+                        }
+                        color="#f59e0b"
+                      />
+                      <Badge
+                        label={
+                          GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.lane2Authorized
+                            ? "lane2 open"
+                            : "lane2 blocked"
+                        }
+                        color="#ef4444"
+                      />
+                    </div>
+                    <h2 className="mt-3 text-lg font-black text-cyan-100">
+                      {GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.length} ordered local work items
+                    </h2>
+                    <p className="mt-1.5 text-[11px] leading-6 text-cyan-700">
+                      {GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.nextAction}
+                    </p>
+                  </div>
+                  <div className="grid min-w-56 gap-1.5 text-[10px]">
+                    {GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.evidenceFiles.map((file) => (
+                      <code
+                        key={file}
+                        className="block rounded border border-cyan-950 bg-[#020708] px-2.5 py-1.5 text-[10px] leading-5 text-cyan-700"
+                      >
+                        {file}
+                      </code>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-3 rounded border border-cyan-950 bg-[#020809] p-2.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <Badge label="A2A Queue Status" color="#22d3ee" />
+                    <Badge label={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.status} color="#38bdf8" />
+                    <Badge
+                      label={
+                        GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.runtimeQueueExecution
+                          ? "runtime on"
+                          : "runtime off"
+                      }
+                      color="#f59e0b"
+                    />
+                    <Badge
+                      label={
+                        GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.hermesDecisionRecorded
+                          ? "decision recorded"
+                          : "decision pending"
+                      }
+                      color="#ef4444"
+                    />
+                  </div>
+                  <div className="mt-2 grid gap-1.5 text-[10px] text-cyan-700 sm:grid-cols-3">
+                    <span>inbox={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts.inbox}</span>
+                    <span>outbox={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts.outbox}</span>
+                    <span>working={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts.working}</span>
+                    <span>done={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts.done}</span>
+                    <span>blocked={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts.blocked}</span>
+                    <span>total={GOD_MODE_CODEX_HERMES_A2A_QUEUE_STATUS.packetCounts.total}</span>
+                  </div>
+                </div>
+                <div className="mt-3 grid gap-2 lg:grid-cols-2">
+                  {GOD_MODE_CODEX_HERMES_EXECUTION_QUEUE.items.map((item) => (
+                    <div key={item.id} className="rounded border border-cyan-950 bg-[#020809] p-2.5">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <Badge label={item.priority} color={GOD_MODE_PRIORITY_COLORS[item.priority]} />
+                        <Badge label={item.owner} color="#22d3ee" />
+                        <Badge label={item.status} color={item.status.startsWith("blocked") ? "#ef4444" : "#38bdf8"} />
+                      </div>
+                      <h3 className="mt-2 break-words text-[11px] font-black uppercase leading-5 text-cyan-200">
+                        {item.id}
+                      </h3>
+                      <p className="mt-1 text-[10px] leading-5 text-cyan-800">gate: {item.gate}</p>
+                      <p className="mt-1.5 text-[11px] leading-5 text-slate-500">{item.nextAction}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+              <section className="mb-3 rounded-lg border border-emerald-900 bg-[#06140f] p-3.5">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge label="Pocket Hatchery" color="#14b8a6" />
+                      <Badge label={GOD_MODE_POCKET_HATCHERY_RELEASE.status} color="#10b981" />
+                      <Badge
+                        label={
+                          GOD_MODE_POCKET_HATCHERY_RELEASE.externalWrites
+                            ? "external writes on"
+                            : "external writes off"
+                        }
+                        color="#10b981"
+                      />
+                    </div>
+                    <h2 className="mt-3 text-lg font-black text-emerald-100">
+                      Release evidence score {GOD_MODE_POCKET_HATCHERY_RELEASE.score}/
+                      {GOD_MODE_POCKET_HATCHERY_RELEASE.scoreMax}
+                    </h2>
+                    <p className="mt-1.5 text-[11px] leading-6 text-emerald-700">
+                      {GOD_MODE_POCKET_HATCHERY_RELEASE.nextAction}
+                    </p>
+                  </div>
+                  <div className="grid min-w-48 grid-cols-2 gap-1.5 text-[10px]">
+                    {GOD_MODE_POCKET_HATCHERY_RELEASE.blockedGates.map((gate) => (
+                      <span
+                        key={gate}
+                        className="rounded border border-red-900 bg-[#140606] px-2 py-1.5 font-black uppercase text-red-300"
+                      >
+                        {gate}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-3 grid gap-1.5">
+                  {GOD_MODE_POCKET_HATCHERY_RELEASE.evidenceFiles.map((file) => (
+                    <code
+                      key={file}
+                      className="block rounded border border-emerald-950 bg-[#020609] px-2.5 py-1.5 text-[10px] leading-5 text-emerald-700"
+                    >
+                      {file}
+                    </code>
+                  ))}
+                </div>
+              </section>
               {GOD_MODE_R0_GATES.map((gate, index) => (
                 <article
                   key={gate}

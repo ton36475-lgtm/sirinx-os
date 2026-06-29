@@ -1,0 +1,36 @@
+{
+  "id": "packet_023",
+  "project": "sirinx",
+  "priority": "P0",
+  "title": "Hermes gateway current recheck",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": true,
+  "approval_scope": "read_only_gateway_status_review_only",
+  "input": [
+    "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
+    "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
+    "data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json",
+    "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json"
+  ],
+  "target": "127.0.0.1:9000",
+  "gateway_reachable": false,
+  "blocker": "BLOCK-HERMES-GATEWAY",
+  "restart_attempted": false,
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "secret_read": false,
+  "decision_record": false,
+  "state_mutation": false,
+  "lane2_authorized": false,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "notes": "Read-only gateway blocker refresh only. It does not restart Hermes, execute a queue item, record a decision, clear blockers, or mutate state."
+}

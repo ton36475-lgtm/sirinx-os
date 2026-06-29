@@ -10,10 +10,15 @@
 - [x] Creature catalog schema validates samples.
 - [x] Metadata manifest schema defined.
 - [x] Contract action table reviewed for blocked actions.
-- [ ] Pause/unpause tests passing.
-- [ ] Wallet flow end-to-end evidence.
+- [x] Pause/unpause tests passing.
+- [x] Read-only `/pocket-hatchery` viewer builds locally.
+- [x] Public `waxwing` exposure scan evidence recorded at `WORKSPACE_SCAFFOLD/security_scan_waxwing.json`.
+- [x] Wallet flow local evidence recorded at `apps/pocket-hatchery/ops/wallet_flow_evidence.md`.
+- [x] Metadata permission audit recorded at `apps/pocket-hatchery/ops/metadata_permission_audit.md`.
+- [x] Rollback plan review recorded at `apps/pocket-hatchery/ops/rollback_plan_review.md`.
+- [ ] Wallet flow end-to-end testnet evidence (requires R0 approval).
 - [ ] Testnet deployment (requires R0 approval).
 
 ## Current Score
 
-`34/100` — architecture and guardrails strong; implementation incomplete.
+`84/100` — local evidence threshold met. This score does not approve testnet deployment, real wallet connector implementation, production release, push, or cloud mutation.

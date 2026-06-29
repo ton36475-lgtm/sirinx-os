@@ -1,0 +1,83 @@
+{
+  "id": "packet_013",
+  "project": "ghostclaw",
+  "priority": "P0",
+  "title": "Hermes gate request to open Codex-as-recorder path for LANE_1 architecture packet",
+  "agent": "hermes",
+  "status": "inbox",
+  "risk": "safe",
+  "input": [
+    "_A2A_QUEUE/inbox/packet_012_ghostclaw_lane1_hermes_draft_review.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DRAFT_REVIEW_REQUEST_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
+    "_OBSIDIAN_GHOSTCLAW_BRAIN/16_STATUS_BOARD.md"
+  ],
+  "output": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_CODEX_RECORDER_GATE_REQUEST_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md"
+  ],
+  "approval_required": true,
+  "approval_scope": "hermes_decision_only",
+  "dry_run": true,
+  "live_send": false,
+  "provider_call": false,
+  "external_message_send": false,
+  "runtime_queue_execution": false,
+  "deploy": false,
+  "push": false,
+  "lane2_authorized": false,
+  "codex_recorder_gate_requested": true,
+  "codex_recorder_gate_open": false,
+  "requested_decision": "open_codex_recorder_gate",
+  "allowed_decisions": [
+    "route_to_opus",
+    "request_revision",
+    "open_codex_recorder_gate",
+    "block"
+  ],
+  "decision_record": false,
+  "hermes_model_selection": {
+    "allowed_for_vibe_coding_drafts": true,
+    "models": "any",
+    "scope": "assist Hermes with vibe coding draft creation and architecture wording only",
+    "separate_action_gate_required": true,
+    "does_not_authorize": [
+      "deploy",
+      "push",
+      "cloud_mutation",
+      "customer_send",
+      "secret_read",
+      "runtime_queue_execution"
+    ]
+  },
+  "external_action_approval": {
+    "blanket_approval_actionable": false,
+    "requires_gate_specific_approval": true,
+    "required_fields": [
+      "gate_id",
+      "action",
+      "target",
+      "environment",
+      "rollback",
+      "evidence_path"
+    ],
+    "blocked_without_gate": [
+      "deploy",
+      "push",
+      "cloud_mutation",
+      "customer_send",
+      "secret_read",
+      "paid_provider_call"
+    ]
+  },
+  "latest_recheck": {
+    "hermes_gateway": "unreachable_127.0.0.1_9000",
+    "exact_v3_3_artifact": "not_found",
+    "chat_export": "not_found_user_export"
+  },
+  "notes": "Local file-bus gate request only. This packet requests that Hermes decide whether to open the Codex-as-recorder path. It is not a Hermes decision, does not open the gate, does not create the final Opus packet, and does not authorize LANE_2."
+}

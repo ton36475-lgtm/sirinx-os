@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "scan_id": "pocket-hatchery-public-signer-exposure-2026-06-29",
+  "generated_at": "2026-06-29T04:43:57+0700",
+  "mode": "local-only",
+  "status": "pass",
+  "target": "waxwing",
+  "scanned_paths": [
+    "apps/pocket-hatchery/web",
+    "docs"
+  ],
+  "rules": [
+    {
+      "id": "no-public-signer-codename",
+      "description": "Public-facing docs and viewer specs must not expose the office-internal signer codename.",
+      "severity": "critical",
+      "status": "pass"
+    }
+  ],
+  "findings": [],
+  "external_writes": false,
+  "verification": {
+    "command": "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_public_signer_exposure",
+    "expected_result": "pass"
+  }
+}

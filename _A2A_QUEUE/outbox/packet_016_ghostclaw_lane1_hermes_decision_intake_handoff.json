@@ -1,0 +1,52 @@
+{
+  "agent": "codex",
+  "approval_required": true,
+  "approval_scope": "hermes_decision_record_only",
+  "blocked_by": [
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY"
+  ],
+  "cloud_mutation": false,
+  "codex_recorder_gate_open": false,
+  "current_actionable_packet": "packet_013",
+  "customer_send": false,
+  "decision_path": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+  "decision_record": false,
+  "deploy": false,
+  "dry_run": true,
+  "external_message_send": false,
+  "id": "packet_016",
+  "input": [
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_intake_handoff_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INTAKE_HANDOFF_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_intake_handoff.py",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_intake_handoff.py",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json"
+  ],
+  "install": false,
+  "lane2_authorized": false,
+  "live_send": false,
+  "merge_script_execution": false,
+  "migration": false,
+  "next_validation_commands": [
+    "python3 WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+    "python3 WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py --decision docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md"
+  ],
+  "notes": "Handoff pointer only. This packet does not create a Hermes decision, does not open the Codex recorder gate, does not execute a queue item, and does not authorize LANE_2 or any external action.",
+  "output": [
+    "_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md"
+  ],
+  "paid_provider_call": false,
+  "priority": "P0",
+  "project": "ghostclaw",
+  "provider_call": false,
+  "push": false,
+  "risk": "safe",
+  "runtime_queue_execution": false,
+  "secret_read": false,
+  "status": "outbox",
+  "telegram_live_send": false,
+  "title": "Hermes decision intake handoff for LANE_1 packet_013"
+}

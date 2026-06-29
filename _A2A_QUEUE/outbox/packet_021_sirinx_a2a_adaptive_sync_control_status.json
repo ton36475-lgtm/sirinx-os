@@ -1,0 +1,52 @@
+{
+  "id": "packet_021",
+  "project": "sirinx",
+  "priority": "P0",
+  "title": "A2A adaptive sync control status",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": true,
+  "approval_scope": "read_only_status_review_only",
+  "input": [
+    "data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json",
+    "docs/knowledge/SIRINX_A2A_ADAPTIVE_SYNC_CONTROL_STATUS_2026-06-29.md",
+    "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
+    "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json"
+  ],
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "external_message_send": false,
+  "secret_read": false,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "lane2_authorized": false,
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "customer_send": false,
+  "next_safe_action": "Review packet_021 as a local status surface; choose packet_020 source receipt, packet_013 Hermes decision, v3.3 artifact gate, or R0 approval packet as separate gated work.",
+  "forbidden_actions": [
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "paid_provider_call",
+    "provider_call",
+    "runtime_queue_execution",
+    "connector_read",
+    "external_upload",
+    "telegram_live_send",
+    "external_message_send",
+    "merge_script_execution",
+    "install",
+    "migration",
+    "state_mutation",
+    "claims_all_chats_read",
+    "completion_claim"
+  ]
+}

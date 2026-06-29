@@ -1,0 +1,34 @@
+{
+  "id": "packet_022",
+  "project": "sirinx",
+  "priority": "P0",
+  "title": "A2A next safe action sequencer",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": true,
+  "approval_scope": "read_only_next_safe_action_review_only",
+  "input": [
+    "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
+    "docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json"
+  ],
+  "selected_next_lane": "record_hermes_packet_013_decision",
+  "selected_next_packet": "packet_013",
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "secret_read": false,
+  "connector_read": false,
+  "decision_record": false,
+  "state_mutation": false,
+  "lane2_authorized": false,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "notes": "Read-only sequencer packet only. It selects the next review lane but does not execute, approve, record a decision, clear blockers, or mutate state."
+}
