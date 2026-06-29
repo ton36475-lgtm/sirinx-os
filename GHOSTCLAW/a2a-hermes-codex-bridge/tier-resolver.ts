@@ -2,7 +2,7 @@
  * Tier Resolver: maps an action request to a policy tier.
  * Mirrors GHOSTCLAW autonomous-safe-execution-v3.yaml execution_matrix.
  */
-import type { A2AMessage, ActionClass, Tier, TierRule } from "./a2a-message";
+import type { A2AMessage, ActionClass, Tier, TierRule } from "./a2a-message.js";
 
 export const TIER_RULES: TierRule[] = [
   {

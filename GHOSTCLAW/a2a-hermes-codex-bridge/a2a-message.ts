@@ -102,7 +102,7 @@ export interface Receipt {
   decision_status: "allowed" | "blocked" | "simulated" | "quorum_required";
   reason: string;
   evidence_pack: Record<string, unknown>;
-  safe_replacement_action?: string;
+  safe_replacement_action?: string | undefined;
   timestamp: string;
   checksums: Record<string, string>;
 }

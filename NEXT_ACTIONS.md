@@ -1,6 +1,6 @@
 # NEXT_ACTIONS
 
-Date: 2026-06-28
+Date: 2026-06-29
 Mode: strict ordered queue
 Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
@@ -15,6 +15,12 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [x] Add missing state files (`AUTONOMOUS_RUN_LOG.md`, `SECURITY_GUARDRAILS.md`, `TASK_ROUTER.md`, `INBOX_OUTBOX_PROTOCOL.md`, `LOOP_ENGINEERING.md`).
 - [x] Update `PROJECT_STATE.md` with Pocket Hatchery as flagship MVP.
 - [x] Run `pnpm verify`, `pnpm centerbrain-shell:check`, and Python tests (16 passing).
+- [x] Add read-only Pocket Hatchery release evidence panel to GodMode Mission Control.
+- [x] Refresh GhostClaw LANE_0 status board from current repo files.
+- [x] Integrate A2A Hermes-Codex Bridge v2 under `GHOSTCLAW/a2a-hermes-codex-bridge/`.
+  - Added `packet-bus.ts` (INBOX_OUTBOX_PROTOCOL file-bus), `manifest-store.ts` (simulation manifests), `codex-sidecar.ts` (dry-run Codex CLI contract), and `integration.test.ts`.
+  - Bridge passes 21/21 vitest tests and `npx tsc --noEmit`.
+  - Default behavior is dry-run only; Tier D/X actions are blocked and simulated; Tier A/B actions produce dry-run previews and evidence packets but do not invoke real Codex CLI.
 
 ## Immediate
 
@@ -33,29 +39,183 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - File scope: `WORKSPACE_SCAFFOLD/tests/test_public_signer_exposure.py`.
   - Status: ✅ completed; test passes.
 
-- [ ] Task 2.4: Create actual Next.js creature viewer page.
+- [x] Task 2.4: Create actual Next.js creature viewer page.
   - Goal: `/pocket-hatchery` route in `apps/centerbrain-shell`.
   - File scope: `apps/centerbrain-shell/app/pocket-hatchery/page.tsx`.
-  - Status: pending; data ready.
+  - Status: ✅ completed; route builds as static content and reads `sample_creatures.json`.
 
-- [ ] Task 2.5: Generate security scan evidence report.
+- [x] Task 2.5: Generate security scan evidence report.
   - Goal: write `WORKSPACE_SCAFFOLD/security_scan_waxwing.json` with findings.
   - File scope: `WORKSPACE_SCAFFOLD/security_scan_waxwing.json`.
-  - Status: pending.
+  - Status: ✅ completed; public signer exposure sentinel passes.
 
-- [ ] Task 2.6: Push release gate score to ≥ 80.
+- [x] Task 2.6: Push release gate score to ≥ 80.
   - Goal: fill remaining required evidence (contract action tests, wallet flow evidence, metadata permission audit, rollback plan review).
   - File scope: `apps/pocket-hatchery/ops/release_gate_evidence.md`, `WORKSPACE_SCAFFOLD/config/pocket_hatchery_release_gate.json`.
-  - Status: pending.
+  - Status: ✅ completed locally; score is `84/100` with no deploy, no real wallet write, and R0 gates still blocked.
 
 ## Approval-Gated
 
 - [ ] R0-01: Approve testnet deploy of Pocket Hatchery.
 - [ ] R0-02: Approve real wallet connector implementation.
 - [ ] R0-03: Approve merge of `staging/godmode-master-os-v2` to main.
+- [x] Add R0 gate-specific approval packet contract.
+  - Status: local contract, template, and validator created; no active approval packet exists and all R0 gates remain blocked.
+  - Evidence: `data/pathspecs/sirinx_r0_gate_specific_approval_contract_2026-06-29.json`, `WORKSPACE_SCAFFOLD/scripts/validate_r0_gate_approval.py`, `WORKSPACE_SCAFFOLD/templates/r0_gate_specific_approval_packet.template.json`, `docs/knowledge/SIRINX_R0_GATE_SPECIFIC_APPROVAL_CONTRACT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_r0_gate_specific_approval_contract.py`.
 
 ## Backlog
 
+- [ ] Ingest GhostClaw YOLO v3.3 merge kit when exact local artifact is present.
+  - Expected artifact: `/Users/sirinx/Downloads/ghostclaw_repo_merge_kit_v3_3.zip`.
+  - Current status: blocked for merge because exact v3.3 artifact was not found locally after recheck.
+  - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-yolo-v3-3-staging-merge.md`.
+  - Latest preflight: `docs/knowledge/SIRINX_GHOSTCLAW_V3_3_PREFLIGHT_RECHECK_2026-06-29.md`.
+  - Artifact gate validator: `WORKSPACE_SCAFFOLD/scripts/validate_ghostclaw_v3_3_artifact_gate.py`; run only after exact artifact and local policy evidence exist.
+- [x] Prepare GhostClaw LANE_1 architecture request packet for Opus/Hermes review.
+  - Status: request packet prepared; final Opus architecture packet still pending.
+  - Evidence: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_REQUEST_2026-06-29.md`.
+- [x] Queue GhostClaw LANE_1 request for Hermes routing to Opus.
+  - Status: local inbox packet created; not live-sent and not executed by a runner.
+  - Evidence: `_A2A_QUEUE/inbox/packet_011_ghostclaw_lane1_opus_architecture.json`.
+- [x] Prepare GhostClaw LANE_1 architecture input worksheet for Hermes/Opus.
+  - Status: local worksheet and Hermes dry-run route review prepared; not the final Opus packet.
+  - Evidence: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_INPUT_WORKSHEET_2026-06-29.md`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_LOCAL_REVIEW_2026-06-29.md`.
+- [x] Record GhostClaw LANE_1 Hermes local route receipt.
+  - Status: local file-bus receipt prepared; Hermes gateway was not reachable, no restart attempted, and no live/provider/runtime action ran.
+  - Evidence: `_A2A_QUEUE/outbox/packet_011_ghostclaw_lane1_hermes_route_receipt.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_ROUTE_RECEIPT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_route_receipt.py`.
+- [x] Add active-goal completion audit.
+  - Status: audit proves the goal is still in progress and maps each major blocker to required evidence.
+  - Evidence: `docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_completion_audit.py`.
+- [x] Prepare GhostClaw LANE_1 architecture packet draft for Hermes review.
+  - Status: Codex recorder draft prepared; not final Opus packet and not LANE_2 approval.
+  - Evidence: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_architecture_draft.py`.
+- [x] Queue GhostClaw LANE_1 draft for Hermes local review.
+  - Status: local review request packet queued; not a Hermes decision and not LANE_2 approval.
+  - Evidence: `_A2A_QUEUE/inbox/packet_012_ghostclaw_lane1_hermes_draft_review.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DRAFT_REVIEW_REQUEST_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_review_request.py`.
+- [x] Prepare GhostClaw LANE_1 Hermes review decision template.
+  - Status: template ready; defaults to no decision and no LANE_2 authorization.
+  - Evidence: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md`, `WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_template.py`.
+- [x] Record Hermes model-choice permission for vibe coding drafts.
+  - Status: Hermes may choose any model for draft assistance only; no deploy, push, cloud mutation, customer send, secret read, runtime queue execution, or production action is authorized by this permission.
+  - Evidence: `data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_MODEL_CHOICE_BOUNDARY_2026-06-29.md`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md`, `WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_model_choice_boundary.py`.
+- [x] Preserve external action approval boundary.
+  - Status: blanket approval text is not executable; deploy, push, cloud mutation, customer send, secret read, and paid/provider call still require gate-specific approval.
+  - Evidence: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md`, `WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json`.
+- [x] Queue GhostClaw LANE_1 Codex recorder gate request for Hermes.
+  - Status: local inbox packet created; gate remains closed, final Opus packet missing, and LANE_2 blocked.
+  - Evidence: `_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_CODEX_RECORDER_GATE_REQUEST_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_codex_recorder_gate_request.py`.
+- [x] Add GhostClaw LANE_1 Hermes decision inbox index.
+  - Status: local index created; current actionable packet is `packet_013`, but no Hermes decision or LANE_2 authorization exists.
+  - Evidence: `data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INBOX_INDEX_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_inbox_index.py`.
+- [x] Add GhostClaw LANE_1 packet 013 offline decision workbench.
+  - Status: local workbench created for Hermes/operator review; it is not a decision, keeps recorder gate closed, and keeps LANE_2 blocked.
+  - Evidence: `data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_WORKBENCH_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_workbench.py`.
+- [x] Add GhostClaw LANE_1 packet 013 decision readiness scorecard.
+  - Status: local scorecard created for Hermes/operator review; it is not a decision, does not open the recorder gate, and keeps LANE_2 blocked.
+  - Evidence: `data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_READINESS_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_readiness.py`.
+- [x] Add GhostClaw LANE_1 Hermes decision validator.
+  - Status: local validator created for a future decision artifact; missing decision returns blocked, not success, and no gate is opened.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_VALIDATOR_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_validator.py`.
+- [x] Add GhostClaw LANE_1 packet 013 Hermes decision draft.
+  - Status: local draft aid created for Hermes review; it is rejected by the final decision validator, keeps `decision_record=false`, keeps the Codex recorder gate closed, and does not authorize provider/runtime/external actions.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_draft.py`, `data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_DRAFT_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_015_ghostclaw_lane1_hermes_decision_draft.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_draft.py`.
+- [x] Add GhostClaw LANE_1 Hermes decision intake handoff.
+  - Status: local handoff created for the missing `packet_013` decision; it lists the future decision path, required fields, evidence paths, validator command, and transition-guard command without creating a decision or mutating queue state.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_intake_handoff.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_intake_handoff_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INTAKE_HANDOFF_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_intake_handoff.py`.
+- [x] Add GhostClaw LANE_1 Hermes decision handoff outbox packet.
+  - Status: `packet_016` created as local file-bus evidence only; it points to the decision intake handoff but is not a Hermes decision, does not execute a queue item, does not open the Codex recorder gate, and does not authorize LANE_2 or external actions.
+  - Evidence: `_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_handoff_packet.py`, `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json`, `docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md`.
+- [x] Add GhostClaw LANE_1 Hermes decision preflight audit.
+  - Status: `packet_017` created as local file-bus evidence only; it confirms local review evidence is ready for Hermes decision review but is not a Hermes decision, does not execute a queue item, does not open the Codex recorder gate, does not create the final Opus packet, and does not authorize LANE_2 or external actions.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_preflight_audit_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py`.
+- [x] Add GhostClaw LANE_1 Opus architecture packet gate validator.
+  - Status: `packet_018` created as local file-bus evidence only; it validates a future final Opus packet shape after separate Hermes/Opus evidence exists, but it is not the final packet, not a Hermes decision, does not execute a queue item, does not open the Codex recorder gate, and does not authorize LANE_2 or external actions.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/validate_lane1_opus_architecture_packet.py`, `data/pathspecs/ghostclaw_lane1_opus_architecture_packet_gate_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET_GATE_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_opus_architecture_packet_gate.py`.
+- [x] Add GhostClaw LANE_1 Opus authoring bundle.
+  - Status: `packet_019` created as local file-bus evidence only; it gives Hermes/Opus a compact authoring bundle but is not the final packet, not a Hermes decision, does not execute a queue item, does not open the Codex recorder gate, and does not authorize LANE_2 or external actions.
+  - Evidence: `data/pathspecs/ghostclaw_lane1_opus_authoring_bundle_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_AUTHORING_BUNDLE_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_opus_authoring_bundle.py`.
+- [x] Add GhostClaw LANE_1 Hermes decision transition guard.
+  - Status: local guard created and generated in `blocked_missing_hermes_decision`; it writes fail-closed evidence but does not create a Hermes decision, mutate queue state, open the Codex recorder gate, authorize LANE_2, or permit provider/runtime/external actions.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_transition_guard.py`.
+- [x] Recheck Hermes gateway read-only status.
+  - Status: `127.0.0.1:9000` unreachable; `BLOCK-HERMES-GATEWAY` remains open; no restart, provider call, runtime queue execution, or external send was attempted.
+  - Evidence: `data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_RECHECK_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_recheck.py`.
+- [x] Refresh active-goal blockers from current read-only probes.
+  - Status: Hermes gateway remains unreachable, exact v3.3 artifact and ChatGPT export candidates remain missing, and all completion blockers stay open.
+  - Evidence: `data/pathspecs/sirinx_active_goal_current_blocker_refresh_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_CURRENT_BLOCKER_REFRESH_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_current_blocker_refresh.py`.
+- [x] Add all-chat export intake contract.
+  - Status: local intake contract created; prepares `repo/path/status/blocker/next_action/source` mapping but does not load raw chats or claim all chats were read.
+  - Evidence: `data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json`, `docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_CONTRACT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_all_chat_export_intake_contract.py`.
+- [x] Add all-chat export intake mapper.
+  - Status: local metadata-only mapper created for a future operator-supplied export; no real export loaded, no raw chat content written, and all-chat coverage remains blocked.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_all_chat_export_intake_map.py`, `data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json`, `docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_MAPPER_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_all_chat_export_intake_mapper.py`.
+- [x] Add all-chat export request packet.
+  - Status: `packet_020` created as local outbox request evidence only; it asks for an operator-supplied ChatGPT export path or explicitly authorized read-only connector scope and does not load raw chat content, perform connector reads, call providers, or claim all chats were read.
+  - Evidence: `data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json`, `docs/knowledge/SIRINX_ALL_CHAT_EXPORT_REQUEST_PACKET_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json`, `WORKSPACE_SCAFFOLD/tests/test_all_chat_export_request_packet.py`.
+- [x] Add A2A adaptive sync control status packet.
+  - Status: `packet_021` created as local outbox status evidence only; it summarizes current Codex/Hermes file-bus state and keeps runtime queue execution, provider calls, connector reads, external sends, state mutation, LANE_2 authorization, and all-chat claims blocked.
+  - Evidence: `data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json`, `docs/knowledge/SIRINX_A2A_ADAPTIVE_SYNC_CONTROL_STATUS_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json`, `WORKSPACE_SCAFFOLD/tests/test_a2a_adaptive_sync_control_status_packet.py`.
+- [x] Recheck Hermes/Codex/A2A Godmode v3 HTML source.
+  - Status: local HTML source read; topology and No-Ask boundary captured, but it is not the v3.3 merge kit and does not clear `BLOCK-V3-3-ARTIFACT`.
+  - Evidence: `data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_CODEX_A2A_GODMODE_V3_HTML_RECHECK_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_hermes_codex_a2a_godmode_html_recheck.py`.
+- [x] Add GhostClaw YOLO v3.3 artifact gate validator.
+  - Status: metadata-only validator created; exact artifact still missing, no zip extracted into repo, no merge script, no feature branch, and no backend merge executed.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/validate_ghostclaw_v3_3_artifact_gate.py`, `data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_V3_3_ARTIFACT_GATE_VALIDATOR_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_ghostclaw_v3_3_artifact_gate_validator.py`.
+- [x] Recheck active-goal blockers from current local state.
+  - Status: current probes confirm Hermes gateway exit code 7, no exact v3.3 artifact/export candidates, stale `project-hermes` board health versus current curl, and all completion blockers remain open.
+  - Evidence: `data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_RECHECK_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_recheck.py`.
+- [x] Add active-goal blocker clearance validator.
+  - Status: local validator created for one proposed blocker clearance packet; it does not clear blockers, mark the goal complete, approve all, or authorize external actions.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/validate_active_goal_blocker_clearance.py`, `data/pathspecs/sirinx_active_goal_blocker_clearance_validator_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_VALIDATOR_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_clearance_validator.py`.
+- [x] Add active-goal read-only blocker probe runner.
+  - Status: local runner created for repeatable filename/TCP blocker probes; latest report still shows no exact v3.3 artifact candidate, no ChatGPT export candidate, and Hermes gateway connection refused.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py`, `data/pathspecs/sirinx_active_goal_read_only_probe_runner_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_READ_ONLY_PROBE_RUNNER_2026-06-29.md`, `WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_read_only_probe_runner.py`.
+- [x] Add active-goal completion requirements matrix.
+  - Status: requirement-level matrix created; it maps the full active objective to current evidence and keeps completion blocked until all-chat export, final LANE_1 packet, Hermes gateway proof, v3.3 artifact, and R0 approvals exist.
+  - Evidence: `data/pathspecs/sirinx_active_goal_completion_requirements_matrix_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_REQUIREMENTS_MATRIX_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_completion_requirements_matrix.py`.
+- [x] Add active-goal context packet registry.
+  - Status: local source registry created with owner, freshness, permission, confidence, relevance, and expiry metadata; does not claim all chats were read.
+  - Evidence: `data/pathspecs/sirinx_active_goal_context_packet_registry_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_CONTEXT_PACKET_REGISTRY_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_context_packet_registry.py`.
+- [x] Add active-goal source-file receipt.
+  - Status: local scan receipt created for the user-named files; only the equivalent HTML topology source exists locally, while backend/PDF/SKILL/TODO/zip inputs remain current-local missing and cannot be counted as read.
+  - Evidence: `data/pathspecs/sirinx_active_goal_source_file_receipt_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_SOURCE_FILE_RECEIPT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_source_file_receipt.py`.
+- [x] Add active-goal local evidence durability manifest.
+  - Status: manifest records ignored `data/pathspecs/*.json` artifacts and doc mirrors for review; it does not force-add ignored data, claim completion, or open any external gate.
+  - Evidence: `WORKSPACE_SCAFFOLD/manifests/active_goal_local_evidence_durability_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_LOCAL_EVIDENCE_DURABILITY_MANIFEST_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_local_evidence_durability_manifest.py`.
+- [x] Add active-goal systematic work index.
+  - Status: local machine-readable index created; objective remains in progress, and all-chat coverage remains blocked on export/connector source.
+  - Evidence: `data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json`, `docs/knowledge/SIRINX_ACTIVE_GOAL_SYSTEMATIC_WORK_INDEX_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_active_goal_systematic_work_index.py`.
+- [x] Surface active-goal systematic work index in GodMode Mission Control.
+  - Status: static read-only data and R0 tab panel added; no runtime file access or command execution.
+  - Evidence: `apps/centerbrain-shell/src/lib/god-mode-master-os.ts`, `apps/centerbrain-shell/app/ui/GodModeMasterOS.tsx`, `apps/centerbrain-shell/src/lib/god-mode-master-os.test.ts`.
+- [x] Add Codex/Hermes execution queue.
+  - Status: local machine-readable queue created; orders current Codex/Hermes work without claiming all-chat coverage, opening the Codex recorder gate, or authorizing runtime queue execution.
+  - Evidence: `data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json`, `docs/knowledge/SIRINX_CODEX_HERMES_EXECUTION_QUEUE_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_codex_hermes_execution_queue.py`.
+- [x] Add Codex/Hermes Telegram-safe work report draft.
+  - Status: local draft builder and contract created; report delivery remains `telegram-draft` and no live-send, provider call, runtime queue execution, deploy, push, cloud mutation, customer send, secret read, install, migration, or wallet action is authorized.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_work_report.py`, `data/pathspecs/sirinx_codex_hermes_work_report_contract_2026-06-29.json`, `docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_DRAFT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_codex_hermes_work_report.py`.
+- [x] Add Codex/Hermes work report outbox packet.
+  - Status: `packet_014` created as local file-bus evidence only; it does not send Telegram, create a Hermes decision, open the Codex recorder gate, or authorize LANE_2.
+  - Evidence: `_A2A_QUEUE/outbox/packet_014_codex_hermes_work_report_draft.json`, `docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_PACKET_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_codex_hermes_work_report_packet.py`.
+- [x] Surface Codex/Hermes work report draft in GodMode Mission Control.
+  - Status: static read-only queue item added; no runtime file access, queue execution, Telegram send, provider call, or gate unlock.
+  - Evidence: `apps/centerbrain-shell/src/lib/god-mode-master-os.ts`, `apps/centerbrain-shell/src/lib/god-mode-master-os.test.ts`.
+- [x] Surface Codex/Hermes execution queue in GodMode Mission Control.
+  - Status: static read-only queue panel added in the R0 tab; no runtime file access, queue execution, Hermes decision creation, or LANE_2 authorization.
+  - Evidence: `apps/centerbrain-shell/src/lib/god-mode-master-os.ts`, `apps/centerbrain-shell/app/ui/GodModeMasterOS.tsx`, `apps/centerbrain-shell/src/lib/god-mode-master-os.test.ts`.
+- [x] Add Codex/Hermes A2A queue status snapshot.
+  - Status: `_A2A_QUEUE` indexed as local file-bus evidence only; `packet_013` remains in inbox, `packet_016` is outbox handoff evidence, `packet_017` is outbox preflight audit evidence, `packet_018` is outbox Opus packet gate evidence, `packet_019` is outbox Opus authoring bundle evidence, `packet_020` is all-chat export request evidence, `packet_021` is adaptive sync control status evidence, `packet_022` is next-safe-action sequencer evidence, `packet_023` is Hermes gateway current recheck evidence, counts are `inbox=4 outbox=11 working=1 done=8 blocked=0 total=24`, no Hermes decision exists, no final Opus packet exists, no all-chat export has been loaded, no runtime queue execution occurred, and LANE_2 remains blocked.
+  - Evidence: `WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py`, `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json`, `docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md`, `WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json`, `_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json`, `_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json`, `_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json`, `_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json`, `_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json`, `_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json`, `_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json`, `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`, `WORKSPACE_SCAFFOLD/tests/test_codex_hermes_a2a_queue_status.py`, `WORKSPACE_SCAFFOLD/tests/test_all_chat_export_request_packet.py`, `WORKSPACE_SCAFFOLD/tests/test_a2a_adaptive_sync_control_status_packet.py`, `WORKSPACE_SCAFFOLD/tests/test_a2a_next_safe_action_sequencer_packet.py`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py`.
+- [x] Add A2A next-safe-action sequencer packet.
+  - Status: `packet_022` selects `record_hermes_packet_013_decision` as the next local lane for review; it does not record a decision, execute queue items, mutate state, call providers, authorize LANE_2, or claim completion.
+  - Evidence: `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json`, `docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json`, `WORKSPACE_SCAFFOLD/tests/test_a2a_next_safe_action_sequencer_packet.py`.
+- [x] Add Hermes gateway current recheck packet.
+  - Status: `packet_023` records current read-only localhost gateway probes; `127.0.0.1:9000` is still unreachable, no restart was attempted, no decision was recorded, no queue item executed, and `BLOCK-HERMES-GATEWAY` remains open.
+  - Evidence: `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py`.
+- [ ] Produce GhostClaw LANE_1 Opus architecture packet.
+  - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
+  - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.
+  - Constraint: Codex does not begin LANE_2 until Hermes approves this packet.
 - [ ] LatentMAS transport research (docs-only until benchmark proof).
 - [ ] Oracle Memory ψ Vault schema design.
 - [ ] 21-agent identity routing wire-up.

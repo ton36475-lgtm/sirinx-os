@@ -3,8 +3,8 @@
  * No real shell execution. Returns a BrokerVerdict + Receipt.
  */
 import { createHash, randomUUID } from "crypto";
-import type { A2AMessage, ActionClass, AgentRole, BrokerVerdict, Receipt, Tier } from "./a2a-message";
-import { classifyMessage, resolveActionClass } from "./tier-resolver";
+import type { A2AMessage, ActionClass, AgentRole, BrokerVerdict, Receipt, Tier } from "./a2a-message.js";
+import { classifyMessage, resolveActionClass } from "./tier-resolver.js";
 
 export const HARD_DENY_ACTIONS = new Set([
   "jailbreak_execution",
