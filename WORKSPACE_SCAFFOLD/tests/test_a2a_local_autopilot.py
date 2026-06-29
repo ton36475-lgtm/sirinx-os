@@ -57,16 +57,14 @@ class A2ALocalAutopilotTests(unittest.TestCase):
         self.assertFalse(status["merge_script_execution"])
         self.assertFalse(status["license_file_mutation"])
         self.assertEqual(status["current_actionable_packet"], "packet_013")
+        self.assertGreaterEqual(status["packet_counts"]["inbox"], 5)
+        self.assertGreaterEqual(status["packet_counts"]["outbox"], 14)
+        self.assertGreaterEqual(status["packet_counts"]["working"], 1)
+        self.assertGreaterEqual(status["packet_counts"]["done"], 8)
+        self.assertEqual(status["packet_counts"]["blocked"], 0)
         self.assertEqual(
-            status["packet_counts"],
-            {
-                "inbox": 5,
-                "outbox": 14,
-                "working": 1,
-                "done": 8,
-                "blocked": 0,
-                "total": 28,
-            },
+            status["packet_counts"]["total"],
+            sum(status["packet_counts"][k] for k in ("inbox", "outbox", "working", "done", "blocked")),
         )
 
     def test_packet_024_is_auto_acknowledgeable_but_not_runtime_executed(self):

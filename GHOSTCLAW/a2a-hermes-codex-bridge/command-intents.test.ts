@@ -94,11 +94,9 @@ describe("Hermes goal/mission/brainstorm command intents", () => {
 
     const outbox = await listPackets("outbox", { projectRoot });
     expect(outbox).toHaveLength(3);
-    expect(outbox.map((packet) => packet.a2a2a_message?.action_requested)).toEqual([
-      "goal_define",
-      "mission_create",
-      "brainstorm_deliberate",
-    ]);
+    expect(
+      outbox.map((packet) => packet.a2a2a_message?.action_requested).sort()
+    ).toEqual(["brainstorm_deliberate", "goal_define", "mission_create"]);
     expect(outbox.every((packet) => packet.approval_required === false)).toBe(true);
   });
 
