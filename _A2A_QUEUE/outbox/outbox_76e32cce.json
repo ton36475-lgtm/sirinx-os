@@ -1,0 +1,70 @@
+{
+  "project": "ghostclaw-a2a2a",
+  "priority": "P1",
+  "title": "codex-sidecar:file_read:D-545a3cda",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "input": [
+    "GHOSTCLAW/a2a-hermes-codex-bridge/README.md"
+  ],
+  "output": [],
+  "approval_required": false,
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-21b7f59f",
+    "correlation_id": "sirinx-a2a2a-a679ca2a",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "mission-commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build-captain"
+    },
+    "action_requested": "file_read",
+    "context": {
+      "goal": "A2A bridge dry-run",
+      "files": [
+        "GHOSTCLAW/a2a-hermes-codex-bridge/README.md"
+      ],
+      "lane": "GHOSTCLAW/a2a-hermes-codex-bridge",
+      "constraints": []
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-06-29T09:56:16.893Z",
+    "ttl_seconds": 600,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "receipt": {
+    "schema": "ghostclaw.receipt.v3_2",
+    "decision_id": "D-545a3cda",
+    "correlation_id": "sirinx-a2a2a-a679ca2a",
+    "mission_id": "M-21b7f59f",
+    "requester_agent": "hermes-commander",
+    "approver_agent": "codex-captain",
+    "action_class": "READ",
+    "final_tier": "A",
+    "decision_status": "allowed",
+    "reason": "auto_execute:A:READ",
+    "evidence_pack": {
+      "action_requested": "file_read",
+      "lane": "GHOSTCLAW/a2a-hermes-codex-bridge",
+      "files": [
+        "GHOSTCLAW/a2a-hermes-codex-bridge/README.md"
+      ]
+    },
+    "timestamp": "2026-06-29T09:56:16.895Z",
+    "checksums": {
+      "context_goal_sha256": "1d681f3160fc9875f7be2f9fb3b77d092d416797f5ed8193cb4412c26f54d858",
+      "action_requested_sha256": "ef8ad7d52ab35c3c20f376db557f46e847102e1a66ab8650a08fd1baf121fd64"
+    }
+  },
+  "notes": "tier=A; reason=auto_execute:A:READ; real_exec=false",
+  "id": "outbox_76e32cce",
+  "created_at": "2026-06-29T09:56:16.895Z"
+}

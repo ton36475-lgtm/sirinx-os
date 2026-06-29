@@ -1,0 +1,72 @@
+{
+  "project": "ghostclaw-a2a2a",
+  "priority": "P1",
+  "title": "codex-sidecar:generic_push:D-a90b09c0",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "critical",
+  "input": [
+    "GHOSTCLAW/a2a-hermes-codex-bridge/README.md"
+  ],
+  "output": [],
+  "approval_required": true,
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-6f8897be",
+    "correlation_id": "sirinx-a2a2a-ec4cbad1",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "mission-commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build-captain"
+    },
+    "action_requested": "generic_push",
+    "context": {
+      "goal": "A2A bridge dry-run",
+      "files": [
+        "GHOSTCLAW/a2a-hermes-codex-bridge/README.md"
+      ],
+      "lane": "GHOSTCLAW/a2a-hermes-codex-bridge",
+      "constraints": []
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-06-29T09:56:16.900Z",
+    "ttl_seconds": 600,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "receipt": {
+    "schema": "ghostclaw.receipt.v3_2",
+    "decision_id": "D-a90b09c0",
+    "correlation_id": "sirinx-a2a2a-ec4cbad1",
+    "mission_id": "M-6f8897be",
+    "requester_agent": "hermes-commander",
+    "approver_agent": "codex-captain",
+    "action_class": "PUSH",
+    "final_tier": "X",
+    "decision_status": "simulated",
+    "reason": "hard_block:PUSH",
+    "evidence_pack": {
+      "action_requested": "generic_push",
+      "lane": "GHOSTCLAW/a2a-hermes-codex-bridge",
+      "files": [
+        "GHOSTCLAW/a2a-hermes-codex-bridge/README.md"
+      ],
+      "safe_replacement": "staging_dry_run"
+    },
+    "safe_replacement_action": "staging_dry_run",
+    "timestamp": "2026-06-29T09:56:16.900Z",
+    "checksums": {
+      "context_goal_sha256": "1d681f3160fc9875f7be2f9fb3b77d092d416797f5ed8193cb4412c26f54d858",
+      "action_requested_sha256": "cd3150e65c2af0e965d5f16093f163c339fa19f0089b1f9b06d6887fc5d7132d"
+    }
+  },
+  "notes": "tier=X; reason=hard_block:PUSH; real_exec=false",
+  "id": "outbox_4cef7180",
+  "created_at": "2026-06-29T09:56:16.900Z"
+}
