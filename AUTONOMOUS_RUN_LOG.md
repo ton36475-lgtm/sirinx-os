@@ -2345,6 +2345,28 @@
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
 
+## Run 2026-06-30T08:08:00+07:00 — Final Receipt Commit Hash Resolution
+
+- **Agent:** Codex local worker
+- **Mode:** local-only receipt finalization, no push
+- **Scope:** Prevent a self-referential receipt hash loop by treating `commit_hash` as the validated scoped local commit reported by the receipt, not the hash of a later receipt-finalization commit.
+
+### Changes
+
+- Added `commit_hash_resolution` to `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`.
+- Updated `GHOSTCLAW/receipts/final-receipt-validator.mjs` to verify that `commit_hash` resolves to a real local git commit.
+
+### Verification
+
+- `node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `python3 -m json.tool .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and no errors.
+- `git cat-file -t a70f947^{commit}` — passed and returned `commit`.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
+
 ## Run 2026-06-30T08:05:00+07:00 — Final Receipt Contract Validator
 
 - **Agent:** Codex local worker

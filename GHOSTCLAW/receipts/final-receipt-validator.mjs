@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 const repoRoot = process.cwd();
 const defaultReceiptPath = ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json";
@@ -44,6 +45,20 @@ function validateSmokeReceipt(receipt, errors) {
   pushIfMissing(errors, stepByName.blocker_found?.status === "pass", "browser smoke did not prove blocker text");
   pushIfMissing(errors, (smokeReceipt.console_errors || []).length === 0, "browser smoke console errors are not zero");
   pushIfMissing(errors, (smokeReceipt.page_errors || []).length === 0, "browser smoke page errors are not zero");
+}
+
+function validateCommitHash(receipt, errors) {
+  if (!String(receipt.commit_status || "").includes("committed")) return;
+
+  const commitHash = String(receipt.commit_hash || "");
+  pushIfMissing(errors, /^[0-9a-f]{7,40}$/.test(commitHash), "commit_status is committed but commit_hash is missing or invalid");
+  if (!/^[0-9a-f]{7,40}$/.test(commitHash)) return;
+
+  const result = spawnSync("git", ["cat-file", "-e", `${commitHash}^{commit}`], {
+    cwd: repoRoot,
+    stdio: "ignore"
+  });
+  pushIfMissing(errors, result.status === 0, `commit_hash does not resolve to a local commit: ${commitHash}`);
 }
 
 export function validateFinalReceipt(receipt) {
@@ -133,9 +148,7 @@ export function validateFinalReceipt(receipt) {
     pushIfMissing(errors, safety[key] === true, `safety flag is not true: ${key}`);
   }
 
-  if (String(receipt.commit_status || "").includes("committed")) {
-    pushIfMissing(errors, /^[0-9a-f]{7,40}$/.test(String(receipt.commit_hash || "")), "commit_status is committed but commit_hash is missing or invalid");
-  }
+  validateCommitHash(receipt, errors);
 
   validateSmokeReceipt(receipt, errors);
 

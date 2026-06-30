@@ -6,8 +6,8 @@
   "requester_agent": "codex",
   "approver_agent": "hermes",
   "self_approval_allowed": false,
-  "timestamp": "2026-06-30T00:49:47Z",
-  "local_timestamp": "2026-06-30T07:49:47+0700",
+  "timestamp": "2026-06-30T00:56:33Z",
+  "local_timestamp": "2026-06-30T07:56:33+0700",
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
   "phases": {
@@ -29,7 +29,7 @@
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
     "phase_17_final_receipt": "updated_current_turn",
-    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_43e4c76"
+    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_a70f947"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -260,9 +260,15 @@
     }
   },
   "commit_status": "committed_current_turn",
-  "commit_hash": "43e4c76",
-  "commit_message": "feat(ghostclaw): record browser smoke and commit gates",
-  "commit_reason": "Scoped local commit completed after validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-browser-smoke-20260630-001.",
+  "commit_hash": "a70f947",
+  "commit_message": "test(ghostclaw): validate final receipt contract",
+  "commit_reason": "Latest scoped local commit completed after final receipt validator checks, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-final-receipt-validator-20260630-001.",
+  "commit_hash_resolution": {
+    "hash_scope": "validated_scoped_local_commit_reported_by_this_receipt",
+    "reported_commit_hash": "a70f947",
+    "self_reference_policy": "Do not chase the hash of a later receipt-finalization commit; that would create an endless self-referential receipt update loop.",
+    "latest_head_can_differ_after_receipt_finalization": true
+  },
   "next_safe_actions": [
     "Review one external repo install approval template at a time if installation is desired.",
     "Start the local dashboard before rerunning Browser Use smoke for /god-mode.",
