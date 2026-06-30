@@ -2504,6 +2504,7 @@
 - Added `GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs`.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json`.
 - Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 8 MoA schema, policy, protocol, docs, skill, and test markers.
+- Created scoped local source commit `a843530` (`test(ghostclaw): validate moa brainstorm contract`).
 
 ### Verification
 
