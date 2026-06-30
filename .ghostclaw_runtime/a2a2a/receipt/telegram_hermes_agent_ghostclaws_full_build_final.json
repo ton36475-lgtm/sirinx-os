@@ -29,7 +29,7 @@
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
     "phase_17_final_receipt": "updated_current_turn",
-    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_1dcc709"
+    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_516c8ff"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -555,12 +555,13 @@
     }
   },
   "commit_status": "committed_current_turn",
-  "commit_hash": "1dcc709",
+  "commit_hash": "516c8ff",
   "commit_message": "test(ghostclaw): validate model router contract",
   "commit_reason": "Latest scoped local commit completed after Phase 6 Model Router contract validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-phase6-model-router-20260630-001.",
   "commit_hash_resolution": {
     "hash_scope": "validated_scoped_local_commit_reported_by_this_receipt",
-    "reported_commit_hash": "1dcc709",
+    "reported_commit_hash": "516c8ff",
+    "source_commit_subject": "test(ghostclaw): validate kimi worker contract",
     "self_reference_policy": "Do not chase the hash of a later receipt-finalization commit; that would create an endless self-referential receipt update loop.",
     "latest_head_can_differ_after_receipt_finalization": true
   },
@@ -605,6 +606,9 @@
       "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase7 kimi)"
     ],
     "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json",
-    "local_commit_approval_status": "approved_tier_B_non_self_approval"
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "source_commit_hash": "516c8ff",
+    "source_commit_subject": "test(ghostclaw): validate kimi worker contract",
+    "commit_status": "committed_current_turn"
   }
 }

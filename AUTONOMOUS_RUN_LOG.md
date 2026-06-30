@@ -2477,6 +2477,7 @@
 - Added `GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs`.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json`.
 - Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 7 Kimi schema, policy, registry, skill, and test markers.
+- Created scoped local source commit `516c8ff` (`test(ghostclaw): validate kimi worker contract`).
 
 ### Verification
 
