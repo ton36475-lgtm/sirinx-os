@@ -1,0 +1,20 @@
+{
+  "schema": "ghostclaw.receipt.v2",
+  "receipt_id": "rcp_1782780919384_lcf5wx",
+  "decision_id": "decision-local-commit-final-receipt-validator-20260630-001",
+  "timestamp": "2026-06-30T00:55:19.384Z",
+  "evaluation": {
+    "status": "approved",
+    "final_tier": "B",
+    "effective_score": 94,
+    "display_score": 94,
+    "confidence_label": "A",
+    "human_approval_required": false,
+    "reason": "autonomous_mutual_approval_passed"
+  },
+  "context": {
+    "requester": "codex",
+    "approver": "hermes",
+    "action": "local_commit_allowed_scope"
+  }
+}

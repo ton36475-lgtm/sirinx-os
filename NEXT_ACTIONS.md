@@ -27,6 +27,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: `local_commit_allowed_scope` now rejects failed validation, disallowed file scope, and blocked actions before approval.
   - Evidence: `GHOSTCLAW/agents/auto-approve-engine.mjs`, `GHOSTCLAW/agents/auto-approve-engine.test.mjs`, `.ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json`.
   - Verification: `pnpm vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` passed, 1 file / 14 tests.
+- [x] Add GhostClaw final receipt validator.
+  - Status: Phase 17 receipt fields and Browser Use smoke proof can now be checked directly from disk.
+  - Evidence: `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`.
+  - Verification: `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` returned `ok=true`.
 - [x] Integrate GhostClaws GodMode Mission Control UI + CenterBrain hub runtime bridge.
 - [x] Push GodMode changes to `staging/godmode-master-os-v2`.
 - [x] Integrate Pocket Hatchery Agent Factory v4 scaffold.

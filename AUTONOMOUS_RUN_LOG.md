@@ -2344,3 +2344,24 @@
 ### Blocked Actions
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
+
+## Run 2026-06-30T08:05:00+07:00 — Final Receipt Contract Validator
+
+- **Agent:** Codex local worker
+- **Mode:** local-only receipt validation, no external execution
+- **Scope:** Add a dependency-free validator for the AGENT GHOSTCLAWS final receipt so Phase 17 fields and Browser Use smoke evidence are checked from disk instead of inferred.
+
+### Changes
+
+- Added `GHOSTCLAW/receipts/final-receipt-validator.mjs`.
+- Updated `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` with explicit Phase 17 aliases for `files_changed`, status fields, `validations_run`, and `validation_results`.
+
+### Verification
+
+- `node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `python3 -m json.tool .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and no errors.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.

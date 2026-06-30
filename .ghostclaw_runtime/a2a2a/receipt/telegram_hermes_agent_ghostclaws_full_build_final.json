@@ -6,8 +6,8 @@
   "requester_agent": "codex",
   "approver_agent": "hermes",
   "self_approval_allowed": false,
-  "timestamp": "2026-06-30T00:46:38Z",
-  "local_timestamp": "2026-06-30T07:46:38+0700",
+  "timestamp": "2026-06-30T00:49:47Z",
+  "local_timestamp": "2026-06-30T07:49:47+0700",
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
   "phases": {
@@ -29,7 +29,7 @@
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
     "phase_17_final_receipt": "updated_current_turn",
-    "phase_18_stage_commit": "local_commit_gate_approved_pending_staged_scope_verification"
+    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_43e4c76"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -42,6 +42,7 @@
     ".ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json",
     ".ghostclaw_runtime/a2a2a/receipts/external_repo_install_approval_templates_20260630T001415Z.json",
     ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs",
     "GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json",
     "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-1782779510569.png",
     "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png"
@@ -55,6 +56,22 @@
     ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
     "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
   ],
+  "files_created": {
+    "source_field": "current_turn_files_created",
+    "count": 9
+  },
+  "files_modified": {
+    "source_field": "current_turn_files_modified",
+    "count": 7
+  },
+  "files_changed": {
+    "created_count": 9,
+    "modified_count": 7,
+    "source_fields": [
+      "current_turn_files_created",
+      "current_turn_files_modified"
+    ]
+  },
   "workers_created_or_present": [
     "Hermes Commander",
     "Codex Builder",
@@ -86,6 +103,14 @@
     "github_toptrend_worker_status": "present_public_metadata_only_no_clone_or_install",
     "edgeone_readiness_status": "r3_readiness_only_no_deploy"
   },
+  "workers_created": "see workers_created_or_present",
+  "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
+  "vibe_agent_status": "present",
+  "a2a_sync_status": "probe_only_local_mailbox_workers_present",
+  "model_swap_status": "validated_current_turn",
+  "kimi_worker_status": "present_policy_only_no_live_model_call",
+  "skill_created": "skill_file_present",
+  "edgeone_readiness_status": "r3_readiness_only_no_deploy",
   "validations_run_current_turn": [
     {
       "name": "a2a2a_schema_json",
@@ -144,8 +169,27 @@
       "name": "diff_check",
       "command": "git diff --check",
       "result": "passed"
+    },
+    {
+      "name": "final_receipt_validator",
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "result": "passed_ok_true_errors_empty"
     }
   ],
+  "validations_run": "see validations_run_current_turn",
+  "validation_results": {
+    "a2a2a_schema_json": "passed",
+    "a2a2a_template_json": "passed",
+    "auto_approve_engine": "passed_1_file_14_tests",
+    "local_commit_allowed_scope_decision": "approved_tier_B_non_self_approval",
+    "model_router": "passed_1_file_23_tests",
+    "latentmas_cargo_offline": "passed",
+    "latentmas_python_compile": "passed",
+    "latentmas_gateway_direct_test": "passed_1_file_3_tests",
+    "browser_use_smoke": "passed_http_200_r0_tab_click_active_goal_packet_013_blocker_no_console_or_page_errors",
+    "diff_check": "passed",
+    "final_receipt_validator": "passed_ok_true_errors_empty"
+  },
   "blocked_actions": [
     "push",
     "deploy",
@@ -215,8 +259,10 @@
       "approval_phrase_required": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE"
     }
   },
-  "commit_status": "pending_scoped_local_commit",
-  "commit_reason": "Local commit gate decision-local-commit-browser-smoke-20260630-001 approved tier B with non-self approval; scoped staged-file verification must pass before git commit.",
+  "commit_status": "committed_current_turn",
+  "commit_hash": "43e4c76",
+  "commit_message": "feat(ghostclaw): record browser smoke and commit gates",
+  "commit_reason": "Scoped local commit completed after validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-browser-smoke-20260630-001.",
   "next_safe_actions": [
     "Review one external repo install approval template at a time if installation is desired.",
     "Start the local dashboard before rerunning Browser Use smoke for /god-mode.",
