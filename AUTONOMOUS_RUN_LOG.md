@@ -2478,6 +2478,7 @@
 - Added `GHOSTCLAW/vibe/vibe-agent-router.test.mjs` with 5 focused tests for parsing, mutual approval, self-approval rejection, blocked receipt archiving, and dry-run behavior.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json`.
 - Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 5 parser/router/template/test markers.
+- Created scoped local source commit `dd4903c` (`test(ghostclaw): validate vibe agent contract`).
 
 ### Verification
 

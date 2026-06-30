@@ -275,7 +275,7 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Evidence: `.ghostclaw/policies/a2a-gate-policy.v1.yaml`, `.ghostclaw_runtime/queue/hermes/inbox/hermes-a2a-safe-boot-queue.json`, `.ghostclaw_runtime/audit/blocked-blanket-approval-20260630-001.json`, `scripts/ghostclaw_a2a_safe_autorun.sh`, `docs/knowledge/GUARDED_A2A_GO_LIVE_BUNDLE_20260630.md`.
 - [x] Harden GhostClaw Phase 5 Vibe Coding Agent contract.
   - Status: local router now creates `decision_id`, mutual approval metadata, `receipt_required=true`, and an evidence pack before execution; self-approval and missing approval metadata are rejected; blocked commands archive receipts without executing blocked actions.
-  - Evidence: `GHOSTCLAW/vibe/vibe-agent-router.mjs`, `GHOSTCLAW/vibe/vibe-agent-router.test.mjs`, `GHOSTCLAW/vibe/vibe-execution-plan.template.json`, `docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md`, `.ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json`.
+  - Evidence: commit `dd4903c`, `GHOSTCLAW/vibe/vibe-agent-router.mjs`, `GHOSTCLAW/vibe/vibe-agent-router.test.mjs`, `GHOSTCLAW/vibe/vibe-execution-plan.template.json`, `docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md`, `.ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.
