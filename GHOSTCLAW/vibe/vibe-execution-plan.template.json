@@ -10,7 +10,9 @@
     "timestamp",
     "requester",
     "approver",
+    "decision_id",
     "approval_status",
+    "receipt_required",
     "status",
     "tasks",
     "evidence_pack"
@@ -39,6 +41,28 @@
       "description": "Agent approving execution (must not equal requester)",
       "example": "hermes-commander"
     },
+    "requester_agent": {
+      "type": "string",
+      "description": "A2A requester agent mirror of requester"
+    },
+    "approver_agent": {
+      "type": "string",
+      "description": "A2A approver agent mirror of approver"
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Mutual approval decision identifier required before execution"
+    },
+    "human_approval_required": {
+      "type": "boolean",
+      "const": false,
+      "description": "Phase 5 local-safe tasks use mutual agent approval, not human wait"
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "const": true,
+      "description": "Execution must create receipts"
+    },
     "approval_status": {
       "type": "string",
       "enum": ["pending", "approved", "rejected"],
@@ -55,6 +79,53 @@
     },
     "router_version": {
       "type": "string"
+    },
+    "mutual_approval": {
+      "type": "object",
+      "required": [
+        "decision_id",
+        "requested",
+        "status",
+        "requester_agent",
+        "approver_agent",
+        "self_approval_allowed",
+        "human_approval_required",
+        "receipt_required"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string"
+        },
+        "requested": {
+          "type": "boolean",
+          "const": true
+        },
+        "status": {
+          "type": "string",
+          "enum": ["approved", "rejected"]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "requester_agent": {
+          "type": "string"
+        },
+        "approver_agent": {
+          "type": "string"
+        },
+        "self_approval_allowed": {
+          "type": "boolean",
+          "const": false
+        },
+        "human_approval_required": {
+          "type": "boolean",
+          "const": false
+        },
+        "receipt_required": {
+          "type": "boolean",
+          "const": true
+        }
+      }
     },
     "tasks": {
       "type": "array",
@@ -148,11 +219,27 @@
     "evidence_pack": {
       "type": "object",
       "description": "Evidence pack requirements",
-      "required": ["required", "artifacts"],
+      "required": ["id", "required", "receipt_required", "decision_id", "artifacts"],
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "required": {
           "type": "boolean",
-          "default": true
+          "const": true
+        },
+        "receipt_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "requester_agent": {
+          "type": "string"
+        },
+        "approver_agent": {
+          "type": "string"
+        },
+        "decision_id": {
+          "type": "string"
         },
         "artifacts": {
           "type": "array",
@@ -165,7 +252,7 @@
               },
               "type": {
                 "type": "string",
-                "enum": ["receipt", "screenshot", "log", "diff", "checksum", "other"]
+                "enum": ["execution_plan", "decision_artifact", "receipt", "screenshot", "log", "diff", "checksum", "other"]
               },
               "format": {
                 "type": "string",
@@ -184,6 +271,14 @@
     "archive_path": {
       "type": ["string", "null"],
       "description": "Directory where plan and receipt are archived"
+    },
+    "receipts_dir": {
+      "type": ["string", "null"],
+      "description": "Optional receipt directory override for tests"
+    },
+    "archive_dir": {
+      "type": ["string", "null"],
+      "description": "Optional archive base directory override for tests"
     },
     "status": {
       "type": "string",
@@ -206,10 +301,26 @@
       "timestamp": "2026-06-30T00:00:00Z",
       "requester": "vibe-agent",
       "approver": "hermes-commander",
-      "approval_status": "pending",
+      "requester_agent": "vibe-agent",
+      "approver_agent": "hermes-commander",
+      "decision_id": "decision-plan-example001",
+      "human_approval_required": false,
+      "receipt_required": true,
+      "approval_status": "approved",
       "approval_reason": "Mutual approval constraint satisfied",
       "router_id": "vibe-agent-router",
       "router_version": "1.0.0",
+      "mutual_approval": {
+        "decision_id": "decision-plan-example001",
+        "requested": true,
+        "status": "approved",
+        "reason": "Mutual approval constraint satisfied",
+        "requester_agent": "vibe-agent",
+        "approver_agent": "hermes-commander",
+        "self_approval_allowed": false,
+        "human_approval_required": false,
+        "receipt_required": true
+      },
       "tasks": [
         {
           "task_id": "vibe-example001-t1",
@@ -228,8 +339,25 @@
         }
       ],
       "evidence_pack": {
+        "id": "evidence-plan-example001",
         "required": true,
+        "receipt_required": true,
+        "requester_agent": "vibe-agent",
+        "approver_agent": "hermes-commander",
+        "decision_id": "decision-plan-example001",
         "artifacts": [
+          {
+            "task_id": "vibe-example001-t1",
+            "type": "execution_plan",
+            "format": "json",
+            "path": "GHOSTCLAW/vibe/archive/plan-example001/plan.json"
+          },
+          {
+            "task_id": "vibe-example001-t1",
+            "type": "decision_artifact",
+            "format": "json",
+            "path": "GHOSTCLAW/vibe/archive/plan-example001/receipt.json"
+          },
           {
             "task_id": "vibe-example001-t1",
             "type": "receipt",
@@ -239,7 +367,9 @@
         ]
       },
       "archive_path": "GHOSTCLAW/vibe/archive/plan-example001",
-      "status": "pending_approval"
+      "receipts_dir": null,
+      "archive_dir": null,
+      "status": "approved"
     }
   ]
 }

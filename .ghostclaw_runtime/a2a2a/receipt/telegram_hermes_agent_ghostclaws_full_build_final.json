@@ -16,7 +16,7 @@
     "phase_2_auto_approval": "completed_validated_current_turn_matrix_hardened_20_tests",
     "phase_3_a2a_sync_team": "completed_validated_current_turn_protocol_contract_fields",
     "phase_4_browser_use": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
-    "phase_5_vibe_coding": "completed_existing_files_present",
+    "phase_5_vibe_coding": "completed_validated_current_turn_mutual_approval_evidence_receipt_archive_contract",
     "phase_6_model_swap_router": "completed_validated_current_turn",
     "phase_7_kimi_worker_lane": "completed_existing_files_present",
     "phase_8_moa_brainstorm": "completed_existing_files_present",
@@ -49,7 +49,10 @@
     ".ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json",
     ".ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json",
     "GHOSTCLAW/workers/core/worker-runtime.test.mjs",
-    ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json"
+    ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json",
+    "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -66,19 +69,22 @@
     "GHOSTCLAW/workers/core/worker-receipt.mjs",
     "GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs",
     ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
-    "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
+    "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+    "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+    "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+    "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
-    "count": 13
+    "count": 16
   },
   "files_modified": {
     "source_field": "current_turn_files_modified",
-    "count": 15
+    "count": 18
   },
   "files_changed": {
-    "created_count": 13,
-    "modified_count": 15,
+    "created_count": 16,
+    "modified_count": 18,
     "source_fields": [
       "current_turn_files_created",
       "current_turn_files_modified"
@@ -104,7 +110,7 @@
   "status_summary": {
     "worker_runtime_status": "validated_current_turn_runtime_contract_7_tests",
     "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
-    "vibe_agent_status": "present",
+    "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
     "a2a_sync_status": "probe_only_local_mailbox_workers_present",
     "auto_approval_engine_status": "validated_current_turn_matrix_hardened_20_tests_model_gpu_tier_x",
     "model_swap_status": "validated_current_turn",
@@ -117,7 +123,7 @@
   },
   "workers_created": "see workers_created_or_present",
   "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
-  "vibe_agent_status": "present",
+  "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
   "a2a_sync_status": "probe_only_local_mailbox_workers_present",
   "model_swap_status": "validated_current_turn",
   "kimi_worker_status": "present_policy_only_no_live_model_call",
@@ -183,6 +189,12 @@
       "screenshot": "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png"
     },
     {
+      "name": "vibe_agent_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+      "result": "passed_1_file_5_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json"
+    },
+    {
       "name": "diff_check",
       "command": "git diff --check",
       "result": "passed"
@@ -205,6 +217,7 @@
     "latentmas_python_compile": "passed",
     "latentmas_gateway_direct_test": "passed_1_file_3_tests",
     "browser_use_smoke": "passed_http_200_r0_tab_click_active_goal_packet_013_blocker_no_console_or_page_errors",
+    "vibe_agent_contract": "passed_1_file_5_tests_mutual_approval_evidence_receipt_archive_contract",
     "diff_check": "passed",
     "final_receipt_validator": "passed_ok_true_errors_empty"
   },
@@ -382,6 +395,68 @@
       {
         "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
         "result": "passed_ok_true_phase3_schema_field_count_21_phase3_template_count_5"
+      }
+    ]
+  },
+  "latest_phase5_vibe_agent_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T01:49:12Z",
+    "local_validated_at": "2026-06-30T08:49:12+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
+    "files_created": [
+      "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
+      ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+      "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+      "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "requirements_covered": [
+      "natural language command parsing",
+      "task graph creation",
+      "worker selection",
+      "decision_id creation",
+      "required evidence pack creation",
+      "mutual approval request with requester_agent != approver_agent",
+      "self-approval rejection",
+      "safe execution gate before task execution",
+      "receipt write with decision/evidence metadata",
+      "plan and receipt archive",
+      "blocked command receipt archive without executing blocked action"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --check GHOSTCLAW/vibe/vibe-task-parser.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "node --check GHOSTCLAW/vibe/vibe-agent-router.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool GHOSTCLAW/vibe/vibe-task-graph.schema.json",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+        "result": "passed"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+        "result": "passed_1_file_5_tests"
+      },
+      {
+        "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs",
+        "result": "passed_ok_true_phase5_vibe_test_case_count_5"
+      },
+      {
+        "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope)",
+        "result": "approved_tier_B_non_self_approval",
+        "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
       }
     ]
   },

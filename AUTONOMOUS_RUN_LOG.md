@@ -2463,6 +2463,36 @@
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
 
+## Run 2026-06-30T08:49:12+07:00 — Phase 5 Vibe Coding Agent Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only router/template/test hardening, no external execution
+- **Scope:** Prove Phase 5 Vibe Coding Agent creates a task graph, worker plan, mutual approval decision, evidence pack, receipt, and archive before safe execution.
+
+### Changes
+
+- Updated `GHOSTCLAW/vibe/vibe-agent-router.mjs` so execution plans create `decision_id`, mutual approval metadata, `receipt_required=true`, and a required evidence pack before execution.
+- Added `validateExecutablePlan` so self-approval, missing decision IDs, missing evidence packs, and unapproved plans are rejected before execution.
+- Updated blocked-task receipts, manual receipts, and worker invocation metadata with decision/evidence/requester/approver fields.
+- Updated `GHOSTCLAW/vibe/vibe-execution-plan.template.json` and `docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md` to document the Phase 5 contract.
+- Added `GHOSTCLAW/vibe/vibe-agent-router.test.mjs` with 5 focused tests for parsing, mutual approval, self-approval rejection, blocked receipt archiving, and dry-run behavior.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json`.
+- Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 5 parser/router/template/test markers.
+
+### Verification
+
+- `node --check GHOSTCLAW/vibe/vibe-task-parser.mjs` — passed.
+- `node --check GHOSTCLAW/vibe/vibe-agent-router.mjs` — passed.
+- `node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `python3 -m json.tool GHOSTCLAW/vibe/vibe-task-graph.schema.json` — passed.
+- `python3 -m json.tool GHOSTCLAW/vibe/vibe-execution-plan.template.json` — passed.
+- `./node_modules/.bin/vitest run GHOSTCLAW/vibe/vibe-agent-router.test.mjs` — passed, 1 file / 5 tests.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed with `ok=true` and `phase5_vibe_test_case_count=5`.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
+
 ## Run 2026-06-30T08:38:19+07:00 — Phase 1 Worker Build Runtime Contract Hardening
 
 - **Agent:** Codex local worker

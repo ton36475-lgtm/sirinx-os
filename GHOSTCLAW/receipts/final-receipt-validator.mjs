@@ -74,6 +74,7 @@ function validateRequiredArtifacts(errors) {
     "docs/knowledge/BROWSER_USE_GHOSTCLAWS_WORKER.md",
     "GHOSTCLAW/vibe/vibe-task-parser.mjs",
     "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+    "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
     "GHOSTCLAW/vibe/vibe-task-graph.schema.json",
     "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
     "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
@@ -275,6 +276,61 @@ function validatePhase3ProtocolArtifacts(errors) {
   };
 }
 
+function validatePhase5VibeArtifacts(errors) {
+  const parserText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/vibe/vibe-task-parser.mjs"), "utf8");
+  for (const marker of [
+    "parseMultiStepCommand",
+    "normalizeTerminology",
+    "checkBlocked",
+    "brainstorm",
+    "beststorm",
+    "beststrom"
+  ]) {
+    pushIfMissing(errors, parserText.includes(marker), `phase5 vibe parser missing marker: ${marker}`);
+  }
+
+  const routerText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/vibe/vibe-agent-router.mjs"), "utf8");
+  for (const marker of [
+    "createApprovalDecision",
+    "validateExecutablePlan",
+    "approval_status !== 'approved'",
+    "decision_id",
+    "receipt_required",
+    "evidence_pack",
+    "archive_path"
+  ]) {
+    pushIfMissing(errors, routerText.includes(marker), `phase5 vibe router missing marker: ${marker}`);
+  }
+
+  const template = readJson("GHOSTCLAW/vibe/vibe-execution-plan.template.json");
+  const templateProperties = template.properties || {};
+  for (const field of ["decision_id", "human_approval_required", "receipt_required", "mutual_approval", "evidence_pack"]) {
+    pushIfMissing(errors, hasValue(templateProperties[field]), `phase5 vibe execution template missing field: ${field}`);
+  }
+
+  const evidenceProperties = templateProperties.evidence_pack?.properties || {};
+  for (const field of ["id", "receipt_required", "requester_agent", "approver_agent", "decision_id", "artifacts"]) {
+    pushIfMissing(errors, hasValue(evidenceProperties[field]), `phase5 vibe evidence pack missing field: ${field}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/vibe/vibe-agent-router.test.mjs"), "utf8");
+  for (const marker of [
+    "parses natural language",
+    "mutual approval decision",
+    "rejects self-approval",
+    "archives blocked commands",
+    "dry-run pipeline"
+  ]) {
+    pushIfMissing(errors, testText.includes(marker), `phase5 vibe test missing case marker: ${marker}`);
+  }
+
+  return {
+    required_router_marker_count: 7,
+    required_template_field_count: 5,
+    required_test_case_count: 5
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -294,6 +350,7 @@ export function validateFinalReceipt(receipt) {
   const requiredArtifactCount = validateRequiredArtifacts(errors);
   const phase1WorkerRuntime = validatePhase1WorkerRuntimeArtifacts(errors);
   const phase3Protocol = validatePhase3ProtocolArtifacts(errors);
+  const phase5Vibe = validatePhase5VibeArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -394,6 +451,9 @@ export function validateFinalReceipt(receipt) {
       phase1_required_worker_field_count: phase1WorkerRuntime.required_worker_field_count,
       phase3_schema_field_count: phase3Protocol.schema_field_count,
       phase3_template_count: phase3Protocol.template_count,
+      phase5_vibe_router_marker_count: phase5Vibe.required_router_marker_count,
+      phase5_vibe_template_field_count: phase5Vibe.required_template_field_count,
+      phase5_vibe_test_case_count: phase5Vibe.required_test_case_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

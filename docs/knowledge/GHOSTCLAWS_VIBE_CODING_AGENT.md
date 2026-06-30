@@ -26,13 +26,13 @@ Natural Language Command
            ▼
 ┌──────────────────────────┐
 │  vibe-agent-router.mjs   │  Select worker per task
-│  Create execution plan   │  Check mutual approval
-│  Validate vs policy      │  Create evidence pack
+│  Create execution plan   │  Request mutual approval
+│  Validate vs policy      │  Create decision + evidence pack
 └──────────┬───────────────┘
            │ Execution Plan
            ▼
 ┌──────────────────────────┐
-│  Mutual Approval Gate     │  requester ≠ approver
+│  Mutual Approval Gate     │  decision_id required
 │  (A2A2A protocol)         │  Self-approval blocked
 └──────────┬───────────────┘
            │ approved
@@ -123,6 +123,8 @@ The router enforces:
 - `approver` must be specified
 - `requester !== approver`
 - Self-approval is rejected with `status: "rejected"`
+- Safe local plans receive `approval_status: "approved"` only after the mutual approval decision is created
+- Execution is refused if `decision_id`, `evidence_pack.required`, or `receipt_required` is missing
 
 ### Example Approval Pairs
 
@@ -141,6 +143,8 @@ Every execution plan requires an evidence pack containing:
 
 | Artifact | Format | Description |
 |---|---|---|
+| Execution Plan | JSON | Full validated plan before execution |
+| Decision Artifact | JSON | Mutual approval metadata with `decision_id` |
 | Receipt | JSON | Per-task receipt with status, timestamps, errors |
 | Screenshot | PNG | Browser worker screenshots (if applicable) |
 | Plan | JSON | Full execution plan archived |
@@ -261,6 +265,7 @@ Additional agent-specific rules:
 - Natural language commands are sanitized and checked for blocked patterns
 - Terminology normalization rejects invalid typos (`beststrom` → rejected)
 - Mutual approval enforced (requester ≠ approver)
+- `decision_id`, `receipt_required: true`, and evidence pack are required before execution
 - No task executes without evidence pack creation
 - All results archived with receipts
 
