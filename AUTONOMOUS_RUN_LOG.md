@@ -2345,6 +2345,29 @@
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
 
+## Run 2026-06-30T08:03:55+07:00 — GhostClaws Sub-Agent Team Artifact Validation
+
+- **Agent:** Codex local worker
+- **Mode:** local-only docs and receipt validation, no external execution
+- **Scope:** Close the explicit Phase 8 documentation gap for `docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md` and make the final receipt validator check required objective artifacts from disk.
+
+### Changes
+
+- Added `docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md`.
+- Updated `GHOSTCLAW/receipts/final-receipt-validator.mjs` to verify 52 required AGENT GHOSTCLAWS artifacts across worker runtime, approval, A2A protocol, Browser Use, vibe, model router, Kimi, sub-agent team, LatentMAS, GitHub research, and EdgeOne readiness surfaces.
+- Added `.ghostclaw_runtime/a2a2a/receipts/sub_agent_team_artifact_validation_20260630T010355Z.json`.
+
+### Verification
+
+- `node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true`, no errors, and `required_artifact_count=52`.
+- Canonical terminology scan on the new doc and validator — passed with no legacy typo matches.
+- Scoped `git diff --check` for the new doc and validator — passed.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
+
 ## Run 2026-06-30T08:08:00+07:00 — Final Receipt Commit Hash Resolution
 
 - **Agent:** Codex local worker

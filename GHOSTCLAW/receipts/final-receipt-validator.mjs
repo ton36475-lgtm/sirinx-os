@@ -47,6 +47,69 @@ function validateSmokeReceipt(receipt, errors) {
   pushIfMissing(errors, (smokeReceipt.page_errors || []).length === 0, "browser smoke page errors are not zero");
 }
 
+function validateRequiredArtifacts(errors) {
+  const requiredArtifacts = [
+    "GHOSTCLAW/workers/registry/worker-registry.json",
+    "GHOSTCLAW/workers/registry/worker-capabilities.schema.json",
+    "GHOSTCLAW/workers/core/worker-message-schema.json",
+    "GHOSTCLAW/workers/core/worker-runtime.mjs",
+    "GHOSTCLAW/workers/core/worker-router.mjs",
+    "GHOSTCLAW/workers/core/worker-heartbeat.mjs",
+    "GHOSTCLAW/workers/core/worker-receipt.mjs",
+    "GHOSTCLAW/agents/auto-approve-engine.mjs",
+    "GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+    "GHOSTCLAW/policies/action-tier-cap.yaml",
+    "GHOSTCLAW/policies/approval-matrix.yaml",
+    "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+    "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+    "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml",
+    ".ghostclaw_runtime/a2a2a/templates/worker-message.json",
+    ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json",
+    ".ghostclaw_runtime/a2a2a/templates/worker-heartbeat.json",
+    ".ghostclaw_runtime/a2a2a/templates/evidence-pack.json",
+    ".ghostclaw_runtime/a2a2a/templates/decision-artifact.json",
+    "GHOSTCLAW/workers/browser-use/browser-use-worker.mjs",
+    "GHOSTCLAW/workers/browser-use/browser-use.policy.yaml",
+    "GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs",
+    "docs/knowledge/BROWSER_USE_GHOSTCLAWS_WORKER.md",
+    "GHOSTCLAW/vibe/vibe-task-parser.mjs",
+    "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+    "GHOSTCLAW/vibe/vibe-task-graph.schema.json",
+    "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+    "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
+    "GHOSTCLAW/models/model-registry.yaml",
+    "GHOSTCLAW/models/model-swap-policy.yaml",
+    "GHOSTCLAW/models/model-router.mjs",
+    "GHOSTCLAW/models/model-router.test.mjs",
+    "GHOSTCLAW/models/provider-health.mjs",
+    "GHOSTCLAW/workers/model-swap/model-swap-worker.mjs",
+    "GHOSTCLAW/workers/model-swap/model-swap.policy.yaml",
+    ".ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json",
+    "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md",
+    "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
+    "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+    "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
+    "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
+    ".ghostclaw_runtime/latent",
+    "GHOSTCLAW/research/github-toptrend-worker.mjs",
+    "GHOSTCLAW/research/github-toptrend-map.yaml",
+    "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md",
+    "docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md",
+    "docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md",
+    ".ghostclaw_runtime/a2a2a/templates/edgeone-deploy-packet.json",
+    ".ghostclaw_runtime/a2a2a/templates/edgeone-smoke-test-receipt.json",
+    "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs"
+  ];
+
+  for (const artifact of requiredArtifacts) {
+    pushIfMissing(errors, fs.existsSync(path.resolve(repoRoot, artifact)), `missing required artifact: ${artifact}`);
+  }
+
+  return requiredArtifacts.length;
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -63,6 +126,7 @@ function validateCommitHash(receipt, errors) {
 
 export function validateFinalReceipt(receipt) {
   const errors = [];
+  const requiredArtifactCount = validateRequiredArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -158,6 +222,7 @@ export function validateFinalReceipt(receipt) {
     checked: {
       receipt_path: receiptPath,
       validation_count: Object.keys(validations).length,
+      required_artifact_count: requiredArtifactCount,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

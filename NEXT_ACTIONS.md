@@ -31,6 +31,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: Phase 17 receipt fields and Browser Use smoke proof can now be checked directly from disk.
   - Evidence: `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`.
   - Verification: `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` returned `ok=true`.
+- [x] Add GhostClaws sub-agent team artifact.
+  - Status: Phase 8 sub-agent team documentation now exists and remains local-only / approval-gated.
+  - Evidence: `docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md`, `.ghostclaw_runtime/a2a2a/receipts/sub_agent_team_artifact_validation_20260630T010355Z.json`.
+  - Verification: final receipt validator returned `ok=true` with `required_artifact_count=52`.
 - [x] Integrate GhostClaws GodMode Mission Control UI + CenterBrain hub runtime bridge.
 - [x] Push GodMode changes to `staging/godmode-master-os-v2`.
 - [x] Integrate Pocket Hatchery Agent Factory v4 scaffold.
