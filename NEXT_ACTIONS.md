@@ -23,6 +23,7 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: Phase 1 registry/runtime now loads concrete worker IDs, enforces decision/evidence/receipt metadata before dispatch, rejects self approval, and writes receipts only with decision/evidence/non-self approval.
   - Evidence: `GHOSTCLAW/workers/registry/worker-registry.json`, `GHOSTCLAW/workers/core/worker-runtime.mjs`, `GHOSTCLAW/workers/core/worker-receipt.mjs`, `GHOSTCLAW/workers/core/worker-runtime.test.mjs`, `.ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json`.
   - Verification: runtime/router load probe passed; `./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs` passed, 1 file / 7 tests.
+  - Commit: `0cd9fdb` (`test(ghostclaw): validate worker runtime contract`).
 - [x] Refresh GhostClaw objective validation evidence.
   - Status: objective validation refreshed from current files; schema/template JSON, auto-approve tests, model-router tests, LatentMAS offline checks, gateway direct test, diff check, and Browser/UI smoke passed. UI smoke verified `/god-mode` HTTP 200, R0 tab click, Active Goal panel, `packet_013`, blocker text, and zero console/page errors.
   - Evidence: `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`, `GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json`, `GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png`, `AUTONOMOUS_RUN_LOG.md`.

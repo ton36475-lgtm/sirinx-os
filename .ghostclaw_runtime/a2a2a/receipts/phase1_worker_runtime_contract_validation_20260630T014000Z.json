@@ -5,7 +5,7 @@
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
   "mode": "local_only_worker_runtime_contract_hardening",
-  "status": "validation_passed_commit_pending",
+  "status": "validated_and_committed_local_scope",
   "scope": "Phase 1 Worker Build Runtime registry, router, heartbeat, receipt, and dispatch contract",
   "files_modified": [
     "GHOSTCLAW/workers/registry/worker-registry.json",
@@ -51,6 +51,12 @@
       "result": "passed"
     }
   ],
+  "commit": {
+    "commit_status": "committed_local_scope",
+    "commit_hash": "0cd9fdb",
+    "commit_message": "test(ghostclaw): validate worker runtime contract",
+    "hash_scope": "validated scoped local source commit for Phase 1 Worker Build Runtime contract hardening"
+  },
   "safety": {
     "no_push": true,
     "no_deploy": true,
@@ -59,5 +65,5 @@
     "no_package_install": true,
     "no_external_message_send": true
   },
-  "next_safe_action": "Run focused Worker Build Runtime tests and update validation evidence."
+  "next_safe_action": "Continue broader GhostClaw objective audit; keep deploy, push, provider/model calls, model downloads, GPU inference, secret reads, package installs, queue mutation, and live sends blocked unless exact gates exist."
 }

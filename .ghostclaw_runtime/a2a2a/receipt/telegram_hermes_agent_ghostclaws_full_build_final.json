@@ -268,9 +268,12 @@
     "no_provider_call": true
   },
   "latest_phase1_worker_runtime_contract": {
-    "status": "validated_local_changes_pending_scoped_commit",
+    "status": "validated_and_committed_local_scope",
     "validated_at": "2026-06-30T01:38:19Z",
     "local_validated_at": "2026-06-30T08:38:19+0700",
+    "commit_hash": "0cd9fdb",
+    "commit_message": "test(ghostclaw): validate worker runtime contract",
+    "commit_hash_scope": "validated scoped local source commit for Phase 1 Worker Build Runtime contract hardening; later receipt-finalization commits may differ",
     "files_created": [
       "GHOSTCLAW/workers/core/worker-runtime.test.mjs",
       ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json"

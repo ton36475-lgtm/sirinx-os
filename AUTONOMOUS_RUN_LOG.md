@@ -2477,6 +2477,7 @@
 - Added `GHOSTCLAW/workers/core/worker-runtime.test.mjs`.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json`.
 - Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 1 worker registry and guard markers.
+- Created scoped local source commit `0cd9fdb` (`test(ghostclaw): validate worker runtime contract`).
 
 ### Verification
 
@@ -2484,6 +2485,7 @@
 - Worker core `node --check` commands — passed.
 - Runtime/router load probe — passed with worker IDs `kimi_coding_worker`, `model_swap_worker`, and `code_patch` routing to `kimi_coding_worker`.
 - `./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs` — passed, 1 file / 7 tests.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true`, `phase1_worker_count=2`, and `phase1_required_worker_field_count=11`.
 - Scoped `git diff --check` — passed.
 
 ### Blocked Actions
