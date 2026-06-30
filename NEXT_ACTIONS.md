@@ -6,10 +6,15 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Completed This Session
 
+- [x] Harden GhostClaw Phase 12 EdgeOne Makers Readiness contract.
+  - Status: EdgeOne is locked to R3 readiness only. R4 preview deploy requires a separate gate, R5 production deploy requires explicit production approval, and all receipts/templates keep deploy/cloud/live API/secret actions blocked.
+  - Evidence: `GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs`, `GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs`, `docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md`, `docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md`, `.ghostclaw_runtime/a2a2a/receipts/phase12_edgeone_readiness_contract_validation_20260630T030900Z.json`.
+  - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` passed, 5 files / 20 tests; R3 readiness receipt status is `not_ready`, with R4/R5 gates false.
 - [x] Harden GhostClaw Phase 11 GitHub Toptrend Research Worker.
   - Status: worker now uses argument-based `gh` calls, checks availability/auth status without raw secret recording, searches public repos with `--visibility public`, normalizes supported CLI fields into the public metadata contract, and blocks clone/install/execute/token/rate-limit bypass lanes.
   - Evidence: `GHOSTCLAW/research/github-toptrend-worker.mjs`, `GHOSTCLAW/research/github-toptrend-worker.test.mjs`, `GHOSTCLAW/research/github-toptrend-map.yaml`, `docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md`, `.ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json`.
   - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` passed, 4 files / 16 tests; runtime public metadata scan completed 15 topics and validated 16 JSON files.
+  - Commit: `fbbf067` (`test(ghostclaw): validate github toptrend worker`).
 - [x] Harden GhostClaw Phase 10 Skill Creator / Zero Prompting contract.
   - Status: `SKILL.md` now covers Phase 1-10, including Mission Card based Zero Prompting, Hermes/Codex mutual approval, all required worker/readiness lanes, validation/receipt/archive, and hard stops for secrets, push/deploy, live provider/model calls, GPU inference, and model download.
   - Evidence: `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md`, `GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs`, `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json`.

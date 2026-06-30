@@ -110,7 +110,8 @@ function validateRequiredArtifacts(errors) {
     "docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md",
     ".ghostclaw_runtime/a2a2a/templates/edgeone-deploy-packet.json",
     ".ghostclaw_runtime/a2a2a/templates/edgeone-smoke-test-receipt.json",
-    "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs"
+    "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs",
+    "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs"
   ];
 
   for (const artifact of requiredArtifacts) {
@@ -596,7 +597,7 @@ function validatePhase8MoABrainstormArtifacts(errors) {
   }
 
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
-  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9|10|11)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9|10|11|12)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
   for (const marker of [
     "ref_A_safety_risk",
     "ref_B_speed_cost",
@@ -721,7 +722,7 @@ function validatePhase9LatentMASArtifacts(errors) {
 
 function validatePhase10SkillCreatorArtifacts(errors) {
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
-  pushIfMissing(errors, /phase_coverage:\s*"1-(10|11)"/.test(skillText), "phase10 GhostClaw skill missing phase coverage marker");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(10|11|12)"/.test(skillText), "phase10 GhostClaw skill missing phase coverage marker");
 
   const requiredSkillMarkers = [
     "Skill Creator / Zero Prompting System (Phase 10)",
@@ -774,7 +775,7 @@ function validatePhase11GithubToptrendArtifacts(errors) {
   const docText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md"), "utf8");
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
 
-  pushIfMissing(errors, /phase_coverage:\s*"1-11"/.test(skillText), "phase11 GhostClaw skill missing phase coverage marker");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(11|12)"/.test(skillText), "phase11 GhostClaw skill missing phase coverage marker");
   pushIfMissing(errors, !workerText.includes("execSync"), "phase11 GitHub worker still uses execSync");
 
   const requiredWorkerMarkers = [
@@ -875,6 +876,93 @@ function validatePhase11GithubToptrendArtifacts(errors) {
   };
 }
 
+function validatePhase12EdgeOneArtifacts(errors) {
+  const workerText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs"), "utf8");
+  const strategyText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md"), "utf8");
+  const checklistText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md"), "utf8");
+  const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+  const deployPacket = readJson(".ghostclaw_runtime/a2a2a/templates/edgeone-deploy-packet.json");
+  const smokeReceipt = readJson(".ghostclaw_runtime/a2a2a/templates/edgeone-smoke-test-receipt.json");
+
+  pushIfMissing(errors, /phase_coverage:\s*"1-12"/.test(skillText), "phase12 GhostClaw skill missing phase coverage marker");
+
+  const requiredWorkerMarkers = [
+    "EdgeOne Readiness Worker (Phase 12)",
+    "R3",
+    "R4",
+    "R5",
+    "preview_deploy_requires_deploy_packet_and_separate_gate",
+    "production_deploy_explicit_gate_only",
+    "do_not_deploy",
+    "do_not_push",
+    "do_not_mutate_cloud",
+    "do_not_call_live_api",
+    "do_not_read_secrets",
+    "R4_preview_gate_approved: false",
+    "R5_production_gate_approved: false"
+  ];
+
+  for (const marker of requiredWorkerMarkers) {
+    pushIfMissing(errors, workerText.includes(marker), `phase12 EdgeOne worker missing marker: ${marker}`);
+  }
+
+  pushIfMissing(errors, deployPacket.schema === "ghostclaw.edgeone.deploy_packet.v1", "phase12 deploy packet schema mismatch");
+  pushIfMissing(errors, deployPacket.environment === "preview", "phase12 deploy packet default environment is not preview");
+  pushIfMissing(errors, deployPacket.approval_mode === "agent_quorum_approval", "phase12 deploy packet approval mode mismatch");
+  pushIfMissing(errors, deployPacket.approval_tier === "C", "phase12 deploy packet approval tier mismatch");
+  pushIfMissing(errors, deployPacket.gate?.R3_readiness_passed === false, "phase12 deploy packet opens R3 gate");
+  pushIfMissing(errors, deployPacket.gate?.R4_preview_gate_approved === false, "phase12 deploy packet opens R4 gate");
+  pushIfMissing(errors, deployPacket.gate?.R5_production_gate_approved === false, "phase12 deploy packet opens R5 gate");
+  pushIfMissing(errors, deployPacket.safety_flags?.do_not_deploy === true, "phase12 deploy packet does not block deploy");
+  pushIfMissing(errors, deployPacket.safety_flags?.do_not_call_live_api === true, "phase12 deploy packet does not block live API");
+
+  pushIfMissing(errors, smokeReceipt.schema === "ghostclaw.edgeone.smoke_test_receipt.v1", "phase12 smoke receipt schema mismatch");
+  pushIfMissing(errors, smokeReceipt.passed === false, "phase12 smoke receipt template is pre-marked passed");
+  pushIfMissing(errors, smokeReceipt.safety_flags?.do_not_deploy === true, "phase12 smoke receipt does not block deploy");
+  pushIfMissing(errors, smokeReceipt.safety_flags?.do_not_call_live_api === true, "phase12 smoke receipt does not block live API");
+
+  for (const marker of [
+    "Readiness Only",
+    "Requires deploy packet + separate gate",
+    "Explicit production gate only",
+    "Do NOT deploy now",
+    "Do NOT mutate cloud resources",
+    "Do NOT call EdgeOne live API",
+    "template only",
+    "Never calls EdgeOne live API"
+  ]) {
+    pushIfMissing(errors, strategyText.includes(marker), `phase12 EdgeOne strategy missing marker: ${marker}`);
+  }
+
+  for (const marker of [
+    "Pre-Deploy Readiness (R3)",
+    "Preview Gate (R4)",
+    "Production Gate (R5)",
+    "No EdgeOne live API call during readiness",
+    "do_not_deploy",
+    "do_not_call_live_api",
+    "Canonical Terminology"
+  ]) {
+    pushIfMissing(errors, checklistText.includes(marker), `phase12 EdgeOne checklist missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs"), "utf8");
+  const requiredTestMarkers = [
+    "defaults to R3 not_ready and never deploys",
+    "can mark R3 ready without opening R4 or R5 gates",
+    "keeps deploy and smoke templates readiness-only",
+    "documents Phase 12 R3/R4/R5 gates and hard stops"
+  ];
+  for (const marker of requiredTestMarkers) {
+    pushIfMissing(errors, testText.includes(marker), `phase12 EdgeOne test missing case marker: ${marker}`);
+  }
+
+  return {
+    worker_marker_count: requiredWorkerMarkers.length,
+    test_case_marker_count: requiredTestMarkers.length
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -901,6 +989,7 @@ export function validateFinalReceipt(receipt) {
   const phase9LatentMAS = validatePhase9LatentMASArtifacts(errors);
   const phase10SkillCreator = validatePhase10SkillCreatorArtifacts(errors);
   const phase11GithubToptrend = validatePhase11GithubToptrendArtifacts(errors);
+  const phase12EdgeOne = validatePhase12EdgeOneArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -1027,6 +1116,8 @@ export function validateFinalReceipt(receipt) {
       phase10_skill_creator_test_case_count: phase10SkillCreator.test_case_marker_count,
       phase11_github_toptrend_worker_marker_count: phase11GithubToptrend.worker_marker_count,
       phase11_github_toptrend_test_case_count: phase11GithubToptrend.test_case_marker_count,
+      phase12_edgeone_worker_marker_count: phase12EdgeOne.worker_marker_count,
+      phase12_edgeone_test_case_count: phase12EdgeOne.test_case_marker_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

@@ -1,9 +1,10 @@
 # GitHub Toptrend Research Map
-# Part of: GHOSTCLAW Research Worker
+# Part of: GHOSTCLAW Research Worker (Phase 11)
 
 schema: ghostclaw.github_toptrend_map.v2
 mode: public_metadata_only
 output_dir: .ghostclaw_runtime/research/github_trending/
+documentation: docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md
 
 topics:
   - ai-agent
@@ -27,6 +28,7 @@ allowed:
   - gh_search_repos_metadata_only
   - gh_auth_status_without_secret_read
   - save_output_under_runtime_research
+  - write_documentation_when_gh_missing
 
 allowed_metadata_fields:
   - nameWithOwner
@@ -59,6 +61,12 @@ setup_required_when:
   - gh_cli_missing_or_unavailable
   - gh_auth_unavailable_without_secret_read
   - gh_search_failed_or_rate_limited
+
+setup_required_actions:
+  - mark_status_setup_required
+  - write_documentation_ref
+  - record_status_in_receipt
+  - continue_local_implementation
 
 canonical_terminology:
   brainstorm: canonical

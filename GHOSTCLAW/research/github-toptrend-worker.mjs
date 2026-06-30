@@ -47,7 +47,9 @@ export const BLOCKED_ACTIONS = [
   "execute_unknown_code",
   "read_tokens",
   "print_tokens",
-  "bypass_rate_limits"
+  "bypass_rate_limits",
+  "network_scan_external",
+  "credential_extraction"
 ];
 
 function ensureDir(dir) {
@@ -89,7 +91,9 @@ function statusRecord(reason, dateId, runtimeDir) {
     no_clone: true,
     no_install: true,
     no_execute_unknown_code: true,
-    no_token_read_or_print: true
+    no_token_read_or_print: true,
+    no_rate_limit_bypass: true,
+    timestamp: new Date().toISOString()
   };
   fs.writeFileSync(statusPath, `${JSON.stringify(record, null, 2)}\n`);
   return statusPath;
@@ -134,9 +138,26 @@ export function checkGhPublicMetadataReadiness(options = {}) {
 /**
  * GitHub Toptrend Research Worker
  * Mode: public_metadata_only
- * Allowed: `gh search repos` metadata fields only
- * Blocked: clone, install, execute unknown code, read/print tokens, bypass rate limits
- * Output: .ghostclaw_runtime/research/github_trending/
+ *
+ * Allowed:
+ *   - `gh search repos` metadata fields only (public visibility)
+ *   - `gh --version` and `gh auth status` readiness checks
+ *   - Save output under .ghostclaw_runtime/research/github_trending/
+ *
+ * Blocked:
+ *   - clone repos
+ *   - install packages
+ *   - execute unknown code
+ *   - read tokens
+ *   - print tokens
+ *   - bypass rate limits
+ *   - network scan external
+ *   - credential extraction
+ *
+ * If gh is missing or unavailable:
+ *   - Mark status as setup_required
+ *   - Write documentation referencing the workflow
+ *   - Record status in receipt
  */
 export function runGithubToptrendResearch(options = {}) {
   const runtimeDir = options.runtimeDir ?? DEFAULT_RUNTIME_DIR;
@@ -164,7 +185,14 @@ export function runGithubToptrendResearch(options = {}) {
       no_execute_unknown_code: true,
       no_token_read: true,
       no_token_print: true,
-      no_rate_limit_bypass: true
+      no_rate_limit_bypass: true,
+      no_network_scan: true,
+      no_credential_extraction: true
+    },
+    canonical_terminology: {
+      brainstorm: "canonical",
+      beststorm: "legacy_alias",
+      beststrom: "invalid_typo"
     }
   };
 
@@ -172,6 +200,7 @@ export function runGithubToptrendResearch(options = {}) {
   if (!readiness.ready) {
     manifest.status = "setup_required";
     manifest.reason = readiness.reason;
+    manifest.documentation_ref = "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md";
     const snapshotPath = writeManifest(runtimeDir, dateId, manifest);
     const statusPath = statusRecord(readiness.reason, dateId, runtimeDir);
     return {
@@ -180,7 +209,8 @@ export function runGithubToptrendResearch(options = {}) {
       snapshot: dateId,
       path: runtimeDir,
       snapshot_path: snapshotPath,
-      status_path: statusPath
+      status_path: statusPath,
+      documentation_ref: manifest.documentation_ref
     };
   }
 

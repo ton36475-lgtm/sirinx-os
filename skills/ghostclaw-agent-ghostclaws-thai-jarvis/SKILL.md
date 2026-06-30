@@ -1,6 +1,6 @@
 ---
 name: ghostclaw-agent-ghostclaws-thai-jarvis
-version: "1.0.0"
+version: "1.1.0"
 author: sirinx-os
 description: >
   GHOSTCLAW Thai Jarvis Agent — the unified agent skill for SIRINX OS.
@@ -11,7 +11,7 @@ description: >
   read-only research, validation/receipt/archive, and hard stop conditions.
 
 # Skill metadata
-phase_coverage: "1-11"
+phase_coverage: "1-12"
 canonical_terminology:
   brainstorm: canonical
   beststorm: legacy_alias
@@ -81,6 +81,7 @@ Workers registered in `GHOSTCLAW/workers/registry/worker-registry.json`:
 
 - `kimi_coding_worker` — Phase 7 coding lane
 - `model_swap_worker` — Phase 6 metadata routing
+- `edgeone_readiness_worker` — Phase 12 EdgeOne readiness checks
 
 ## 4. Browser Use Worker
 
@@ -244,16 +245,48 @@ The Kimi K2.7 Code Worker is the coding lane in GHOSTCLAW.
 - `GHOSTCLAW/workers/registry/worker-registry.json` — registry entry
 - `docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md` — documentation
 
-## 11. EdgeOne Deployment Readiness
+## 11. EdgeOne Deployment Readiness (Phase 12)
 
-GHOSTCLAW tracks EdgeOne deployment readiness as a separate gate. Deployment requires:
+GHOSTCLAW tracks EdgeOne deployment readiness as a **readiness-only** status (R3). No deployment action is taken automatically.
 
+**Deployment levels:**
+
+| Level | Name | Action | Gate |
+|-------|------|--------|------|
+| R3 | Readiness | Check preparation, produce readiness report | Auto (read-only) |
+| R4 | Preview Deploy | Deploy to preview environment | Requires deploy packet + separate gate |
+| R5 | Production Deploy | Deploy to production environment | Explicit production gate only |
+
+**R3 readiness checks:**
+
+- Project builds successfully (no-install validation)
 - All tests pass
-- KOB validator sign-off
-- Hermes approval
-- Human approval (tier A5 minimum)
+- No secrets in code
+- No .env files staged
+- EdgeOne project config exists
+- Deploy packet template ready
+- Smoke test template ready
+- Rollback plan documented
 
-No deployment action is taken automatically. EdgeOne readiness is a reporting status only.
+**R4 preview deploy** requires a completed deploy packet (`edgeone-deploy-packet.json`), all R3 checks passed, validation results recorded, and agent quorum approval (Tier C).
+
+**R5 production deploy** requires all R4 preview checks passed, explicit human/operator gate approval, rollback plan verified, and no auto-deploy under any mode.
+
+**Blocked (Phase 12):**
+
+- Do NOT deploy now
+- Do NOT push to production
+- Do NOT mutate cloud resources
+- Do NOT call EdgeOne live API
+- Do NOT read secrets or tokens
+
+**Files:**
+
+- `GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs` — readiness worker
+- `docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md` — deployment strategy doc
+- `docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md` — runtime checklist
+- `.ghostclaw_runtime/a2a2a/templates/edgeone-deploy-packet.json` — deploy packet template
+- `.ghostclaw_runtime/a2a2a/templates/edgeone-smoke-test-receipt.json` — smoke test receipt template
 
 ## 12. GitHub Toptrend Public Read-Only Research (Phase 11)
 
@@ -264,7 +297,14 @@ The `GHOSTCLAW/research/github-toptrend-worker.mjs` module performs public metad
 - Stores only normalized public metadata fields: `nameWithOwner`, `description`, `stargazerCount`, `url`, `updatedAt`
 - Saves output only under `.ghostclaw_runtime/research/github_trending/`
 - Marks `setup_required` if `gh` is missing, auth status is unavailable, or search fails/rate-limits
+- Writes documentation and records status in receipt when `gh` is missing
 - Does not clone repos, install packages, execute unknown code, read tokens, print tokens, or bypass rate limits
+
+**Research topics:** ai-agent, multi-agent, agent-framework, agent-orchestration, browser-use, mcp, a2a, autonomous-agent, workflow-automation, edgeone, kimi, deepseek, glm, openai agents, claude opus
+
+**Topic-to-search mapping:** `GHOSTCLAW/research/github-toptrend-map.yaml`
+
+**Documentation:** `docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md`
 
 ## 13. Validation, Receipt, Archive
 
@@ -281,6 +321,8 @@ Receipt types:
 - Model swap receipts (Phase 6)
 - MoA vote records (Phase 7)
 - Skill creator receipts (Phase 10)
+- GitHub Toptrend research receipts (Phase 11)
+- EdgeOne readiness receipts (Phase 12)
 
 ## 14. Hard Stop Conditions
 
@@ -297,6 +339,8 @@ GHOSTCLAW enters hard stop when:
 - Self-approval attempted
 - Recursive Codex/MoA launch attempted
 - KV-only protocol requested
+- EdgeOne live API call attempted
+- EdgeOne deploy/push attempted without explicit gate
 
 On hard stop:
 
@@ -304,6 +348,18 @@ On hard stop:
 2. Do not proceed
 3. Escalate to the authority chain
 4. Log to audit trail
+
+## 15. Immutable Safety Constraints (Cross-Phase)
+
+The following constraints apply across all phases and cannot be overridden:
+
+- **No secret access:** Workers never read `.env`, API keys, tokens, or credentials
+- **No push/deploy:** No git push, no cloud deploy, no production mutation
+- **No live provider/model call:** No live API calls to model providers
+- **No GPU inference:** No local or remote GPU inference execution
+- **No model download:** No model weight downloads or checkpoints
+- **No live EdgeOne API call:** No calls to EdgeOne cloud API endpoints
+- **No cloud mutation:** No create/update/delete on any cloud resource
 
 ---
 

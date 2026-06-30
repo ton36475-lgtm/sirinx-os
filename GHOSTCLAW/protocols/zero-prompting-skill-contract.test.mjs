@@ -8,7 +8,7 @@ const skillText = readFileSync(
 
 describe("Phase 10 Skill Creator / Zero Prompting contract", () => {
   it("marks Phase 10 coverage in the GhostClaw skill", () => {
-    expect(skillText).toMatch(/phase_coverage:\s*"1-(10|11)"/);
+    expect(skillText).toMatch(/phase_coverage:\s*"1-(10|11|12)"/);
     expect(skillText).toContain("Skill Creator / Zero Prompting System (Phase 10)");
   });
 

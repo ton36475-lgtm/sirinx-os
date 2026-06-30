@@ -1,0 +1,34 @@
+{
+  "schema": "ghostclaw.edgeone.readiness.v1",
+  "level": "R3",
+  "status": "not_ready",
+  "checks": {
+    "build_passes": false,
+    "tests_pass": false,
+    "no_secrets": true,
+    "no_env_files": true,
+    "edgeone_config_exists": false,
+    "deploy_packet_ready": true,
+    "smoke_test_ready": true,
+    "rollback_plan_documented": true
+  },
+  "timestamp": "2026-06-30T03:09:00.000Z",
+  "rules": {
+    "R3": "readiness_only",
+    "R4": "preview_deploy_requires_deploy_packet_and_separate_gate",
+    "R5": "production_deploy_explicit_gate_only"
+  },
+  "gate": {
+    "R3_readiness_passed": false,
+    "R4_preview_gate_approved": false,
+    "R5_production_gate_approved": false
+  },
+  "safety_flags": {
+    "do_not_deploy": true,
+    "do_not_push": true,
+    "do_not_mutate_cloud": true,
+    "do_not_call_live_api": true,
+    "do_not_read_secrets": true
+  },
+  "do_not_deploy": true
+}

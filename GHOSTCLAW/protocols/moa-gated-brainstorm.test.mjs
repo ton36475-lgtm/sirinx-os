@@ -69,7 +69,7 @@ describe("Phase 8 MoA-gated brainstorm contract", () => {
   });
 
   it("documents Phase 8 in the GhostClaw skill", () => {
-    expect(skillText).toMatch(/phase_coverage:\s*"1-(8|9|10|11)"/);
+    expect(skillText).toMatch(/phase_coverage:\s*"1-(8|9|10|11|12)"/);
     expect(skillText).toContain("ref_A_safety_risk");
     expect(skillText).toContain("ref_B_speed_cost");
     expect(skillText).toContain("ref_C_correctness_proof");
