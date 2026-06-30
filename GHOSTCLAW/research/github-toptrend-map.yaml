@@ -1,8 +1,8 @@
 # GitHub Toptrend Research Map
 # Part of: GHOSTCLAW Research Worker
 
-schema: ghostclaw.github_toptrend_map.v1
-mode: public_read_only
+schema: ghostclaw.github_toptrend_map.v2
+mode: public_metadata_only
 output_dir: .ghostclaw_runtime/research/github_trending/
 
 topics:
@@ -25,14 +25,40 @@ topics:
 allowed:
   - public_metadata_only
   - gh_search_repos_metadata_only
+  - gh_auth_status_without_secret_read
   - save_output_under_runtime_research
+
+allowed_metadata_fields:
+  - nameWithOwner
+  - description
+  - stargazerCount
+  - url
+  - updatedAt
+
+gh_json_fields:
+  - fullName
+  - description
+  - stargazersCount
+  - url
+  - updatedAt
+  - visibility
+
+visibility_filter: public
 
 blocked:
   - clone_trending_repo
   - install_trending_repo_packages
   - execute_unknown_code
+  - read_tokens
+  - print_tokens
+  - bypass_rate_limits
   - network_scan_external
   - credential_extraction
+
+setup_required_when:
+  - gh_cli_missing_or_unavailable
+  - gh_auth_unavailable_without_secret_read
+  - gh_search_failed_or_rate_limited
 
 canonical_terminology:
   brainstorm: canonical

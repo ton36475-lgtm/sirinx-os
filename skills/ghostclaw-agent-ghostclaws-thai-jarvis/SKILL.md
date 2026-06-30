@@ -11,7 +11,7 @@ description: >
   read-only research, validation/receipt/archive, and hard stop conditions.
 
 # Skill metadata
-phase_coverage: "1-10"
+phase_coverage: "1-11"
 canonical_terminology:
   brainstorm: canonical
   beststorm: legacy_alias
@@ -255,14 +255,16 @@ GHOSTCLAW tracks EdgeOne deployment readiness as a separate gate. Deployment req
 
 No deployment action is taken automatically. EdgeOne readiness is a reporting status only.
 
-## 12. GitHub Toptrend Public Read-Only Research
+## 12. GitHub Toptrend Public Read-Only Research (Phase 11)
 
-The `GHOSTCLAW/research/github-toptrend-scan.mjs` module performs public read-only research on GitHub trending repositories. It:
+The `GHOSTCLAW/research/github-toptrend-worker.mjs` module performs public metadata-only research on GitHub repositories. It:
 
-- Reads public APIs only
-- Does not clone repos
-- Does not execute external code
-- Produces a research report
+- Checks `gh --version` and `gh auth status` without reading or printing tokens
+- Runs `gh search repos --visibility public` for public repositories only
+- Stores only normalized public metadata fields: `nameWithOwner`, `description`, `stargazerCount`, `url`, `updatedAt`
+- Saves output only under `.ghostclaw_runtime/research/github_trending/`
+- Marks `setup_required` if `gh` is missing, auth status is unavailable, or search fails/rate-limits
+- Does not clone repos, install packages, execute unknown code, read tokens, print tokens, or bypass rate limits
 
 ## 13. Validation, Receipt, Archive
 

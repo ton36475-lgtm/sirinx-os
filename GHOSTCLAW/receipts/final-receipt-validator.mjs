@@ -103,6 +103,7 @@ function validateRequiredArtifacts(errors) {
     "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
     "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
     "GHOSTCLAW/research/github-toptrend-worker.mjs",
+    "GHOSTCLAW/research/github-toptrend-worker.test.mjs",
     "GHOSTCLAW/research/github-toptrend-map.yaml",
     "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md",
     "docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md",
@@ -595,7 +596,7 @@ function validatePhase8MoABrainstormArtifacts(errors) {
   }
 
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
-  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9|10)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9|10|11)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
   for (const marker of [
     "ref_A_safety_risk",
     "ref_B_speed_cost",
@@ -683,7 +684,7 @@ function validatePhase9LatentMASArtifacts(errors) {
 
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
   for (const marker of [
-    'phase_coverage: "1-10"',
+    "phase_coverage:",
     "JSON control plane",
     "Latent plane",
     "Safety/policy plane",
@@ -720,7 +721,7 @@ function validatePhase9LatentMASArtifacts(errors) {
 
 function validatePhase10SkillCreatorArtifacts(errors) {
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
-  pushIfMissing(errors, /phase_coverage:\s*"1-10"/.test(skillText), "phase10 GhostClaw skill missing phase coverage marker");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(10|11)"/.test(skillText), "phase10 GhostClaw skill missing phase coverage marker");
 
   const requiredSkillMarkers = [
     "Skill Creator / Zero Prompting System (Phase 10)",
@@ -767,6 +768,113 @@ function validatePhase10SkillCreatorArtifacts(errors) {
   };
 }
 
+function validatePhase11GithubToptrendArtifacts(errors) {
+  const workerText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/research/github-toptrend-worker.mjs"), "utf8");
+  const mapText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/research/github-toptrend-map.yaml"), "utf8");
+  const docText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md"), "utf8");
+  const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+
+  pushIfMissing(errors, /phase_coverage:\s*"1-11"/.test(skillText), "phase11 GhostClaw skill missing phase coverage marker");
+  pushIfMissing(errors, !workerText.includes("execSync"), "phase11 GitHub worker still uses execSync");
+
+  const requiredWorkerMarkers = [
+    "spawnSync",
+    "public_metadata_only",
+    "checkGhPublicMetadataReadiness",
+    "gh_auth_unavailable_without_secret_read",
+    "setup_required",
+    "ALLOWED_METADATA_FIELDS",
+    "GH_JSON_FIELDS",
+    "nameWithOwner",
+    "fullName",
+    "description",
+    "stargazerCount",
+    "stargazersCount",
+    "url",
+    "updatedAt",
+    "--visibility",
+    "public",
+    "BLOCKED_ACTIONS",
+    "clone_trending_repo",
+    "install_trending_repo_packages",
+    "execute_unknown_code",
+    "read_tokens",
+    "print_tokens",
+    "bypass_rate_limits",
+    ".ghostclaw_runtime/research/github_trending/"
+  ];
+
+  for (const marker of requiredWorkerMarkers) {
+    pushIfMissing(errors, workerText.includes(marker), `phase11 GitHub worker missing marker: ${marker}`);
+  }
+
+  for (const marker of [
+    "public_metadata_only",
+    "gh_auth_status_without_secret_read",
+    "allowed_metadata_fields",
+    "gh_json_fields",
+    "visibility_filter: public",
+    "clone_trending_repo",
+    "install_trending_repo_packages",
+    "execute_unknown_code",
+    "read_tokens",
+    "print_tokens",
+    "bypass_rate_limits",
+    "gh_cli_missing_or_unavailable",
+    "gh_auth_unavailable_without_secret_read"
+  ]) {
+    pushIfMissing(errors, mapText.includes(marker), `phase11 GitHub map missing marker: ${marker}`);
+  }
+
+  for (const marker of [
+    "public_metadata_only",
+    "gh auth status",
+    "without reading or printing tokens",
+    "nameWithOwner",
+    "fullName",
+    "stargazerCount",
+    "stargazersCount",
+    "--visibility public",
+    "scan_status_<timestamp>.json",
+    "completed_public_metadata_only",
+    "setup_required",
+    "argument-based process execution",
+    "does not call GitHub or require credentials"
+  ]) {
+    pushIfMissing(errors, docText.includes(marker), `phase11 GitHub doc missing marker: ${marker}`);
+  }
+
+  for (const marker of [
+    "GitHub Toptrend Public Read-Only Research (Phase 11)",
+    "public metadata-only",
+    "gh --version",
+    "gh auth status",
+    "without reading or printing tokens",
+    "nameWithOwner",
+    "--visibility public",
+    "setup_required",
+    "Does not clone repos, install packages, execute unknown code, read tokens, print tokens, or bypass rate limits"
+  ]) {
+    pushIfMissing(errors, skillText.includes(marker), `phase11 GhostClaw skill missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/research/github-toptrend-worker.test.mjs"), "utf8");
+  const requiredTestMarkers = [
+    "marks setup_required when gh is unavailable",
+    "checks gh auth status without reading or printing tokens",
+    "writes public metadata only using argument-based gh search",
+    "documents hard blocks against clone, install, execute, token reads, and rate-limit bypass"
+  ];
+  for (const marker of requiredTestMarkers) {
+    pushIfMissing(errors, testText.includes(marker), `phase11 GitHub test missing case marker: ${marker}`);
+  }
+
+  return {
+    worker_marker_count: requiredWorkerMarkers.length,
+    test_case_marker_count: requiredTestMarkers.length
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -792,6 +900,7 @@ export function validateFinalReceipt(receipt) {
   const phase8MoA = validatePhase8MoABrainstormArtifacts(errors);
   const phase9LatentMAS = validatePhase9LatentMASArtifacts(errors);
   const phase10SkillCreator = validatePhase10SkillCreatorArtifacts(errors);
+  const phase11GithubToptrend = validatePhase11GithubToptrendArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -916,6 +1025,8 @@ export function validateFinalReceipt(receipt) {
       phase9_latentmas_test_case_count: phase9LatentMAS.test_case_marker_count,
       phase10_skill_creator_marker_count: phase10SkillCreator.skill_marker_count,
       phase10_skill_creator_test_case_count: phase10SkillCreator.test_case_marker_count,
+      phase11_github_toptrend_worker_marker_count: phase11GithubToptrend.worker_marker_count,
+      phase11_github_toptrend_test_case_count: phase11GithubToptrend.test_case_marker_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

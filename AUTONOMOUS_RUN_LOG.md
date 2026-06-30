@@ -1,5 +1,31 @@
 # AUTONOMOUS_RUN_LOG
 
+## Run 2026-06-30T10:02:04+07:00 — Phase 11 GitHub Toptrend Research Worker Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** public metadata only, no clone/install/execute
+- **Scope:** Prove the GitHub Toptrend Research Worker uses safe public metadata collection and cannot become an install lane.
+
+### Changes
+
+- Replaced shell-based GitHub search execution in `GHOSTCLAW/research/github-toptrend-worker.mjs` with argument-based `spawnSync`.
+- Added `GHOSTCLAW/research/github-toptrend-worker.test.mjs` with setup-required, auth-status, metadata normalization, and hard-block coverage.
+- Replaced `GHOSTCLAW/research/github-toptrend-scan.mjs` with a thin wrapper around the safe worker.
+- Updated `GHOSTCLAW/research/github-toptrend-map.yaml`, `docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md`, `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md`, and `GHOSTCLAW/receipts/final-receipt-validator.mjs`.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json`.
+
+### Verification
+
+- `node --check` for the GitHub Toptrend worker, scan wrapper, test, and final receipt validator — passed.
+- `./node_modules/.bin/vitest run GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` — passed, 4 files / 16 tests.
+- Public metadata scan with `limit=3` — completed 15 topics, wrote 15 topic files, skipped 0.
+- Runtime JSON validation — passed for 16 files under `.ghostclaw_runtime/research/github_trending/*20260630030023*.json`.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and `phase11_github_toptrend_test_case_count=4`.
+
+### Blocked Actions
+
+- No clone, install, execution of unknown repo code, rate-limit bypass, push, deploy, production action, customer send, Telegram live send, or raw secret recording was performed.
+
 ## Run 2026-06-30T09:44:10+07:00 — Phase 10 Skill Creator / Zero Prompting Contract Hardening
 
 - **Agent:** Codex local worker
