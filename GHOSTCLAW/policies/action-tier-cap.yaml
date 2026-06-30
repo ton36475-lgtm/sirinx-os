@@ -60,8 +60,8 @@ action_tier_cap:
 
   # Tier D: External/Resource Bounds Breach (Auto-Block, No Human Prompt)
   dependency_install: D
-  model_download: D
-  gpu_inference: D
+  model_download: X
+  gpu_inference: X
   external_network_write: D
 
   # Tier X: High Risk / Strict Forbidden Actions (Hard Block, No Human Prompt)

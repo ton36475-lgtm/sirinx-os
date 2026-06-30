@@ -27,6 +27,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: `local_commit_allowed_scope` now rejects failed validation, disallowed file scope, and blocked actions before approval.
   - Evidence: `GHOSTCLAW/agents/auto-approve-engine.mjs`, `GHOSTCLAW/agents/auto-approve-engine.test.mjs`, `.ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json`.
   - Verification: `pnpm vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` passed, 1 file / 14 tests.
+- [x] Harden GhostClaw auto-approval matrix coverage.
+  - Status: Phase 2 matrix now explicitly covers Tier B auto approval, Tier C quorum, unknown actions defaulting to Tier D auto-block, missing evidence, missing decision id, and Tier X classification for push/deploy/secret/model download/GPU inference.
+  - Evidence: `GHOSTCLAW/agents/auto-approve-engine.mjs`, `GHOSTCLAW/agents/auto-approve-engine.test.mjs`, `GHOSTCLAW/policies/action-tier-cap.yaml`, `.ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json`.
+  - Verification: `node --check GHOSTCLAW/agents/auto-approve-engine.mjs` passed; `./node_modules/.bin/vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` passed, 1 file / 20 tests.
 - [x] Add GhostClaw final receipt validator.
   - Status: Phase 17 receipt fields and Browser Use smoke proof can now be checked directly from disk.
   - Evidence: `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`.

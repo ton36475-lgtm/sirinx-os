@@ -1,0 +1,58 @@
+{
+  "schema": "ghostclaw.phase2.auto_approval_matrix_validation.v1",
+  "created_at": "2026-06-30T01:19:14Z",
+  "local_created_at": "2026-06-30T08:19:14+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "mode": "local_only_policy_and_test_hardening",
+  "status": "validation_passed_commit_pending",
+  "scope": "Phase 2 Hermes/Codex mutual auto approval matrix",
+  "files_modified": [
+    "GHOSTCLAW/agents/auto-approve-engine.mjs",
+    "GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+    "GHOSTCLAW/policies/action-tier-cap.yaml"
+  ],
+  "requirements_validated": [
+    "A auto approve remains covered",
+    "B auto approve",
+    "C quorum required",
+    "D auto blocked",
+    "X hard blocked",
+    "unknown action_class defaults to Tier D",
+    "self approval rejected",
+    "missing evidence_pack rejected",
+    "missing decision_id rejected",
+    "local commit rejected if validation_passed=false",
+    "local commit rejected if allowed_files_only=false",
+    "push deploy secret_access model_download and gpu_inference classified Tier X"
+  ],
+  "validation": [
+    {
+      "command": "node --check GHOSTCLAW/agents/auto-approve-engine.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+      "result": "passed_1_file_20_tests"
+    }
+  ],
+  "policy_decision": {
+    "model_download": "X",
+    "gpu_inference": "X",
+    "source_files": [
+      "GHOSTCLAW/agents/auto-approve-engine.mjs",
+      "GHOSTCLAW/policies/action-tier-cap.yaml"
+    ]
+  },
+  "safety": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_secret_access": true,
+    "no_model_download": true,
+    "no_gpu_live_inference": true,
+    "no_provider_call": true,
+    "no_package_install": true,
+    "no_external_message_send": true
+  },
+  "next_safe_action": "Run final receipt validation, evaluate non-self local_commit_allowed_scope approval, then stage only scoped Phase 2 files if checks pass."
+}

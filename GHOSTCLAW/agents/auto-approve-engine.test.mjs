@@ -33,8 +33,57 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(engine.getActionTierCap("local_commit_allowed_scope")).toBe("B");
     expect(engine.getActionTierCap("lockfile_bound_dependency_repair")).toBe("C");
     expect(engine.getActionTierCap("dependency_install")).toBe("D");
+    expect(engine.getActionTierCap("model_download")).toBe("X");
+    expect(engine.getActionTierCap("gpu_inference")).toBe("X");
     expect(engine.getActionTierCap("push")).toBe("X");
     expect(engine.getActionTierCap("unknown_hacker_action")).toBe("D");
+  });
+
+  it("should auto-approve Tier B local validation work", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "no_install_validation",
+      display_score: 88,
+      decision_id: "test-dec-tier-b-auto-approve",
+      evidence_pack: { command: "pnpm vitest run focused-suite" }
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("approved");
+    expect(res.final_tier).toBe("B");
+    expect(res.human_approval_required).toBe(false);
+  });
+
+  it("should require agent quorum for Tier C actions", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "lockfile_bound_dependency_repair",
+      display_score: 95,
+      decision_id: "test-dec-tier-c-quorum",
+      evidence_pack: { rollback_plan: "restore lockfile from git" }
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("quorum_required");
+    expect(res.final_tier).toBe("C");
+    expect(res.reason).toBe("agent_quorum_required");
+    expect(res.human_approval_required).toBe(false);
+  });
+
+  it("should auto-block unknown action classes as Tier D", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "unknown_hacker_action",
+      display_score: 95,
+      decision_id: "test-dec-unknown-action",
+      evidence_pack: { note: "unknown actions must fail closed" }
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("D");
+    expect(res.reason).toBe("policy_tier_auto_blocked");
+    expect(res.human_approval_required).toBe(false);
   });
 
   it("should strictly enforce mutual approval rules and disallow self-approval", () => {
@@ -66,6 +115,34 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(res.reason).toBe("missing_required_metadata_fields");
   });
 
+  it("should auto-block a missing evidence pack even when decision id exists", () => {
+    const ctx = {
+      requester_agent: "hermes",
+      approver_agent: "codex",
+      action_class: "read_only",
+      display_score: 95,
+      decision_id: "test-dec-missing-evidence"
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.reason).toBe("missing_required_metadata_fields");
+  });
+
+  it("should auto-block a missing decision id even when evidence exists", () => {
+    const ctx = {
+      requester_agent: "hermes",
+      approver_agent: "codex",
+      action_class: "read_only",
+      display_score: 95,
+      evidence_pack: { file: "receipt.json" }
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.reason).toBe("missing_required_metadata_fields");
+  });
+
   it("should enforce auto-block on Tier D and X without flagging human interaction required", () => {
     const ctx = {
       requester_agent: "hermes",
@@ -79,6 +156,22 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(res.status).toBe("auto_blocked");
     expect(res.human_approval_required).toBe(false);
     expect(res.final_tier).toBe("X");
+  });
+
+  it("should classify push deploy secret model download and GPU actions as Tier X", () => {
+    for (const action_class of ["push", "deploy", "secret_access", "model_download", "gpu_inference"]) {
+      const res = engine.evaluateAutonomousApproval({
+        requester_agent: "codex",
+        approver_agent: "hermes",
+        action_class,
+        display_score: 99,
+        decision_id: `test-dec-x-${action_class}`,
+        evidence_pack: { action_class }
+      });
+      expect(res.status).toBe("auto_blocked");
+      expect(res.final_tier).toBe("X");
+      expect(res.human_approval_required).toBe(false);
+    }
   });
 
   it("should auto-block dependency install without human approval prompt", () => {

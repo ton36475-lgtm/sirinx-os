@@ -2410,3 +2410,26 @@
 ### Blocked Actions
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
+
+## Run 2026-06-30T08:19:14+07:00 — Phase 2 Auto-Approval Matrix Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only policy/test hardening, no external execution
+- **Scope:** Close explicit Phase 2 coverage gaps for Hermes/Codex mutual auto approval.
+
+### Changes
+
+- Updated `GHOSTCLAW/agents/auto-approve-engine.mjs` so `model_download` and `gpu_inference` are Tier X hard-block actions.
+- Updated `GHOSTCLAW/policies/action-tier-cap.yaml` to match the embedded policy for `model_download: X` and `gpu_inference: X`.
+- Expanded `GHOSTCLAW/agents/auto-approve-engine.test.mjs` from 14 to 20 tests, covering Tier B auto approval, Tier C quorum, unknown action Tier D auto-block, separate missing evidence and missing decision id rejection, and Tier X classification for push/deploy/secret/model download/GPU actions.
+- Added `.ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json`.
+- Updated the final receipt and `NEXT_ACTIONS.md` with the 20-test validation result.
+
+### Verification
+
+- `node --check GHOSTCLAW/agents/auto-approve-engine.mjs` — passed.
+- `./node_modules/.bin/vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` — passed, 1 file / 20 tests.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
