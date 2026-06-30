@@ -16,7 +16,7 @@
  *
  * If dependencies are missing, writes setup instructions — does NOT auto-install.
  *
- * Canonical terminology: brainstorm (canonical), beststorm (legacy alias), beststrom (invalid typo).
+ * Canonical terminology: brainstorm.
  */
 
 import { writeFile, mkdir, appendFile } from 'node:fs/promises';
@@ -41,11 +41,25 @@ function smokeId() {
 
 // ─── Detect Playwright ────────────────────────────────────────
 
+async function loadPlaywrightChromium() {
+  const direct = await import('playwright').catch(() => null);
+  if (direct?.chromium) {
+    return { chromium: direct.chromium, source: 'playwright' };
+  }
+
+  const testPackage = await import('@playwright/test').catch(() => null);
+  if (testPackage?.chromium) {
+    return { chromium: testPackage.chromium, source: '@playwright/test' };
+  }
+
+  return null;
+}
+
 async function detectPlaywright() {
   try {
-    const pw = await import('playwright').catch(() => null);
-    if (pw && pw.chromium) {
-      return { available: true, runtime: 'node', version: 'playwright' };
+    const loaded = await loadPlaywrightChromium();
+    if (loaded?.chromium) {
+      return { available: true, runtime: 'node', version: loaded.source };
     }
   } catch {
     // not installed
@@ -176,7 +190,27 @@ async function runSmoke() {
   }
 
   // Run Playwright smoke test
-  const { chromium } = await import('playwright');
+  const loaded = await loadPlaywrightChromium();
+  if (!loaded?.chromium) {
+    const result = {
+      smoke_id: smokeId(),
+      timestamp: isoNow(),
+      url: SMOKE_URL,
+      status: 'setup_required',
+      overall: 'setup_required',
+      error: 'Node.js Playwright runtime could not be imported. Auto-install is disabled.',
+      dependencies: {
+        playwright: pwDetection,
+        browser_use: buDetection,
+      },
+    };
+    await writeReceipt(result);
+    await appendRunLog(result);
+    console.log(JSON.stringify(result, null, 2));
+    process.exit(1);
+  }
+
+  const { chromium } = loaded;
 
   const smokeResult = {
     smoke_id: smokeId(),
@@ -186,6 +220,7 @@ async function runSmoke() {
     overall: null,
     steps: [],
     console_errors: [],
+    page_errors: [],
     dependencies: {
       playwright: pwDetection,
       browser_use: buDetection,
@@ -211,11 +246,25 @@ async function runSmoke() {
         });
       }
     });
+    page.on('pageerror', (err) => {
+      smokeResult.page_errors.push({
+        message: err.message,
+      });
+    });
 
     // Step 2: Open dashboard URL
     try {
-      await page.goto(SMOKE_URL, { waitUntil: 'networkidle', timeout: 15000 });
-      smokeResult.steps.push({ step: 'open_url', status: 'pass', url: SMOKE_URL });
+      const response = await page.goto(SMOKE_URL, { waitUntil: 'networkidle', timeout: 15000 });
+      const statusCode = response?.status() || 0;
+      smokeResult.steps.push({
+        step: 'open_url',
+        status: statusCode === 200 ? 'pass' : 'fail',
+        url: SMOKE_URL,
+        http_status: statusCode,
+      });
+      if (statusCode !== 200) {
+        throw new Error(`Expected HTTP 200, got ${statusCode}`);
+      }
     } catch (err) {
       smokeResult.steps.push({ step: 'open_url', status: 'fail', error: err.message });
       throw new Error(`Failed to open ${SMOKE_URL}: ${err.message}`);
@@ -238,7 +287,19 @@ async function runSmoke() {
       smokeResult.steps.push({ step: 'safe_click', status: 'fail', error: err.message });
     }
 
-    // Step 5: Check visible text
+    // Step 5: Click R0 tab before checking active-goal evidence
+    try {
+      await page.getByRole('button', { name: /R0 Gates/i }).click({ timeout: 5000 });
+      await page.waitForTimeout(250);
+      smokeResult.steps.push({ step: 'r0_tab_click', status: 'pass', target: 'R0 Gates' });
+      const r0ScreenshotPath = join(SCREENSHOTS_DIR, `smoke-r0-${Date.now()}.png`);
+      await page.screenshot({ path: r0ScreenshotPath, fullPage: true });
+      smokeResult.steps.push({ step: 'capture_r0_page', status: 'pass', screenshot: r0ScreenshotPath });
+    } catch (err) {
+      smokeResult.steps.push({ step: 'r0_tab_click', status: 'fail', error: err.message });
+    }
+
+    // Step 6: Check visible text
     try {
       const text = await page.textContent('body');
       const trimmed = text ? text.trim() : '';
@@ -248,15 +309,29 @@ async function runSmoke() {
         text_length: trimmed.length,
         text_preview: trimmed.slice(0, 200),
       });
+
+      const requiredChecks = [
+        ['active_goal_panel_found', 'Active Goal'],
+        ['packet_013_found', 'packet_013'],
+        ['blocker_found', 'BLOCK-'],
+      ];
+      for (const [stepName, needle] of requiredChecks) {
+        smokeResult.steps.push({
+          step: stepName,
+          status: trimmed.includes(needle) ? 'pass' : 'fail',
+          needle,
+        });
+      }
     } catch (err) {
       smokeResult.steps.push({ step: 'visible_text_check', status: 'fail', error: err.message });
     }
 
-    // Step 6: Console error capture summary
+    // Step 7: Console/page error capture summary
     smokeResult.steps.push({
       step: 'console_error_capture',
-      status: smokeResult.console_errors.length === 0 ? 'pass' : 'warn',
+      status: smokeResult.console_errors.length === 0 && smokeResult.page_errors.length === 0 ? 'pass' : 'fail',
       error_count: smokeResult.console_errors.length,
+      page_error_count: smokeResult.page_errors.length,
     });
 
     // Determine overall result

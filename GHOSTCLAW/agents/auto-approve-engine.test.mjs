@@ -112,6 +112,77 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(res.human_approval_required).toBe(false);
   });
 
+  it("should approve local commit only when validation and file-scope guards pass", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "local_commit_allowed_scope",
+      display_score: 95,
+      decision_id: "test-dec-local-commit-pass",
+      evidence_pack: { receipt: "receipt.json" },
+      validation_passed: true,
+      allowed_files_only: true,
+      blocked_actions: []
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("approved");
+    expect(res.final_tier).toBe("B");
+  });
+
+  it("should reject local commit when validation has not passed", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "local_commit_allowed_scope",
+      display_score: 95,
+      decision_id: "test-dec-local-commit-validation-fail",
+      evidence_pack: { receipt: "receipt.json" },
+      validation_passed: false,
+      allowed_files_only: true,
+      blocked_actions: []
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.reason).toBe("local_commit_guard_failed");
+  });
+
+  it("should reject local commit when staged file scope is not allowed", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "local_commit_allowed_scope",
+      display_score: 95,
+      decision_id: "test-dec-local-commit-scope-fail",
+      evidence_pack: { receipt: "receipt.json" },
+      validation_passed: true,
+      allowed_files_only: false,
+      blocked_actions: []
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.reason).toBe("local_commit_guard_failed");
+  });
+
+  it("should reject local commit when blocked actions are present", () => {
+    const ctx = {
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "local_commit_allowed_scope",
+      display_score: 95,
+      decision_id: "test-dec-local-commit-blocked-action",
+      evidence_pack: { receipt: "receipt.json" },
+      validation_passed: true,
+      allowed_files_only: true,
+      blocked_actions: ["deploy"]
+    };
+    const res = engine.evaluateAutonomousApproval(ctx);
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("X");
+    expect(res.reason).toBe("local_commit_guard_failed");
+  });
+
   it("should normalize legacy aliases to canonical action classes", () => {
     expect(engine.getCanonicalActionClass("write_lane")).toBe("runtime_artifact_write");
     expect(engine.getCanonicalActionClass("git_push")).toBe("push");

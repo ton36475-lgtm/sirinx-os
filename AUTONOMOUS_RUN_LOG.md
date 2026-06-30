@@ -2175,3 +2175,172 @@
 - This evidence was recorded from prior UI smoke test runs.
 - No runtime/gate/source changes were made only to record this evidence.
 - No deploy, push, cloud mutation, customer send, Telegram live send, or secret read was performed.
+
+## Run 2026-06-30T06:59:38+07:00 — GhostClaw A2A Probe Hardening Receipt
+
+- **Agent:** Codex local worker
+- **Mode:** local-only validation, probe-only A2A sync, no external execution
+- **Scope:** Validate `scripts/ghostclaw_a2a_sync_probe.py`, the existing probe test, and the external repo quarantine state for `oh-my-opencode-lite` and `Agent-Blackbox`.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Re-read the active GhostClaw objective file before continuing.
+- Confirmed the focused probe test exists at `WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_probe.py`.
+- Verified external repos are present only under `.ghostclaw_runtime/a2a2a/external_repos/`.
+- Wrote hardening receipt `.ghostclaw_runtime/a2a2a/receipts/a2a_probe_hardening_20260629T235938_784654Z.json`.
+
+### Verification
+
+- `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_ghostclaw_a2a_sync_probe -v` — passed, 2 tests.
+- `python3 -m py_compile scripts/ghostclaw_a2a_sync_probe.py` — passed.
+- Runtime inbox and receipt JSON validation with `python3 -m json.tool` — passed.
+- Scoped `git diff --check` for probe/status files — passed.
+- Quarantine scan found no `node_modules`, `.pnpm`, `dist`, or `build` directories at maxdepth 2.
+
+### Blocked Actions
+
+- No third-party install script, `npx up`, global OpenCode plugin write, provider/model call, Telegram/customer live send, secret read, deploy, push, model download, or GPU inference was performed.
+- Hermes/KOB/A2A sessions remain probe-only mailbox workers, not proof of authenticated full agent intelligence.
+
+## Run 2026-06-30T07:02:29+07:00 — External Repo Install-Risk Review
+
+- **Agent:** Codex local worker
+- **Mode:** local-only quarantine review, no package execution
+- **Scope:** Review `oh-my-opencode-lite` and `Agent-Blackbox` quarantine metadata before any install gate.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Read package metadata, README/install guidance, `oh-my-opencode-lite` postinstall script, SUL license, and Agent-Blackbox e2e/package metadata from `.ghostclaw_runtime/a2a2a/external_repos/`.
+- Wrote `docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_RISK_REVIEW_20260630.md`.
+- Wrote `.ghostclaw_runtime/a2a2a/state/external_repo_install_risk_review_20260630T000229Z.json`.
+- Wrote `.ghostclaw_runtime/a2a2a/receipts/external_repo_install_risk_review_20260630T000229Z.json`.
+
+### Decisions
+
+- `oh-my-opencode-lite`: blocked until `APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE`.
+- `Agent-Blackbox`: blocked until `APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE`.
+- Do not combine both installs into one broad approval.
+
+### Blocked Actions
+
+- No package install, `bunx`, `npx`, postinstall execution, global OpenCode plugin write, daemon/dashboard start, provider/model call, secret read, browser automation, Telegram/customer live send, deploy, or push was performed.
+
+## Run 2026-06-30T07:14:15+07:00 — External Repo Install Approval Packet Templates
+
+- **Agent:** Codex local worker
+- **Mode:** local-only template creation, no package execution
+- **Scope:** Convert the external repo install-risk review into two non-executable approval packet templates, one per quarantined repo.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Actions
+
+- Wrote `docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_APPROVAL_PACKET_TEMPLATES_20260630.md`.
+- Wrote `.ghostclaw_runtime/a2a2a/templates/install-oh-my-opencode-lite-approval.template.json`.
+- Wrote `.ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json`.
+- Wrote `.ghostclaw_runtime/a2a2a/receipts/external_repo_install_approval_templates_20260630T001415Z.json`.
+
+### Decisions
+
+- `oh-my-opencode-lite`: approval template only; still blocked until `APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE`.
+- `Agent-Blackbox`: approval template only; still blocked until `APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE`.
+- Do not activate both templates together. Review one repo at a time.
+
+### Blocked Actions
+
+- No active approval packet was created.
+- No package install, `bunx`, `npx`, postinstall execution, global OpenCode plugin write, daemon/dashboard start, provider/model call, secret read, browser automation, Telegram/customer live send, deploy, or push was performed.
+
+## Run 2026-06-30T07:24:23+07:00 — GhostClaw Objective Validation Refresh
+
+- **Agent:** Codex local worker
+- **Mode:** local-only validation, no push, no deploy, no provider call
+- **Scope:** Re-read the active GhostClaw objective and refresh validation evidence for the existing AGENT GHOSTCLAWS worker system.
+- **Branch:** `staging/godmode-master-os-v2`
+
+### Verification
+
+- `python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json` — passed.
+- Runtime A2A template JSON validation under `.ghostclaw_runtime/a2a2a/templates/` — passed.
+- `pnpm vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` — passed, 1 file / 10 tests.
+- `pnpm vitest run GHOSTCLAW/models/model-router.test.mjs` — passed, 1 file / 23 tests.
+- `LATENTMAS_LIVE_ENABLED=false HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 cargo check --manifest-path research/latentmas/Cargo.toml --workspace --locked --offline` — passed.
+- `python3 -m py_compile $(find research/latentmas/python -name "*.py" -type f | sort)` — passed.
+- `pnpm vitest run services/latentmas-gateway/cors-policy.test.mjs` — passed, 1 file / 3 tests.
+- `git diff --check` — passed.
+
+### Smoke Status
+
+- Initial Browser/UI probe for `http://127.0.0.1:8721/god-mode` returned `http_code=000` / connection refused.
+- The local `centerbrain-shell` dashboard was then started on port `8721` for local smoke only, and Browser Use smoke passed with real receipt evidence.
+
+### Receipt
+
+- Updated `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` with current validation results, skipped actions, blocked actions, and current commit status.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, model download, GPU inference, package install, global install, or external repo install was performed.
+- Current-turn commit was not made because the worktree contains parallel or out-of-scope files and there is no current gate authorizing staging them together.
+
+### 2026-06-30T00:30:57.564Z — Browser Use Smoke Test
+- **Smoke ID:** smoke-mqzwuvyl-uxd53x
+- **URL:** http://127.0.0.1:8721/god-mode
+- **Status:** completed
+- **Overall:** pass
+- **Steps:** 9
+### 2026-06-30T00:31:51.511Z — Browser Use Smoke Test
+- **Smoke ID:** smoke-mqzww15i-qgmqki
+- **URL:** http://127.0.0.1:8721/god-mode
+- **Status:** completed
+- **Overall:** pass
+- **Steps:** 10
+
+## Run 2026-06-30T07:31:51+07:00 — Browser Use `/god-mode` Smoke Evidence
+
+- **Agent:** Codex local worker
+- **Mode:** local-only browser smoke, no login, no customer send, no deploy
+- **Scope:** Start the local `centerbrain-shell` dashboard on `127.0.0.1:8721`, verify `/god-mode`, click R0 Gates, and capture evidence required by the active GhostClaw objective.
+
+### Evidence
+
+- Smoke receipt: `GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json`.
+- R0 screenshot: `GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png`.
+- `open_url` — passed, HTTP 200.
+- `r0_tab_click` — passed.
+- `active_goal_panel_found` — passed.
+- `packet_013_found` — passed.
+- `blocker_found` — passed.
+- `console_error_capture` — passed with `error_count=0` and `page_error_count=0`.
+
+### Blocked Actions
+
+- No login, payment, security setting change, private data scraping, customer-send flow, Telegram live send, provider/model call, secret read, deploy, push, package install, model download, or GPU inference was performed.
+
+## Run 2026-06-30T07:46:38+07:00 — Local Commit Guard Enforcement
+
+- **Agent:** Codex local worker
+- **Mode:** local-only policy hardening and validation
+- **Scope:** Enforce the active GhostClaw objective requirement that `local_commit_allowed_scope` requires real validation, allowlisted file scope, and no blocked actions.
+
+### Changes
+
+- Updated `GHOSTCLAW/agents/auto-approve-engine.mjs` to reject local commit approval when `validation_passed !== true`, `allowed_files_only !== true`, or `blocked_actions` is non-empty.
+- Added four focused tests in `GHOSTCLAW/agents/auto-approve-engine.test.mjs` covering approved local commit and rejection for failed validation, disallowed scope, and blocked actions.
+- Generated non-self approval receipt `.ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json` for the scoped local commit gate.
+
+### Verification
+
+- `node --check GHOSTCLAW/agents/auto-approve-engine.mjs` — passed.
+- `node --check GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs` — passed.
+- `pnpm vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` — passed, 1 file / 14 tests.
+- `pnpm vitest run GHOSTCLAW/models/model-router.test.mjs` — passed, 1 file / 23 tests.
+- Runtime A2A template JSON validation — passed.
+- LatentMAS offline `cargo check` and Python compile — passed.
+- `pnpm vitest run services/latentmas-gateway/cors-policy.test.mjs` — passed, 1 file / 3 tests.
+- `git diff --check` — passed.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.

@@ -317,6 +317,25 @@ export class AutoApproveEngine {
       }, context);
     }
 
+    const canonicalActionClass = this.getCanonicalActionClass(action_class);
+    if (canonicalActionClass === "local_commit_allowed_scope") {
+      const blockedActions = Array.isArray(context.blocked_actions) ? context.blocked_actions : [];
+      const validationPassed = context.validation_passed === true;
+      const allowedFilesOnly = context.allowed_files_only === true;
+
+      if (!validationPassed || !allowedFilesOnly || blockedActions.length > 0) {
+        return this.buildDecision({
+          status: "auto_blocked",
+          final_tier: "X",
+          human_approval_required: false,
+          reason: "local_commit_guard_failed",
+          validation_passed: validationPassed,
+          allowed_files_only: allowedFilesOnly,
+          blocked_actions: blockedActions
+        }, context);
+      }
+    }
+
     const effective_score = Math.min(100, Math.max(0, Number(display_score) || 0));
     const scoreTier = this.scoreToTier(effective_score);
     const final_tier = this.applyActionTierCap(scoreTier, action_class);

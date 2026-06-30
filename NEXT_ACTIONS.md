@@ -6,6 +6,27 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Completed This Session
 
+- [x] Start GhostClaw A2A sync probe and external repo intake receipts.
+  - Status: partial/probe-only. Existing tmux sessions `ghostclaw-hermes`, `ghostclaw-kob`, and `ghostclaw-a2a-sync` are live Python probe workers; smoke packets and external repo intake packets produced ack receipts.
+  - External repos reviewed but not installed: `Yeachan-Heo/oh-my-opencode-lite`, `Yeachan-Heo/Agent-Blackbox`.
+  - Evidence: `scripts/ghostclaw_a2a_sync_probe.py`, `.ghostclaw_runtime/a2a2a/receipts/a2a_sync_start_20260629T235443_089980Z.json`.
+  - Blocked until separate approval: clone, install, `npx`, global plugin writes, provider calls, live sends, deploy, and push.
+- [x] Add GhostClaw external repo install-risk review.
+  - Status: install blocked pending gate-specific approval. `oh-my-opencode-lite` and `Agent-Blackbox` were reviewed from quarantine metadata; no install, postinstall, `npx`, `bunx`, daemon, dashboard, global plugin write, provider call, secret read, deploy, or push ran.
+  - Evidence: `docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_RISK_REVIEW_20260630.md`, `.ghostclaw_runtime/a2a2a/state/external_repo_install_risk_review_20260630T000229Z.json`, `.ghostclaw_runtime/a2a2a/receipts/external_repo_install_risk_review_20260630T000229Z.json`.
+  - Next gate options: `APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE` or `APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE`, one repo at a time.
+- [x] Add GhostClaw external repo install approval packet templates.
+  - Status: template-only approval packets prepared for operator review; no active approval packet was created and no external repo code was installed or executed.
+  - Evidence: `docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_APPROVAL_PACKET_TEMPLATES_20260630.md`, `.ghostclaw_runtime/a2a2a/templates/install-oh-my-opencode-lite-approval.template.json`, `.ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json`, `.ghostclaw_runtime/a2a2a/receipts/external_repo_install_approval_templates_20260630T001415Z.json`.
+  - Next gate options remain separate: `APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE` or `APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE`.
+- [x] Refresh GhostClaw objective validation evidence.
+  - Status: objective validation refreshed from current files; schema/template JSON, auto-approve tests, model-router tests, LatentMAS offline checks, gateway direct test, diff check, and Browser/UI smoke passed. UI smoke verified `/god-mode` HTTP 200, R0 tab click, Active Goal panel, `packet_013`, blocker text, and zero console/page errors.
+  - Evidence: `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`, `GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json`, `GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png`, `AUTONOMOUS_RUN_LOG.md`.
+  - Commit status: scoped local commit gate approved by `decision-local-commit-browser-smoke-20260630-001`; broad staging remains blocked because the worktree includes parallel or out-of-scope files.
+- [x] Enforce GhostClaw local commit guard.
+  - Status: `local_commit_allowed_scope` now rejects failed validation, disallowed file scope, and blocked actions before approval.
+  - Evidence: `GHOSTCLAW/agents/auto-approve-engine.mjs`, `GHOSTCLAW/agents/auto-approve-engine.test.mjs`, `.ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json`.
+  - Verification: `pnpm vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` passed, 1 file / 14 tests.
 - [x] Integrate GhostClaws GodMode Mission Control UI + CenterBrain hub runtime bridge.
 - [x] Push GodMode changes to `staging/godmode-master-os-v2`.
 - [x] Integrate Pocket Hatchery Agent Factory v4 scaffold.
