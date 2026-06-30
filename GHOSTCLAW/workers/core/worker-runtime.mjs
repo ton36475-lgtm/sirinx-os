@@ -147,6 +147,31 @@ class WorkerRuntime {
   }
 
   /**
+   * Validate dispatch metadata required by the Worker Build Runtime.
+   * @param {Object} message
+   * @returns {{valid: boolean, reason?: string}}
+   */
+  validateDispatchContract(message) {
+    if (!message?.task_id) return { valid: false, reason: 'missing_task_id' };
+    if (!message?.decision_id) return { valid: false, reason: 'missing_decision_id' };
+    if (!message?.evidence_pack || typeof message.evidence_pack !== 'object') {
+      return { valid: false, reason: 'missing_evidence_pack' };
+    }
+    if (message.receipt_required !== true) {
+      return { valid: false, reason: 'receipt_required_must_be_true' };
+    }
+
+    const requester = message.requester_agent || message.autonomous_approval?.requester_agent;
+    const approver = message.approver_agent || message.autonomous_approval?.approver_agent;
+    if (!requester || !approver) {
+      return { valid: false, reason: 'missing_requester_or_approver_agent' };
+    }
+
+    this.validateMutualApproval(requester, approver);
+    return { valid: true };
+  }
+
+  /**
    * Enqueue a message for dispatch.
    * @param {Object} message
    */
@@ -163,6 +188,12 @@ class WorkerRuntime {
     if (this.messageQueue.length === 0) return null;
 
     const message = this.messageQueue.shift();
+    const contract = this.validateDispatchContract(message);
+    if (!contract.valid) {
+      console.error(`[runtime] Dispatch contract failed: ${contract.reason}`);
+      return null;
+    }
+
     const worker = this.getWorker(message.worker_id);
 
     if (!worker) {
@@ -179,9 +210,9 @@ class WorkerRuntime {
     }
 
     // Check mutual approval if approval fields are present
-    if (message.autonomous_approval || (message.requester_agent && message.approver_agent)) {
-      this.validateMutualApproval(message.requester_agent, message.approver_agent);
-    }
+    const requesterAgent = message.requester_agent || message.autonomous_approval?.requester_agent;
+    const approverAgent = message.approver_agent || message.autonomous_approval?.approver_agent;
+    this.validateMutualApproval(requesterAgent, approverAgent);
 
     // Update worker state
     const state = this.workerStates.get(message.worker_id);

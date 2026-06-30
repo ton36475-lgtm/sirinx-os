@@ -19,6 +19,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: template-only approval packets prepared for operator review; no active approval packet was created and no external repo code was installed or executed.
   - Evidence: `docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_APPROVAL_PACKET_TEMPLATES_20260630.md`, `.ghostclaw_runtime/a2a2a/templates/install-oh-my-opencode-lite-approval.template.json`, `.ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json`, `.ghostclaw_runtime/a2a2a/receipts/external_repo_install_approval_templates_20260630T001415Z.json`.
   - Next gate options remain separate: `APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE` or `APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE`.
+- [x] Harden GhostClaw Worker Build Runtime contract.
+  - Status: Phase 1 registry/runtime now loads concrete worker IDs, enforces decision/evidence/receipt metadata before dispatch, rejects self approval, and writes receipts only with decision/evidence/non-self approval.
+  - Evidence: `GHOSTCLAW/workers/registry/worker-registry.json`, `GHOSTCLAW/workers/core/worker-runtime.mjs`, `GHOSTCLAW/workers/core/worker-receipt.mjs`, `GHOSTCLAW/workers/core/worker-runtime.test.mjs`, `.ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json`.
+  - Verification: runtime/router load probe passed; `./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs` passed, 1 file / 7 tests.
 - [x] Refresh GhostClaw objective validation evidence.
   - Status: objective validation refreshed from current files; schema/template JSON, auto-approve tests, model-router tests, LatentMAS offline checks, gateway direct test, diff check, and Browser/UI smoke passed. UI smoke verified `/god-mode` HTTP 200, R0 tab click, Active Goal panel, `packet_013`, blocker text, and zero console/page errors.
   - Evidence: `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`, `GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json`, `GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png`, `AUTONOMOUS_RUN_LOG.md`.

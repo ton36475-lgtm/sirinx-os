@@ -2462,3 +2462,30 @@
 ### Blocked Actions
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
+
+## Run 2026-06-30T08:38:19+07:00 — Phase 1 Worker Build Runtime Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only runtime/registry/test hardening, no external execution
+- **Scope:** Prove Phase 1 Worker Build Runtime can actually load, route, enforce metadata, reject self approval, track heartbeat, and require receipts.
+
+### Changes
+
+- Updated `GHOSTCLAW/workers/registry/worker-registry.json` so registered workers expose `id`, `model_lane`, `capabilities`, `allowed_actions`, schema fields, `heartbeat_required=true`, `receipt_required=true`, and `self_approval_allowed=false`.
+- Updated `GHOSTCLAW/workers/core/worker-runtime.mjs` to reject dispatch when `task_id`, `decision_id`, `evidence_pack`, `receipt_required=true`, requester, or approver metadata is missing.
+- Updated `GHOSTCLAW/workers/core/worker-receipt.mjs` to require `decisionId`, `evidencePack`, `receiptRequired=true`, requester, approver, and non-self approval.
+- Added `GHOSTCLAW/workers/core/worker-runtime.test.mjs`.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json`.
+- Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 1 worker registry and guard markers.
+
+### Verification
+
+- `python3 -m json.tool GHOSTCLAW/workers/registry/worker-registry.json` — passed.
+- Worker core `node --check` commands — passed.
+- Runtime/router load probe — passed with worker IDs `kimi_coding_worker`, `model_swap_worker`, and `code_patch` routing to `kimi_coding_worker`.
+- `./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs` — passed, 1 file / 7 tests.
+- Scoped `git diff --check` — passed.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.

@@ -93,6 +93,8 @@ class WorkerReceipt {
    * @param {Object} [params.payload] - Input payload for the action.
    * @param {Object} [params.output] - Output produced by the action.
    * @param {Object} [params.evidencePack] - Evidence pack (artifacts, verification data).
+   * @param {string} params.decisionId - Decision ID for the approving action.
+   * @param {boolean} [params.receiptRequired=true] - Must remain true for worker actions.
    * @param {string} [params.correlationId] - Correlation ID for tracing.
    * @param {string} [params.phase] - Workflow phase.
    * @returns {Object} The written receipt (with receipt_id and file_path).
@@ -107,12 +109,26 @@ class WorkerReceipt {
       payload = null,
       output = null,
       evidencePack = null,
+      decisionId,
+      receiptRequired = true,
       correlationId = null,
       phase = null
     } = params;
 
-    if (!workerId || !taskId || !action) {
-      throw new Error('Receipt requires workerId, taskId, and action');
+    if (!workerId || !taskId || !action || !decisionId) {
+      throw new Error('Receipt requires workerId, taskId, action, and decisionId');
+    }
+
+    if (!requesterAgent || !approverAgent) {
+      throw new Error('Receipt requires requesterAgent and approverAgent');
+    }
+
+    if (!evidencePack || typeof evidencePack !== 'object') {
+      throw new Error('Receipt requires evidencePack');
+    }
+
+    if (receiptRequired !== true) {
+      throw new Error('Worker action receipts require receiptRequired=true');
     }
 
     // Enforce mutual approval constraint
@@ -129,11 +145,13 @@ class WorkerReceipt {
     const receipt = {
       receipt_id: receiptId,
       task_id: taskId,
+      decision_id: decisionId,
       worker_id: workerId,
       action: action,
       requester_agent: requesterAgent || null,
       approver_agent: approverAgent || null,
       self_approval_allowed: false,
+      receipt_required: true,
       payload: payload,
       output: output,
       evidence_pack: evidencePack,

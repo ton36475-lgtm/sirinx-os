@@ -110,6 +110,74 @@ function validateRequiredArtifacts(errors) {
   return requiredArtifacts.length;
 }
 
+function validatePhase1WorkerRuntimeArtifacts(errors) {
+  const registry = readJson("GHOSTCLAW/workers/registry/worker-registry.json");
+  const workers = Array.isArray(registry.workers) ? registry.workers : [];
+  pushIfMissing(errors, workers.length > 0, "phase1 worker registry has no workers");
+
+  const requiredWorkerFields = [
+    "id",
+    "role",
+    "model_lane",
+    "capabilities",
+    "allowed_actions",
+    "blocked_actions",
+    "input_schema",
+    "output_schema",
+    "heartbeat_required",
+    "receipt_required",
+    "self_approval_allowed"
+  ];
+
+  const seenIds = new Set();
+  for (const worker of workers) {
+    for (const field of requiredWorkerFields) {
+      pushIfMissing(errors, hasValue(worker[field]), `phase1 worker ${worker.name || worker.id || "unknown"} missing field: ${field}`);
+    }
+    pushIfMissing(errors, !seenIds.has(worker.id), `phase1 duplicate worker id: ${worker.id}`);
+    seenIds.add(worker.id);
+    pushIfMissing(errors, Array.isArray(worker.capabilities) && worker.capabilities.length > 0, `phase1 worker ${worker.id} missing capabilities`);
+    pushIfMissing(errors, Array.isArray(worker.allowed_actions) && worker.allowed_actions.length > 0, `phase1 worker ${worker.id} missing allowed_actions`);
+    pushIfMissing(errors, Array.isArray(worker.blocked_actions), `phase1 worker ${worker.id} missing blocked_actions array`);
+    pushIfMissing(errors, worker.blocked_actions?.includes("self_approval"), `phase1 worker ${worker.id} does not block self_approval`);
+    pushIfMissing(errors, worker.self_approval_allowed === false, `phase1 worker ${worker.id} allows self approval`);
+    pushIfMissing(errors, worker.heartbeat_required === true, `phase1 worker ${worker.id} does not require heartbeat`);
+    pushIfMissing(errors, worker.receipt_required === true, `phase1 worker ${worker.id} does not require receipt`);
+  }
+
+  const messageSchema = readJson("GHOSTCLAW/workers/core/worker-message-schema.json");
+  const messageProperties = messageSchema.properties || {};
+  for (const field of ["decision_id", "evidence_pack", "requester_agent", "approver_agent", "receipt_required"]) {
+    pushIfMissing(errors, hasValue(messageProperties[field]), `phase1 worker message schema missing field: ${field}`);
+  }
+
+  const runtimeText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/core/worker-runtime.mjs"), "utf8");
+  for (const marker of [
+    "validateDispatchContract",
+    "missing_decision_id",
+    "missing_evidence_pack",
+    "receipt_required_must_be_true",
+    "missing_requester_or_approver_agent"
+  ]) {
+    pushIfMissing(errors, runtimeText.includes(marker), `phase1 worker runtime missing guard marker: ${marker}`);
+  }
+
+  const receiptText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/core/worker-receipt.mjs"), "utf8");
+  for (const marker of [
+    "decisionId",
+    "Receipt requires evidencePack",
+    "Worker action receipts require receiptRequired=true",
+    "Self-approval detected in receipt write"
+  ]) {
+    pushIfMissing(errors, receiptText.includes(marker), `phase1 worker receipt missing guard marker: ${marker}`);
+  }
+
+  return {
+    worker_count: workers.length,
+    required_worker_field_count: requiredWorkerFields.length
+  };
+}
+
 function validatePhase3ProtocolArtifacts(errors) {
   const schema = readJson("GHOSTCLAW/protocols/a2a2a-message-schema.json");
   const schemaProperties = schema.properties || {};
@@ -224,6 +292,7 @@ function validateCommitHash(receipt, errors) {
 export function validateFinalReceipt(receipt) {
   const errors = [];
   const requiredArtifactCount = validateRequiredArtifacts(errors);
+  const phase1WorkerRuntime = validatePhase1WorkerRuntimeArtifacts(errors);
   const phase3Protocol = validatePhase3ProtocolArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
@@ -321,6 +390,8 @@ export function validateFinalReceipt(receipt) {
       receipt_path: receiptPath,
       validation_count: Object.keys(validations).length,
       required_artifact_count: requiredArtifactCount,
+      phase1_worker_count: phase1WorkerRuntime.worker_count,
+      phase1_required_worker_field_count: phase1WorkerRuntime.required_worker_field_count,
       phase3_schema_field_count: phase3Protocol.schema_field_count,
       phase3_template_count: phase3Protocol.template_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,

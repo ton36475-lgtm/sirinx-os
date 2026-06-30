@@ -10,16 +10,30 @@
   },
   "workers": [
     {
+      "id": "kimi_coding_worker",
       "name": "kimi_coding_worker",
       "model": "kimi_k2_7_code",
       "display_name": "Kimi K2.7 Code",
       "provider": "moonshot_ai",
       "lane": "code_patch",
+      "model_lane": "kimi",
       "role": "coding_tool_use_reference",
       "autonomy_level": "A2",
       "reports_to": "codex_build_captain",
       "policy_file": "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
       "vote_schema": "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "capabilities": [
+        "code_generation",
+        "patch_planning",
+        "test_planning",
+        "moa_reference_vote"
+      ],
+      "allowed_actions": [
+        "code_patch",
+        "patch_plan",
+        "test_plan",
+        "reference_vote"
+      ],
       "allowed_roles": [
         "coding_tool_use_reference",
         "coding_worker",
@@ -39,20 +53,48 @@
         "install_dependencies",
         "live_provider_call",
         "run_shell_command",
-        "cross_lane_write"
-      ]
+        "cross_lane_write",
+        "self_approval"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false
     },
     {
+      "id": "model_swap_worker",
       "name": "model_swap_worker",
       "model": "metadata_only",
       "display_name": "Model Swap Worker",
       "provider": "internal",
       "lane": "model_swap",
+      "model_lane": "any",
       "role": "metadata_router",
       "autonomy_level": "A2",
       "reports_to": "hermes_commander",
       "policy_file": "GHOSTCLAW/workers/model-swap/model-swap.policy.yaml",
       "receipt_template": ".ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json",
+      "capabilities": [
+        "model_routing",
+        "metadata_routing",
+        "receipt_storage"
+      ],
       "allowed_actions": [
         "route_task_to_model_lane",
         "generate_swap_receipt",
@@ -69,8 +111,29 @@
         "deploy",
         "production_action",
         "secret_access",
-        "override_action_tier_cap"
-      ]
+        "override_action_tier_cap",
+        "self_approval"
+      ],
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false
     }
   ]
 }

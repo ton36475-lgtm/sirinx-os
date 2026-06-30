@@ -12,7 +12,7 @@
   "branch": "staging/godmode-master-os-v2",
   "phases": {
     "phase_0_inspection": "completed_current_turn",
-    "phase_1_worker_build_runtime": "completed_existing_files_present",
+    "phase_1_worker_build_runtime": "completed_validated_current_turn_runtime_contract",
     "phase_2_auto_approval": "completed_validated_current_turn_matrix_hardened_20_tests",
     "phase_3_a2a_sync_team": "completed_validated_current_turn_protocol_contract_fields",
     "phase_4_browser_use": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
@@ -47,7 +47,9 @@
     "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-1782779510569.png",
     "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png",
     ".ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json",
-    ".ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json"
+    ".ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json",
+    "GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -59,21 +61,24 @@
     "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
     "GHOSTCLAW/receipts/final-receipt-validator.mjs",
     ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json",
+    "GHOSTCLAW/workers/registry/worker-registry.json",
+    "GHOSTCLAW/workers/core/worker-runtime.mjs",
+    "GHOSTCLAW/workers/core/worker-receipt.mjs",
     "GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs",
     ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
     "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
-    "count": 11
+    "count": 13
   },
   "files_modified": {
     "source_field": "current_turn_files_modified",
-    "count": 12
+    "count": 15
   },
   "files_changed": {
-    "created_count": 11,
-    "modified_count": 12,
+    "created_count": 13,
+    "modified_count": 15,
     "source_fields": [
       "current_turn_files_created",
       "current_turn_files_modified"
@@ -97,7 +102,7 @@
     "Receipt / Memory Worker"
   ],
   "status_summary": {
-    "worker_runtime_status": "present",
+    "worker_runtime_status": "validated_current_turn_runtime_contract_7_tests",
     "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
     "vibe_agent_status": "present",
     "a2a_sync_status": "probe_only_local_mailbox_workers_present",
@@ -128,6 +133,11 @@
       "name": "a2a2a_template_json",
       "command": "find .ghostclaw_runtime/a2a2a/templates -maxdepth 3 -name \"*.json\" -type f -print -exec python3 -m json.tool {} \\;",
       "result": "passed"
+    },
+    {
+      "name": "worker_runtime_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+      "result": "passed_1_file_7_tests"
     },
     {
       "name": "auto_approve_engine",
@@ -187,6 +197,7 @@
   "validation_results": {
     "a2a2a_schema_json": "passed",
     "a2a2a_template_json": "passed",
+    "worker_runtime_contract": "passed_1_file_7_tests",
     "auto_approve_engine": "passed_1_file_20_tests",
     "local_commit_allowed_scope_decision": "approved_tier_B_non_self_approval",
     "model_router": "passed_1_file_23_tests",
@@ -256,7 +267,43 @@
     "no_external_repo_install": true,
     "no_provider_call": true
   },
-    "latest_phase2_matrix_hardening": {
+  "latest_phase1_worker_runtime_contract": {
+    "status": "validated_local_changes_pending_scoped_commit",
+    "validated_at": "2026-06-30T01:38:19Z",
+    "local_validated_at": "2026-06-30T08:38:19+0700",
+    "files_created": [
+      "GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/workers/registry/worker-registry.json",
+      "GHOSTCLAW/workers/core/worker-runtime.mjs",
+      "GHOSTCLAW/workers/core/worker-receipt.mjs",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "worker registry loads concrete worker IDs",
+      "registry workers expose capability contract fields",
+      "heartbeat_required and receipt_required are true",
+      "self_approval_allowed is false",
+      "runtime rejects missing decision_id",
+      "runtime rejects missing evidence_pack",
+      "runtime rejects receipt_required=false",
+      "runtime rejects missing requester or approver",
+      "receipt writer requires decisionId, evidencePack, receiptRequired=true, and non-self approval"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --input-type=module runtime/router load probe",
+        "result": "passed_worker_ids_kimi_coding_worker_model_swap_worker_code_patch_routes_kimi_coding_worker"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+        "result": "passed_1_file_7_tests"
+      }
+    ]
+  },
+  "latest_phase2_matrix_hardening": {
     "status": "validated_and_committed_local_scope",
     "validated_at": "2026-06-30T01:19:14Z",
     "local_validated_at": "2026-06-30T08:19:14+0700",
