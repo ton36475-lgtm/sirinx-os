@@ -13,6 +13,7 @@
 - Updated `docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md`, `docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md`, `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md`, and `GHOSTCLAW/receipts/final-receipt-validator.mjs`.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase12_edgeone_readiness_contract_validation_20260630T030900Z.json`.
 - Created R3 runtime readiness receipt `.ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json` with status `not_ready`.
+- Created scoped local source commit `d81f4e1` (`test(ghostclaw): validate edgeone readiness contract`).
 
 ### Verification
 
@@ -20,6 +21,7 @@
 - `./node_modules/.bin/vitest run GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` — passed, 5 files / 20 tests.
 - R3 readiness receipt JSON validation — passed.
 - `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and `phase12_edgeone_test_case_count=4`.
+- Source commit: `d81f4e1`.
 
 ### Blocked Actions
 

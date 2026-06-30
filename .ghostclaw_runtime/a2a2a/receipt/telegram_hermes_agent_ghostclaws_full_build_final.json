@@ -23,13 +23,13 @@
     "phase_9_latentmas_dual_plane": "completed_validated_current_turn_dual_plane_manifest_contract",
     "phase_10_skill_creator": "completed_validated_current_turn_zero_prompting_skill_contract",
     "phase_11_github_toptrend": "completed_validated_current_turn_public_metadata_only_15_topics_committed_fbbf067",
-    "phase_12_edgeone_readiness": "completed_validated_current_turn_r3_not_ready_no_deploy",
+    "phase_12_edgeone_readiness": "completed_validated_current_turn_r3_not_ready_no_deploy_committed_d81f4e1",
     "phase_13_autonomous_run_log": "updated_current_turn",
     "phase_14_validation": "completed_current_turn",
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
     "phase_17_final_receipt": "updated_current_turn_phase12_edgeone_readiness_contract",
-    "phase_18_stage_commit": "pending_phase12_scoped_local_commit"
+    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_d81f4e1"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -677,8 +677,8 @@
       "approval_phrase_required": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE"
     }
   },
-  "commit_status": "committed_current_turn_phase10_skill_creator_source_commit",
-  "commit_hash": "6f4250f",
+  "commit_status": "committed_current_turn_phase12_edgeone_readiness_source_commit",
+  "commit_hash": "d81f4e1",
   "commit_message": "test(ghostclaw): validate model router contract",
   "commit_reason": "Latest scoped local commit completed after Phase 6 Model Router contract validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-phase6-model-router-20260630-001.",
   "commit_hash_resolution": {
@@ -816,8 +816,8 @@
     "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
     "commit_status": "committed_current_turn"
   },
-  "last_updated_at": "2026-06-30T03:11:42Z",
-  "last_local_updated_at": "2026-06-30T10:11:42+0700",
+  "last_updated_at": "2026-06-30T03:12:22Z",
+  "last_local_updated_at": "2026-06-30T10:12:22+0700",
   "latest_phase10_skill_creator_contract": {
     "status": "validated_current_turn",
     "validated_at": "2026-06-30T02:44:10Z",
@@ -952,10 +952,11 @@
       "python3 -m json.tool .ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json",
       "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
     ],
-    "source_commit_hash": "pending_phase12_scoped_local_commit",
-    "source_commit_subject": "pending",
-    "commit_status": "pending_phase12_scoped_local_commit",
+    "source_commit_hash": "d81f4e1",
+    "source_commit_subject": "test(ghostclaw): validate edgeone readiness contract",
+    "commit_status": "committed_current_turn",
     "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase12-edgeone-readiness-20260630-001.json",
-    "local_commit_approval_status": "approved_tier_B_non_self_approval"
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "commit_hash_scope": "validated scoped local source commit for Phase 12 EdgeOne readiness contract hardening; later receipt-finalization commits may differ"
   }
 }
