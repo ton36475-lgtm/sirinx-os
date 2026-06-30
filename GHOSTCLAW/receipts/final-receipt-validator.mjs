@@ -331,6 +331,83 @@ function validatePhase5VibeArtifacts(errors) {
   };
 }
 
+function validatePhase6ModelRouterArtifacts(errors) {
+  const routerText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/models/model-router.mjs"), "utf8");
+  for (const marker of [
+    "createEngine",
+    "ProviderHealthCheck",
+    "getPolicyDecision",
+    "resolveProviderFallback",
+    "policy_gate",
+    "action_tier_cap is final authority"
+  ]) {
+    pushIfMissing(errors, routerText.includes(marker), `phase6 model router missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/models/model-router.test.mjs"), "utf8");
+  for (const marker of [
+    "routes code_patch to Kimi K2.7 Code",
+    "blocks model_download (tier X)",
+    "blocks gpu_inference (tier X)",
+    "blocks D/X action class even when the task lane would otherwise route",
+    "provider health fallback is metadata-only",
+    "ModelSwapWorker — receipt contract"
+  ]) {
+    pushIfMissing(errors, testText.includes(marker), `phase6 model router test missing case marker: ${marker}`);
+  }
+
+  const workerText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/model-swap/model-swap-worker.mjs"), "utf8");
+  for (const marker of [
+    "ModelSwapWorker",
+    "model-swap-policy.yaml",
+    "action_tier_cap_version",
+    "approved_by",
+    "receipt_hash",
+    "auto_block"
+  ]) {
+    pushIfMissing(errors, workerText.includes(marker), `phase6 model swap worker missing marker: ${marker}`);
+  }
+
+  const policyText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/models/model-swap-policy.yaml"), "utf8");
+  for (const marker of [
+    "model_swap_never_overrides_policy_gate",
+    "action_tier_cap_remains_final_authority",
+    "no_live_provider_call",
+    "no_api_key_read",
+    "no_env_read",
+    "no_model_download",
+    "no_gpu_inference"
+  ]) {
+    pushIfMissing(errors, policyText.includes(marker), `phase6 model swap policy missing marker: ${marker}`);
+  }
+
+  const receiptTemplate = readJson(".ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json");
+  const templateFields = receiptTemplate.fields || {};
+  for (const field of [
+    "swap_id",
+    "timestamp",
+    "from_model",
+    "to_model",
+    "task_type",
+    "triggered_by",
+    "policy_version",
+    "action_tier_cap_version",
+    "approved_by",
+    "receipt_hash",
+    "blocked"
+  ]) {
+    pushIfMissing(errors, hasValue(templateFields[field]), `phase6 model-swap receipt template missing field: ${field}`);
+  }
+
+  return {
+    router_marker_count: 6,
+    test_case_marker_count: 6,
+    worker_marker_count: 6,
+    policy_marker_count: 7,
+    receipt_template_field_count: 11
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -351,6 +428,7 @@ export function validateFinalReceipt(receipt) {
   const phase1WorkerRuntime = validatePhase1WorkerRuntimeArtifacts(errors);
   const phase3Protocol = validatePhase3ProtocolArtifacts(errors);
   const phase5Vibe = validatePhase5VibeArtifacts(errors);
+  const phase6ModelRouter = validatePhase6ModelRouterArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -454,6 +532,11 @@ export function validateFinalReceipt(receipt) {
       phase5_vibe_router_marker_count: phase5Vibe.required_router_marker_count,
       phase5_vibe_template_field_count: phase5Vibe.required_template_field_count,
       phase5_vibe_test_case_count: phase5Vibe.required_test_case_count,
+      phase6_model_router_marker_count: phase6ModelRouter.router_marker_count,
+      phase6_model_router_test_case_count: phase6ModelRouter.test_case_marker_count,
+      phase6_model_swap_worker_marker_count: phase6ModelRouter.worker_marker_count,
+      phase6_model_swap_policy_marker_count: phase6ModelRouter.policy_marker_count,
+      phase6_model_swap_receipt_template_field_count: phase6ModelRouter.receipt_template_field_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

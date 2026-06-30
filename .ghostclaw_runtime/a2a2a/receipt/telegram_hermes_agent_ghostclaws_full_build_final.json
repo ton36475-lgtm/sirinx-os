@@ -17,7 +17,7 @@
     "phase_3_a2a_sync_team": "completed_validated_current_turn_protocol_contract_fields",
     "phase_4_browser_use": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
     "phase_5_vibe_coding": "completed_validated_current_turn_mutual_approval_evidence_receipt_archive_contract",
-    "phase_6_model_swap_router": "completed_validated_current_turn",
+    "phase_6_model_swap_router": "completed_validated_current_turn_policy_gate_provider_fallback_receipt_contract",
     "phase_7_kimi_worker_lane": "completed_existing_files_present",
     "phase_8_moa_brainstorm": "completed_existing_files_present",
     "phase_9_latentmas_dual_plane": "completed_validated_offline_current_turn",
@@ -52,7 +52,9 @@
     ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json",
     "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
     ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
-    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json",
+    ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -72,19 +74,23 @@
     "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
     "GHOSTCLAW/vibe/vibe-agent-router.mjs",
     "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
-    "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md"
+    "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
+    "GHOSTCLAW/models/model-router.mjs",
+    "GHOSTCLAW/models/model-router.test.mjs",
+    "GHOSTCLAW/models/model-swap-policy.yaml",
+    "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
-    "count": 16
+    "count": 18
   },
   "files_modified": {
     "source_field": "current_turn_files_modified",
-    "count": 18
+    "count": 22
   },
   "files_changed": {
-    "created_count": 16,
-    "modified_count": 18,
+    "created_count": 18,
+    "modified_count": 22,
     "source_fields": [
       "current_turn_files_created",
       "current_turn_files_modified"
@@ -113,7 +119,7 @@
     "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
     "a2a_sync_status": "probe_only_local_mailbox_workers_present",
     "auto_approval_engine_status": "validated_current_turn_matrix_hardened_20_tests_model_gpu_tier_x",
-    "model_swap_status": "validated_current_turn",
+    "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
     "kimi_worker_status": "present_policy_only_no_live_model_call",
     "moa_brainstorm_status": "present_policy_only",
     "latentmas_status": "offline_validation_passed_live_disabled",
@@ -125,7 +131,7 @@
   "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
   "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
   "a2a_sync_status": "probe_only_local_mailbox_workers_present",
-  "model_swap_status": "validated_current_turn",
+  "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
   "kimi_worker_status": "present_policy_only_no_live_model_call",
   "skill_created": "skill_file_present",
   "edgeone_readiness_status": "r3_readiness_only_no_deploy",
@@ -158,8 +164,9 @@
     },
     {
       "name": "model_router",
-      "command": "pnpm vitest run GHOSTCLAW/models/model-router.test.mjs",
-      "result": "passed_1_file_23_tests"
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs",
+      "result": "passed_1_file_26_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json"
     },
     {
       "name": "latentmas_cargo_offline",
@@ -212,7 +219,7 @@
     "worker_runtime_contract": "passed_1_file_7_tests",
     "auto_approve_engine": "passed_1_file_20_tests",
     "local_commit_allowed_scope_decision": "approved_tier_B_non_self_approval",
-    "model_router": "passed_1_file_23_tests",
+    "model_router": "passed_1_file_26_tests_policy_gate_provider_fallback_receipt_contract",
     "latentmas_cargo_offline": "passed",
     "latentmas_python_compile": "passed",
     "latentmas_gateway_direct_test": "passed_1_file_3_tests",
@@ -460,6 +467,56 @@
         "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope)",
         "result": "approved_tier_B_non_self_approval",
         "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
+      }
+    ]
+  },
+  "latest_phase6_model_router_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:00:07Z",
+    "local_validated_at": "2026-06-30T09:00:07+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
+    "files_created": [
+      ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
+      ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/models/model-router.mjs",
+      "GHOSTCLAW/models/model-router.test.mjs",
+      "GHOSTCLAW/models/model-swap-policy.yaml",
+      "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "requirements_covered": [
+      "default model lanes route to Kimi, GLM, DeepSeek, GPT-5.5, and Claude Opus",
+      "action_tier_cap is consulted as final authority for known action classes",
+      "D/X action classes block routing regardless of lane",
+      "unknown task lane falls back safely to GLM",
+      "provider unavailable falls back via metadata-only provider health stub",
+      "model swap worker writes safe and blocked receipts",
+      "no live provider call, API key read, .env read, model download, or GPU inference"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --check GHOSTCLAW/models/model-router.mjs && node --check GHOSTCLAW/models/provider-health.mjs && node --check GHOSTCLAW/workers/model-swap/model-swap-worker.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool .ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json",
+        "result": "passed"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs",
+        "result": "passed_1_file_26_tests"
+      },
+      {
+        "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+        "result": "passed_ok_true_phase6_model_router_test_case_count_6"
+      },
+      {
+        "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope)",
+        "result": "approved_tier_B_non_self_approval",
+        "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json"
       }
     ]
   },

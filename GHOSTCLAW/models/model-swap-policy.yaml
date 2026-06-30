@@ -24,7 +24,7 @@ immutable_rules:
 
   - id: rule_003
     rule: "d_x_actions_auto_block"
-    description: "Actions classified as D (dependency_install, model_download, gpu_inference, external_network_write) or X (push, deploy, production_action, secret_access, ambiguous_input, recursive_codex_launch, recursive_moa_launch, kv_only_protocol) are auto-blocked. No model swap can reclassify or permit these."
+    description: "Actions classified as D (dependency_install, external_network_write) or X (model_download, gpu_inference, push, deploy, production_action, secret_access, ambiguous_input, recursive_codex_launch, recursive_moa_launch, kv_only_protocol) are auto-blocked. No model swap can reclassify or permit these."
     enforce: always
 
   - id: rule_004

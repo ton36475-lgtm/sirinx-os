@@ -2463,6 +2463,32 @@
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
 
+## Run 2026-06-30T09:00:07+07:00 — Phase 6 Model Auto Swap Router Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only router/policy/test hardening, no provider/model call
+- **Scope:** Prove Phase 6 Model Auto Swap Router respects `action_tier_cap`, falls back safely, and writes receipts without model/provider execution.
+
+### Changes
+
+- Updated `GHOSTCLAW/models/model-router.mjs` to consult the existing `action_tier_cap` engine for known action classes before routing.
+- Added metadata-only provider health fallback through `ProviderHealthCheck` for unavailable target providers.
+- Expanded `GHOSTCLAW/models/model-router.test.mjs` to 26 tests covering policy gate metadata, Tier X model/GPU blocks, D/X override of routable lanes, provider fallback, and `ModelSwapWorker` receipt behavior.
+- Updated `GHOSTCLAW/models/model-swap-policy.yaml` and `docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md` so `model_download` and `gpu_inference` are documented as Tier X hard blocks.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json`.
+- Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 6 router, test, worker, policy, and receipt-template markers.
+
+### Verification
+
+- `node --check GHOSTCLAW/models/model-router.mjs && node --check GHOSTCLAW/models/provider-health.mjs && node --check GHOSTCLAW/workers/model-swap/model-swap-worker.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `python3 -m json.tool .ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json` — passed.
+- `./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs` — passed, 1 file / 26 tests.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and `phase6_model_router_test_case_count=6`.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
+
 ## Run 2026-06-30T08:49:12+07:00 — Phase 5 Vibe Coding Agent Contract Hardening
 
 - **Agent:** Codex local worker

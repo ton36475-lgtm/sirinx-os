@@ -62,7 +62,7 @@ unknown         → GLM 5.2 Max (fallback)
 These constraints are enforced by `model-swap-policy.yaml`:
 
 1. **Model swap never overrides policy gate** — `action_tier_cap` remains final authority.
-2. **D/X actions auto-block** — Tier D (dependency_install, model_download, gpu_inference, external_network_write) and Tier X (push, deploy, production_action, secret_access, etc.) are auto-blocked. No model swap can reclassify these.
+2. **D/X actions auto-block** — Tier D (`dependency_install`, `external_network_write`) and Tier X (`model_download`, `gpu_inference`, `push`, `deploy`, `production_action`, `secret_access`, etc.) are auto-blocked. No model swap can reclassify these.
 3. **No live provider call** — The router and worker make zero provider API calls.
 4. **No API key read** — No credential access.
 5. **No `.env` read** — No environment file access.
@@ -146,14 +146,14 @@ Every receipt includes:
 
 ## 8. Provider Health Check (Stub)
 
-`provider-health.mjs` exports a `ProviderHealthCheck` stub that returns static health status without making any real network calls. This is safe for development and CI. A real implementation (when approved) would be added under separate authorization.
+`provider-health.mjs` exports a `ProviderHealthCheck` stub that returns static health status without making any real network calls. When `respectProviderHealth=true`, an unavailable target provider routes to the fallback lane (`glm_5_2_max`) with health metadata attached. A real provider probe would require separate authorization.
 
 ---
 
 ## 9. Testing
 
 ```bash
-npx vitest run GHOSTCLAW/models/model-router.test.mjs
+./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs
 ```
 
 Test coverage:
@@ -161,8 +161,10 @@ Test coverage:
 - Default lane routing for all 5 models
 - Unknown task type → fallback lane (GLM 5.2 Max)
 - D/X action classes are blocked (no lane assigned)
+- Explicit blocked action class overrides any otherwise routable lane
+- Provider unavailable → fallback lane through metadata-only health stub
+- ModelSwapWorker receipt generation for safe and blocked swaps
 - Custom lane overrides
-- Additional blocked classes
 - `listLanes()` and `getFallback()` helpers
 
 ---

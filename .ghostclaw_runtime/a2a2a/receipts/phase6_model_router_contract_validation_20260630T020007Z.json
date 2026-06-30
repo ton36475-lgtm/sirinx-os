@@ -1,0 +1,75 @@
+{
+  "schema": "ghostclaw.phase6_model_router_contract_receipt.v1",
+  "task_id": "phase6_model_auto_swap_router_contract",
+  "correlation_id": "sirinx-a2a2a-fullbuild-phase6",
+  "timestamp": "2026-06-30T02:00:07Z",
+  "local_timestamp": "2026-06-30T09:00:07+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "requester_agent": "codex",
+  "approver_agent": "hermes",
+  "self_approval_allowed": false,
+  "human_approval_required": false,
+  "receipt_required": true,
+  "status": "validated_current_turn",
+  "files_created": [
+    ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json"
+  ],
+  "files_modified": [
+    "GHOSTCLAW/models/model-router.mjs",
+    "GHOSTCLAW/models/model-router.test.mjs",
+    "GHOSTCLAW/models/model-swap-policy.yaml",
+    "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+  ],
+  "requirements_covered": [
+    "code_patch routes to Kimi K2.7 Code",
+    "repo_mapping routes to GLM 5.2 Max",
+    "architecture routes to DeepSeek V4 Pro",
+    "final_decision routes to GPT-5.5",
+    "critic_review routes to Claude Opus 4.8",
+    "action_tier_cap remains final authority for known action classes",
+    "D/X actions return blocked regardless of model lane",
+    "unknown lane falls back safely to GLM 5.2 Max",
+    "provider unavailable returns fallback through metadata-only health stub",
+    "model swap worker generates receipts for safe and blocked swaps",
+    "no live provider call, API key read, .env read, model download, or GPU inference"
+  ],
+  "validation_commands": [
+    {
+      "command": "node --check GHOSTCLAW/models/model-router.mjs && node --check GHOSTCLAW/models/provider-health.mjs && node --check GHOSTCLAW/workers/model-swap/model-swap-worker.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m json.tool .ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json",
+      "result": "passed"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs",
+      "result": "passed_1_file_26_tests"
+    },
+    {
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "result": "passed_ok_true_errors_empty_phase6_model_router_test_case_count_6"
+    }
+  ],
+  "blocked_actions_preserved": [
+    "push",
+    "deploy",
+    "production_action",
+    "customer_send",
+    "telegram_live_send",
+    "secret_access",
+    "api_key_read",
+    "provider_model_call",
+    "package_install",
+    "external_repo_install_without_gate",
+    "model_download",
+    "gpu_live_inference"
+  ],
+  "notes": [
+    "Model names remain routing labels only.",
+    "No live provider/model call was made.",
+    "No API key, token, .env, model download, GPU inference, push, deploy, or external message action occurred."
+  ]
+}

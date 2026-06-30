@@ -8,6 +8,8 @@
 
 import { describe, expect, it } from 'vitest';
 import { ModelRouter } from './model-router.mjs';
+import { ProviderHealthCheck } from './provider-health.mjs';
+import { ModelSwapWorker } from '../workers/model-swap/model-swap-worker.mjs';
 
 describe('ModelRouter — default lane routing', () => {
   const router = new ModelRouter();
@@ -18,6 +20,12 @@ describe('ModelRouter — default lane routing', () => {
     expect(result.lane.model).toBe('kimi_k2_7_code');
     expect(result.lane.display_name).toBe('Kimi K2.7 Code');
     expect(result.lane.role).toBe('coding_tool_use_reference');
+    expect(result.policy_gate).toMatchObject({
+      known: true,
+      canonical_action_class: 'code_patch_allowed_path',
+      tier: 'B',
+      blocked: false,
+    });
   });
 
   it('routes repo_mapping to GLM 5.2 Max', () => {
@@ -57,6 +65,8 @@ describe('ModelRouter — unknown task type fallback', () => {
     expect(result.blocked).toBe(false);
     expect(result.lane).toBeDefined();
     expect(result.lane.model).toBe('glm_5_2_max');
+    expect(result.fallback_applied).toBe(true);
+    expect(result.policy_gate.known).toBe(false);
     expect(result.reason).toContain('Unknown task type');
   });
 
@@ -74,17 +84,25 @@ describe('ModelRouter — D/X action classes are blocked', () => {
     const result = router.route('dependency_install');
     expect(result.blocked).toBe(true);
     expect(result.lane).toBeUndefined();
-    expect(result.reason).toBeDefined;
+    expect(result.policy_gate).toMatchObject({
+      known: true,
+      canonical_action_class: 'dependency_install',
+      tier: 'D',
+      blocked: true,
+    });
+    expect(result.reason).toBeDefined();
   });
 
-  it('blocks model_download (tier D)', () => {
+  it('blocks model_download (tier X)', () => {
     const result = router.route('model_download');
     expect(result.blocked).toBe(true);
+    expect(result.policy_gate.tier).toBe('X');
   });
 
-  it('blocks gpu_inference (tier D)', () => {
+  it('blocks gpu_inference (tier X)', () => {
     const result = router.route('gpu_inference');
     expect(result.blocked).toBe(true);
+    expect(result.policy_gate.tier).toBe('X');
   });
 
   it('blocks external_network_write (tier D)', () => {
@@ -132,6 +150,17 @@ describe('ModelRouter — D/X action classes are blocked', () => {
     expect(result.blocked).toBe(true);
     expect(result.task_type).toBe('kv_only_protocol');
   });
+
+  it('blocks D/X action class even when the task lane would otherwise route', () => {
+    const result = router.route('code_patch', { actionClass: 'secret_access' });
+    expect(result.blocked).toBe(true);
+    expect(result.lane).toBeUndefined();
+    expect(result.policy_gate).toMatchObject({
+      canonical_action_class: 'secret_access',
+      tier: 'X',
+      blocked: true,
+    });
+  });
 });
 
 describe('ModelRouter — custom lanes and helpers', () => {
@@ -156,15 +185,6 @@ describe('ModelRouter — custom lanes and helpers', () => {
     expect(codeResult.lane.model).toBe('kimi_k2_7_code');
   });
 
-  it('supports additional blocked classes', () => {
-    const router = new ModelRouter({
-      blockedClasses: ['extra_blocked_action'],
-    });
-
-    const result = router.route('extra_blocked_action');
-    expect(result.blocked).toBe(true);
-  });
-
   it('listLanes returns all registered lanes', () => {
     const router = new ModelRouter();
     const lanes = router.listLanes();
@@ -179,5 +199,60 @@ describe('ModelRouter — custom lanes and helpers', () => {
     const router = new ModelRouter();
     const fallback = router.getFallback();
     expect(fallback.model).toBe('glm_5_2_max');
+  });
+});
+
+describe('ModelRouter — provider health fallback is metadata-only', () => {
+  it('returns fallback when target provider is unavailable without making a live provider call', () => {
+    const providerHealth = new ProviderHealthCheck({
+      healthMap: {
+        moonshot_ai: {
+          status: 'unavailable',
+          healthy: false,
+          last_check: null,
+          stub: true,
+        },
+      },
+    });
+    const router = new ModelRouter({ providerHealth, respectProviderHealth: true });
+
+    const result = router.route('code_patch');
+    expect(result.blocked).toBe(false);
+    expect(result.lane.model).toBe('glm_5_2_max');
+    expect(result.fallback_applied).toBe(true);
+    expect(result.provider_health).toMatchObject({
+      provider: 'moonshot_ai',
+      status: 'unavailable',
+      healthy: false,
+      stub: true,
+    });
+    expect(result.reason).toContain('metadata health stub');
+  });
+});
+
+describe('ModelSwapWorker — receipt contract', () => {
+  it('generates metadata-only receipts for safe swaps', () => {
+    const worker = new ModelSwapWorker();
+    const receipt = worker.swap('code_patch', 'codex');
+
+    expect(receipt.blocked).toBe(false);
+    expect(receipt.to_model).toBe('kimi_k2_7_code');
+    expect(receipt.triggered_by).toBe('codex');
+    expect(receipt.policy_version).toBe('1.0.0');
+    expect(receipt.action_tier_cap_version).toBe('2.0.0');
+    expect(receipt.receipt_hash).toMatch(/^h[0-9a-f]+$/);
+  });
+
+  it('generates blocked receipts for D/X policy blocks without changing model state', () => {
+    const worker = new ModelSwapWorker();
+    const first = worker.swap('code_patch', 'codex');
+    const blocked = worker.swap('deploy', 'codex');
+
+    expect(first.to_model).toBe('kimi_k2_7_code');
+    expect(blocked.blocked).toBe(true);
+    expect(blocked.from_model).toBe('kimi_k2_7_code');
+    expect(blocked.to_model).toBe('none');
+    expect(blocked.approved_by).toBe('auto_block');
+    expect(blocked.reason).toContain('action_tier_cap is final authority');
   });
 });
