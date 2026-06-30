@@ -23,6 +23,12 @@
   - API key reference: `{env:MAXPLUS_API_KEY}`
   - model example: `maxplus/claude-opus-4-8`
 - Chrome read-only inspection found sensitive account/key surfaces. Key previews, account email, credit balance, and any full key surfaces were intentionally not copied into this repo.
+- Operator later supplied install recommendations:
+  - `npm install -g opencode-ai`
+  - `curl -fsSL https://opencode.ai/install | bash`
+  - `opencode --version`
+- Read-only local verification found an existing `opencode` binary at `/Users/sirinx/.local/bin/opencode`.
+- `opencode --version` returned `1.17.11`.
 - No install command was executed.
 - No login was attempted.
 - No token, key, `.env`, or account data was read or submitted.
@@ -37,6 +43,8 @@ Risk reasons:
 - It appears to involve API proxy/provider routing and payment/top-up flows.
 - The logged-in page references API key creation/selection and one-command installer behavior.
 - The objective hard-blocks paid provider/model live calls, API key reads, secret reads, global installs, curl-pipe-bash, and unknown external install execution.
+- The proposed `npm install -g opencode-ai` is a global install and remains blocked in this lane.
+- The proposed `curl -fsSL https://opencode.ai/install | bash` is a curl-pipe-bash installer and remains blocked in this lane.
 - Any OpenCode/provider setup must be reviewed as a configuration proposal first, not run directly.
 
 ## Allowed Next Step
@@ -50,6 +58,8 @@ Risk reasons:
 - Do not run quick install commands from this page.
 - Do not pipe remote scripts into shell.
 - Do not use the one-command installer until it is copied as text, reviewed, and separately approved.
+- Do not run `npm install -g opencode-ai` without an explicit install gate.
+- Do not run `curl -fsSL https://opencode.ai/install | bash` without an explicit install gate.
 - Do not create or paste API keys.
 - Do not write `MAXPLUS_API_KEY` to shell profiles or `.env` during this local-safe lane.
 - Do not connect MaxPlus, OpenCode, Codex, Claude Code, or provider accounts automatically.

@@ -61,8 +61,19 @@
     "read-only HEAD request",
     "read-only unauthenticated HTML metadata inspection",
     "read-only Chrome tab signal extraction",
+    "read-only local opencode version check",
     "created quarantine intake document"
   ],
+  "operator_supplied_install_commands": [
+    "npm install -g opencode-ai",
+    "curl -fsSL https://opencode.ai/install | bash",
+    "opencode --version"
+  ],
+  "local_opencode_verification": {
+    "command_v_opencode": "/Users/sirinx/.local/bin/opencode",
+    "opencode_version": "1.17.11",
+    "install_needed_for_presence_check": false
+  },
   "actions_not_taken": [
     "no login",
     "no install",
@@ -80,6 +91,8 @@
     "run_remote_quick_install",
     "curl_pipe_bash",
     "global_install",
+    "npm_global_install_opencode_ai",
+    "opencode_upstream_curl_pipe_bash_installer",
     "secret_read",
     "api_key_create_or_paste",
     "paid_provider_model_call",
