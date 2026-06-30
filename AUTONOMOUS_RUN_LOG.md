@@ -2767,3 +2767,18 @@ Verified A2A2A smoke test evidence from the live runtime probe:
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, browser smoke, or external repo install was performed.
 - Browser smoke was not verified — marked as `skipped_or_setup_required`.
+
+### 2026-06-30T03:37:45.669Z — Browser Use Smoke Test
+- **Smoke ID:** smoke-mr03j50v-n8quar
+- **URL:** http://127.0.0.1:8721/god-mode
+- **Status:** failed
+- **Overall:** fail
+- **Error:** Failed to open http://127.0.0.1:8721/god-mode: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8721/god-mode. Call log: navigating to "http://127.0.0.1:8721/god-mode", waiting until "networkidle".
+
+- **Steps:** 1
+### 2026-06-30T03:41:46.313Z — Browser Use Smoke Test
+- **Smoke ID:** smoke-mr03o9cs-hh2sef
+- **URL:** http://127.0.0.1:8721/god-mode
+- **Status:** completed
+- **Overall:** pass
+- **Steps:** 10
