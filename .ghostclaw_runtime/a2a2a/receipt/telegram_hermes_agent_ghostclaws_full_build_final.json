@@ -18,7 +18,7 @@
     "phase_4_browser_use": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
     "phase_5_vibe_coding": "completed_validated_current_turn_mutual_approval_evidence_receipt_archive_contract",
     "phase_6_model_swap_router": "completed_validated_current_turn_policy_gate_provider_fallback_receipt_contract",
-    "phase_7_kimi_worker_lane": "completed_existing_files_present",
+    "phase_7_kimi_worker_lane": "completed_validated_current_turn_policy_schema_registry_skill_contract",
     "phase_8_moa_brainstorm": "completed_existing_files_present",
     "phase_9_latentmas_dual_plane": "completed_validated_offline_current_turn",
     "phase_10_skill_creator": "completed_existing_files_present",
@@ -54,7 +54,10 @@
     ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
     ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json",
     ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
-    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json"
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -78,7 +81,11 @@
     "GHOSTCLAW/models/model-router.mjs",
     "GHOSTCLAW/models/model-router.test.mjs",
     "GHOSTCLAW/models/model-swap-policy.yaml",
-    "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md"
+    "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md",
+    "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+    "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
@@ -120,7 +127,7 @@
     "a2a_sync_status": "probe_only_local_mailbox_workers_present",
     "auto_approval_engine_status": "validated_current_turn_matrix_hardened_20_tests_model_gpu_tier_x",
     "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
-    "kimi_worker_status": "present_policy_only_no_live_model_call",
+    "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
     "moa_brainstorm_status": "present_policy_only",
     "latentmas_status": "offline_validation_passed_live_disabled",
     "skill_creator_status": "skill_file_present",
@@ -132,7 +139,7 @@
   "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
   "a2a_sync_status": "probe_only_local_mailbox_workers_present",
   "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
-  "kimi_worker_status": "present_policy_only_no_live_model_call",
+  "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
   "skill_created": "skill_file_present",
   "edgeone_readiness_status": "r3_readiness_only_no_deploy",
   "validations_run_current_turn": [
@@ -210,6 +217,18 @@
       "name": "final_receipt_validator",
       "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
       "result": "passed_ok_true_errors_empty"
+    },
+    {
+      "name": "kimi_worker_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      "result": "passed_1_file_5_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase7_kimi",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase7 kimi)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json"
     }
   ],
   "validations_run": "see validations_run_current_turn",
@@ -226,7 +245,9 @@
     "browser_use_smoke": "passed_http_200_r0_tab_click_active_goal_packet_013_blocker_no_console_or_page_errors",
     "vibe_agent_contract": "passed_1_file_5_tests_mutual_approval_evidence_receipt_archive_contract",
     "diff_check": "passed",
-    "final_receipt_validator": "passed_ok_true_errors_empty"
+    "final_receipt_validator": "passed_ok_true_errors_empty",
+    "kimi_worker_contract": "passed_1_file_5_tests_policy_schema_registry_skill_contract",
+    "local_commit_allowed_scope_decision_phase7_kimi": "approved_tier_B_non_self_approval"
   },
   "blocked_actions": [
     "push",
@@ -548,5 +569,42 @@
     "Start the local dashboard before rerunning Browser Use smoke for /god-mode.",
     "Stage only the allowlisted current-turn GhostClaw files before any local commit.",
     "Keep deploy, push, provider calls, model downloads, GPU inference, secret reads, and live sends blocked until exact gates exist."
-  ]
+  ],
+  "latest_phase7_kimi_worker_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:08:30Z",
+    "local_timestamp": "2026-06-30T09:08:30+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json",
+    "files_created": [
+      "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json"
+    ],
+    "files_modified": [
+      "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
+      "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+      "GHOSTCLAW/workers/registry/worker-registry.json",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "coding_tool_use_reference role",
+      "coding worker, patch planner, test planner, and MoA reference vote worker roles",
+      "decision_id, requester_agent, approver_agent, receipt_required, and evidence_pack required in reference votes",
+      "evidence_pack.no_secrets=true required",
+      "live provider call, model download, and GPU inference flags locked false",
+      "model download, GPU live inference, secret access, deploy, push, production action, live provider call, shell execution, cross-lane write, and self-approval blocked",
+      "worker registry and GhostClaw skill document the Phase 7 contract"
+    ],
+    "validation_commands": [
+      "python3 -m json.tool GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "python3 -m json.tool GHOSTCLAW/workers/registry/worker-registry.json",
+      "node --check GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase7 kimi)"
+    ],
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval"
+  }
 }

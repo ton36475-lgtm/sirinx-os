@@ -46,12 +46,13 @@ The following operations are **blocked** for the Kimi worker. These constraints 
 
 | Blocked Operation | Tier | Reason |
 |---|---|---|
-| Model download | D | No model fetch/pull |
-| GPU live inference | D | No local GPU execution |
+| Model download | X | No model fetch/pull |
+| GPU live inference | X | No local GPU execution |
 | Secret access | X | No `.env`, API key, token, or credential reads |
 | Deploy | X | No production deployment |
 | Push | X | No `git push` |
 | Production action | X | No production system mutations |
+| Live provider call | X | No paid/provider call from this lane |
 
 Additional constraints:
 
@@ -60,6 +61,7 @@ Additional constraints:
 - The worker does not make live provider API calls
 - The worker does not run shell commands
 - The worker does not install dependencies
+- The worker does not self-approve or bypass `action_tier_cap`
 
 ---
 
@@ -88,6 +90,10 @@ The vote includes:
 - `rationale` — reasoning text
 - `code_quality_score` — float 0.0–1.0 (specific to coding proposals)
 - `safety_check` — boolean (whether the proposal passes safety constraints)
+- `decision_id` — approval decision that authorized producing the vote artifact
+- `evidence_pack` — source context used for the advisory vote
+- `requester_agent` / `approver_agent` — non-self approval pair
+- `receipt_required` — always `true`
 - `timestamp` — ISO-8601
 
 The vote does not execute, deploy, or mutate any system. It is a metadata-only advisory record.
@@ -129,6 +135,7 @@ The Kimi worker lane is validated via:
 - Model router tests (`model-router.test.mjs`) — confirms `code_patch` routes to `kimi_k2_7_code`
 - Worker registry — confirms `kimi_coding_worker` is registered
 - Policy validation — confirms blocked operations are enforced
+- Focused Kimi lane tests (`kimi-reference-vote.test.mjs`) — confirm schema, policy, registry, and skill contract markers
 
 ---
 

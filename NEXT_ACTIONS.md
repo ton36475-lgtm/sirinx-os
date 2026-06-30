@@ -279,6 +279,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 - [x] Harden GhostClaw Phase 6 Model Auto Swap Router contract.
   - Status: model router now checks `action_tier_cap` for known action classes before routing, keeps D/X actions blocked, falls back safely for unknown lanes and unavailable providers through metadata-only health stubs, and validates ModelSwapWorker safe/blocked receipts.
   - Evidence: commit `1dcc709`, `GHOSTCLAW/models/model-router.mjs`, `GHOSTCLAW/models/model-router.test.mjs`, `GHOSTCLAW/models/model-swap-policy.yaml`, `docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md`, `.ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json`.
+- [x] Harden GhostClaw Phase 7 Kimi Worker Lane contract.
+  - Status: Kimi is now validated as a draft-only coding reference, patch planner, test planner, and MoA reference vote worker. Reference votes require decision/evidence/requester/approver metadata, `receipt_required=true`, `evidence_pack.no_secrets=true`, and false live-provider/model-download/GPU flags.
+  - Evidence: `GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs`, `GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json`, `GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml`, `GHOSTCLAW/workers/registry/worker-registry.json`, `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md`, `.ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json`.
+  - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs` passed, 1 file / 5 tests; final receipt validator returned `ok=true` with `phase7_kimi_test_case_count=5`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.

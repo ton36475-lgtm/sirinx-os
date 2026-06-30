@@ -1,0 +1,79 @@
+{
+  "schema": "ghostclaw.phase7_kimi_worker_contract_receipt.v1",
+  "task_id": "phase7_kimi_worker_lane_contract",
+  "correlation_id": "sirinx-a2a2a-fullbuild-phase7",
+  "timestamp": "2026-06-30T02:08:30Z",
+  "local_timestamp": "2026-06-30T09:08:30+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "requester_agent": "codex",
+  "approver_agent": "hermes",
+  "self_approval_allowed": false,
+  "human_approval_required": false,
+  "receipt_required": true,
+  "status": "validated_current_turn",
+  "files_created": [
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json"
+  ],
+  "files_modified": [
+    "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+    "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+    "GHOSTCLAW/workers/registry/worker-registry.json",
+    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+  ],
+  "requirements_covered": [
+    "Kimi worker role is coding_tool_use_reference",
+    "Kimi worker lane supports coding worker, patch planner, test planner, and MoA reference vote worker roles",
+    "Kimi reference vote schema requires decision_id, requester_agent, approver_agent, receipt_required, and evidence_pack",
+    "Kimi evidence pack requires no_secrets=true",
+    "Kimi vote artifacts lock live provider call, model download, and GPU inference to false",
+    "Kimi policy blocks model download, GPU live inference, secret access, deploy, push, production action, live provider call, shell execution, cross-lane write, and self-approval",
+    "worker registry exposes Kimi policy, vote schema, receipt_required=true, heartbeat_required=true, and self_approval_allowed=false",
+    "GhostClaw skill documents Kimi lane roles, blocked actions, and vote artifact contract"
+  ],
+  "validation_commands": [
+    {
+      "command": "python3 -m json.tool GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m json.tool GHOSTCLAW/workers/registry/worker-registry.json",
+      "result": "passed"
+    },
+    {
+      "command": "node --check GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      "result": "passed_1_file_5_tests"
+    },
+    {
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "result": "passed_ok_true_errors_empty_phase7_kimi_test_case_count_5"
+    }
+  ],
+  "blocked_actions_preserved": [
+    "push",
+    "deploy",
+    "production_action",
+    "customer_send",
+    "telegram_live_send",
+    "secret_access",
+    "api_key_read",
+    "provider_model_call",
+    "package_install",
+    "external_repo_install_without_gate",
+    "model_download",
+    "gpu_live_inference",
+    "self_approval"
+  ],
+  "notes": [
+    "Kimi remains a draft/reference/vote lane only.",
+    "No live Kimi provider call was made.",
+    "No model download, GPU inference, secret read, push, deploy, external repo install, or live message occurred."
+  ]
+}

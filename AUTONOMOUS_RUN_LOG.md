@@ -2463,6 +2463,33 @@
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
 
+## Run 2026-06-30T09:08:30+07:00 — Phase 7 Kimi Worker Lane Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only schema/policy/registry/skill/test hardening, no provider/model call
+- **Scope:** Prove Phase 7 Kimi Worker Lane remains a draft-only coding reference lane with receipt/evidence metadata and blocked live execution.
+
+### Changes
+
+- Updated `docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md` so model download, GPU live inference, and live provider calls are Tier X blocked for this lane.
+- Updated `GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json` to require `decision_id`, requester/approver metadata, `receipt_required=true`, `evidence_pack.no_secrets=true`, and false live-provider/model-download/GPU flags.
+- Updated `GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml`, `GHOSTCLAW/workers/registry/worker-registry.json`, and `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md` with Kimi blocked actions, self-approval prohibition, and vote artifact contract markers.
+- Added `GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs`.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json`.
+- Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 7 Kimi schema, policy, registry, skill, and test markers.
+
+### Verification
+
+- `python3 -m json.tool GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json` — passed.
+- `python3 -m json.tool GHOSTCLAW/workers/registry/worker-registry.json` — passed.
+- `node --check GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs` — passed, 1 file / 5 tests.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and `phase7_kimi_test_case_count=5`.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
+
 ## Run 2026-06-30T09:00:07+07:00 — Phase 6 Model Auto Swap Router Contract Hardening
 
 - **Agent:** Codex local worker

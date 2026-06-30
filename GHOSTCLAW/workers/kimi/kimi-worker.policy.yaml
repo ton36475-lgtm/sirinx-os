@@ -34,6 +34,7 @@ allowed_actions:
 blocked_actions:
   - model_download
   - gpu_live_inference
+  - gpu_inference
   - secret_access
   - deploy
   - push
@@ -44,6 +45,7 @@ blocked_actions:
   - live_provider_call
   - run_shell_command
   - cross_lane_write
+  - self_approval
 
 authority:
   reports_to: codex_build_captain
@@ -59,17 +61,22 @@ stop_conditions:
 hard_stop:
   - model_download_requested
   - gpu_live_inference_requested
+  - gpu_inference_requested
   - secret_access_attempted
   - deploy_requested
   - push_requested
   - production_action_requested
   - env_read_attempted
+  - live_provider_call_attempted
+  - self_approval_attempted
 
 invariants:
   - "kimi worker never downloads models"
   - "kimi worker never runs GPU live inference"
   - "kimi worker never accesses secrets or .env"
   - "kimi worker never deploys, pushes, or executes production actions"
+  - "kimi worker never makes live provider calls"
+  - "kimi worker never self-approves"
   - "kimi worker only produces drafts, plans, and advisory votes"
   - "kimi worker reports to codex build captain only"
   - "action_tier_cap remains final authority"

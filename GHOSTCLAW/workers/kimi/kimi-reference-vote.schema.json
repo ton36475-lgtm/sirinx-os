@@ -7,11 +7,19 @@
     "vote_id",
     "voter",
     "proposal_id",
+    "decision_id",
+    "requester_agent",
+    "approver_agent",
+    "receipt_required",
+    "evidence_pack",
     "vote",
     "confidence",
     "rationale",
     "code_quality_score",
     "safety_check",
+    "live_provider_call_performed",
+    "model_download_performed",
+    "gpu_inference_performed",
     "timestamp",
     "receipt_hash"
   ],
@@ -30,9 +38,60 @@
       "type": "string",
       "description": "ID of the proposal being voted on"
     },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Mutual approval decision authorizing this advisory vote artifact"
+    },
+    "requester_agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Agent requesting the Kimi reference vote"
+    },
+    "approver_agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Agent approving the Kimi reference vote; must not equal requester_agent"
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "const": true,
+      "description": "Kimi advisory votes must produce receipts"
+    },
+    "evidence_pack": {
+      "type": "object",
+      "description": "Structured source evidence used by the Kimi worker. Raw secrets and .env values are forbidden.",
+      "required": [
+        "sources",
+        "scope",
+        "no_secrets"
+      ],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_secrets": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
     "vote": {
       "type": "string",
-      "enum": ["approve", "reject", "abstain"],
+      "enum": [
+        "approve",
+        "reject",
+        "abstain"
+      ],
       "description": "The vote decision"
     },
     "confidence": {
@@ -55,6 +114,44 @@
     "safety_check": {
       "type": "boolean",
       "description": "Whether the proposal passes safety constraints (true = passes)"
+    },
+    "blocked_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "model_download",
+          "gpu_live_inference",
+          "gpu_inference",
+          "secret_access",
+          "env_read",
+          "api_key_read",
+          "deploy",
+          "push",
+          "production_action",
+          "live_provider_call",
+          "install_dependencies",
+          "run_shell_command",
+          "cross_lane_write",
+          "self_approval"
+        ]
+      },
+      "description": "Blocked action classes detected by the Kimi worker"
+    },
+    "live_provider_call_performed": {
+      "type": "boolean",
+      "const": false,
+      "description": "Must remain false. Kimi lane is metadata/draft only in this MVP."
+    },
+    "model_download_performed": {
+      "type": "boolean",
+      "const": false,
+      "description": "Must remain false. Model downloads are blocked."
+    },
+    "gpu_inference_performed": {
+      "type": "boolean",
+      "const": false,
+      "description": "Must remain false. GPU inference is blocked."
     },
     "timestamp": {
       "type": "string",

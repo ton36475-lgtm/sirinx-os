@@ -173,15 +173,31 @@ The Kimi K2.7 Code Worker is the coding lane in GHOSTCLAW.
 
 - model_download
 - gpu_live_inference
+- gpu_inference
 - secret_access
+- env_read
+- api_key_read
 - deploy
 - push
 - production_action
+- live provider call
+- install_dependencies
+- run_shell_command
+- self_approval
+
+**Vote artifact contract:**
+
+- `decision_id` is required
+- `evidence_pack.no_secrets` must be true
+- `requester_agent` must not equal `approver_agent`
+- `receipt_required` is always true
+- `live_provider_call_performed`, `model_download_performed`, and `gpu_inference_performed` must remain false
 
 **Files:**
 
 - `GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml` — policy
 - `GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json` — MoA vote schema
+- `GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs` — Phase 7 contract tests
 - `GHOSTCLAW/workers/registry/worker-registry.json` — registry entry
 - `docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md` — documentation
 

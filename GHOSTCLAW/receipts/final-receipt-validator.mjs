@@ -90,6 +90,7 @@ function validateRequiredArtifacts(errors) {
     "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
     "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
     "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
     "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
     "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
     "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
@@ -408,6 +409,105 @@ function validatePhase6ModelRouterArtifacts(errors) {
   };
 }
 
+function validatePhase7KimiArtifacts(errors) {
+  const schema = readJson("GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json");
+  const required = Array.isArray(schema.required) ? schema.required : [];
+  for (const field of [
+    "vote_id",
+    "voter",
+    "proposal_id",
+    "decision_id",
+    "requester_agent",
+    "approver_agent",
+    "receipt_required",
+    "evidence_pack",
+    "live_provider_call_performed",
+    "model_download_performed",
+    "gpu_inference_performed",
+    "receipt_hash"
+  ]) {
+    pushIfMissing(errors, required.includes(field), `phase7 Kimi vote schema missing required field: ${field}`);
+  }
+  pushIfMissing(errors, schema.properties?.voter?.const === "kimi_coding_worker", "phase7 Kimi schema does not lock voter to kimi_coding_worker");
+  pushIfMissing(errors, schema.properties?.receipt_required?.const === true, "phase7 Kimi schema does not require receipt_required=true");
+  pushIfMissing(errors, schema.properties?.evidence_pack?.properties?.no_secrets?.const === true, "phase7 Kimi evidence pack does not require no_secrets=true");
+  pushIfMissing(errors, schema.properties?.live_provider_call_performed?.const === false, "phase7 Kimi schema does not lock live provider call to false");
+  pushIfMissing(errors, schema.properties?.model_download_performed?.const === false, "phase7 Kimi schema does not lock model download to false");
+  pushIfMissing(errors, schema.properties?.gpu_inference_performed?.const === false, "phase7 Kimi schema does not lock GPU inference to false");
+
+  const policyText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml"), "utf8");
+  for (const marker of [
+    "coding_tool_use_reference",
+    "coding_worker",
+    "patch_planner",
+    "test_planner",
+    "moa_reference_vote_worker",
+    "model_download",
+    "gpu_live_inference",
+    "gpu_inference",
+    "secret_access",
+    "deploy",
+    "push",
+    "production_action",
+    "live_provider_call",
+    "self_approval",
+    "action_tier_cap remains final authority"
+  ]) {
+    pushIfMissing(errors, policyText.includes(marker), `phase7 Kimi policy missing marker: ${marker}`);
+  }
+
+  const registry = readJson("GHOSTCLAW/workers/registry/worker-registry.json");
+  const kimi = Array.isArray(registry.workers)
+    ? registry.workers.find((worker) => worker.id === "kimi_coding_worker")
+    : null;
+  pushIfMissing(errors, Boolean(kimi), "phase7 Kimi worker is missing from registry");
+  if (kimi) {
+    pushIfMissing(errors, kimi.model === "kimi_k2_7_code", "phase7 Kimi registry model is not kimi_k2_7_code");
+    pushIfMissing(errors, kimi.role === "coding_tool_use_reference", "phase7 Kimi registry role is not coding_tool_use_reference");
+    pushIfMissing(errors, kimi.receipt_required === true, "phase7 Kimi registry does not require receipts");
+    pushIfMissing(errors, kimi.self_approval_allowed === false, "phase7 Kimi registry allows self approval");
+    for (const role of ["coding_tool_use_reference", "coding_worker", "patch_planner", "test_planner", "moa_reference_vote_worker"]) {
+      pushIfMissing(errors, kimi.allowed_roles?.includes(role), `phase7 Kimi registry missing role: ${role}`);
+    }
+    for (const action of ["model_download", "gpu_live_inference", "gpu_inference", "secret_access", "deploy", "push", "production_action", "live_provider_call", "self_approval"]) {
+      pushIfMissing(errors, kimi.blocked_actions?.includes(action), `phase7 Kimi registry missing blocked action: ${action}`);
+    }
+  }
+
+  const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+  for (const marker of [
+    "Kimi Worker Lane (Phase 7)",
+    "coding_tool_use_reference",
+    "patch_planner",
+    "test_planner",
+    "MoA reference vote worker",
+    "decision_id",
+    "evidence_pack.no_secrets",
+    "live_provider_call_performed"
+  ]) {
+    pushIfMissing(errors, skillText.includes(marker), `phase7 GhostClaw skill missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs"), "utf8");
+  for (const marker of [
+    "advisory artifacts with decision and evidence metadata",
+    "secret-free and scoped",
+    "hard-blocks provider, model, secret, deployment, shell, and self-approval actions",
+    "registers kimi_coding_worker",
+    "draft-only worker"
+  ]) {
+    pushIfMissing(errors, testText.includes(marker), `phase7 Kimi test missing case marker: ${marker}`);
+  }
+
+  return {
+    schema_required_field_count: 12,
+    policy_marker_count: 15,
+    registry_role_count: 5,
+    registry_blocked_action_count: 9,
+    test_case_marker_count: 5
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -429,6 +529,7 @@ export function validateFinalReceipt(receipt) {
   const phase3Protocol = validatePhase3ProtocolArtifacts(errors);
   const phase5Vibe = validatePhase5VibeArtifacts(errors);
   const phase6ModelRouter = validatePhase6ModelRouterArtifacts(errors);
+  const phase7Kimi = validatePhase7KimiArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -537,6 +638,11 @@ export function validateFinalReceipt(receipt) {
       phase6_model_swap_worker_marker_count: phase6ModelRouter.worker_marker_count,
       phase6_model_swap_policy_marker_count: phase6ModelRouter.policy_marker_count,
       phase6_model_swap_receipt_template_field_count: phase6ModelRouter.receipt_template_field_count,
+      phase7_kimi_schema_required_field_count: phase7Kimi.schema_required_field_count,
+      phase7_kimi_policy_marker_count: phase7Kimi.policy_marker_count,
+      phase7_kimi_registry_role_count: phase7Kimi.registry_role_count,
+      phase7_kimi_registry_blocked_action_count: phase7Kimi.registry_blocked_action_count,
+      phase7_kimi_test_case_count: phase7Kimi.test_case_marker_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

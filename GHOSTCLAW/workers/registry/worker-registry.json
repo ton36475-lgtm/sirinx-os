@@ -44,6 +44,7 @@
       "blocked_actions": [
         "model_download",
         "gpu_live_inference",
+        "gpu_inference",
         "secret_access",
         "deploy",
         "push",
