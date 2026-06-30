@@ -278,7 +278,7 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Evidence: commit `dd4903c`, `GHOSTCLAW/vibe/vibe-agent-router.mjs`, `GHOSTCLAW/vibe/vibe-agent-router.test.mjs`, `GHOSTCLAW/vibe/vibe-execution-plan.template.json`, `docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md`, `.ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json`.
 - [x] Harden GhostClaw Phase 6 Model Auto Swap Router contract.
   - Status: model router now checks `action_tier_cap` for known action classes before routing, keeps D/X actions blocked, falls back safely for unknown lanes and unavailable providers through metadata-only health stubs, and validates ModelSwapWorker safe/blocked receipts.
-  - Evidence: `GHOSTCLAW/models/model-router.mjs`, `GHOSTCLAW/models/model-router.test.mjs`, `GHOSTCLAW/models/model-swap-policy.yaml`, `docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md`, `.ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json`.
+  - Evidence: commit `1dcc709`, `GHOSTCLAW/models/model-router.mjs`, `GHOSTCLAW/models/model-router.test.mjs`, `GHOSTCLAW/models/model-swap-policy.yaml`, `docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md`, `.ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.

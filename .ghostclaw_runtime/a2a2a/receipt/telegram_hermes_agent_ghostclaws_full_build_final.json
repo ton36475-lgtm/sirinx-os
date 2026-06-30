@@ -29,7 +29,7 @@
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
     "phase_17_final_receipt": "updated_current_turn",
-    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_dd4903c"
+    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_1dcc709"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -471,9 +471,12 @@
     ]
   },
   "latest_phase6_model_router_contract": {
-    "status": "validated_current_turn",
+    "status": "validated_and_committed_local_scope",
     "validated_at": "2026-06-30T02:00:07Z",
     "local_validated_at": "2026-06-30T09:00:07+0700",
+    "commit_hash": "1dcc709",
+    "commit_message": "test(ghostclaw): validate model router contract",
+    "commit_hash_scope": "validated scoped local source commit for Phase 6 Model Auto Swap Router contract hardening; later receipt-finalization commits may differ",
     "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
     "files_created": [
       ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
@@ -531,12 +534,12 @@
     }
   },
   "commit_status": "committed_current_turn",
-  "commit_hash": "dd4903c",
-  "commit_message": "test(ghostclaw): validate vibe agent contract",
-  "commit_reason": "Latest scoped local commit completed after Phase 5 Vibe Agent contract validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-phase5-vibe-20260630-001.",
+  "commit_hash": "1dcc709",
+  "commit_message": "test(ghostclaw): validate model router contract",
+  "commit_reason": "Latest scoped local commit completed after Phase 6 Model Router contract validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-phase6-model-router-20260630-001.",
   "commit_hash_resolution": {
     "hash_scope": "validated_scoped_local_commit_reported_by_this_receipt",
-    "reported_commit_hash": "dd4903c",
+    "reported_commit_hash": "1dcc709",
     "self_reference_policy": "Do not chase the hash of a later receipt-finalization commit; that would create an endless self-referential receipt update loop.",
     "latest_head_can_differ_after_receipt_finalization": true
   },

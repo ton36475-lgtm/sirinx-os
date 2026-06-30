@@ -2477,6 +2477,7 @@
 - Updated `GHOSTCLAW/models/model-swap-policy.yaml` and `docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md` so `model_download` and `gpu_inference` are documented as Tier X hard blocks.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json`.
 - Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 6 router, test, worker, policy, and receipt-template markers.
+- Created scoped local source commit `1dcc709` (`test(ghostclaw): validate model router contract`).
 
 ### Verification
 
