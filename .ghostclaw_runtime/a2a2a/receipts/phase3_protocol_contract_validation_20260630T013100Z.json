@@ -5,7 +5,7 @@
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
   "mode": "local_only_protocol_contract_hardening",
-  "status": "validation_passed_commit_pending",
+  "status": "validated_and_committed_local_scope",
   "scope": "Phase 3 A2A Sync Team schema and protocol compatibility fields",
   "files_modified": [
     "GHOSTCLAW/protocols/a2a2a-message-schema.json",
@@ -65,6 +65,12 @@
     "json_control_plane_authority": true,
     "kv_only_protocol_allowed": false
   },
+  "commit": {
+    "commit_status": "committed_local_scope",
+    "commit_hash": "8e4bfa8",
+    "commit_message": "test(ghostclaw): validate a2a protocol contract",
+    "hash_scope": "validated scoped local source commit for Phase 3 A2A protocol contract hardening"
+  },
   "safety": {
     "no_push": true,
     "no_deploy": true,
@@ -73,5 +79,5 @@
     "no_package_install": true,
     "no_external_message_send": true
   },
-  "next_safe_action": "Evaluate non-self local commit approval and stage only scoped Phase 3 protocol contract files if checks pass."
+  "next_safe_action": "Continue broader GhostClaw objective audit; keep deploy, push, provider/model calls, model downloads, GPU inference, secret reads, package installs, queue mutation, and live sends blocked unless exact gates exist."
 }

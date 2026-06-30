@@ -36,6 +36,7 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: A2A schema now exposes the required optional compatibility fields, worker receipt templates include `from_agent`/`to_agent`, and the final receipt validator verifies Phase 3 schema fields, templates, canonical terminology, JSON control-plane authority, and KV-only prohibition.
   - Evidence: `GHOSTCLAW/protocols/a2a2a-message-schema.json`, `GHOSTCLAW/protocols/A2A2A_PROTOCOL.md`, `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/templates/worker-receipt.json`, `.ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json`.
   - Verification: schema JSON validation passed; runtime template JSON validation passed; final receipt validator returned `ok=true` with `phase3_schema_field_count=21` and `phase3_template_count=5`.
+  - Commit: `8e4bfa8` (`test(ghostclaw): validate a2a protocol contract`).
 - [x] Add GhostClaw final receipt validator.
   - Status: Phase 17 receipt fields and Browser Use smoke proof can now be checked directly from disk.
   - Evidence: `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json`.

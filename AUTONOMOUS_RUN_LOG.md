@@ -2449,6 +2449,7 @@
 - Updated `.ghostclaw_runtime/a2a2a/templates/worker-receipt.json` with `from_agent` and `to_agent`.
 - Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate 21 Phase 3 schema fields, 5 runtime templates, canonical terminology, JSON control-plane authority, latent-plane non-authority, and KV-only prohibition.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json`.
+- Created scoped local source commit `8e4bfa8` (`test(ghostclaw): validate a2a protocol contract`).
 
 ### Verification
 
