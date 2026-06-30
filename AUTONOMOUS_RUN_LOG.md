@@ -2424,11 +2424,13 @@
 - Expanded `GHOSTCLAW/agents/auto-approve-engine.test.mjs` from 14 to 20 tests, covering Tier B auto approval, Tier C quorum, unknown action Tier D auto-block, separate missing evidence and missing decision id rejection, and Tier X classification for push/deploy/secret/model download/GPU actions.
 - Added `.ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json`.
 - Updated the final receipt and `NEXT_ACTIONS.md` with the 20-test validation result.
+- Created scoped local source commit `4468696` (`test(ghostclaw): harden auto-approval matrix`).
 
 ### Verification
 
 - `node --check GHOSTCLAW/agents/auto-approve-engine.mjs` — passed.
 - `./node_modules/.bin/vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs` — passed, 1 file / 20 tests.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` before the scoped source commit.
 
 ### Blocked Actions
 

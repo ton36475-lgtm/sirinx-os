@@ -5,7 +5,7 @@
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
   "mode": "local_only_policy_and_test_hardening",
-  "status": "validation_passed_commit_pending",
+  "status": "validated_and_committed_local_scope",
   "scope": "Phase 2 Hermes/Codex mutual auto approval matrix",
   "files_modified": [
     "GHOSTCLAW/agents/auto-approve-engine.mjs",
@@ -44,6 +44,12 @@
       "GHOSTCLAW/policies/action-tier-cap.yaml"
     ]
   },
+  "commit": {
+    "commit_status": "committed_local_scope",
+    "commit_hash": "4468696",
+    "commit_message": "test(ghostclaw): harden auto-approval matrix",
+    "hash_scope": "validated scoped local source commit for Phase 2 auto-approval matrix hardening"
+  },
   "safety": {
     "no_push": true,
     "no_deploy": true,
@@ -54,5 +60,5 @@
     "no_package_install": true,
     "no_external_message_send": true
   },
-  "next_safe_action": "Run final receipt validation, evaluate non-self local_commit_allowed_scope approval, then stage only scoped Phase 2 files if checks pass."
+  "next_safe_action": "Keep deploy, push, provider/model calls, model downloads, GPU inference, secret reads, package installs, and live sends blocked unless exact gates exist."
 }

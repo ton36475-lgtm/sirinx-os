@@ -252,9 +252,12 @@
     "no_provider_call": true
   },
   "latest_phase2_matrix_hardening": {
-    "status": "validated_local_changes_pending_scoped_commit",
+    "status": "validated_and_committed_local_scope",
     "validated_at": "2026-06-30T01:19:14Z",
     "local_validated_at": "2026-06-30T08:19:14+0700",
+    "commit_hash": "4468696",
+    "commit_message": "test(ghostclaw): harden auto-approval matrix",
+    "commit_hash_scope": "validated scoped local source commit for Phase 2 auto-approval matrix hardening; later receipt-finalization commits may differ",
     "files_modified": [
       "GHOSTCLAW/agents/auto-approve-engine.mjs",
       "GHOSTCLAW/agents/auto-approve-engine.test.mjs",
