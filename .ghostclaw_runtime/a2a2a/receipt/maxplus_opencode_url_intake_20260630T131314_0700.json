@@ -1,0 +1,97 @@
+{
+  "schema": "ghostclaw.a2a2a.url_intake_receipt.v1",
+  "receipt_id": "maxplus_opencode_url_intake_20260630T131314_0700",
+  "task_id": "maxplus-opencode-url-intake",
+  "correlation_id": "sirinx-ghostclaw-external-opencode-intake",
+  "status": "read_only_quarantine_recorded",
+  "created_at": "2026-06-30T13:13:14+07:00",
+  "created_by": "codex",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "source_url": "https://maxplus-ai.cc/getterstart/opencode",
+  "fetch_evidence": {
+    "head_status": "HTTP/2 200",
+    "redirect_observed": "NEXT_REDIRECT;replace;/login;307",
+    "page_framework": "Next.js",
+    "edge": "Cloudflare",
+    "authenticated_content_visible": false,
+    "raw_html_saved": false
+  },
+  "chrome_readonly_evidence": {
+    "used_chrome_plugin": true,
+    "tab_url": "https://maxplus-ai.cc/getterstart/opencode",
+    "signals_confirmed": [
+      "~/.config/opencode/opencode.json",
+      "MAXPLUS_API_KEY",
+      "https://api.maxplus-ai.cc/v1",
+      "maxplus/claude-opus-4-8",
+      "@ai-sdk/anthropic",
+      "custom provider"
+    ],
+    "sensitive_surfaces_redacted": [
+      "account email",
+      "credit balance",
+      "key names",
+      "key previews",
+      "full key surfaces"
+    ],
+    "browser_actions": [
+      "claimed existing tab read-only",
+      "read title/url/page text signals",
+      "released tab without clicking copy or submitting forms"
+    ]
+  },
+  "screenshot_evidence": {
+    "provided_by_user": true,
+    "path": "/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/codex-clipboard-62e1eea5-f3a5-4eb8-a17f-12b7a557cc04.png",
+    "visible_config_path": "~/.config/opencode/opencode.json",
+    "visible_provider_name": "maxplus",
+    "visible_base_url": "https://api.maxplus-ai.cc/v1",
+    "visible_api_key_reference": "{env:MAXPLUS_API_KEY}",
+    "visible_model_example": "maxplus/claude-opus-4-8"
+  },
+  "observed_page_claims": [
+    "MaxPlus AI",
+    "API proxy pay-as-you-go for Claude Code and Codex",
+    "PromptPay/TrueMoney top-up",
+    "quick install UI label present",
+    "OpenCode custom provider config path and MaxPlus provider snippet visible after login"
+  ],
+  "actions_taken": [
+    "read-only HEAD request",
+    "read-only unauthenticated HTML metadata inspection",
+    "read-only Chrome tab signal extraction",
+    "created quarantine intake document"
+  ],
+  "actions_not_taken": [
+    "no login",
+    "no install",
+    "no curl pipe bash",
+    "no global package install",
+    "no API key read",
+    "no API key paste",
+    "no provider call",
+    "no payment/top-up action",
+    "no external service mutation",
+    "no push",
+    "no deploy"
+  ],
+  "blocked_actions": [
+    "run_remote_quick_install",
+    "curl_pipe_bash",
+    "global_install",
+    "secret_read",
+    "api_key_create_or_paste",
+    "paid_provider_model_call",
+    "external_account_connection",
+    "payment_or_top_up",
+    "push",
+    "deploy"
+  ],
+  "documentation_path": "docs/knowledge/MAXPLUS_OPENCODE_URL_INTAKE_20260630.md",
+  "next_safe_actions": [
+    "Review logged-in setup instructions only as redacted text or screenshot.",
+    "Compare proposed commands against official OpenCode docs.",
+    "Require explicit owner gate before any install, provider connection, key creation, or paid call."
+  ]
+}
