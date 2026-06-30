@@ -14,7 +14,7 @@
     "phase_0_inspection": "completed_current_turn",
     "phase_1_worker_build_runtime": "completed_existing_files_present",
     "phase_2_auto_approval": "completed_validated_current_turn_matrix_hardened_20_tests",
-    "phase_3_a2a_sync_team": "completed_existing_files_present",
+    "phase_3_a2a_sync_team": "completed_validated_current_turn_protocol_contract_fields",
     "phase_4_browser_use": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
     "phase_5_vibe_coding": "completed_existing_files_present",
     "phase_6_model_swap_router": "completed_validated_current_turn",
@@ -46,7 +46,8 @@
     "GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json",
     "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-1782779510569.png",
     "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png",
-    ".ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json"
+    ".ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json",
+    ".ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -54,21 +55,25 @@
     "GHOSTCLAW/agents/auto-approve-engine.mjs",
     "GHOSTCLAW/agents/auto-approve-engine.test.mjs",
     "GHOSTCLAW/policies/action-tier-cap.yaml",
+    "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+    "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+    ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json",
     "GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs",
     ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
     "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
-    "count": 10
+    "count": 11
   },
   "files_modified": {
     "source_field": "current_turn_files_modified",
-    "count": 8
+    "count": 12
   },
   "files_changed": {
-    "created_count": 10,
-    "modified_count": 8,
+    "created_count": 11,
+    "modified_count": 12,
     "source_fields": [
       "current_turn_files_created",
       "current_turn_files_modified"
@@ -251,7 +256,7 @@
     "no_external_repo_install": true,
     "no_provider_call": true
   },
-  "latest_phase2_matrix_hardening": {
+    "latest_phase2_matrix_hardening": {
     "status": "validated_and_committed_local_scope",
     "validated_at": "2026-06-30T01:19:14Z",
     "local_validated_at": "2026-06-30T08:19:14+0700",
@@ -291,6 +296,40 @@
       "provider_model_call",
       "package_install",
       "telegram_live_send"
+    ]
+  },
+  "latest_phase3_protocol_contract": {
+    "status": "validated_local_changes_pending_scoped_commit",
+    "validated_at": "2026-06-30T01:30:12Z",
+    "local_validated_at": "2026-06-30T08:30:12+0700",
+    "files_modified": [
+      "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json"
+    ],
+    "requirements_covered": [
+      "top-level optional compatibility fields in A2A schema",
+      "worker receipt template includes from_agent and to_agent",
+      "JSON control plane source of truth documented",
+      "KV-only protocol forbidden",
+      "brainstorm canonical terminology validated",
+      "beststorm documented as legacy alias only",
+      "beststrom documented as invalid typo"
+    ],
+    "validation_commands": [
+      {
+        "command": "python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json",
+        "result": "passed"
+      },
+      {
+        "command": "find .ghostclaw_runtime/a2a2a/templates -maxdepth 3 -name '*.json' -type f -print -exec python3 -m json.tool {} \\;",
+        "result": "passed"
+      },
+      {
+        "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+        "result": "passed_ok_true_phase3_schema_field_count_21_phase3_template_count_5"
+      }
     ]
   },
   "external_repo_install_gates": {

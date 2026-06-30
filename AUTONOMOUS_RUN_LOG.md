@@ -2435,3 +2435,29 @@
 ### Blocked Actions
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, or external repo install was performed.
+
+## Run 2026-06-30T08:30:12+07:00 — Phase 3 A2A Protocol Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only schema/template/validator hardening, no external execution
+- **Scope:** Prove Phase 3 A2A Sync Team compatibility fields instead of checking only artifact presence.
+
+### Changes
+
+- Added top-level `from_agent`, `to_agent`, `requester_agent`, and `approver_agent` compatibility fields to `GHOSTCLAW/protocols/a2a2a-message-schema.json`.
+- Added the GhostClaw runtime compatibility field list, JSON control-plane authority rule, canonical brainstorm rule, and KV-only prohibition to `GHOSTCLAW/protocols/A2A2A_PROTOCOL.md`.
+- Updated `.ghostclaw_runtime/a2a2a/templates/worker-receipt.json` with `from_agent` and `to_agent`.
+- Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate 21 Phase 3 schema fields, 5 runtime templates, canonical terminology, JSON control-plane authority, latent-plane non-authority, and KV-only prohibition.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json`.
+
+### Verification
+
+- `python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json` — passed.
+- Runtime A2A template JSON validation — passed.
+- `node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true`, `phase3_schema_field_count=21`, and `phase3_template_count=5`.
+- Scoped `git diff --check` — passed.
+
+### Blocked Actions
+
+- No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.

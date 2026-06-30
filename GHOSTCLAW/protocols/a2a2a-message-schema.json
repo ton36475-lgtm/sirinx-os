@@ -242,6 +242,14 @@
       "type": "string",
       "description": "Optional task identifier for worker dispatch tracking."
     },
+    "from_agent": {
+      "type": "string",
+      "description": "Optional backward-compatible sender agent identifier for worker bus templates."
+    },
+    "to_agent": {
+      "type": "string",
+      "description": "Optional backward-compatible receiver agent identifier for worker bus templates."
+    },
     "decision_id": {
       "type": "string",
       "description": "Optional decision identifier for autonomous mutual approval."
@@ -253,6 +261,14 @@
     "action_class": {
       "type": "string",
       "description": "Optional action class for policy gate evaluation (e.g. read_only, code_patch_allowed_path)."
+    },
+    "requester_agent": {
+      "type": "string",
+      "description": "Optional top-level requester agent for autonomous mutual approval compatibility."
+    },
+    "approver_agent": {
+      "type": "string",
+      "description": "Optional top-level approver agent; must differ from requester_agent at policy evaluation time."
     },
     "evidence_pack": {
       "type": "object",

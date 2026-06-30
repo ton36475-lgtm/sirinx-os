@@ -110,6 +110,103 @@ function validateRequiredArtifacts(errors) {
   return requiredArtifacts.length;
 }
 
+function validatePhase3ProtocolArtifacts(errors) {
+  const schema = readJson("GHOSTCLAW/protocols/a2a2a-message-schema.json");
+  const schemaProperties = schema.properties || {};
+  const requiredSchemaFields = [
+    "task_id",
+    "correlation_id",
+    "decision_id",
+    "brainstorm_id",
+    "phase",
+    "from_agent",
+    "to_agent",
+    "worker_id",
+    "action_class",
+    "evidence_pack",
+    "autonomous_approval",
+    "requester_agent",
+    "approver_agent",
+    "human_approval_required",
+    "receipt_required",
+    "latent_plane",
+    "control_plane_required",
+    "moa_summary",
+    "moa_gated_brainstorm",
+    "browser_use",
+    "edgeone"
+  ];
+
+  for (const field of requiredSchemaFields) {
+    pushIfMissing(errors, hasValue(schemaProperties[field]), `phase3 schema missing optional compatibility field: ${field}`);
+  }
+
+  pushIfMissing(
+    errors,
+    schemaProperties.terminology_policy?.properties?.canonical?.const === "brainstorm",
+    "phase3 schema does not lock brainstorm as canonical terminology"
+  );
+  pushIfMissing(
+    errors,
+    schemaProperties.terminology_policy?.properties?.deprecated_aliases?.items?.enum?.includes("beststorm"),
+    "phase3 schema does not document beststorm as a deprecated alias"
+  );
+  pushIfMissing(
+    errors,
+    schemaProperties.terminology_policy?.properties?.invalid_typos?.items?.enum?.includes("beststrom"),
+    "phase3 schema does not document beststrom as an invalid typo"
+  );
+
+  const templatePaths = [
+    ".ghostclaw_runtime/a2a2a/templates/worker-message.json",
+    ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json",
+    ".ghostclaw_runtime/a2a2a/templates/worker-heartbeat.json",
+    ".ghostclaw_runtime/a2a2a/templates/evidence-pack.json",
+    ".ghostclaw_runtime/a2a2a/templates/decision-artifact.json"
+  ];
+  const requiredTemplateFields = [
+    "task_id",
+    "correlation_id",
+    "brainstorm_id",
+    "phase",
+    "from_agent",
+    "to_agent",
+    "worker_id",
+    "human_approval_required",
+    "receipt_required",
+    "latent_plane",
+    "control_plane_required",
+    "moa_summary",
+    "moa_gated_brainstorm",
+    "browser_use",
+    "edgeone"
+  ];
+
+  for (const templatePath of templatePaths) {
+    const template = readJson(templatePath);
+    const properties = template.properties || {};
+    for (const field of requiredTemplateFields) {
+      pushIfMissing(errors, hasValue(properties[field]), `phase3 template ${templatePath} missing field: ${field}`);
+    }
+  }
+
+  const policyText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml"), "utf8");
+  pushIfMissing(errors, /canonical_term:\s*brainstorm/.test(policyText), "brainstorm terminology policy missing canonical_term: brainstorm");
+  pushIfMissing(errors, /beststorm/.test(policyText), "brainstorm terminology policy missing beststorm legacy alias");
+  pushIfMissing(errors, /beststrom/.test(policyText), "brainstorm terminology policy missing beststrom invalid typo");
+  pushIfMissing(errors, /json_control_plane_authority:\s*true/.test(policyText), "brainstorm terminology policy does not make JSON control plane authoritative");
+  pushIfMissing(errors, /latent_plane_authority:\s*false/.test(policyText), "brainstorm terminology policy does not mark latent plane non-authoritative");
+
+  const protocolText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md"), "utf8");
+  pushIfMissing(errors, /JSON control plane is the source of truth/.test(protocolText), "A2A2A protocol does not state JSON control plane source of truth");
+  pushIfMissing(errors, /forbids KV-only execution/.test(protocolText), "A2A2A protocol does not forbid KV-only execution");
+
+  return {
+    schema_field_count: requiredSchemaFields.length,
+    template_count: templatePaths.length
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -127,6 +224,7 @@ function validateCommitHash(receipt, errors) {
 export function validateFinalReceipt(receipt) {
   const errors = [];
   const requiredArtifactCount = validateRequiredArtifacts(errors);
+  const phase3Protocol = validatePhase3ProtocolArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -223,6 +321,8 @@ export function validateFinalReceipt(receipt) {
       receipt_path: receiptPath,
       validation_count: Object.keys(validations).length,
       required_artifact_count: requiredArtifactCount,
+      phase3_schema_field_count: phase3Protocol.schema_field_count,
+      phase3_template_count: phase3Protocol.template_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,
