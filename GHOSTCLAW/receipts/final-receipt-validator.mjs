@@ -101,6 +101,7 @@ function validateRequiredArtifacts(errors) {
     ".ghostclaw_runtime/latent/control-plane-manifest.json",
     ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
     "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+    "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
     "GHOSTCLAW/research/github-toptrend-worker.mjs",
     "GHOSTCLAW/research/github-toptrend-map.yaml",
     "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md",
@@ -594,7 +595,7 @@ function validatePhase8MoABrainstormArtifacts(errors) {
   }
 
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
-  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9|10)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
   for (const marker of [
     "ref_A_safety_risk",
     "ref_B_speed_cost",
@@ -682,7 +683,7 @@ function validatePhase9LatentMASArtifacts(errors) {
 
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
   for (const marker of [
-    'phase_coverage: "1-9"',
+    'phase_coverage: "1-10"',
     "JSON control plane",
     "Latent plane",
     "Safety/policy plane",
@@ -717,6 +718,55 @@ function validatePhase9LatentMASArtifacts(errors) {
   };
 }
 
+function validatePhase10SkillCreatorArtifacts(errors) {
+  const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+  pushIfMissing(errors, /phase_coverage:\s*"1-10"/.test(skillText), "phase10 GhostClaw skill missing phase coverage marker");
+
+  const requiredSkillMarkers = [
+    "Skill Creator / Zero Prompting System (Phase 10)",
+    "Zero Prompting workflow",
+    "Mission Card",
+    "Hermes/Codex mutual approval",
+    "Worker Build Runtime",
+    "Browser Use Worker",
+    "Vibe Coding Agent",
+    "A2A Sync Team",
+    "MoA-gated Brainstorm",
+    "LatentMAS dual-plane architecture",
+    "Model Auto Swap Router",
+    "Kimi Worker lane",
+    "EdgeOne deployment readiness",
+    "GitHub Toptrend public read-only research",
+    "validation/receipt/archive",
+    "no secret access",
+    "no push/deploy",
+    "no live provider/model call",
+    "no GPU inference",
+    "no model download"
+  ];
+
+  for (const marker of requiredSkillMarkers) {
+    pushIfMissing(errors, skillText.includes(marker), `phase10 GhostClaw skill missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs"), "utf8");
+  const requiredTestMarkers = [
+    "marks Phase 10 coverage",
+    "preserves the Zero Prompting Mission Card workflow",
+    "documents all required worker lanes",
+    "keeps Phase 10 hard stops explicit"
+  ];
+
+  for (const marker of requiredTestMarkers) {
+    pushIfMissing(errors, testText.includes(marker), `phase10 skill contract test missing case marker: ${marker}`);
+  }
+
+  return {
+    skill_marker_count: requiredSkillMarkers.length,
+    test_case_marker_count: requiredTestMarkers.length
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -741,6 +791,7 @@ export function validateFinalReceipt(receipt) {
   const phase7Kimi = validatePhase7KimiArtifacts(errors);
   const phase8MoA = validatePhase8MoABrainstormArtifacts(errors);
   const phase9LatentMAS = validatePhase9LatentMASArtifacts(errors);
+  const phase10SkillCreator = validatePhase10SkillCreatorArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -863,6 +914,8 @@ export function validateFinalReceipt(receipt) {
       phase9_latentmas_kv_gate_field_count: phase9LatentMAS.kv_gate_field_count,
       phase9_latentmas_kv_gate_guard_count: phase9LatentMAS.kv_gate_guard_count,
       phase9_latentmas_test_case_count: phase9LatentMAS.test_case_marker_count,
+      phase10_skill_creator_marker_count: phase10SkillCreator.skill_marker_count,
+      phase10_skill_creator_test_case_count: phase10SkillCreator.test_case_marker_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

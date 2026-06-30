@@ -21,15 +21,15 @@
     "phase_7_kimi_worker_lane": "completed_validated_current_turn_policy_schema_registry_skill_contract",
     "phase_8_moa_brainstorm": "completed_validated_current_turn_schema_policy_protocol_skill_contract",
     "phase_9_latentmas_dual_plane": "completed_validated_current_turn_dual_plane_manifest_contract",
-    "phase_10_skill_creator": "completed_existing_files_present",
+    "phase_10_skill_creator": "completed_validated_current_turn_zero_prompting_skill_contract",
     "phase_11_github_toptrend": "completed_existing_files_present",
     "phase_12_edgeone_readiness": "completed_existing_files_present_r3_only",
     "phase_13_autonomous_run_log": "updated_current_turn",
     "phase_14_validation": "completed_current_turn",
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
-    "phase_17_final_receipt": "updated_current_turn",
-    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_20bfef7"
+    "phase_17_final_receipt": "updated_current_turn_phase10_skill_creator_contract",
+    "phase_18_stage_commit": "pending_phase10_scoped_local_commit"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -63,7 +63,10 @@
     ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json",
     "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
     ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json",
-    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json"
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json",
+    "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -99,19 +102,20 @@
     ".ghostclaw_runtime/latent/latent-manifest.json",
     ".ghostclaw_runtime/latent/control-plane-manifest.json",
     ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
-    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs"
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+    "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
-    "count": 18
+    "count": 30
   },
   "files_modified": {
     "source_field": "current_turn_files_modified",
-    "count": 22
+    "count": 35
   },
   "files_changed": {
-    "created_count": 18,
-    "modified_count": 22,
+    "created_count": 30,
+    "modified_count": 35,
     "source_fields": [
       "current_turn_files_created",
       "current_turn_files_modified"
@@ -144,7 +148,7 @@
     "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
     "moa_brainstorm_status": "validated_current_turn_schema_policy_protocol_skill_contract_4_tests",
     "latentmas_status": "validated_current_turn_dual_plane_manifest_contract_4_tests_live_disabled",
-    "skill_creator_status": "skill_file_present",
+    "skill_creator_status": "validated_current_turn_zero_prompting_skill_contract_4_tests",
     "github_toptrend_worker_status": "present_public_metadata_only_no_clone_or_install",
     "edgeone_readiness_status": "r3_readiness_only_no_deploy"
   },
@@ -154,7 +158,7 @@
   "a2a_sync_status": "probe_only_local_mailbox_workers_present",
   "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
   "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
-  "skill_created": "skill_file_present",
+  "skill_created": "validated_current_turn_phase10_zero_prompting_skill_contract",
   "edgeone_readiness_status": "r3_readiness_only_no_deploy",
   "validations_run_current_turn": [
     {
@@ -230,7 +234,7 @@
     {
       "name": "final_receipt_validator",
       "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
-      "result": "passed_ok_true_errors_empty"
+      "result": "passed_ok_true_phase10_skill_creator_test_case_count_4"
     },
     {
       "name": "kimi_worker_contract",
@@ -267,6 +271,18 @@
       "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase9 latentmas)",
       "result": "approved_tier_B_non_self_approval",
       "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json"
+    },
+    {
+      "name": "skill_creator_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_3_files_12_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase10_skill_creator",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase10 skill creator)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json"
     }
   ],
   "validations_run": "see validations_run_current_turn",
@@ -283,13 +299,15 @@
     "browser_use_smoke": "passed_http_200_r0_tab_click_active_goal_packet_013_blocker_no_console_or_page_errors",
     "vibe_agent_contract": "passed_1_file_5_tests_mutual_approval_evidence_receipt_archive_contract",
     "diff_check": "passed",
-    "final_receipt_validator": "passed_ok_true_errors_empty",
+    "final_receipt_validator": "passed_ok_true_phase10_skill_creator_test_case_count_4",
     "kimi_worker_contract": "passed_1_file_5_tests_policy_schema_registry_skill_contract",
     "local_commit_allowed_scope_decision_phase7_kimi": "approved_tier_B_non_self_approval",
     "moa_brainstorm_contract": "passed_1_file_4_tests_schema_policy_protocol_skill_contract",
     "local_commit_allowed_scope_decision_phase8_moa": "approved_tier_B_non_self_approval",
     "latentmas_dual_plane_contract": "passed_1_file_4_tests_dual_plane_manifest_contract",
-    "local_commit_allowed_scope_decision_phase9_latentmas": "approved_tier_B_non_self_approval"
+    "local_commit_allowed_scope_decision_phase9_latentmas": "approved_tier_B_non_self_approval",
+    "skill_creator_contract": "passed_3_files_12_tests_zero_prompting_skill_contract",
+    "local_commit_allowed_scope_decision_phase10_skill_creator": "approved_tier_B_non_self_approval"
   },
   "blocked_actions": [
     "push",
@@ -734,5 +752,49 @@
     "source_commit_hash": "20bfef7",
     "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
     "commit_status": "committed_current_turn"
+  },
+  "last_updated_at": "2026-06-30T02:45:54Z",
+  "last_local_updated_at": "2026-06-30T09:45:54+0700",
+  "latest_phase10_skill_creator_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:44:10Z",
+    "local_timestamp": "2026-06-30T09:44:10+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json",
+    "files_created": [
+      "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json"
+    ],
+    "files_modified": [
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "Zero Prompting workflow preserved as Mission Card contract",
+      "Hermes/Codex mutual approval documented",
+      "Worker Build Runtime documented",
+      "Browser Use Worker documented",
+      "Vibe Coding Agent documented",
+      "A2A Sync Team documented",
+      "MoA-gated Brainstorm documented",
+      "LatentMAS dual-plane architecture documented",
+      "Model Auto Swap Router documented",
+      "Kimi Worker lane documented",
+      "EdgeOne deployment readiness documented",
+      "GitHub Toptrend public read-only research documented",
+      "validation/receipt/archive documented",
+      "hard stops for secrets, push/deploy, live provider/model calls, GPU inference, and model download documented"
+    ],
+    "validation_commands": [
+      "node --check GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs && node --check GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs && node --check GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "source_commit_hash": "pending_phase10_scoped_local_commit",
+    "source_commit_subject": "pending",
+    "commit_status": "pending_phase10_scoped_local_commit",
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval"
   }
 }

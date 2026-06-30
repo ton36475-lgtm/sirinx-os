@@ -6,6 +6,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
 
 ## Completed This Session
 
+- [x] Harden GhostClaw Phase 10 Skill Creator / Zero Prompting contract.
+  - Status: `SKILL.md` now covers Phase 1-10, including Mission Card based Zero Prompting, Hermes/Codex mutual approval, all required worker/readiness lanes, validation/receipt/archive, and hard stops for secrets, push/deploy, live provider/model calls, GPU inference, and model download.
+  - Evidence: `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md`, `GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs`, `GHOSTCLAW/receipts/final-receipt-validator.mjs`, `.ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json`.
+  - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` passed, 3 files / 12 tests; final receipt validator returned `ok=true` with `phase10_skill_creator_test_case_count=4`.
 - [x] Start GhostClaw A2A sync probe and external repo intake receipts.
   - Status: partial/probe-only. Existing tmux sessions `ghostclaw-hermes`, `ghostclaw-kob`, and `ghostclaw-a2a-sync` are live Python probe workers; smoke packets and external repo intake packets produced ack receipts.
   - External repos reviewed but not installed: `Yeachan-Heo/oh-my-opencode-lite`, `Yeachan-Heo/Agent-Blackbox`.

@@ -63,7 +63,7 @@ describe("Phase 9 LatentMAS dual-plane contract", () => {
     expect(docText).toContain("4.3x");
     expect(docText).toContain("83.7%");
     expect(docText).toContain("+13.3%");
-    expect(skillText).toContain('phase_coverage: "1-9"');
+    expect(skillText).toContain('phase_coverage: "1-10"');
     expect(skillText).toContain("json_control_plane_source_of_truth");
     expect(skillText).toContain("past_key_values");
     expect(skillText).toContain("parallel_text_probe");

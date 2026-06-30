@@ -11,7 +11,7 @@ description: >
   read-only research, validation/receipt/archive, and hard stop conditions.
 
 # Skill metadata
-phase_coverage: "1-9"
+phase_coverage: "1-10"
 canonical_terminology:
   brainstorm: canonical
   beststorm: legacy_alias
@@ -41,6 +41,22 @@ GHOSTCLAW implements a **Zero Prompting** workflow. Agents do not receive free-f
 - Report Format
 
 This prevents prompt injection and ambiguous dispatch.
+
+## 1.1 Skill Creator / Zero Prompting System (Phase 10)
+
+The Skill Creator updates this `SKILL.md` as the canonical operating guide for the Thai JARVIS worker system. It records capabilities as structured contracts, not raw prompt dumps.
+
+**Required workflow:**
+
+1. Convert operator intent into a Mission Card.
+2. Map the Mission Card to approved file scope and blocked actions.
+3. Route through Hermes/Codex mutual approval before mutation.
+4. Dispatch only to registered local workers.
+5. Validate, write receipt, archive evidence, then report exact status.
+
+**Coverage contract:** Worker Build Runtime, Browser Use Worker, Vibe Coding Agent, A2A Sync Team, MoA-gated Brainstorm, LatentMAS dual-plane architecture, Model Auto Swap Router, Kimi Worker lane, EdgeOne deployment readiness, GitHub Toptrend public read-only research, validation/receipt/archive.
+
+**Phase 10 hard stops:** no secret access, no push/deploy, no live provider/model call, no GPU inference, no model download.
 
 ## 2. Hermes/Codex Mutual Approval
 
@@ -262,6 +278,7 @@ Receipt types:
 - Decision receipts
 - Model swap receipts (Phase 6)
 - MoA vote records (Phase 7)
+- Skill creator receipts (Phase 10)
 
 ## 14. Hard Stop Conditions
 
