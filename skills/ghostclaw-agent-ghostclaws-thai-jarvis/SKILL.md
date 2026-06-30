@@ -11,7 +11,7 @@ description: >
   read-only research, validation/receipt/archive, and hard stop conditions.
 
 # Skill metadata
-phase_coverage: "1-8"
+phase_coverage: "1-9"
 canonical_terminology:
   brainstorm: canonical
   beststorm: legacy_alias
@@ -128,10 +128,24 @@ No recursive MoA launch is permitted (tier X).
 
 GHOSTCLAW implements the **LatentMAS** dual-plane architecture:
 
-- **Latent plane:** Internal scoring, reasoning, and policy evaluation — not externally visible
-- **Manifest plane:** Structured decision artifacts (JSON receipts) that are the source of truth
+- **JSON control plane:** Structured decision artifacts, receipts, and action gates that are the source of truth
+- **Latent plane:** Shadow/acceleration only; never authoritative
+- **Safety/policy plane:** Final authority over all action gates
 
-The manifest plane always wins over the latent plane. A JSON decision artifact overrides any latent score.
+The JSON control plane always wins over the latent plane. A JSON decision artifact overrides any latent score.
+
+**Phase 9 invariants:**
+
+- `json_control_plane_source_of_truth` is true
+- `latent_plane_shadow_only` is true
+- `safety_policy_plane_final_authority` is true
+- `kv_only_protocol_allowed` is false
+- exact KV compatibility gate requires 12 matching fields and `past_key_values`
+- debug probe mode is `parallel_text_probe`
+- `decode_from_kv` is false
+- no guaranteed `4.3x`, `83.7%`, or `+13.3%` local claim without benchmark evidence
+- `LATENTMAS_LIVE_ENABLED` remains false in MVP
+- model download, GPU live inference, live provider calls, and secret access remain blocked
 
 ## 9. Model Auto Swap Router (Phase 6)
 

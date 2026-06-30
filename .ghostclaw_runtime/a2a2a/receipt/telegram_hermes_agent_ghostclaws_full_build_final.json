@@ -20,7 +20,7 @@
     "phase_6_model_swap_router": "completed_validated_current_turn_policy_gate_provider_fallback_receipt_contract",
     "phase_7_kimi_worker_lane": "completed_validated_current_turn_policy_schema_registry_skill_contract",
     "phase_8_moa_brainstorm": "completed_validated_current_turn_schema_policy_protocol_skill_contract",
-    "phase_9_latentmas_dual_plane": "completed_validated_offline_current_turn",
+    "phase_9_latentmas_dual_plane": "completed_validated_current_turn_dual_plane_manifest_contract",
     "phase_10_skill_creator": "completed_existing_files_present",
     "phase_11_github_toptrend": "completed_existing_files_present",
     "phase_12_edgeone_readiness": "completed_existing_files_present_r3_only",
@@ -60,7 +60,10 @@
     ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json",
     "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
     ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json",
-    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json"
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json",
+    "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -91,7 +94,12 @@
     "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
     "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml",
     "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
-    "docs/knowledge/MOA_GATED_BRAINSTORM.md"
+    "docs/knowledge/MOA_GATED_BRAINSTORM.md",
+    "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
+    ".ghostclaw_runtime/latent/latent-manifest.json",
+    ".ghostclaw_runtime/latent/control-plane-manifest.json",
+    ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
@@ -135,7 +143,7 @@
     "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
     "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
     "moa_brainstorm_status": "validated_current_turn_schema_policy_protocol_skill_contract_4_tests",
-    "latentmas_status": "offline_validation_passed_live_disabled",
+    "latentmas_status": "validated_current_turn_dual_plane_manifest_contract_4_tests_live_disabled",
     "skill_creator_status": "skill_file_present",
     "github_toptrend_worker_status": "present_public_metadata_only_no_clone_or_install",
     "edgeone_readiness_status": "r3_readiness_only_no_deploy"
@@ -247,6 +255,18 @@
       "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase8 moa)",
       "result": "approved_tier_B_non_self_approval",
       "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json"
+    },
+    {
+      "name": "latentmas_dual_plane_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_1_file_4_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase9_latentmas",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase9 latentmas)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json"
     }
   ],
   "validations_run": "see validations_run_current_turn",
@@ -267,7 +287,9 @@
     "kimi_worker_contract": "passed_1_file_5_tests_policy_schema_registry_skill_contract",
     "local_commit_allowed_scope_decision_phase7_kimi": "approved_tier_B_non_self_approval",
     "moa_brainstorm_contract": "passed_1_file_4_tests_schema_policy_protocol_skill_contract",
-    "local_commit_allowed_scope_decision_phase8_moa": "approved_tier_B_non_self_approval"
+    "local_commit_allowed_scope_decision_phase8_moa": "approved_tier_B_non_self_approval",
+    "latentmas_dual_plane_contract": "passed_1_file_4_tests_dual_plane_manifest_contract",
+    "local_commit_allowed_scope_decision_phase9_latentmas": "approved_tier_B_non_self_approval"
   },
   "blocked_actions": [
     "push",
@@ -669,5 +691,45 @@
     "source_commit_hash": "a843530",
     "source_commit_subject": "test(ghostclaw): validate moa brainstorm contract",
     "commit_status": "committed_current_turn"
+  },
+  "latest_phase9_latentmas_dual_plane_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:33:57Z",
+    "local_timestamp": "2026-06-30T09:33:57+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json",
+    "files_created": [
+      "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json"
+    ],
+    "files_modified": [
+      "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
+      ".ghostclaw_runtime/latent/latent-manifest.json",
+      ".ghostclaw_runtime/latent/control-plane-manifest.json",
+      ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs"
+    ],
+    "requirements_covered": [
+      "JSON control plane source of truth",
+      "latent plane shadow-only",
+      "safety policy plane final authority",
+      "KV-only protocol forbidden",
+      "exact KV compatibility gate with 12 required fields and past_key_values",
+      "parallel_text_probe with decode_from_kv=false",
+      "benchmark claim lock for 4.3x, 83.7%, and +13.3%",
+      "LATENTMAS_LIVE_ENABLED=false",
+      "model download and GPU live inference blocked"
+    ],
+    "validation_commands": [
+      "python3 -m json.tool .ghostclaw_runtime/latent/latent-manifest.json && python3 -m json.tool .ghostclaw_runtime/latent/control-plane-manifest.json && python3 -m json.tool .ghostclaw_runtime/latent/kv-compatibility-gate.json",
+      "node --check GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase9 latentmas)"
+    ],
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval"
   }
 }

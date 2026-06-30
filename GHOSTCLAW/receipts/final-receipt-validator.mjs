@@ -97,6 +97,10 @@ function validateRequiredArtifacts(errors) {
     "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
     "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
     ".ghostclaw_runtime/latent",
+    ".ghostclaw_runtime/latent/latent-manifest.json",
+    ".ghostclaw_runtime/latent/control-plane-manifest.json",
+    ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
+    "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
     "GHOSTCLAW/research/github-toptrend-worker.mjs",
     "GHOSTCLAW/research/github-toptrend-map.yaml",
     "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md",
@@ -590,8 +594,8 @@ function validatePhase8MoABrainstormArtifacts(errors) {
   }
 
   const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+  pushIfMissing(errors, /phase_coverage:\s*"1-(8|9)"/.test(skillText), "phase8 GhostClaw skill missing phase coverage marker for phase 8+");
   for (const marker of [
-    'phase_coverage: "1-8"',
     "ref_A_safety_risk",
     "ref_B_speed_cost",
     "ref_C_correctness_proof",
@@ -622,6 +626,97 @@ function validatePhase8MoABrainstormArtifacts(errors) {
   };
 }
 
+function validatePhase9LatentMASArtifacts(errors) {
+  const latentManifest = readJson(".ghostclaw_runtime/latent/latent-manifest.json");
+  const controlManifest = readJson(".ghostclaw_runtime/latent/control-plane-manifest.json");
+  const kvGate = readJson(".ghostclaw_runtime/latent/kv-compatibility-gate.json");
+
+  pushIfMissing(errors, latentManifest.json_control_plane_source_of_truth === true, "phase9 latent manifest does not mark JSON control plane as source of truth");
+  pushIfMissing(errors, latentManifest.latent_plane_shadow_only === true, "phase9 latent manifest does not mark latent plane shadow-only");
+  pushIfMissing(errors, latentManifest.safety_policy_plane_final_authority === true, "phase9 latent manifest does not mark safety policy final authority");
+  pushIfMissing(errors, latentManifest.kv_only_protocol_allowed === false, "phase9 latent manifest allows KV-only protocol");
+  pushIfMissing(errors, latentManifest.debug_probe_mode === "parallel_text_probe", "phase9 latent manifest debug probe is not parallel_text_probe");
+  pushIfMissing(errors, latentManifest.decode_from_kv === false, "phase9 latent manifest allows decode_from_kv");
+  pushIfMissing(errors, latentManifest.LATENTMAS_LIVE_ENABLED === false, "phase9 latent manifest has live enabled");
+  pushIfMissing(errors, latentManifest.model_download_allowed === false, "phase9 latent manifest allows model download");
+  pushIfMissing(errors, latentManifest.gpu_live_inference_allowed === false, "phase9 latent manifest allows GPU live inference");
+
+  pushIfMissing(errors, controlManifest.json_control_plane_source_of_truth === true, "phase9 control manifest missing source-of-truth lock");
+  pushIfMissing(errors, controlManifest.safety_policy_plane_final_authority === true, "phase9 control manifest missing safety final authority");
+  pushIfMissing(errors, controlManifest.latent_plane_override_allowed === false, "phase9 control manifest allows latent override");
+  pushIfMissing(errors, controlManifest.moa_or_latent_score_override_allowed === false, "phase9 control manifest allows score override");
+  pushIfMissing(errors, controlManifest.kv_only_protocol_allowed === false, "phase9 control manifest allows KV-only protocol");
+  pushIfMissing(errors, controlManifest.effective_score_cap === 100, "phase9 control manifest effective score cap is not 100");
+
+  const requiredFields = Array.isArray(kvGate.required_fields) ? kvGate.required_fields : [];
+  pushIfMissing(errors, kvGate.kv_required_field_count === 12, "phase9 KV gate required field count is not 12");
+  pushIfMissing(errors, requiredFields.length === 12, "phase9 KV gate does not list 12 required fields");
+  pushIfMissing(errors, kvGate.exact_kv_compatibility_gate === true, "phase9 KV gate is not exact");
+  pushIfMissing(errors, kvGate.backend_requirement === "past_key_values", "phase9 KV gate backend requirement is not past_key_values");
+  pushIfMissing(errors, kvGate.on_mismatch?.action === "fallback_to_json_text_brainstorm", "phase9 KV mismatch action is not JSON fallback");
+  pushIfMissing(errors, kvGate.on_mismatch?.latent_bonus === 0, "phase9 KV mismatch latent bonus is not zero");
+  pushIfMissing(errors, kvGate.kv_only_protocol_allowed === false, "phase9 KV gate allows KV-only protocol");
+  pushIfMissing(errors, kvGate.decode_from_kv === false, "phase9 KV gate allows decode_from_kv");
+  pushIfMissing(errors, kvGate.debug_probe_mode === "parallel_text_probe", "phase9 KV gate debug probe is not parallel_text_probe");
+  pushIfMissing(errors, kvGate.model_download_allowed === false, "phase9 KV gate allows model download");
+  pushIfMissing(errors, kvGate.gpu_live_inference_allowed === false, "phase9 KV gate allows GPU live inference");
+
+  const docText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md"), "utf8");
+  for (const marker of [
+    "JSON receipt + policy gate > latent score",
+    "json_control_plane_source_of_truth",
+    "latent_plane_shadow_only",
+    "safety_policy_plane_final_authority",
+    "exact KV compatibility gate",
+    "parallel_text_probe",
+    "decode_from_kv",
+    "4.3x",
+    "83.7%",
+    "+13.3%",
+    "LATENTMAS_LIVE_ENABLED",
+    "model_download_allowed",
+    "gpu_live_inference_allowed"
+  ]) {
+    pushIfMissing(errors, docText.includes(marker), `phase9 LatentMAS doc missing marker: ${marker}`);
+  }
+
+  const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+  for (const marker of [
+    'phase_coverage: "1-9"',
+    "JSON control plane",
+    "Latent plane",
+    "Safety/policy plane",
+    "json_control_plane_source_of_truth",
+    "latent_plane_shadow_only",
+    "safety_policy_plane_final_authority",
+    "kv_only_protocol_allowed",
+    "past_key_values",
+    "parallel_text_probe",
+    "decode_from_kv",
+    "LATENTMAS_LIVE_ENABLED"
+  ]) {
+    pushIfMissing(errors, skillText.includes(marker), `phase9 GhostClaw skill missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs"), "utf8");
+  for (const marker of [
+    "locks JSON control plane as source of truth",
+    "locks exact KV compatibility and JSON fallback",
+    "locks debug probe and live execution blocks",
+    "documents Phase 9 in docs and skill"
+  ]) {
+    pushIfMissing(errors, testText.includes(marker), `phase9 LatentMAS test missing case marker: ${marker}`);
+  }
+
+  return {
+    manifest_guard_count: 9,
+    control_guard_count: 5,
+    kv_gate_field_count: requiredFields.length,
+    kv_gate_guard_count: 11,
+    test_case_marker_count: 4
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -645,6 +740,7 @@ export function validateFinalReceipt(receipt) {
   const phase6ModelRouter = validatePhase6ModelRouterArtifacts(errors);
   const phase7Kimi = validatePhase7KimiArtifacts(errors);
   const phase8MoA = validatePhase8MoABrainstormArtifacts(errors);
+  const phase9LatentMAS = validatePhase9LatentMASArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -762,6 +858,11 @@ export function validateFinalReceipt(receipt) {
       phase8_moa_schema_guard_count: phase8MoA.schema_guard_count,
       phase8_moa_policy_marker_count: phase8MoA.policy_marker_count,
       phase8_moa_test_case_count: phase8MoA.test_case_marker_count,
+      phase9_latentmas_manifest_guard_count: phase9LatentMAS.manifest_guard_count,
+      phase9_latentmas_control_guard_count: phase9LatentMAS.control_guard_count,
+      phase9_latentmas_kv_gate_field_count: phase9LatentMAS.kv_gate_field_count,
+      phase9_latentmas_kv_gate_guard_count: phase9LatentMAS.kv_gate_guard_count,
+      phase9_latentmas_test_case_count: phase9LatentMAS.test_case_marker_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

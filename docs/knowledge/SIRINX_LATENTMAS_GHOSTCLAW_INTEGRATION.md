@@ -19,6 +19,16 @@ SAFETY PLANE          = always active, final authority
 JSON receipt + policy gate > latent score  (always)
 ```
 
+Phase 9 contract lock:
+
+- `json_control_plane_source_of_truth` = true
+- `latent_plane_shadow_only` = true
+- `safety_policy_plane_final_authority` = true
+- `kv_only_protocol_allowed` = false
+- `LATENTMAS_LIVE_ENABLED` = false
+- `model_download_allowed` = false
+- `gpu_live_inference_allowed` = false
+
 ## 2. Plane Definitions
 
 ### Control Plane (JSON)
@@ -39,10 +49,11 @@ JSON receipt + policy gate > latent score  (always)
 - Policy gate is final authority
 - Hard violations force tier X
 - No score (MoA, latent, confidence) can override
+- Blocks production, provider calls, model downloads, GPU live inference, secret reads, and public sends unless an explicit separate gate exists
 
 ## 3. KV Compatibility Gate
 
-A KV bundle is compatible only if all 12 fields match exactly and the backend exposes `past_key_values`:
+A KV bundle is compatible only if all 12 fields match exactly and the backend exposes `past_key_values`. This is an exact KV compatibility gate, not a best-effort decode path:
 
 ```python
 KV_REQUIRED_FIELDS = [
@@ -53,6 +64,7 @@ KV_REQUIRED_FIELDS = [
 ```
 
 On mismatch: fallback to JSON text Brainstorm, log mismatch, `latent_bonus = 0`.
+The debug probe remains `parallel_text_probe`; it must not call `decode_from_kv`.
 
 ## 4. Debug Probe
 
@@ -86,6 +98,12 @@ effective_score = min(100, base_brainstorm + latent_bonus + standard_modifiers)
 ## 7. Runtime Directory
 
 LatentMAS runtime files are stored under `.ghostclaw_runtime/latent/`.
+
+Runtime manifests:
+
+- `.ghostclaw_runtime/latent/latent-manifest.json`
+- `.ghostclaw_runtime/latent/control-plane-manifest.json`
+- `.ghostclaw_runtime/latent/kv-compatibility-gate.json`
 
 ## 8. Terminology
 

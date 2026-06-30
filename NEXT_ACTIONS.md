@@ -287,11 +287,15 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: MoA brainstorm is now validated as a review gate only. It requires `ref_A_safety_risk`, `ref_B_speed_cost`, `ref_C_correctness_proof`, Hermes aggregator metadata, safety hard veto, confidence-only MoA score, no policy override, and no recursive MoA launch.
   - Evidence: commit `a843530`, `GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs`, `GHOSTCLAW/protocols/a2a2a-message-schema.json`, `GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml`, `docs/knowledge/MOA_GATED_BRAINSTORM.md`, `.ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json`.
   - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs` passed, 1 file / 4 tests; final receipt validator returned `ok=true` with `phase8_moa_test_case_count=4`.
+- [x] Harden GhostClaw Phase 9 LatentMAS Dual-Plane contract.
+  - Status: LatentMAS is now validated as JSON-control-plane-first, latent shadow-only, safety-policy-final architecture. Exact KV compatibility, `parallel_text_probe`, `decode_from_kv=false`, `LATENTMAS_LIVE_ENABLED=false`, no model download, and no GPU live inference are machine-readable contract fields.
+  - Evidence: `GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs`, `docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md`, `.ghostclaw_runtime/latent/latent-manifest.json`, `.ghostclaw_runtime/latent/control-plane-manifest.json`, `.ghostclaw_runtime/latent/kv-compatibility-gate.json`, `.ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json`.
+  - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` passed, 1 file / 4 tests; final receipt validator returned `ok=true` with `phase9_latentmas_test_case_count=4`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.
   - Constraint: Codex does not begin LANE_2 until Hermes approves this packet.
-- [ ] LatentMAS transport research (docs-only until benchmark proof).
+- [ ] LatentMAS transport research beyond Phase 9 contract (docs-only until benchmark proof).
 - [ ] Oracle Memory ψ Vault schema design.
 - [ ] 21-agent identity routing wire-up.
 - [ ] KOB CLI P1 kobdemy launch.
