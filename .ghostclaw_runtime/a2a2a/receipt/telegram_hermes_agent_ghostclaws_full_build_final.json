@@ -29,7 +29,7 @@
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
     "phase_17_final_receipt": "updated_current_turn_phase10_skill_creator_contract",
-    "phase_18_stage_commit": "pending_phase10_scoped_local_commit"
+    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_6f4250f"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -614,8 +614,8 @@
       "approval_phrase_required": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE"
     }
   },
-  "commit_status": "committed_current_turn",
-  "commit_hash": "20bfef7",
+  "commit_status": "committed_current_turn_phase10_skill_creator_source_commit",
+  "commit_hash": "6f4250f",
   "commit_message": "test(ghostclaw): validate model router contract",
   "commit_reason": "Latest scoped local commit completed after Phase 6 Model Router contract validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-phase6-model-router-20260630-001.",
   "commit_hash_resolution": {
@@ -753,8 +753,8 @@
     "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
     "commit_status": "committed_current_turn"
   },
-  "last_updated_at": "2026-06-30T02:45:54Z",
-  "last_local_updated_at": "2026-06-30T09:45:54+0700",
+  "last_updated_at": "2026-06-30T02:49:20Z",
+  "last_local_updated_at": "2026-06-30T09:49:20+0700",
   "latest_phase10_skill_creator_contract": {
     "status": "validated_current_turn",
     "validated_at": "2026-06-30T02:44:10Z",
@@ -791,10 +791,11 @@
       "./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
       "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
     ],
-    "source_commit_hash": "pending_phase10_scoped_local_commit",
-    "source_commit_subject": "pending",
-    "commit_status": "pending_phase10_scoped_local_commit",
+    "source_commit_hash": "6f4250f",
+    "source_commit_subject": "test(ghostclaw): validate skill creator contract",
+    "commit_status": "committed_current_turn",
     "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json",
-    "local_commit_approval_status": "approved_tier_B_non_self_approval"
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "commit_hash_scope": "validated scoped local source commit for Phase 10 Skill Creator / Zero Prompting contract hardening; later receipt-finalization commits may differ"
   }
 }

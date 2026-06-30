@@ -13,6 +13,7 @@
 - Added `GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs`.
 - Updated Phase 8/9 skill coverage tests and `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 10 markers.
 - Added `.ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json`.
+- Created scoped local source commit `6f4250f` (`test(ghostclaw): validate skill creator contract`).
 
 ### Verification
 
@@ -20,6 +21,7 @@
 - `./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs` — passed, 3 files / 12 tests.
 - `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and `phase10_skill_creator_test_case_count=4`.
 - Local commit approval receipt: `.ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json`.
+- Source commit: `6f4250f`.
 
 ### Blocked Actions
 
