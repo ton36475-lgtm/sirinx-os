@@ -10,6 +10,14 @@
   "local_timestamp": "2026-06-30T08:19:14+0700",
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
+  "status": "not_complete_current_dirty_tree_receipt_refreshed",
+  "no_push": true,
+  "no_deploy": true,
+  "no_secret_access": true,
+  "no_model_download": true,
+  "no_gpu_live_inference": true,
+  "no_telegram_live_send": true,
+  "no_customer_send": true,
   "phases": {
     "phase_0_inspection": "completed_current_turn",
     "phase_1_worker_build_runtime": "completed_validated_current_turn_runtime_contract",
@@ -28,8 +36,8 @@
     "phase_14_validation": "completed_current_turn",
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
-    "phase_17_final_receipt": "updated_current_turn_phase12_edgeone_readiness_contract",
-    "phase_18_stage_commit": "completed_current_turn_scoped_local_commit_d81f4e1"
+    "phase_17_final_receipt": "refreshed_current_turn_truthful_dirty_tree_state",
+    "phase_18_stage_commit": "last_scoped_local_commit_5fcb03a_audit_only_remaining_dirty_tree_not_committed"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -429,7 +437,8 @@
     "no_telegram_live_send": true,
     "no_customer_send": true,
     "no_external_repo_install": true,
-    "no_provider_call": true
+    "no_provider_call": true,
+    "no_airtable_write": true
   },
   "latest_phase1_worker_runtime_contract": {
     "status": "validated_and_committed_local_scope",
@@ -677,16 +686,31 @@
       "approval_phrase_required": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE"
     }
   },
-  "commit_status": "committed_current_turn_phase12_edgeone_readiness_source_commit",
-  "commit_hash": "d81f4e1",
-  "commit_message": "test(ghostclaw): validate model router contract",
-  "commit_reason": "Latest scoped local commit completed after Phase 6 Model Router contract validation, staged-file scope checks, secret/env filename checks, external repo source exclusion, and non-self approval decision-local-commit-phase6-model-router-20260630-001.",
+  "commit_status": "latest_committed_evidence_before_receipt_refresh_is_scoped_audit_commit",
+  "commit_hash": "5fcb03a",
+  "commit_message": "docs(ghostclaw): audit triple mission dispatch",
+  "commit_reason": "Latest committed evidence before this receipt refresh is the scoped Triple Mission Dispatch audit commit. The working tree remains dirty with concurrent artifacts, so broad Phase 18 objective commit is not complete.",
   "commit_hash_resolution": {
     "hash_scope": "validated_scoped_local_commit_reported_by_this_receipt",
     "reported_commit_hash": "20bfef7",
     "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
     "self_reference_policy": "Do not chase the hash of a later receipt-finalization commit; that would create an endless self-referential receipt update loop.",
     "latest_head_can_differ_after_receipt_finalization": true
+  },
+  "latest_truthful_state_refresh": {
+    "status": "not_complete_current_dirty_tree",
+    "refreshed_at": "2026-06-30T05:44:14Z",
+    "local_refreshed_at": "2026-06-30T12:44:14+0700",
+    "latest_commit_before_refresh": "5fcb03a",
+    "latest_commit_subject_before_refresh": "docs(ghostclaw): audit triple mission dispatch",
+    "branch_ahead": 30,
+    "modified_or_staged_paths": 34,
+    "untracked_path_entries": 49,
+    "staged_files_before_refresh": 0,
+    "receipt_refresh_scope": "truthful status metadata only",
+    "remaining_blocker": "remaining concurrent dirty artifacts require explicit scope decision before broad final commit",
+    "push_gate_status": "not_approved_for_current_dirty_tree",
+    "deploy_gate_status": "blocked"
   },
   "next_safe_actions": [
     "Review one external repo install approval template at a time if installation is desired.",
@@ -816,8 +840,8 @@
     "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
     "commit_status": "committed_current_turn"
   },
-  "last_updated_at": "2026-06-30T03:12:22Z",
-  "last_local_updated_at": "2026-06-30T10:12:22+0700",
+  "last_updated_at": "2026-06-30T05:44:14Z",
+  "last_local_updated_at": "2026-06-30T12:44:14+0700",
   "latest_phase10_skill_creator_contract": {
     "status": "validated_current_turn",
     "validated_at": "2026-06-30T02:44:10Z",
