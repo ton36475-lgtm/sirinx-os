@@ -2491,6 +2491,31 @@
 
 - No push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
 
+## Run 2026-06-30T09:22:41+07:00 — Phase 8 MoA-Gated Brainstorm Contract Hardening
+
+- **Agent:** Codex local worker
+- **Mode:** local-only protocol/schema/test hardening, no recursive MoA launch
+- **Scope:** Prove Phase 8 MoA-gated brainstorm is a review gate only and cannot override the policy gate.
+
+### Changes
+
+- Updated `GHOSTCLAW/protocols/a2a2a-message-schema.json` with required MoA reference lanes, Hermes aggregator metadata, confidence-only score guard, policy override lock, hard veto, and recursive MoA prohibition.
+- Updated `GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml`, `GHOSTCLAW/protocols/A2A2A_PROTOCOL.md`, `docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md`, `docs/knowledge/MOA_GATED_BRAINSTORM.md`, and the GhostClaw skill to document the Phase 8 contract.
+- Added `GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs`.
+- Added `.ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json`.
+- Expanded `GHOSTCLAW/receipts/final-receipt-validator.mjs` to validate Phase 8 MoA schema, policy, protocol, docs, skill, and test markers.
+
+### Verification
+
+- `python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json` — passed.
+- `node --check GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs` — passed.
+- `./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs` — passed, 1 file / 4 tests.
+- `node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json` — passed with `ok=true` and `phase8_moa_test_case_count=4`.
+
+### Blocked Actions
+
+- No recursive MoA launch, push, deploy, production action, customer send, Telegram live send, secret read, provider/model call, package install, model download, GPU inference, queue mutation, or external repo install was performed.
+
 ## Run 2026-06-30T09:00:07+07:00 — Phase 6 Model Auto Swap Router Contract Hardening
 
 - **Agent:** Codex local worker

@@ -283,6 +283,10 @@ Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
   - Status: Kimi is now validated as a draft-only coding reference, patch planner, test planner, and MoA reference vote worker. Reference votes require decision/evidence/requester/approver metadata, `receipt_required=true`, `evidence_pack.no_secrets=true`, and false live-provider/model-download/GPU flags.
   - Evidence: commit `516c8ff`, `GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs`, `GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json`, `GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml`, `GHOSTCLAW/workers/registry/worker-registry.json`, `skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md`, `.ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json`.
   - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs` passed, 1 file / 5 tests; final receipt validator returned `ok=true` with `phase7_kimi_test_case_count=5`.
+- [x] Harden GhostClaw Phase 8 MoA-Gated Brainstorm contract.
+  - Status: MoA brainstorm is now validated as a review gate only. It requires `ref_A_safety_risk`, `ref_B_speed_cost`, `ref_C_correctness_proof`, Hermes aggregator metadata, safety hard veto, confidence-only MoA score, no policy override, and no recursive MoA launch.
+  - Evidence: `GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs`, `GHOSTCLAW/protocols/a2a2a-message-schema.json`, `GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml`, `docs/knowledge/MOA_GATED_BRAINSTORM.md`, `.ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json`.
+  - Verification: `./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs` passed, 1 file / 4 tests; final receipt validator returned `ok=true` with `phase8_moa_test_case_count=4`.
 - [ ] Produce GhostClaw LANE_1 Opus architecture packet.
   - Expected output: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`.
   - Plan: `docs/superpowers/plans/2026-06-29-ghostclaw-lane1-opus-architecture-packet.md`.

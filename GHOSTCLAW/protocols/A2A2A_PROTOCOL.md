@@ -185,3 +185,34 @@ Terminology is locked:
 
 The protocol forbids KV-only execution. Any latent or KV compatibility layer
 must still produce JSON control-plane artifacts and local receipts.
+
+---
+
+## 9. MoA-Gated Brainstorm Contract
+
+MoA-gated brainstorm is a review gate, not an execution authority. It can raise
+or lower confidence, but it cannot approve a blocked action or bypass
+`action_tier_cap`.
+
+Required reference lanes:
+
+- `ref_A_safety_risk`
+- `ref_B_speed_cost`
+- `ref_C_correctness_proof`
+
+Hermes is the aggregator. The aggregator records consensus, aggregator
+certainty, and the evidence pack in the JSON control plane. A safety disagreement from `ref_A_safety_risk` is a hard veto even if consensus and
+aggregator certainty are high.
+
+Phase 8 invariants:
+
+- `moa_summary.moa_score_is_confidence_signal_only` must be `true`.
+- `moa_summary.policy_gate_override_allowed` must be `false`.
+- `moa_summary.recursive_moa_launch_allowed` must be `false`.
+- `moa_gated_brainstorm.safety_disagreement_hard_veto` must be `true`.
+- `moa_gated_brainstorm.policy_gate_final_authority` must be `true`.
+- `moa_gated_brainstorm.moa_score_authorizes_action` must be `false`.
+
+No recursive MoA launch is allowed. If a brainstorm request attempts to start
+another MoA loop, the policy gate treats it as Tier X and writes a blocked
+receipt.

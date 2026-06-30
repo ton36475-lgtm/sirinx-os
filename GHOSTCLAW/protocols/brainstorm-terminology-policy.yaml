@@ -43,11 +43,30 @@ terminology_policy:
     summary_field: moa_summary
     rule: "MoA outputs may summarize consensus, but only moa_gated_brainstorm may carry gated brainstorm approval data."
 
+  moa_gate_contract:
+    reference_votes_required: true
+    references:
+      ref_A_safety_risk:
+        focus: safety_risk
+        safety_disagreement_hard_veto: true
+      ref_B_speed_cost:
+        focus: speed_cost
+      ref_C_correctness_proof:
+        focus: correctness_proof
+    aggregator: hermes
+    consensus_threshold: 0.67
+    aggregator_certainty_required: true
+    moa_score_confidence_signal_only: true
+    policy_gate_override_allowed: false
+    recursive_moa_launch_allowed: false
+
   enforcement:
     json_control_plane_authority: true
     latent_plane_authority: false
     reject_on_invalid_typo: true
     block_external_action_on_terminology_error: true
+    safety_disagreement_hard_veto: true
+    action_tier_cap_final_authority: true
 
   claim_lock:
     requires_local_benchmark_for_performance_claims: true

@@ -11,7 +11,7 @@ description: >
   read-only research, validation/receipt/archive, and hard stop conditions.
 
 # Skill metadata
-phase_coverage: "1-7"
+phase_coverage: "1-8"
 canonical_terminology:
   brainstorm: canonical
   beststorm: legacy_alias
@@ -104,12 +104,25 @@ Mixture-of-Agents (MoA) voting gates brainstorm sessions. The canonical term is 
 MoA flow:
 
 1. Hermes proposes a brainstorm topic
-2. Multiple agents produce proposals
-3. Reference workers (like Kimi) produce structured votes
-4. Quorum is reached
-5. Decision is recorded with receipt
+2. `ref_A_safety_risk`, `ref_B_speed_cost`, and `ref_C_correctness_proof` produce structured references
+3. Hermes aggregates consensus and `aggregator_certainty`
+4. Safety disagreement from `ref_A_safety_risk` creates a hard veto
+5. MoA score is stored as a confidence signal only
+6. Policy gate and `action_tier_cap` remain final authority
+7. Decision is recorded with receipt
 
 No recursive MoA launch is permitted (tier X).
+
+**Phase 8 invariants:**
+
+- `ref_A_safety_risk`, `ref_B_speed_cost`, and `ref_C_correctness_proof` are required
+- Hermes is the aggregator
+- `consensus_threshold` defaults to 0.67
+- `aggregator_certainty` must be recorded as evidence
+- `safety_disagreement_hard_veto` is true
+- `moa_score_authorizes_action` is false
+- `policy_gate_override_allowed` is false
+- `recursive_moa_launch_allowed` is false
 
 ## 8. LatentMAS Dual-Plane Architecture
 

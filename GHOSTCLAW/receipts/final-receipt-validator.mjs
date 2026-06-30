@@ -93,6 +93,8 @@ function validateRequiredArtifacts(errors) {
     "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
     "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
     "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
+    "docs/knowledge/MOA_GATED_BRAINSTORM.md",
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
     "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
     ".ghostclaw_runtime/latent",
     "GHOSTCLAW/research/github-toptrend-worker.mjs",
@@ -508,6 +510,118 @@ function validatePhase7KimiArtifacts(errors) {
   };
 }
 
+function validatePhase8MoABrainstormArtifacts(errors) {
+  const schema = readJson("GHOSTCLAW/protocols/a2a2a-message-schema.json");
+  const moaSummary = schema.properties?.moa_summary?.properties || {};
+  const gated = schema.properties?.moa_gated_brainstorm?.properties || {};
+  const referenceVotes = moaSummary.reference_votes || {};
+  const referenceRequired = Array.isArray(referenceVotes.required) ? referenceVotes.required : [];
+
+  for (const field of ["ref_A_safety_risk", "ref_B_speed_cost", "ref_C_correctness_proof"]) {
+    pushIfMissing(errors, referenceRequired.includes(field), `phase8 MoA reference_votes missing required lane: ${field}`);
+    pushIfMissing(errors, hasValue(referenceVotes.properties?.[field]), `phase8 MoA reference_votes missing schema for: ${field}`);
+  }
+
+  pushIfMissing(errors, moaSummary.hermes_aggregator?.properties?.agent?.const === "hermes", "phase8 MoA schema does not lock Hermes as aggregator");
+  pushIfMissing(errors, hasValue(moaSummary.hermes_aggregator?.properties?.consensus_threshold), "phase8 MoA schema missing consensus_threshold");
+  pushIfMissing(errors, hasValue(moaSummary.hermes_aggregator?.properties?.aggregator_certainty), "phase8 MoA schema missing aggregator_certainty");
+  pushIfMissing(errors, moaSummary.moa_score_is_confidence_signal_only?.const === true, "phase8 MoA score is not locked as confidence-only");
+  pushIfMissing(errors, moaSummary.policy_gate_override_allowed?.const === false, "phase8 MoA schema allows policy override");
+  pushIfMissing(errors, moaSummary.recursive_moa_launch_allowed?.const === false, "phase8 MoA schema allows recursive MoA launch");
+  pushIfMissing(errors, gated.safety_disagreement_hard_veto?.const === true, "phase8 gated brainstorm does not require safety hard veto");
+  pushIfMissing(errors, gated.policy_gate_final_authority?.const === true, "phase8 gated brainstorm does not lock policy gate final authority");
+  pushIfMissing(errors, gated.moa_score_authorizes_action?.const === false, "phase8 gated brainstorm allows MoA score to authorize action");
+
+  const policyText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml"), "utf8");
+  for (const marker of [
+    "ref_A_safety_risk",
+    "ref_B_speed_cost",
+    "ref_C_correctness_proof",
+    "aggregator: hermes",
+    "consensus_threshold: 0.67",
+    "moa_score_confidence_signal_only: true",
+    "policy_gate_override_allowed: false",
+    "recursive_moa_launch_allowed: false",
+    "safety_disagreement_hard_veto: true",
+    "action_tier_cap_final_authority: true"
+  ]) {
+    pushIfMissing(errors, policyText.includes(marker), `phase8 brainstorm policy missing marker: ${marker}`);
+  }
+
+  const protocolText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md"), "utf8");
+  for (const marker of [
+    "MoA-Gated Brainstorm Contract",
+    "ref_A_safety_risk",
+    "ref_B_speed_cost",
+    "ref_C_correctness_proof",
+    "Hermes is the aggregator",
+    "hard veto",
+    "moa_score_authorizes_action",
+    "No recursive MoA launch is allowed"
+  ]) {
+    pushIfMissing(errors, protocolText.includes(marker), `phase8 A2A protocol missing marker: ${marker}`);
+  }
+
+  const docText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/MOA_GATED_BRAINSTORM.md"), "utf8");
+  for (const marker of [
+    "confidence signal only",
+    "never overrides the policy gate",
+    "ref_A",
+    "ref_B",
+    "ref_C",
+    "consensus_threshold",
+    "safety_disagreement_hard_veto",
+    "policy_gate_final_authority"
+  ]) {
+    pushIfMissing(errors, docText.includes(marker), `phase8 MoA doc missing marker: ${marker}`);
+  }
+
+  const teamText = fs.readFileSync(path.resolve(repoRoot, "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md"), "utf8");
+  for (const marker of [
+    "ref_A_safety_risk",
+    "ref_B_speed_cost",
+    "ref_C_correctness_proof",
+    "Consensus threshold",
+    "aggregator_certainty",
+    "hard veto",
+    "MoA cannot override"
+  ]) {
+    pushIfMissing(errors, teamText.includes(marker), `phase8 sub-agent team doc missing marker: ${marker}`);
+  }
+
+  const skillText = fs.readFileSync(path.resolve(repoRoot, "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"), "utf8");
+  for (const marker of [
+    'phase_coverage: "1-8"',
+    "ref_A_safety_risk",
+    "ref_B_speed_cost",
+    "ref_C_correctness_proof",
+    "Hermes aggregates",
+    "safety_disagreement_hard_veto",
+    "moa_score_authorizes_action",
+    "policy_gate_override_allowed",
+    "recursive_moa_launch_allowed"
+  ]) {
+    pushIfMissing(errors, skillText.includes(marker), `phase8 GhostClaw skill missing marker: ${marker}`);
+  }
+
+  const testText = fs.readFileSync(path.resolve(repoRoot, "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs"), "utf8");
+  for (const marker of [
+    "requires the three reference lanes",
+    "locks MoA score to confidence-only",
+    "documents hard veto and policy authority",
+    "documents Phase 8 in the GhostClaw skill"
+  ]) {
+    pushIfMissing(errors, testText.includes(marker), `phase8 MoA test missing case marker: ${marker}`);
+  }
+
+  return {
+    reference_lane_count: 3,
+    schema_guard_count: 9,
+    policy_marker_count: 10,
+    test_case_marker_count: 4
+  };
+}
+
 function validateCommitHash(receipt, errors) {
   if (!String(receipt.commit_status || "").includes("committed")) return;
 
@@ -530,6 +644,7 @@ export function validateFinalReceipt(receipt) {
   const phase5Vibe = validatePhase5VibeArtifacts(errors);
   const phase6ModelRouter = validatePhase6ModelRouterArtifacts(errors);
   const phase7Kimi = validatePhase7KimiArtifacts(errors);
+  const phase8MoA = validatePhase8MoABrainstormArtifacts(errors);
   const requiredTopLevel = [
     "task_id",
     "correlation_id",
@@ -643,6 +758,10 @@ export function validateFinalReceipt(receipt) {
       phase7_kimi_registry_role_count: phase7Kimi.registry_role_count,
       phase7_kimi_registry_blocked_action_count: phase7Kimi.registry_blocked_action_count,
       phase7_kimi_test_case_count: phase7Kimi.test_case_marker_count,
+      phase8_moa_reference_lane_count: phase8MoA.reference_lane_count,
+      phase8_moa_schema_guard_count: phase8MoA.schema_guard_count,
+      phase8_moa_policy_marker_count: phase8MoA.policy_marker_count,
+      phase8_moa_test_case_count: phase8MoA.test_case_marker_count,
       created_file_count: receipt.current_turn_files_created?.length || 0,
       modified_file_count: receipt.current_turn_files_modified?.length || 0,
       blocked_action_count: receipt.blocked_actions?.length || 0,

@@ -40,10 +40,12 @@ Required references:
 - `ref_B_speed_cost`
 - `ref_C_correctness_proof`
 
-Hermes aggregates votes and records the decision evidence. MoA score is a
-confidence signal only. Safety disagreement is a hard veto. MoA cannot override
-the policy gate, start recursive agent loops, deploy, push, read secrets, call
-providers, or send public/customer messages.
+Hermes aggregates votes and records the decision evidence. Consensus threshold
+is `0.67` unless a stricter task contract is supplied. `aggregator_certainty`
+must be recorded as evidence, not as execution authority. MoA score is a
+confidence signal only. Safety disagreement from `ref_A_safety_risk` is a hard veto.
+MoA cannot override the policy gate, start recursive agent loops, deploy, push,
+read secrets, call providers, or send public/customer messages.
 
 ## Approval Rules
 

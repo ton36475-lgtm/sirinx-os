@@ -19,7 +19,7 @@
     "phase_5_vibe_coding": "completed_validated_current_turn_mutual_approval_evidence_receipt_archive_contract",
     "phase_6_model_swap_router": "completed_validated_current_turn_policy_gate_provider_fallback_receipt_contract",
     "phase_7_kimi_worker_lane": "completed_validated_current_turn_policy_schema_registry_skill_contract",
-    "phase_8_moa_brainstorm": "completed_existing_files_present",
+    "phase_8_moa_brainstorm": "completed_validated_current_turn_schema_policy_protocol_skill_contract",
     "phase_9_latentmas_dual_plane": "completed_validated_offline_current_turn",
     "phase_10_skill_creator": "completed_existing_files_present",
     "phase_11_github_toptrend": "completed_existing_files_present",
@@ -57,7 +57,10 @@
     ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json",
     "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
     ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json",
-    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json"
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json",
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json"
   ],
   "current_turn_files_modified": [
     "AUTONOMOUS_RUN_LOG.md",
@@ -85,7 +88,10 @@
     "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
     "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
     "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
-    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md"
+    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+    "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml",
+    "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
+    "docs/knowledge/MOA_GATED_BRAINSTORM.md"
   ],
   "files_created": {
     "source_field": "current_turn_files_created",
@@ -128,7 +134,7 @@
     "auto_approval_engine_status": "validated_current_turn_matrix_hardened_20_tests_model_gpu_tier_x",
     "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
     "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
-    "moa_brainstorm_status": "present_policy_only",
+    "moa_brainstorm_status": "validated_current_turn_schema_policy_protocol_skill_contract_4_tests",
     "latentmas_status": "offline_validation_passed_live_disabled",
     "skill_creator_status": "skill_file_present",
     "github_toptrend_worker_status": "present_public_metadata_only_no_clone_or_install",
@@ -229,6 +235,18 @@
       "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase7 kimi)",
       "result": "approved_tier_B_non_self_approval",
       "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json"
+    },
+    {
+      "name": "moa_brainstorm_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      "result": "passed_1_file_4_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase8_moa",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase8 moa)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json"
     }
   ],
   "validations_run": "see validations_run_current_turn",
@@ -247,7 +265,9 @@
     "diff_check": "passed",
     "final_receipt_validator": "passed_ok_true_errors_empty",
     "kimi_worker_contract": "passed_1_file_5_tests_policy_schema_registry_skill_contract",
-    "local_commit_allowed_scope_decision_phase7_kimi": "approved_tier_B_non_self_approval"
+    "local_commit_allowed_scope_decision_phase7_kimi": "approved_tier_B_non_self_approval",
+    "moa_brainstorm_contract": "passed_1_file_4_tests_schema_policy_protocol_skill_contract",
+    "local_commit_allowed_scope_decision_phase8_moa": "approved_tier_B_non_self_approval"
   },
   "blocked_actions": [
     "push",
@@ -610,5 +630,41 @@
     "source_commit_hash": "516c8ff",
     "source_commit_subject": "test(ghostclaw): validate kimi worker contract",
     "commit_status": "committed_current_turn"
+  },
+  "latest_phase8_moa_brainstorm_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:22:41Z",
+    "local_timestamp": "2026-06-30T09:22:41+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json",
+    "files_created": [
+      "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml",
+      "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+      "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
+      "docs/knowledge/MOA_GATED_BRAINSTORM.md",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "ref_A_safety_risk, ref_B_speed_cost, and ref_C_correctness_proof required",
+      "Hermes aggregator metadata includes consensus threshold and aggregator certainty",
+      "safety disagreement hard veto is locked",
+      "MoA score is confidence signal only",
+      "policy gate override is false",
+      "recursive MoA launch is false"
+    ],
+    "validation_commands": [
+      "python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "node --check GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase8 moa)"
+    ],
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval"
   }
 }
