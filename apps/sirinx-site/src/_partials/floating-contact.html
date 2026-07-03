@@ -1,0 +1,124 @@
+<div id="floating-contact-cluster" class="floating-contact-cluster" role="region" aria-label="ติดต่อ SIRINX">
+  <p class="contact-dock-label">คุยกับบอท / แอด LINE Official</p>
+  <div class="contact-dock-desktop">
+    <button
+      id="line-trigger"
+      class="line-button"
+      aria-label="เพิ่มเพื่อน LINE Official"
+      aria-controls="line-panel"
+      aria-expanded="false"
+      onclick="openLinePanel()"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0C5.373 0 0 4.373 0 9.75c0 2.71 1.511 5.177 4 6.94V24l4.817-2.736c1.04.243 2.133.376 3.183.376 6.627 0 12-4.373 12-9.75S18.627 0 12 0z"/>
+      </svg>
+      <span class="button-text">LINE Official</span>
+    </button>
+    <button
+      id="inquiry-trigger"
+      class="inquiry-button"
+      aria-label="สอบถามผ่านเว็บไซต์"
+      aria-controls="inquiry-panel"
+      aria-expanded="false"
+      onclick="openInquiryPanel()"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="button-text">สอบถาม</span>
+    </button>
+  </div>
+
+  <button
+    id="contact-trigger-mobile"
+    class="contact-trigger-mobile"
+    aria-label="เปิดเมนูติดต่อ"
+    aria-controls="mobile-panel"
+    aria-expanded="false"
+    onclick="toggleMobilePanel()"
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+
+  <div id="line-panel" class="contact-panel line-panel" role="dialog" aria-hidden="true" aria-label="LINE Official Contact Panel">
+    <div class="panel-header">
+      <div>
+        <span class="panel-kicker">Solar Carport / BESS / EV Charger</span>
+        <h3>SIRINX โซล่าเซลล์</h3>
+      </div>
+      <button class="close-button" aria-label="ปิด" onclick="closeLinePanel()">×</button>
+    </div>
+    <div class="panel-content">
+      <img
+        src="https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr"
+        alt="QR Code สำหรับเพิ่มเพื่อน LINE Official ของ SIRINX"
+        class="qr-image"
+        width="240"
+        height="240"
+        loading="lazy"
+        decoding="async"
+        data-qr-image
+      />
+      <p class="qr-fallback">QR ไม่แสดง? กดปุ่มเพิ่มเพื่อน LINE ด้านล่าง</p>
+      <p class="panel-instruction">สแกน QR เพื่อส่งบิลค่าไฟ รูปพื้นที่ หรือคำถามให้ทีมประเมินเบื้องต้น</p>
+      <div class="panel-actions">
+        <a href="https://lin.ee/S97R6nj" target="_blank" rel="noopener noreferrer" class="panel-button primary" aria-label="เพิ่มเพื่อน LINE" data-track-events="line_add_friend_click line_shortlink_click">เพิ่มเพื่อน</a>
+        <a href="https://line.me/R/oaMessage/%40304zrttj" target="_blank" rel="noopener noreferrer" class="panel-button secondary" aria-label="แชท LINE Official" data-track-event="line_chat_click">แชท LINE</a>
+      </div>
+      <p class="line-id">LINE ID: <code>@304zrttj</code></p>
+    </div>
+  </div>
+
+  <div id="inquiry-panel" class="contact-panel inquiry-panel" role="dialog" aria-hidden="true" aria-label="Website Inquiry Panel">
+    <div class="panel-header">
+      <div>
+        <span class="panel-kicker">Project intake</span>
+        <h3>สอบถามโครงการ</h3>
+      </div>
+      <button class="close-button" aria-label="ปิด" onclick="closeInquiryPanel()">×</button>
+    </div>
+    <div class="panel-content">
+      <p>เลือกเส้นทางเริ่มต้นสำหรับ Solar Carport, Rooftop Solar, BESS, EV Charger หรือส่งอีเมลพร้อมเอกสาร</p>
+      <div class="quick-actions">
+        <a href="/contact" class="quick-action">ขอ Solar Carport</a>
+        <a href="/contact" class="quick-action">ขอ Rooftop Solar</a>
+        <a href="/line" class="quick-action line-route">สแกน QR LINE</a>
+        <a href="mailto:contact@sirinx.co" class="quick-action email">ส่งอีเมล</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="mobile-panel" class="mobile-bottom-sheet" role="dialog" aria-hidden="true" aria-label="คุยกับบอท / แอด LINE Official">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-content">
+      <div class="sheet-section">
+        <h4>LINE Official</h4>
+        <img
+          src="https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr"
+          alt="QR Code สำหรับเพิ่มเพื่อน LINE Official ของ SIRINX"
+          class="qr-image-mobile"
+          width="280"
+          height="280"
+          loading="lazy"
+          decoding="async"
+          data-qr-image
+        />
+        <p class="qr-fallback">QR ไม่แสดง? กดปุ่มเพิ่มเพื่อน LINE ด้านล่าง</p>
+        <div class="sheet-actions">
+          <a href="https://lin.ee/S97R6nj" target="_blank" rel="noopener noreferrer" class="sheet-button" data-track-events="line_add_friend_click line_shortlink_click">เพิ่มเพื่อน</a>
+          <a href="https://line.me/R/oaMessage/%40304zrttj" target="_blank" rel="noopener noreferrer" class="sheet-button secondary" data-track-event="line_chat_click">แชท</a>
+        </div>
+      </div>
+      <div class="sheet-section">
+        <h4>สอบถามโครงการ</h4>
+        <div class="sheet-actions">
+          <a href="/contact" class="sheet-button secondary" onclick="closeMobilePanel()">ขอประเมิน</a>
+          <a href="mailto:contact@sirinx.co" class="sheet-button secondary">อีเมล</a>
+        </div>
+      </div>
+      <button class="sheet-close" aria-label="ปิดเมนู" onclick="closeMobilePanel()">ปิด</button>
+    </div>
+  </div>
+</div>

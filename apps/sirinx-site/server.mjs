@@ -1,13 +1,15 @@
 import { createReadStream } from "node:fs";
-import { stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const siteDir = resolve(root, process.env.SIRINX_SITE_DIR || "src");
 const host = process.env.SIRINX_SITE_HOST || "127.0.0.1";
 const port = Number(process.env.SIRINX_SITE_PORT || 8730);
+const floatingContactPartialPath = resolve(root, "src", "_partials", "floating-contact.html");
+const appScriptTag = '<script type="module" src="/app.js"></script>';
 
 const contentTypes = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -19,20 +21,47 @@ const contentTypes = new Map([
   ["", "text/plain; charset=utf-8"]
 ]);
 
-function resolveAsset(urlPath) {
+async function resolveAsset(urlPath) {
   const cleanPath = normalize(decodeURIComponent(urlPath.split("?")[0])).replace(/^(\.\.[/\\])+/, "");
   const relativePath = cleanPath === "/" ? "index.html" : cleanPath.replace(/^[/\\]/, "");
-  return join(siteDir, relativePath);
+  const assetPath = join(siteDir, relativePath);
+  const assetStat = await stat(assetPath).catch(() => null);
+
+  if (assetStat?.isDirectory()) {
+    return join(assetPath, "index.html");
+  }
+
+  if (!assetStat && !extname(assetPath)) {
+    return join(assetPath, "index.html");
+  }
+
+  return assetPath;
 }
 
-const server = createServer(async (request, response) => {
+export function renderHtmlForLocalPreview({ html, floatingContactPartial }) {
+  if (!floatingContactPartial || html.includes('id="floating-contact-cluster"')) {
+    return html;
+  }
+
+  if (html.includes(appScriptTag)) {
+    return html.replace(appScriptTag, `${floatingContactPartial}\n\n    ${appScriptTag}`);
+  }
+
+  return html.replace("</body>", `${floatingContactPartial}\n  </body>`);
+}
+
+async function readFloatingContactPartial() {
+  return readFile(floatingContactPartialPath, "utf8").catch(() => "");
+}
+
+export const server = createServer(async (request, response) => {
   if (!request.url || request.method !== "GET") {
     response.writeHead(405, { "content-type": "application/json" });
     response.end(JSON.stringify({ error: "method_not_allowed" }));
     return;
   }
 
-  const assetPath = resolveAsset(request.url);
+  const assetPath = await resolveAsset(request.url);
 
   try {
     const assetStat = await stat(assetPath);
@@ -42,8 +71,20 @@ const server = createServer(async (request, response) => {
       return;
     }
 
+    const contentType = contentTypes.get(extname(assetPath)) || "application/octet-stream";
+    if (extname(assetPath) === ".html") {
+      const html = await readFile(assetPath, "utf8");
+      const floatingContactPartial = await readFloatingContactPartial();
+      response.writeHead(200, {
+        "content-type": contentType,
+        "cache-control": "no-store"
+      });
+      response.end(renderHtmlForLocalPreview({ html, floatingContactPartial }));
+      return;
+    }
+
     response.writeHead(200, {
-      "content-type": contentTypes.get(extname(assetPath)) || "application/octet-stream",
+      "content-type": contentType,
       "cache-control": "no-store"
     });
     createReadStream(assetPath).pipe(response);
@@ -53,6 +94,8 @@ const server = createServer(async (request, response) => {
   }
 });
 
-server.listen(port, host, () => {
-  console.log(`sirinx.co local preview listening on http://${host}:${port}`);
-});
+if (import.meta.url === pathToFileURL(process.argv[1] || "").href) {
+  server.listen(port, host, () => {
+    console.log(`sirinx.co local preview listening on http://${host}:${port}`);
+  });
+}

@@ -1,0 +1,328 @@
+/* Floating Contact Cluster - CSS */
+.floating-contact-cluster {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  font-family: inherit;
+}
+
+.contact-dock-desktop {
+  display: none;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.line-button, .inquiry-button {
+  align-items: center;
+  background: #1b6b55;
+  border: none;
+  border-radius: 50px;
+  color: #fbfcf7;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  height: 48px;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0;
+  transition: background 0.2s, transform 0.1s;
+  font-weight: 600;
+  width: 48px;
+}
+
+.line-button:hover, .line-button:focus-visible {
+  background: #103c31;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.inquiry-button {
+  background: #172944;
+}
+
+.inquiry-button:hover, .inquiry-button:focus-visible {
+  background: #263f88;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.button-text {
+  clip: rect(0 0 0 0);
+  font-size: 0.95rem;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.contact-trigger-mobile {
+  align-items: center;
+  background: #1b6b55;
+  border: none;
+  border-radius: 50%;
+  color: #fbfcf7;
+  cursor: pointer;
+  display: none;
+  height: 48px;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0;
+  width: 48px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.contact-trigger-mobile:hover, .contact-trigger-mobile:focus-visible {
+  background: #103c31;
+  outline: none;
+  transform: scale(1.05);
+}
+
+.contact-panel {
+  background: #fbfcf7;
+  border: 1px solid #cdd8cf;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(30, 38, 31, 0.15);
+  bottom: 72px;
+  position: absolute;
+  right: 0;
+  width: 300px;
+  max-height: 480px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.contact-panel.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.panel-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid #cdd8cf;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #12241d;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: #52635c;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 4px;
+}
+
+.close-button:hover {
+  color: #b34b42;
+}
+
+.panel-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.qr-image {
+  display: block;
+  margin: 0 auto 16px;
+  max-width: 180px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.panel-instruction {
+  color: #52635c;
+  font-size: 0.95rem;
+  margin: 0 0 16px;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.panel-button {
+  border-radius: 8px;
+  padding: 10px 18px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.panel-button.primary {
+  background: #1b6b55;
+  color: #fbfcf7;
+}
+
+.panel-button.secondary {
+  background: #e5ebfb;
+  color: #172944;
+}
+
+.line-id {
+  color: #52635c;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.line-id code {
+  background: #e5ebfb;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.95em;
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quick-action {
+  background: #1b6b55;
+  border-radius: 8px;
+  color: #fbfcf7;
+  padding: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.quick-action.email {
+  background: #172944;
+}
+
+.mobile-bottom-sheet {
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.mobile-bottom-sheet.open {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sheet-handle {
+  background: #cdd8cf;
+  border-radius: 999px;
+  height: 4px;
+  margin: 12px auto 8px;
+  width: 40px;
+}
+
+.sheet-content {
+  background: #fbfcf7;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.sheet-section {
+  margin-bottom: 24px;
+}
+
+.sheet-section h4 {
+  margin: 0 0 16px;
+  color: #12241d;
+  font-size: 1.1rem;
+}
+
+.qr-image-mobile {
+  display: block;
+  margin: 0 auto 16px;
+  max-width: 200px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.sheet-button {
+  background: #1b6b55;
+  border-radius: 8px;
+  color: #fbfcf7;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+}
+
+.sheet-button.secondary {
+  background: #e5ebfb;
+  color: #172944;
+}
+
+.sheet-close {
+  background: #cdd8cf;
+  border: none;
+  border-radius: 8px;
+  color: #12241d;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.line-cta {
+  align-items: center;
+  background: #1b6b55;
+  border-radius: 50px;
+  color: #fbfcf7;
+  display: inline-flex;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.line-cta:hover, .line-cta:focus-visible {
+  background: #103c31;
+  outline: none;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .floating-contact-cluster {
+    bottom: 16px;
+    right: 16px;
+  }
+}
