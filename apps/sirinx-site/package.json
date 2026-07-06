@@ -20,6 +20,8 @@
     "review:public-guardian": "node scripts/public-guardian-checks.mjs --write",
     "review:preview-health": "node scripts/local-preview-health.mjs",
     "review:evidence": "node scripts/review-evidence-refresh.mjs",
+    "auto-review:website": "node scripts/auto-review/computer-use-review.mjs",
+    "auto-review:visual-bot": "node scripts/auto-review/auto-visual-bot-check.mjs",
     "release:preflight": "node scripts/release-readiness.mjs --write",
     "release:readiness": "node scripts/release-readiness.mjs",
     "review:screenshots": "pnpm build && node scripts/capture-review-screenshots.mjs",
@@ -32,6 +34,8 @@
     "test:preview-health": "vitest run scripts/local-preview-health.test.mjs",
     "test:public-guardian": "vitest run scripts/public-guardian-checks.test.mjs",
     "test:review-evidence": "vitest run scripts/review-evidence-refresh.test.mjs",
+    "test:auto-review": "vitest run scripts/auto-review/computer-use-review.test.mjs",
+    "test:auto-visual-bot": "vitest run scripts/auto-review/auto-visual-bot-check.test.mjs",
     "test:roi-claims": "vitest run src/roi-calculator/roi-calculator.guard.test.mjs",
     "test:master-plan-audit": "vitest run scripts/master-plan-current-audit.test.mjs",
     "test:manual-review-gate": "vitest run scripts/manual-review-gate.test.mjs",
@@ -42,5 +46,9 @@
     "test:review-gates": "vitest run scripts/review-gate-checks.test.mjs",
     "test:server": "vitest run scripts/server.test.mjs",
     "test:line": "pnpm build && playwright test --config=playwright.config.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.12.1",
+    "lighthouse": "^13.4.0"
   }
 }

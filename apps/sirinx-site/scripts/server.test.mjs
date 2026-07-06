@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import { renderHtmlForLocalPreview } from "../server.mjs";
 
 const partial = '<div id="floating-contact-cluster">LINE dock</div>';
@@ -26,5 +28,16 @@ describe("sirinx-site local preview server", () => {
     expect(rendered.match(/id="floating-contact-cluster"/g)).toHaveLength(1);
     expect(rendered).toContain("Existing dock");
     expect(rendered).not.toContain("LINE dock");
+  });
+
+  it("keeps hidden desktop contact panels inert until opened", async () => {
+    const root = resolve(import.meta.dirname, "..");
+    const floatingContact = await readFile(resolve(root, "src", "_partials", "floating-contact.html"), "utf8");
+    const appScript = await readFile(resolve(root, "src", "app.js"), "utf8");
+
+    expect(floatingContact).toMatch(/id="line-panel"[\s\S]*aria-hidden="true"[\s\S]*inert/);
+    expect(floatingContact).toMatch(/id="inquiry-panel"[\s\S]*aria-hidden="true"[\s\S]*inert/);
+    expect(appScript).toContain("function setPanelOpen(panel, open)");
+    expect(appScript).toContain("panel.inert = !open");
   });
 });
