@@ -483,6 +483,24 @@ test.describe('SIRINX Website - LINE Integration UAT', () => {
     await expect(lineButton).toHaveAttribute('aria-expanded', 'false');
   });
 
+  test('desktop contact panels return focus to visible triggers after close', async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 800 });
+
+    const lineButton = page.locator('.line-button');
+    await lineButton.click();
+    await expect(page.locator('#line-panel')).toHaveAttribute('aria-hidden', 'false');
+    await page.locator('#line-panel .close-button').click();
+    await expect(page.locator('#line-panel')).toHaveAttribute('aria-hidden', 'true');
+    await expect(lineButton).toBeFocused();
+
+    const inquiryButton = page.locator('.inquiry-button');
+    await inquiryButton.click();
+    await expect(page.locator('#inquiry-panel')).toHaveAttribute('aria-hidden', 'false');
+    await page.locator('#inquiry-panel .close-button').click();
+    await expect(page.locator('#inquiry-panel')).toHaveAttribute('aria-hidden', 'true');
+    await expect(inquiryButton).toBeFocused();
+  });
+
   test('desktop inquiry button preserves website contact path', async ({ page }) => {
     await page.setViewportSize({ width: 1200, height: 800 });
     const inquiryButton = page.locator('.inquiry-button');

@@ -1,0 +1,72 @@
+{
+  "packet_id": "P089D_DESKTOP_PANEL_FOCUS_RETURN_PATCH",
+  "created_at": "2026-07-07T00:55:41+0700",
+  "mode": "LOCAL_PATCH_ONLY_NO_COMMIT_NO_PUSH_NO_DEPLOY",
+  "status": "LOCAL_PATCH_READY_FOR_SCOPED_COMMIT_PUSH_PREVIEW_REDEPLOY_GATE",
+  "repo": "/Users/sirinx/sirinx-os",
+  "source_blocker": {
+    "packet": "P089C_SIRINX_REMOTE_PREVIEW_UAT_VERIFICATION",
+    "receipt": "reports/review/p089c/remote_preview_uat_receipt.json",
+    "finding": "HIDDEN_PANEL_RETAINS_FOCUS_AFTER_CLOSE"
+  },
+  "changed_files": [
+    "apps/sirinx-site/src/app.js",
+    "apps/sirinx-site/tests/line-integration.spec.ts"
+  ],
+  "implementation": {
+    "summary": "Desktop close handlers now restore focus to the visible opener when a panel is closed directly. Internal panel switching and responsive cleanup suppress focus restoration to avoid moving focus to hidden desktop controls.",
+    "line_panel_focus_target": "#line-trigger",
+    "inquiry_panel_focus_target": "#inquiry-trigger",
+    "responsive_cleanup_suppresses_focus": true,
+    "panel_switching_suppresses_intermediate_focus": true
+  },
+  "tdd_evidence": {
+    "red_test": {
+      "command": "pnpm --filter @sirinx/site build && pnpm exec playwright test apps/sirinx-site/tests/line-integration.spec.ts -g \"desktop contact panels return focus\" --config=apps/sirinx-site/playwright.config.mjs",
+      "result": "failed before app.js patch",
+      "failure": "Expected .line-button to be focused after #line-panel close; received inactive"
+    },
+    "green_test": {
+      "command": "pnpm --filter @sirinx/site build && pnpm exec playwright test apps/sirinx-site/tests/line-integration.spec.ts -g \"desktop contact panels return focus\" --config=apps/sirinx-site/playwright.config.mjs",
+      "result": "2 passed after app.js patch"
+    }
+  },
+  "validation": [
+    {
+      "command": "pnpm --filter @sirinx/site test:server",
+      "result": "passed: 1 file, 3 tests"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:line",
+      "result": "passed: 110 tests"
+    },
+    {
+      "command": "git diff --check -- apps/sirinx-site/src/app.js apps/sirinx-site/tests/line-integration.spec.ts",
+      "result": "passed"
+    },
+    {
+      "command": "node scripts/secret-scan.mjs",
+      "result": "passed: no findings"
+    }
+  ],
+  "known_blocker_not_caused_by_patch": {
+    "command": "pnpm --filter @sirinx/site check",
+    "result": "failed",
+    "reason": "docs/website/SIRINX_WEBSITE_MANUAL_REVIEW_RESULT_TEMPLATE_2026-07-03.md is missing required governance snippet: pending human input",
+    "interpretation": "This is a governance-check expectation mismatch after deploy approval state changed. It is outside the two-file focus patch and was not changed by P089D."
+  },
+  "actions_not_performed": [
+    "git_commit",
+    "git_push",
+    "preview_redeploy",
+    "production_deploy",
+    "dns_mutation",
+    "r2_d1_kv_mutation",
+    "line_webhook_activation",
+    "crm_customer_storage",
+    "live_send",
+    "provider_model_call",
+    "secret_read_print"
+  ],
+  "next_gate": "P089E_SCOPED_COMMIT_PUSH_PREVIEW_REDEPLOY_APPROVAL_PACKET"
+}

@@ -21,6 +21,13 @@ if (yearStamp) {
     panel.classList.toggle('open', open);
   }
 
+  function restoreFocus(controlId) {
+    const control = document.getElementById(controlId);
+    if (control && typeof control.focus === 'function') {
+      control.focus({ preventScroll: true });
+    }
+  }
+
   function emitTrackEvent(eventName, data) {
     if (existingTrackEvent) {
       existingTrackEvent(eventName, data);
@@ -105,7 +112,7 @@ if (yearStamp) {
     const panel = document.getElementById('line-panel');
     if (panel) {
       if (typeof window.closeInquiryPanel === 'function') {
-        window.closeInquiryPanel();
+        window.closeInquiryPanel({ restoreFocus: false });
       }
       setPanelOpen(panel, true);
       setExpanded('line-trigger', true);
@@ -114,11 +121,15 @@ if (yearStamp) {
     }
   };
 
-  window.closeLinePanel = function() {
+  window.closeLinePanel = function(options = {}) {
     const panel = document.getElementById('line-panel');
     if (panel) {
+      const wasOpen = panel.getAttribute('aria-hidden') === 'false';
       setPanelOpen(panel, false);
       setExpanded('line-trigger', false);
+      if (wasOpen && options.restoreFocus !== false) {
+        restoreFocus('line-trigger');
+      }
     }
   };
 
@@ -127,7 +138,7 @@ if (yearStamp) {
     const panel = document.getElementById('inquiry-panel');
     if (panel) {
       if (typeof window.closeLinePanel === 'function') {
-        window.closeLinePanel();
+        window.closeLinePanel({ restoreFocus: false });
       }
       setPanelOpen(panel, true);
       setExpanded('inquiry-trigger', true);
@@ -135,11 +146,15 @@ if (yearStamp) {
     }
   };
 
-  window.closeInquiryPanel = function() {
+  window.closeInquiryPanel = function(options = {}) {
     const panel = document.getElementById('inquiry-panel');
     if (panel) {
+      const wasOpen = panel.getAttribute('aria-hidden') === 'false';
       setPanelOpen(panel, false);
       setExpanded('inquiry-trigger', false);
+      if (wasOpen && options.restoreFocus !== false) {
+        restoreFocus('inquiry-trigger');
+      }
     }
   };
 
@@ -209,8 +224,8 @@ if (yearStamp) {
       } else {
         mobileTrigger.style.display = suppressMobileTrigger ? 'none' : 'flex';
         desktopDock.style.display = 'none';
-        window.closeLinePanel();
-        window.closeInquiryPanel();
+        window.closeLinePanel({ restoreFocus: false });
+        window.closeInquiryPanel({ restoreFocus: false });
       }
     }
 
