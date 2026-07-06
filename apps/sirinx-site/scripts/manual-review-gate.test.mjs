@@ -45,7 +45,7 @@ describe("manual review gate validator", () => {
     expect(packet.deploy_gate).toBe("BLOCKED_FOR_DEPLOY");
     expect(packet.completion_claim_allowed).toBe(false);
     expect(packet.manual_checks_pending).toEqual(
-      expect.arrayContaining(["Real-device LINE QR scan", "Existing bot / inquiry path behavior"])
+      expect.arrayContaining(["Confirm Add LINE target", "Existing bot / inquiry path behavior"])
     );
     expect(packet.exact_deploy_approval_present).toBe(false);
   });

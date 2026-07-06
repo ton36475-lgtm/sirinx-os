@@ -187,7 +187,7 @@ test.describe('SIRINX Website - LINE Integration UAT', () => {
   });
 
   test('homepage primary CTA follows the live index contact route', async ({ page }) => {
-    await page.getByRole('link', { name: 'ขอใบเสนอราคา Solar Carport' }).click();
+    await page.getByRole('link', { name: 'ขอใบเสนอราคา Solar Carport' }).first().click();
     await expect(page).toHaveURL(/\/contact\?interest=solar-carport/);
     await expect(page.getByRole('heading', { name: 'คุยกับทีม SIRINX เพื่อประเมินระบบพลังงานองค์กร' })).toBeVisible();
   });

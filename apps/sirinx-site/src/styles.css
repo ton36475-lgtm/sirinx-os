@@ -2100,6 +2100,349 @@ dd {
   text-decoration: none;
 }
 
+.solar-carport-original .production-container {
+  align-items: center;
+  display: grid;
+  gap: 40px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.65fr);
+}
+
+.solar-carport-original .production-button.line {
+  background: #06c755;
+  color: #04130a;
+}
+
+.solar-slide-card {
+  align-self: end;
+  backdrop-filter: blur(20px);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(102, 217, 232, 0.28);
+  border-radius: 12px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+  color: #f8fafc;
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+  padding: 24px;
+}
+
+.solar-slide-card span,
+.solar-card-grid article > span,
+.solar-project-card > div > span {
+  color: #66d9e8;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.solar-slide-card h2,
+.solar-slide-card p {
+  margin: 0;
+}
+
+.solar-slide-card h2 {
+  color: #f8fafc;
+  font-family: "Space Grotesk", "IBM Plex Sans Thai", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.solar-slide-card p {
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.solar-slide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.solar-slide-actions a,
+.solar-inline-action a {
+  color: #66d9e8;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.solar-proof-strip {
+  background: #0a1628;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  color: #f8fafc;
+  padding: 40px 32px;
+}
+
+.solar-proof-strip dl {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1184px;
+}
+
+.solar-proof-strip div {
+  border-left: 2px solid #2dd4bf;
+  padding-left: 18px;
+}
+
+.solar-proof-strip dt,
+.solar-mini-metrics dt {
+  color: rgba(226, 232, 240, 0.62);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.solar-proof-strip dd {
+  color: #f8fafc;
+  font-family: "Space Grotesk", "IBM Plex Sans Thai", sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  font-weight: 800;
+}
+
+.solar-section {
+  max-width: none;
+  padding-left: max(32px, calc((100vw - 1184px) / 2));
+  padding-right: max(32px, calc((100vw - 1184px) / 2));
+}
+
+.solar-section.compact {
+  gap: 40px;
+}
+
+.solar-section .solar-section-copy,
+.solar-section .solar-centered-copy {
+  max-width: 760px;
+}
+
+.solar-centered-copy {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.solar-flagship {
+  align-items: center;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1fr);
+}
+
+.solar-check-list {
+  color: rgba(226, 232, 240, 0.8);
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 24px 0;
+  padding: 0;
+}
+
+.solar-check-list li {
+  align-items: start;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 18px minmax(0, 1fr);
+}
+
+.solar-check-list li::before {
+  background: #2dd4bf;
+  border-radius: 999px;
+  content: "";
+  height: 8px;
+  margin-top: 9px;
+  width: 8px;
+}
+
+.solar-image-card {
+  border-radius: 16px;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.solar-image-card img,
+.solar-project-card img,
+.solar-testimonial > img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.solar-image-card img {
+  aspect-ratio: 16 / 10;
+}
+
+.solar-image-card figcaption {
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(102, 217, 232, 0.22);
+  border-radius: 10px;
+  bottom: 20px;
+  color: #f8fafc;
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  position: absolute;
+  right: 20px;
+}
+
+.solar-image-card figcaption strong {
+  color: #66d9e8;
+  font-size: 1.25rem;
+}
+
+.solar-image-card figcaption span {
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.82rem;
+}
+
+.solar-card-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.solar-card-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.solar-card-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.solar-card-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.solar-card-grid article,
+.solar-project-card > div,
+.solar-testimonial > div {
+  background: rgba(15, 23, 42, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 12px;
+  color: #f8fafc;
+  padding: 24px;
+}
+
+.solar-card-grid.mini article {
+  min-height: 0;
+  padding: 18px;
+}
+
+.solar-card-grid article p {
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.96rem;
+}
+
+.solar-mid-cta,
+.solar-final-cta,
+.solar-testimonial {
+  background: #0a1628;
+  color: #f8fafc;
+  margin: 0 auto;
+  padding-left: max(32px, calc((100vw - 1184px) / 2));
+  padding-right: max(32px, calc((100vw - 1184px) / 2));
+}
+
+.solar-mid-cta {
+  align-items: center;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-bottom: 64px;
+  padding-top: 64px;
+}
+
+.solar-mid-cta h2,
+.solar-final-cta h2 {
+  color: #f8fafc;
+  font-family: "Space Grotesk", "IBM Plex Sans Thai", sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+}
+
+.solar-mid-cta p,
+.solar-final-cta p {
+  color: rgba(226, 232, 240, 0.76);
+  margin: 12px 0 0;
+  max-width: 720px;
+}
+
+.solar-cta-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.solar-project-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.solar-project-card {
+  background: rgba(15, 23, 42, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.solar-project-card img {
+  aspect-ratio: 16 / 10;
+}
+
+.solar-mini-metrics {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 18px 0 0;
+}
+
+.solar-mini-metrics dd {
+  color: #66d9e8;
+  font-size: 0.9rem;
+}
+
+.solar-inline-action {
+  text-align: center;
+}
+
+.solar-testimonial {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(280px, 0.65fr) minmax(0, 1fr);
+  padding-bottom: 64px;
+  padding-top: 64px;
+}
+
+.solar-testimonial > img {
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+}
+
+.solar-testimonial blockquote {
+  color: rgba(226, 232, 240, 0.82);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.8;
+  margin: 18px 0;
+}
+
+.solar-final-cta {
+  display: grid;
+  justify-items: center;
+  padding-bottom: 96px;
+  padding-top: 80px;
+  text-align: center;
+}
+
+.solar-final-cta .production-actions {
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.solar-line-support {
+  color: #9fffe7 !important;
+  font-weight: 700;
+}
+
 .production-section {
   background: #0a1628;
   color: #f8fafc;
@@ -2366,6 +2709,57 @@ dd {
   .production-card-grid,
   .production-answer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .solar-carport-original .production-container,
+  .solar-flagship,
+  .solar-mid-cta,
+  .solar-testimonial,
+  .solar-project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .solar-slide-card {
+    align-self: stretch;
+    max-width: none;
+  }
+
+  .solar-proof-strip {
+    padding: 32px 24px;
+  }
+
+  .solar-proof-strip dl,
+  .solar-card-grid.two,
+  .solar-card-grid.three,
+  .solar-card-grid.four {
+    grid-template-columns: 1fr;
+  }
+
+  .solar-section,
+  .solar-mid-cta,
+  .solar-final-cta,
+  .solar-testimonial {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .solar-cta-stack {
+    justify-content: stretch;
+  }
+
+  .solar-cta-stack .production-button,
+  .solar-final-cta .production-button {
+    width: 100%;
+  }
+
+  .solar-mini-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .solar-image-card figcaption {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
   }
 }
 

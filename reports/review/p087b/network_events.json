@@ -26,6 +26,11 @@
   },
   {
     "method": "GET",
+    "url": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+    "local": false
+  },
+  {
+    "method": "GET",
     "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
     "local": false
   },
@@ -216,6 +221,11 @@
   },
   {
     "method": "GET",
+    "url": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+    "local": false
+  },
+  {
+    "method": "GET",
     "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
     "local": false
   },
@@ -406,6 +416,11 @@
   },
   {
     "method": "GET",
+    "url": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+    "local": false
+  },
+  {
+    "method": "GET",
     "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
     "local": false
   },
@@ -593,6 +608,11 @@
     "method": "GET",
     "url": "http://127.0.0.1:18742/app.js",
     "local": true
+  },
+  {
+    "method": "GET",
+    "url": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+    "local": false
   },
   {
     "method": "GET",

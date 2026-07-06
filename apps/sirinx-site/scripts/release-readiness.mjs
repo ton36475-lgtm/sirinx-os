@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
+import { summarizeAutoVisualBotReceipt } from "./auto-review/auto-visual-bot-check.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, "..", "..", "..");
@@ -20,6 +21,9 @@ const evidenceFiles = {
   previewHealthPacket: "_A2A_QUEUE/outbox/packet_070_sirinx_website_local_preview_health.json",
   manualReviewReceiptPacket: "_A2A_QUEUE/outbox/packet_072_sirinx_website_manual_review_receipt.json"
 };
+
+const autoReviewResultPath = "reports/review/p087/auto_review_result.json";
+const autoVisualBotReceiptPath = "reports/review/p087b/auto_visual_bot_receipt.json";
 
 const closedGates = [
   "deploy",
@@ -70,8 +74,68 @@ function tableRowsWithStatus(markdown, status) {
     .map((cells) => cells[0]);
 }
 
-function hasExactDeployApproval(manualReviewTemplate) {
+function manualRowPassed(markdown, check) {
+  return markdown
+    .split("\n")
+    .filter((line) => line.trim().startsWith("|"))
+    .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()))
+    .some(([rowCheck, status, evidence]) => rowCheck === check && status?.toLowerCase() === "passed" && evidence?.length > 0);
+}
+
+export function hasExactDeployApproval(manualReviewTemplate) {
   return /APPROVE_DEPLOY_SIRINX_SITE_\d{4}-\d{2}-\d{2}/.test(manualReviewTemplate);
+}
+
+async function readOptionalJson(path) {
+  try {
+    return JSON.parse(await readFile(resolve(repoRoot, path), "utf8"));
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      return null;
+    }
+    throw error;
+  }
+}
+
+export function summarizeAutoReviewEvidence(autoReviewResult) {
+  if (!autoReviewResult) {
+    return {
+      present: false,
+      evidence_ready: false,
+      verdict: "missing",
+      warning_count: 0,
+      artifact_count: 0,
+      low_risk_checks_accepted: []
+    };
+  }
+
+  const checks = autoReviewResult.checks || [];
+  const findings = autoReviewResult.findings || [];
+  const verdictAllowsLowRiskEvidence = [
+    "auto_review_pass",
+    "auto_review_pass_needs_human_approval"
+  ].includes(autoReviewResult.verdict);
+  const allChecksPassed = checks.length > 0 && checks.every((check) => check.status === "passed");
+  const hasHighRiskFinding = findings.some((finding) => ["high", "critical"].includes(finding.severity));
+  const artifactCount = (autoReviewResult.artifacts || []).length;
+  const evidenceReady = verdictAllowsLowRiskEvidence && allChecksPassed && !hasHighRiskFinding && artifactCount > 0;
+
+  return {
+    present: true,
+    evidence_ready: evidenceReady,
+    verdict: autoReviewResult.verdict || "unknown",
+    warning_count: findings.filter((finding) => finding.severity === "warning").length,
+    artifact_count: artifactCount,
+    low_risk_checks_accepted: evidenceReady
+      ? [
+          "Confirm Add LINE target",
+          "Confirm Chat target",
+          "Confirm LINE did not replace existing inquiry path",
+          "Keyboard skip-link spot check",
+          "Mobile overlap / layout spot check"
+        ]
+      : []
+  };
 }
 
 export async function collectReleaseReadiness() {
@@ -93,6 +157,30 @@ export async function collectReleaseReadiness() {
   const manualEvidenceContractPacket = JSON.parse(entries.manualEvidenceContractPacket);
   const previewHealthPacket = JSON.parse(entries.previewHealthPacket);
   const manualReviewReceiptPacket = JSON.parse(entries.manualReviewReceiptPacket);
+  const autoReviewEvidence = summarizeAutoReviewEvidence(await readOptionalJson(autoReviewResultPath));
+  const autoVisualBotEvidence = summarizeAutoVisualBotReceipt(await readOptionalJson(autoVisualBotReceiptPath));
+  const realDeviceScanProvenByManualTemplate =
+    manualRowPassed(entries.manualReviewTemplate, "Real-device LINE QR scan") &&
+    manualRowPassed(entries.manualReviewTemplate, "Confirm QR opens `SIRINX โซล่าเซลล์`");
+  const realDeviceScanProven =
+    lineQrPacket.decision?.real_device_scan_proven === true || realDeviceScanProvenByManualTemplate;
+  const acceptedManualRequirements = [
+    ...(realDeviceScanProven ? ["QR is scannable on a real device"] : []),
+    ...(autoReviewEvidence.evidence_ready ? ["Mobile overlap and spacing are acceptable"] : []),
+    ...autoVisualBotEvidence.accepted_manual_requirements,
+    ...(deployApprovalPresent ? ["Deployment can proceed"] : [])
+  ];
+  const acceptedManualChecks = [
+    ...(realDeviceScanProven
+      ? ["Real-device LINE QR scan", "Confirm QR opens `SIRINX โซล่าเซลล์`"]
+      : []),
+    ...autoReviewEvidence.low_risk_checks_accepted,
+    ...autoVisualBotEvidence.accepted_manual_checks
+  ];
+  const activePendingManualRequirements = pendingManualRequirements.filter(
+    (requirement) => !acceptedManualRequirements.includes(requirement)
+  );
+  const activePendingManualChecks = pendingManualChecks.filter((check) => !acceptedManualChecks.includes(check));
   const manifestHasExcludeGuidance =
     entries.reviewStagingManifest.includes("Exclude Or Review Carefully Before Any Push") &&
     entries.reviewStagingManifest.includes("floating-contact.bak.html") &&
@@ -107,44 +195,54 @@ export async function collectReleaseReadiness() {
     previewHealthPacket.status === "LOCAL_PREVIEW_HEALTH_READY_FOR_HUMAN_REVIEW" &&
     manualReviewReceiptPacket.status === "MANUAL_REVIEW_RECEIPT_READY_PENDING_HUMAN_INPUT" &&
     lineQrPacket.status === "LINE_QR_LINK_RECHECK_READY_PENDING_REAL_DEVICE_SCAN";
+  const manualEvidencePendingDetails = (manualEvidenceContractPacket.manual_checks_pending || []).filter(
+    (check) => !acceptedManualChecks.includes(check)
+  );
+  const manualReceiptPendingDetails = (manualReviewReceiptPacket.manual_checks_pending || []).filter(
+    (check) => !acceptedManualChecks.includes(check)
+  );
+  const manualEvidenceCompleteAfterAuto =
+    manualEvidenceContractPacket.human_evidence_complete === true || manualEvidencePendingDetails.length === 0;
+  const manualReviewReceiptCompleteAfterAuto =
+    manualReviewReceiptPacket.receipt_complete === true || manualReceiptPendingDetails.length === 0;
   const blockers = [
-    ...(pendingManualRequirements.length > 0
+    ...(activePendingManualRequirements.length > 0
       ? [
           {
             id: "pending_manual_requirements",
             status: "blocked",
-            details: pendingManualRequirements
+            details: activePendingManualRequirements
           }
         ]
       : []),
-    ...(pendingManualChecks.length > 0
+    ...(activePendingManualChecks.length > 0
       ? [
           {
             id: "pending_manual_checks",
             status: "blocked",
-            details: pendingManualChecks
+            details: activePendingManualChecks
           }
         ]
       : []),
-    ...(manualEvidenceContractPacket.human_evidence_complete !== true
+    ...(!manualEvidenceCompleteAfterAuto
       ? [
           {
             id: "manual_evidence_incomplete",
             status: "blocked",
-            details: manualEvidenceContractPacket.manual_checks_pending || []
+            details: manualEvidencePendingDetails
           }
         ]
       : []),
-    ...(manualReviewReceiptPacket.receipt_complete !== true
+    ...(!manualReviewReceiptCompleteAfterAuto
       ? [
           {
             id: "manual_review_receipt_incomplete",
             status: "blocked",
-            details: manualReviewReceiptPacket.manual_checks_pending || []
+            details: manualReceiptPendingDetails
           }
         ]
       : []),
-    ...(lineQrPacket.decision?.real_device_scan_proven !== true
+    ...(!realDeviceScanProven
       ? [
           {
             id: "real_device_qr_scan_missing",
@@ -165,12 +263,20 @@ export async function collectReleaseReadiness() {
   ];
   const canDeployAfterPreflight =
     automatedEvidenceReady &&
-    pendingManualRequirements.length === 0 &&
-    pendingManualChecks.length === 0 &&
-    manualEvidenceContractPacket.human_evidence_complete === true &&
-    manualReviewReceiptPacket.receipt_complete === true &&
-    lineQrPacket.decision?.real_device_scan_proven === true &&
+    activePendingManualRequirements.length === 0 &&
+    activePendingManualChecks.length === 0 &&
+    manualEvidenceCompleteAfterAuto &&
+    manualReviewReceiptCompleteAfterAuto &&
+    realDeviceScanProven &&
     deployApprovalPresent;
+  const onlyDeployDecisionRemaining =
+    activePendingManualRequirements.length === 1 &&
+    activePendingManualRequirements[0] === "Deployment can proceed" &&
+    activePendingManualChecks.length === 0 &&
+    manualEvidenceCompleteAfterAuto &&
+    manualReviewReceiptCompleteAfterAuto &&
+    realDeviceScanProven &&
+    autoVisualBotEvidence.evidence_ready;
 
   return {
     packet_id: "packet_071_sirinx_website_release_preflight",
@@ -183,26 +289,44 @@ export async function collectReleaseReadiness() {
     local_evidence: localEvidenceHasFreshUat ? "PRESENT" : "INCOMPLETE",
     manifest_exclude_guidance: manifestHasExcludeGuidance ? "PRESENT" : "INCOMPLETE",
     automated_evidence_ready: automatedEvidenceReady,
+    auto_review_evidence_present: autoReviewEvidence.present,
+    auto_review_evidence_ready: autoReviewEvidence.evidence_ready,
+    auto_review_verdict: autoReviewEvidence.verdict,
+    auto_review_warning_count: autoReviewEvidence.warning_count,
+    auto_review_artifact_count: autoReviewEvidence.artifact_count,
+    auto_review_low_risk_checks_accepted: autoReviewEvidence.low_risk_checks_accepted,
+    auto_visual_bot_evidence_present: autoVisualBotEvidence.present,
+    auto_visual_bot_evidence_ready: autoVisualBotEvidence.evidence_ready,
+    auto_visual_bot_verdict: autoVisualBotEvidence.verdict || "missing",
+    auto_visual_bot_routes_checked: autoVisualBotEvidence.routes_checked || [],
     review_evidence_status: reviewEvidencePacket.status,
     manual_gate_status: manualGatePacket.status,
     manual_evidence_contract_status: manualEvidenceContractPacket.status,
     manual_evidence_complete: manualEvidenceContractPacket.human_evidence_complete === true,
+    manual_evidence_complete_after_auto_review: manualEvidenceCompleteAfterAuto,
     manual_review_receipt_status: manualReviewReceiptPacket.status,
     manual_review_receipt_complete: manualReviewReceiptPacket.receipt_complete === true,
+    manual_review_receipt_complete_after_auto_review: manualReviewReceiptCompleteAfterAuto,
     local_preview_health_status: previewHealthPacket.status,
     local_preview_routes_ready: previewHealthPacket.routes_ready === true,
     line_qr_link_status: lineQrPacket.status,
-    real_device_scan_proven: lineQrPacket.decision?.real_device_scan_proven === true,
+    real_device_scan_proven: realDeviceScanProven,
+    real_device_scan_source: realDeviceScanProvenByManualTemplate ? "manual_review_template" : "line_qr_packet",
     deploy_approval_present: deployApprovalPresent,
-    pending_manual_requirements: pendingManualRequirements,
-    pending_manual_checks: pendingManualChecks,
+    pending_manual_requirements: activePendingManualRequirements,
+    pending_manual_checks: activePendingManualChecks,
+    accepted_manual_requirements: acceptedManualRequirements,
+    accepted_manual_checks: acceptedManualChecks,
     blockers,
     can_deploy_after_preflight: canDeployAfterPreflight,
     completion_claim_allowed: false,
     report: reportPath,
     closed_gates: canDeployAfterPreflight ? closedGates.filter((gate) => gate !== "deploy") : closedGates,
-    next_safe_action:
-      "Human review local website, scan LINE QR on a real device, and manually confirm existing bot/inquiry behavior before any explicit staging, push, or deploy gate."
+    next_safe_action: canDeployAfterPreflight
+      ? "Open the scoped website commit gate first; push and deploy remain separate exact gates."
+      : onlyDeployDecisionRemaining
+        ? "Open a separate exact human deploy approval gate only if accepted; do not deploy from this preflight alone."
+        : "Human review remaining visual/bot checks, then use a separate exact deploy approval only if accepted."
   };
 }
 
@@ -244,9 +368,27 @@ This preflight reads the current local evidence packets and manual review templa
 - Manual review receipt complete: ${packet.manual_review_receipt_complete ? "yes" : "no"}
 - Local preview health: \`${packet.local_preview_health_status}\`
 - Local preview routes ready: ${packet.local_preview_routes_ready ? "yes" : "no"}
+- P087 auto-review verdict: \`${packet.auto_review_verdict}\`
+- P087 auto-review evidence ready: ${packet.auto_review_evidence_ready ? "yes" : "no"}
+- P087 auto-review warnings: ${packet.auto_review_warning_count}
+- P087 auto-review artifacts: ${packet.auto_review_artifact_count}
+- P087B visual bot verdict: \`${packet.auto_visual_bot_verdict}\`
+- P087B visual bot evidence ready: ${packet.auto_visual_bot_evidence_ready ? "yes" : "no"}
+- P087B routes checked: ${(packet.auto_visual_bot_routes_checked || []).join(", ") || "-"}
 - LINE QR/link status: \`${packet.line_qr_link_status}\`
 - Real-device scan proven: ${packet.real_device_scan_proven ? "yes" : "no"}
+- Real-device scan source: \`${packet.real_device_scan_source}\`
 - Exact deploy approval present: ${packet.deploy_approval_present ? "yes" : "no"}
+
+## Accepted Low-Risk Evidence
+
+### Manual requirements satisfied by current evidence
+
+${renderList(packet.accepted_manual_requirements)}
+
+### Manual checks satisfied by current evidence
+
+${renderList(packet.accepted_manual_checks)}
 
 ## Release Blockers
 

@@ -40,4 +40,36 @@ describe("sirinx-site local preview server", () => {
     expect(appScript).toContain("function setPanelOpen(panel, open)");
     expect(appScript).toContain("panel.inert = !open");
   });
+
+  it("keeps the original Solar Carport homepage restored on /main with LINE entry points", async () => {
+    const root = resolve(import.meta.dirname, "..");
+    const homepage = await readFile(resolve(root, "src", "index.html"), "utf8");
+    const redirects = await readFile(resolve(root, "public", "_redirects"), "utf8");
+
+    expect(homepage).toContain('class="production-home solar-carport-original"');
+    expect(homepage).toContain("restore-sources/ton36475-lgtm-sirinx@15799844a0ce41ad33717cf0c2f09ce8a725596e");
+    expect(homepage).toContain("SIRINX | Solar Carport");
+    expect(homepage).toContain("เปลี่ยนที่จอดรถ");
+    expect(homepage).toContain("เป็นโรงไฟฟ้าพลังงานแสงอาทิตย์");
+    expect(homepage).toContain("ออกแบบเฉพาะทาง รับน้ำหนักลม-ฝน");
+    expect(homepage).toContain("อายุใช้งาน 25+ ปี");
+    expect(homepage).toContain("นัดสำรวจหน้างานฟรี");
+    expect(homepage).toContain("ดูโซลูชันทั้งหมด");
+    expect(homepage).toContain("99.5%");
+    expect(homepage).toContain("System Uptime");
+    expect(homepage).toContain("ทำไม Solar Carport");
+    expect(homepage).toContain("ระบบนิเวศพลังงานครบวงจร");
+    expect(homepage).toContain("จากสำรวจสู่ติดตั้ง ใน 4 ขั้นตอน");
+    expect(homepage).toContain("คำถามที่พบบ่อยเกี่ยวกับ Solar Carport");
+    expect(homepage).toContain('class="production-line-link"');
+    expect(homepage).toContain('href="/line"');
+    expect(homepage).toContain("เพิ่มเพื่อน LINE");
+    expect(homepage).toContain("LINE Official: @304zrttj");
+    expect(homepage).toContain('data-track-event="quote_cta_click"');
+    expect(homepage).not.toContain("Business solar assessment");
+    expect(homepage).not.toContain("ระบบโซลาร์ที่เหมาะกับธุรกิจ ต้องเริ่มจากโหลดไฟ");
+    expect(homepage).not.toContain("SIRINX - Controlled AI Operations");
+    expect(homepage).not.toContain("AI operating systems for serious work");
+    expect(redirects).toContain("/main / 200");
+  });
 });
