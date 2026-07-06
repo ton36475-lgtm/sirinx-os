@@ -1,0 +1,65 @@
+{
+  "packet_id": "P100_GHOSTCLAW_RUST_MIGRATION_OS_V1",
+  "status": "P100_RUST_MIGRATION_CORE_VALIDATED_LOCAL_UNCOMMITTED",
+  "mode": "scoped_rust_migration_status_after_p090e_monitoring",
+  "run_at": "2026-07-07T02:31:21+07:00",
+  "last_refreshed_at": "2026-07-07T03:34:09+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "crate": "crates/ghostclaw_migration_core",
+  "preconditions": {
+    "p090e_status": "P090E_POST_PRODUCTION_MONITORING_PASS",
+    "production_deployment_id": "a5215017-b89d-451c-b1f2-8c290beb1d55",
+    "rollback_target_deployment_id": "6bdf4746-2c34-429b-b0d5-88f6dfed3f66"
+  },
+  "scope": {
+    "command_parser": true,
+    "policy_guard": true,
+    "lane_router": true,
+    "receipt_store": true,
+    "redaction": true,
+    "validation_result_model": true,
+    "local_safe_adapter_previews": true,
+    "review_handoff_status_models": true
+  },
+  "file_inventory": {
+    "non_target_files": 95,
+    "target_ignored": true,
+    "ignored_paths": [
+      "crates/ghostclaw_migration_core/target/**"
+    ]
+  },
+  "validation": {
+    "cargo_fmt_check": "passed",
+    "cargo_clippy_all_targets_all_features_deny_warnings": "passed",
+    "cargo_test": {
+      "status": "passed",
+      "tests": 161,
+      "failures": 0
+    },
+    "cargo_build": "passed"
+  },
+  "git_state": {
+    "crate_untracked": true,
+    "commit_required": true,
+    "commit_gate": "P100A_SCOPED_RUST_CORE_COMMIT_GATE"
+  },
+  "blocked_actions_confirmed": {
+    "deploy_rerun": true,
+    "rollback_execution": true,
+    "dns_mutation": true,
+    "r2_d1_kv_mutation": true,
+    "line_webhook_activation": true,
+    "crm_customer_storage_write": true,
+    "live_telegram_line_email_customer_send": true,
+    "provider_model_api_call": true,
+    "secret_read_or_print": true,
+    "git_add_all": true,
+    "broad_dirty_tree_cleanup": true
+  },
+  "artifacts": {
+    "migration_doc": "docs/migration/GHOSTCLAW_RUST_MIGRATION_OS_V1.md",
+    "report": "reports/mission/A2A2A_P100_RUST_MIGRATION_POST_PRODUCTION_STATUS_20260707.md",
+    "receipt": "reports/review/p100/rust_migration_status_receipt.json"
+  },
+  "next_safe_gate": "P100A_SCOPED_RUST_CORE_COMMIT_GATE"
+}

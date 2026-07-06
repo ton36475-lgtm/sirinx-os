@@ -1,0 +1,72 @@
+{
+  "packet_id": "P100A_SCOPED_RUST_CORE_COMMIT_GATE_PREVIEW",
+  "status": "P100A_READY_FOR_HUMAN_COMMIT_APPROVAL",
+  "mode": "preview_only_no_staging_no_commit_no_push",
+  "created_at": "2026-07-07T02:35:32+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "head": "93f2a1965c3531c1ac5c626f198060df023876b7",
+  "branch": "staging/godmode-master-os-v2",
+  "origin_sync": {
+    "ahead": 0,
+    "behind": 0
+  },
+  "proposed_commit_message": "feat(ghostclaw): validate Rust migration core after production launch",
+  "allowed_pathspecs": [
+    "crates/ghostclaw_migration_core/.gitignore",
+    "crates/ghostclaw_migration_core/Cargo.lock",
+    "crates/ghostclaw_migration_core/Cargo.toml",
+    "crates/ghostclaw_migration_core/README.md",
+    "crates/ghostclaw_migration_core/docs/BEHAVIOR_CONTRACT.md",
+    "crates/ghostclaw_migration_core/docs/FILE_LEASE_PROPOSAL.md",
+    "crates/ghostclaw_migration_core/docs/GHOSTCLAW_RUST_MIGRATION_OS_V1_INTEGRATION.md",
+    "crates/ghostclaw_migration_core/docs/REFACTOR_PLAN.md",
+    "crates/ghostclaw_migration_core/scripts/legacy_oracle.py",
+    "crates/ghostclaw_migration_core/src/**",
+    "crates/ghostclaw_migration_core/tests/**",
+    "docs/migration/GHOSTCLAW_RUST_MIGRATION_OS_V1.md",
+    "reports/mission/A2A2A_P090E_POST_PRODUCTION_MONITORING_20260707.md",
+    "reports/mission/A2A2A_P100_RUST_MIGRATION_POST_PRODUCTION_STATUS_20260707.md",
+    "reports/mission/A2A2A_P090E_P100_REVIEW_ONLY_PACKET_20260707.md",
+    "reports/mission/A2A2A_P100A_SCOPED_RUST_CORE_COMMIT_GATE_PREVIEW_20260707.md",
+    "reports/review/p090e/production_monitoring_receipt.json",
+    "reports/review/p100/rust_migration_status_receipt.json",
+    "reports/review/p100/p100a_scoped_commit_gate_receipt.json"
+  ],
+  "excluded_pathspecs": [
+    "crates/ghostclaw_migration_core/target/**"
+  ],
+  "validation_evidence": {
+    "p090e_receipt_parse": "passed",
+    "p100_receipt_parse": "passed",
+    "cargo_fmt_check": "passed",
+    "cargo_clippy_all_targets_all_features_deny_warnings": "passed",
+    "cargo_test": {
+      "status": "passed",
+      "tests": 161,
+      "failures": 0
+    },
+    "cargo_build": "passed",
+    "secret_scan": "passed_no_findings",
+    "scoped_git_diff_check": "passed"
+  },
+  "blocked_actions_confirmed": {
+    "git_add_all": true,
+    "staging_unrelated_dirty_tree_files": true,
+    "commit_before_exact_human_approval": true,
+    "push_before_exact_human_approval": true,
+    "deploy_rerun": true,
+    "rollback_execution": true,
+    "dns_r2_d1_kv_mutation": true,
+    "webhook_activation": true,
+    "crm_customer_storage_write": true,
+    "live_send": true,
+    "provider_model_api_call": true,
+    "secret_read_or_print": true
+  },
+  "artifacts": {
+    "review_packet": "reports/mission/A2A2A_P090E_P100_REVIEW_ONLY_PACKET_20260707.md",
+    "commit_gate_preview": "reports/mission/A2A2A_P100A_SCOPED_RUST_CORE_COMMIT_GATE_PREVIEW_20260707.md",
+    "receipt": "reports/review/p100/p100a_scoped_commit_gate_receipt.json"
+  },
+  "next_gate": "APPROVE_P100A_SCOPED_RUST_CORE_COMMIT_20260707"
+}

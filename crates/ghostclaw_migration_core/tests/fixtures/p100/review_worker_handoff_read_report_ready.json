@@ -1,0 +1,1 @@
+{"envelope":{"envelope_id":"p099-ready","status":"ready_for_manual_opencode_review","dry_run":true,"live_execution":false,"handoff_target":"opencode_review_only","next_action":"manual_opencode_review_only_no_invocation"},"missing":false,"invalid":false}
