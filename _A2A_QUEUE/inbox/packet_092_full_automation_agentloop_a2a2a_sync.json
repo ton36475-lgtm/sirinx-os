@@ -1,0 +1,71 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-2026-0708-092",
+  "correlation_id": "sirinx-a2a2a-p092tlg",
+  "phase": "p2_completed",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander_router"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "build_captain"
+  },
+  "action_requested": "stage_commit",
+  "context": {
+    "goal": "Apply LINE OA webhook overlay to apps/web-sirinx, register route before express.json(), enforce dry-run safety, run full test/build gate, and request Telegram command center approval for commit.",
+    "constraints": [
+      "SIRINX_LINE_MODE=dry-run",
+      "SIRINX_LINE_AUTO_REPLY_APPROVED=false",
+      "no deploy",
+      "no git push",
+      "no cloud mutation",
+      "no secret read or print",
+      "no LINE live-send or broadcast",
+      "no customer message",
+      "no dependency install",
+      "no production analytics"
+    ],
+    "lane": "apps/web-sirinx/server/_core/",
+    "files": [
+      "apps/web-sirinx/server/_core/lineWebhook.ts",
+      "apps/web-sirinx/server/_core/lineWebhook.test.ts",
+      "apps/web-sirinx/server/_core/index.ts"
+    ],
+    "deliverables": [
+      "lineWebhook.ts dry-run handler with 10MB body cap",
+      "lineWebhook.test.ts — 10 unit tests",
+      "index.ts route registration before express.json()",
+      "276/276 tests passing",
+      "tsc --noEmit passing",
+      "vite build passing",
+      "6 mock curl tests passing",
+      "Codex review completed (P2 body cap fixed)",
+      ".mcp.json codex-cli + line-bot servers",
+      ".opencode/config.json tool gates",
+      ".env.example safety locks",
+      "docs/architecture/LINE_OA_WORKFLOW_ARCHITECTURE.md"
+    ],
+    "command_source": "mission"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "within_lane": "apps/web-sirinx/server/_core/",
+    "max_turns": 3
+  },
+  "human_approval_required": true,
+  "timestamp": "2026-07-08T01:30:00.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "auto_block_and_continue"
+  },
+  "terminology_policy": {
+    "canonical": "brainstorm",
+    "canonical_term": "brainstorm",
+    "deprecated_aliases": ["beststorm"],
+    "invalid_typos": ["beststrom"],
+    "emit_only_canonical": true
+  }
+}
