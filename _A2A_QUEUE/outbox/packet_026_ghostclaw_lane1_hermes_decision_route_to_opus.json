@@ -6,6 +6,7 @@
   "agent": "hermes",
   "status": "outbox",
   "risk": "safe",
+  "approval_required": false,
   "parent_packet": "packet_013",
   "decision_id": "HERMES-LANE1-DECISION-013-20260629-001",
   "decision": "route_to_opus",

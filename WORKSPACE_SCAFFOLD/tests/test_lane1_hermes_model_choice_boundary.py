@@ -52,7 +52,7 @@ class Lane1HermesModelChoiceBoundaryTests(unittest.TestCase):
         self.assertTrue(BOUNDARY_JSON.exists(), f"Missing model boundary JSON: {BOUNDARY_JSON}")
         self.assertTrue(BOUNDARY_DOC.exists(), f"Missing model boundary doc: {BOUNDARY_DOC}")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 packet exists unexpectedly")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_boundary_json_limits_any_model_to_draft_assistance(self):
         boundary = self.load_boundary_json()

@@ -1,0 +1,78 @@
+{
+  "packet_id": "P089_EXACT_PREVIEW_DEPLOY_APPROVAL_PACKET",
+  "created_at": "2026-07-07T00:35:31+0700",
+  "mode": "APPROVAL_PACKET_ONLY_NO_DEPLOY",
+  "status": "READY_FOR_HUMAN_PREVIEW_DEPLOY_DECISION",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "remote": "origin",
+  "remote_url": "https://github.com/ton36475-lgtm/sirinx-os.git",
+  "release_candidate": {
+    "commit": "3e5420c82d762ed94e87af59e4b727af7dc95496",
+    "commit_subject": "gate: record P087B auto visual bot pass evidence (2026-07-06)",
+    "local_head_matches_origin": true,
+    "ahead_behind": "0 0",
+    "deploy_relevant_paths_clean": true,
+    "broad_dirty_tree_count_at_packet_time": 644,
+    "broad_dirty_tree_note": "The full worktree contains unrelated dirty paths. Preview deploy execution must use the scoped release candidate and pass deploy-relevant path checks again immediately before deployment."
+  },
+  "cloudflare_pages": {
+    "project_name": "sirinx-co",
+    "config_file": "apps/sirinx-site/wrangler.jsonc",
+    "pages_build_output_dir": "apps/sirinx-site/dist",
+    "wrangler_command_help_verified": true,
+    "target_environment": "preview",
+    "target_branch": "staging/godmode-master-os-v2"
+  },
+  "evidence": {
+    "p087b_receipt": "reports/review/p087b/auto_visual_bot_receipt.json",
+    "p087b_result": "reports/review/p087b/auto_visual_bot_result.json",
+    "p087b_verdict": "auto_review_pass_bot_verified",
+    "p087b_second_review": "reports/mission/A2A2A_P087B_OPENCODE_SECOND_REVIEW_PASS_20260706.md",
+    "release_preflight_packet": "_A2A_QUEUE/outbox/packet_071_sirinx_website_release_preflight.json",
+    "p092a_scoped_commit_report": "reports/mission/A2A2A_P092A_SCOPED_RELEASE_EVIDENCE_COMMIT_20260707.md",
+    "p092b_p092c_push_alignment_report": "reports/mission/A2A2A_P092B_P092C_RELEASE_CANDIDATE_PUSH_AND_ALIGNMENT_20260707.md"
+  },
+  "pre_execution_checks": [
+    "git rev-parse HEAD must equal 3e5420c82d762ed94e87af59e4b727af7dc95496",
+    "git rev-parse origin/staging/godmode-master-os-v2 must equal 3e5420c82d762ed94e87af59e4b727af7dc95496",
+    "git rev-list --left-right --count origin/staging/godmode-master-os-v2...HEAD must return 0 0",
+    "git status --short -- apps/sirinx-site/src apps/sirinx-site/public apps/sirinx-site/server.mjs apps/sirinx-site/package.json apps/sirinx-site/wrangler.jsonc pnpm-lock.yaml must be empty",
+    "pnpm --filter @sirinx/site build must pass",
+    "reports/review/p087b/auto_visual_bot_receipt.json must parse and verdict must be auto_review_pass_bot_verified",
+    "reports/review/p087b/auto_visual_bot_result.json must parse and verdict must be auto_review_pass_bot_verified",
+    "Cloudflare authentication must be present without printing token values"
+  ],
+  "exact_preview_deploy_command": [
+    "cd /Users/sirinx/sirinx-os/apps/sirinx-site",
+    "pnpm build",
+    "pnpm exec wrangler pages deploy dist --project-name sirinx-co --branch staging/godmode-master-os-v2 --commit-hash 3e5420c82d762ed94e87af59e4b727af7dc95496 --commit-message \"gate: record P087B auto visual bot pass evidence (2026-07-06)\""
+  ],
+  "approval_required_before_execution": "APPROVE_P089_PREVIEW_DEPLOY_SIRINX_SITE_2026-07-07",
+  "rollback_plan": [
+    "Preview deployment creates a Cloudflare Pages deployment only; no DNS or production promotion is authorized by this packet.",
+    "If preview is bad, do not promote it. Use Cloudflare Pages deployment history to select the previous known-good preview or rerun a corrected preview deploy.",
+    "If any command targets production, DNS, R2, D1, KV, webhook, CRM, or live messaging, stop and require a separate approval packet."
+  ],
+  "blocked_actions_confirmed": [
+    "production_deploy",
+    "dns_mutation",
+    "cloudflare_r2_d1_kv_mutation",
+    "line_webhook_activation",
+    "crm_customer_storage_write",
+    "live_telegram_line_email_customer_send",
+    "git_push",
+    "provider_model_call",
+    "secret_read_or_print"
+  ],
+  "actions_performed_by_this_packet": {
+    "deploy": false,
+    "cloudflare_mutation": false,
+    "dns_mutation": false,
+    "git_push": false,
+    "live_send": false,
+    "provider_call": false,
+    "secret_read_or_print": false
+  },
+  "next_gate": "HUMAN_DECISION_ON_APPROVE_P089_PREVIEW_DEPLOY_SIRINX_SITE_2026-07-07"
+}

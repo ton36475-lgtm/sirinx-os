@@ -1,0 +1,79 @@
+{
+  "packet_id": "packet_064_sirinx_website_github_connector_recheck",
+  "created_at": "2026-07-03T02:28:11+0700",
+  "lane": "codex_builder",
+  "mode": "local_only_read_only_github_connector_recheck",
+  "scope": "apps/sirinx-site",
+  "status": "GITHUB_CONNECTOR_RECHECK_COMPLETE_LOCAL_REVIEW_STILL_BLOCKED",
+  "repository": "ton36475-lgtm/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "github_connector": {
+    "used": true,
+    "read_only": true,
+    "branch_found": true,
+    "fetched_file": "apps/sirinx-site/src/index.html",
+    "fetched_blob_sha": "4bff81afadf3994b886c61b060c66075fe4b4b52",
+    "mutation_performed": false
+  },
+  "git_metadata": {
+    "remote_branch_sha": "02524464ea97931aea1a34c559ecdec6e431dc37",
+    "local_head_sha": "aa66f263b182dceafeb16562e36064bddf40c342",
+    "local_branch_ahead_of_origin": true,
+    "website_scope_has_local_diff_from_origin": true
+  },
+  "source_comparison": {
+    "github_branch_index_title": "SIRINX - Controlled AI Operations",
+    "github_branch_index_has_solar": false,
+    "github_branch_index_has_line": false,
+    "live_url": "https://www.sirinx.co/",
+    "live_http_status": 200,
+    "live_index_title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy",
+    "live_has_solar": true,
+    "live_has_line_signal": true,
+    "live_homepage_has_line_route_link": false,
+    "live_homepage_has_qr_url": false,
+    "local_index_title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy",
+    "local_has_solar": true,
+    "local_has_line_route_link": true,
+    "local_homepage_contact_route": "/contact?interest=solar-carport"
+  },
+  "decision": {
+    "copy_github_index_to_local": false,
+    "reason": "GitHub branch index is an older Controlled AI Operations page and would roll back the Solar/LINE website upgrade.",
+    "current_review_target": "local_working_copy"
+  },
+  "verification": [
+    {
+      "command": "pnpm --filter @sirinx/site test:closed-gates",
+      "result": "passed",
+      "details": "3 checks passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:release-readiness",
+      "result": "passed",
+      "details": "1 check passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:line",
+      "result": "passed",
+      "details": "106 Playwright checks passed"
+    },
+    {
+      "command": "git diff --check origin/staging/godmode-master-os-v2 -- apps/sirinx-site docs/website _A2A_QUEUE/outbox/packet_05* _A2A_QUEUE/outbox/packet_06*",
+      "result": "passed",
+      "details": "No whitespace errors in scoped website comparison"
+    }
+  ],
+  "closed_gates": {
+    "push": "blocked",
+    "deploy": "blocked",
+    "line_webhook": "blocked",
+    "production_analytics": "blocked",
+    "crm_customer_data_storage": "blocked",
+    "customer_data_collection": "blocked",
+    "external_message_send": "blocked",
+    "production_api_key": "blocked"
+  },
+  "report": "docs/website/SIRINX_WEBSITE_GITHUB_CONNECTOR_RECHECK_2026-07-03.md",
+  "next_safe_action": "Human review local preview, scan the LINE QR on a real device, confirm existing bot/contact behavior, then grant exact deploy approval only if accepted."
+}

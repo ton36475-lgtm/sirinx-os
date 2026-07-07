@@ -1,0 +1,74 @@
+{
+  "version": "ADS_ANDROMEDA_ASSET_FACTORY_V1",
+  "project_id": "ads-andromeda-ads-queen",
+  "language": "thai_first",
+  "global_rules": [
+    "Use the Thai text lock exactly through {{thai_text_lock_block}}.",
+    "Do not create chat screenshots, fake conversations, fake testimonials, or fake platform UI.",
+    "Use premium cyber-luxury advertising account visuals without implying impossible outcomes.",
+    "Leave space for human review before public publishing."
+  ],
+  "templates": [
+    {
+      "id": "poster_cyber_queen_trust",
+      "category": "poster",
+      "title": "Cyber Queen Trust Poster",
+      "prompt": "Create a premium dark cyber-luxury poster for {{brand}}. Visual: elegant queen-inspired silhouette, neon magenta and violet rim light, secure ad-account dashboard motifs, no platform logos, no fake chat UI. Composition: centered headline area, high contrast, clean product proof mood. Thai overlay text must be exactly:\\n{{thai_text_lock_block}}\\nAudience: {{audience}}. Format: {{format}}."
+    },
+    {
+      "id": "poster_account_stability",
+      "category": "poster",
+      "title": "Account Stability Poster",
+      "prompt": "Create a professional Thai advertising account service poster for {{brand}}. Visual: stable control-room grid, glowing account cards, premium black-charcoal base, violet-pink accents, subtle shield iconography, no fake messages and no screenshots of real customer data. Thai overlay text must be exactly:\\n{{thai_text_lock_block}}\\nGoal: {{asset_goal}}. Format: {{format}}."
+    },
+    {
+      "id": "poster_support_24h",
+      "category": "poster",
+      "title": "Support 24h Poster",
+      "prompt": "Create a polished service-support poster for {{brand}}. Visual: night-shift operations desk, neon crown line art, reliable support aura, dark glass panels, clean CTA area, no fake review cards, no fake chat UI. Thai overlay text must be exactly:\\n{{thai_text_lock_block}}\\nMood: responsive, premium, calm. Format: {{format}}."
+    },
+    {
+      "id": "cover_brand_authority",
+      "category": "cover",
+      "title": "Brand Authority Cover",
+      "prompt": "Design a Facebook cover image for {{brand}} with a wide cinematic layout. Visual: black-to-charcoal cyber luxury background, crown motif, ad account control panels as abstract shapes, magenta-violet glow, spacious Thai text area. Thai overlay text must be exactly:\\n{{thai_text_lock_block}}\\nDo not show simulated conversations, platform-confusing interface, or customer data. Format: {{format}}."
+    },
+    {
+      "id": "cover_campaign_launch",
+      "category": "cover",
+      "title": "Campaign Launch Cover",
+      "prompt": "Design a launch cover for {{brand}}. Visual: high-end digital campaign command center, queen/crown accent, luminous cards representing ad accounts, polished SaaS-like layout, dark base with pink-violet highlights. Thai overlay text must be exactly:\\n{{thai_text_lock_block}}\\nUse clean space for CTA and avoid exaggerated outcome claims. Format: {{format}}."
+    },
+    {
+      "id": "cover_line_oa_rich_menu",
+      "category": "cover",
+      "title": "LINE OA Rich Menu Cover",
+      "prompt": "Design a LINE OA cover/rich-menu hero for {{brand}}. Visual: premium ad-account support hub, crown emblem, compact service tiles, dark cyber-luxury style, no fake conversation screenshot. Thai overlay text must be exactly:\\n{{thai_text_lock_block}}\\nButtons may be abstract placeholders only: {{cta_labels}}. Format: {{format}}."
+    },
+    {
+      "id": "video_opening_queen_signal",
+      "category": "video_storyboard",
+      "title": "Queen Signal Opening",
+      "prompt": "Create a 10-second vertical video storyboard for {{brand}}. Scene 1: dark neon crown signal appears. Scene 2: abstract ad-account cards align into a secure grid. Scene 3: final product lockup with exact Thai overlay text:\\n{{thai_text_lock_block}}\\nMotion: premium, smooth, cyber-luxury. Do not show fake chat UI or real platform screens. Format: {{format}}."
+    },
+    {
+      "id": "video_stability_sequence",
+      "category": "video_storyboard",
+      "title": "Stability Sequence",
+      "prompt": "Create a 12-second vertical video storyboard for {{brand}}. Scene 1: unstable ad chaos represented by abstract red noise, no real platform UI. Scene 2: ADS Queen control layer stabilizes glowing account cards. Scene 3: exact Thai overlay text appears:\\n{{thai_text_lock_block}}\\nTone: trustworthy, premium, energetic. Format: {{format}}."
+    },
+    {
+      "id": "video_support_loop",
+      "category": "video_storyboard",
+      "title": "Support Loop",
+      "prompt": "Create an 8-second looping short video storyboard for {{brand}}. Scene 1: neon clock and support signal. Scene 2: crown icon pulses over abstract service panels. Scene 3: CTA lockup with exact Thai overlay text:\\n{{thai_text_lock_block}}\\nAvoid fake chats, fake reviews, and customer data. Format: {{format}}."
+    }
+  ],
+  "sample_data": {
+    "brand": "ADS Queen",
+    "audience": "เจ้าของธุรกิจและทีมยิงแอดที่ต้องการบัญชีโฆษณาคุณภาพสูง",
+    "asset_goal": "สร้างความเชื่อมั่นก่อนทักแชท",
+    "format": "1080x1350 poster / 1920x720 cover / 1080x1920 vertical video as appropriate",
+    "cta_labels": "ทักแชท, ดูแพ็กเกจ, ซัพพอร์ต"
+  }
+}

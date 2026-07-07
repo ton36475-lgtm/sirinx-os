@@ -1,0 +1,49 @@
+mission_name: GHOSTCLAW_CODING_MODEL_ROUTER_V2_1
+repo: /Users/sirinx/sirinx-os
+mode: local_safe_receipt_gated
+
+control:
+  commander: Hermes
+  orchestrator: Fable_or_Claude_Code
+  builder: Codex
+  reviewer: OpenCode
+  validator: Validator_Worker
+  veto: Policy_Guardian
+
+env:
+  openrouter_key: OPENROUTER_API_KEY
+  local_ollama_base_url: OLLAMA_BASE_URL
+  custom_gateway_base_url: CUSTOM_LLM_GATEWAY_BASE_URL
+
+policy:
+  no_push: true
+  no_deploy: true
+  no_secret_read: true
+  no_customer_send: true
+  no_provider_limit_bypass: true
+  no_account_rotation_for_evasion: true
+  require_receipt: true
+  require_openspec_for_t2_plus: true
+
+model_lanes:
+  free_patch:
+    model_ref: openrouter/poolside/laguna-m.1:free
+    permissions: local_patch_draft
+  free_repo_coder:
+    model_ref: openrouter/qwen/qwen3-coder:free
+    permissions: local_patch_draft
+  long_horizon_code:
+    model_ref: openrouter/moonshotai/kimi-k2.7-code
+    permissions: budget_gated
+  architecture_reasoning:
+    model_ref: openrouter/deepseek/deepseek-v3.2-exp
+    permissions: budget_gated
+  fable5_orchestrator:
+    model_ref: openrouter/anthropic/claude-fable-5
+    permissions: explicit_high_reasoning_gate_only
+  repo_map_review:
+    model_ref: custom/glm-5.2
+    permissions: review_only
+  local_light:
+    model_ref: ollama/${LOCAL_QWEN_MODEL}
+    permissions: local_only

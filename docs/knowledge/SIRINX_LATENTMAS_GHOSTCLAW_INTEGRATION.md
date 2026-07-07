@@ -1,112 +1,100 @@
-# SIRINX LatentMAS × GhostClaw Integration
+# SIRINX LatentMAS — GHOSTCLAW Integration
 
-**Status:** ACTIVE
-**Authority:** ADR-LATENT-001
+**Phase:** 9
+**Status:** Architecture specification only — no live inference
+**LATENTMAS_LIVE_ENABLED:** false
 
 ---
 
 ## 1. Dual-Plane Architecture
 
+LatentMAS operates on a **dual-plane** model:
+
+| Plane | Authority | Description |
+|---|---|---|
+| **Control Plane** | Source of Truth | JSON-based task envelopes, receipts, and audit trails. All decisions are recorded here. |
+| **Latent Plane** | Shadow/Acceleration Only | KV cache acceleration for inference. Does not carry authoritative state. |
+| **Safety Plane** | Final Authority | Policy Guardian and KOB Validator. Overrides all other planes. |
+
+Invariant: `JSON receipt + policy gate > latent score`.
+
+Contract markers:
+
+- `json_control_plane_source_of_truth`
+- `latent_plane_shadow_only`
+- `safety_policy_plane_final_authority`
+
+## 2. Key Rules
+
+### 2.1 No KV-Only Protocol
+
+- All authoritative communication goes through the JSON control plane
+- KV cache in the latent plane is a **shadow** — it cannot be the sole protocol
+- `kv_only_protocol` = Tier X hard violation
+
+### 2.2 Exact KV Compatibility Gate
+
+- KV cache compatibility requires **exact match** between control and latent planes
+- This is the `exact KV compatibility gate`.
+- If compatibility fails, the latent plane is **disabled** and control plane continues alone
+- No degraded KV protocol is accepted
+
+### 2.3 Debug Probe = Parallel Text Probe
+
+- Debug probes for latent plane issues use **parallel text probes** — NOT `decode_from_kv`
+- The runtime marker is `parallel_text_probe`.
+- Direct KV decoding is prohibited as it bypasses the control plane's authority
+
+### 2.4 No Guaranteed Performance Claims
+
+- **No guaranteed 4.3x speedup** claim
+- **No guaranteed 83.7% accuracy** claim
+- **No guaranteed +13.3% improvement** claim
+- All performance metrics are **benchmarked, not guaranteed**
+
+### 2.5 Safety Rules
+
+- `LATENTMAS_LIVE_ENABLED = false` (default)
+- `model_download_allowed = false`
+- `gpu_live_inference_allowed = false`
+- No model download
+- No GPU live inference
+- No secret access
+- The Policy Guardian can override any latent plane proposal
+- KOB Validator issues safety verdicts for any latent plane activation request
+
+## 3. Manifest
+
+The LatentMAS manifest is stored at:
+
 ```
-CONTROL PLANE (JSON)  = source of truth
-LATENT PLANE (KV)     = shadow / acceleration only
-SAFETY PLANE          = always active, final authority
-```
-
-### Invariant
-
-```
-JSON receipt + policy gate > latent score  (always)
-```
-
-Phase 9 contract lock:
-
-- `json_control_plane_source_of_truth` = true
-- `latent_plane_shadow_only` = true
-- `safety_policy_plane_final_authority` = true
-- `kv_only_protocol_allowed` = false
-- `LATENTMAS_LIVE_ENABLED` = false
-- `model_download_allowed` = false
-- `gpu_live_inference_allowed` = false
-
-## 2. Plane Definitions
-
-### Control Plane (JSON)
-- Source of truth for all decisions
-- Receipts, decisions, evidence packs, worker messages
-- `autonomous_approval` metadata
-- `action_tier_cap` enforcement
-
-### Latent Plane (KV)
-- Shadow / acceleration only
-- Never authoritative
-- May provide `latent_bonus` to `display_score`
-- `effective_score` remains capped at 100
-- Fallback to JSON control plane on any mismatch
-
-### Safety Plane
-- Always active
-- Policy gate is final authority
-- Hard violations force tier X
-- No score (MoA, latent, confidence) can override
-- Blocks production, provider calls, model downloads, GPU live inference, secret reads, and public sends unless an explicit separate gate exists
-
-## 3. KV Compatibility Gate
-
-A KV bundle is compatible only if all 12 fields match exactly and the backend exposes `past_key_values`. This is an exact KV compatibility gate, not a best-effort decode path:
-
-```python
-KV_REQUIRED_FIELDS = [
-  "model_id", "model_revision", "tokenizer_hash", "config_hash",
-  "num_layers", "hidden_size", "num_attention_heads", "num_key_value_heads",
-  "rope_scaling", "dtype", "quantization_mode", "cache_schema_hash"
-]
-```
-
-On mismatch: fallback to JSON text Brainstorm, log mismatch, `latent_bonus = 0`.
-The debug probe remains `parallel_text_probe`; it must not call `decode_from_kv`.
-
-## 4. Debug Probe
-
-- Mode: `parallel_text_probe`
-- `decode_from_kv` = **false**
-- Debug probe runs in parallel with text probe, not from KV
-- No KV-only protocol is allowed
-
-## 5. Claims Lock
-
-Until a local benchmark is run, never state these as facts:
-- "4.3x faster inference"
-- "83.7% fewer tokens"
-- "+13.3% accuracy"
-- "guaranteed speedup"
-
-Allowed: "empirical results from arXiv:2511.20639v3 on specific benchmarks", "shadow latent metrics (not yet validated)".
-
-## 6. Auto-Approve Score Invariant
-
-```python
-effective_score = min(100, base_brainstorm + latent_bonus + standard_modifiers)
+.ghostclaw_runtime/latent/manifest.json
 ```
 
-- `display_score` may exceed 100 for confidence signaling only
-- `effective_score` is capped at 100
-- Base tier: A≥90, B≥75, C≥60, D<60
-- `action_tier_cap` overrides base tier: `final_tier = min(base_tier, cap)`
-- Hard violations force tier X
+It declares:
+- Control plane = source of truth (JSON)
+- Latent plane = shadow/acceleration only
+- Safety plane = final authority
+- All hard rules (no KV-only, no guaranteed claims, no live inference)
 
-## 7. Runtime Directory
+## 4. Worker Integration
 
-LatentMAS runtime files are stored under `.ghostclaw_runtime/latent/`.
+| Worker | Role |
+|---|---|
+| receipt_memory_worker | Archives latent plane manifests and evidence |
+| policy_guardian | Enforces safety plane authority over latent plane |
+| kob_validator | Issues safety verdict for latent plane activation |
+| model_router | Routes latent-plane tasks to appropriate model lanes (metadata only) |
 
-Runtime manifests:
+## 5. Validation
 
-- `.ghostclaw_runtime/latent/latent-manifest.json`
-- `.ghostclaw_runtime/latent/control-plane-manifest.json`
-- `.ghostclaw_runtime/latent/kv-compatibility-gate.json`
+- LatentMAS validation (Phase 15): `cargo check --offline --locked` if Cargo.toml exists
+- If cargo needs fetch: auto-block, record `blocked_by_missing_cached_dependency`
+- If no Cargo.toml: `skipped_no_latentmas_crate`
+- `LATENTMAS_LIVE_ENABLED = false` always enforced
 
-## 8. Terminology
+## 6. Gateway L6
 
-- `brainstorm` = canonical
-- `beststorm` = deprecated legacy alias (inbound read only)
-- `beststrom` = invalid typo (reject)
+- If `services/latentmas-gateway` exists: `pnpm --filter latentmas-gateway test`
+- If missing: `skipped_no_gateway`
+- No secrets read, no installs

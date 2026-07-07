@@ -66,6 +66,8 @@
     "ghostclaw-project-queue:test": "pnpm exec vitest run scripts/ghostclaw_project_queue_dispatch_preview.test.mjs",
     "ghostclaw-a2a:bus-watch": "python3 scripts/ghostclaw_a2a_bus_watcher.py --once",
     "ghostclaw-a2a:bus-watch:test": "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_ghostclaw_a2a_bus_watcher -v",
+    "ghostclaw-a2a:gate-lock-audit": "python3 scripts/ghostclaw_a2a_gate_lock_audit.py --write",
+    "ghostclaw-a2a:gate-lock-audit:test": "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_ghostclaw_a2a_gate_lock_audit",
     "policy-core:test": "pnpm exec vitest run packages/policy-core/src/index.test.mjs",
     "policy-core:api-test": "pnpm exec vitest run services/dev-control-api/src/policy-core-status.test.mjs",
     "hermes-inbox:test": "pnpm exec vitest run services/hermes-api/src/inbox.test.mjs",

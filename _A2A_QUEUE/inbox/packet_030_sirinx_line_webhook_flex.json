@@ -1,0 +1,83 @@
+{
+  "project": "sirinx-line-bot",
+  "priority": "P0",
+  "title": "Codex: LINE Webhook Handler + Flex Message Builder",
+  "agent": "codex",
+  "status": "inbox",
+  "risk": "safe",
+  "input": [
+    ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
+    ".hermes/hermes-agent/plugins/platforms/line/sirinx/"
+  ],
+  "output": [
+    ".hermes/hermes-agent/plugins/platforms/line/sirinx/flex_templates.py",
+    ".hermes/hermes-agent/plugins/platforms/line/sirinx/__init__.py"
+  ],
+  "approval_required": false,
+  "created_at": "2026-07-07T12:00:00.000Z",
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-030",
+    "correlation_id": "sirinx-line-bot-030",
+    "phase": "build:flex_webhook",
+    "from": {
+      "agent": "human",
+      "role": "product-owner"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build-captain"
+    },
+    "action_requested": "build",
+    "context": {
+      "goal": "Build SIRINX LINE Official Account webhook handler integration and Flex Message template builder module inside the Hermes LINE platform plugin.",
+      "files": [
+        ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/"
+      ],
+      "lane": ".hermes/hermes-agent/plugins/platforms/line",
+      "constraints": [
+        "dry_run=false",
+        "runtime_queue_execution=false",
+        "provider_call=false",
+        "external_message_send=false",
+        "deploy=false",
+        "push=false",
+        "secret_read=false",
+        "no_live_send",
+        "no_blanket_approval",
+        "all_new_code_in_plugins/platforms/line/sirinx/",
+        "adapter.py_changes_only_integration_hook",
+        "zero_core_hermes_edits_outside_plugins/"
+      ],
+      "deliverables": [
+        "SirinxBot class in sirinx/__init__.py that orchestrates intent dispatch, ROI flow, and governance",
+        "flex_templates.py with LINE Flex Message JSON builders (ROI result bubble, welcome bubble, confirmation, carousel, input request, quick reply)",
+        "Lazy-loaded sirinx_bot property in LineAdapter",
+        "Message interception in _handle_message_event() before agent round-trip",
+        "All Flex Message bubbles styled with SIRINX brand colors (#00D4AA primary, #0a1628 dark, #1a2744 surface)"
+      ],
+      "command_source": "mission",
+      "license_policy": {
+        "requested_license": "MIT",
+        "repo_license_file_present": false,
+        "assertion": "intent_only_until_license_file_exists"
+      }
+    },
+    "response_expected": {
+      "format": "packet_and_code_preview",
+      "within_lane": ".hermes/hermes-agent/plugins/platforms/line",
+      "max_turns": 2
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-07T12:00:00.000Z",
+    "ttl_seconds": 1800,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "notes": "SirinxBot integrated as lazy-loaded property in LineAdapter; intercepts text messages before Hermes agent round-trip; all Flex Messages use SIRINX brand design tokens",
+  "id": "packet_030_sirinx_line_webhook_flex"
+}

@@ -59,9 +59,7 @@
   "merge_script_execution": false,
   "notes": "Read-only filename/TCP probe only. Candidate discovery does not clear blockers or authorize actions.",
   "scanned_roots": [
-    "/Users/sirinx/Downloads",
-    "/Users/sirinx/sirinx-os",
-    "/Users/sirinx/project-hermes"
+    "."
   ],
   "schema": "sirinx.active_goal.read_only_probe.v1",
   "secret_like_files_read": [],

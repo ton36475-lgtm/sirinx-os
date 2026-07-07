@@ -1,0 +1,29 @@
+spec_id: P087B_AUTO_VISUAL_BOT_CHECK
+mission_id: P087B
+mode: receipt_visibility_first
+checks:
+  - visual_regression
+  - accessibility_bot
+  - lighthouse_bot
+  - cta_link_bot
+  - form_dry_run_bot
+  - responsive_bot
+  - console_error_bot
+  - seo_metadata_bot
+  - receipt_summary
+exit_criteria: all required receipts exist and verdict is PASS or explicit blocked findings are recorded
+allowed_actions:
+  - read_repo
+  - read_http
+  - write_reports
+  - test_sandbox
+blocked_actions:
+  - deploy
+  - git_push
+  - cloudflare_mutation
+  - live_send_line
+  - live_send_telegram
+  - live_send_email
+  - secret_read
+  - secret_print
+

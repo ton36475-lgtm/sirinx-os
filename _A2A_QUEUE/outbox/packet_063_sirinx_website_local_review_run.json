@@ -1,0 +1,49 @@
+{
+  "packet_id": "packet_063_sirinx_website_local_review_run",
+  "created_at": "2026-07-03T03:05:00+0700",
+  "status": "LOCAL_REVIEW_READY_BLOCKED_PENDING_HUMAN_INPUT",
+  "mode": "local_only_review_run_no_server_no_push_no_deploy",
+  "generated_packets": [
+    "_A2A_QUEUE/outbox/packet_060_sirinx_website_master_plan_current_audit.json",
+    "_A2A_QUEUE/outbox/packet_061_sirinx_website_human_review_board.json",
+    "_A2A_QUEUE/outbox/packet_062_sirinx_website_manual_review_gate.json"
+  ],
+  "companion_packets": [
+    "_A2A_QUEUE/outbox/packet_064_sirinx_website_github_connector_recheck.json",
+    "_A2A_QUEUE/outbox/packet_065_sirinx_website_github_live_local_recheck_automation.json",
+    "_A2A_QUEUE/outbox/packet_066_sirinx_website_line_qr_link_recheck.json",
+    "_A2A_QUEUE/outbox/packet_067_sirinx_website_manual_review_intake.json",
+    "_A2A_QUEUE/outbox/packet_069_sirinx_website_manual_review_evidence_contract.json",
+    "_A2A_QUEUE/outbox/packet_070_sirinx_website_local_preview_health.json",
+    "_A2A_QUEUE/outbox/packet_072_sirinx_website_manual_review_receipt.json"
+  ],
+  "report": "docs/website/SIRINX_WEBSITE_LOCAL_REVIEW_RUN_2026-07-03.md",
+  "board": "docs/website/SIRINX_WEBSITE_HUMAN_REVIEW_BOARD_2026-07-03.html",
+  "master_plan_status": "LOCAL_EVIDENCE_READY_FOR_HUMAN_REVIEW_NOT_COMPLETE",
+  "review_board_status": "READY_FOR_HUMAN_REVIEW",
+  "manual_review_gate_status": "BLOCKED_PENDING_HUMAN_REVIEW",
+  "manual_checks_total": 17,
+  "manual_checks_passed": 0,
+  "deploy_gate": "BLOCKED_FOR_DEPLOY",
+  "push_gate": "BLOCKED_UNTIL_EXPLICIT_PUSH_APPROVAL",
+  "completion_claim_allowed": false,
+  "local_preview_command": "pnpm --filter @sirinx/site preview",
+  "local_preview_url": "http://127.0.0.1:8730/",
+  "closed_gates": [
+    "deploy",
+    "push",
+    "line_webhook",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "customer_data_collection",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "public_tunnel",
+    "package_install",
+    "production_mutation",
+    "database_write_or_migration",
+    "secret_or_env_read"
+  ],
+  "next_safe_action": "Open the local review board and preview, complete the manual review template with real evidence, then rerun pnpm --filter @sirinx/site review:local."
+}

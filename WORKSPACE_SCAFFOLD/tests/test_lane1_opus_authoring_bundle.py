@@ -34,7 +34,7 @@ class Lane1OpusAuthoringBundleTests(unittest.TestCase):
         self.assertTrue(BUNDLE_DOC.exists(), f"Missing authoring bundle doc: {BUNDLE_DOC}")
         self.assertTrue(PACKET.exists(), f"Missing authoring bundle packet: {PACKET}")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus packet exists unexpectedly")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_bundle_is_authoring_input_not_final_packet_or_decision(self):
         bundle = self.load_bundle()
@@ -120,11 +120,11 @@ class Lane1OpusAuthoringBundleTests(unittest.TestCase):
             status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         packet = next(item for item in status["packets"] if item["id"] == "packet_019")
@@ -138,7 +138,7 @@ class Lane1OpusAuthoringBundleTests(unittest.TestCase):
         self.assertFalse(packet["lane2_authorized"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29", text)
+        self.assertIn("packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48", text)
         self.assertIn(str(PACKET.relative_to(ROOT)), text)
 
     def test_status_surfaces_link_authoring_bundle(self):

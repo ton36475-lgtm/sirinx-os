@@ -1,0 +1,141 @@
+{
+  "index_id": "GHOSTCLAW_RUST_CORE_EVIDENCE_INDEX_20260705",
+  "generated_at": "2026-07-05T17:22:23+0700",
+  "status": "PASS_LOCAL_SAFE_EVIDENCE_INDEX_CREATED",
+  "repo": "/Users/sirinx/sirinx-os",
+  "crate": "/Users/sirinx/sirinx-os/crates/ghostclaw_migration_core",
+  "mode": "local_safe_report_only",
+  "evidence_chain": [
+    {
+      "packet": "P085",
+      "status": "PASS_LOCAL_SAFE_RUST_CORE_CREATED",
+      "focus": "rust_command_policy_receipt_core",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P085_GHOSTCLAW_RUST_MIGRATION_CORE_20260704.md"
+    },
+    {
+      "packet": "P086",
+      "status": "PASS_LOCAL_SAFE_RUST_ADAPTERS_CREATED",
+      "focus": "dry_run_adapter_seams",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P086_RUST_ADAPTER_EXTRACTION_DRY_RUN_20260704.md"
+    },
+    {
+      "packet": "P087",
+      "status": "PASS_LOCAL_SAFE_PERSISTENT_ADAPTER_PARITY",
+      "focus": "persistent_adapter_parity",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P087_RUST_PERSISTENT_ADAPTER_PARITY_20260705.md"
+    },
+    {
+      "packet": "P088",
+      "status": "PASS_LOCAL_SAFE_RESPONSE_FIXTURES_CREATED",
+      "focus": "adapter_response_fixture_expansion",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P088_RUST_ADAPTER_RESPONSE_FIXTURE_EXPANSION_20260705.md"
+    },
+    {
+      "packet": "P089",
+      "status": "PASS_LOCAL_SAFE_RESPONSE_BUNDLE_PACKET_CREATED",
+      "focus": "adapter_response_bundle_packet",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P089_RUST_ADAPTER_RESPONSE_BUNDLE_PACKET_20260705.md"
+    },
+    {
+      "packet": "P090",
+      "status": "PASS_LOCAL_SAFE_BUNDLE_WRITER_READ_REPORT_CREATED",
+      "focus": "bundle_writer_read_report",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P090_RUST_BUNDLE_WRITER_AND_READ_REPORT_20260705.md"
+    },
+    {
+      "packet": "P091",
+      "status": "PASS_LOCAL_SAFE_BUNDLE_SELECTION_HELPER_CREATED",
+      "focus": "bundle_selection_helper",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P091_RUST_BUNDLE_SELECTION_HELPER_20260705.md"
+    },
+    {
+      "packet": "P092",
+      "status": "PASS_LOCAL_SAFE_ORCHESTRATOR_STATUS_VIEW_CREATED",
+      "focus": "orchestrator_status_view",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P092_RUST_ORCHESTRATOR_STATUS_VIEW_20260705.md"
+    },
+    {
+      "packet": "P093",
+      "status": "PASS_LOCAL_SAFE_STATUS_SNAPSHOT_WRITER_CREATED",
+      "focus": "status_snapshot_writer",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P093_RUST_ORCHESTRATOR_STATUS_SNAPSHOT_WRITER_20260705.md"
+    },
+    {
+      "packet": "P094",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "status_freshness_guard",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P094_RUST_STATUS_FRESHNESS_GUARD_20260705.md"
+    },
+    {
+      "packet": "P095",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "selected_bundle_review_packet_export",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P095_RUST_SELECTED_BUNDLE_REVIEW_PACKET_EXPORT_20260705.md"
+    },
+    {
+      "packet": "P096",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "review_packet_store",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P096_RUST_REVIEW_PACKET_STORE_20260705.md"
+    },
+    {
+      "packet": "P097",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "review_outbox_status",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P097_RUST_REVIEW_OUTBOX_STATUS_20260705.md"
+    },
+    {
+      "packet": "P098",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "review_packet_consume_preview",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P098_RUST_REVIEW_PACKET_CONSUME_PREVIEW_20260705.md"
+    },
+    {
+      "packet": "P099",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "review_worker_handoff_envelope",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P099_RUST_REVIEW_WORKER_HANDOFF_ENVELOPE_20260705.md"
+    },
+    {
+      "packet": "P100",
+      "status": "PASS_LOCAL_SAFE_IMPLEMENTED",
+      "focus": "review_worker_handoff_status",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P100_RUST_REVIEW_WORKER_HANDOFF_STATUS_20260705.md"
+    },
+    {
+      "packet": "P231",
+      "status": "PASS_LOCAL_SAFE_RUST_CORE_CURRENT_VALIDATION",
+      "focus": "current_machine_validation",
+      "report": "/Users/sirinx/sirinx-os/reports/mission/A2A2A_P231_P085_RUST_CORE_CURRENT_VALIDATION_20260705.md",
+      "receipt": "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/receipts/A2A2A-P231-P085-RUST-CORE-CURRENT-VALIDATION-20260705.json"
+    }
+  ],
+  "latest_validation": {
+    "source_packet": "P231",
+    "cargo_fmt_check": "pass",
+    "cargo_clippy_all_targets_all_features_deny_warnings": "pass",
+    "cargo_test": {
+      "status": "pass",
+      "tests_passed": 75
+    },
+    "python_oracle_parity": "pass",
+    "cli_policy_smoke": "pass",
+    "scoped_diff_check": "pass",
+    "scoped_secret_scan": "pass_synthetic_redaction_fixtures_only"
+  },
+  "live_actions": {
+    "telegram_live_send": false,
+    "opencode_invocation": false,
+    "codex_live_execution": false,
+    "provider_model_call": false,
+    "repo_customer_data_external_routing": false,
+    "secret_read_or_print": false,
+    "install": false,
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "cloudflare_r2_mutation": false
+  },
+  "next_functional_gate": "P101_RUST_REVIEW_HANDOFF_BUNDLE_MANIFEST",
+  "recommended_current_sequence_packet": "P233_RUST_REVIEW_HANDOFF_BUNDLE_MANIFEST_DRY_RUN"
+}

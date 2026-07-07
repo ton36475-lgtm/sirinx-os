@@ -1,0 +1,48 @@
+{
+  "packet_id": "packet_055_sirinx_website_check_guardrail_receipt",
+  "created_at": "2026-07-03T01:50:00+07:00",
+  "status": "verified_locally",
+  "mode": "local_only_no_stage_no_commit_no_push_no_deploy",
+  "scope": "SIRINX website check guardrail hardening",
+  "changes": [
+    "Extended apps/sirinx-site/scripts/check.mjs to require current website evidence documents.",
+    "Extended apps/sirinx-site/scripts/check.mjs to require and parse website A2A packets packet_039 through packet_055.",
+    "Added build-output guardrails so .bak files and _partials source files cannot leak into dist.",
+    "Updated the local evidence packet to record the new check guardrail receipt."
+  ],
+  "guardrails": [
+    "Review staging manifest must exist and include exclude guidance for floating-contact.bak.html.",
+    "GitHub baseline review must exist and keep push/deploy approval separate.",
+    "Live-index sync report must exist and record the live homepage source.",
+    "Website A2A packets must parse as JSON.",
+    "Build output must not include backup files or source partials."
+  ],
+  "verification": [
+    "packet_055 JSON parse: passed",
+    "git diff --check on touched guardrail files: passed",
+    "pnpm --filter @sirinx/site build: passed",
+    "pnpm --filter @sirinx/site check: passed, 18 files",
+    "pnpm --filter @sirinx/site test:closed-gates: passed, 3 tests",
+    "pnpm --filter @sirinx/site test:server: passed, 2 tests",
+    "pnpm --filter @sirinx/site test:line: passed, 106 Playwright checks",
+    "scoped stale-text scan for old test counts and pending verification text: no matches",
+    "scoped secret-like scan: no matches"
+  ],
+  "closed_gates": [
+    "deploy",
+    "push",
+    "line_webhook",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "customer_data_collection",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "public_tunnel",
+    "package_install",
+    "production_mutation",
+    "database_write_or_migration",
+    "secret_or_env_read"
+  ],
+  "next_safe_action": "Run fresh local build, check, packet parse, diff check, and scoped secret scan; then keep human review and deploy/push approval as separate gates."
+}

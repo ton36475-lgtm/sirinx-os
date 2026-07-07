@@ -1,0 +1,27 @@
+spec_id: P081_RUST_MIGRATION
+mission_id: P081
+start_state: SPEC_INTAKE
+auto_until:
+  - SPEC_INTAKE
+  - CONTRACT_EXTRACT
+  - STRATEGY_DESIGN
+stop_at:
+  - FILE_LEASE_APPROVAL
+after_approval:
+  - IMPLEMENT
+  - VALIDATE
+  - REVIEW
+stop_again_at:
+  - HUMAN_DECISION
+never_auto:
+  - PUSH_DEPLOY
+blocked_actions:
+  - deploy
+  - git_push
+  - cloudflare_mutation
+  - secret_read
+  - secret_print
+  - live_send_telegram
+  - live_send_line
+  - live_send_email
+

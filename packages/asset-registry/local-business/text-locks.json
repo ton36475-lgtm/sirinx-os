@@ -1,0 +1,59 @@
+{
+  "pack_id": "local-business-promo-v1",
+  "text_lock_policy": "exact_public_display_text_required",
+  "projects": [
+    {
+      "project_id": "hiazoom_salapao",
+      "required_text": "เฮียซูมซาลาเปา",
+      "allowed_aliases": [],
+      "forbidden_typos": [
+        "เฮียซูมซาลาเป่า",
+        "เฮียซูม ซาลาเปา",
+        "เฮียซูมซาลาเปาา"
+      ]
+    },
+    {
+      "project_id": "lungbank_charcoal_red_pork",
+      "required_text": "ข้าวหมูแดงลุงแบงค์ เตาถ่าน",
+      "source_alias": "ข้าวหมูแดงลุงแบงค์_เตาถ่าน",
+      "allowed_aliases": [
+        "ข้าวหมูแดงลุงแบงค์_เตาถ่าน"
+      ],
+      "forbidden_typos": [
+        "ข้าวหมูแดงลุงแบง",
+        "ข้าวหมูแดงลุงแบงค์เตาถ่าน",
+        "ข้าวหมูแดงลุงแบงค์ เตาถาน"
+      ]
+    },
+    {
+      "project_id": "tam_mia_sang",
+      "required_text": "ตามเมียสั่ง",
+      "allowed_aliases": [],
+      "forbidden_typos": [
+        "ตามเมียสัง",
+        "ตามเมียสั่่ง",
+        "ตามเมียสัง่"
+      ]
+    },
+    {
+      "project_id": "tree_sale_yangna",
+      "required_text": "tree_sale_yangna",
+      "thai_descriptor": "ต้นยางนา",
+      "allowed_aliases": [],
+      "forbidden_typos": [
+        "tree-sale-yangna",
+        "tree sale yangna",
+        "tree_sale_yanga"
+      ]
+    }
+  ],
+  "blocked_visual_patterns": [
+    "fake chat UI",
+    "private system screenshot",
+    "internal dashboard",
+    "cyberpunk",
+    "cartoon",
+    "anime",
+    "exaggerated income claim"
+  ]
+}

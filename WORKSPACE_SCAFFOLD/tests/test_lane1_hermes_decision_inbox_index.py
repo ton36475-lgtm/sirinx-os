@@ -13,11 +13,11 @@ DECISION_FILE = ROOT / "docs" / "knowledge" / "SIRINX_GHOSTCLAW_LANE1_HERMES_REV
 class Lane1HermesDecisionInboxIndexTests(unittest.TestCase):
     """Ensure Hermes has a single local-only inbox view without implicit approval."""
 
-    def test_index_files_exist_without_final_packet_or_decision(self):
+    def test_index_files_exist_with_decision_but_without_final_packet(self):
         self.assertTrue(INDEX_JSON.exists(), f"Missing JSON index: {INDEX_JSON}")
         self.assertTrue(INDEX_DOC.exists(), f"Missing Markdown index: {INDEX_DOC}")
         self.assertFalse(FINAL_PACKET.exists(), "Final Opus packet exists unexpectedly")
-        self.assertFalse(DECISION_FILE.exists(), "Hermes decision file exists unexpectedly")
+        self.assertTrue(DECISION_FILE.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_json_index_points_to_current_actionable_packet(self):
         index = json.loads(INDEX_JSON.read_text(encoding="utf-8"))

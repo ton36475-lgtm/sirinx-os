@@ -1,0 +1,4 @@
+analytics_id,design_id,upload_date,product_type,price,units_sold,royalty,external_traffic_flag,ad_spend,net_profit_estimate,iteration_decision,next_action
+ANA-001,DES-001,OWNER_ACTION_PENDING,Standard t-shirt,19.99,0,0,planned,0,0,WAIT_FOR_OWNER_PUBLISH,manual review and owner publish decision
+ANA-002,DES-002,OWNER_ACTION_PENDING,Pullover hoodie,34.99,0,0,planned,0,0,REVISE_BEFORE_PUBLISH,fix contrast and rerun QC
+ANA-003,DES-003,OWNER_ACTION_PENDING,Tote bag,18.99,0,0,planned,0,0,PUBLISH_READY_OWNER_ACTION,owner manual review

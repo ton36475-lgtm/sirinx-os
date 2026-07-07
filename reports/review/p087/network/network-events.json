@@ -1,0 +1,862 @@
+[
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/line/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/contact/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/projects/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/trust-center/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/quote/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/roi-calculator/",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-390"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/line/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/contact/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/projects/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/trust-center/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/quote/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/roi-calculator/",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "mobile-430"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/line/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/contact/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/projects/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/trust-center/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/quote/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/roi-calculator/",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "tablet-768"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/line/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/contact/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/projects/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/trust-center/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/quote/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/roi-calculator/",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/styles.css",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/app.js",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "http://127.0.0.1:18741/assets/optimized/solar-carport-hero-1280.jpg",
+    "viewport": "desktop-1440"
+  },
+  {
+    "method": "GET",
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "viewport": "desktop-1440"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "source": "task_codex_opencode_handoff_20260703",
+  "target": "agent_engineering",
+  "type": "routes_to",
+  "properties": {
+    "lane": "codex",
+    "mode": "local_safe_validation"
+  }
+}
+

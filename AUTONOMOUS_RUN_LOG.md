@@ -2782,3 +2782,246 @@ Verified A2A2A smoke test evidence from the live runtime probe:
 - **Status:** completed
 - **Overall:** pass
 - **Steps:** 10
+
+---
+
+## Run 2026-06-30T10:44:00+07:00 — Triple Mission Dispatch + Hermes Full Auto System
+
+- **Agent:** Hermes Commander
+- **Mode:** full_auto_local_first, autonomous_mutual_approval
+- **Scope:** Dispatch 3 missions, create cronjob, kanban, obsidian brain, validate all A2A2A evidence
+
+### Missions Dispatched
+
+1. **MERCH-DASH-V1-AUTO-20260630-001** — Merch Automation Dashboard v1 for Amazon Merch on Demand
+2. **GC-FULLAUTO-HERMES-SUBAGENT-SWARM-2026-06-30-V5** — Full Hermes Agent Team + SubAgent swarm
+3. **GC-HERMES-FULL-AUTO-MAC-MINI-M2-2026-06-30** — Full auto Mac mini M2 command system
+
+### Hermes Features Activated
+
+- **Cronjob:** ghostclaw-a2a-heartbeat (job 2195036d7ed5, every 5m, deliver local)
+- **Kanban Board:** GHOSTCLAW/KANBAN.md (5 columns, 12 cards, 9 done, 3 in progress)
+- **Obsidian Brain:** 3 notes in _OBSIDIAN_GHOSTCLAW_BRAIN/ + brain_index.json
+- **Scheduler:** .ghostclaw_runtime/scheduler/hermes-schedule.yaml (7 schedules)
+- **Worker Registry:** 18 workers (v3.0.0) in GHOSTCLAW/workers/registry/worker-registry.json
+
+### Validation Results
+
+- JSON schemas: all_pass (10 templates + worker-registry + brain-index + latent-manifest)
+- Git diff check: clean (no whitespace errors)
+- Worker count: 18 registered
+- Security: no secrets, no .env references, no hardcoded credentials
+
+### Dispatch Packets Written
+
+- .ghostclaw_runtime/a2a2a/inbox/hermes/MERCH-DASH-V1-AUTO-20260630-001.dispatch.json
+- .ghostclaw_runtime/a2a2a/inbox/hermes/GC-FULLAUTO-HERMES-SWARM.dispatch.json
+- .ghostclaw_runtime/a2a2a/inbox/hermes/GC-HERMES-FULL-AUTO-MAC-MINI-M2.dispatch.json
+
+### Receipts Created
+
+- .ghostclaw_runtime/a2a2a/receipts/triple_mission_dispatch_2026-06-30T034446_020549+0000.json (3105 bytes)
+
+### Safety Verification
+
+- No push to remote
+- No deploy
+- No secret access
+- No paid model calls
+- No model downloads
+- No GPU inference
+- No customer send
+- No Telegram broadcast
+- No cloud mutation
+- All execution flags false in receipts
+
+### Subagent Status
+
+- deleg_eaa031b6: 3 subagents running in parallel (dispatched at ~10:38 UTC)
+- Mission 1 (Merch Dashboard): file creation in progress
+- Mission 2 (Hermes Swarm): schema + script creation in progress
+- Mission 3 (Mac Mini M2): runtime + docs creation in progress
+
+### Blocked Actions
+
+- None currently — all safe local work proceeding
+
+### Next Actions
+
+- Wait for subagent completion
+- Validate all created files (JSON, YAML, py_compile, node --check)
+- Local commit after validation passes
+- Update Kanban with results
+- No push, no deploy
+
+## Run 2026-06-30T12:00:00+07:00 - Merch Automation Dashboard v1 Local Factory
+
+- **Agent:** Codex local worker
+- **Mission:** MERCH-DASH-V1-AUTO-20260630-001
+- **Mode:** local-only, no live Amazon publishing, no paid provider calls, no external sends
+- **Scope:** Created local schema, templates, prompts, QC checklist, n8n disabled import workflow, static dashboard, validator, A2A dispatch, and receipts under `docs/knowledge/merch_automation_dashboard_v1`.
+
+### Blocked Actions
+
+- Live Amazon publish, Amazon control bypass, paid provider call, secret read, customer send, Telegram broadcast, deploy, push, fake reviews, fake traffic, and infringing-content lanes remain blocked.
+
+## Run 2026-06-30T12:45:00+07:00 - MaxPlus Hermes Chinese Model Safe Setup Pack
+
+- **Agent:** Codex local worker
+- **Mission:** MAXPLUS-HERMES-CHINESE-MODEL-20260630
+- **Mode:** redacted templates and validation only; no secret read, no home config mutation, no provider call, no remote installer
+- **Scope:** Added Hermes MaxPlus Chinese Model safe setup docs, config/env templates, secret-handling policy, validator, blocked action receipt, and validation evidence.
+- **Validation:** `python3 -m py_compile scripts/ghostclaw/validate_maxplus_hermes_safe_setup.py` passed; `python3 scripts/ghostclaw/validate_maxplus_hermes_safe_setup.py` passed 21 checks; scoped `git diff --check` passed.
+- **Blocked:** live credential copy, `~/.hermes/.env` read/print, `~/.hermes/config.yaml` mutation, remote installer execution, paid provider smoke call, and gateway live send.
+
+## Run 2026-06-30T13:10:00+07:00 - MaxPlus Hermes Preflight and Provider Gate
+
+- **Agent:** Codex local worker
+- **Mission:** MAXPLUS-HERMES-CHINESE-MODEL-20260630
+- **Mode:** presence-only preflight; no private env read, no provider call, no remote installer, no live gateway send
+- **Scope:** Added `--dry-run` to `scripts/launchers/hermes-maxplus-openai-chat-safe`, added `scripts/ghostclaw/hermes_maxplus_preflight.py`, and added provider-call gate packet/docs.
+- **Preflight:** Hermes binary present, `~/.hermes` present, private env file exists, but `MAXPLUS_CODEX_API_KEY` is not present in this Codex shell; runtime remains not ready.
+- **Validation:** Python compile passed, launcher `bash -n` passed, launcher dry-run passed, safe setup validator passed 39 checks, scoped `git diff --check` passed, secret-pattern scan found no live-looking key in created artifacts.
+
+## Run 2026-06-30T13:35:00+07:00 - Hermes MaxPlus Private Config Applicator Dry Run
+
+- **Agent:** Codex local worker
+- **Mission:** MAXPLUS-HERMES-CHINESE-MODEL-20260630
+- **Mode:** applicator dry-run only; no private home config write, no secret read, no provider call
+- **Scope:** Added `scripts/ghostclaw/apply_hermes_maxplus_private_config.py` for owner-gated private config writes from environment values only.
+- **Validation:** Python compile passed; applicator dry-run passed and reported `secret_value_printed=false`; validator passed 48 checks; scoped diff check passed.
+- **Blocked:** write mode remains closed until `APPROVE_WRITE_PRIVATE_HERMES_MAXPLUS_CONFIG=1`; provider smoke remains closed until `APPROVE_MAXPLUS_HERMES_PROVIDER_SMOKE_ONE_TURN`.
+
+## Run 2026-06-30T13:55:00+07:00 - Hermes MaxPlus Completion Audit and Offline CLI Preflight
+
+- **Agent:** Codex local worker
+- **Mission:** MAXPLUS-HERMES-CHINESE-MODEL-20260630
+- **Mode:** offline CLI preflight and completion audit only; no private env read, no provider call, no gateway start
+- **Scope:** Added completion requirement matrix and offline Hermes CLI preflight for `hermes --help` / `hermes --version` only.
+- **Validation:** Hermes CLI available; offline probes completed; validator passed 60 checks; scoped diff check passed; secret-pattern scan clean.
+- **Conclusion:** Repo-side safe setup pack is complete for review, but full runtime objective remains incomplete behind private config, provider smoke, gateway, cron, subagent, and MCP gates.
+
+## Run 2026-06-30T14:10:00+07:00 - Hermes MaxPlus Advanced Feature Gates
+
+- **Agent:** Codex local worker
+- **Mission:** MAXPLUS-HERMES-CHINESE-MODEL-20260630
+- **Mode:** gate matrix and Telegram draft only; no provider call, no live send, no installer execution
+- **Scope:** Added advanced feature gates for installer review/execution, doctor/status/model, gateway, cron, subagent, and MCP. Added Telegram-safe report draft without sending it.
+- **Validation:** Validator passed 69 checks; all advanced feature gates default closed; scoped diff check passed.
+
+## Run 2026-06-30T14:25:00+07:00 - Hermes MaxPlus Gate Runner and Operator Runbook
+
+- **Agent:** Codex local worker
+- **Mission:** MAXPLUS-HERMES-CHINESE-MODEL-20260630
+- **Mode:** dry-run gate runner only; no provider call, no home config write, no live send
+- **Scope:** Added operator runbook and gate runner for installer/private-config/doctor/status/model/provider/gateway/cron/subagent/MCP gates.
+- **Validation:** Gate runner all-gates dry-run recorded 11 gates; provider-smoke dry-run recorded separately; validator passed 81 checks; scoped diff check passed; secret-pattern scan clean.
+
+## Run 2026-07-02 — GhostClaw Knowledge Integration Layer V1
+
+- **Agent:** Codex local worker (via OpenCode runtime)
+- **Mission:** GHOSTCLAW-KNOWLEDGE-INTEGRATION-20260702-001
+- **Parent:** GHOSTCLAW-A2A2A-ADAPTIVE-SYNC-20260702-001
+- **Mode:** registry-driven knowledge integration; local-safe B tier only
+- **Scope:** Created canonical registry layer for all 28 projects, 15 agents, 32 knowledge pointers, 10 route entries, 12 domain packs, 4 JSON schemas, 5 unified docs, 1 validator script, 10 project queue lanes.
+- **Files Created:**
+  - `.ghostclaw/registry/project-registry.v1.yaml`
+  - `.ghostclaw/registry/agent-registry.v1.yaml`
+  - `.ghostclaw/registry/knowledge-vault-index.v1.yaml`
+  - `.ghostclaw/registry/route-matrix.v1.yaml`
+  - `.ghostclaw/registry/domain-pack-index.v1.yaml`
+  - `.ghostclaw/schemas/*.schema.json` (4 files)
+  - `docs/*.md` (5 files)
+  - `scripts/ghostclaw_registry_validate.py`
+  - 10 project queue `.gitkeep` files
+  - `.ghostclaw_runtime/a2a2a/inbox/GHOSTCLAW-KNOWLEDGE-INTEGRATION-20260702-001.json`
+- **Validation:** PASS — `python3 scripts/ghostclaw_registry_validate.py --root /Users/sirinx/sirinx-os`
+- **Blocked:** None — all work was local-safe B tier
+- **Receipt:** `.ghostclaw_runtime/a2a2a/receipts/GHOSTCLAW-KNOWLEDGE-INTEGRATION-20260702-001.receipt.json`
+
+## Run 2026-07-02 — Mac mini M2 AI CLI Install Gate Packet (Doc Phase)
+
+- **Agent:** Codex local worker (via OpenCode runtime)
+- **Mission:** GHOSTCLAW-MAC-M2-AI-CLI-INTEGRATION-20260702-001
+- **Mode:** local-safe B tier doc/config only
+- **Scope:** Created install gate packet, operator runbook, and local workflow doc for Codex CLI/TUI and Claude Code CLI/TUI integration.
+- **Files Created:**
+  - `docs/MAC_M2_AI_CLI_INSTALL_UPDATE_RECEIPT.md`
+  - `docs/AI_CLI_TUI_OPERATOR_RUNBOOK.md`
+  - `docs/CODEX_CLAUDE_CODE_LOCAL_WORKFLOW.md`
+- **Blocked:** All D-tier actions were refused: standalone CLI install, npm/brew fallback, home-directory mutation (`~/.codex`, `~/.claude`, `~/.zshrc`), multi-repo scanner across `/Users/sirinx`.
+- **Validation:** PASS — `python3 scripts/ghostclaw_registry_validate.py --root /Users/sirinx/sirinx-os`
+- **Receipt:** `.ghostclaw_runtime/a2a2a/receipts/GHOSTCLAW-MAC-M2-AI-CLI-INTEGRATION-20260702-001.receipt.json`
+
+## Run 2026-07-02 — Codex Task Queue Seeding (All Active Projects)
+
+- **Agent:** Codex local worker (via OpenCode runtime)
+- **Mission:** GHOSTCLAW-CODEX-TASK-QUEUE-SEED-20260702-001
+- **Mode:** local-safe B tier queue seeding only
+- **Scope:** Created 13 high-level Codex task queue YAML files across 10 project lanes.
+- **Files Created:**
+  - `.ghostclaw_runtime/a2a2a/project_queues/ghostclaw_os/TASK-001-ghostclaw-os-core-control-plane.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/ghostclaw_os/TASK-002-registry-validator-enhancement.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/ghostclaw_os/TASK-003-knowledge-vault-retrieval-worker.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/ghostclaw_os/TASK-004-a2a2a-queue-coordinator.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/sirinx_site/TASK-001-sirinx-site-public-guardian.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/sirinx_site/TASK-002-sirinx-site-roi-calculator.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/agm/TASK-001-agm-creative-media-platform.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/ads_andromeda/TASK-001-ads-andromeda-asset-factory.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/kusala/TASK-001-kusala-funeral-platform.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/phitsanulok_news/TASK-001-phitsanulok-news-automation.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/merch_dashboard/TASK-001-merch-automation-dashboard.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/merch_dashboard/TASK-002-merch-qc-checklist-validator.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/creative_assets/TASK-001-creative-asset-pipeline.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/local_business/TASK-001-local-business-promo-pack.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/research/TASK-001-research-reverse-engineering-workflow.yaml`
+  - `.ghostclaw_runtime/a2a2a/project_queues/research/TASK-002-competitor-research-pipeline.yaml`
+- **Blocked:** None — queue items are doc/config only, no code executed.
+- **Validation:** PASS — `python3 scripts/ghostclaw_registry_validate.py --root /Users/sirinx/sirinx-os`
+- **Receipt:** `.ghostclaw_runtime/a2a2a/receipts/GHOSTCLAW-CODEX-TASK-QUEUE-SEED-20260702-001.receipt.json`
+
+## Run 2026-07-02 — GhostClaw Coding Model Router Pack V2.1 Install
+
+- **Agent:** Codex local worker (via OpenCode runtime)
+- **Mission:** GHOSTCLAW-MODEL-ROUTER-V2-1-INSTALL-001
+- **Mode:** local-safe receipt-gated install; only doc/config/scripts added, no provider calls
+- **Scope:** Installed 27 files from `ghostclaw_coding_model_integration_pack_v2_1.zip` into repo with backups.
+- **Files Installed:**
+  - `AGENTS_MODEL_ROUTER_ADDENDUM.md`
+  - `CLAUDE_MODEL_ROUTER_ADDENDUM.md`
+  - `config/model-router/model_router.registry.yaml`
+  - `config/model-router/hermes_model_router.config.yaml`
+  - `config/model-router/litellm_config.example.yaml`
+  - `config/model-router/openrouter_request_examples.json`
+  - `docs/model-routing/PACK_README.md`
+  - `docs/model-routing/MODEL_REGISTRY.md`
+  - `docs/model-routing/ROUTING_MATRIX.md`
+  - `docs/model-routing/PROVIDER_POLICY.md`
+  - `docs/model-routing/OPENROUTER_SETUP.md`
+  - `docs/model-routing/PROJECT_APPLY_MAP.md`
+  - `docs/model-routing/NEXT_ACTIONS_MODEL_ROUTER.md`
+  - `schemas/ghostclaw/model_router_receipt.schema.json`
+  - `skills/coding-model-router/SKILL.md`
+  - `.claude/agents/laguna-free-coder.md`
+  - `.claude/agents/qwen3-coder-free.md`
+  - `.claude/agents/kimi-code-worker.md`
+  - `.claude/agents/deepseek-architect.md`
+  - `.claude/agents/glm-repo-mapper.md`
+  - `.claude/agents/codex-peer.md`
+  - `.codex/config.toml.example`
+  - `scripts/validate_model_router_pack.py`
+  - `scripts/model_router_dry_run.py`
+  - `commands/model-router/hermes_model_router_install.txt`
+  - `commands/model-router/model_router_usage_examples.md`
+  - `.env.example` appended
+- **Files Modified:**
+  - `AGENTS.md` — appended Appendix A linking to model router addendum
+  - `CLAUDE.md` — appended Appendix A linking to model router addendum
+  - `scripts/validate_model_router_pack.py` — updated paths to repo-standard locations
+  - `.env.example` — appended model router env template
+- **Backup:** `.ghostclaw_runtime/backups/model_router_pack_v2_1_20260703_005925/`
+- **Validation:**
+  - `python3 scripts/validate_model_router_pack.py` → OK
+  - `python3 scripts/model_router_dry_run.py --tier T1 --project ghostclaw --task "test model router"` → dry_run allowed, lane=laguna_free_coder
+- **Blocked:** Real paid calls, provider limit bypass, account rotation, secret read/print, production deploy, git push, customer send, broad code rewrite.
+- **Receipt:** `.ghostclaw_runtime/a2a2a/receipts/GHOSTCLAW-MODEL-ROUTER-V2-1-INSTALL-001.receipt.json`

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+gate_name="APPROVE_OHMYCODEX_CONFIG_WRITE_PROJECT_CANONICAL"
+if [[ "${1:-}" == "--preflight" ]]; then
+  preflight_receipt="${OHMYCODEX_PREFLIGHT_RECEIPT:-.ghostclaw_runtime/a2a2a/receipts/ohmycodex_activation_preflight_project_canonical_$(date -u +%Y%m%dT%H%M%SZ).json}"
+  python3 scripts/ghostclaw_ohmycodex_config_packet.py \
+    --packet .ghostclaw_runtime/a2a2a/reviews/ohmycodex_config_packet_20260630T102700Z.json \
+    --destination-label project_canonical \
+    --activation-status \
+    --apply-plan-path .ghostclaw_runtime/a2a2a/evidence/ohmycodex_project_canonical_apply_plan_20260630T104500Z.json \
+    --store-activation-result "$preflight_receipt"
+  exit 0
+fi
+
+if [[ "${APPROVE_OHMYCODEX_CONFIG_WRITE_PROJECT_CANONICAL:-}" != "1" ]]; then
+  printf 'Blocked: set %s=1 for this exact invocation to write project-canonical OhMyCodex config.\n' "$gate_name" >&2
+  exit 2
+fi
+
+python3 scripts/ghostclaw_ohmycodex_config_packet.py \
+  --packet .ghostclaw_runtime/a2a2a/reviews/ohmycodex_config_packet_20260630T102700Z.json \
+  --destination-label project_canonical \
+  --activate-and-verify \
+  --readiness-path .ghostclaw_runtime/a2a2a/receipts/ohmycodex_model_team_readiness_20260630T112800Z.json \
+  --handoff-path .ghostclaw_runtime/a2a2a/receipts/ohmycodex_activation_handoff_project_canonical_20260630T142500Z.json \
+  --verify-receipt-dir .ghostclaw_runtime/a2a2a/receipts \
+  --store-activate-and-verify-result .ghostclaw_runtime/a2a2a/receipts/ohmycodex_activate_and_verify_project_canonical.json

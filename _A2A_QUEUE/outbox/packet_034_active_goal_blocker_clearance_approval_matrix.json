@@ -1,0 +1,162 @@
+{
+  "id": "packet_034",
+  "project": "ghostclaw",
+  "priority": "P0",
+  "title": "Active-goal blocker clearance approval matrix",
+  "agent": "codex",
+  "to_agent": "hermes_kob_operator",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": false,
+  "approval_scope": "approval_request_matrix_no_approval_granted",
+  "execution_approval_required": true,
+  "dispatch_mode": "dry_run_review_only",
+  "current_actionable_packet": "packet_013",
+  "source_packet": "packet_033",
+  "blocker_clearance_mode": "one_blocker_one_gate",
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "dry_run": true,
+  "not_approval": true,
+  "final_packet_record": false,
+  "decision_record": false,
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "real_mcp_execution": false,
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "customer_send": false,
+  "secret_read": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "line_send": false,
+  "line_webhook_activation": false,
+  "production_analytics": false,
+  "crm_customer_data_storage": false,
+  "database_write": false,
+  "database_migration": false,
+  "dependency_install": false,
+  "public_tunnel": false,
+  "service_repair": false,
+  "service_restart": false,
+  "state_mutation": false,
+  "lane2_authorized": false,
+  "completion_blockers": [
+    "BLOCK-CHAT-EXPORT",
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY",
+    "BLOCK-V3-3-ARTIFACT",
+    "BLOCK-R0-APPROVALS"
+  ],
+  "clearance_matrix": [
+    {
+      "blocker": "BLOCK-CHAT-EXPORT",
+      "state": "open",
+      "required_evidence": [
+        "operator_provided_chatgpt_export_or_connector_source",
+        "metadata_only_mapping_report",
+        "raw_content_storage_decision"
+      ],
+      "required_gate": "APPROVE_CHATGPT_EXPORT_READONLY_MAPPING_<path>_<date>",
+      "forbidden_without_gate": [
+        "connector_read_performed",
+        "external_upload",
+        "raw_chat_content_stored",
+        "claims_all_chats_read"
+      ]
+    },
+    {
+      "blocker": "BLOCK-LANE1-OPUS-PACKET",
+      "state": "open",
+      "required_evidence": [
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md",
+        "Hermes_Opus_authoring_source_or_receipt",
+        "Codex_validator_pass_result"
+      ],
+      "required_gate": "APPROVE_LANE1_OPUS_FINAL_PACKET_REVIEW_<date>",
+      "forbidden_without_gate": [
+        "final_packet_creation_by_codex",
+        "codex_recorder_gate_open",
+        "lane2_authorization",
+        "runtime_queue_execution"
+      ]
+    },
+    {
+      "blocker": "BLOCK-HERMES-GATEWAY",
+      "state": "open",
+      "required_evidence": [
+        "read_only_gateway_health_or_status_probe",
+        "night_watch_snapshot_after_gateway_change",
+        "operator_approved_repair_scope_if_restart_or_repair_needed"
+      ],
+      "required_gate": "APPROVE_LOCAL_STACK_REPAIR_<target>_<date>",
+      "forbidden_without_gate": [
+        "service_repair",
+        "service_restart",
+        "runtime_queue_execution",
+        "provider_call"
+      ]
+    },
+    {
+      "blocker": "BLOCK-V3-3-ARTIFACT",
+      "state": "open",
+      "required_evidence": [
+        "exact_local_path_to_ghostclaw_repo_merge_kit_v3_3.zip",
+        "metadata_hash_size_manifest",
+        "policy_test_evidence_before_extraction_or_merge"
+      ],
+      "required_gate": "APPROVE_V3_3_ARTIFACT_INTAKE_<path>_<date>",
+      "forbidden_without_gate": [
+        "archive_extraction",
+        "merge_script_execution",
+        "install",
+        "runtime_queue_execution"
+      ]
+    },
+    {
+      "blocker": "BLOCK-R0-APPROVALS",
+      "state": "open",
+      "required_evidence": [
+        "gate_specific_approval_packet",
+        "target_environment_scope",
+        "rollback_plan",
+        "verification_evidence_path"
+      ],
+      "required_gate": "APPROVE_R0_GATE_<target>_<date>",
+      "forbidden_without_gate": [
+        "deploy",
+        "push",
+        "cloud_mutation",
+        "customer_send",
+        "secret_read",
+        "provider_call",
+        "production_analytics",
+        "line_webhook_activation",
+        "crm_customer_data_storage"
+      ]
+    }
+  ],
+  "input": [
+    "_A2A_QUEUE/outbox/packet_033_active_goal_blocker_refresh_hermes_handoff.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_REFRESH_HERMES_HANDOFF_2026-07-02.md",
+    "data/pathspecs/sirinx_active_goal_current_blocker_refresh_2026-06-29.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_CURRENT_BLOCKER_REFRESH_2026-06-29.md",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
+    ".hermes/logs/night-watch-latest.md"
+  ],
+  "output": [
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_APPROVAL_MATRIX_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_034_active_goal_blocker_clearance_approval_matrix.json"
+  ],
+  "required_future_outputs": [
+    "operator_provided_chatgpt_export_or_connector_source",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md",
+    "read_only_gateway_health_or_status_probe",
+    "exact_local_path_to_ghostclaw_repo_merge_kit_v3_3.zip",
+    "gate_specific_r0_approval_packet"
+  ],
+  "next_safe_action": "Hermes/KOB/operator reviews packet_034 and selects exactly one blocker-clearance gate; Codex validates future evidence before changing blocker or completion state.",
+  "notes": "Local approval matrix only. This packet grants no approval and performs no execution, service repair, deploy, push, provider call, webhook activation, analytics enablement, CRM/customer data storage, database write, real MCP execution, final packet creation, or LANE_2 authorization."
+}

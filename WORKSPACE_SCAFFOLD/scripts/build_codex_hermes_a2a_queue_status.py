@@ -22,8 +22,16 @@ BLOCKED_ACTIONS = {
     "customer_send": False,
     "secret_read": False,
     "paid_provider_call": False,
+    "provider_call": False,
     "runtime_queue_execution": False,
     "telegram_live_send": False,
+    "line_send": False,
+    "line_webhook_activation": False,
+    "production_analytics": False,
+    "crm_customer_data_storage": False,
+    "real_mcp_execution": False,
+    "mcp_registration": False,
+    "customer_data_storage": False,
     "external_message_send": False,
     "merge_script_execution": False,
     "install": False,
@@ -118,6 +126,24 @@ def build_queue_status(queue_root: Path | str = DEFAULT_QUEUE_ROOT, root: Path =
     packet_counts["total"] = len(packets)
 
     current = next((packet for packet in packets if packet["id"] == "packet_013"), None)
+    hermes_decision_recorded = HERMES_DECISION.exists()
+    final_packet_present = FINAL_PACKET.exists()
+    if not hermes_decision_recorded:
+        next_safe_action = (
+            "Use this file-bus snapshot for local Codex/Hermes coordination only; "
+            "Hermes still needs a separate packet_013 decision before Codex recorder work."
+        )
+    elif not final_packet_present:
+        next_safe_action = (
+            "Use this file-bus snapshot for local Codex/Hermes coordination only; "
+            "Hermes packet_013 decision is recorded, but the final LANE_1 Opus architecture packet is still absent, "
+            "so Lane 2 and runtime execution stay closed."
+        )
+    else:
+        next_safe_action = (
+            "Use this file-bus snapshot for local Codex/Hermes coordination only; "
+            "do not execute runtime queues or widen external gates without a separate exact approval."
+        )
     return {
         "schema": "sirinx.codex_hermes.a2a_queue_status.v1",
         "status": "local_queue_indexed_not_executed",
@@ -128,18 +154,15 @@ def build_queue_status(queue_root: Path | str = DEFAULT_QUEUE_ROOT, root: Path =
         "claims_all_chats_read": False,
         "runtime_queue_execution": False,
         "lane2_authorized": False,
-        "hermes_decision_recorded": HERMES_DECISION.exists(),
-        "final_lane1_packet_present": FINAL_PACKET.exists(),
+        "hermes_decision_recorded": hermes_decision_recorded,
+        "final_lane1_packet_present": final_packet_present,
         "queue_root": relative_path(queue_root, root=root),
         "current_actionable_packet": current["id"] if current else None,
         "current_actionable_packet_folder": current["folder"] if current else None,
         "packet_counts": packet_counts,
         "packets": packets,
         "blocked_actions": dict(BLOCKED_ACTIONS),
-        "next_safe_action": (
-            "Use this file-bus snapshot for local Codex/Hermes coordination only; "
-            "Hermes still needs a separate packet_013 decision before Codex recorder work."
-        ),
+        "next_safe_action": next_safe_action,
         "notes": "Read-only JSON packet index. No queue item was executed and no external action is authorized.",
     }
 

@@ -1,0 +1,65 @@
+{
+  "receipt_id": "GHOSTCLAW-SUP-AGENT-BOOTSTRAP-V1-1-P000B",
+  "runtime_bootstrap": "GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1.1",
+  "packet_id": "P000B_RECEIPT_BOOTSTRAP",
+  "phase": "00_repo_intake_receipt",
+  "action_tier": "B",
+  "repo": "/Users/sirinx/sirinx-os",
+  "status": "PASS",
+  "file_lease": {
+    "granted": true,
+    "allowed_paths": [
+      "receipts/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1_1/**",
+      "runtime/a2a/inbox/.gitkeep",
+      "runtime/a2a/outbox/.gitkeep",
+      "runtime/a2a/ack/.gitkeep",
+      "runtime/a2a/deadletter/.gitkeep",
+      "reports/mission/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_REPORT.md"
+    ],
+    "blocked_paths": [
+      ".env",
+      ".env.*",
+      "secrets/**",
+      "node_modules/**",
+      ".git/**",
+      "src/**",
+      "app/**",
+      "pages/**",
+      "components/**",
+      "lib/**",
+      "packages/**",
+      "apps/**",
+      "services/**",
+      "backend/**",
+      "frontend/**"
+    ],
+    "changed_files": [
+      "runtime/a2a/inbox/.gitkeep",
+      "runtime/a2a/outbox/.gitkeep",
+      "runtime/a2a/ack/.gitkeep",
+      "runtime/a2a/deadletter/.gitkeep",
+      "receipts/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1_1/README.md",
+      "receipts/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1_1/p000b_receipt_bootstrap.receipt.json",
+      "reports/mission/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_REPORT.md"
+    ],
+    "lease_match": true
+  },
+  "security": {
+    "secret_read": false,
+    "env_read": false,
+    "provider_call": false,
+    "paid_model_call": false,
+    "install": false,
+    "push": false,
+    "deploy": false,
+    "cloud_mutation": false,
+    "dark_web_execution": false,
+    "customer_send": false
+  },
+  "validation": {
+    "ran": true,
+    "result": "pass",
+    "details": "JSON parsed, YAML registry/policies parsed where applicable, git diff whitespace check passed on leased paths, targeted secret-pattern scan returned no matches, and changed files matched the allowed lease."
+  },
+  "next_action": "Validate changed files and keep runtime bootstrap local-safe."
+}

@@ -3,6 +3,8 @@
 //! This adapter creates command previews only. It does not spawn Codex, shell
 //! out to a worker, send repo content to a provider, or mutate source files.
 
+use crate::adapters::traits::WorkerAdapter;
+use crate::error::Result;
 use crate::redaction::redact_sensitive;
 use crate::schema::{escape_json, option_json, RouteJob};
 
@@ -35,6 +37,16 @@ impl CodexDryRunPreview {
             self.executed_live,
             option_json(self.reason.as_deref())
         )
+    }
+}
+
+/// Local-only Codex adapter implementation.
+#[derive(Clone, Debug, Default)]
+pub struct CodexDryRunAdapter;
+
+impl WorkerAdapter for CodexDryRunAdapter {
+    fn preview(&self, job: &RouteJob) -> Result<CodexDryRunPreview> {
+        Ok(preview_codex_dry_run(job))
     }
 }
 

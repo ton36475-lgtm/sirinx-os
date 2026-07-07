@@ -58,11 +58,11 @@ class HermesA2ACodexSyncAllJobsPacketTests(unittest.TestCase):
             pathspec["queue_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         self.assertEqual(pathspec["license_policy"]["requested_license"], "MIT")
@@ -99,8 +99,8 @@ class HermesA2ACodexSyncAllJobsPacketTests(unittest.TestCase):
 
         self.assertEqual(queue_status["current_actionable_packet"], "packet_013")
         self.assertEqual(queue_status["packet_counts"]["inbox"], 5)
-        self.assertEqual(queue_status["packet_counts"]["outbox"], 15)
-        self.assertEqual(queue_status["packet_counts"]["total"], 29)
+        self.assertEqual(queue_status["packet_counts"]["outbox"], 34)
+        self.assertEqual(queue_status["packet_counts"]["total"], 48)
         self.assertEqual(packet["folder"], "inbox")
         self.assertEqual(packet["agent"], "hermes")
         self.assertEqual(packet["status"], "inbox")
@@ -120,7 +120,7 @@ class HermesA2ACodexSyncAllJobsPacketTests(unittest.TestCase):
             "runtime_queue_execution=false",
             "real_codex_cli_execution=false",
             "license_policy=MIT intent only until LICENSE exists",
-            "packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29",
+            "packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48",
             "No `LICENSE` file was created or changed.",
             "not a license claim",
         ]

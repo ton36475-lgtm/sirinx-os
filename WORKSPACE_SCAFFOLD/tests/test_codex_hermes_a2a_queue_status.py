@@ -41,7 +41,7 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
         self.assertTrue(STATUS_DOC.exists(), f"Missing queue status doc: {STATUS_DOC}")
         self.assertTrue(REPORT_JSON.exists(), f"Missing latest queue status report: {REPORT_JSON}")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 packet exists unexpectedly")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_status_preserves_local_only_non_execution_boundary(self):
         status = self.load_status()
@@ -54,7 +54,7 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
         self.assertFalse(status["claims_all_chats_read"])
         self.assertFalse(status["runtime_queue_execution"])
         self.assertFalse(status["lane2_authorized"])
-        self.assertFalse(status["hermes_decision_recorded"])
+        self.assertTrue(status["hermes_decision_recorded"])
         self.assertEqual(status["current_actionable_packet"], "packet_013")
         self.assertEqual(status["current_actionable_packet_folder"], "inbox")
 
@@ -65,8 +65,16 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "customer_send",
             "secret_read",
             "paid_provider_call",
+            "provider_call",
             "runtime_queue_execution",
             "telegram_live_send",
+            "line_send",
+            "line_webhook_activation",
+            "production_analytics",
+            "crm_customer_data_storage",
+            "real_mcp_execution",
+            "mcp_registration",
+            "customer_data_storage",
             "external_message_send",
             "merge_script_execution",
             "install",
@@ -81,24 +89,24 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         packet_013 = next(packet for packet in status["packets"] if packet["id"] == "packet_013")
         self.assertEqual(packet_013["folder"], "inbox")
         self.assertEqual(packet_013["agent"], "hermes")
-        self.assertEqual(packet_013["status"], "inbox")
+        self.assertEqual(packet_013["status"], "decided")
         self.assertEqual(packet_013["risk"], "safe")
         self.assertFalse(packet_013["runtime_queue_execution"])
         self.assertFalse(packet_013["provider_call"])
         self.assertFalse(packet_013["deploy"])
         self.assertFalse(packet_013["push"])
         self.assertFalse(packet_013["lane2_authorized"])
-        self.assertFalse(packet_013["decision_record"])
+        self.assertTrue(packet_013["decision_record"])
 
         packet_016 = next(packet for packet in status["packets"] if packet["id"] == "packet_016")
         self.assertEqual(packet_016["folder"], "outbox")
@@ -188,6 +196,42 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
         self.assertFalse(packet_019["decision_record"])
         self.assertFalse(packet_019["final_packet_record"])
         self.assertFalse(packet_019["lane2_authorized"])
+
+        for packet_id in ("packet_026", "packet_027", "packet_028", "packet_029", "packet_030", "packet_031"):
+            packet = next(packet for packet in status["packets"] if packet["id"] == packet_id)
+            self.assertEqual(packet["folder"], "outbox")
+            expected_agent = "hermes" if packet_id == "packet_026" else "codex"
+            self.assertEqual(packet["agent"], expected_agent)
+            self.assertEqual(packet["status"], "outbox")
+            self.assertEqual(packet["risk"], "safe")
+            self.assertFalse(packet["runtime_queue_execution"])
+            self.assertFalse(packet["provider_call"])
+            self.assertFalse(packet["deploy"])
+            self.assertFalse(packet["push"])
+            self.assertFalse(packet["secret_read"])
+            self.assertFalse(packet["state_mutation"])
+            self.assertFalse(packet["lane2_authorized"])
+
+        packet_029 = next(packet for packet in status["packets"] if packet["id"] == "packet_029")
+        self.assertEqual(
+            packet_029["path"],
+            "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+        )
+        self.assertIn("website LINE integration", packet_029["title"])
+
+        packet_030 = next(packet for packet in status["packets"] if packet["id"] == "packet_030")
+        self.assertEqual(
+            packet_030["path"],
+            "_A2A_QUEUE/outbox/packet_030_sirinx_coding_engine_security_rules_refactor.json",
+        )
+        self.assertIn("coding engine", packet_030["title"])
+
+        packet_031 = next(packet for packet in status["packets"] if packet["id"] == "packet_031")
+        self.assertEqual(
+            packet_031["path"],
+            "_A2A_QUEUE/outbox/packet_031_sirinx_coding_engine_security_rules_work_report_draft.json",
+        )
+        self.assertIn("work report draft", packet_031["title"])
 
     def test_builder_indexes_synthetic_queue_without_executing(self):
         module = load_status_module()
@@ -304,7 +348,7 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "local_queue_indexed_not_executed",
             "evidence_boundary=local_file_bus_only",
             "current_actionable_packet=packet_013",
-            "packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29",
+            "packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48",
             "_A2A_QUEUE/approvals/GATE-PUSH-001-20260629-001.json",
             "approved_by=sirinx",
             "push_this_branch_only",
@@ -317,13 +361,21 @@ class CodexHermesA2AQueueStatusTests(unittest.TestCase):
             "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
             "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
             "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+            "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+            "_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json",
+            "_A2A_QUEUE/outbox/packet_028_sirinx_uat_crud_mongodb_work_report_draft.json",
+            "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+            "_A2A_QUEUE/outbox/packet_030_sirinx_coding_engine_security_rules_refactor.json",
+            "_A2A_QUEUE/outbox/packet_031_sirinx_coding_engine_security_rules_work_report_draft.json",
+            "_A2A_QUEUE/outbox/packet_034_active_goal_blocker_clearance_approval_matrix.json",
             "license_assertion=intent_only_until_license_file_exists",
             "browser_use_candidate_lane_ready_local_only",
             "runtime_queue_execution=false",
-            "hermes_decision_recorded=false",
+            "hermes_decision_recorded=true",
             "lane2_authorized=false",
+            "final_lane1_packet_present=false",
             "No queue item was executed.",
-            "No deploy, push, cloud mutation, customer send, secret read, paid/provider call, runtime queue execution, Telegram live send, external message send, merge script, install, migration, Browser Use package install, browser automation command, Browser Use Cloud action, profile sync, cookie access, form submit, or transaction confirmation is authorized.",
+            "No deploy, push, cloud mutation, customer send, secret read, paid/provider call, runtime queue execution, Telegram live send, LINE send, LINE webhook activation, production analytics, CRM/customer data storage, real MCP execution, MCP registration, external message send, merge script, install, migration, Browser Use package install, browser automation command, Browser Use Cloud action, profile sync, cookie access, form submit, or transaction confirmation is authorized.",
         ]
         missing = [item for item in required if item not in text]
         self.assertEqual(missing, [])

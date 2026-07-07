@@ -1,0 +1,118 @@
+{
+  "$schema": "ghostclaw.hermes.telegram_gateway.config.v1",
+  "config_id": "HERMES-TELEGRAM-GATEWAY-CONFIG-20260703",
+  "status": "local_safe_config_ready",
+  "mode": "dry_run_first",
+  "approval_reference": "a019e53ee-d979-70d0-9951-fe7cc20887ecd",
+  "gateway": {
+    "defaultLiveSend": false,
+    "webhook": {
+      "enabled": false,
+      "url": null
+    },
+    "polling": {
+      "enabled": false
+    },
+    "allowedUpdates": [
+      "message",
+      "callback_query"
+    ],
+    "parseMode": "HTML",
+    "disableWebPagePreview": true
+  },
+  "credentials": {
+    "source": "environment_presence_only",
+    "tokenEnvKey": "TELEGRAM_BOT_TOKEN",
+    "primaryChatEnvKey": "TELEGRAM_HOME_CHANNEL",
+    "fallbackChatEnvKey": "TELEGRAM_CHAT_ID",
+    "storeValuesInRepo": false,
+    "printValues": false
+  },
+  "routing": {
+    "controlPlane": "telegram_to_hermes_preview",
+    "a2a2aInboxPath": ".ghostclaw_runtime/a2a2a/inbox/telegram",
+    "a2a2aOutboxPath": ".ghostclaw_runtime/a2a2a/outbox/telegram",
+    "a2a2aReceiptsPath": ".ghostclaw_runtime/a2a2a/receipts",
+    "queuePayloadExecution": false
+  },
+  "commands": {
+    "accepted": [
+      "/commands",
+      "/status",
+      "/hermes all jobs ready",
+      "/hermes all jobs ready liveSend true",
+      "/fusion smoke",
+      "/fable5 preview",
+      "/codex status",
+      "/codex run status",
+      "/agent loop status",
+      "/agent loop fusion",
+      "/a2a2a status",
+      "/a2a2a dispatch preview",
+      "/a2a2a gate check <exact gate>",
+      "/a2a2a execute readiness",
+      "/a2a2a execute command preview <exact gate>",
+      "/a2a2a completion audit",
+      "/a2a2a live gate readiness",
+      "/daily report"
+    ],
+    "callbackCommands": [
+      "cmd:status",
+      "cmd:hermes-all-jobs-ready",
+      "cmd:fusion-smoke",
+      "cmd:fable5-preview",
+      "cmd:codex-status",
+      "cmd:agent-loop-status",
+      "cmd:agent-loop-fusion",
+      "cmd:a2a2a-status",
+      "cmd:a2a2a-dispatch-preview",
+      "cmd:a2a2a-gate-check",
+      "cmd:a2a2a-execute-readiness",
+      "cmd:a2a2a-execute-command-preview",
+      "cmd:a2a2a-completion-audit",
+      "cmd:a2a2a-live-gate-readiness",
+      "cmd:daily-report"
+    ]
+  },
+  "modelRouting": {
+    "provider": "openrouter",
+    "model": "anthropic/claude-fable-5",
+    "profile": "fable5",
+    "apiKeyEnvKey": "OPENROUTER_API_KEY",
+    "defaultProviderCall": false,
+    "usage": "explicit_high_reasoning_telegram_preview_only"
+  },
+  "gates": {
+    "liveSend": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_TELEGRAM_GATEWAY_LIVE_SEND_A019E53EE",
+      "requiresRecipientEvidence": true,
+      "requiresTokenPresenceOnlyCheck": true
+    },
+    "webhookActivation": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_TELEGRAM_GATEWAY_WEBHOOK_ACTIVATION_A019E53EE"
+    },
+    "runtimeRestart": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_HERMES_GATEWAY_RESTART_A019E53EE"
+    },
+    "openRouterFable5ProviderCall": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE",
+      "requiresOpenRouterKeyPresenceOnlyCheck": true,
+      "requiresBudgetConfirmation": true
+    }
+  },
+  "blockedActions": {
+    "liveTelegramSend": true,
+    "webhookActivation": true,
+    "tokenValueRead": true,
+    "tokenValuePrint": true,
+    "queuePayloadExecution": true,
+    "providerCall": true,
+    "install": true,
+    "push": true,
+    "deploy": true
+  }
+}

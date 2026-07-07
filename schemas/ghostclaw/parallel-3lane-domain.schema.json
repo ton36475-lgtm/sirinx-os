@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/ghostclaw/parallel-3lane-domain.schema.json",
+  "title": "GhostClaw Parallel Three-Lane Domain",
+  "description": "Domain schema for local Hermes, Codex, OpenCode, and Validator packet coordination. This schema is local-first and does not authorize push, deploy, provider calls, installs, or secret access.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mission",
+    "lanes",
+    "packets",
+    "safety_policy"
+  ],
+  "properties": {
+    "mission": {
+      "$ref": "#/$defs/mission"
+    },
+    "lanes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/lane"
+      }
+    },
+    "packets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/packet"
+      }
+    },
+    "file_leases": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/file_lease"
+      }
+    },
+    "receipts": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/receipt_ref"
+      }
+    },
+    "safety_policy": {
+      "$ref": "#/$defs/safety_policy"
+    }
+  },
+  "$defs": {
+    "mission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mission_id",
+        "mission_name",
+        "repo_root",
+        "branch",
+        "mode",
+        "source_of_truth"
+      ],
+      "properties": {
+        "mission_id": {
+          "type": "string",
+          "pattern": "^GC-[A-Z0-9-]+-[0-9]{8}-[0-9]{3}$"
+        },
+        "mission_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repo_root": {
+          "type": "string",
+          "const": "/Users/sirinx/sirinx-os"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "full_auto_safe_local_parallel_lanes"
+          ]
+        },
+        "source_of_truth": {
+          "type": "string",
+          "enum": [
+            "local_repo"
+          ]
+        }
+      }
+    },
+    "lane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lane_name",
+        "lane_type",
+        "owner",
+        "mutation_allowed",
+        "status"
+      ],
+      "properties": {
+        "lane_name": {
+          "type": "string",
+          "enum": [
+            "Hermes_Commander",
+            "Codex_Builder",
+            "OpenCode_Reviewer",
+            "Validator_Worker"
+          ]
+        },
+        "lane_type": {
+          "type": "string",
+          "enum": [
+            "control",
+            "build",
+            "review",
+            "validation"
+          ]
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mutation_allowed": {
+          "type": "boolean"
+        },
+        "write_scopes": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "layer",
+        "status",
+        "allowed_groups",
+        "receipt_required",
+        "validation_required"
+      ],
+      "properties": {
+        "packet_id": {
+          "type": "string",
+          "pattern": "^P[0-9]{2}-[a-z0-9-]+$"
+        },
+        "layer": {
+          "type": "string",
+          "enum": [
+            "backend_domain_schema",
+            "backend_service_logic",
+            "api_contract_freeze",
+            "api_route_handler",
+            "api_client_wiring",
+            "frontend_state_hooks",
+            "frontend_components",
+            "frontend_pages_one_by_one",
+            "local_uat_ready_packet"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "leased",
+            "building",
+            "validation_pending",
+            "receipt_written",
+            "ready_for_review",
+            "review_warn",
+            "review_pass",
+            "done",
+            "blocked"
+          ]
+        },
+        "allowed_groups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_groups": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "leased_files": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "page_lock_required": {
+          "type": "boolean",
+          "default": false
+        },
+        "receipt_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "validation_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "next_packet_opened": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "file_lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lease_id",
+        "packet_id",
+        "owner",
+        "leased_files",
+        "created_at",
+        "status"
+      ],
+      "properties": {
+        "lease_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packet_id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "leased_files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "leased",
+            "released",
+            "conflict",
+            "expired"
+          ]
+        }
+      }
+    },
+    "receipt_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "path",
+        "status"
+      ],
+      "properties": {
+        "packet_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "written",
+            "validated",
+            "review_pending",
+            "blocked"
+          ]
+        }
+      }
+    },
+    "safety_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local_only",
+        "blocked_actions",
+        "secret_handling",
+        "next_packet_gate"
+      ],
+      "properties": {
+        "local_only": {
+          "type": "boolean",
+          "const": true
+        },
+        "blocked_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "secret_handling": {
+          "type": "string",
+          "enum": [
+            "presence_only_never_read_or_print_values"
+          ]
+        },
+        "next_packet_gate": {
+          "type": "string",
+          "enum": [
+            "receipt_and_validation_required_before_open"
+          ]
+        }
+      }
+    }
+  }
+}

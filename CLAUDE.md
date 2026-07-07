@@ -42,3 +42,16 @@ Use these personal Claude Code subagents when helpful:
 - `hermes-code-reviewer`
 
 For bigger work, create an agent team with planner, frontend, backend, browser, devops, and reviewer teammates. Require plan approval before implementation and split work by file ownership.
+
+---
+
+## Appendix A — Multi-Coding-Model Orchestration V2.1
+
+For model router rules, delegation patterns, parallel gate, token discipline, and subagent definitions, see:
+
+- `CLAUDE_MODEL_ROUTER_ADDENDUM.md`
+- `AGENTS_MODEL_ROUTER_ADDENDUM.md`
+- `.claude/agents/*.md`
+- `docs/model-routing/ROUTING_MATRIX.md`
+
+Core rule: Claude Code / Fable orchestrates and synthesizes; delegate routine edits to cheaper/free/local lanes; use premium reasoning only for architecture, complex debugging, and irreversible decisions.

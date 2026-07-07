@@ -1,0 +1,360 @@
+// GHOSTCLAW CONTROL PLANE DATABASE PROPOSAL
+// Packet: P102_DATABASE_SCHEMA_PROPOSAL
+// Date: 2026-07-05
+// Mode: review-only Prisma fragment. Do not migrate from this file.
+//
+// Merge strategy:
+// 1. Keep current prisma/schema.prisma intact.
+// 2. Review these additive models.
+// 3. Merge only after an exact schema-merge gate.
+// 4. Run format/validate before any migration preview.
+// 5. Do not store raw secrets, private keys, browser cookies, or .env values.
+
+model Project {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  focusState    String   @default("active")
+  publicDomain  String?
+  privateDomain String?
+  repoPath      String?
+  status        String   @default("active")
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  missions        Mission[]
+  leads           Lead[]
+  contentItems    ContentItem[]
+  knowledgeCards  KnowledgeCard[]
+  deploymentGates DeploymentGate[]
+  auditEvents     AuditEvent[]
+
+  @@index([focusState])
+  @@index([status])
+}
+
+model Mission {
+  id              String   @id @default(cuid())
+  projectId       String
+  requesterUserId String?
+  title           String
+  actionTier      String
+  status          String   @default("pending")
+  activeFocus     Json?
+  blockedActions  Json?
+  correlationId   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  project       Project        @relation(fields: [projectId], references: [id])
+  taskPackets   TaskPacket[]
+  approvalGates ApprovalGate[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([correlationId])
+  @@index([createdAt])
+}
+
+model TaskPacket {
+  id            String   @id @default(cuid())
+  missionId     String
+  packetId      String
+  packetType    String
+  lane          String
+  status        String   @default("queued")
+  dryRun        Boolean  @default(true)
+  liveExecution Boolean  @default(false)
+  nextAction    String?
+  payloadPath   String?
+  correlationId String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  mission         Mission          @relation(fields: [missionId], references: [id])
+  fileLeases      FileLease[]
+  workerEnvelopes WorkerEnvelope[]
+  validationRuns  ValidationRun[]
+  reviewPackets   ReviewPacket[]
+  receipts        Receipt[]
+
+  @@unique([missionId, packetId])
+  @@index([packetId])
+  @@index([lane])
+  @@index([status])
+  @@index([dryRun, liveExecution])
+  @@index([correlationId])
+}
+
+model FileLease {
+  id              String   @id @default(cuid())
+  taskPacketId    String
+  ownerLane       String
+  allowedPaths    Json
+  blockedPaths    Json
+  leaseStatus     String   @default("active")
+  expiresAt       DateTime?
+  conflictReceipt String?
+  createdAt       DateTime @default(now())
+
+  taskPacket TaskPacket @relation(fields: [taskPacketId], references: [id])
+
+  @@index([taskPacketId])
+  @@index([ownerLane])
+  @@index([leaseStatus])
+}
+
+model WorkerEnvelope {
+  id            String   @id @default(cuid())
+  taskPacketId  String
+  agentId       String?
+  envelopeType  String
+  targetLane    String
+  status        String   @default("created")
+  writeOnly     Boolean  @default(false)
+  ackOnly       Boolean  @default(false)
+  dryRun        Boolean  @default(true)
+  liveExecution Boolean  @default(false)
+  artifactPath  String?
+  artifactSha256 String?
+  createdAt     DateTime @default(now())
+
+  taskPacket TaskPacket @relation(fields: [taskPacketId], references: [id])
+
+  @@index([taskPacketId])
+  @@index([targetLane])
+  @@index([status])
+  @@index([dryRun, liveExecution])
+}
+
+model ValidationRun {
+  id             String   @id @default(cuid())
+  taskPacketId   String
+  validatorName  String
+  status         String
+  commandSummary String?
+  evidencePath   String?
+  artifactSha256 String?
+  createdAt      DateTime @default(now())
+
+  taskPacket TaskPacket @relation(fields: [taskPacketId], references: [id])
+
+  @@index([taskPacketId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ReviewPacket {
+  id             String   @id @default(cuid())
+  taskPacketId   String
+  targetReviewer String
+  status         String
+  reviewOnly     Boolean  @default(true)
+  dryRun         Boolean  @default(true)
+  liveExecution  Boolean  @default(false)
+  candidatePath  String?
+  evidencePath   String?
+  artifactSha256 String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  taskPacket TaskPacket @relation(fields: [taskPacketId], references: [id])
+
+  @@index([taskPacketId])
+  @@index([targetReviewer])
+  @@index([status])
+  @@index([reviewOnly, liveExecution])
+}
+
+model ApprovalGate {
+  id               String   @id @default(cuid())
+  missionId         String
+  gateCode          String
+  actionType        String
+  status            String   @default("pending")
+  approvedByUserId  String?
+  riskLevel         String
+  rollbackPlanPath  String?
+  requestedAt       DateTime @default(now())
+  decidedAt         DateTime?
+  correlationId     String
+
+  mission              Mission              @relation(fields: [missionId], references: [id])
+  receipts             Receipt[]
+  integrationEndpoints IntegrationEndpoint[]
+  deploymentGates      DeploymentGate[]
+
+  @@unique([missionId, gateCode])
+  @@index([status])
+  @@index([actionType])
+  @@index([correlationId])
+}
+
+model Receipt {
+  id              String   @id @default(cuid())
+  taskPacketId    String?
+  approvalGateId  String?
+  receiptType     String
+  status          String
+  artifactPath    String
+  artifactSha256  String?
+  redactionStatus String   @default("redacted_or_no_sensitive_data")
+  createdAt       DateTime @default(now())
+
+  taskPacket   TaskPacket?   @relation(fields: [taskPacketId], references: [id])
+  approvalGate ApprovalGate? @relation(fields: [approvalGateId], references: [id])
+
+  @@index([taskPacketId])
+  @@index([approvalGateId])
+  @@index([receiptType])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Lead {
+  id                String   @id @default(cuid())
+  projectId          String
+  source             String
+  businessName       String?
+  businessType       String?
+  contactNameMasked  String?
+  phoneHash          String?
+  lineIdHash         String?
+  emailHash          String?
+  serviceInterest    String?
+  packageInterest    String?
+  budgetRange        String?
+  urgency            String?
+  status             String   @default("new")
+  correlationId      String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  project    Project     @relation(fields: [projectId], references: [id])
+  quotations Quotation[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([serviceInterest])
+  @@index([correlationId])
+}
+
+model Quotation {
+  id                String   @id @default(cuid())
+  leadId            String
+  packageName        String
+  estimatedPriceMin  Int?
+  estimatedPriceMax  Int?
+  currency           String   @default("THB")
+  status             String   @default("draft")
+  previewPath        String?
+  pdfPath            String?
+  approvalGateCode   String?
+  createdAt          DateTime @default(now())
+  approvedAt         DateTime?
+
+  lead Lead @relation(fields: [leadId], references: [id])
+
+  @@index([leadId])
+  @@index([status])
+  @@index([packageName])
+}
+
+model ContentItem {
+  id          String   @id @default(cuid())
+  projectId   String
+  sourceType  String
+  title       String
+  channel     String?
+  status      String   @default("draft")
+  draftPath   String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([status])
+  @@index([channel])
+}
+
+model KnowledgeCard {
+  id            String   @id @default(cuid())
+  projectId      String
+  title          String
+  sourceType     String
+  sourceRef      String?
+  status         String   @default("distilled")
+  distilledPath  String?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([sourceType])
+  @@index([status])
+}
+
+model IntegrationEndpoint {
+  id              String   @id @default(cuid())
+  name            String
+  provider        String
+  mode            String
+  enabled         Boolean  @default(false)
+  secretRefName   String?
+  status          String   @default("configured_inactive")
+  approvalGateId  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  approvalGate ApprovalGate? @relation(fields: [approvalGateId], references: [id])
+
+  @@index([provider])
+  @@index([enabled])
+  @@index([status])
+}
+
+model DeploymentGate {
+  id             String   @id @default(cuid())
+  projectId       String
+  target          String
+  environment     String
+  status          String   @default("blocked")
+  approvalGateId  String?
+  evidencePath    String?
+  artifactSha256  String?
+  createdAt       DateTime @default(now())
+  deployedAt      DateTime?
+
+  project      Project       @relation(fields: [projectId], references: [id])
+  approvalGate ApprovalGate? @relation(fields: [approvalGateId], references: [id])
+
+  @@index([projectId])
+  @@index([target])
+  @@index([environment])
+  @@index([status])
+}
+
+model AuditEvent {
+  id            String   @id @default(cuid())
+  projectId      String?
+  actorType      String
+  actorId        String?
+  eventType      String
+  entityType     String
+  entityId       String?
+  correlationId  String
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  project Project? @relation(fields: [projectId], references: [id])
+
+  @@index([projectId])
+  @@index([eventType])
+  @@index([entityType])
+  @@index([correlationId])
+  @@index([createdAt])
+}

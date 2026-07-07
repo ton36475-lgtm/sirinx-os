@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  api-gateway:
+    build: ../../services/api-gateway
+    environment:
+      - NODE_ENV=staging
+      - MCP_DRY_RUN=true
+    ports:
+      - "3600:3600"
+
+  dev-control-api:
+    build: ../../services/dev-control-api
+    environment:
+      - DATABASE_URL=\${DATABASE_URL}
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=\${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=sirinx
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

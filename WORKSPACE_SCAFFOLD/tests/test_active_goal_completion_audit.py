@@ -38,6 +38,10 @@ class ActiveGoalCompletionAuditTests(unittest.TestCase):
             "deploy/push/live/provider/cloud/install/migration/secret reads blocked",
             "Do not start until Hermes approval",
             "Wait for exact artifact",
+            "SIRINX_GHOSTCLAW_LANE1_PACKET032_A2A_SYNC_RECEIPT_2026-07-02.md",
+            "Night Watch fresh status",
+            "WARN with local stack services offline",
+            "No service repair or restart without approval",
         ]
 
         missing = [item for item in required if item not in text]

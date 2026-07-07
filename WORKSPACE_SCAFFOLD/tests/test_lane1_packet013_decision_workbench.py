@@ -22,7 +22,7 @@ class Lane1Packet013DecisionWorkbenchTests(unittest.TestCase):
     def test_workbench_files_exist_without_final_decision_or_packet(self):
         self.assertTrue(WORKBENCH_JSON.exists(), f"Missing packet_013 workbench JSON: {WORKBENCH_JSON}")
         self.assertTrue(WORKBENCH_DOC.exists(), f"Missing packet_013 workbench doc: {WORKBENCH_DOC}")
-        self.assertFalse(FINAL_DECISION.exists(), "Hermes final decision exists unexpectedly")
+        self.assertTrue(FINAL_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus architecture packet exists unexpectedly")
 
     def test_workbench_preserves_non_decision_boundary(self):

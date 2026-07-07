@@ -54,7 +54,8 @@ class ActiveGoalCompletionRequirementsMatrixTests(unittest.TestCase):
 
         by_id = {item["id"]: item for item in matrix["requirements"]}
         self.assertEqual(by_id["REQ-ALL-CHAT-CONSOLIDATION"]["verdict"], "blocked_missing_export")
-        self.assertEqual(by_id["REQ-LANE1-FINAL-PACKET"]["verdict"], "blocked_missing_hermes_decision_and_final_packet")
+        self.assertEqual(by_id["REQ-CODEX-HERMES-AUTONOMY"]["verdict"], "hermes_decision_recorded_runtime_still_blocked")
+        self.assertEqual(by_id["REQ-LANE1-FINAL-PACKET"]["verdict"], "blocked_missing_final_opus_packet")
         self.assertEqual(by_id["REQ-HERMES-GATEWAY"]["verdict"], "blocked_connection_refused")
         self.assertEqual(by_id["REQ-V3-3-MERGE-KIT"]["verdict"], "blocked_exact_artifact_missing")
         self.assertEqual(by_id["REQ-R0-GATE-APPROVALS"]["verdict"], "blocked_gate_specific_approval_missing")
@@ -117,7 +118,8 @@ class ActiveGoalCompletionRequirementsMatrixTests(unittest.TestCase):
             "REQ-ALL-CHAT-CONSOLIDATION",
             "blocked_missing_export",
             "REQ-LANE1-FINAL-PACKET",
-            "blocked_missing_hermes_decision_and_final_packet",
+            "blocked_missing_final_opus_packet",
+            "Hermes packet_013 decision is recorded",
             "REQ-HERMES-GATEWAY",
             "blocked_connection_refused",
             "REQ-SAFETY-GATES",

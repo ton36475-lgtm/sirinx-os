@@ -31,7 +31,7 @@ class Lane1HermesDecisionIntakeHandoffTests(unittest.TestCase):
         self.assertTrue(SCRIPT.exists(), f"Missing handoff builder: {SCRIPT}")
         self.assertTrue(HANDOFF_JSON.exists(), f"Missing handoff JSON: {HANDOFF_JSON}")
         self.assertTrue(HANDOFF_DOC.exists(), f"Missing handoff doc: {HANDOFF_DOC}")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus packet exists unexpectedly")
 
     def test_builder_preserves_non_decision_boundary(self):

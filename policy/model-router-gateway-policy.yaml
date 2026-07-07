@@ -1,0 +1,46 @@
+policy_id: model-router-gateway-policy-v1
+target_tools:
+  - decolua/9router
+classification:
+  lane: MODEL_ROUTER_GATEWAY
+  default_gate: YELLOW
+  escalate_to_red_when:
+    - provider_credentials_required
+    - paid_provider_enabled
+    - multi_account_rotation_enabled
+    - auto_token_refresh_enabled
+    - external_endpoint_exposed
+    - production_agent_routing_enabled
+allowed:
+  - read_repo_docs
+  - create_architecture_assessment
+  - create_provider_routing_policy
+  - create_local_config_template_without_secrets
+  - evaluate_openai_compatible_interface
+  - draft_fallback_policy
+  - draft_cost_guard_policy
+blocked:
+  - store_provider_keys_in_repo
+  - print_provider_keys
+  - auto_call_paid_models
+  - bypass_provider_terms
+  - quota_evasion
+  - multi_account_abuse
+  - expose_local_router_to_public_internet
+  - route_customer_data_without_approval
+  - route_secret_bearing_prompts
+required_controls:
+  - env_only_credentials
+  - no_secret_logging
+  - provider_allowlist
+  - model_allowlist
+  - cost_ceiling
+  - per_provider_terms_review
+  - local_bind_only_by_default
+  - receipt_per_config_change
+  - human_gate_for_paid_provider
+receipts_required:
+  - model_router_assessment_receipt
+  - provider_terms_review_receipt
+  - credential_isolation_receipt
+  - no_paid_call_receipt

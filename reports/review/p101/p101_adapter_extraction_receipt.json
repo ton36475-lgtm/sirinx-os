@@ -1,0 +1,59 @@
+{
+  "packet_id": "P101_ADAPTER_EXTRACTION_LOCAL_ONLY",
+  "status": "P101_ADAPTER_EXTRACTION_READY_FOR_OPENCODE_REVIEW",
+  "baseline": {
+    "source": "P100C_REVIEW_PASS_READY_FOR_P101_ADAPTER_EXTRACTION",
+    "commit": "125a15ecf1e92723a38f41f382e006756965c94b",
+    "remote_branch": "origin/staging/godmode-master-os-v2"
+  },
+  "scope": {
+    "allowed_roots": [
+      "crates/ghostclaw_migration_core",
+      "docs/migration",
+      "reports/mission",
+      "reports/review/p101"
+    ],
+    "blocked_roots": [
+      "apps/sirinx-site",
+      "hermes_command_center.py",
+      ".env",
+      "secrets",
+      "target",
+      "cloudflare"
+    ]
+  },
+  "implemented": [
+    "shared_adapter_traits",
+    "codex_dry_run_adapter_wrapper",
+    "append_only_queue_clear_marker",
+    "static_validator_adapter",
+    "python_oracle_fixture_contract",
+    "p101_adapter_extraction_tests",
+    "p101_docs_and_report"
+  ],
+  "blocked_actions_confirmed": {
+    "live_telegram_start": false,
+    "live_codex_execution": false,
+    "deploy": false,
+    "cloudflare_mutation": false,
+    "dns_mutation": false,
+    "r2_d1_kv_mutation": false,
+    "line_webhook_activation": false,
+    "crm_customer_storage": false,
+    "live_send": false,
+    "provider_model_call": false,
+    "secret_read_print": false,
+    "git_push": false
+  },
+  "validation": {
+    "cargo_fmt_check": "passed",
+    "cargo_clippy_all_targets_all_features_d_warnings": "passed",
+    "cargo_test": "passed",
+    "cargo_build": "passed",
+    "json_receipt_parse": "passed",
+    "secret_scan": "passed_no_findings",
+    "scoped_git_diff_check": "passed",
+    "full_validation": "passed"
+  },
+  "next_gate": "P101_OPENCODE_REVIEW_RUST_ADAPTER_EXTRACTION"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "agent_technical_writer",
+  "type": "agent",
+  "label": "Technical Writer Agent",
+  "capabilities": ["runbook", "receipt_summary", "handoff", "obsidian_pulse"],
+  "default_model_route": "deepseek",
+  "fable5_allowed": false,
+  "approval_required_for": ["public_publish", "large_memory_export"]
+}
+

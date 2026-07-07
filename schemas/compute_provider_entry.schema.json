@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/compute_provider_entry.schema.json",
+  "title": "GhostClaw Compute Provider Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["provider_id", "compute_type", "gate", "budget", "provisioning_default"],
+  "properties": {
+    "provider_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compute_type": {
+      "enum": ["gpu", "cpu", "storage", "network"]
+    },
+    "gate": {
+      "enum": ["YELLOW", "RED"]
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "ceiling_required"],
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "ceiling_required": {
+          "const": true
+        }
+      }
+    },
+    "provisioning_default": {
+      "const": "disabled"
+    }
+  }
+}

@@ -108,6 +108,15 @@ const ACTION_TO_CLASS: Record<string, ActionClass> = {
   integrate_patches: "INTEGRATE",
   stage_commit: "COMMIT",
 
+  // Plugin/agent lane operations (safe within .hermes/ lanes)
+  build: "WRITE_LANE",
+  write_module: "WRITE_LANE",
+  build_scaffold: "WRITE_LANE",
+
+  // Intent/task classification (safe — local file read + analysis)
+  classify: "VALIDATE",
+  policy_enforce: "VALIDATE",
+
   // Dangerous / forbidden defaults
   dependency_install: "EXTERNAL",
   model_download: "EXTERNAL",
@@ -120,8 +129,46 @@ const ACTION_TO_CLASS: Record<string, ActionClass> = {
   broad_filesystem_mutation: "DESTROY",
 };
 
-export function resolveActionClass(action: string): ActionClass {
-  return ACTION_TO_CLASS[action] ?? "EXTERNAL";
+// Lane-aware overrides: certain actions are safer within bounded plugin lanes
+// and get upgraded from EXTERNAL → WRITE_LANE / VALIDATE.
+const LANE_ACTION_UPGRADES: Array<{
+  lanePattern: string;
+  actionUpgrades: Record<string, ActionClass>;
+}> = [
+  {
+    lanePattern: ".hermes/hermes-agent/plugins/",
+    actionUpgrades: {
+      build: "WRITE_LANE",
+      classify: "VALIDATE",
+      verify: "VALIDATE",
+      policy_enforce: "VALIDATE",
+    },
+  },
+  {
+    lanePattern: "tests/",
+    actionUpgrades: {
+      verify: "VALIDATE",
+      build: "WRITE_LANE",
+    },
+  },
+];
+
+export function resolveActionClass(
+  action: string,
+  lane?: string,
+): ActionClass {
+  const base = ACTION_TO_CLASS[action] ?? "EXTERNAL";
+
+  if (!lane) return base;
+
+  for (const upgrade of LANE_ACTION_UPGRADES) {
+    if (lane.startsWith(upgrade.lanePattern)) {
+      const upgraded = upgrade.actionUpgrades[action];
+      if (upgraded) return upgraded;
+    }
+  }
+
+  return base;
 }
 
 export function resolveTier(actionClass: ActionClass): TierRule {
@@ -139,6 +186,9 @@ export function resolveTier(actionClass: ActionClass): TierRule {
 }
 
 export function classifyMessage(msg: A2AMessage): TierRule {
-  const actionClass = resolveActionClass(msg.action_requested);
+  const actionClass = resolveActionClass(
+    msg.action_requested,
+    msg.context.lane ?? "",
+  );
   return resolveTier(actionClass);
 }

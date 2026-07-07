@@ -1,0 +1,58 @@
+{
+  "loop_id": "GHOSTCLAW-P077-LOOP-HARNESS-LOCAL-DRY-RUN-20260704",
+  "mode": "docs_only_dry_run",
+  "current_gate": "P077",
+  "objective": "Add Loop-Engineered Harness as Layer 12B without replacing Hermes, Agent Orchestrator, OpenCode review, Semgrep, or human gates.",
+  "active_focus": [
+    "sirinx.co",
+    "AGM AutoFlow"
+  ],
+  "paused_out_of_scope": [
+    "Kusala",
+    "กุศลา",
+    "Final Farewell",
+    "Phitsanulok News",
+    "Phitsanulok United News"
+  ],
+  "allowed_paths": [
+    "docs/harness/**",
+    ".ghostclaw_runtime/a2a2a/evidence/*LOOP-HARNESS*",
+    ".ghostclaw_runtime/a2a2a/receipts/*LOOP-HARNESS*",
+    "reports/mission/*LOOP_HARNESS*"
+  ],
+  "blocked_paths": [
+    "src/**",
+    "apps/**",
+    "packages/**",
+    "workers/**",
+    "cloudflare/**",
+    "wrangler.toml",
+    ".env*",
+    "secrets/**",
+    "credentials/**"
+  ],
+  "max_iterations": 3,
+  "stop_before": [
+    "git commit",
+    "git push",
+    "deploy",
+    "live Telegram send",
+    "Cloudflare mutation",
+    "provider/model call"
+  ],
+  "required_validation": [
+    "python3 -m json.tool docs/harness/loop_harness_manifest.schema.json",
+    "python3 -m json.tool docs/harness/P077_LOOP_HARNESS_LOCAL_DRY_RUN_MANIFEST.example.json",
+    "node scripts/secret-scan.mjs",
+    "git diff --check -- docs/harness reports/mission"
+  ],
+  "reviewer": {
+    "separate_from_worker": true,
+    "mutation_allowed": false
+  },
+  "receipt_policy": {
+    "receipt_per_iteration": true,
+    "record_changed_paths": true,
+    "record_validation": true
+  }
+}

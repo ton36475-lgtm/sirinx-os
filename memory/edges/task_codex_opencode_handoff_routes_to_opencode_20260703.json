@@ -1,0 +1,9 @@
+{
+  "source": "task_codex_opencode_handoff_20260703",
+  "target": "agent_security",
+  "type": "routes_to",
+  "properties": {
+    "lane": "opencode",
+    "mode": "read_only_review"
+  }
+}

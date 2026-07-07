@@ -24,7 +24,7 @@ decision, and not a license claim.
 ## Queue State
 
 ```text
-packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29
+packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48
 current_actionable_packet=packet_013
 packet_024_folder=inbox
 ```

@@ -1,0 +1,90 @@
+{
+  "active_focus": [
+    "sirinx.co",
+    "AGM AutoFlow"
+  ],
+  "agent": "codex",
+  "allowed_files": [
+    "apps/sirinx-site/**",
+    "apps/agm-site/**",
+    "apps/agm-autoglow-dashboard/**",
+    "apps/agm-autoglow-extension/**",
+    "docs/website/**",
+    "docs/creative/**",
+    "reports/mission/**",
+    ".ghostclaw_runtime/a2a2a/evidence/**",
+    ".ghostclaw_runtime/a2a2a/receipts/**"
+  ],
+  "approval_required": false,
+  "closed_gates": {
+    "cloudflare_r2_mutation": "blocked",
+    "commit": "blocked",
+    "connector_read": "blocked",
+    "connector_write": "blocked",
+    "deploy": "blocked",
+    "install": "blocked",
+    "live_send": "blocked",
+    "provider_call": "blocked",
+    "push": "blocked",
+    "secret_read_or_print": "blocked"
+  },
+  "constraints": [
+    "local-safe only",
+    "do not mutate live services",
+    "do not call providers or connectors",
+    "do not send Telegram/LINE/email/customer messages",
+    "do not install dependencies",
+    "do not commit, push, deploy, or mutate Cloudflare/R2",
+    "do not read or print secrets",
+    "preserve active focus: sirinx.co and AGM AutoFlow only"
+  ],
+  "created_at": "2026-07-03T13:53:04+07:00",
+  "deliverables": [
+    "next scoped local task card for sirinx.co or AGM AutoFlow",
+    "Hermes/KOB local worker envelopes after separate dispatch gate",
+    "OpenCode review target summary",
+    "Validator command list",
+    "receipt and Obsidian pulse after execution"
+  ],
+  "forbidden_files": [
+    ".env",
+    ".env.*",
+    "secrets/**",
+    "node_modules/**",
+    ".git/**",
+    "apps/kusala-site/**",
+    "apps/phitsanulok-news/**"
+  ],
+  "id": "packet_074",
+  "mission_id": "A2A2A-P103-ACTIVE-FOCUS-QUEUE-REPLENISH-20260703",
+  "mode": "local_only_queue_replenish_no_live_send_no_provider_no_deploy",
+  "next_safe_action_after_write": "Run coordinator dry-run, then open a separate local worker envelope write gate if packet_074 is selected.",
+  "packet_id": "packet_074_sirinx_agm_active_focus_replenish",
+  "paused_focus": [
+    "Kusala",
+    "Phitsanulok News"
+  ],
+  "priority": "high",
+  "project_id": "active-focus-sirinx-agm",
+  "risk": "safe",
+  "source_evidence": [
+    "reports/mission/A2A2A_P099_ORCHESTRATOR_COMPACT_STATUS_IMPLEMENTATION_20260703.md",
+    "reports/mission/A2A2A_P102_LINEAR_MCP_AUTH_REFRESH_READINESS_20260703.md",
+    ".ghostclaw_runtime/a2a2a/project_queues/sirinx_site/TASK-001-sirinx-site-public-guardian.yaml",
+    ".ghostclaw_runtime/a2a2a/project_queues/sirinx_site/TASK-002-sirinx-site-roi-calculator.yaml",
+    ".ghostclaw_runtime/a2a2a/project_queues/agm/TASK-001-agm-creative-media-platform.yaml"
+  ],
+  "status": "queued_preview_not_written",
+  "summary": "Replenish the A2A2A queue with one safe local packet that routes the next Sirinx site and AGM AutoFlow review/build work through Hermes, Codex, OpenCode, KOB, and Validator without live send, provider call, connector read, deploy, push, install, or secret access.",
+  "target_queue_path_after_approval": "_A2A_QUEUE/outbox/packet_074_sirinx_agm_active_focus_replenish.json",
+  "task_type": "active_focus_local_replenish",
+  "title": "sirinx.co and AGM AutoFlow active focus local queue replenish",
+  "verification": [
+    "python3 scripts/ghostclaw_a2a_agent_orchestrator.py --compact",
+    "python3 scripts/ghostclaw_a2a_queue_coordinator.py --dry-run",
+    "JSON parse generated evidence and receipt",
+    "node scripts/secret-scan.mjs",
+    "git diff --check on scoped artifacts"
+  ],
+  "write_gate_required": "APPROVE_A2A2A_P103_ACTIVE_FOCUS_QUEUE_REPLENISH_WRITE_ONLY"
+}

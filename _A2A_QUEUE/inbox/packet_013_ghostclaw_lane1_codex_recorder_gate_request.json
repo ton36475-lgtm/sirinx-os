@@ -34,6 +34,11 @@
   "deploy": false,
   "push": false,
   "lane2_authorized": false,
+  "hermes_model_selection": {
+    "allowed_for_vibe_coding_drafts": true,
+    "models": "any",
+    "separate_action_gate_required": true
+  },
   "codex_recorder_gate_requested": true,
   "codex_recorder_gate_open": false,
   "requested_decision": "open_codex_recorder_gate",

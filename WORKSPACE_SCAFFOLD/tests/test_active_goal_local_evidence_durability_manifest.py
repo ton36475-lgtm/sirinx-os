@@ -37,7 +37,7 @@ class ActiveGoalLocalEvidenceDurabilityManifestTests(unittest.TestCase):
         self.assertTrue(MANIFEST_JSON.exists(), f"Missing durability manifest JSON: {MANIFEST_JSON}")
         self.assertTrue(MANIFEST_DOC.exists(), f"Missing durability manifest doc: {MANIFEST_DOC}")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 packet exists unexpectedly")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_manifest_preserves_local_only_boundary(self):
         manifest = self.load_manifest()
@@ -76,7 +76,7 @@ class ActiveGoalLocalEvidenceDurabilityManifestTests(unittest.TestCase):
         for entry in entries:
             path = ROOT / entry["path"]
             self.assertTrue(path.exists(), f"Missing local pathspec: {entry['path']}")
-            self.assertEqual(entry["ignore_rule"], ".gitignore:31:data/")
+            self.assertEqual(entry["ignore_rule"], ".gitignore:34:data/")
             self.assertEqual(entry["state"], "local_ignored_present")
             self.assertTrue(entry["doc_mirror"].startswith("docs/knowledge/"))
             self.assertTrue((ROOT / entry["doc_mirror"]).exists(), f"Missing doc mirror: {entry['doc_mirror']}")
@@ -89,7 +89,7 @@ class ActiveGoalLocalEvidenceDurabilityManifestTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(result.returncode, 0, f"{entry['path']} should be ignored")
-            self.assertIn(".gitignore:31:data/", result.stdout)
+            self.assertIn(".gitignore:34:data/", result.stdout)
 
     def test_manifest_is_linked_from_queue_index_and_mission_control(self):
         manifest_path = str(MANIFEST_JSON.relative_to(ROOT))
@@ -126,10 +126,17 @@ class ActiveGoalLocalEvidenceDurabilityManifestTests(unittest.TestCase):
             "claims_all_chats_read=false",
             "lane2_authorized=false",
             "completion_claim=false",
-            ".gitignore:31:data/",
+            ".gitignore:34:data/",
             "data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json",
             "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
             "data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json",
+            "data/pathspecs/sirinx_active_goal_current_probe_refresh_2026-07-02.json",
+            "data/pathspecs/sirinx_chatgpt_export_readonly_source_receipt_validator_2026-07-02.json",
+            "data/pathspecs/sirinx_hermes_gateway_repair_approval_gate_2026-07-02.json",
+            "data/pathspecs/sirinx_uat_crud_mongodb_hermes_review_packet_2026-07-02.json",
+            "data/pathspecs/sirinx_uat_crud_mongodb_work_report_contract_2026-07-02.json",
+            "data/pathspecs/sirinx_uat_crud_mongodb_work_report_queue_2026-07-02.json",
+            "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_DRAFT_2026-07-02.md",
             "No force-add of ignored data.",
             "No deploy.",
             "No push.",

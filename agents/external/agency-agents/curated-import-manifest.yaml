@@ -1,0 +1,135 @@
+mission_name: GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1
+mission_id: GHOSTCLAW-AGENCY-IMPORT-20260630-001
+source_repo:
+  name: msitarzewski/agency-agents
+  role: upstream_agent_catalog
+  license: MIT
+  usage_mode: reference_and_curated_import
+  full_roster_import: false
+  verification_mode: operator_provided_primary_claims_plus_local_reference_only
+limits:
+  max_agents_total: 48
+  max_agents_loaded_per_task: 3
+  max_divisions_per_task: 1
+  max_agents_installed_opencode: 80
+  full_roster_loaded: false
+  default_mode: reference_only
+  install_requires_c_gate: true
+action_tiers:
+  A:
+    autonomous: true
+    allowed:
+      - inspect_repo
+      - inspect_external_catalog_metadata
+      - list_divisions
+      - create_plan
+      - create_mapping_docs
+      - dry_run_review
+  B:
+    autonomous: true
+    requires:
+      - file_lease
+      - local_validation
+      - receipt
+    allowed:
+      - create_adapter_docs
+      - create_registry_yaml
+      - create_curated_manifest
+      - create_local_safe_agent_wrappers
+      - create_receipts
+  C:
+    autonomous: false
+    requires:
+      - explicit_gate
+      - rollback_plan
+      - quorum
+    examples:
+      - git_clone_external_repo
+      - install_script
+      - convert_script
+      - commit
+      - dependency_change
+      - runtime_queue_execution
+  D:
+    blocked: true
+    examples:
+      - push
+      - deploy
+      - cloud_mutation
+      - production_write
+      - customer_send
+  X:
+    blocked: true
+    examples:
+      - secret_read
+      - destructive_script
+      - paid_model_call_without_budget_gate
+      - exfiltration
+priority_divisions:
+  engineering:
+    purpose: build_and_architecture
+    agents:
+      - backend-architect
+      - software-architect
+      - code-reviewer
+      - database-optimizer
+      - ai-engineer
+      - multi-agent-systems-architect
+      - codebase-onboarding-engineer
+      - minimal-change-engineer
+      - technical-writer
+  testing:
+    purpose: validation_and_evidence
+    agents:
+      - evidence-collector
+      - reality-checker
+      - test-results-analyzer
+      - performance-benchmarker
+      - api-tester
+      - accessibility-auditor
+  security:
+    purpose: defensive_review_only
+    agents:
+      - security-architect
+      - application-security-engineer
+      - senior-secops-engineer
+      - compliance-auditor
+  product:
+    purpose: scope_and_requirements
+    agents:
+      - product-manager
+      - sprint-prioritizer
+      - trend-researcher
+      - feedback-synthesizer
+  project-management:
+    purpose: orchestration
+    agents:
+      - studio-producer
+      - project-shepherd
+      - studio-operations
+      - senior-project-manager
+  design:
+    purpose: ux_ui
+    agents:
+      - ui-designer
+      - ux-architect
+      - ux-researcher
+      - brand-guardian
+  specialized:
+    purpose: ghostclaw_core
+    agents:
+      - agents-orchestrator
+      - agentic-identity-trust-architect
+      - workflow-architect
+      - mcp-builder
+      - automation-governance-architect
+      - document-generator
+blocked_loads:
+  - full_agency_repo
+  - all_232_agents
+  - all_divisions
+  - all_marketing_agents
+  - all_sales_agents
+  - all_prompt_files
+  - all_old_ghostclaw_memory
+  - all_chat_history

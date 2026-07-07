@@ -13,21 +13,23 @@ DECISION_PATH = ROOT / "docs" / "knowledge" / "SIRINX_GHOSTCLAW_LANE1_HERMES_REV
 class Lane1CodexRecorderGateRequestTests(unittest.TestCase):
     """Ensure packet_013 asks for a gate without opening it."""
 
-    def test_gate_request_files_exist_without_final_packet_or_decision(self):
+    def test_gate_request_files_exist_with_decision_but_without_final_packet(self):
         self.assertTrue(PACKET_PATH.exists(), f"Missing packet: {PACKET_PATH}")
         self.assertTrue(DOC_PATH.exists(), f"Missing gate request doc: {DOC_PATH}")
         self.assertFalse(FINAL_PACKET_PATH.exists(), "Final Opus packet exists unexpectedly")
-        self.assertFalse(DECISION_PATH.exists(), "Hermes decision file exists unexpectedly")
+        self.assertTrue(DECISION_PATH.exists(), "Hermes decision file should exist after route_to_opus decision")
 
-    def test_packet_requests_gate_but_keeps_it_closed(self):
+    def test_packet_records_decision_but_keeps_gate_closed(self):
         packet = json.loads(PACKET_PATH.read_text(encoding="utf-8"))
 
         self.assertEqual(packet["id"], "packet_013")
-        self.assertEqual(packet["status"], "inbox")
+        self.assertEqual(packet["status"], "decided")
+        self.assertEqual(packet["decision"], "route_to_opus")
         self.assertTrue(packet["codex_recorder_gate_requested"])
         self.assertFalse(packet["codex_recorder_gate_open"])
         self.assertEqual(packet["requested_decision"], "open_codex_recorder_gate")
-        self.assertFalse(packet["decision_record"])
+        self.assertTrue(packet["decision_record"])
+        self.assertEqual(packet["decision_path"], "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md")
         self.assertFalse(packet["lane2_authorized"])
         self.assertTrue(packet["dry_run"])
         self.assertFalse(packet["live_send"])

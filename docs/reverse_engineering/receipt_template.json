@@ -1,0 +1,36 @@
+{
+  "receipt_id": "",
+  "mission_id": "",
+  "project_id": "",
+  "status": "draft",
+  "mode": "research_to_build_packet",
+  "source": {
+    "items_checked": [],
+    "access_rights_confirmed": false,
+    "unknowns": []
+  },
+  "outputs": {
+    "spec_path": "",
+    "adr_path": "",
+    "build_packet_path": "",
+    "validation_path": "",
+    "handoff_path": ""
+  },
+  "validation": {
+    "build_packet_actionable": false,
+    "no_prohibited_methods": false,
+    "json_yaml_parse": false,
+    "receipt_written": false
+  },
+  "blocked_actions_confirmed": [
+    "secret_read",
+    "customer_data_ingestion",
+    "unauthorized_third_party_scanning",
+    "push",
+    "deploy",
+    "cloud_mutation",
+    "provider_call",
+    "live_send"
+  ],
+  "next_safe_action": ""
+}

@@ -1,0 +1,108 @@
+{
+  "project": "sirinx-line-bot",
+  "priority": "P1",
+  "title": "a2a-sync:verify:D-db960421",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "input": [
+    ".hermes/hermes-agent/plugins/platforms/line/sirinx/",
+    ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
+    ".hermes/hermes-agent/tests/gateway/test_line_plugin.py"
+  ],
+  "output": [],
+  "approval_required": false,
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-032",
+    "correlation_id": "sirinx-line-bot-032",
+    "phase": "test:integration",
+    "from": {
+      "agent": "human",
+      "role": "product-owner"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "qa-captain"
+    },
+    "action_requested": "verify",
+    "context": {
+      "goal": "Build integration test suite for SIRINX LINE bot under Hermes LINE plugin. Test message interception, intent classification, ROI calculator state machine, Flex Message output structure, governance risk gates, and postback handling against LINE Messaging API sandbox (mock HTTP endpoints). Tests must comply with Hermes Agent testing conventions (pytest, scripts/run_tests.sh compatible, subprocess-per-file isolation).",
+      "files": [
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/",
+        ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
+        ".hermes/hermes-agent/tests/gateway/test_line_plugin.py"
+      ],
+      "lane": ".hermes/hermes-agent/plugins/platforms/line/sirinx/tests",
+      "constraints": [
+        "dry_run=false",
+        "deploy=false",
+        "push=false",
+        "secret_read=false",
+        "no_live_send",
+        "no_real_line_api_calls",
+        "mock_aiohttp_responses",
+        "pytest_only",
+        "scripts/run_tests.sh_compatible",
+        "do_not_modify_existing_test_line_plugin.py",
+        "all_new_tests_in_plugins/platforms/line/sirinx/tests/"
+      ],
+      "deliverables": [
+        "test_intent_classifier.py — 15+ cases per intent, edge cases, Thai/English mixing",
+        "test_roi_calculator.py — state machine transitions, input parsing, calculation math, edge values",
+        "test_flex_templates.py — structural validation of Flex Message JSON output",
+        "test_governance.py — deny list matches, handoff detection, receipt writing",
+        "test_sirinx_bot.py — end-to-end message processing through SirinxBot orchestrator",
+        "test_postback.py — postback action routing and response generation"
+      ],
+      "command_source": "mission",
+      "license_policy": {
+        "requested_license": "MIT",
+        "repo_license_file_present": false,
+        "assertion": "intent_only_until_license_file_exists"
+      }
+    },
+    "response_expected": {
+      "format": "packet_and_test_report",
+      "within_lane": "local_file_bus_only",
+      "max_turns": 2
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-07T12:00:00.000Z",
+    "ttl_seconds": 3600,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "receipt": {
+    "schema": "ghostclaw.receipt.v3_2",
+    "decision_id": "D-db960421",
+    "correlation_id": "sirinx-line-bot-032",
+    "mission_id": "M-032",
+    "requester_agent": "human",
+    "approver_agent": "codex-captain",
+    "action_class": "VALIDATE",
+    "final_tier": "B",
+    "decision_status": "allowed",
+    "reason": "auto_execute:B:VALIDATE",
+    "evidence_pack": {
+      "action_requested": "verify",
+      "lane": ".hermes/hermes-agent/plugins/platforms/line/sirinx/tests",
+      "files": [
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/",
+        ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
+        ".hermes/hermes-agent/tests/gateway/test_line_plugin.py"
+      ]
+    },
+    "timestamp": "2026-07-07T12:41:42.165Z",
+    "checksums": {
+      "context_goal_sha256": "f914604f443b7ae0bc296fc3450d434b0af0c3ab0b91dc1e151ee2956c1bb986",
+      "action_requested_sha256": "a12dd3a7fd3203a452eb34d91a9be20569d5e337a3384347068895c07f3e0c5a"
+    }
+  },
+  "notes": "tier=B; reason=auto_execute:B:VALIDATE; sync_run=2026-07-07T12:41:42.165Z",
+  "id": "outbox_39f45785",
+  "created_at": "2026-07-07T12:41:42.165Z"
+}

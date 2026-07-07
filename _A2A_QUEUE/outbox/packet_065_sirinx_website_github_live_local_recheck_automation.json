@@ -1,0 +1,112 @@
+{
+  "packet_id": "packet_065_sirinx_website_github_live_local_recheck_automation",
+  "created_at": "2026-07-03T05:03:33+0700",
+  "lane": "codex_builder",
+  "mode": "local_only_read_only_github_live_local_recheck_no_push_no_deploy",
+  "scope": "apps/sirinx-site",
+  "status": "GITHUB_LIVE_LOCAL_RECHECK_READY_LOCAL_REVIEW_TARGET_CONFIRMED",
+  "repository": "ton36475-lgtm/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "github_read": {
+    "read_only": true,
+    "method": "github_contents_api_failed_git_show_fallback",
+    "status": 404,
+    "fetched_file": "apps/sirinx-site/src/index.html",
+    "fetched_blob_sha": "",
+    "mutation_performed": false
+  },
+  "git_metadata": {
+    "local_head_sha": "aa66f263b182dceafeb16562e36064bddf40c342",
+    "remote_branch_sha": "02524464ea97931aea1a34c559ecdec6e431dc37",
+    "branch_found": true,
+    "status_short": "## staging/godmode-master-os-v2...origin/staging/godmode-master-os-v2 [ahead 33]\n M apps/sirinx-site/package.json\n M apps/sirinx-site/public/sitemap.xml\n M apps/sirinx-site/scripts/build.mjs\n M apps/sirinx-site/scripts/check.mjs\n M apps/sirinx-site/server.mjs\n M apps/sirinx-site/src/app.js\n M apps/sirinx-site/src/index.html\n M apps/sirinx-site/src/styles.css\n?? _A2A_QUEUE/outbox/packet_064_sirinx_website_github_connector_recheck.json\n?? _A2A_QUEUE/outbox/packet_065_sirinx_website_github_live_local_recheck_automation.json\n?? apps/sirinx-site/DESIGN.md\n?? apps/sirinx-site/playwright.config.mjs\n?? apps/sirinx-site/scripts/capture-review-screenshots.mjs\n?? apps/sirinx-site/scripts/capture-review-screenshots.test.mjs\n?? apps/sirinx-site/scripts/closed-gate-checks.mjs\n?? apps/sirinx-site/scripts/closed-gate-checks.test.mjs\n?? apps/sirinx-site/scripts/generate-human-review-board.mjs\n?? apps/sirinx-site/scripts/generate-human-review-board.test.mjs\n?? apps/sirinx-site/scripts/github-live-local-recheck.mjs\n?? apps/sirinx-site/scripts/github-live-local-recheck.test.mjs\n?? apps/sirinx-site/scripts/line-qr-link-recheck.mjs\n?? apps/sirinx-site/scripts/line-qr-link-recheck.test.mjs\n?? apps/sirinx-site/scripts/local-preview-health.mjs\n?? apps/sirinx-site/scripts/local-preview-health.test.mjs\n?? apps/sirinx-site/scripts/local-review-run.mjs\n?? apps/sirinx-site/scripts/local-review-run.test.mjs\n?? apps/sirinx-site/scripts/manual-review-evidence-contract.mjs\n?? apps/sirinx-site/scripts/manual-review-evidence-contract.test.mjs\n?? apps/sirinx-site/scripts/manual-review-gate.mjs\n?? apps/sirinx-site/scripts/manual-review-gate.test.mjs\n?? apps/sirinx-site/scripts/manual-review-intake.mjs\n?? apps/sirinx-site/scripts/manual-review-intake.test.mjs\n?? apps/sirinx-site/scripts/manual-review-receipt.mjs\n?? apps/sirinx-site/scripts/manual-review-receipt.test.mjs\n?? apps/sirinx-site/scripts/master-plan-current-audit.mjs\n?? apps/sirinx-site/scripts/master-plan-current-audit.test.mjs\n?? apps/sirinx-site/scripts/release-readiness.mjs\n?? apps/sirinx-site/scripts/release-readiness.test.mjs\n?? apps/sirinx-site/scripts/review-evidence-refresh.mjs\n?? apps/sirinx-site/scripts/review-evidence-refresh.test.mjs\n?? apps/sirinx-site/scripts/review-gate-checks.test.mjs\n?? apps/sirinx-site/scripts/server.test.mjs\n?? apps/sirinx-site/src/_partials/\n?? apps/sirinx-site/src/assets/optimized/\n?? apps/sirinx-site/src/components/\n?? apps/sirinx-site/src/config/\n?? apps/sirinx-site/src/contact/\n?? apps/sirinx-site/src/line/\n?? apps/sirinx-site/src/projects/\n?? apps/sirinx-site/src/quote/\n?? apps/sirinx-site/src/roi-calculator/\n?? apps/sirinx-site/src/trust-center/\n?? apps/sirinx-site/tests/\n?? docs/website/",
+    "website_diff_name_status": "M\tapps/sirinx-site/package.json\nM\tapps/sirinx-site/public/sitemap.xml\nM\tapps/sirinx-site/scripts/build.mjs\nM\tapps/sirinx-site/scripts/check.mjs\nM\tapps/sirinx-site/server.mjs\nM\tapps/sirinx-site/src/app.js\nM\tapps/sirinx-site/src/index.html\nM\tapps/sirinx-site/src/styles.css"
+  },
+  "source_comparison": {
+    "github_branch_index": {
+      "bytes": 7416,
+      "sha256": "252c9229301fb03b0b45c98d8edababff930837f53ffb60032a502b8d6f6e114",
+      "title": "SIRINX - Controlled AI Operations",
+      "has_solar": true,
+      "has_line_signal": false,
+      "has_line_route_link": false,
+      "has_qr_url": false,
+      "has_solar_contact_route": false,
+      "has_old_controlled_ai_title": true
+    },
+    "live_home": {
+      "url": "https://www.sirinx.co/",
+      "status": 200,
+      "bytes": 11716,
+      "sha256": "98d4538a4b0b6c705013df70a441cf9aed51b9c8598b60bd10f86b2a099a6251",
+      "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS &amp; AI Energy",
+      "has_solar": true,
+      "has_line_signal": true,
+      "has_line_route_link": false,
+      "has_qr_url": false,
+      "has_solar_contact_route": true,
+      "has_old_controlled_ai_title": false
+    },
+    "live_line": {
+      "url": "https://www.sirinx.co/line",
+      "status": 200,
+      "bytes": 11716,
+      "sha256": "f515e2babc3d6e59fe5a95a4398012f9fcbce165244da36e97953a6291722c2f",
+      "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS &amp; AI Energy",
+      "has_solar": true,
+      "has_line_signal": true,
+      "has_line_route_link": false,
+      "has_qr_url": false,
+      "has_solar_contact_route": true,
+      "has_old_controlled_ai_title": false
+    },
+    "local_home": {
+      "bytes": 17218,
+      "sha256": "193b35fc97d7834eb1f4a446b5fe3ab032d381caa4f07255b5d471102a42f50b",
+      "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS &amp; AI Energy",
+      "has_solar": true,
+      "has_line_signal": true,
+      "has_line_route_link": true,
+      "has_qr_url": false,
+      "has_solar_contact_route": true,
+      "has_old_controlled_ai_title": false
+    },
+    "local_line": {
+      "bytes": 20905,
+      "sha256": "93fb31f6598b3de84fe0bbef067992e40e9567d648f1d7ce7111d669ee2dbe77",
+      "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger",
+      "has_solar": true,
+      "has_line_signal": true,
+      "has_line_route_link": true,
+      "has_qr_url": true,
+      "has_solar_contact_route": false,
+      "has_old_controlled_ai_title": false
+    }
+  },
+  "decision": {
+    "review_target": "local_working_copy",
+    "copy_github_index_to_local": false,
+    "reason": "GitHub branch index is older than the Solar/LINE local review target and would roll back the website upgrade.",
+    "completion_claim_allowed": false,
+    "deploy_gate": "BLOCKED_FOR_DEPLOY",
+    "push_gate": "BLOCKED_UNTIL_EXPLICIT_PUSH_APPROVAL"
+  },
+  "closed_gates": {
+    "deploy": "blocked",
+    "push": "blocked",
+    "line_webhook": "blocked",
+    "production_analytics": "blocked",
+    "crm_customer_data_storage": "blocked",
+    "customer_data_collection": "blocked",
+    "external_message_send": "blocked",
+    "provider_call": "blocked",
+    "paid_provider_call": "blocked",
+    "public_tunnel": "blocked",
+    "package_install": "blocked",
+    "production_mutation": "blocked",
+    "database_write_or_migration": "blocked",
+    "secret_or_env_read": "blocked"
+  },
+  "report": "docs/website/SIRINX_WEBSITE_GITHUB_LIVE_LOCAL_AUTOMATED_RECHECK_2026-07-03.md",
+  "next_safe_action": "Human reviewer opens local preview and review board, scans the LINE QR on a real device, confirms existing bot/contact behavior, then grants exact deploy approval only if accepted."
+}

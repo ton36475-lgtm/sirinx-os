@@ -125,11 +125,11 @@ class A2ANextSafeActionSequencerPacketTests(unittest.TestCase):
             queue_status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         packet = next(item for item in queue_status["packets"] if item["id"] == "packet_022")
@@ -144,7 +144,7 @@ class A2ANextSafeActionSequencerPacketTests(unittest.TestCase):
         self.assertFalse(packet["lane2_authorized"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29", text)
+        self.assertIn("packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48", text)
         self.assertIn(str(PACKET.relative_to(ROOT)), text)
 
     def test_sequencer_surfaces_across_queue_index_registry_manifest_and_mission_control(self):

@@ -1,0 +1,84 @@
+{
+  "packet_id": "packet_066_sirinx_website_line_qr_link_recheck",
+  "created_at": "2026-07-06T21:20:24+0700",
+  "lane": "codex_builder",
+  "mode": "local_only_read_only_line_qr_link_recheck_no_message_send",
+  "scope": "apps/sirinx-site",
+  "status": "LINE_QR_LINK_RECHECK_READY_PENDING_REAL_DEVICE_SCAN",
+  "line_official": {
+    "display_name": "SIRINX โซล่าเซลล์",
+    "basic_id": "@304zrttj",
+    "premium_id_target": "@sirinx",
+    "short_link": "https://lin.ee/S97R6nj",
+    "add_friend_url": "https://line.me/R/ti/p/%40304zrttj",
+    "chat_url": "https://line.me/R/oaMessage/%40304zrttj",
+    "qr_image_url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr"
+  },
+  "qr_asset": {
+    "url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "status": 200,
+    "content_type": "",
+    "content_length": "24045",
+    "is_png": true,
+    "width": 360,
+    "height": 360,
+    "bytes": 24045,
+    "sha256": "8211596f38bafec06b8c0ceafe444f0dfe9746196c4684c9604f11c6a7a1639a",
+    "acceptable_for_local_review": true
+  },
+  "link_results": {
+    "shortLink": {
+      "url": "https://lin.ee/S97R6nj",
+      "status": 301,
+      "location": "https://line.me/R/ti/p/@304zrttj?ts=07020215&oat_content=url",
+      "content_type": "",
+      "content_length": "0",
+      "acceptable_read_only_response": true
+    },
+    "addFriendUrl": {
+      "url": "https://line.me/R/ti/p/%40304zrttj",
+      "status": 200,
+      "location": "",
+      "content_type": "text/html;charset=UTF-8",
+      "content_length": "",
+      "acceptable_read_only_response": true
+    },
+    "chatUrl": {
+      "url": "https://line.me/R/oaMessage/%40304zrttj",
+      "status": 302,
+      "location": "/",
+      "content_type": "text/html",
+      "content_length": "142",
+      "acceptable_read_only_response": true
+    }
+  },
+  "manual_evidence_still_required": [
+    "real_device_qr_scan",
+    "confirm_LINE_account_display_name_on_phone",
+    "confirm_add_friend_or_chat_path_on_real_device"
+  ],
+  "decision": {
+    "completion_claim_allowed": false,
+    "real_device_scan_proven": false,
+    "deploy_gate": "BLOCKED_FOR_DEPLOY",
+    "push_gate": "BLOCKED_UNTIL_EXPLICIT_PUSH_APPROVAL"
+  },
+  "closed_gates": {
+    "deploy": "blocked",
+    "push": "blocked",
+    "line_webhook": "blocked",
+    "production_analytics": "blocked",
+    "crm_customer_data_storage": "blocked",
+    "customer_data_collection": "blocked",
+    "external_message_send": "blocked",
+    "provider_call": "blocked",
+    "paid_provider_call": "blocked",
+    "public_tunnel": "blocked",
+    "package_install": "blocked",
+    "production_mutation": "blocked",
+    "database_write_or_migration": "blocked",
+    "secret_or_env_read": "blocked"
+  },
+  "report": "docs/website/SIRINX_WEBSITE_LINE_QR_LINK_RECHECK_2026-07-03.md",
+  "next_safe_action": "Scan the QR on a real device and confirm it opens SIRINX โซล่าเซลล์ before any deploy approval."
+}

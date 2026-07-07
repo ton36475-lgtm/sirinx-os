@@ -1,0 +1,37 @@
+{
+  "packet_id": "packet_061_sirinx_website_human_review_board",
+  "created_at": "2026-07-03T02:35:00+0700",
+  "status": "READY_FOR_HUMAN_REVIEW",
+  "mode": "local_only_human_review_board",
+  "board": "docs/website/SIRINX_WEBSITE_HUMAN_REVIEW_BOARD_2026-07-03.html",
+  "report": "docs/website/SIRINX_WEBSITE_HUMAN_REVIEW_BOARD_2026-07-03.md",
+  "screenshot_manifest": "/tmp/sirinx-site-review-screenshots-1783018931992/manifest.json",
+  "screenshot_count": 14,
+  "missing_screenshots": [],
+  "master_plan_status": "LOCAL_EVIDENCE_READY_FOR_HUMAN_REVIEW_NOT_COMPLETE",
+  "completion_claim_allowed": false,
+  "pending_requirements": [
+    "manual_visual_acceptance",
+    "real_device_qr_scan",
+    "existing_bot_manual_behavior",
+    "mobile_spacing_real_review",
+    "explicit_push_deploy_gate"
+  ],
+  "closed_gates": [
+    "deploy",
+    "push",
+    "line_webhook",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "customer_data_collection",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "public_tunnel",
+    "package_install",
+    "production_mutation",
+    "database_write_or_migration",
+    "secret_or_env_read"
+  ],
+  "next_safe_action": "Open the local review board, scan LINE QR on a real device, and manually confirm existing bot/inquiry behavior before any exact push or deploy approval."
+}

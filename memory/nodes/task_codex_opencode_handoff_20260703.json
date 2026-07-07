@@ -1,0 +1,20 @@
+{
+  "id": "task_codex_opencode_handoff_20260703",
+  "type": "task",
+  "label": "Codex and OpenCode handoff packets",
+  "status": "queued_local_safe",
+  "risk_level": "low",
+  "files_touched": [
+    ".ghostclaw_runtime/a2a2a/inbox/codex/A2A2A-P018-CODEX-HANDOFF-20260703.json",
+    ".ghostclaw_runtime/a2a2a/inbox/opencode/A2A2A-P018-OPENCODE-REVIEW-20260703.json",
+    "docs/ghostclaw/CODEX_OPENCODE_OBSIDIAN_CLOUDFLARE_R2_GATE.md"
+  ],
+  "guardrails": {
+    "live_send": false,
+    "cloudflare_r2_write": false,
+    "provider_call": false,
+    "push": false,
+    "deploy": false
+  }
+}
+

@@ -46,24 +46,24 @@ APPROVE_TELEGRAM_WORK_REPORT_SEND
 ```text
 Hermes work report.
 status: BLOCKED
-task: LANE1-HERMES-DECISION-PACKET-013 - Record a separate local Hermes decision: route_to_opus, request_revision, open_codex_recorder_gate, or block.
+task: LANE1-HERMES-DECISION-PACKET-013 - Use the recorded route_to_opus decision as local evidence; route final LANE_1 Opus architecture packet authoring while keeping the Codex recorder gate and LANE_2 closed.
 audit: data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json
 team: planner, context, coder, qa, reviewer, reporter
 files:
 - _A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json
+- docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md
+- _A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json
 - data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json
 - data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json
 - data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json
-- docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_READINESS_2026-06-29.md
-- data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json
 tests:
+- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator_packet -v
+- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator -v
 - python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_execution_queue -v
-- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_work_report -v
-- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_work_report_packet -v
 blockers:
 - BLOCK-LANE1-OPUS-PACKET
 - BLOCK-HERMES-GATEWAY
-next: Record a separate local Hermes decision: route_to_opus, request_revision, open_codex_recorder_gate, or block.
+next: Use the recorded route_to_opus decision as local evidence; route final LANE_1 Opus architecture packet authoring while keeping the Codex recorder gate and LANE_2 closed.
 delivery: telegram-draft
 dry_run: true
 live_send: false
@@ -90,6 +90,6 @@ git diff --check
 
 ## Next Safe Action
 
-Hermes records a separate local decision for `packet_013` or the operator keeps
-the current blocker state. This draft can be read by the operator, but it must
-not be sent externally without the live-send gate.
+Use the recorded `route_to_opus` decision as local evidence and keep routing the
+final LANE_1 Opus packet locally. This draft can be read by the operator, but it
+must not be sent externally without the live-send gate.

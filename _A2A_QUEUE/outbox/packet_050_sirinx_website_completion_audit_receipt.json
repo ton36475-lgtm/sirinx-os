@@ -1,0 +1,65 @@
+{
+  "packet_id": "packet_050_sirinx_website_completion_audit_receipt",
+  "created_at": "2026-07-03T01:14:39+07:00",
+  "lane": "codex_builder",
+  "scope": "apps/sirinx-site",
+  "status": "local_audit_recorded",
+  "intent": "Record a current-state completion audit that separates proven local website evidence from manual evidence still required before any deploy approval.",
+  "completion_status": "not_complete_until_manual_review",
+  "evidence_files": [
+    "docs/website/SIRINX_WEBSITE_COMPLETION_AUDIT_2026-07-03.md",
+    "docs/website/SIRINX_WEBSITE_MANUAL_REVIEW_RESULT_TEMPLATE_2026-07-03.md",
+    "docs/website/SIRINX_WEBSITE_LOCAL_EVIDENCE_PACKET_2026-07-03.md",
+    "apps/sirinx-site/scripts/check.mjs"
+  ],
+  "proven_local_evidence": [
+    "homepage and active routes build locally",
+    "LINE Official QR and CTAs render in local browser UAT",
+    "floating LINE and existing inquiry paths coexist in browser UAT",
+    "homepage-aligned navigation guardrails pass",
+    "closed gate tests pass",
+    "no secret-like pattern scan matches"
+  ],
+  "pending_manual_evidence": [
+    "human visual acceptance",
+    "real-device LINE QR scan",
+    "manual existing bot/inquiry behavior confirmation",
+    "mobile spacing and overlap review",
+    "separate exact deploy approval"
+  ],
+  "verification": [
+    {
+      "command": "git diff --check -- <scoped audit and website guardrail files>",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site build",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site check",
+      "result": "passed, 18 files checked"
+    },
+    {
+      "command": "packet_050 JSON parse",
+      "result": "passed"
+    },
+    {
+      "command": "rg secret-like pattern scan on website/docs/outbox scope",
+      "result": "no matches"
+    }
+  ],
+  "closed_gates_preserved": {
+    "deploy": false,
+    "push": false,
+    "line_webhook": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "customer_data_collection": false,
+    "database_write": false,
+    "package_install": false,
+    "public_tunnel": false
+  },
+  "approval_status": "not_deploy_approval",
+  "next_safe_action": "Human review local preview, scan LINE QR on a real device, and manually confirm existing bot/inquiry behavior."
+}

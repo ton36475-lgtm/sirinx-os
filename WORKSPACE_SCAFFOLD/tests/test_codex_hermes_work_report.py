@@ -67,7 +67,7 @@ class CodexHermesWorkReportTests(unittest.TestCase):
             "external_message_send: false",
             "deploy: false",
             "push: false",
-            "next: Record a separate local Hermes decision",
+            "next: Use the recorded route_to_opus decision as local evidence",
         ):
             self.assertIn(required, body)
 

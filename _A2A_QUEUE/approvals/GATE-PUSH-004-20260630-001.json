@@ -1,0 +1,85 @@
+{
+  "approval_id": "GATE-PUSH-004-20260630-001",
+  "requested_by": "sirinx",
+  "approved_by": null,
+  "approved_at": null,
+  "created_at": "2026-06-30T03:30:00+07:00",
+  "expires_at": "2026-06-30T23:59:59+07:00",
+  "single_use": true,
+  "gate": "GATE-PUSH-004",
+  "target": {
+    "repo": "/Users/sirinx/sirinx-os",
+    "environment": "staging",
+    "remote": "origin",
+    "branch": "staging/godmode-master-os-v2",
+    "resource_id": "origin/staging/godmode-master-os-v2"
+  },
+  "scope": {
+    "allowed_files": [
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md",
+      "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+      "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+      "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+      "_A2A_QUEUE/approvals/GATE-PUSH-003-20260630-001.json",
+      "_A2A_QUEUE/approvals/GATE-PUSH-004-20260630-001.json",
+      ".ghostclaw/policies/a2a-gate-policy.v1.yaml",
+      "scripts/ghostclaw_a2a_safe_autorun.sh",
+      "docs/knowledge/GUARDED_A2A_GO_LIVE_BUNDLE_20260630.md"
+    ],
+    "forbidden_files": [
+      ".env",
+      ".env.*",
+      "memory/private/**",
+      "infra/cloudflare/**",
+      ".git/",
+      "secrets/"
+    ],
+    "allowed_actions": [
+      "verify",
+      "push_this_branch_only"
+    ],
+    "forbidden_actions": [
+      "force_push",
+      "tag_release",
+      "deploy",
+      "secret_read",
+      "customer_send",
+      "cloud_mutation",
+      "provider_paid_call",
+      "runtime_queue_execution",
+      "dependency_install",
+      "migration",
+      "merge_script",
+      "license_file_mutation"
+    ]
+  },
+  "cost_cap": {
+    "max_usd": 0,
+    "paid_provider_calls": false
+  },
+  "preflight": [
+    "git status --short --branch",
+    "git diff --check",
+    "npx vitest run GHOSTCLAW/a2a-hermes-codex-bridge/*.test.ts --reporter=dot",
+    "python3 WORKSPACE_SCAFFOLD/tests/test_a2a_local_autopilot.py",
+    "python3 WORKSPACE_SCAFFOLD/tests/test_hermes_a2a_codex_sync_all_jobs_packet.py",
+    "python3 -m json.tool _A2A_QUEUE/approvals/GATE-PUSH-004-20260630-001.json >/dev/null",
+    "python3 -m json.tool .ghostclaw_runtime/queue/hermes/inbox/hermes-a2a-safe-boot-queue.json >/dev/null || true"
+  ],
+  "rollback": {
+    "strategy": "revert_commits",
+    "command": "git revert <commit-sha-1> <commit-sha-2>",
+    "requires_human_confirmation": true
+  },
+  "stop_conditions": [
+    "dirty tree contains unrelated files",
+    "tests fail",
+    "target branch differs",
+    "secret-like diff appears",
+    "approval packet expired",
+    "bundle script contains push/deploy/secret/customer/cloud mutation"
+  ],
+  "approval_phrase": "APPROVE GATE-PUSH-004-20260630-001",
+  "notes": "Push is pending explicit operator approval. This gate covers packet_013 Hermes decision and Guarded A2A Go-Live Bundle only. Deploy, force_push, tag_release, secret_read, customer_send, cloud_mutation, provider_call, runtime_queue_execution, install, migration, merge_script, and license_file_mutation remain forbidden."
+}

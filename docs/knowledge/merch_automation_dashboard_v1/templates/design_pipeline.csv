@@ -1,0 +1,4 @@
+design_id,niche_id,design_family,design_phrase,visual_style,product_fit,color_strategy,prompt_version,asset_path,status,created_at,updated_at
+DES-001,NICHE-001,Clean badge,Weekend Pickleball Auntie,bold retro court lines,shirt hoodie tote,white ink plus mint accent,v1,assets/mock/des-001.png,QC_READY,2026-06-30,2026-06-30
+DES-002,NICHE-003,Work humor typographic,Solar Engineer Weekend Mode,minimal icon grid,shirt sticker mug,black ink plus yellow highlight,v1,assets/mock/des-002.png,DESIGN_DRAFT_READY,2026-06-30,2026-06-30
+DES-003,NICHE-004,Vintage club crest,Garden Club Captain,hand drawn herbs and badge,shirt tote apron,forest green cream coral,v1,assets/mock/des-003.png,LISTING_DRAFT_READY,2026-06-30,2026-06-30

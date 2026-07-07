@@ -1,5 +1,7 @@
 //! Validator result model for deterministic local checks.
 
+use crate::adapters::traits::ValidatorAdapter;
+use crate::error::Result;
 use crate::schema::{escape_json, option_json};
 
 /// One deterministic validation check.
@@ -24,6 +26,25 @@ pub struct ValidatorResult {
     pub checks: Vec<ValidationCheck>,
     /// Whether live execution was performed.
     pub executed_live: bool,
+}
+
+/// Deterministic validator adapter backed by static local checks.
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct StaticValidatorAdapter {
+    checks: Vec<ValidationCheck>,
+}
+
+impl StaticValidatorAdapter {
+    /// Creates a validator adapter from already-collected local checks.
+    pub fn new(checks: Vec<ValidationCheck>) -> Self {
+        Self { checks }
+    }
+}
+
+impl ValidatorAdapter for StaticValidatorAdapter {
+    fn validate(&self, target_id: &str) -> Result<ValidatorResult> {
+        Ok(ValidatorResult::from_checks(target_id, self.checks.clone()))
+    }
 }
 
 impl ValidatorResult {

@@ -8,7 +8,8 @@ This queue is not a completion claim.
 
 It consolidates the current local Codex/Hermes work order from repo evidence only.
 It does not claim all chats were read, does not create the final LANE_1 Opus packet,
-does not record a Hermes decision, and does not approve LANE_2.
+does not execute runtime queues, and does not approve LANE_2. Hermes packet_013
+decision is recorded as `route_to_opus`; the final Opus packet is still missing.
 
 ## Guardrails
 
@@ -28,35 +29,51 @@ does not record a Hermes decision, and does not approve LANE_2.
 
 | Order | Queue ID | Owner | Status | Gate | Next Safe Action |
 | --- | --- | --- | --- | --- | --- |
-| 1 | `LANE1-HERMES-DECISION-PACKET-013` | Hermes | `waiting_for_decision` | `codex_recorder_gate_closed` | Record a separate local Hermes decision: `route_to_opus`, `request_revision`, `open_codex_recorder_gate`, or `block`. |
-| 2 | `LANE1-HERMES-DECISION-DRAFT-PACKET-015` | Codex | `draft_for_hermes_review_not_decision` | `hermes_decision_required` | Review the draft-only `route_to_opus` aid; Hermes must still record a separate validated decision before Codex recorder or LANE_2 action. |
-| 3 | `LANE1-HERMES-DECISION-HANDOFF-PACKET-016` | Codex | `handoff_packet_ready_not_decision` | `hermes_decision_record_required` | Use packet_016 as the local outbox pointer to the decision intake handoff; Hermes still records the separate decision artifact before any state change. |
-| 4 | `LANE1-HERMES-DECISION-PREFLIGHT-PACKET-017` | Codex | `ready_for_hermes_decision_review_not_decision` | `hermes_decision_record_required` | Use packet_017 as the local preflight audit proving review evidence is ready; Hermes still records the separate validated decision before any state change. |
-| 5 | `LANE1-OPUS-ARCHITECTURE-PACKET-GATE-PACKET-018` | Codex | `validator_ready_final_packet_missing` | `hermes_decision_and_final_packet_required` | Use packet_018 to validate a future final Opus packet; do not create the final packet until Hermes/Opus decision evidence exists. |
-| 6 | `LANE1-OPUS-AUTHORING-BUNDLE-PACKET-019` | Codex | `authoring_bundle_ready_not_final_packet` | `hermes_decision_and_final_packet_required` | Use packet_019 as local evidence for Hermes/Opus authoring only; it is not the final packet and cannot open LANE_2. |
-| 7 | `LANE1-HERMES-DECISION-TRANSITION-GUARD` | Codex | `blocked_missing_hermes_decision` | `validated_hermes_decision_required` | After Hermes records a separate decision, rerun the guard before any recorder-gate, Opus-packet, or LANE_2 state change. |
-| 8 | `ALL-CHAT-EXPORT-INTAKE` | Operator | `blocked_export_missing` | `chat_export_required` | Use the local intake contract and mapper, then provide a ChatGPT export or connector-backed source before all-chat coverage can be claimed. |
-| 9 | `ALL-CHAT-EXPORT-REQUEST-PACKET-020` | Codex | `request_packet_ready_no_export_loaded` | `chat_export_required` | Use packet_020 to request an operator-supplied ChatGPT export path or authorized read-only connector scope; do not claim all chats were read until metadata mapping is reviewed. |
-| 10 | `A2A-ADAPTIVE-SYNC-CONTROL-STATUS-PACKET-021` | Codex | `a2a_adaptive_sync_control_status_ready_local_only` | `local_read_only_status_review` | Review packet_021 as the current local A2A adaptive sync control status; choose one separate gated blocker-clearing lane. |
-| 11 | `A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022` | Codex | `a2a_next_safe_action_sequencer_ready_local_only` | `local_read_only_next_lane_review` | Review packet_022 as a deterministic local sequencer; Hermes still records a separate packet_013 decision before any state change. |
-| 12 | `HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023` | Codex | `hermes_gateway_current_recheck_ready_local_only` | `local_read_only_gateway_status_review` | Review packet_023 as current localhost gateway evidence; Hermes/operator must start or verify the gateway separately before live routing or packet_013 decision claims. |
-| 13 | `HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024` | Hermes / Codex | `goal_command_inbox_ready_local_only` | `local_read_only_goal_command_review` | Review packet_024 as a local `/goal` command; do not execute Codex CLI, runtime queues, provider calls, external sends, or license changes. |
-| 14 | `BROWSER-USE-CANDIDATE-LANE-PACKET-025` | Codex | `browser_use_candidate_lane_ready_local_only` | `candidate_review_only_install_gate_required` | Review Browser Use as candidate browser QA evidence only; request a gate-specific approval before installing it or opening any page through it. |
-| 15 | `GHOSTCLAW-V3-3-ARTIFACT-INTAKE` | Codex | `blocked_exact_artifact_missing` | `exact_artifact_required` | Re-run metadata-only artifact intake after the exact `ghostclaw_repo_merge_kit_v3_3.zip` path exists. |
-| 16 | `R0-GATE-SPECIFIC-APPROVALS` | Operator | `blocked_approval_missing` | `r0_gate_specific_approval_required` | Approve one named R0 gate with target, environment, rollback, and evidence path before external action. |
-| 17 | `ACTIVE-GOAL-BLOCKER-RECHECK` | Codex | `done_current_state` | `local_read_only_probe_only` | Run or inspect the read-only probe runner output before claiming completion or choosing the next safe lane. |
-| 18 | `MISSION-CONTROL-READONLY-EVIDENCE` | Codex | `done_local_readonly` | `no_runtime_gate_unlock` | Keep panels sourced from static evidence unless a runtime integration gate is approved. |
-| 19 | `CODEX-HERMES-A2A-QUEUE-STATUS` | Codex | `local_queue_indexed_not_executed` | `local_file_bus_only` | Use the `_A2A_QUEUE` status snapshot for local coordination only; do not execute queue items. |
-| 20 | `COMPLETION-REQUIREMENTS-MATRIX` | Codex | `requirements_mapped_not_complete` | `no_completion_claim_without_requirement_proof` | Use requirement-level evidence before any active-goal completion claim. |
-| 21 | `SOURCE-FILE-RECEIPT` | Codex | `current_local_scan_partial` | `local_file_evidence_only` | Use the source-file receipt to separate current local files from user-message summaries before any all-files-read claim. |
-| 22 | `CODEX-HERMES-WORK-REPORT-DRAFT` | Codex | `telegram_draft_ready` | `telegram_live_send_gate_closed` | Use the local Telegram-safe draft and `packet_014` outbox evidence for operator review; live Telegram delivery requires `APPROVE_TELEGRAM_WORK_REPORT_SEND`. |
-| 23 | `OBSIDIAN-BRAIN-SYNC-PULSE` | Codex | `active_after_meaningful_work` | `no_secrets_no_raw_logs` | Append concise memory pulses after verified local work. |
-| 24 | `LOCAL-EVIDENCE-DURABILITY` | Codex | `done_local_manifest` | `no_force_add_ignored_data` | Use the manifest and docs mirror as the review surface for ignored `data/pathspecs` artifacts. |
+| 1 | `LANE1-HERMES-DECISION-PACKET-013` | Hermes | `decision_recorded_route_to_opus` | `codex_recorder_gate_closed_final_opus_packet_required` | Use the recorded `route_to_opus` decision as local evidence; route final LANE_1 Opus architecture packet authoring while keeping the Codex recorder gate and LANE_2 closed. |
+| 2 | `LANE1-HERMES-DECISION-DRAFT-PACKET-015` | Codex | `superseded_by_recorded_route_to_opus_decision` | `decision_recorded_final_packet_required` | Keep packet_015 as historical draft evidence only; packet_026 records the `route_to_opus` decision and the final Opus packet remains missing. |
+| 3 | `LANE1-HERMES-DECISION-HANDOFF-PACKET-016` | Codex | `handoff_superseded_by_packet_026_decision` | `decision_recorded_final_packet_required` | Keep packet_016 as decision-intake audit evidence; packet_026 records the decision and the next safe transition is final Opus packet authoring. |
+| 4 | `LANE1-HERMES-DECISION-PREFLIGHT-PACKET-017` | Codex | `preflight_superseded_by_packet_026_decision` | `decision_recorded_final_packet_required` | Keep packet_017 as preflight audit evidence; packet_026 records the decision and final Opus packet evidence remains required. |
+| 5 | `LANE1-OPUS-ARCHITECTURE-PACKET-GATE-PACKET-018` | Codex | `validator_ready_final_packet_missing` | `final_opus_packet_required_after_route_to_opus` | Use packet_018 to validate a future final Opus packet after `route_to_opus`; do not create the final packet inside the validator. |
+| 6 | `LANE1-OPUS-AUTHORING-BUNDLE-PACKET-019` | Codex | `authoring_bundle_ready_not_final_packet` | `route_to_opus_final_packet_required` | Use packet_019 with the recorded `route_to_opus` decision as local authoring evidence for the final Opus packet; it is not the final packet and cannot open LANE_2. |
+| 7 | `LANE1-HERMES-DECISION-TRANSITION-GUARD` | Codex | `validated_decision_transition_ready` | `await_opus_architecture_packet` | Use the transition guard as local evidence that `route_to_opus` maps to `await_opus_architecture_packet`; do not mutate queue state or authorize LANE_2. |
+| 8 | `LANE1-OPUS-FINAL-PACKET-AUTHORING-REQUEST-PACKET-032` | Codex | `authoring_request_ready_local_only` | `await_opus_architecture_packet` | Hermes/Opus reviews packet_032 as a local authoring request and produces a separate final LANE_1 Opus architecture packet candidate; Codex validates it before any recorder gate or LANE_2 authorization. |
+| 9 | `ACTIVE-GOAL-BLOCKER-REFRESH-HERMES-HANDOFF-PACKET-033` | Codex | `handoff_ready_local_only` | `blockers_still_open_review_only` | Hermes/KOB reviews packet_033 as a local blocker-refresh handoff and routes one blocker-clearing lane at a time; Codex validates any future clearance evidence before completion state changes. |
+| 10 | `ACTIVE-GOAL-BLOCKER-CLEARANCE-APPROVAL-MATRIX-PACKET-034` | Codex | `approval_matrix_ready_local_only` | `one_blocker_one_gate_required` | Hermes/KOB/operator reviews packet_034 and selects exactly one blocker-clearance gate; Codex validates future evidence before changing blocker or completion state. |
+| 11 | `ACTIVE-GOAL-CHAT-EXPORT-READONLY-MAPPING-GATE-REQUEST-PACKET-035` | Codex | `gate_request_ready_local_only` | `chat_export_readonly_mapping_approval_required` | Operator reviews packet_035 and may provide `APPROVE_CHATGPT_EXPORT_READONLY_MAPPING_<path>_<date>`; Codex validates receipt metadata before loading or mapping anything. |
+| 12 | `CHATGPT-EXPORT-READONLY-SOURCE-RECEIPT-VALIDATOR-PACKET-036` | Codex | `validator_review_ready_local_only` | `chat_export_readonly_mapping_approval_required` | Hermes/KOB/operator reviews packet_036 and the receipt validator; exact approval and valid metadata receipt remain required before source loading or metadata-only mapping. |
+| 13 | `ACTIVE-GOAL-CURRENT-PROBE-REFRESH-PACKET-037` | Codex | `probe_refresh_ready_local_only` | `one_blocker_one_gate_required` | Hermes/KOB/operator reviews packet_037 as current blocker evidence; choose exactly one blocker-clearing gate before Codex validates any clearance claim. |
+| 14 | `HERMES-GATEWAY-REPAIR-APPROVAL-GATE-PACKET-038` | Codex | `approval_gate_ready_local_only` | `local_stack_repair_approval_required` | Hermes/KOB/operator reviews packet_038 and may provide `APPROVE_LOCAL_STACK_REPAIR_HERMES_GATEWAY_<target>_<date>` plus required fields before any local gateway repair attempt. |
+| 15 | `ALL-CHAT-EXPORT-INTAKE` | Operator | `blocked_export_missing` | `chat_export_required` | Use the local intake contract and mapper, then provide a ChatGPT export or connector-backed source before all-chat coverage can be claimed. |
+| 16 | `ALL-CHAT-EXPORT-REQUEST-PACKET-020` | Codex | `request_packet_ready_no_export_loaded` | `chat_export_required` | Use packet_020 to request an operator-supplied ChatGPT export path or authorized read-only connector scope; do not claim all chats were read until metadata mapping is reviewed. |
+| 17 | `A2A-ADAPTIVE-SYNC-CONTROL-STATUS-PACKET-021` | Codex | `a2a_adaptive_sync_control_status_ready_local_only` | `local_read_only_status_review` | Review packet_021 as the current local A2A adaptive sync control status; choose one separate gated blocker-clearing lane. |
+| 18 | `A2A-NEXT-SAFE-ACTION-SEQUENCER-PACKET-022` | Codex | `a2a_next_safe_action_sequencer_ready_local_only` | `local_read_only_next_lane_review` | Review packet_022 as historical sequencer evidence; packet_026 records `route_to_opus`, so the current local lane is final Opus packet authoring without LANE_2 authorization. |
+| 19 | `HERMES-GATEWAY-CURRENT-RECHECK-PACKET-023` | Codex | `hermes_gateway_current_recheck_ready_local_only` | `local_read_only_gateway_status_review` | Review packet_023 as current localhost gateway evidence; Hermes/operator must start or verify the gateway separately before any live routing claim. |
+| 20 | `HERMES-A2A-CODEX-SYNC-ALL-JOBS-PACKET-024` | Hermes / Codex | `goal_command_inbox_ready_local_only` | `local_read_only_goal_command_review` | Review packet_024 as a local `/goal` command; do not execute Codex CLI, runtime queues, provider calls, external sends, or license changes. |
+| 21 | `BROWSER-USE-CANDIDATE-LANE-PACKET-025` | Codex | `browser_use_candidate_lane_ready_local_only` | `candidate_review_only_install_gate_required` | Review Browser Use as candidate browser QA evidence only; request a gate-specific approval before installing it or opening any page through it. |
+| 22 | `UAT-CRUD-MONGODB-HERMES-REVIEW-PACKET-027` | Codex | `uat_crud_mongodb_review_ready_local_only` | `review_only_uat_execution_gate_required` | Review `packet_027` as local UAT CRUD MongoDB security-rule evidence; request an exact UAT gate before any MongoDB, CRUD, install, browser, tunnel, or secret access. |
+| 23 | `UAT-CRUD-MONGODB-WORK-REPORT-PACKET-028` | Codex | `telegram_draft_ready_local_only` | `telegram_live_send_gate_closed` | Review `packet_028` as a Telegram-safe work report draft; do not live-send or execute CRUD UAT without exact approvals. |
+| 24 | `SIRINX-WEBSITE-LINE-HERMES-REVIEW-PACKET-029` | Codex | `review_packet_ready_local_only` | `website_deploy_webhook_analytics_crm_gates_closed` | Review `packet_029` as local SIRINX website LINE integration handoff evidence; request exact approval before deploy, LINE webhook activation, production analytics, CRM/customer storage, public tunnel, or local stack restart. |
+| 25 | `SIRINX-WEBSITE-LINE-UAT-VERIFICATION-RECEIPT-PACKET-039` | Codex | `local_uat_verified_no_deploy` | `website_deploy_webhook_analytics_crm_gates_closed` | Review `packet_039` as local website LINE UAT evidence; deploy, LINE webhook, production analytics, CRM/customer storage, live sends, public tunnel, and local stack restart still require separate exact approval. |
+| 26 | `SIRINX-WEBSITE-HUMAN-REVIEW-DEPLOY-GATE-PACKET-040` | Codex | `pending_human_review_no_deploy` | `human_review_real_device_qr_bot_check_and_explicit_deploy_approval_required` | Human reviews the local website and packet_039, confirms LINE QR on a real device, confirms existing bot behavior manually, then provides separate exact deploy approval only if ready. |
+| 27 | `CODING-ENGINE-SECURITY-RULES-REFACTOR-PACKET-030` | Codex | `review_packet_ready_local_only` | `real_mcp_execution_gate_closed` | Review `packet_030` as local coding-engine security-rule refactor evidence; request exact approval before real MCP execution, runtime queue execution, provider calls, deploy, push, or customer/production data actions. |
+| 28 | `CODING-ENGINE-SECURITY-RULES-WORK-REPORT-PACKET-031` | Codex | `telegram_draft_ready_local_only` | `telegram_live_send_and_real_mcp_execution_gates_closed` | Review `packet_031` as a Telegram-safe work report draft for `packet_030`; do not live-send or execute real MCP/runtime/provider actions without separate exact approvals. |
+| 29 | `GHOSTCLAW-V3-3-ARTIFACT-INTAKE` | Codex | `blocked_exact_artifact_missing` | `exact_artifact_required` | Re-run metadata-only artifact intake after the exact `ghostclaw_repo_merge_kit_v3_3.zip` path exists. |
+| 30 | `R0-GATE-SPECIFIC-APPROVALS` | Operator | `blocked_approval_missing` | `r0_gate_specific_approval_required` | Approve one named R0 gate with target, environment, rollback, and evidence path before external action. |
+| 31 | `ACTIVE-GOAL-BLOCKER-RECHECK` | Codex | `done_current_state` | `local_read_only_probe_only` | Run or inspect the read-only probe runner output before claiming completion or choosing the next safe lane. |
+| 32 | `MISSION-CONTROL-READONLY-EVIDENCE` | Codex | `done_local_readonly` | `no_runtime_gate_unlock` | Keep panels sourced from static evidence unless a runtime integration gate is approved. |
+| 33 | `CODEX-HERMES-A2A-QUEUE-STATUS` | Codex | `local_queue_indexed_not_executed` | `local_file_bus_only` | Use the `_A2A_QUEUE` status snapshot for local coordination only; do not execute queue items. |
+| 34 | `COMPLETION-REQUIREMENTS-MATRIX` | Codex | `requirements_mapped_not_complete` | `no_completion_claim_without_requirement_proof` | Use requirement-level evidence before any active-goal completion claim. |
+| 35 | `SOURCE-FILE-RECEIPT` | Codex | `current_local_scan_partial` | `local_file_evidence_only` | Use the source-file receipt to separate current local files from user-message summaries before any all-files-read claim. |
+| 35 | `CODEX-HERMES-WORK-REPORT-DRAFT` | Codex | `telegram_draft_ready` | `telegram_live_send_gate_closed` | Use the local Telegram-safe draft and `packet_014` outbox evidence for operator review; live Telegram delivery requires `APPROVE_TELEGRAM_WORK_REPORT_SEND`. |
+| 36 | `OBSIDIAN-BRAIN-SYNC-PULSE` | Codex | `active_after_meaningful_work` | `no_secrets_no_raw_logs` | Append concise memory pulses after verified local work. |
+| 37 | `LOCAL-EVIDENCE-DURABILITY` | Codex | `done_local_manifest` | `no_force_add_ignored_data` | Use the manifest and docs mirror as the review surface for ignored `data/pathspecs` artifacts. |
 
 ## Current Actionable Packet
 
 - `current_actionable_packet=packet_013`
 - Packet path: `_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json`
+- Recorded Hermes decision: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md`
+- Decision receipt: `_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json`
 - Decision inbox index: `data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json`
 - Packet 013 decision workbench: `data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json`
 - Packet 013 readiness scorecard: `data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json`
@@ -99,17 +116,39 @@ does not record a Hermes decision, and does not approve LANE_2.
 - Hermes A2A command-intents bridge: `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts`
 - Decision transition guard: `data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json`
 - Decision transition guard doc: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md`
+- Opus final packet authoring request packet: `_A2A_QUEUE/outbox/packet_032_ghostclaw_lane1_opus_final_packet_authoring_request.json`
+- Opus final packet authoring request doc: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_FINAL_PACKET_AUTHORING_REQUEST_2026-07-02.md`
+- Packet 032 local A2A sync receipt: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET032_A2A_SYNC_RECEIPT_2026-07-02.md`
+- Packet 032 local A2A sync guard: `WORKSPACE_SCAFFOLD/tests/test_lane1_packet032_a2a_sync_receipt.py`
+- Active-goal blocker refresh handoff packet: `_A2A_QUEUE/outbox/packet_033_active_goal_blocker_refresh_hermes_handoff.json`
+- Active-goal blocker refresh handoff doc: `docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_REFRESH_HERMES_HANDOFF_2026-07-02.md`
+- Active-goal blocker refresh handoff guard: `WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_refresh_hermes_handoff_packet.py`
+- Active-goal blocker clearance approval matrix packet: `_A2A_QUEUE/outbox/packet_034_active_goal_blocker_clearance_approval_matrix.json`
+- Active-goal blocker clearance approval matrix doc: `docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_APPROVAL_MATRIX_2026-07-02.md`
+- Active-goal blocker clearance approval matrix guard: `WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_clearance_approval_matrix_packet.py`
+- Chat export read-only mapping gate request packet: `_A2A_QUEUE/outbox/packet_035_active_goal_chat_export_readonly_mapping_gate_request.json`
+- Chat export read-only mapping gate request doc: `docs/knowledge/SIRINX_ACTIVE_GOAL_CHAT_EXPORT_READONLY_MAPPING_GATE_REQUEST_2026-07-02.md`
+- Chat export read-only mapping gate request guard: `WORKSPACE_SCAFFOLD/tests/test_active_goal_chat_export_readonly_mapping_gate_request_packet.py`
+- ChatGPT export read-only source receipt validator packet: `_A2A_QUEUE/outbox/packet_036_chatgpt_export_readonly_source_receipt_validator.json`
+- ChatGPT export read-only source receipt validator script: `WORKSPACE_SCAFFOLD/scripts/validate_chatgpt_export_readonly_source_receipt.py`
+- ChatGPT export read-only source receipt validator pathspec: `data/pathspecs/sirinx_chatgpt_export_readonly_source_receipt_validator_2026-07-02.json`
+- ChatGPT export read-only source receipt validator doc: `docs/knowledge/SIRINX_CHATGPT_EXPORT_READONLY_SOURCE_RECEIPT_VALIDATOR_2026-07-02.md`
+- ChatGPT export read-only source receipt validator guard: `WORKSPACE_SCAFFOLD/tests/test_chatgpt_export_readonly_source_receipt_validator.py`
+- ChatGPT export read-only source receipt validator packet guard: `WORKSPACE_SCAFFOLD/tests/test_chatgpt_export_readonly_source_receipt_validator_packet.py`
 - Decision validator: `data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json`
 - Hermes gateway recheck: `data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json`
 - Decision doc: `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INBOX_INDEX_2026-06-29.md`
 
-Hermes must record a separate decision artifact before Codex can act as recorder.
-Until then, the Codex recorder gate remains closed.
+Hermes packet_013 decision is recorded as `route_to_opus`. The Codex recorder
+gate remains closed, the final Opus packet is still missing, and LANE_2 remains
+unauthorized.
 
 ## Source Evidence
 
 - `data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json`
 - `data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md`
+- `_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json`
 - `data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json`
 - `data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json`
 - `data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json`
@@ -131,6 +170,50 @@ Until then, the Codex recorder gate remains closed.
 - `data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json`
 - `docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md`
 - `_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json`
+- `skills/uat-crud-mongodb/SKILL.md`
+- `docs/knowledge/SIRINX_UAT_CRUD_MONGODB_SECURITY_RULES_2026-07-02.md`
+- `docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.md`
+- `docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.json`
+- `data/pathspecs/sirinx_uat_crud_mongodb_hermes_review_packet_2026-07-02.json`
+- `docs/knowledge/SIRINX_UAT_CRUD_MONGODB_A2A_QUEUE_VISIBILITY_2026-07-02.md`
+- `_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json`
+- `data/pathspecs/sirinx_uat_crud_mongodb_work_report_queue_2026-07-02.json`
+- `data/pathspecs/sirinx_uat_crud_mongodb_work_report_contract_2026-07-02.json`
+- `docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_DRAFT_2026-07-02.md`
+- `docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_A2A_VISIBILITY_2026-07-02.md`
+- `_A2A_QUEUE/outbox/packet_028_sirinx_uat_crud_mongodb_work_report_draft.json`
+- `docs/website/SIRINX_WEBSITE_QUALITY_AUDIT.md`
+- `docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.md`
+- `docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.json`
+- `_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json`
+- `WORKSPACE_SCAFFOLD/tests/test_sirinx_website_line_hermes_review_packet.py`
+- `_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json`
+- `docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.md`
+- `docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.json`
+- `WORKSPACE_SCAFFOLD/tests/test_sirinx_website_line_uat_verification_receipt_packet.py`
+- `_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json`
+- `docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.md`
+- `docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.json`
+- `WORKSPACE_SCAFFOLD/tests/test_sirinx_website_human_review_deploy_gate_packet.py`
+- `docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_REFACTOR_PACKET_2026-07-02.md`
+- `docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_REFACTOR_A2A_VISIBILITY_2026-07-02.md`
+- `_A2A_QUEUE/outbox/packet_030_sirinx_coding_engine_security_rules_refactor.json`
+- `WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_refactor_packet.py`
+- `WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_refactor_a2a_visibility.py`
+- `docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_WORK_REPORT_DRAFT_2026-07-02.md`
+- `docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_WORK_REPORT_A2A_VISIBILITY_2026-07-02.md`
+- `_A2A_QUEUE/outbox/packet_031_sirinx_coding_engine_security_rules_work_report_draft.json`
+- `WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_work_report_packet.py`
+- `WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_work_report_a2a_visibility.py`
+- `_A2A_QUEUE/outbox/packet_032_ghostclaw_lane1_opus_final_packet_authoring_request.json`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_FINAL_PACKET_AUTHORING_REQUEST_2026-07-02.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET032_A2A_SYNC_RECEIPT_2026-07-02.md`
+- `WORKSPACE_SCAFFOLD/tests/test_lane1_packet032_a2a_sync_receipt.py`
+- `WORKSPACE_SCAFFOLD/tests/test_lane1_opus_final_packet_authoring_request.py`
+- `WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_hermes_review_packet.py`
+- `WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_a2a_queue_visibility.py`
+- `WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_packet.py`
+- `WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_a2a_visibility.py`
 - `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts`
 - `GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts`
 - `data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json`
@@ -262,6 +345,26 @@ The `BROWSER-USE-CANDIDATE-LANE-PACKET-025` item records Browser Use as a
 candidate browser QA tool only. It does not install packages, open pages, use
 Browser Use Cloud, sync profiles, read/export cookies, submit forms, confirm
 transactions, call providers, execute runtime queues, or send external messages.
+
+The UAT CRUD MongoDB items are review/report packets only. They do not authorize
+MongoDB connection, MongoDB read/write, real `.env` access, package install,
+browser automation, public tunnels, Telegram/LINE sends, customer data storage,
+or CRUD UAT execution without a separate exact approval.
+
+The `SIRINX-WEBSITE-LINE-HERMES-REVIEW-PACKET-029` item is review-only website
+evidence. It does not authorize deploy, LINE webhook activation, production
+analytics, CRM/customer data storage, customer messaging, public tunnels, local
+stack restart, push, provider calls, or production mutation.
+
+The `CODING-ENGINE-SECURITY-RULES-REFACTOR-PACKET-030` item is review-only
+security-rule evidence. It does not authorize real MCP execution, MCP
+registration, provider calls, runtime queue execution, deploy, push, production
+mutation, customer data storage, or external sends.
+
+The `CODING-ENGINE-SECURITY-RULES-WORK-REPORT-PACKET-031` item is a
+Telegram-safe draft only. It does not authorize Telegram live send, LINE send,
+real MCP execution, runtime queue execution, provider calls, deploy, push,
+production mutation, customer data storage, or external sends.
 
 The `LANE1-HERMES-DECISION-DRAFT-PACKET-015` item is only a draft decision aid.
 It does not record a Hermes decision, call a provider, execute the runtime

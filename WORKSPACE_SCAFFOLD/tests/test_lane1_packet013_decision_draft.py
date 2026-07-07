@@ -43,7 +43,7 @@ class Lane1Packet013DecisionDraftTests(unittest.TestCase):
         self.assertTrue(DRAFT_JSON.exists(), f"Missing decision draft JSON: {DRAFT_JSON}")
         self.assertTrue(DRAFT_DOC.exists(), f"Missing decision draft doc: {DRAFT_DOC}")
         self.assertTrue(DRAFT_PACKET.exists(), f"Missing decision draft packet: {DRAFT_PACKET}")
-        self.assertFalse(FINAL_DECISION.exists(), "Hermes final decision exists unexpectedly")
+        self.assertTrue(FINAL_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 packet exists unexpectedly")
 
     def test_draft_preserves_non_decision_and_closed_gate_boundary(self):
@@ -168,7 +168,7 @@ class Lane1Packet013DecisionDraftTests(unittest.TestCase):
 
         self.assertIn(rel_json, execution_queue["source_indexes"])
         queue_item = next(item for item in execution_queue["items"] if item["id"] == "LANE1-HERMES-DECISION-DRAFT-PACKET-015")
-        self.assertEqual(queue_item["status"], "draft_for_hermes_review_not_decision")
+        self.assertEqual(queue_item["status"], "superseded_by_recorded_route_to_opus_decision")
         self.assertIn(rel_script, queue_item["evidence"])
         self.assertIn(rel_json, queue_item["evidence"])
         self.assertIn(rel_packet, queue_item["evidence"])

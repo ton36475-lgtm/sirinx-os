@@ -1,0 +1,68 @@
+{
+  "packet_id": "packet_059_sirinx_website_github_current_recheck",
+  "created_at": "2026-07-03T02:06:00+0700",
+  "status": "verified_locally_read_only",
+  "mode": "github_current_recheck_no_push_no_deploy",
+  "repository": {
+    "github_connector_repo_id": "1269568669",
+    "name_with_owner": "ton36475-lgtm/sirinx-os",
+    "url": "https://github.com/ton36475-lgtm/sirinx-os",
+    "visibility": "private",
+    "default_branch": "codex/urgent-backlog-execution",
+    "pushed_at": "2026-06-29T19:40:02Z",
+    "open_pull_requests_returned": 0
+  },
+  "branch_evidence": {
+    "local_branch": "staging/godmode-master-os-v2",
+    "local_head": "aa66f263b182dceafeb16562e36064bddf40c342",
+    "remote_head": "a5de5858989a3c258acaf9c41a97c9b65cb0856b",
+    "remote_staging_head": "02524464ea97931aea1a34c559ecdec6e431dc37",
+    "local_branch_ahead_of_upstream_by_commits": 33,
+    "push_performed": false,
+    "deploy_performed": false
+  },
+  "website_diff_scope_against_upstream": {
+    "base": "origin/staging/godmode-master-os-v2",
+    "tracked_files_changed": [
+      "apps/sirinx-site/package.json",
+      "apps/sirinx-site/public/sitemap.xml",
+      "apps/sirinx-site/scripts/build.mjs",
+      "apps/sirinx-site/scripts/check.mjs",
+      "apps/sirinx-site/server.mjs",
+      "apps/sirinx-site/src/app.js",
+      "apps/sirinx-site/src/index.html",
+      "apps/sirinx-site/src/styles.css"
+    ],
+    "tracked_file_count": 8,
+    "tracked_insertions": 3888,
+    "tracked_deletions": 220,
+    "note": "Untracked website routes, components, tests, docs, and evidence packets remain local-only until explicit review and approval."
+  },
+  "verification": [
+    "pnpm --filter @sirinx/site test:line: passed, 106 Playwright checks",
+    "GitHub connector _get_repo: passed, private repo, default branch codex/urgent-backlog-execution",
+    "GitHub connector _get_users_recent_prs_in_repo state=open limit=10: passed, 0 open PRs returned",
+    "gh repo view ton36475-lgtm/sirinx-os --json nameWithOwner,url,defaultBranchRef,isPrivate,pushedAt: passed",
+    "gh pr list --repo ton36475-lgtm/sirinx-os --state open --limit 10: passed, 0 open PRs returned",
+    "git ls-remote origin HEAD refs/heads/staging/godmode-master-os-v2 refs/heads/main refs/heads/master: passed",
+    "git diff --stat origin/staging/godmode-master-os-v2 -- apps/sirinx-site: passed"
+  ],
+  "report": "docs/website/SIRINX_WEBSITE_GITHUB_CURRENT_RECHECK_2026-07-03.md",
+  "closed_gates": [
+    "deploy",
+    "push",
+    "line_webhook",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "customer_data_collection",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "public_tunnel",
+    "package_install",
+    "production_mutation",
+    "database_write_or_migration",
+    "secret_or_env_read"
+  ],
+  "next_safe_action": "Human review the local website and screenshot evidence, scan the LINE QR on a real device, and manually confirm existing bot/inquiry behavior before any exact push or deploy approval."
+}

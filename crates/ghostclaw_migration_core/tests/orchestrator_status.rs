@@ -32,6 +32,7 @@ fn orchestrator_status_should_inspect_malformed_lines_when_no_bundle_is_ready() 
         jobs: Vec::new(),
         invalid_lines: 0,
         skipped_empty_lines: 0,
+        clear_events: 0,
     };
 
     let status =
@@ -53,6 +54,7 @@ fn orchestrator_status_should_surface_blocked_lease_when_queue_and_bundles_are_c
         jobs: Vec::new(),
         invalid_lines: 0,
         skipped_empty_lines: 0,
+        clear_events: 0,
     };
     let lease_decisions = vec![LeaseDecision {
         path: ".env.production".to_string(),

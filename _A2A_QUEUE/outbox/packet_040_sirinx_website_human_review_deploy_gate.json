@@ -1,0 +1,180 @@
+{
+  "id": "packet_040",
+  "project": "sirinx-site",
+  "priority": "P0",
+  "title": "SIRINX website human review and deploy approval gate",
+  "agent": "codex",
+  "to_agent": "hermes",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": false,
+  "approval_scope": "human_review_gate_request_no_deploy_approval",
+  "execution_approval_required": true,
+  "dispatch_mode": "local_review_gate_only",
+  "dry_run": true,
+  "human_review_required": true,
+  "human_review_status": "pending_human_review",
+  "not_approval": true,
+  "evidence_boundary": "local_evidence_only",
+  "input": [
+    "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+    "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.md",
+    "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.json",
+    "apps/sirinx-site/tests/line-integration.spec.ts",
+    "docs/superpowers/plans/2026-07-02-quote-roi-crm-readiness.md"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json",
+    "docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.md",
+    "docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.json",
+    "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_human_review_deploy_gate_packet.py"
+  ],
+  "review_targets": [
+    "local_homepage",
+    "local_line_page",
+    "local_contact_page",
+    "local_projects_page",
+    "local_quote_page",
+    "local_roi_calculator_page",
+    "floating_contact_cluster",
+    "existing_website_bot",
+    "line_qr_real_device_scan",
+    "packet_039_evidence"
+  ],
+  "required_human_evidence": [
+    {
+      "id": "local_website_review",
+      "status": "pending",
+      "evidence_required": "Human reviews the local website and packet_039 before any deploy approval."
+    },
+    {
+      "id": "line_qr_real_device_scan",
+      "status": "pending",
+      "evidence_required": "Human scans the LINE QR on a real device and confirms it opens SIRINX \u0e42\u0e0b\u0e25\u0e48\u0e32\u0e40\u0e0b\u0e25\u0e25\u0e4c LINE Official."
+    },
+    {
+      "id": "existing_bot_manual_check",
+      "status": "pending",
+      "evidence_required": "Human opens the existing website bot manually and confirms its behavior is preserved."
+    },
+    {
+      "id": "deploy_approval",
+      "status": "pending",
+      "evidence_required": "Separate exact approval phrase APPROVE_DEPLOY_SIRINX_SITE_<date> after review."
+    }
+  ],
+  "next_sprint_gates": [
+    {
+      "scope": "quote_flow",
+      "status": "spec_ready_gate_required",
+      "required_approval": "APPROVE_QUOTE_FLOW_LOCAL_IMPLEMENTATION_<scope>_<date>",
+      "forbidden_until_approved": [
+        "production_submit",
+        "customer_data_storage",
+        "crm_sync"
+      ]
+    },
+    {
+      "scope": "roi_calculator",
+      "status": "spec_ready_gate_required",
+      "required_approval": "APPROVE_ROI_CALCULATOR_LOCAL_IMPLEMENTATION_<scope>_<date>",
+      "forbidden_until_approved": [
+        "guaranteed_savings_claim",
+        "production_analytics",
+        "customer_data_storage"
+      ]
+    },
+    {
+      "scope": "crm_lead_capture",
+      "status": "approval_required_before_storage",
+      "required_approval": "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+      "forbidden_until_approved": [
+        "database_write",
+        "customer_data_storage",
+        "crm_sync",
+        "production_data"
+      ]
+    }
+  ],
+  "required_future_approval_phrases": [
+    "APPROVE_DEPLOY_SIRINX_SITE_<date>",
+    "APPROVE_LINE_QR_REAL_DEVICE_CONFIRMED_<device>_<date>",
+    "APPROVE_EXISTING_BOT_MANUAL_CHECK_<date>",
+    "APPROVE_QUOTE_FLOW_LOCAL_IMPLEMENTATION_<scope>_<date>",
+    "APPROVE_ROI_CALCULATOR_LOCAL_IMPLEMENTATION_<scope>_<date>",
+    "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+    "APPROVE_PRODUCTION_ANALYTICS_<scope>_<date>",
+    "APPROVE_LINE_WEBHOOK_<scope>_<date>"
+  ],
+  "canonical_line_official": {
+    "display_name": "SIRINX \u0e42\u0e0b\u0e25\u0e48\u0e32\u0e40\u0e0b\u0e25\u0e25\u0e4c",
+    "short_link": "https://lin.ee/S97R6nj",
+    "basic_id": "@304zrttj",
+    "qr_image_url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "add_friend_url": "https://line.me/R/ti/p/%40304zrttj",
+    "chat_url": "https://line.me/R/oaMessage/%40304zrttj"
+  },
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "production_mutation": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "line_send": false,
+  "customer_send": false,
+  "line_webhook_activation": false,
+  "production_analytics": false,
+  "crm_customer_data_storage": false,
+  "customer_data_storage": false,
+  "secret_read": false,
+  "real_env_read": false,
+  "mongodb_connect": false,
+  "database_write": false,
+  "database_migration": false,
+  "customer_data": false,
+  "production_data": false,
+  "dependency_install": false,
+  "external_browser_automation_execution": false,
+  "stagehand_execution": false,
+  "public_tunnel": false,
+  "runtime_queue_execution": false,
+  "lane2_authorized": false,
+  "decision_record": false,
+  "state_mutation": false,
+  "final_packet_record": false,
+  "allowed_actions": [
+    "read_local_files",
+    "review_packet_039",
+    "review_packet_040",
+    "run_local_tests",
+    "update_status_docs",
+    "record_human_review_evidence_after_user_confirmation"
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "push",
+    "secret_read",
+    "paid_provider_call",
+    "provider_call",
+    "runtime_queue_execution",
+    "cloud_mutation",
+    "customer_send",
+    "telegram_live_send",
+    "external_message_send",
+    "line_send",
+    "line_webhook_activation",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "database_write",
+    "database_migration",
+    "customer_data_storage",
+    "external_browser_automation_execution",
+    "stagehand_execution",
+    "public_tunnel",
+    "local_stack_restart"
+  ],
+  "next_safe_action": "Human reviews the local website and packet_039, confirms LINE QR on a real device, confirms existing bot behavior manually, then provides a separate exact deploy approval only if ready.",
+  "notes": "This packet is a review/approval checkpoint only. It does not approve deployment, LINE webhook activation, production analytics, CRM/customer data storage, external sends, public tunnel, provider calls, or runtime queue execution."
+}

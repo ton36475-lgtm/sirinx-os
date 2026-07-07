@@ -25,7 +25,7 @@ class CodexHermesWorkReportPacketTests(unittest.TestCase):
         self.assertTrue(PACKET.exists(), f"Missing packet: {PACKET}")
         self.assertTrue(PACKET_DOC.exists(), f"Missing packet doc: {PACKET_DOC}")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 packet exists unexpectedly")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_packet_preserves_telegram_draft_boundary(self):
         packet = self.load_packet()

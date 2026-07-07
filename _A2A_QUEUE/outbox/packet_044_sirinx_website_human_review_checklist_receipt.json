@@ -1,0 +1,136 @@
+{
+  "id": "packet_044",
+  "project": "sirinx-site",
+  "priority": "P0",
+  "title": "SIRINX website human review checklist receipt",
+  "agent": "codex",
+  "to_agent": "hermes",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": false,
+  "approval_scope": "human_review_checklist_only_no_execution",
+  "execution_approval_required": true,
+  "dispatch_mode": "local_review_handoff_only",
+  "input": [
+    "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+    "_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json",
+    "_A2A_QUEUE/outbox/packet_041_sirinx_website_visual_correction_evidence_receipt.json",
+    "_A2A_QUEUE/outbox/packet_042_sirinx_website_seo_aeo_metadata_evidence_receipt.json",
+    "_A2A_QUEUE/outbox/packet_043_sirinx_website_accessibility_performance_guardrail_receipt.json",
+    "docs/website/SIRINX_WEBSITE_LOCAL_EVIDENCE_PACKET_2026-07-03.md"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_044_sirinx_website_human_review_checklist_receipt.json",
+    "docs/website/SIRINX_WEBSITE_HUMAN_REVIEW_CHECKLIST_2026-07-03.md"
+  ],
+  "local_preview_url": "http://127.0.0.1:8730/",
+  "review_targets": [
+    "homepage",
+    "line page",
+    "contact page",
+    "projects page",
+    "trust center",
+    "quote readiness page",
+    "roi readiness page",
+    "floating LINE and inquiry dock",
+    "mobile contact tray",
+    "existing bot or inquiry behavior",
+    "real-device LINE QR scan"
+  ],
+  "automated_evidence_summary": {
+    "build": "passed",
+    "check": "passed, 18 files checked",
+    "line_browser_uat": "passed, 70 Playwright checks",
+    "closed_gate_tests": "passed, 3 checks",
+    "server_tests": "passed, 2 checks",
+    "git_diff_check": "passed",
+    "forbidden_form_storage_network_scan": "no matches in quote, ROI, and app script"
+  },
+  "manual_evidence_required": [
+    {
+      "id": "human_visual_review",
+      "status": "pending",
+      "evidence_required": "Human reviews the local website pages and screenshots before any deploy decision."
+    },
+    {
+      "id": "line_qr_real_device_scan",
+      "status": "pending",
+      "evidence_required": "Human scans the LINE QR on a real device and confirms it opens SIRINX โซล่าเซลล์ LINE Official."
+    },
+    {
+      "id": "existing_bot_manual_check",
+      "status": "pending",
+      "evidence_required": "Human opens the existing bot or inquiry path and confirms LINE did not replace it."
+    },
+    {
+      "id": "mobile_contact_tray_manual_check",
+      "status": "pending",
+      "evidence_required": "Human opens and closes the mobile tray and confirms it does not block QR or navigation."
+    },
+    {
+      "id": "deploy_approval",
+      "status": "pending",
+      "evidence_required": "Separate exact approval phrase APPROVE_DEPLOY_SIRINX_SITE_<date> after review."
+    }
+  ],
+  "required_future_approval_phrases": [
+    "APPROVE_DEPLOY_SIRINX_SITE_<date>",
+    "APPROVE_LINE_WEBHOOK_<scope>_<date>",
+    "APPROVE_PRODUCTION_ANALYTICS_<scope>_<date>",
+    "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+    "APPROVE_LINE_QR_REAL_DEVICE_CONFIRMED_<device>_<date>",
+    "APPROVE_EXISTING_BOT_MANUAL_CHECK_<date>"
+  ],
+  "allowed_actions": [
+    "read_local_files",
+    "review_local_preview",
+    "run_local_tests",
+    "record_human_review_results_after_user_confirmation",
+    "update_status_docs"
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "push",
+    "secret_read",
+    "paid_provider_call",
+    "provider_call",
+    "cloud_mutation",
+    "production_mutation",
+    "customer_send",
+    "telegram_live_send",
+    "external_message_send",
+    "line_send",
+    "line_webhook_activation",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "database_write",
+    "database_migration",
+    "customer_data_storage",
+    "public_tunnel",
+    "dependency_install",
+    "runtime_queue_execution"
+  ],
+  "dry_run": true,
+  "live_send": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "line_send": false,
+  "customer_send": false,
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "production_mutation": false,
+  "line_webhook_activation": false,
+  "production_analytics": false,
+  "crm_customer_data_storage": false,
+  "customer_data_storage": false,
+  "secret_read": false,
+  "real_env_read": false,
+  "dependency_install": false,
+  "public_tunnel": false,
+  "runtime_queue_execution": false,
+  "not_approval": true,
+  "next_safe_action": "Human reviews docs/website/SIRINX_WEBSITE_HUMAN_REVIEW_CHECKLIST_2026-07-03.md against the local preview, confirms LINE QR on a real device, confirms existing bot/inquiry behavior manually, then provides a separate exact deploy approval only if ready.",
+  "notes": "This packet is a human review checklist receipt only. It does not approve deployment, push, webhook activation, production analytics, CRM/customer data storage, external sends, provider calls, public tunnel, dependency install, or runtime queue execution."
+}

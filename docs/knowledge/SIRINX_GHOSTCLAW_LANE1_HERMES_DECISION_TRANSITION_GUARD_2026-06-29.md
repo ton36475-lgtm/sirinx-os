@@ -8,12 +8,12 @@ This guard is not a Hermes decision and not a final Opus architecture packet.
 It only maps a future validated Hermes decision to the next local transition.
 
 ```text
-status=blocked_missing_hermes_decision
+status=validated_decision_transition_ready
 current_actionable_packet=packet_013
-validated_decision=None
-transition_allowed=false
-next_transition=wait_for_hermes_decision
-decision_record=false
+validated_decision=route_to_opus
+transition_allowed=true
+next_transition=await_opus_architecture_packet
+decision_record=true
 codex_recorder_gate_open=false
 lane2_authorized=false
 runtime_queue_execution=false
@@ -23,7 +23,7 @@ provider_call=false
 ## Machine-Readable Guard
 
 ```text
-/var/folders/6_/dlvk9m7n60bf_nhbr22w9wwm0000gn/T/tmp4knd52g6/transition-guard.json
+data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json
 WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py
 ```
 
@@ -36,11 +36,14 @@ WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py
 
 ## Reviewed Evidence
 
-- none
+- `_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md`
+- `WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json`
 
 ## Errors
 
-`missing_hermes_decision`
+`none`
 
 ## Non-Actions
 

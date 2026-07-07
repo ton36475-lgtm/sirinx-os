@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Kusala Final Farewell local public scaffold for respectful funeral planning, estimate-only quote building, memorial pages, and future gated services."
+    />
+    <title>Kusala Final Farewell</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero" data-section="home">
+      <nav class="nav" aria-label="Kusala navigation">
+        <a class="brand" href="#home">Kusala</a>
+        <div class="nav-links">
+          <a href="#services">Services</a>
+          <a href="#quote">Estimate</a>
+          <a href="#memorial">Memorial</a>
+          <a href="#gates">Gates</a>
+        </div>
+      </nav>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Final Farewell Planner</p>
+          <h1>วางแผนงานอำลาอย่างสงบ ชัดเจน และเคารพครอบครัว</h1>
+          <p class="lead">
+            Local-only public scaffold for funeral planning. Estimates are non-binding and every partner action requires human approval.
+          </p>
+        </div>
+        <aside class="quiet-card">
+          <strong>Respect first</strong>
+          <span>No live partner dispatch, no payment integration, no customer send.</span>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="service-grid" id="services" data-section="services">
+        <article data-scope="temple_booking"><h2>Temple booking</h2><p>Collect location, date range, ceremony style, and coordinator notes.</p></article>
+        <article data-scope="hall_search"><h2>Hall search</h2><p>Compare capacity, accessibility, parking, and family room needs.</p></article>
+        <article data-scope="wreaths"><h2>Wreaths</h2><p>Plan respectful wreath options with message review before any order.</p></article>
+        <article data-scope="catering"><h2>Catering</h2><p>Estimate meal count, dietary notes, and serving windows.</p></article>
+        <article data-scope="vans"><h2>Vans</h2><p>Plan transport needs for family, monks, guests, and equipment.</p></article>
+        <article data-scope="local_agents"><h2>Local agents</h2><p>Prepare a human-reviewed coordinator request, not an automatic dispatch.</p></article>
+      </section>
+
+      <section class="quote-panel" id="quote" data-section="quote_builder">
+        <div>
+          <p class="eyebrow">Estimate-only quote builder</p>
+          <h2>Local budget estimate</h2>
+          <p>Adjust quantities to prepare a private planning estimate. This is not a binding quotation.</p>
+        </div>
+        <form id="quote-form">
+          <label>Days <input name="days" type="number" min="1" max="7" value="3" /></label>
+          <label>Guests <input name="guests" type="number" min="10" max="500" value="80" /></label>
+          <label>Wreaths <input name="wreaths" type="number" min="0" max="50" value="8" /></label>
+          <label>Vans <input name="vans" type="number" min="0" max="20" value="2" /></label>
+          <label>
+            Catering
+            <select name="catering">
+              <option value="simple">Simple</option>
+              <option value="standard" selected>Standard</option>
+              <option value="extended">Extended</option>
+            </select>
+          </label>
+        </form>
+        <div class="estimate" data-section="budget_estimate">
+          <span>Estimated range</span>
+          <strong id="estimate-total">-</strong>
+          <p id="estimate-note">Owner review required before any quote is sent.</p>
+        </div>
+      </section>
+
+      <section class="split" data-section="partner_dispatch_stub">
+        <div>
+          <p class="eyebrow">Partner dispatch stub</p>
+          <h2>Prepared, but locked.</h2>
+          <p>Partner messages are drafted for owner review only. This page cannot send to temples, halls, caterers, wreath shops, drivers, or local agents.</p>
+        </div>
+        <button class="locked-button" type="button" aria-disabled="true">Dispatch locked by approval gate</button>
+      </section>
+
+      <section class="memorial" id="memorial" data-section="memorial_guest_page">
+        <p class="eyebrow">Memorial guest page</p>
+        <h2>Private remembrance template</h2>
+        <div class="memorial-card">
+          <span>In loving memory</span>
+          <strong>Name placeholder</strong>
+          <p>Family-approved biography, ceremony schedule, map link, and guest message settings can be added after privacy review.</p>
+        </div>
+      </section>
+
+      <section class="gate-grid" id="gates" data-section="payments_future_gate">
+        <article><h2>Payment gate</h2><p>Future placeholder only. No payment gateway is connected.</p></article>
+        <article><h2>Customer send gate</h2><p>No SMS, email, LINE, or partner messages are sent from this scaffold.</p></article>
+        <article><h2>Privacy gate</h2><p>Family names, guest messages, and ceremony details require consent review.</p></article>
+      </section>
+    </main>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

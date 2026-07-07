@@ -19,7 +19,7 @@ class HermesGatewayRecheckTests(unittest.TestCase):
     def test_recheck_files_exist_without_hermes_decision(self):
         self.assertTrue(RECHECK_JSON.exists(), f"Missing JSON recheck: {RECHECK_JSON}")
         self.assertTrue(RECHECK_DOC.exists(), f"Missing Markdown recheck: {RECHECK_DOC}")
-        self.assertFalse(FINAL_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(FINAL_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_recheck_preserves_read_only_boundary(self):
         report = self.load_report()

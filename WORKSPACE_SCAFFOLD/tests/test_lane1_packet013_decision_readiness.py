@@ -24,7 +24,7 @@ class Lane1Packet013DecisionReadinessTests(unittest.TestCase):
     def test_scorecard_files_exist_without_final_decision_or_packet(self):
         self.assertTrue(SCORECARD_JSON.exists(), f"Missing readiness scorecard: {SCORECARD_JSON}")
         self.assertTrue(SCORECARD_DOC.exists(), f"Missing readiness doc: {SCORECARD_DOC}")
-        self.assertFalse(FINAL_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(FINAL_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final Opus packet exists unexpectedly")
 
     def test_scorecard_is_not_a_decision_or_gate_unlock(self):

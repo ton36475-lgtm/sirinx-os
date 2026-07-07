@@ -12,6 +12,7 @@ pub mod engine;
 pub mod error;
 pub mod policy;
 pub mod python_compat;
+pub mod python_oracle;
 pub mod receipt;
 pub mod redaction;
 pub mod schema;

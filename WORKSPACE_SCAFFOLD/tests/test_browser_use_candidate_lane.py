@@ -94,8 +94,8 @@ class BrowserUseCandidateLaneTests(unittest.TestCase):
         rel_packet = str(PACKET.relative_to(ROOT))
 
         queue_status = json.loads(QUEUE_STATUS_JSON.read_text(encoding="utf-8"))
-        self.assertEqual(queue_status["packet_counts"]["outbox"], 15)
-        self.assertEqual(queue_status["packet_counts"]["total"], 29)
+        self.assertEqual(queue_status["packet_counts"]["outbox"], 34)
+        self.assertEqual(queue_status["packet_counts"]["total"], 48)
         packet = next(item for item in queue_status["packets"] if item["id"] == "packet_025")
         self.assertEqual(packet["folder"], "outbox")
         self.assertEqual(packet["risk"], "safe")

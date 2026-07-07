@@ -30,7 +30,7 @@ class Lane1HermesDecisionValidatorTests(unittest.TestCase):
         self.assertTrue(VALIDATOR.exists(), f"Missing validator script: {VALIDATOR}")
         self.assertTrue(CONTRACT_JSON.exists(), f"Missing validator contract: {CONTRACT_JSON}")
         self.assertTrue(CONTRACT_DOC.exists(), f"Missing validator doc: {CONTRACT_DOC}")
-        self.assertFalse(FINAL_DECISION.exists(), "Hermes final decision exists unexpectedly")
+        self.assertTrue(FINAL_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus architecture packet exists unexpectedly")
 
     def test_validator_contract_preserves_gate_boundaries(self):

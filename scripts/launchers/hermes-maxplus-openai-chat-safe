@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd /Users/sirinx/sirinx-os
+
+export HERMES_INFERENCE_PROVIDER="${HERMES_INFERENCE_PROVIDER:-custom:maxplus-codex}"
+export MAXPLUS_HERMES_CODEX_MODEL="${MAXPLUS_HERMES_CODEX_MODEL:-deepseek-v4-flash}"
+export CUSTOM_BASE_URL="${CUSTOM_BASE_URL:-https://api.maxplus-ai.cc/deepseek/v1}"
+
+if [[ "${1:-}" == "--dry-run" ]]; then
+  hermes_present=false
+  key_present=false
+  if command -v hermes >/dev/null 2>&1; then
+    hermes_present=true
+  fi
+  if [[ -n "${MAXPLUS_CODEX_API_KEY:-}" ]]; then
+    key_present=true
+  fi
+  printf '{"dry_run":true,"provider":"%s","model":"%s","base_url":"%s","hermes_present":%s,"maxplus_codex_api_key_present":%s,"secret_value_printed":false}\n' \
+    "${HERMES_INFERENCE_PROVIDER}" \
+    "${MAXPLUS_HERMES_CODEX_MODEL}" \
+    "${CUSTOM_BASE_URL}" \
+    "${hermes_present}" \
+    "${key_present}"
+  exit 0
+fi
+
+if [[ -z "${MAXPLUS_CODEX_API_KEY:-}" ]]; then
+  echo "ERROR: MAXPLUS_CODEX_API_KEY is not set. Refusing to start without printing or reading secret values." >&2
+  exit 1
+fi
+
+if ! command -v hermes >/dev/null 2>&1; then
+  echo "ERROR: hermes is not on PATH." >&2
+  exit 1
+fi
+
+echo "Starting Hermes with provider ${HERMES_INFERENCE_PROVIDER} and model ${MAXPLUS_HERMES_CODEX_MODEL}."
+echo "Secret value presence was checked but not printed."
+exec hermes "$@"

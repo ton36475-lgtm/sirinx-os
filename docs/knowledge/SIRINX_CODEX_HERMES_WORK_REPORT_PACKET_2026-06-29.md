@@ -57,7 +57,7 @@ _A2A_QUEUE/outbox/packet_014_codex_hermes_work_report_draft.json
 status=BLOCKED
 current_actionable_packet=packet_013
 blockers=BLOCK-LANE1-OPUS-PACKET,BLOCK-HERMES-GATEWAY
-next=Record a separate local Hermes decision: route_to_opus, request_revision, open_codex_recorder_gate, or block.
+next=Use the recorded route_to_opus decision as local evidence; route final LANE_1 Opus architecture packet authoring while keeping the Codex recorder gate and LANE_2 closed.
 ```
 
 ## Verification

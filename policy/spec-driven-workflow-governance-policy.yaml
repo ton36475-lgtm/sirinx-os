@@ -1,0 +1,24 @@
+policy_id: spec-driven-workflow-governance-policy-v1
+target_tools:
+  - Fission-AI/OpenSpec
+classification:
+  lane: SPEC_DRIVEN_WORKFLOW
+  default_gate: GREEN_FOR_REFERENCE
+  import_gate: YELLOW
+allowed:
+  - read_repo_docs
+  - create_workflow_assessment
+  - map_explore_propose_apply_to_ghostclaw_packets
+  - draft_spec_templates
+  - draft_task_templates
+blocked:
+  - blind_install
+  - overwrite_existing_specs
+  - bypass_policy_guardian
+  - bypass_file_lease
+  - generated_specs_override_security_rules
+required_controls:
+  - source_review
+  - template_diff_review
+  - receipt_per_import
+  - ghostclaw_policy_precedence

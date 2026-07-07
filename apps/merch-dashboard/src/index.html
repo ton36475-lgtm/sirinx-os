@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Local-first merch operations dashboard for planning, QC, listing drafts, manual content, and owner review gates."
+    />
+    <title>Merch Automation Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Local-first operations</p>
+        <h1>Merch Automation Dashboard</h1>
+      </div>
+      <div class="gate-badge">DRAFT ONLY / OWNER REVIEW REQUIRED</div>
+    </header>
+
+    <main>
+      <section class="grid summary-grid" data-section="summary">
+        <article class="metric"><span>7</span><p>Planning tables</p></article>
+        <article class="metric"><span>30</span><p>Calendar days</p></article>
+        <article class="metric"><span>10</span><p>QC checks</p></article>
+        <article class="metric danger"><span>0</span><p>Live marketplace actions</p></article>
+      </section>
+
+      <section class="panel" data-section="pipeline">
+        <div class="section-title">
+          <p class="eyebrow">Pipeline</p>
+          <h2>Plan, review, and prepare drafts without publishing.</h2>
+        </div>
+        <div class="pipeline" id="pipeline"></div>
+      </section>
+
+      <section class="grid two" data-section="schemas">
+        <article class="panel">
+          <p class="eyebrow">Google Sheet schema</p>
+          <h2>Tables</h2>
+          <ul id="sheet-schema"></ul>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">Airtable schema</p>
+          <h2>Manual import model</h2>
+          <ul id="airtable-schema"></ul>
+        </article>
+      </section>
+
+      <section class="panel" data-section="qc">
+        <div class="section-title">
+          <p class="eyebrow">QC checklist</p>
+          <h2>Quality and policy gates before owner action.</h2>
+        </div>
+        <div class="checklist" id="qc-list"></div>
+      </section>
+
+      <section class="panel" data-section="calendar">
+        <div class="section-title">
+          <p class="eyebrow">30-day calendar</p>
+          <h2>Production rhythm</h2>
+        </div>
+        <div class="calendar" id="calendar"></div>
+      </section>
+
+      <section class="panel" data-section="safety">
+        <p class="eyebrow">Safety boundary</p>
+        <h2>Automation stops at local drafts.</h2>
+        <p>
+          This dashboard prepares ideas, briefs, listing drafts, QC notes, and owner-ready
+          tasks only. Publishing, marketplace submission, paid provider calls, and external
+          customer messages require separate explicit approval.
+        </p>
+      </section>
+    </main>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

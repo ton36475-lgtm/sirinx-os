@@ -1,0 +1,91 @@
+{
+  "packet_id": "packet_048_sirinx_website_theme_correction_receipt",
+  "created_at": "2026-07-03T01:05:49+07:00",
+  "lane": "codex_builder",
+  "scope": "apps/sirinx-site",
+  "status": "local_verification_passed",
+  "intent": "Correct the SIRINX website visual direction after human rejection by aligning subpages with the homepage theme while preserving LINE Official, QR, and existing inquiry behavior.",
+  "human_feedback": "Previous design direction was rejected as inconsistent and low quality.",
+  "changed_surfaces": [
+    "subpage header and navigation visual alignment",
+    "subpage hero height and spacing",
+    "LINE, contact, quote, projects, trust, and ROI nav copy alignment",
+    "quote/contact customer-facing copy polish",
+    "static check and Playwright copy expectations",
+    "local evidence packet"
+  ],
+  "evidence_files": [
+    "apps/sirinx-site/src/styles.css",
+    "apps/sirinx-site/src/line/index.html",
+    "apps/sirinx-site/src/contact/index.html",
+    "apps/sirinx-site/src/projects/index.html",
+    "apps/sirinx-site/src/trust-center/index.html",
+    "apps/sirinx-site/src/quote/index.html",
+    "apps/sirinx-site/src/roi-calculator/index.html",
+    "apps/sirinx-site/scripts/check.mjs",
+    "apps/sirinx-site/tests/line-integration.spec.ts",
+    "docs/specs/website-quality/TEST_CASES.md",
+    "docs/website/SIRINX_WEBSITE_LOCAL_EVIDENCE_PACKET_2026-07-03.md"
+  ],
+  "screenshot_evidence": [
+    "/tmp/sirinx-audit-home-desktop.png",
+    "/tmp/sirinx-audit-line-desktop.png",
+    "/tmp/sirinx-audit-home-mobile.png",
+    "/tmp/sirinx-audit-quote-mobile.png",
+    "/tmp/sirinx-fix2-line-desktop.png",
+    "/tmp/sirinx-fix2-line-mobile.png",
+    "/tmp/sirinx-fix2-contact-desktop.png",
+    "/tmp/sirinx-fix2-quote-mobile.png"
+  ],
+  "preserved_behavior": [
+    "LINE Official short link",
+    "LINE QR image",
+    "floating LINE button",
+    "existing website inquiry/contact path",
+    "mobile contact sheet",
+    "closed deploy/push/webhook/analytics/CRM gates"
+  ],
+  "verification": [
+    {
+      "command": "git diff --check -- <scoped website theme correction files>",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site build",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site check",
+      "result": "passed, 18 files checked"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:line",
+      "result": "passed, 82 Playwright checks"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:closed-gates",
+      "result": "passed, 3 checks"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:server",
+      "result": "passed, 2 checks"
+    },
+    {
+      "command": "rg secret-like pattern scan on website/docs/outbox scope",
+      "result": "no matches"
+    }
+  ],
+  "closed_gates_preserved": {
+    "deploy": false,
+    "push": false,
+    "line_webhook": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "customer_data_collection": false,
+    "database_write": false,
+    "package_install": false,
+    "public_tunnel": false
+  },
+  "approval_status": "not_deploy_approval",
+  "next_safe_action": "Human review local preview and screenshots, then decide whether to accept this theme direction before any deploy approval."
+}

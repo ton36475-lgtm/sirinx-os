@@ -1,0 +1,10 @@
+{
+  "id": "agent_product",
+  "type": "agent",
+  "label": "Product Agent",
+  "capabilities": ["requirements", "offer_framing", "priority_map", "release_gate"],
+  "default_model_route": "deepseek_or_glm",
+  "fable5_allowed": "explicit_strategy_gate_only",
+  "approval_required_for": ["public_claim", "pricing_change", "launch_decision"]
+}
+

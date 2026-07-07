@@ -1,0 +1,95 @@
+{
+  "packet_id": "P090A_2_PRODUCTION_METHOD_AND_ROLLBACK_DISCOVERY",
+  "status": "P090A2_METHOD_DISCOVERY_READY_FOR_P090C_EXACT_HUMAN_APPROVAL",
+  "mode": "read_only_discovery_no_mutation",
+  "created_at": "2026-07-07T01:52:25+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "workspace": "/Users/sirinx/sirinx-os/apps/sirinx-site",
+  "branch": "staging/godmode-master-os-v2",
+  "repo_head": "79cc2252a3d8bbbc036b9c8272c2d4f7c181126b",
+  "cloudflare_pages": {
+    "project_name": "sirinx-co",
+    "project_domains": [
+      "sirinx-co.pages.dev",
+      "www.sirinx.co"
+    ],
+    "git_provider": "No",
+    "deploy_method": "cloudflare_pages_direct_upload_wrangler",
+    "production_branch": "main",
+    "build_command": "pnpm build",
+    "deploy_command": "pnpm exec wrangler pages deploy dist --project-name sirinx-co --branch main --commit-hash f1cec05d89d82d35f9cf5616c91a13d6d2870962 --commit-message \"fix(site): restore focus after closing contact panels\""
+  },
+  "release_candidate": {
+    "site_code_commit": "f1cec05d89d82d35f9cf5616c91a13d6d2870962",
+    "preview_deployment_id": "49d66d7f-98c5-4c18-b7a6-6e26886563a2",
+    "preview_branch": "staging/godmode-master-os-v2",
+    "preview_url": "https://49d66d7f.sirinx-co.pages.dev",
+    "preview_alias": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev"
+  },
+  "current_production": {
+    "deployment_id": "6bdf4746-2c34-429b-b0d5-88f6dfed3f66",
+    "source": "9d2e081",
+    "branch": "main",
+    "deployment_url": "https://6bdf4746.sirinx-co.pages.dev",
+    "production_url": "https://www.sirinx.co/"
+  },
+  "rollback": {
+    "target_deployment_id": "6bdf4746-2c34-429b-b0d5-88f6dfed3f66",
+    "target_source": "9d2e081",
+    "target_url": "https://6bdf4746.sirinx-co.pages.dev",
+    "method": "cloudflare_pages_production_deployment_rollback",
+    "dashboard_procedure": [
+      "Open Cloudflare Dashboard",
+      "Select Pages project sirinx-co",
+      "Open production deployment 6bdf4746-2c34-429b-b0d5-88f6dfed3f66",
+      "Trigger Cloudflare Pages rollback for that production deployment",
+      "Verify https://www.sirinx.co/"
+    ],
+    "api_endpoint_candidate": "POST https://api.cloudflare.com/client/v4/accounts/4b35e17c8966dc88f57aa8019ebae2bb/pages/projects/sirinx-co/deployments/6bdf4746-2c34-429b-b0d5-88f6dfed3f66/rollback",
+    "requires_separate_rollback_gate": true
+  },
+  "read_only_checks": {
+    "project_list": "passed",
+    "production_deployment_list": "passed",
+    "preview_deployment_list": "passed",
+    "url_reachability": [
+      {
+        "url": "https://www.sirinx.co/",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8"
+      },
+      {
+        "url": "https://6bdf4746.sirinx-co.pages.dev/",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8"
+      },
+      {
+        "url": "https://49d66d7f.sirinx-co.pages.dev/",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8"
+      },
+      {
+        "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/",
+        "status": 200,
+        "content_type": "text/html; charset=utf-8"
+      }
+    ]
+  },
+  "blocked_actions_confirmed": {
+    "production_deploy": true,
+    "preview_deploy": true,
+    "git_push": true,
+    "cloudflare_r2_d1_kv_dns_mutation": true,
+    "line_webhook_activation": true,
+    "crm_customer_storage_write": true,
+    "live_telegram_line_email_customer_send": true,
+    "provider_model_call": true,
+    "secret_read_or_print": true
+  },
+  "artifacts": {
+    "report": "reports/mission/A2A2A_P090A_2_PRODUCTION_METHOD_AND_ROLLBACK_DISCOVERY_20260707.md",
+    "receipt": "_A2A_QUEUE/outbox/packet_090a2_sirinx_site_production_method_rollback_discovery_receipt.json"
+  },
+  "next_gate": "P090C_EXACT_PRODUCTION_DEPLOY_APPROVAL_PACKET",
+  "production_deploy_remains_blocked": true
+}

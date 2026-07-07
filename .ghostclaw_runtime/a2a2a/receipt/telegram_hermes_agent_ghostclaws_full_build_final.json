@@ -10,7 +10,7 @@
   "local_timestamp": "2026-06-30T08:19:14+0700",
   "repo": "/Users/sirinx/sirinx-os",
   "branch": "staging/godmode-master-os-v2",
-  "status": "not_complete_current_dirty_tree_receipt_refreshed",
+  "status": "not_complete_current_dirty_tree_acceptance_queue_recorded",
   "no_push": true,
   "no_deploy": true,
   "no_secret_access": true,
@@ -36,8 +36,8 @@
     "phase_14_validation": "completed_current_turn",
     "phase_15_latentmas_validation": "completed_current_turn",
     "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
-    "phase_17_final_receipt": "refreshed_current_turn_truthful_dirty_tree_state",
-    "phase_18_stage_commit": "last_scoped_local_commit_5fcb03a_audit_only_remaining_dirty_tree_not_committed"
+    "phase_17_final_receipt": "refreshed_current_turn_dirty_tree_acceptance_queue_recorded",
+    "phase_18_stage_commit": "not_ready_for_broad_stage_current_dirty_tree_has_62_observed_only_paths"
   },
   "core_system_commit": {
     "commit_hash": "f789441",
@@ -982,5 +982,28 @@
     "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase12-edgeone-readiness-20260630-001.json",
     "local_commit_approval_status": "approved_tier_B_non_self_approval",
     "commit_hash_scope": "validated scoped local source commit for Phase 12 EdgeOne readiness contract hardening; later receipt-finalization commits may differ"
-  }
+  },
+  "latest_dirty_tree_acceptance_queue": {
+    "timestamp": "2026-06-30T06:25:10Z",
+    "local_timestamp": "2026-06-30T13:25:10+0700",
+    "observed_head": "aa66f26",
+    "ahead_of_origin": 33,
+    "total_changed_paths": 85,
+    "modified_or_staged_paths": 34,
+    "untracked_paths": 51,
+    "approved_scope_paths": 22,
+    "conditional_scope_paths": 1,
+    "observed_only_outside_approved_scope_paths": 62,
+    "staged_paths_at_inspection": 0,
+    "report_path": "docs/knowledge/GHOSTCLAW_DIRTY_TREE_ACCEPTANCE_QUEUE_20260630.md",
+    "receipt_path": ".ghostclaw_runtime/a2a2a/receipt/dirty_tree_acceptance_queue_20260630T132510_0700.json",
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-dirty-tree-acceptance-queue-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "broad_stage_status": "blocked_until_observed_only_groups_are_separately_gated",
+    "no_push": true,
+    "no_deploy": true,
+    "no_secret_access": true
+  },
+  "last_updated": "2026-06-30T06:25:10Z",
+  "last_updated_local": "2026-06-30T13:25:10+0700"
 }

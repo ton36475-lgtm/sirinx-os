@@ -38,15 +38,15 @@ class Lane1HermesDecisionPreflightAuditTests(unittest.TestCase):
         self.assertTrue(PACKET.exists(), f"Missing preflight audit outbox packet: {PACKET}")
         return json.loads(PACKET.read_text(encoding="utf-8"))
 
-    def test_artifacts_exist_without_decision_or_final_packet(self):
+    def test_artifacts_exist_with_decision_but_without_final_packet(self):
         self.assertTrue(SCRIPT.exists(), f"Missing preflight audit builder: {SCRIPT}")
         self.assertTrue(AUDIT_JSON.exists(), f"Missing preflight audit JSON: {AUDIT_JSON}")
         self.assertTrue(AUDIT_DOC.exists(), f"Missing preflight audit doc: {AUDIT_DOC}")
         self.assertTrue(PACKET.exists(), f"Missing preflight audit outbox packet: {PACKET}")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus packet exists unexpectedly")
 
-    def test_builder_reports_review_readiness_without_gate_clearance(self):
+    def test_builder_reports_decision_recorded_without_gate_clearance(self):
         module = load_preflight_module()
         audit = module.build_preflight_audit()
 
@@ -57,12 +57,12 @@ class Lane1HermesDecisionPreflightAuditTests(unittest.TestCase):
         self.assertEqual(audit["missing_review_evidence"], [])
         self.assertTrue(audit["ready_for_hermes_decision_review"])
         self.assertFalse(audit["decision_record"])
-        self.assertFalse(audit["hermes_decision_recorded"])
+        self.assertTrue(audit["hermes_decision_recorded"])
         self.assertFalse(audit["codex_recorder_gate_open"])
         self.assertFalse(audit["ready_for_codex_recorder"])
         self.assertFalse(audit["lane2_authorized"])
         self.assertFalse(audit["ready_for_lane2"])
-        self.assertIn("docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md", audit["missing_gate_artifacts"])
+        self.assertNotIn("docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md", audit["missing_gate_artifacts"])
         self.assertIn("docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md", audit["missing_gate_artifacts"])
         self.assertEqual(
             audit["model_assistance_scope"],
@@ -116,11 +116,11 @@ class Lane1HermesDecisionPreflightAuditTests(unittest.TestCase):
             status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         packet = next(item for item in status["packets"] if item["id"] == "packet_017")
@@ -134,7 +134,7 @@ class Lane1HermesDecisionPreflightAuditTests(unittest.TestCase):
         self.assertFalse(packet["lane2_authorized"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29", text)
+        self.assertIn("packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48", text)
         self.assertIn(str(PACKET.relative_to(ROOT)), text)
 
     def test_status_surfaces_link_preflight_without_claiming_transition(self):
@@ -151,7 +151,7 @@ class Lane1HermesDecisionPreflightAuditTests(unittest.TestCase):
 
         self.assertIn(rel_json, execution_queue["source_indexes"])
         item = next(item for item in execution_queue["items"] if item["id"] == "LANE1-HERMES-DECISION-PREFLIGHT-PACKET-017")
-        self.assertEqual(item["status"], "ready_for_hermes_decision_review_not_decision")
+        self.assertEqual(item["status"], "preflight_superseded_by_packet_026_decision")
         self.assertEqual(item["current_actionable_packet"], "packet_013")
         self.assertFalse(item["lane2_authorized"])
         self.assertIn(rel_script, item["evidence"])
@@ -183,7 +183,7 @@ class Lane1HermesDecisionPreflightAuditTests(unittest.TestCase):
             "GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_LOCAL_ONLY",
             "ready_for_hermes_decision_review=true",
             "decision_record=false",
-            "hermes_decision_recorded=false",
+            "hermes_decision_recorded=true",
             "codex_recorder_gate_open=false",
             "lane2_authorized=false",
             "ready_for_lane2=false",

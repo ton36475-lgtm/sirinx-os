@@ -1,0 +1,49 @@
+{
+  "packet_id": "packet_053_sirinx_website_github_baseline_review",
+  "created_at": "2026-07-03T01:42:51+07:00",
+  "status": "ready_for_human_review",
+  "mode": "local_only_read_only_github_review",
+  "repository": "ton36475-lgtm/sirinx-os",
+  "local_branch": "staging/godmode-master-os-v2",
+  "upstream_branch": "origin/staging/godmode-master-os-v2",
+  "github_default_branch": "codex/urgent-backlog-execution",
+  "github_connector_compare": {
+    "base": "codex/urgent-backlog-execution",
+    "head": "staging/godmode-master-os-v2",
+    "status": "ahead",
+    "ahead_by": 25,
+    "behind_by": 0,
+    "base_commit": "a5de5858989a3c258acaf9c41a97c9b65cb0856b"
+  },
+  "local_git_evidence": {
+    "fetch_origin_prune": "passed",
+    "local_branch_ahead_of_upstream_by_commits": 33,
+    "tracked_website_files_changed_against_upstream": 10,
+    "untracked_website_evidence_spec_outbox_files_in_scope": 73
+  },
+  "baseline_finding": "The GitHub upstream homepage is still the older controlled-AI operations homepage, while the current local website is the Solar/LINE conversion upgrade.",
+  "review_report": "docs/website/SIRINX_WEBSITE_GITHUB_BASELINE_REVIEW_2026-07-03.md",
+  "source_packets": [
+    "packet_039_sirinx_website_line_uat_verification_receipt",
+    "packet_040_sirinx_website_human_review_deploy_gate",
+    "packet_051_sirinx_website_live_index_source_sync_receipt",
+    "packet_052_sirinx_website_evidence_docs_live_index_refresh"
+  ],
+  "closed_gates": [
+    "deploy",
+    "push",
+    "line_webhook",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "customer_data_collection",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "public_tunnel",
+    "package_install",
+    "production_mutation",
+    "database_write_or_migration",
+    "secret_or_env_read"
+  ],
+  "next_safe_action": "Human review the local preview, compare the current local homepage with live and GitHub baseline, scan LINE QR on a real device, and manually confirm existing bot/inquiry behavior before any push or deploy approval."
+}

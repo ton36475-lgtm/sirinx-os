@@ -1,0 +1,122 @@
+{
+  "id": "packet_041",
+  "project": "sirinx-site",
+  "priority": "P1",
+  "title": "SIRINX website visual correction and LINE QR evidence receipt",
+  "agent": "codex",
+  "to_agent": "hermes",
+  "status": "outbox",
+  "risk": "safe",
+  "approval_required": false,
+  "approval_scope": "local_evidence_receipt_only_no_execution",
+  "execution_approval_required": true,
+  "dispatch_mode": "local_evidence_receipt_only",
+  "input": [
+    "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+    "_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json",
+    "apps/sirinx-site/src/styles.css",
+    "apps/sirinx-site/src/components/floating-contact.css",
+    "apps/sirinx-site/src/line/index.html",
+    "apps/sirinx-site/tests/line-integration.spec.ts"
+  ],
+  "output": [
+    "_A2A_QUEUE/outbox/packet_041_sirinx_website_visual_correction_evidence_receipt.json",
+    "docs/website/SIRINX_WEBSITE_LOCAL_EVIDENCE_PACKET_2026-07-03.md"
+  ],
+  "local_preview_url": "http://127.0.0.1:8730/",
+  "visual_corrections": [
+    {
+      "surface": "desktop floating contact dock",
+      "change": "closed state compacted to icon buttons to reduce content overlap risk"
+    },
+    {
+      "surface": "mobile /line page",
+      "change": "floating trigger hidden on the dedicated QR/contact route so the primary QR stays unobstructed"
+    },
+    {
+      "surface": "mobile subpage floating contact trigger",
+      "change": "trigger reduced to 48px to keep the contact tray available without dominating section headings"
+    }
+  ],
+  "screenshot_evidence": [
+    "/tmp/sirinx-line-compact-dock-desktop-v2.png",
+    "/tmp/sirinx-line-qr-unobstructed-mobile.png",
+    "/tmp/sirinx-projects-mobile-trigger-48.png",
+    "/tmp/sirinx-trust-mobile-trigger-48.png",
+    "/tmp/sirinx-home-compact-dock-desktop.png",
+    "/tmp/sirinx-quote-crm-readiness-final-desktop.png",
+    "/tmp/sirinx-quote-crm-readiness-final-mobile.png"
+  ],
+  "verified_commands": [
+    {
+      "command": "pnpm --filter @sirinx/site build",
+      "result": "passed",
+      "evidence": "sirinx-site built at apps/sirinx-site/dist"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site check",
+      "result": "passed",
+      "evidence": "sirinx-site check passed for 18 files"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:line",
+      "result": "passed",
+      "evidence": "44 Playwright checks passed across desktop and mobile projects"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:closed-gates",
+      "result": "passed",
+      "evidence": "3 vitest checks passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:server",
+      "result": "passed",
+      "evidence": "2 vitest checks passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed",
+      "evidence": "no whitespace or patch formatting issues"
+    }
+  ],
+  "verified_counts": {
+    "built_site_files_checked": 18,
+    "line_browser_uat_tests": 44,
+    "closed_gate_regression_tests": 3,
+    "server_tests": 2
+  },
+  "manual_uat_required": [
+    "human visual review of local website",
+    "real-device LINE QR scan",
+    "manual existing website bot/contact behavior confirmation",
+    "deploy approval only after review"
+  ],
+  "dry_run": true,
+  "live_send": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "line_send": false,
+  "customer_send": false,
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "production_mutation": false,
+  "line_webhook_activation": false,
+  "production_analytics": false,
+  "crm_customer_data_storage": false,
+  "secret_read": false,
+  "real_env_read": false,
+  "mongodb_connect": false,
+  "database_write": false,
+  "database_migration": false,
+  "customer_data": false,
+  "production_data": false,
+  "dependency_install": false,
+  "public_tunnel": false,
+  "runtime_queue_execution": false,
+  "not_approval": true,
+  "next_safe_action": "Human reviews local website and evidence packet, confirms LINE QR on a real device, confirms existing bot/contact behavior manually, then provides separate exact deploy approval only if ready.",
+  "notes": "Local evidence receipt only. This packet does not approve deployment, LINE webhook activation, production analytics, CRM/customer data storage, external sends, provider calls, public tunnel, or runtime queue execution."
+}

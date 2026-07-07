@@ -104,7 +104,7 @@ class Lane1OpusArchitecturePacketGateTests(unittest.TestCase):
         self.assertTrue(CONTRACT_DOC.exists(), f"Missing Opus packet gate doc: {CONTRACT_DOC}")
         self.assertTrue(PACKET.exists(), f"Missing Opus packet gate outbox packet: {PACKET}")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus packet exists unexpectedly")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
 
     def test_contract_preserves_missing_final_packet_boundary(self):
         contract = self.load_contract()
@@ -207,11 +207,11 @@ class Lane1OpusArchitecturePacketGateTests(unittest.TestCase):
             status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         packet = next(item for item in status["packets"] if item["id"] == "packet_018")
@@ -226,7 +226,7 @@ class Lane1OpusArchitecturePacketGateTests(unittest.TestCase):
         self.assertFalse(packet["lane2_authorized"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29", text)
+        self.assertIn("packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48", text)
         self.assertIn(str(PACKET.relative_to(ROOT)), text)
 
     def test_status_surfaces_link_gate_without_creating_final_packet(self):
@@ -278,7 +278,7 @@ class Lane1OpusArchitecturePacketGateTests(unittest.TestCase):
             "validator_ready_final_packet_missing",
             "final_packet_present=false",
             "final_packet_record=false",
-            "hermes_decision_recorded=false",
+            "hermes_decision_recorded=true",
             "decision_record=false",
             "lane2_authorized=false",
             "ready_for_lane2=false",

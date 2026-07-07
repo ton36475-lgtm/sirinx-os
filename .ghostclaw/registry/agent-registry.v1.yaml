@@ -1,0 +1,301 @@
+agents:
+
+  - id: hermes
+    name: Hermes
+    lane: control_plane
+    description: Orchestrator and task dispatcher. Routes work to agents, manages mission lifecycle, interprets user intent, and composes final responses.
+    mutates_files: false
+    tier_access: [A, B, C, D, X]
+    owns:
+      - task dispatch and routing
+      - agent lifecycle management
+      - mission orchestration and decomposition
+      - user intent interpretation
+      - final response composition
+    forbidden:
+      - direct file mutations
+      - bypassing the policy guardian gate
+      - running unchecked code
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: structured mission-plan or free-form task from user
+    output_protocol: composed response with receipts from subtasks
+    default_model_hint: deepseek-v4
+
+  - id: codex
+    name: Codex
+    lane: primary_builder
+    description: Primary implementation agent. Writes code, edits files, creates new artifacts, and runs build/test commands.
+    mutates_files: true
+    tier_access: [B, C, D]
+    owns:
+      - code generation and editing
+      - file creation and modification
+      - build and test execution
+      - git staging and committing
+    forbidden:
+      - approving its own code (requires opencode review)
+      - bypassing file lease system
+      - mutating files without acquiring leases
+    requires_lease: true
+    requires_receipt: true
+    input_protocol: spec or task from hermes with lease grants
+    output_protocol: file diffs, receipts, test results
+    default_model_hint: deepseek-v4
+
+  - id: opencode
+    name: OpenCode
+    lane: qa_review_only
+    description: Quality assurance reviewer. Reviews code diffs, checks style, correctness, and adherence to spec. Does not write files.
+    mutates_files: false
+    tier_access: [B, C, D]
+    owns:
+      - code review and diff inspection
+      - quality reporting
+      - style and convention checking
+      - spec adherence verification
+    forbidden:
+      - writing or editing files
+      - running destructive commands
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: diff or PR from codex or hermes
+    output_protocol: structured review report with pass/fail verdict
+    default_model_hint: claude-opus-4
+
+  - id: policy-guardian
+    name: Policy Guardian
+    lane: final_gatekeeper
+    description: Entry and exit gate. Validates all outgoing content against policy, scans for secrets, and enforces safety rules before any external action.
+    mutates_files: false
+    tier_access: [A, B, C, D, X]
+    owns:
+      - policy enforcement and compliance
+      - secrets and credential scanning
+      - content safety filtering
+      - final gate approval
+    forbidden:
+      - modifying source code
+      - bypassing its own gate
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: payload from hermes destined for external output
+    output_protocol: pass/block verdict with reasons
+    default_model_hint: claude-opus-4
+
+  - id: validator
+    name: Validator
+    lane: validation
+    description: Runs linting, type checking, schema validation, and other static analysis on code and configuration.
+    mutates_files: false
+    tier_access: [B, C, D]
+    owns:
+      - schema validation
+      - linting and static analysis
+      - type checking
+      - configuration verification
+    forbidden:
+      - modifying source files
+      - approving architectural decisions
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: file paths or content from hermes
+    output_protocol: validation report with error/warning list
+    default_model_hint: deepseek-v4
+
+  - id: repo-mapper
+    name: Repo Mapper
+    lane: readonly_intake
+    description: Reads repository structure, maps dependencies, analyzes codebase layout, and provides context for other agents.
+    mutates_files: false
+    tier_access: [B, C, D]
+    owns:
+      - repository structure mapping
+      - dependency graphing
+      - codebase analysis and summarization
+      - context provision for planning
+    forbidden:
+      - writing or editing any files
+      - running build or test commands
+    requires_lease: false
+    requires_receipt: false
+    input_protocol: repo path or query from hermes
+    output_protocol: structured map, graph, or summary
+    default_model_hint: deepseek-v4
+
+  - id: file-lease-manager
+    name: File Lease Manager
+    lane: coordination
+    description: Manages the distributed file lease system. Acquires, releases, and tracks leases to prevent concurrent edit conflicts.
+    mutates_files: true
+    tier_access: [A, B, C, D, X]
+    owns:
+      - lease acquisition and release
+      - conflict detection and resolution
+      - lease state persistence
+    forbidden:
+      - editing source files outside lease records
+      - approving code changes
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: lease request from codex or hermes
+    output_protocol: lease grant, denial, or release confirmation
+    default_model_hint: deepseek-v4
+
+  - id: architect-opus
+    name: Architect Opus
+    lane: architecture
+    description: High-level system architect. Produces architecture plans, technology recommendations, and design documents.
+    mutates_files: false
+    tier_access: [A, B, C, D]
+    owns:
+      - system architecture and design
+      - technology selection
+      - technical planning
+      - architecture decision records
+    forbidden:
+      - writing implementation code
+      - editing source files directly
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: mission context and requirements from hermes
+    output_protocol: architecture plan with ADRs
+    default_model_hint: claude-opus-4
+
+  - id: glm-deepseek-kimi-workers
+    name: GLM DeepSeek Kimi Workers
+    lane: coding_draft_workers
+    description: Pool of drafting agents that generate code stubs, snippets, and initial implementations for review by primary builders.
+    mutates_files: false
+    tier_access: [C, D]
+    owns:
+      - code draft generation
+      - stub and skeleton creation
+      - implementation prototyping
+    forbidden:
+      - approving or merging drafts
+      - modifying files outside draft scope
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: draft task spec from hermes
+    output_protocol: code draft for downstream review
+    default_model_hint: deepseek-v4
+
+  - id: browser-smoke-worker
+    name: Browser Smoke Worker
+    lane: local_uat
+    description: Performs browser-based smoke tests and local user acceptance testing on web applications.
+    mutates_files: false
+    tier_access: [C, D]
+    owns:
+      - browser smoke testing
+      - visual regression checks
+      - local UAT execution
+      - console error detection
+    forbidden:
+      - modifying application code
+      - making architectural decisions
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: URL or local path from hermes
+    output_protocol: smoke test report with screenshots and logs
+    default_model_hint: gpt-4o
+
+  - id: creative-prompt-worker
+    name: Creative Prompt Worker
+    lane: creative_prompt_worker
+    description: Generates creative content, marketing copy, and user-facing prompts with attention to tone and brand voice.
+    mutates_files: false
+    tier_access: [B, C]
+    owns:
+      - creative content generation
+      - prompt engineering
+      - copywriting
+      - tone and voice management
+    forbidden:
+      - system file mutations
+      - code implementation
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: creative brief from hermes
+    output_protocol: generated creative content
+    default_model_hint: claude-opus-4
+
+  - id: thai-text-qa-worker
+    name: Thai Text QA Worker
+    lane: thai_text_qa_worker
+    description: Specialized quality assurance for Thai language text. Checks grammar, spelling, tone, and cultural appropriateness.
+    mutates_files: false
+    tier_access: [C]
+    owns:
+      - Thai language quality checks
+      - Thai grammar and spelling verification
+      - Thai cultural appropriateness review
+    forbidden:
+      - modifying Thai content directly
+      - code modifications
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: Thai text content from hermes
+    output_protocol: QA report with corrections
+    default_model_hint: deepseek-v4
+
+  - id: repo-mapper-research
+    name: Repo Mapper Research
+    lane: repo_mapper_research_worker
+    description: Performs deep research on codebases, analyzes patterns, generates documentation maps, and produces detailed context reports.
+    mutates_files: false
+    tier_access: [B, C, D]
+    owns:
+      - deep codebase research
+      - documentation analysis
+      - pattern detection and reporting
+      - context report generation
+    forbidden:
+      - writing to source files
+      - modifying documentation directly
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: research query from hermes
+    output_protocol: structured research report
+    default_model_hint: deepseek-v4
+
+  - id: defensive-report-worker
+    name: Defensive Report Worker
+    lane: defensive_report_worker
+    description: Security-focused agent that scans for vulnerabilities, generates defensive reports, and flags potential attack vectors.
+    mutates_files: false
+    tier_access: [B, C, D]
+    owns:
+      - vulnerability scanning
+      - defensive report generation
+      - attack vector analysis
+      - security recommendation reporting
+    forbidden:
+      - modifying source code
+      - disabling security measures
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: codebase or path from hermes
+    output_protocol: defensive security report
+    default_model_hint: claude-opus-4
+
+  - id: model-router-worker
+    name: Model Router Worker
+    lane: model_router_worker
+    description: Routes tasks to optimal AI models based on cost, capability, and latency requirements. Manages model fallback logic.
+    mutates_files: false
+    tier_access: [A, B, C, D, X]
+    owns:
+      - model routing decisions
+      - cost optimization
+      - capability matching
+      - fallback chain management
+    forbidden:
+      - modifying model configurations directly
+      - code changes
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: task with capability requirements from hermes
+    output_protocol: model assignment with routing justification
+    default_model_hint: deepseek-v4

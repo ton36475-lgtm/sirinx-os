@@ -1,0 +1,4 @@
+qc_id,design_id,spelling_pass,readability_pass,contrast_pass,transparent_background_pass,dpi_size_pass,placement_pass,duplicate_pattern_pass,final_qc_status,reject_reason,fix_notes
+QC-001,DES-001,yes,yes,yes,yes,yes,yes,yes,PASS,none,Ready for listing owner review.
+QC-002,DES-002,yes,yes,needs_review,yes,yes,yes,yes,REVISE,contrast_low_on_dark_products,Increase yellow highlight thickness.
+QC-003,DES-003,yes,yes,yes,yes,yes,yes,yes,PASS,none,Manual final image review still required.

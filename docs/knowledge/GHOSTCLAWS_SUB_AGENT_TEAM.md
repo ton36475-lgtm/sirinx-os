@@ -1,84 +1,93 @@
-# GhostClaws Sub-Agent Team
+# GHOSTCLAW Sub-Agent Team — MoA-Gated Brainstorm Protocol
 
-Date: 2026-06-30
-Mode: local-first, approval-gated, no live provider calls
+**Phase:** 8
+**Status:** Local specification
+**Canonical Term:** "brainstorm" (legacy: "beststorm", invalid typo: "beststrom")
 
-## Purpose
+---
 
-This document defines the AGENT GHOSTCLAWS worker team used by Hermes and
-Codex for the Thai Jarvis local operating system. It is a local execution and
-review contract, not authorization for push, deploy, live customer messaging,
-secret access, paid model calls, package installs, or cloud mutation.
+## 1. MoA-Gated Brainstorm Overview
 
-## Team Roles
+The Mixture-of-Agents (MoA) gated brainstorm is a structured multi-agent deliberation protocol where:
 
-| Worker | Role | Default Authority |
-| --- | --- | --- |
-| Hermes Commander | Command intake, routing, mission decomposition, final report | Route and approve only with receipts |
-| Codex Builder | Repo inspection, patches, tests, receipts, local commits | Local allowed paths only |
-| Repo Mapper | Read-only source map and changed-file classification | No mutation |
-| Policy Guardian | Action tier enforcement and hard-stop checks | Final local policy authority |
-| Validator Worker | JSON validation, tests, diff checks, receipt verification | No source mutation except receipts/status |
-| Browser Use Worker | Local dashboard smoke evidence only | No login, payment, private data, or send flows |
-| Vibe Coding Agent | Natural-language task graph, worker selection, approval request | Routes through policy and receipts |
-| Model Router | Logical lane selection for coding, mapping, architecture, critic review | No live provider call or key read |
-| Kimi Worker Lane | Coding reference, patch planning, test planning, reference vote | No model download or live inference |
-| GLM Repo Mapper | Long-context map reference lane | Read-only |
-| DeepSeek Reasoner | Architecture/reference reasoning lane | Read-only unless routed through Codex |
-| Opus Critic | Safety, bug, uncertainty, and architecture critique | No final execution |
-| GitHub Toptrend Research Worker | Public metadata research only | No clone, install, or unknown code execution |
-| EdgeOne Readiness Worker | R3 readiness packets and checklists | No preview or production deploy |
-| Receipt / Memory Worker | Receipts, logs, archive, Obsidian pulse summaries | Never deletes audit trails |
+- **Multiple reference workers** provide independent assessments across safety, speed, and correctness dimensions
+- **Hermes Commander** acts as aggregator
+- **Consensus threshold** must be met (default: 75)
+- **Safety disagreement** triggers a **hard veto** — no override possible
+- **MoA score** is a **confidence signal only** — it cannot override the Policy Guardian
+- **Recursive MoA launch** is prohibited
 
-## MoA-Gated Brainstorm Contract
+## 2. Reference Dimensions
 
-The brainstorm lane is a gated review process, not an execution bypass.
+| Reference | Dimension | Description |
+|---|---|---|
+| ref_A | safety_risk | Assesses safety implications of the proposed action |
+| ref_B | speed_cost | Assesses latency and compute cost tradeoffs |
+| ref_C | correctness_proof | Assesses correctness and completeness of the solution |
 
-Required references:
+Canonical evidence markers:
 
 - `ref_A_safety_risk`
 - `ref_B_speed_cost`
 - `ref_C_correctness_proof`
+- `aggregator_certainty`
 
-Hermes aggregates votes and records the decision evidence. Consensus threshold
-is `0.67` unless a stricter task contract is supplied. `aggregator_certainty`
-must be recorded as evidence, not as execution authority. MoA score is a
-confidence signal only. Safety disagreement from `ref_A_safety_risk` is a hard veto.
-MoA cannot override the policy gate, start recursive agent loops, deploy, push,
-read secrets, call providers, or send public/customer messages.
+## 3. Aggregator Rules
 
-## Approval Rules
+- **Aggregator:** Hermes Commander
+- **Consensus threshold:** 75 (configurable, never below 60)
+- **Safety disagreement → hard veto:** If any reference worker flags safety_risk below threshold, the brainstorm is blocked. No override.
+- **MoA score = confidence signal only:** The aggregate score informs confidence labeling but does NOT override the Policy Guardian's tier cap enforcement.
+- MoA cannot override the policy gate.
+- **No recursive MoA:** A brainstorm session cannot spawn another brainstorm. Recursive MoA launch = Tier X auto-block.
 
-- Self-approval is forbidden.
-- `requester_agent` and `approver_agent` must differ.
-- `decision_id`, `evidence_pack`, and receipt are required.
-- A/B tier local work can be approved by autonomous mutual approval.
-- C tier requires quorum or a rollback plan.
-- D/X tier actions are blocked.
-- Local commit approval requires validation passed, allowed files only, and no
-  blocked actions.
+## 4. Protocol Flow
 
-## Hard Stops
+```
+1. Vibe Coding Agent or Hermes Commander initiates brainstorm_id
+2. Reference workers (Kimi, GLM, DeepSeek) cast independent votes
+3. Each vote includes ref_A (safety_risk), ref_B (speed_cost), ref_C (correctness_proof)
+4. Hermes Commander aggregates votes
+5. If consensus >= threshold: brainstorm_approved
+6. If safety disagreement: brainstorm_blocked (hard veto, no override)
+7. MoA score attached to evidence pack as confidence signal
+8. Policy Guardian still enforces tier cap independently
+9. Receipt written with brainstorm_id, votes, aggregate, and final status
+```
 
-Stop and write a receipt if any task requires:
+## 5. Terminology Policy
 
-- `git push`, deploy, production action, or DNS/cloud mutation
-- secrets, `.env`, tokens, customer/private data, banking, wallet, or password access
-- Telegram/LINE/email/customer live send
-- package install, global install, postinstall script, or unknown repo execution
-- model download, GPU live inference, paid provider call, or API key read
-- login, payment, security setting, captcha bypass, or private browser flow
+- **brainstorm** = canonical term
+- **beststorm** = legacy alias (accepted but flagged)
+- **beststrom** = invalid typo (rejected)
 
-## Current Evidence
+## 6. Hard Violations (Tier X)
 
-- Worker registry: `GHOSTCLAW/workers/registry/worker-registry.json`
-- A2A protocol: `GHOSTCLAW/protocols/A2A2A_PROTOCOL.md`
-- Action tier cap: `GHOSTCLAW/policies/action-tier-cap.yaml`
-- Auto approval engine: `GHOSTCLAW/agents/auto-approve-engine.mjs`
-- Model router: `GHOSTCLAW/models/model-router.mjs`
-- Browser smoke worker: `GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs`
-- Final receipt validator: `GHOSTCLAW/receipts/final-receipt-validator.mjs`
+- `self_approval_attempted`
+- `moa_override_of_policy_gate`
+- `recursive_moa_launch_requested`
+- `kv_only_protocol_requested`
+- `secret_access_requested`
+- `model_download_requested`
+- `gpu_live_inference_requested`
 
-This document does not claim the full AGENT GHOSTCLAWS mission is complete.
-It closes the Phase 8 sub-agent team documentation surface and keeps remaining
-external actions gated.
+## 7. A2A Integration
+
+Brainstorm envelopes are carried as part of the A2A2A message schema with:
+
+- `brainstorm_id`: unique session identifier
+- `moa_gated_brainstorm`: boolean flag
+- `moa_summary`: aggregate result with ref_A/ref_B/ref_C scores
+- `autonomous_approval`: boolean (only after MoA + policy gate pass)
+
+## 8. Workers Involved
+
+| Worker | Role in Brainstorm |
+|---|---|
+| kimi_coding_worker | Reference voter (code correctness focus) |
+| glm_repo_mapper | Reference voter (architecture mapping focus) |
+| deepseek_reasoner | Reference voter (reasoning depth focus) |
+| opus_critic | Reference voter (quality critique focus) |
+| hermes_commander | Aggregator |
+| policy_guardian | Policy gate enforcer (independent of MoA) |
+| kob_validator | Safety verdict for brainstorm outcome |

@@ -28,7 +28,7 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
         self.assertTrue(PACKET.exists(), f"Missing handoff outbox packet: {PACKET}")
         self.assertTrue(HANDOFF_JSON.exists(), f"Missing handoff JSON: {HANDOFF_JSON}")
         self.assertTrue(HANDOFF_DOC.exists(), f"Missing handoff doc: {HANDOFF_DOC}")
-        self.assertFalse(HERMES_DECISION.exists(), "Hermes decision exists unexpectedly")
+        self.assertTrue(HERMES_DECISION.exists(), "Hermes decision file should exist after route_to_opus decision")
         self.assertFalse(FINAL_PACKET.exists(), "Final LANE_1 Opus packet exists unexpectedly")
 
     def test_packet_preserves_handoff_only_boundary(self):
@@ -86,11 +86,11 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
             status["packet_counts"],
             {
                 "inbox": 5,
-                "outbox": 15,
+                "outbox": 34,
                 "working": 1,
                 "done": 8,
                 "blocked": 0,
-                "total": 29,
+                "total": 48,
             },
         )
         packet = next(item for item in status["packets"] if item["id"] == "packet_016")
@@ -104,7 +104,7 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
         self.assertFalse(packet["lane2_authorized"])
 
         text = QUEUE_STATUS_DOC.read_text(encoding="utf-8")
-        self.assertIn("packet_counts: inbox=5 outbox=15 working=1 done=8 blocked=0 total=29", text)
+        self.assertIn("packet_counts: inbox=5 outbox=34 working=1 done=8 blocked=0 total=48", text)
         self.assertIn("_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json", text)
         self.assertIn("_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json", text)
         self.assertIn("_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json", text)
@@ -117,7 +117,7 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
 
         self.assertIn(rel_packet, execution_queue["source_indexes"])
         handoff_item = next(item for item in execution_queue["items"] if item["id"] == "LANE1-HERMES-DECISION-HANDOFF-PACKET-016")
-        self.assertEqual(handoff_item["status"], "handoff_packet_ready_not_decision")
+        self.assertEqual(handoff_item["status"], "handoff_superseded_by_packet_026_decision")
         self.assertEqual(handoff_item["current_actionable_packet"], "packet_013")
         self.assertFalse(handoff_item["lane2_authorized"])
         self.assertIn(rel_packet, handoff_item["evidence"])
@@ -125,8 +125,8 @@ class Lane1HermesDecisionHandoffPacketTests(unittest.TestCase):
         self.assertIn("runtime_queue_execution", handoff_item["forbidden_actions"])
 
         self.assertIn(rel_packet, mission)
-        self.assertIn("outbox: 15", mission)
-        self.assertIn("total: 29", mission)
+        self.assertIn("outbox: 34", mission)
+        self.assertIn("total: 48", mission)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,75 @@
+{
+  "packet_id": "packet_051_sirinx_website_live_index_source_sync_receipt",
+  "created_at": "2026-07-03T01:34:22+07:00",
+  "lane": "codex_builder",
+  "scope": "apps/sirinx-site",
+  "status": "local_live_index_source_sync_completed",
+  "intent": "Use the currently live sirinx.co index page as the local homepage source of truth for hero copy, primary CTA, metadata, and visual direction without deploy or push.",
+  "live_sources_read_only": [
+    "https://www.sirinx.co/",
+    "/tmp/sirinx-live-index.html",
+    "/tmp/sirinx-live-index.css",
+    "/tmp/sirinx-live-home.js"
+  ],
+  "changed_files": [
+    "apps/sirinx-site/src/index.html",
+    "apps/sirinx-site/src/styles.css",
+    "apps/sirinx-site/src/app.js",
+    "apps/sirinx-site/src/contact/index.html",
+    "apps/sirinx-site/scripts/check.mjs",
+    "apps/sirinx-site/tests/line-integration.spec.ts",
+    "docs/website/SIRINX_WEBSITE_LIVE_INDEX_SOURCE_SYNC_2026-07-03.md"
+  ],
+  "local_changes": [
+    "homepage hero copy now follows the live index source",
+    "homepage primary CTA now routes to /contact?interest=solar-carport like the live index source",
+    "homepage metadata and OG image now follow the live index source",
+    "LINE Official homepage CTA remains preserved as a secondary local requirement",
+    "mobile contact trigger is suppressed on contact and line pages to avoid covering core contact content",
+    "static and browser guardrails now enforce live-index homepage copy and mobile navigation behavior"
+  ],
+  "visual_evidence": [
+    "/tmp/sirinx-live-index-applied-home-desktop-final.png",
+    "/tmp/sirinx-live-index-applied-home-mobile-final.png",
+    "/tmp/sirinx-live-index-applied-contact-mobile.png"
+  ],
+  "verification": [
+    {
+      "command": "git diff --check -- apps/sirinx-site/src apps/sirinx-site/scripts/check.mjs apps/sirinx-site/tests/line-integration.spec.ts",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site build",
+      "result": "passed"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site check",
+      "result": "passed, 18 files checked"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:line",
+      "result": "passed, 106 Playwright checks"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:closed-gates",
+      "result": "passed, 3 tests"
+    },
+    {
+      "command": "pnpm --filter @sirinx/site test:server",
+      "result": "passed, 2 tests"
+    }
+  ],
+  "closed_gates_preserved": {
+    "deploy": false,
+    "push": false,
+    "line_webhook": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "customer_data_collection": false,
+    "database_write": false,
+    "package_install": false,
+    "public_tunnel": false
+  },
+  "approval_status": "not_deploy_approval",
+  "next_safe_action": "Human review local preview against live index direction, scan LINE QR on a real device, and manually confirm existing bot/inquiry behavior before any deploy approval."
+}

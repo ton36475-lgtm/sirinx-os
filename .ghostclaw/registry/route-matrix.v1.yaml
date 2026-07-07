@@ -1,0 +1,249 @@
+routes:
+  - route_id: route-repo-arch
+    task_type: repo_or_architecture
+    description: >
+      Repository structure analysis, architecture design, dependency mapping,
+      and large-scale refactoring decisions. Used when the task requires
+      understanding or modifying the overall system architecture.
+    primary_agent: codex
+    architect_agent: architect-opus
+    validator_agent: validator
+    reviewer_agent: opencode
+    tier: C
+    constraints:
+      - architectural review required for any cross-module change
+      - must produce updated dependency graph on significant restructuring
+    projects:
+      - sirinx-os
+      - core-infra
+      - agent-framework
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-public-site
+    task_type: public_site_ui
+    description: >
+      Public-facing website UI development including landing pages,
+      documentation sites, and user-facing dashboards. Routes to
+      browser smoke testing for visual regression.
+    primary_agent: codex
+    reviewer_agent: opencode
+    smoke_test_agent: browser-smoke-worker
+    tier: B
+    constraints:
+      - must pass browser-smoke-worker visual regression
+      - mobile responsive check required
+      - no production deploy without reviewer sign-off
+    projects:
+      - sirinx-dev-site
+      - dashboard
+      - docs-site
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-creative-asset
+    task_type: creative_asset_prompt
+    description: >
+      Generation and iteration of creative assets including images,
+      audio, video, and UI mockups via prompt engineering. Routes
+      through Thai-language text QA for bilingual assets.
+    primary_agent: creative-prompt-worker
+    reviewer_agent: thai-text-qa-worker
+    tier: B
+    constraints:
+      - all text layers must pass thai-text-qa-worker
+      - asset metadata must be registered in asset registry
+      - no NSFW or policy-violating output
+    projects:
+      - creative-assets
+      - marketing
+      - brand-assets
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-biz-automation
+    task_type: business_automation
+    description: >
+      Workflow automation, data pipelines, scheduled jobs, notification
+      systems, and internal tooling for business operations.
+    primary_agent: codex
+    reviewer_agent: policy-guardian
+    validator_agent: validator
+    tier: C
+    constraints:
+      - policy-guardian review required for any data handling
+      - must include rollback plan
+      - credential usage must be pre-approved
+    projects:
+      - automation
+      - workflows
+      - ops-tools
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-research-re
+    task_type: research_reverse_engineering
+    description: >
+      Deep technical research, protocol analysis, binary inspection,
+      third-party system reverse engineering. Produces a structured
+      Build_Packet as the deliverable.
+    primary_agent: repo-mapper-research
+    architect_agent: architect-opus
+    tier: B
+    constraints:
+      - output must be a completed Build_Packet
+      - no de-obfuscation of licensed software
+      - research findings only — no exploit delivery
+      - architect review required before dissemination
+    projects:
+      - research
+      - analysis
+      - threat-intel
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-security-osint
+    task_type: security_or_osint
+    description: >
+      Defensive security analysis, vulnerability assessment, OSINT
+      gathering for known threats. Strictly defensive — no offensive
+      operations. Defensive-only and report-only mode.
+    primary_agent: defensive-report-worker
+    reviewer_agent: policy-guardian
+    tier: A
+    constraints:
+      - defensive_only: true
+      - report_only: true
+      - no credential handling
+      - no dark web crawling
+      - no de-anonymization
+      - all findings must go through policy-guardian review
+    projects:
+      - security
+      - compliance
+      - monitoring
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-model-router
+    task_type: model_router
+    description: >
+      AI model selection, provider routing, cost management, and
+      inference orchestration. All model calls pass through this route
+      for governance and cost control.
+    primary_agent: model-router-worker
+    reviewer_agent: policy-guardian
+    tier: A
+    constraints:
+      - provider allowlist enforced
+      - model allowlist enforced
+      - cost ceiling applies per request and per session
+      - no secret logging
+      - human gate required for paid provider calls
+      - dry_run enabled by default
+    projects:
+      - model-gateway
+      - ai-infra
+      - inference
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-docs-config
+    task_type: docs_config_update
+    description: >
+      Documentation edits, configuration file changes, and non-code
+      metadata updates. Requires a lease lock and a written receipt
+      to prevent conflicting edits.
+    primary_agent: codex
+    reviewer_agent: validator
+    tier: B
+    constraints:
+      - lease required before editing
+      - receipt required after update
+      - no bulk updates without explicit approval
+    projects:
+      - docs
+      - config
+      - manifests
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-registry-update
+    task_type: registry_update
+    description: >
+      Additions to the Ghostclaw registry (route entries, agent records,
+      project manifests). Append-only — existing entries must never be
+      replaced or deleted.
+    primary_agent: codex
+    reviewer_agent: validator
+    tier: B
+    constraints:
+      - append only: never replace or delete existing entries
+      - each addition must include a unique ID
+      - validator must confirm no existing entry is modified
+    projects:
+      - registry
+      - manifests
+      - ghostclaw
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes
+
+  - route_id: route-emergency-ro
+    task_type: emergency_readonly
+    description: >
+      Emergency read-only access for incident response and production
+      debugging. Strictly read-only — no mutations, no code execution,
+      no state changes. Report findings only.
+    primary_agent: repo-mapper
+    tier: A
+    constraints:
+      - read only: no mutations permitted
+      - no file writes, no config changes, no state mutation
+      - report findings only — do not apply fixes
+      - must log all accessed paths
+    projects:
+      - sirinx-os
+      - core-infra
+      - emergency-response
+    escalation_path:
+      - repo-mapper
+      - codex
+      - architect-opus
+      - policy-guardian
+      - hermes

@@ -50,6 +50,17 @@ import {
   getOpenRouterQwenAdapterStatus
 } from "./src/openrouter-qwen-adapter.mjs";
 import {
+  createGhostClawDispatchPreview,
+  loadGhostClawControlPlane
+} from "./src/ghostclaw-control-plane.mjs";
+import { getGhostClawControlPlaneStatus } from "./src/ghostclaw-control-plane-status.mjs";
+import {
+  createOpenRouterFable5AdapterDryRun,
+  getOpenRouterFable5AdapterStatus,
+  OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+  runOpenRouterFable5LiveSmoke
+} from "./src/openrouter-fable5-adapter.mjs";
+import {
   createOpenRouterFusionRouterDryRun,
   getOpenRouterFusionRouterStatus,
   runOpenRouterFusionLiveSmoke
@@ -75,6 +86,7 @@ import {
   createHermesImageEditDryRun,
   getHermesImageEditStatus
 } from "./src/hermes-image-edit.mjs";
+import { getHermesAllJobsReadiness } from "./src/hermes-all-jobs-readiness.mjs";
 import { createLatentmasBenchDryRun, getLatentmasStatus } from "./src/latentmas-status.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -83,6 +95,14 @@ const port = Number(process.env.DEV_CONTROL_API_PORT || 8711);
 const hermesDashboardUrl = process.env.HERMES_DASHBOARD_URL || "http://127.0.0.1:9119";
 const hermesKanbanBoard = process.env.HERMES_KANBAN_BOARD || "sirinx-os";
 const projectRoot = process.env.SIRINX_PROJECT_ROOT || "/Users/sirinx/sirinx-os";
+
+function queryFlag(url, name) {
+  return ["1", "true", "yes", "on"].includes(String(url.searchParams.get(name) || "").toLowerCase());
+}
+
+function queryObject(url) {
+  return Object.fromEntries(url.searchParams.entries());
+}
 const hermesAgentDir = `${projectRoot}/.claude/agents`;
 const thClawsAgentDir = `${projectRoot}/.thclaws/agents`;
 const hermesSkillDir = `${projectRoot}/.claude/skills`;
@@ -940,6 +960,26 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/openrouter-fable5-adapter") {
+    sendJson(request, response, 200, getOpenRouterFable5AdapterStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/ghostclaw/control-plane") {
+    sendJson(request, response, 200, await loadGhostClawControlPlane(projectRoot));
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/ghostclaw/control-plane/status") {
+    const payload = await getGhostClawControlPlaneStatus({
+      root: projectRoot,
+      query: queryObject(url)
+    });
+    const statusCode = payload.error ? (payload.error.code === "INVALID_QUERY" ? 400 : 503) : 200;
+    sendJson(request, response, statusCode, payload);
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/openrouter-fusion-router") {
     sendJson(request, response, 200, getOpenRouterFusionRouterStatus());
     return;
@@ -962,6 +1002,24 @@ export async function handleRequest(request, response) {
 
   if (request.method === "GET" && url.pathname === "/api/telegram-command-router") {
     sendJson(request, response, 200, getTelegramCommandRouterStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/hermes/all-jobs-ready") {
+    sendJson(
+      request,
+      response,
+      200,
+      await getHermesAllJobsReadiness({
+        root: projectRoot,
+        liveSendRequested: queryFlag(url, "liveSend"),
+        providerCallRequested: queryFlag(url, "providerCall"),
+        cloudflareR2WriteRequested: queryFlag(url, "cloudflareR2Write"),
+        pushRequested: queryFlag(url, "push"),
+        deployRequested: queryFlag(url, "deploy"),
+        installRequested: queryFlag(url, "install")
+      })
+    );
     return;
   }
 
@@ -1273,6 +1331,100 @@ export async function handleRequest(request, response) {
         secretsRead: false,
         commandExecuted: false,
         requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-fable5-adapter/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createOpenRouterFable5AdapterDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_fable5_adapter_dry_run_request",
+        error: "openrouter_fable5_adapter_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCallPaidApi: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        providerCalled: false,
+        secretsRead: false,
+        keyValuePrinted: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/ghostclaw/control-plane/dispatch/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createGhostClawDispatchPreview(body, { root: projectRoot }));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_ghostclaw_control_plane_dispatch_request",
+        error: "ghostclaw_control_plane_dispatch_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        workerExecution: false,
+        providerCalled: false,
+        keyValuePrinted: false
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-fable5-adapter/smoke") {
+    try {
+      const body = await readJson(request);
+      if (body.approval !== OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL) {
+        sendJson(request, response, 200, {
+          title: "OpenRouter Fable5 Live Smoke",
+          status: "blocked-openrouter-fable5-live-smoke",
+          mode: "bounded-provider-smoke",
+          requestId: String(body.requestId || "openrouter-fable5-live-smoke").trim(),
+          provider: "OpenRouter",
+          model: String(body.model || "anthropic/claude-fable-5").trim(),
+          providerCalled: false,
+          commandExecuted: false,
+          secretsRead: false,
+          keyValuePrinted: false,
+          canCallPaidApi: false,
+          providerAttemptCount: 0,
+          retryPolicy: {
+            maxProviderAttempts: 1,
+            retryAllowed: false,
+            repeatedRetryBlocked: true,
+            retryAfterFailure: false,
+            reason: "Fable5 is a gated high-cost route; failed smoke results must stop for operator review."
+          },
+          requiredApproval: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+          blockedReason: "missing_exact_provider_call_approval",
+          nextRecommendedAction:
+            "Use the dry-run endpoint first, then include the exact approval only for one bounded provider-call smoke."
+        });
+        return;
+      }
+      sendJson(request, response, 200, await runOpenRouterFable5LiveSmoke(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_fable5_smoke_request",
+        error: "openrouter_fable5_smoke_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        providerCalled: false,
+        commandExecuted: false,
+        keyValuePrinted: false
       });
     }
     return;

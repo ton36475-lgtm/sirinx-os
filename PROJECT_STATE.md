@@ -1,6 +1,7 @@
 # PROJECT_STATE
 
-Date: 2026-06-29
+Date: 2026-07-02
+Last Update: GHOSTCLAW-KNOWLEDGE-INTEGRATION-20260702-001
 Repo: `/Users/sirinx/sirinx-os`
 Branch: `staging/godmode-master-os-v2`
 Runtime mode: local control plane, dry-run only
@@ -64,7 +65,7 @@ Last verified baseline: `28b8ea1 chore(staging): GhostClaws GodMode Mission Cont
 - All-chat export intake mapper is recorded at `WORKSPACE_SCAFFOLD/scripts/build_all_chat_export_intake_map.py`, `data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json`, and `docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_MAPPER_2026-06-29.md`; it can map a future operator-supplied export into redacted metadata only, but no real export has been loaded and `BLOCK-CHAT-EXPORT` remains open.
 - All-chat export request packet is recorded at `data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json`, `docs/knowledge/SIRINX_ALL_CHAT_EXPORT_REQUEST_PACKET_2026-06-29.md`, and `_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json`; it requests an operator-supplied ChatGPT export path or explicitly authorized read-only connector scope, but no raw chat content was loaded, no connector read was performed, and all-chat coverage remains unclaimed.
 - A2A adaptive sync control status is recorded at `data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json`, `docs/knowledge/SIRINX_A2A_ADAPTIVE_SYNC_CONTROL_STATUS_2026-06-29.md`, and `_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json`; it summarizes current local Codex/Hermes file-bus state for review only and does not execute queue items, read connectors, call providers, mutate state, authorize LANE_2, or claim all chats were read.
-- A2A next-safe-action sequencer is recorded at `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json`, `docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md`, and `_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json`; it selects `record_hermes_packet_013_decision` as the next local lane for review only and does not record a Hermes decision, mutate state, execute queues, call providers, authorize LANE_2, or claim completion.
+- A2A next-safe-action sequencer is recorded at `data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json`, `docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md`, and `_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json`; it is historical local sequencer evidence now superseded by the recorded packet_013 decision in `packet_026`, and it does not mutate state, execute queues, call providers, authorize LANE_2, or claim completion.
 - Hermes gateway current recheck packet is recorded at `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`, and `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`; fresh read-only curls to `127.0.0.1:9000` still failed with exit code 7, no restart was attempted, and `BLOCK-HERMES-GATEWAY` remains open.
 - A2A Hermes-Codex Bridge v2 is integrated under `GHOSTCLAW/a2a-hermes-codex-bridge/` with `packet-bus.ts`, `manifest-store.ts`, `codex-sidecar.ts`, and `integration.test.ts`; the bridge passes 21/21 vitest tests and TypeScript `--noEmit`; it writes packets only to `_A2A_QUEUE/` and simulation manifests only to `.ghostclaw_runtime/manifests/`, performs no real Codex CLI execution by default, blocks Tier D/X actions, and produces dry-run previews plus A2A evidence for every routing decision.
 - Bridge v2 Tier A/B actions produce `allowed_dry_run` outbox packets and simulation manifests even when `allowRealExec=true`; real Codex CLI execution remains a separate runtime gate outside the sidecar contract.
@@ -82,7 +83,7 @@ Last verified baseline: `28b8ea1 chore(staging): GhostClaws GodMode Mission Cont
 - Active goal systematic work index is recorded at `data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json` and `docs/knowledge/SIRINX_ACTIVE_GOAL_SYSTEMATIC_WORK_INDEX_2026-06-29.md`; it keeps the objective `in_progress_not_complete` and maps current local workstreams, blockers, and next safe action without claiming all chats were read.
 - GodMode Mission Control exposes the active-goal systematic work index as read-only static data through `GOD_MODE_ACTIVE_GOAL_INDEX`; it does not read runtime files, execute commands, or unlock any gate.
 - Codex/Hermes execution queue is recorded at `data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json` and `docs/knowledge/SIRINX_CODEX_HERMES_EXECUTION_QUEUE_2026-06-29.md`; it orders `packet_013`, draft-only `packet_015`, handoff-only `packet_016`, preflight-only `packet_017`, Opus packet gate `packet_018`, authoring-bundle-only `packet_019`, transition guard, all-chat export intake, all-chat export request `packet_020`, A2A adaptive sync control status `packet_021`, next-safe-action sequencer `packet_022`, Hermes gateway current recheck `packet_023`, sync-all-jobs command `packet_024`, Browser Use candidate lane `packet_025`, v3.3 artifact intake, R0 approvals, Mission Control read-only evidence, and Obsidian pulse work without claiming completion or opening runtime gates.
-- Codex/Hermes A2A queue status is recorded at `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json`, `docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md`, and `WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json`; it indexes `_A2A_QUEUE` as local file-bus evidence only with `packet_013` still the current actionable inbox packet, `packet_024_sirinx_hermes_a2a_codex_sync_all_jobs` added as a local `/goal` inbox command, `packet_025_sirinx_browser_use_candidate_lane` added as local Browser Use candidate evidence, packet_015 through packet_025 plus older sidecar probe receipts in `outbox`, counts `inbox=5 outbox=15 working=1 done=8 blocked=0 total=29`, excludes pending `approval_gate_*.json` artifacts from packet counts, no Hermes decision, no final Opus packet, no runtime queue execution, no all-chat export import, no Browser Use install/execution, no LANE_2 authorization, and no MIT license claim because no root `LICENSE`/`COPYING` file exists.
+- Codex/Hermes A2A queue status is recorded at `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json`, `docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md`, and `WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json`; it indexes `_A2A_QUEUE` as local file-bus evidence only with `packet_013` still the current actionable inbox packet, `packet_024_sirinx_hermes_a2a_codex_sync_all_jobs` added as a local `/goal` inbox command, `packet_025_sirinx_browser_use_candidate_lane` added as local Browser Use candidate evidence, packet_026 through packet_040 added as local outbox evidence, counts `inbox=5 outbox=34 working=1 done=8 blocked=0 total=48`, excludes pending `approval_gate_*.json` artifacts from packet counts, Hermes packet_013 decision is recorded, final LANE_1 packet is still absent, no runtime queue execution, no all-chat export import, no Browser Use install/execution, no local stack repair/restart, no LANE_2 authorization, no deploy/webhook/production analytics/CRM/customer storage approval from packet_040, and no MIT license claim because no root `LICENSE`/`COPYING` file exists.
 - Hermes A2A Codex sync-all-jobs packet 024 is recorded at `data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md`, and `_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json`; it is `goal_command_inbox_ready_local_only`, forbids real Codex CLI execution, runtime queue execution, provider calls, external sends, deploy/push/cloud/customer/secret actions, and treats `requested_license=MIT` as only a requested-license intent because no root `LICENSE`/`COPYING` file exists.
 - The A2A Sync Hermes checkpoint (`packet_024`, command-intents, a2a-message extensions, tier-resolver, safe local autopilot, and tests) was pushed to `origin/staging/godmode-master-os-v2` via `GATE-PUSH-001-20260629-001` with result `0a1d892..eb664e4`; `GATE-PUSH-001-20260629-001` is now consumed and a new gate-specific approval packet is required for any further push.
 - Push evidence receipt is recorded at `_A2A_QUEUE/outbox/receipt_gate_push_001_2026-06-29.json` with correlation ID `sirinx-a2a2a-push-20260629-001`.
@@ -151,7 +152,7 @@ Last verified baseline: `28b8ea1 chore(staging): GhostClaws GodMode Mission Cont
 | GhostClaw LANE_1 Hermes decision preflight audit | review-ready, not decision | `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_preflight_audit_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py` |
 | GhostClaw LANE_1 Opus architecture packet gate | validator ready, final packet missing | `WORKSPACE_SCAFFOLD/scripts/validate_lane1_opus_architecture_packet.py`, `data/pathspecs/ghostclaw_lane1_opus_architecture_packet_gate_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET_GATE_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_opus_architecture_packet_gate.py` |
 | GhostClaw LANE_1 Opus authoring bundle | authoring bundle ready, not final packet | `data/pathspecs/ghostclaw_lane1_opus_authoring_bundle_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_AUTHORING_BUNDLE_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json`, `WORKSPACE_SCAFFOLD/tests/test_lane1_opus_authoring_bundle.py` |
-| GhostClaw LANE_1 Hermes decision transition guard | fail-closed guard, missing decision | `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_transition_guard.py` |
+| GhostClaw LANE_1 Hermes decision transition guard | validated route_to_opus transition, final packet missing | `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py`, `data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md`, `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md`, `WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_transition_guard.py` |
 | Hermes gateway read-only recheck | unreachable, blocker open | `data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_RECHECK_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_recheck.py` |
 | Hermes gateway current recheck packet | unreachable, blocker open | `data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json`, `docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md`, `_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json`, `WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py` |
 | All-chat export intake contract | contract ready, export missing | `data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json`, `docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_CONTRACT_2026-06-29.md`, `WORKSPACE_SCAFFOLD/tests/test_all_chat_export_intake_contract.py` |
@@ -224,3 +225,105 @@ git diff --check
 - Do not read or copy keystore/signing material.
 - Do not write raw chat logs into memory.
 - Do not treat this file as permission to bypass `AGENTS.md`.
+
+## Merch Automation Dashboard v1 - Local Factory Added 2026-06-30
+
+- Mission `MERCH-DASH-V1-AUTO-20260630-001` created a local-first Amazon Merch on Demand planning dashboard under `docs/knowledge/merch_automation_dashboard_v1`.
+- The package includes schemas, CSV templates, disabled n8n import workflow, static dashboard UI, prompt pack, QC checklist, 30-day calendar, validator, dispatch packet, and receipts.
+- Live Amazon publish, scraping/bypass, fake reviews/traffic, paid provider calls, secrets, push, deploy, and external sends remain blocked.
+
+## MaxPlus Hermes Chinese Model Safe Setup - Local Pack Added 2026-06-30
+
+- Mission `MAXPLUS-HERMES-CHINESE-MODEL-20260630` added redacted Hermes MaxPlus OpenAI-chat templates and validation under `docs/ghostclaw/` and `scripts/ghostclaw/`.
+- The pasted live credential was not copied into repo artifacts, and private Hermes config/env files were not read or modified.
+- Provider calls, gateway live sends, remote installer execution, push, deploy, and secret reads remain blocked pending separate gates.
+
+## MaxPlus Hermes Preflight - 2026-06-30
+
+- Presence-only preflight for mission `MAXPLUS-HERMES-CHINESE-MODEL-20260630` confirms Hermes is installed and `~/.hermes` exists, but runtime activation remains blocked because `MAXPLUS_CODEX_API_KEY` is not present in the current Codex shell and the provider-call gate is closed.
+- Evidence is recorded at `.ghostclaw_runtime/a2a2a/evidence/MAXPLUS-HERMES-CHINESE-MODEL-20260630.preflight.json` and `.ghostclaw_runtime/a2a2a/gates/MAXPLUS-HERMES-CHINESE-MODEL-20260630.provider_smoke_gate.json`.
+
+## Hermes MaxPlus Private Config Applicator - 2026-06-30
+
+- Mission `MAXPLUS-HERMES-CHINESE-MODEL-20260630` now includes a manual-gated private config applicator that can write `~/.hermes/config.yaml` and `~/.hermes/.env` from templates when the owner supplies private env outside repo.
+- Codex ran only dry-run mode; no home config was written, no secret file was read, and no provider call was executed.
+
+## Hermes MaxPlus Completion Audit - 2026-06-30
+
+- Mission `MAXPLUS-HERMES-CHINESE-MODEL-20260630` now has a requirement matrix proving repo-side safe setup is ready for review while full Hermes runtime completion remains gated.
+- Offline CLI preflight confirms Hermes CLI availability without running `doctor`, `status`, provider calls, gateway, cron, or TUI prompts.
+
+## Hermes MaxPlus Advanced Feature Gates - 2026-06-30
+
+- Mission `MAXPLUS-HERMES-CHINESE-MODEL-20260630` now has advanced feature gates for every non-local-safe Hermes feature named in the pasted setup source.
+- All gates default closed and the Telegram report remains a local draft only.
+
+## Hermes MaxPlus Gate Runner - 2026-06-30
+
+- Mission `MAXPLUS-HERMES-CHINESE-MODEL-20260630` now has a dry-run gate runner and operator runbook for all remaining runtime gates.
+- The current repo evidence proves dry-run routing only; no provider, live message, or home config write has executed.
+
+## GhostClaw Knowledge Integration - 2026-07-02
+
+- Mission `GHOSTCLAW-KNOWLEDGE-INTEGRATION-20260702-001` completed.
+- Parent mission `GHOSTCLAW-A2A2A-ADAPTIVE-SYNC-20260702-001` integrated.
+- Created canonical registry system under `.ghostclaw/registry/`:
+  - `project-registry.v1.yaml` — 28 projects across 6 domain categories
+  - `agent-registry.v1.yaml` — 15 agent roles with lane isolation
+  - `knowledge-vault-index.v1.yaml` — 32 knowledge artifact pointers
+  - `route-matrix.v1.yaml` — 10 task-type routing entries
+  - `domain-pack-index.v1.yaml` — 12 project domain packs
+- Created 4 JSON schemas under `.ghostclaw/schemas/`.
+- Created 5 unified OS docs under `docs/`.
+- Created `scripts/ghostclaw_registry_validate.py` validator.
+- Created 10 project queue lanes under `.ghostclaw_runtime/a2a2a/project_queues/`.
+- Created A2A2A inbox queue item for mission tracking.
+- No forbidden actions executed. All work local-safe B tier (doc config).
+
+## Mac mini M2 AI CLI Install Gate Packet - 2026-07-02
+
+- Mission `GHOSTCLAW-MAC-M2-AI-CLI-INTEGRATION-20260702-001` doc-only phase completed.
+- Created install gate packet: `docs/MAC_M2_AI_CLI_INSTALL_UPDATE_RECEIPT.md` (D-tier, pending human approval).
+- Created operator runbook: `docs/AI_CLI_TUI_OPERATOR_RUNBOOK.md`.
+- Created workflow doc: `docs/CODEX_CLAUDE_CODE_LOCAL_WORKFLOW.md`.
+- Install/update of Codex CLI and Claude Code CLI remains behind `GATE-INSTALL-001-20260702-001` and requires explicit human execution on the Mac mini.
+- No install, home-directory mutation, or multi-repo scanner executed. All doc/config work remained inside `/Users/sirinx/sirinx-os`.
+
+## Codex Task Queue Seeding - 2026-07-02
+
+- Mission `GHOSTCLAW-CODEX-TASK-QUEUE-SEED-20260702-001` completed.
+- Created 13 high-level Codex task queue items across 10 project lanes:
+  - `ghostclaw_os/`: 4 tasks (core control plane, registry validator enhancement, knowledge retrieval worker, A2A2A queue coordinator)
+  - `sirinx_site/`: 2 tasks (public guardian, ROI calculator)
+  - `agm/`: 1 task (creative media platform)
+  - `ads_andromeda/`: 1 task (campaign asset factory)
+  - `kusala/`: 1 task (funeral platform)
+  - `phitsanulok_news/`: 1 task (news automation)
+  - `merch_dashboard/`: 2 tasks (automation dashboard, QC checklist validator)
+  - `creative_assets/`: 1 task (education carousel pack)
+  - `local_business/`: 1 task (promo asset pack)
+  - `research/`: 2 tasks (reverse engineering workflow, competitor research pipeline)
+- Each task includes skill level, allowed/forbidden files, constraints, deliverables, verification, and context retrieval pointers.
+- No code executed; only queue item YAML files created. All work local-safe B tier.
+
+## GhostClaw Coding Model Router Pack V2.1 Install - 2026-07-02
+
+- Mission `GHOSTCLAW-MODEL-ROUTER-V2-1-INSTALL-001` completed.
+- Installed 27 files from `ghostclaw_coding_model_integration_pack_v2_1.zip` into repo with backups.
+- Key additions:
+  - `AGENTS_MODEL_ROUTER_ADDENDUM.md` and `CLAUDE_MODEL_ROUTER_ADDENDUM.md` (linked from root AGENTS.md and CLAUDE.md)
+  - `config/model-router/` — registry, Hermes config, LiteLLM example, OpenRouter examples
+  - `docs/model-routing/` — MODEL_REGISTRY, ROUTING_MATRIX, PROVIDER_POLICY, OPENROUTER_SETUP, PROJECT_APPLY_MAP, PACK_README, NEXT_ACTIONS_MODEL_ROUTER
+  - `schemas/ghostclaw/model_router_receipt.schema.json`
+  - `skills/coding-model-router/SKILL.md`
+  - `.claude/agents/*.md` — 6 subagent definitions
+  - `.codex/config.toml.example`
+  - `scripts/validate_model_router_pack.py` and `scripts/model_router_dry_run.py`
+  - `commands/model-router/`
+  - `.env.example` appended with model router env template
+- Updated validator paths to match repo structure (`config/model-router/`, `schemas/ghostclaw/`).
+- Validation passed:
+  - `python3 scripts/validate_model_router_pack.py` → OK
+  - `python3 scripts/model_router_dry_run.py --tier T1 --project ghostclaw --task "test model router"` → dry_run allowed, lane=laguna_free_coder
+- No real paid calls, no provider calls, no secret read/print, no deploy, no push.
+- Backup stored at `.ghostclaw_runtime/backups/model_router_pack_v2_1_20260703_005925/`.

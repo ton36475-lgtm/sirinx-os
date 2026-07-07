@@ -1,0 +1,100 @@
+// prisma/schema.prisma - GHOSTCLAW_LOOP_ENGINEERING Schema
+// Phase 2A: Database Foundation
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Base Models (from AGENTS.md baseline)
+model LiveChatEvent {
+  id              String    @id @default(cuid())
+  source          String
+  streamId        String?
+  viewerIdHash    String?
+  displayNameMasked String?
+  messageText     String
+  language        String?
+  createdAt       DateTime  @default(now())
+  correlationId   String
+
+  @@index([correlationId])
+  @@index([createdAt])
+}
+
+model SolarLead {
+  id                String   @id @default(cuid())
+  chatEventId       String?
+  leadGrade         String?
+  customerType      String?
+  monthlyBillThb    Int?
+  wantsRoiAnalysis  Boolean  @default(false)
+  wantsCallback     Boolean  @default(false)
+  lineHandoffStatus String   @default("not_sent")
+  createdAt         DateTime @default(now())
+  correlationId     String
+
+  @@index([correlationId])
+}
+
+// GhostClaw Extensions
+model Agent {
+  id           String        @id @default(cuid())
+  name         String
+  role         String
+  capabilities String?       @db.LongText // JSON as string
+  status       String        @default("idle")
+  lastHeartbeat DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  runs         AgentRun[]
+  tasks        TaskQueue[]   @relation("AssignedTasks")
+
+  @@index([role])
+  @@index([status])
+}
+
+model AgentRun {
+  id           String   @id @default(cuid())
+  agentId      String
+  task         String?   @db.LongText
+  modelName    String?
+  promptName   String?
+  inputTokens  Int?
+  outputTokens Int?
+  latencyMs     Int?
+  costEstimate  Float?    @default(0)
+  status       String    @default("pending")
+  correlationId String
+  createdAt    DateTime  @default(now())
+
+  agent        Agent     @relation(fields: [agentId], references: [id])
+
+  @@index([agentId])
+  @@index([correlationId])
+  @@index([status])
+}
+
+model TaskQueue {
+  id          String   @id @default(cuid())
+  taskType    String
+  description String?  @db.LongText
+  priority    Int      @default(100)
+  status      String   @default("pending")
+  agentId     String?
+  input       String?  @db.LongText // JSON as string
+  output      String?
+  createdAt   DateTime @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  agent       Agent?   @relation("AssignedTasks", fields: [agentId], references: [id])
+
+  @@index([status])
+  @@index([taskType])
+}

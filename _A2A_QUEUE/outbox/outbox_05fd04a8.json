@@ -1,0 +1,106 @@
+{
+  "project": "sirinx-line-bot",
+  "priority": "P1",
+  "title": "a2a-sync:policy_enforce:D-d428aaff",
+  "agent": "codex",
+  "status": "outbox",
+  "risk": "safe",
+  "input": [
+    ".hermes/hermes-agent/plugins/platforms/line/sirinx/governance.py",
+    ".hermes/hermes-agent/plugins/platforms/line/sirinx/__init__.py"
+  ],
+  "output": [],
+  "approval_required": false,
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-033",
+    "correlation_id": "sirinx-line-bot-033",
+    "phase": "policy:governance",
+    "from": {
+      "agent": "human",
+      "role": "product-owner"
+    },
+    "to": {
+      "agent": "hermes-commander",
+      "role": "policy-enforcer"
+    },
+    "action_requested": "policy_enforce",
+    "context": {
+      "goal": "Review and harden SIRINX LINE governance: deny-list patterns for forbidden claims (guaranteed ROI, zero downtime, no risk), human handoff detection keywords, commitment phrase patterns, auto-send/broadcast kill switches (env-gated), and GHOSTCLAW receipt writing. Ensure zero auto-send without human gate by default, and all human handoff requests write provenance receipts to ~/.ghostclaw/receipts/.",
+      "files": [
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/governance.py",
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/__init__.py"
+      ],
+      "lane": ".hermes/hermes-agent/plugins/platforms/line/sirinx",
+      "constraints": [
+        "dry_run=false",
+        "deploy=false",
+        "push=false",
+        "secret_read=false",
+        "no_blanket_approval",
+        "no_live_send",
+        "do_not_modify_adapter.py",
+        "do_not_modify_other_sirinx_files",
+        "LINE_AUTO_SEND_ENABLED_default=false",
+        "LINE_BROADCAST_ENABLED_default=false",
+        "all_receipts_written_to_~/.ghostclaw/receipts/"
+      ],
+      "deliverables": [
+        "DenyList with 14+ forbidden claim patterns covering Thai + English",
+        "Handoff keyword detection (price inquiry, negotiation, commitment)",
+        "Commitment pattern detection (sign contract, agree deal, delivery date)",
+        "RiskAssessment dataclass with is_risky, requires_human, requires_handoff flags",
+        "RiskGate class with env-gated auto_send and broadcast checks",
+        "GovernanceReceipt with receipt_id, chat_id, action, status, payload, reason, timestamp",
+        "Claim guard that prepends disclaimer text when risky patterns matched in bot replies"
+      ],
+      "command_source": "mission",
+      "license_policy": {
+        "requested_license": "MIT",
+        "repo_license_file_present": false,
+        "assertion": "intent_only_until_license_file_exists"
+      }
+    },
+    "response_expected": {
+      "format": "packet_and_policy_report",
+      "within_lane": "local_file_bus_only",
+      "max_turns": 1
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-07T12:00:00.000Z",
+    "ttl_seconds": 1800,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "receipt": {
+    "schema": "ghostclaw.receipt.v3_2",
+    "decision_id": "D-d428aaff",
+    "correlation_id": "sirinx-line-bot-033",
+    "mission_id": "M-033",
+    "requester_agent": "human",
+    "approver_agent": "hermes-commander",
+    "action_class": "VALIDATE",
+    "final_tier": "B",
+    "decision_status": "allowed",
+    "reason": "auto_execute:B:VALIDATE",
+    "evidence_pack": {
+      "action_requested": "policy_enforce",
+      "lane": ".hermes/hermes-agent/plugins/platforms/line/sirinx",
+      "files": [
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/governance.py",
+        ".hermes/hermes-agent/plugins/platforms/line/sirinx/__init__.py"
+      ]
+    },
+    "timestamp": "2026-07-07T12:41:42.166Z",
+    "checksums": {
+      "context_goal_sha256": "1d6744d5b7873cd8a6349ce1f307761f1f99030c09ed0e31b64deb0dc563b46f",
+      "action_requested_sha256": "82309861e92ddbd62c57681e7afbafa7912ba35e1ceb7ee6e2ce483d3340c69c"
+    }
+  },
+  "notes": "tier=B; reason=auto_execute:B:VALIDATE; sync_run=2026-07-07T12:41:42.166Z",
+  "id": "outbox_05fd04a8",
+  "created_at": "2026-07-07T12:41:42.166Z"
+}

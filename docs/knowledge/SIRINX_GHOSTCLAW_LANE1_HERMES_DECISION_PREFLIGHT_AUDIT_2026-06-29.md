@@ -13,7 +13,7 @@ current_actionable_packet=packet_013
 review_evidence_complete=true
 ready_for_hermes_decision_review=true
 decision_record=false
-hermes_decision_recorded=false
+hermes_decision_recorded=true
 codex_recorder_gate_open=false
 ready_for_codex_recorder=false
 lane2_authorized=false
@@ -66,7 +66,6 @@ _A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.jso
 
 ## Gate Artifacts Still Missing
 
-- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md`
 - `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`
 
 ## Validation Commands After Hermes Records A Decision

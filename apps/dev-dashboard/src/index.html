@@ -197,6 +197,36 @@
         </div>
       </section>
 
+      <section class="panel control-plane-panel" aria-label="GhostClaw control-plane status">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">GhostClaw Control Plane</p>
+            <h2>Status Read Model</h2>
+          </div>
+          <span id="controlPlaneStatus" class="status-pill status-warn">Control plane checking</span>
+        </div>
+        <div id="controlPlaneSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="controlPlaneStopPoint" class="agent-launch-stop">Control-plane status waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Control-plane active projects">
+            <h3>Active Projects</h3>
+            <div id="controlPlaneProjectList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane current packets">
+            <h3>Packets</h3>
+            <div id="controlPlanePacketList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane guardrails">
+            <h3>Guardrails</h3>
+            <div id="controlPlaneGuardrailList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane receipts">
+            <h3>Receipts</h3>
+            <div id="controlPlaneReceiptList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
       <section class="panel team-runtime-panel" aria-label="Team Runtime Bridge for Qwen OpenRouter and Antigravity">
         <div class="panel-head">
           <div>

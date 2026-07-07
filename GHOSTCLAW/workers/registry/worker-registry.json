@@ -1,8 +1,8 @@
 {
   "schema_version": "ghostclaw.worker_registry.v2",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "effective_date": "2026-06-30",
-  "description": "GHOSTCLAW worker registry — canonical list of all worker lanes",
+  "description": "GHOSTCLAW worker registry \u2014 canonical list of all 18 worker lanes",
   "canonical_terminology": {
     "brainstorm": "canonical",
     "beststorm": "legacy_alias",
@@ -135,6 +135,952 @@
       "heartbeat_required": true,
       "receipt_required": true,
       "self_approval_allowed": false
+    },
+    {
+      "name": "hermes_commander",
+      "model": "metadata_only",
+      "display_name": "Hermes Commander",
+      "provider": "internal",
+      "lane": "command",
+      "model_lane": "any",
+      "role": "mission_commander",
+      "autonomy_level": "A4",
+      "reports_to": "human_operator",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "mission_dispatch",
+        "a2a_routing",
+        "approval_routing",
+        "fleet_coordination"
+      ],
+      "allowed_actions": [
+        "route_mission",
+        "dispatch_to_captain",
+        "request_quorum",
+        "write_receipt",
+        "read_any_file"
+      ],
+      "allowed_roles": [
+        "mission_commander",
+        "fleet_commander",
+        "approval_dispatcher"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "production_action",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "customer_message_send"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "hermes_commander",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "codex_build_captain",
+      "model": "metadata_only",
+      "display_name": "Codex Build Captain",
+      "provider": "internal",
+      "lane": "build",
+      "model_lane": "any",
+      "role": "repo_execution_captain",
+      "autonomy_level": "A3",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "repo_mutation",
+        "code_patch",
+        "test_run",
+        "local_commit",
+        "receipt_writing"
+      ],
+      "allowed_actions": [
+        "code_patch_allowed_path",
+        "source_mutation_allowed_path",
+        "local_commit_allowed_scope",
+        "run_tests",
+        "run_lint",
+        "stage_allowed_files",
+        "write_receipt"
+      ],
+      "allowed_roles": [
+        "repo_execution_captain",
+        "build_captain"
+      ],
+      "blocked_actions": [
+        "push",
+        "deploy",
+        "production_action",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "cross_lane_write"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "codex_build_captain",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "repo_mapper",
+      "model": "glm_5_2_max",
+      "display_name": "GLM Repo Mapper",
+      "provider": "zhipu_ai",
+      "lane": "repo_mapping",
+      "model_lane": "glm",
+      "role": "repo_cartographer",
+      "autonomy_level": "A2",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "file_tree_mapping",
+        "dependency_mapping",
+        "architecture_analysis",
+        "evidence_writing"
+      ],
+      "allowed_actions": [
+        "read_only",
+        "brain_query",
+        "write_runtime_artifact",
+        "write_evidence_pack"
+      ],
+      "allowed_roles": [
+        "repo_cartographer",
+        "module_mapper"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "install_dependencies"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "repo_mapper",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "policy_guardian",
+      "model": "metadata_only",
+      "display_name": "Policy Guardian",
+      "provider": "internal",
+      "lane": "policy",
+      "model_lane": "any",
+      "role": "policy_enforcer",
+      "autonomy_level": "A4",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "policy_evaluation",
+        "tier_cap_enforcement",
+        "hard_violation_detection",
+        "block_override_prevention"
+      ],
+      "allowed_actions": [
+        "evaluate_policy",
+        "block_action",
+        "write_policy_receipt",
+        "enforce_tier_cap"
+      ],
+      "allowed_roles": [
+        "policy_enforcer",
+        "safety_guardian"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "production_action",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "override_action_tier_cap"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "policy_guardian",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "validator_worker",
+      "model": "metadata_only",
+      "display_name": "Validator Worker (KOB)",
+      "provider": "internal",
+      "lane": "validation",
+      "model_lane": "any",
+      "role": "validation_verifier",
+      "autonomy_level": "A3",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "json_validation",
+        "schema_validation",
+        "test_result_verification",
+        "evidence_validation"
+      ],
+      "allowed_actions": [
+        "run_tests",
+        "run_lint",
+        "validate_json",
+        "validate_schema",
+        "write_validation_receipt"
+      ],
+      "allowed_roles": [
+        "validation_verifier",
+        "kob_validator"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "code_patch"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "validator_worker",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_use_worker",
+      "model": "metadata_only",
+      "display_name": "Browser Use Worker",
+      "provider": "internal",
+      "lane": "browser_qa",
+      "model_lane": "any",
+      "role": "browser_qa_worker",
+      "autonomy_level": "A3",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/workers/browser-use/browser-use.policy.yaml",
+      "capabilities": [
+        "browser_smoke",
+        "screenshot_capture",
+        "console_error_check",
+        "page_inspection"
+      ],
+      "allowed_actions": [
+        "open_local_url",
+        "capture_screenshot",
+        "check_console_errors",
+        "write_smoke_receipt"
+      ],
+      "allowed_roles": [
+        "browser_qa_worker"
+      ],
+      "blocked_actions": [
+        "login",
+        "payment",
+        "security_settings",
+        "private_data",
+        "captcha_bypass",
+        "customer_send",
+        "telegram_live_send",
+        "deploy",
+        "push",
+        "secret_access",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "browser_use_worker",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "vibe_coding_agent",
+      "model": "metadata_only",
+      "display_name": "Vibe Coding Agent",
+      "provider": "internal",
+      "lane": "vibe",
+      "model_lane": "any",
+      "role": "natural_language_task_router",
+      "autonomy_level": "A3",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "task_parsing",
+        "worker_selection",
+        "evidence_pack_creation",
+        "receipt_writing"
+      ],
+      "allowed_actions": [
+        "parse_task",
+        "select_workers",
+        "request_mutual_approval",
+        "execute_safe_worker_tasks",
+        "write_receipt"
+      ],
+      "allowed_roles": [
+        "natural_language_task_router"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "vibe_coding_agent",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "skill_creator",
+      "model": "metadata_only",
+      "display_name": "Skill Creator",
+      "provider": "internal",
+      "lane": "skill",
+      "model_lane": "any",
+      "role": "skill_author",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "skill_md_writing",
+        "zero_prompting_workflow",
+        "knowledge_documentation"
+      ],
+      "allowed_actions": [
+        "write_skill_md",
+        "read_only",
+        "write_runtime_artifact"
+      ],
+      "allowed_roles": [
+        "skill_author"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "skill_creator",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "model_router",
+      "model": "metadata_only",
+      "display_name": "Model Auto Swap Router",
+      "provider": "internal",
+      "lane": "model_routing",
+      "model_lane": "any",
+      "role": "model_lane_router",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/models/model-swap-policy.yaml",
+      "capabilities": [
+        "lane_routing",
+        "fallback_selection",
+        "metadata_only_routing",
+        "health_status_check"
+      ],
+      "allowed_actions": [
+        "route_task_to_model_lane",
+        "read_model_registry_metadata",
+        "generate_swap_receipt",
+        "record_swap_decision"
+      ],
+      "allowed_roles": [
+        "model_lane_router"
+      ],
+      "blocked_actions": [
+        "live_provider_call",
+        "api_key_read",
+        "env_read",
+        "model_download",
+        "gpu_inference",
+        "push",
+        "deploy",
+        "secret_access",
+        "override_action_tier_cap",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "model_router",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "glm_repo_mapper",
+      "model": "glm_5_2_max",
+      "display_name": "GLM 5.2 Max",
+      "provider": "zhipu_ai",
+      "lane": "repo_mapping",
+      "model_lane": "glm",
+      "role": "repo_mapping_reference",
+      "autonomy_level": "A2",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "file_tree_analysis",
+        "dependency_graph",
+        "architecture_mapping"
+      ],
+      "allowed_actions": [
+        "read_only",
+        "brain_query",
+        "write_runtime_artifact"
+      ],
+      "allowed_roles": [
+        "repo_mapping_reference"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "glm_repo_mapper",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "deepseek_reasoner",
+      "model": "deepseek_v4_pro",
+      "display_name": "DeepSeek V4 Pro",
+      "provider": "deepseek",
+      "lane": "architecture",
+      "model_lane": "deepseek",
+      "role": "architecture_reasoner",
+      "autonomy_level": "A2",
+      "reports_to": "codex_build_captain",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "architecture_design",
+        "system_planning",
+        "component_modeling"
+      ],
+      "allowed_actions": [
+        "read_only",
+        "brain_query",
+        "write_runtime_artifact"
+      ],
+      "allowed_roles": [
+        "architecture_reasoner"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "deepseek_reasoner",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "opus_critic",
+      "model": "claude_opus_4_8",
+      "display_name": "Claude Opus 4.8",
+      "provider": "anthropic",
+      "lane": "critic_review",
+      "model_lane": "opus",
+      "role": "critic_reviewer",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "code_review",
+        "architecture_review",
+        "quality_critique",
+        "safety_audit"
+      ],
+      "allowed_actions": [
+        "read_only",
+        "brain_query",
+        "write_runtime_artifact"
+      ],
+      "allowed_roles": [
+        "critic_reviewer"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "code_patch",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "opus_critic",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "github_toptrend_worker",
+      "model": "metadata_only",
+      "display_name": "GitHub Toptrend Research Worker",
+      "provider": "internal",
+      "lane": "research",
+      "model_lane": "any",
+      "role": "public_research_worker",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "public_repo_search",
+        "topic_mapping",
+        "metadata_collection"
+      ],
+      "allowed_actions": [
+        "gh_search_repos_metadata",
+        "write_research_receipt",
+        "read_only"
+      ],
+      "allowed_roles": [
+        "public_research_worker"
+      ],
+      "blocked_actions": [
+        "clone",
+        "install",
+        "execute_unknown_code",
+        "read_tokens",
+        "print_tokens",
+        "bypass_rate_limits",
+        "deploy",
+        "push",
+        "secret_access",
+        "live_provider_call",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "github_toptrend_worker",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "edgeone_readiness_worker",
+      "model": "metadata_only",
+      "display_name": "EdgeOne Readiness Worker",
+      "provider": "internal",
+      "lane": "edgeone",
+      "model_lane": "any",
+      "role": "readiness_assessor",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "readiness_check",
+        "r3_assessment",
+        "deploy_packet_generation"
+      ],
+      "allowed_actions": [
+        "assess_r3_readiness",
+        "write_readiness_receipt",
+        "generate_deploy_packet_template"
+      ],
+      "allowed_roles": [
+        "readiness_assessor"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "call_edgeone_live_api",
+        "production_action",
+        "self_approval"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "edgeone_readiness_worker",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "receipt_memory_worker",
+      "model": "metadata_only",
+      "display_name": "Receipt/Memory Worker",
+      "provider": "internal",
+      "lane": "receipt",
+      "model_lane": "any",
+      "role": "archive_worker",
+      "autonomy_level": "A2",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "receipt_archival",
+        "evidence_pack_validation",
+        "memory_sync",
+        "obsidian_brain_write"
+      ],
+      "allowed_actions": [
+        "write_receipt",
+        "archive_receipt",
+        "validate_evidence_pack",
+        "sync_to_obsidian_brain"
+      ],
+      "allowed_roles": [
+        "archive_worker"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "receipt_memory_worker",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
+    },
+    {
+      "name": "kob_validator",
+      "model": "metadata_only",
+      "display_name": "KOB Validator",
+      "provider": "internal",
+      "lane": "validation",
+      "model_lane": "any",
+      "role": "safety_verdict_worker",
+      "autonomy_level": "A3",
+      "reports_to": "hermes_commander",
+      "policy_file": "GHOSTCLAW/policies/action-tier-cap.yaml",
+      "capabilities": [
+        "safety_verdict",
+        "execution_flag_check",
+        "allow_local_ack_only",
+        "block_dangerous_actions"
+      ],
+      "allowed_actions": [
+        "evaluate_safety",
+        "write_kob_verdict_receipt",
+        "allow_local_ack_only",
+        "block_action"
+      ],
+      "allowed_roles": [
+        "safety_verdict_worker",
+        "kob_validator"
+      ],
+      "blocked_actions": [
+        "deploy",
+        "push",
+        "secret_access",
+        "cloud_mutation",
+        "self_approval",
+        "live_provider_call",
+        "model_download",
+        "gpu_inference",
+        "customer_message_send",
+        "telegram_live_send"
+      ],
+      "heartbeat_required": true,
+      "receipt_required": true,
+      "self_approval_allowed": false,
+      "id": "kob_validator",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "decision_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "receipt_id",
+          "evidence_pack"
+        ],
+        "properties": {}
+      }
     }
   ]
 }
