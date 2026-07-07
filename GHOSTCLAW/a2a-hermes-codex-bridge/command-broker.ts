@@ -29,10 +29,53 @@ export const FORBIDDEN_PATH_PREFIXES = [
   "secrets/",
 ];
 
-export const ALLOWED_MUTATION_PREFIXES = ["GHOSTCLAW/", "docs/", "tests/", ".ghostclaw_runtime/"];
+export const ALLOWED_MUTATION_PREFIXES = [
+  "GHOSTCLAW/",
+  "docs/",
+  "tests/",
+  ".ghostclaw_runtime/",
+  ".hermes/",
+];
 
 export function sha256(input: string): string {
   return createHash("sha256").update(input, "utf8").digest("hex");
+}
+
+const REDACT_PATTERNS: RegExp[] = [
+  /(sk-[A-Za-z0-9_-]{8,})/g,
+  /(kob_[A-Za-z0-9_-]{8,})/g,
+  /(Bearer\s+)[A-Za-z0-9._-]+/gi,
+  /([A-Za-z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD)[A-Za-z0-9_]*\s*=\s*)[^\s"']+/gi,
+  /(gh[opu]_)[A-Za-z0-9_]{20,}/g,
+  /(hf_)[A-Za-z0-9_]{20,}/g,
+];
+
+export function redactSecrets(value: string): string {
+  let result = value;
+  for (const pattern of REDACT_PATTERNS) {
+    result = result.replace(pattern, (match, group1) => {
+      return group1 ? `${group1}<masked>` : "<masked>";
+    });
+  }
+  return result;
+}
+
+export function redactDict(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const [key, val] of Object.entries(obj)) {
+    if (typeof val === "string") {
+      result[key] = redactSecrets(val);
+    } else if (val && typeof val === "object" && !Array.isArray(val)) {
+      result[key] = redactDict(val as Record<string, unknown>);
+    } else if (Array.isArray(val)) {
+      result[key] = val.map((v) =>
+        typeof v === "string" ? redactSecrets(v) : typeof v === "object" && v ? redactDict(v as Record<string, unknown>) : v
+      );
+    } else {
+      result[key] = val;
+    }
+  }
+  return result;
 }
 
 function pathIsInScope(files: string[] = []): { ok: boolean; reason?: string } {
@@ -56,7 +99,7 @@ export function evaluateCommand(
   msg: A2AMessage,
   _opts: BrokerOptions = {}
 ): { verdict: BrokerVerdict; receipt: Receipt } {
-  const actionClass = resolveActionClass(msg.action_requested);
+  const actionClass = resolveActionClass(msg.action_requested, msg.context.lane ?? "");
   const tierRule = classifyMessage(msg);
   const decisionId = `D-${randomUUID().slice(0, 8)}`;
 
@@ -146,6 +189,8 @@ function buildReceipt(
 
   return {
     schema: "ghostclaw.receipt.v3_2",
+    redacted: true,
+    redacted_at: new Date().toISOString(),
     decision_id: decisionId,
     correlation_id: msg.correlation_id,
     mission_id: msg.mission_id,
@@ -155,12 +200,12 @@ function buildReceipt(
     final_tier: tier,
     decision_status: status,
     reason: verdict.reason,
-    evidence_pack: {
+    evidence_pack: redactDict({
       action_requested: msg.action_requested,
       lane: msg.context.lane,
       files: msg.context.files,
       safe_replacement: verdict.safeReplacement,
-    },
+    }),
     safe_replacement_action: verdict.safeReplacement,
     timestamp: new Date().toISOString(),
     checksums: {
