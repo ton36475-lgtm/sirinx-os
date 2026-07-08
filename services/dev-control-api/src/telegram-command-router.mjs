@@ -74,6 +74,7 @@ export function buildTelegramCommandMenu() {
   return {
     inline_keyboard: [
       [
+        { text: "MCP Sync", callback_data: "cmd:mcp-sync" },
         { text: "Hermes Status", callback_data: "cmd:status" },
         { text: "All Jobs Ready", callback_data: "cmd:hermes-all-jobs-ready" }
       ],
@@ -126,6 +127,7 @@ export function getTelegramCommandRouterStatus(options = {}) {
       "/status",
       "/hermes all jobs ready",
       "/hermes all jobs ready liveSend true",
+      "/hermes mcp-sync",
       "/fusion smoke",
       "/fable5 preview",
       "/codex status",
@@ -142,6 +144,7 @@ export function getTelegramCommandRouterStatus(options = {}) {
       "/daily report"
     ],
     callbackCommands: [
+      "cmd:mcp-sync",
       "cmd:status",
       "cmd:hermes-all-jobs-ready",
       "cmd:fusion-smoke",
@@ -443,6 +446,28 @@ export async function handleTelegramCommand(input = {}, options = {}) {
         `Cloudflare: ${foundation.readiness.cloudflare ? "ready" : "blocked"}`,
         "",
         "Next: run /agent loop fusion after credentials are complete."
+      ].join("\n"),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (command === "/hermes mcp-sync" || command === "cmd:mcp-sync") {
+    actionResult = await runAgentLoop({
+      requestId: "telegram-mcp-sync",
+      goal: "Sync MCP tools (codex-mcp, slayer-mcp) to Codex via A2A packet. One-button sync."
+    }, options);
+    message = {
+      text: [
+        "MCP Sync via A2A to Codex",
+        "",
+        `Status: ${actionResult.status}`,
+        `Goal: Sync MCP tools to Codex`,
+        `Stages: ${actionResult.stages?.map(s => s.stage).join(" -> ") || "planned"}`,
+        "",
+        `Next gate: ${actionResult.nextGate || "auto_blocked_by_policy"}`,
+        "",
+        "[SAFETY]",
+        "dry_run: true",
+        "live_send: false",
+        "provider_call: false"
       ].join("\n"),
       replyMarkup: buildTelegramCommandMenu()
     };

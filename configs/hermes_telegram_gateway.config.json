@@ -41,6 +41,7 @@
       "/status",
       "/hermes all jobs ready",
       "/hermes all jobs ready liveSend true",
+      "/hermes mcp-sync",
       "/fusion smoke",
       "/fable5 preview",
       "/codex status",
@@ -57,6 +58,7 @@
       "/daily report"
     ],
     "callbackCommands": [
+      "cmd:mcp-sync",
       "cmd:status",
       "cmd:hermes-all-jobs-ready",
       "cmd:fusion-smoke",
