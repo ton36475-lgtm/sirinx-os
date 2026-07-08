@@ -75,6 +75,10 @@ export function buildTelegramCommandMenu() {
     inline_keyboard: [
       [
         { text: "MCP Sync", callback_data: "cmd:mcp-sync" },
+        { text: "Model Swap", callback_data: "cmd:model-swap" },
+        { text: "Reset", callback_data: "cmd:runtime-reset" }
+      ],
+      [
         { text: "Hermes Status", callback_data: "cmd:status" },
         { text: "All Jobs Ready", callback_data: "cmd:hermes-all-jobs-ready" }
       ],
@@ -128,6 +132,8 @@ export function getTelegramCommandRouterStatus(options = {}) {
       "/hermes all jobs ready",
       "/hermes all jobs ready liveSend true",
       "/hermes mcp-sync",
+      "/hermes model-swap",
+      "/hermes runtime-reset",
       "/fusion smoke",
       "/fable5 preview",
       "/codex status",
@@ -145,6 +151,8 @@ export function getTelegramCommandRouterStatus(options = {}) {
     ],
     callbackCommands: [
       "cmd:mcp-sync",
+      "cmd:model-swap",
+      "cmd:runtime-reset",
       "cmd:status",
       "cmd:hermes-all-jobs-ready",
       "cmd:fusion-smoke",
@@ -468,6 +476,50 @@ export async function handleTelegramCommand(input = {}, options = {}) {
         "dry_run: true",
         "live_send: false",
         "provider_call: false"
+      ].join("\n"),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (command === "/hermes model-swap" || command === "cmd:model-swap") {
+    const config = {
+      current: "deepseek-v4-pro",
+      target: "claude-fable-5",
+      requiresGate: "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE"
+    };
+    message = {
+      text: [
+        "Model Swap Request",
+        "",
+        `[CURRENT] ${config.current}`,
+        `[TARGET] ${config.target}`,
+        "",
+        `Gate Required: ${config.requiresGate}`,
+        "",
+        "[SAFETY]",
+        "dry_run: true",
+        "provider_call: false",
+        "live_send: false",
+        "swap_pending_approval: true"
+      ].join("\n"),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (command === "/hermes runtime-reset" || command === "cmd:runtime-reset") {
+    actionResult = await runAgentLoop({
+      requestId: "telegram-runtime-reset",
+      goal: "Clear runtime queues and re-check all readiness lanes. Safe local reset."
+    }, options);
+    message = {
+      text: [
+        "Runtime Reset",
+        "",
+        `Status: ${actionResult.status}`,
+        `Goal: Clear queues and re-check readiness`,
+        `Stages: ${actionResult.stages?.map(s => s.stage).join(" -> ") || "discovery, verify"}`,
+        "",
+        "[SAFETY]",
+        "dry_run: true",
+        "live_send: false",
+        "provider_call: false",
+        "system_reset_only_dry_run: true"
       ].join("\n"),
       replyMarkup: buildTelegramCommandMenu()
     };
