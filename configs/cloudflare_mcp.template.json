@@ -21,6 +21,7 @@
     "writeR2": "APPROVE_CLOUDFLARE_R2_WRITE_A2A2A_A019E53EE",
     "deployPages": "APPROVE_CLOUDFLARE_PAGES_DEPLOY_LIVE"
   },
+  "gateReference": "sirinx-os/configs/cloudflare_mcp.template.json",
   "guardrails": {
     "dryRun": true,
     "liveSend": false,
