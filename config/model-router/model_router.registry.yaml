@@ -1,142 +1,55 @@
-version: GHOSTCLAW_MODEL_ROUTER_V2_1
-updated_at: GENERATED
-
-defaults:
-  mode: local_safe_receipt_gated
-  source_of_truth:
-    - AGENTS.md
-    - CLAUDE.md
-    - docs/architecture/CONTEXT_MAP.md
-    - docs/openspec/
-    - docs/receipts/
-  blocked_actions:
-    - provider_limit_bypass
-    - account_rotation_for_evasion
-    - credential_sharing
-    - secret_read_or_print
-    - production_deploy
-    - git_push_without_gate
-    - customer_send
-    - dns_mutation
-    - line_webhook_activation
+# MaxPlus-AI Dedicated Provider Configuration Matrix
+version: "2026.SIRINX.AUTOLOOP"
 
 providers:
-  local_ollama:
-    type: openai_compatible
-    base_url_env: OLLAMA_BASE_URL
-    default_base_url: http://127.0.0.1:11434/v1
-    api_key_env: OLLAMA_API_KEY
-    allowed_by_default: true
-    paid: false
-  openrouter:
-    type: openai_compatible
-    base_url: https://openrouter.ai/api/v1
-    api_key_env: OPENROUTER_API_KEY
-    allowed_by_default: true
-    paid: mixed
-    notes: free models are still rate-limited and availability may change
-  openai_codex:
-    type: codex
-    allowed_by_default: budget_gate
-    paid: true
-  anthropic_claude_code:
-    type: claude_code
-    allowed_by_default: budget_gate
-    paid: true
-  maxplus_or_custom_gateway:
-    type: openai_compatible
-    base_url_env: CUSTOM_LLM_GATEWAY_BASE_URL
-    api_key_env: CUSTOM_LLM_GATEWAY_API_KEY
-    allowed_by_default: review_only
-    paid: mixed
+  maxplus-free:
+    type: "openai_compatible"
+    base_url: "https://api.maxplus-ai.cc/v1"
+    api_key_env: "MAXPLUS_API_KEY_1"
+    api_key_pools:
+      - "MAXPLUS_API_KEY_1"
+      - "MAXPLUS_API_KEY_2"
+    default_headers:
+      X-Sovereign-Node: "Phitsanulok-MacMini-Node1"
+      X-Fleet-Scope: "SIRINX_ALL_PROJECTS"
 
 models:
-  local_qwen_worker:
-    provider: local_ollama
-    model_env: LOCAL_QWEN_MODEL
-    fallback_model: qwen3-coder
-    role: classify_summarize_light_patch
-    task_tiers: [T0, T1]
-    max_tokens: 4096
-    temperature: 0.2
+  deepseek-v4-pro:
+    provider: "maxplus-free"
+    model: "maxplus-free/deepseek-v4-pro"
+    role: "primary_free_coder"
+    context_length: 1000000
+    capabilities: [reasoning, tool_call, code_generation]
+    free_tier: true
+    priority: 1
 
-  laguna_free_coder:
-    provider: openrouter
-    model: poolside/laguna-m.1:free
-    role: free_agentic_coding_worker
-    task_tiers: [T0, T1, T2_draft]
-    max_tokens: 8192
-    temperature: 0.2
+  glm-5.2:
+    provider: "maxplus-free"
+    model: "maxplus-free/glm-5.2"
+    role: "planning_assistant"
+    context_length: 1000000
+    capabilities: [reasoning, function_call]
+    free_tier: true
+    priority: 2
 
-  qwen3_coder_free:
-    provider: openrouter
-    model: qwen/qwen3-coder:free
-    role: repo_coding_tool_use_long_context_draft
-    task_tiers: [T1, T2_draft]
-    max_tokens: 8192
-    temperature: 0.2
+  kimi-k2.7-code:
+    provider: "maxplus-free"
+    model: "maxplus-free/kimi-k2.7-code"
+    role: "long_context_processor"
+    context_length: 262144
+    capabilities: [tool_call, code_generation]
+    free_tier: true
+    priority: 3
 
-  kimi_code_worker:
-    provider: openrouter
-    model: moonshotai/kimi-k2.7-code
-    role: long_horizon_coding_ui_generation_multiturn
-    task_tiers: [T2, T3_draft]
-    max_tokens: 12000
-    temperature: 0.15
-    gate: budget_gate
+escalation_chain:
+  - maxplus-free/deepseek-v4-pro
+  - opencode/deepseek-v4-flash-free
+  - maxplus-free/glm-5.2
+  - openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 
-  deepseek_architect:
-    provider: openrouter
-    model: deepseek/deepseek-v3.2-exp
-    role: architecture_debug_reasoning
-    task_tiers: [T3]
-    max_tokens: 12000
-    temperature: 0.1
-    gate: budget_gate
-
-  fable5_orchestrator:
-    provider: openrouter
-    model: anthropic/claude-fable-5
-    role: founder_level_architecture_strategy_synthesis
-    task_tiers: [T3, T4_review]
-    max_tokens: 12000
-    temperature: 0.15
-    permissions: preview_only_until_provider_gate
-    gate: APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE
-
-  glm_repo_mapper:
-    provider: maxplus_or_custom_gateway
-    model: glm-5.2
-    role: long_context_repo_mapping_review_only
-    task_tiers: [T1, T2, T3]
-    max_tokens: 12000
-    temperature: 0.1
-    permissions: review_only
-
-  codex_peer:
-    provider: openai_codex
-    model: codex_default
-    role: peer_engineer_rescue_adversarial_review
-    task_tiers: [T2, T3]
-    gate: budget_gate
-
-routing:
-  T0:
-    primary: local_qwen_worker
-    fallback: laguna_free_coder
-  T1:
-    primary: laguna_free_coder
-    fallback: qwen3_coder_free
-    review: validator
-  T2:
-    primary: qwen3_coder_free
-    fallback: laguna_free_coder
-    peer_review: codex_peer
-    final_synthesis: hermes_or_fable
-  T3:
-    primary: deepseek_architect
-    peer_review: codex_peer
-    optional_mapper: glm_repo_mapper
-    final_synthesis: fable5_orchestrator
-  T4:
-    primary: human_gate_only
+budget_guard:
+  mode: "free_first"
+  max_task_budget_usd: 2.00
+  escalation_threshold_usd: 0.50
+  hard_stop_usd: 5.00
+  auto_escalate_on_failure: true

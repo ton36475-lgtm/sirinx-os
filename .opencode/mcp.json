@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "sirinx-files": {
+      "type": "stdio",
+      "command": ["node", "/Users/sirinx/sirinx-os/.opencode/node_modules/opencode-mcp/dist/index.js"],
+      "enabled": true
+    },
+    "capcut-ai-editor": {
+      "type": "stdio",
+      "command": ["npx", "-y", "opencode-mcp"],
+      "enabled": true,
+      "env": {
+        "MAXPLUS_API_KEY": "${env:MAXPLUS_API_KEY}"
+      }
+    },
+    "sirinx-memory": {
+      "type": "stdio",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/Users/sirinx/sirinx-os/memory"],
+      "enabled": true
+    }
+  }
+}

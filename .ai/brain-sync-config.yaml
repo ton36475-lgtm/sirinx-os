@@ -1,0 +1,35 @@
+# Obsidian Brain Sync Configuration
+# SIRINX OS ↔ Mind Palace Integration
+
+sync_config:
+  source: "/Users/sirinx/Documents/Obsidian Vault/SIRINX"
+  digest_file: "AI HQ Knowledge Digest.md"
+  sync_pointers:
+    - sirinx_agent_native_os: "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/OBSIDIAN_BRAIN_SYNC.md"
+    - codex_session_pulse: "/Users/sirinx/.codex/obsidian-brain-sync.json"
+  
+  pulse_rules:
+    write_facts_only: true
+    mask_pii: true
+    deduplicate_memory: true
+    max_pulse_chars: 1000
+    
+  memory_classes:
+    M0: "Ephemeral task context (current session only)"
+    M1: "Session working memory"
+    M2: "Project state memory (this file -> OBSIDIAN)"
+    M3: "KMS/documentation memory"
+    M4: "Audit/provenance memory (evidence chain)"
+
+pulse_template: |
+  ## [{timestamp}] Sovereign Fleet Integration Update
+  **Source**: {source_path}
+  **Change**: {change_summary}
+  **Evidence**: {evidence_path}
+  **Next Action**: {next_action}
+  
+  ---
+
+brain_sync_enabled: true
+dry_run_mode: true
+sync_interval_seconds: 300
