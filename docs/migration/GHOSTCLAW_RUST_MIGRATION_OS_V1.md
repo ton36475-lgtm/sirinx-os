@@ -1,7 +1,7 @@
 # GhostClaw Rust Migration OS V1
 
-Status: `P100_RUST_MIGRATION_CORE_VALIDATED_LOCAL_UNCOMMITTED`
-Updated: `2026-07-07T02:31:21+07:00`
+Status: `P101_ADAPTER_EXTRACTION_COMMITTED_VALIDATED_LOCAL`
+Updated: `2026-07-14T03:31:14+07:00`
 
 ## Purpose
 
@@ -55,44 +55,53 @@ crates/ghostclaw_migration_core/
 
 ## Validation Baseline
 
-Fresh P100 validation from `crates/ghostclaw_migration_core`:
+Fresh local validation from the repository root:
 
 ```text
-cargo fmt --check
-cargo clippy --all-targets --all-features -- -D warnings
-cargo test
-cargo build
+cargo fmt --check --manifest-path crates/ghostclaw_migration_core/Cargo.toml
+cargo clippy --offline --locked --manifest-path crates/ghostclaw_migration_core/Cargo.toml --all-targets --all-features -- -D warnings
+cargo test --offline --locked --manifest-path crates/ghostclaw_migration_core/Cargo.toml
+cargo build --offline --locked --manifest-path crates/ghostclaw_migration_core/Cargo.toml
 ```
 
 Result:
 
 - `cargo fmt --check`: passed
 - `cargo clippy --all-targets --all-features -- -D warnings`: passed
-- `cargo test`: passed, 161 tests total, 0 failed
+- `cargo test`: passed, 167 tests total, 0 failed
 - `cargo build`: passed
 
 ## Git State
 
-The crate is currently local and untracked:
+The P100 core and P101 adapter extraction are committed:
 
 ```text
-?? crates/ghostclaw_migration_core/
+125a15e feat(ghostclaw): validate Rust migration core after production launch
+bd8cbf2 chore: bulk-track all dirty files across sirinx-os
 ```
 
-This is intentional evidence state for the next gate. Do not use `git add -A`. A scoped human commit gate must explicitly name the crate and P090E/P100 evidence files before these artifacts are committed.
+The Rust migration path is clean in the current worktree. Unrelated dirty lanes
+remain outside this scope and were not modified, staged, or committed by this
+validation.
+
+Current evidence:
+
+- `reports/mission/A2A2A_RUST_MIGRATION_CURRENT_VALIDATION_20260714.md`
+- `reports/review/p101/rust_migration_current_validation_20260714.json`
 
 ## Next Gate
 
 Recommended next gate:
 
 ```text
-P100A_SCOPED_RUST_CORE_COMMIT_GATE
+P101_OPENCODE_REVIEW_RUST_ADAPTER_EXTRACTION
 ```
 
-Allowed after explicit human approval:
+Allowed in the current local-safe lane:
 
-- scoped add/commit for `crates/ghostclaw_migration_core/**`
-- scoped add/commit for P090E/P100 evidence artifacts
+- read-only review of P101 adapter contracts and fixtures
+- repeatable offline format, lint, test, and build validation
+- scoped evidence updates
 
 Still blocked:
 
