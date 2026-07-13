@@ -1,5 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 use ghostclaw_migration_core::adapters::lease::PathLeaseChecker;
 use ghostclaw_migration_core::adapters::queue::FilePendingQueue;
@@ -99,6 +100,40 @@ fn pending_queue_report_should_count_corrupt_lines_without_executing_jobs() {
 }
 
 #[test]
+fn pending_queue_should_reject_noncanonical_records() {
+    let path = unique_temp_queue_path();
+    let job = RouteJob {
+        id: "route-canonical-001".to_string(),
+        lane: Lane::Review,
+        task: "inspect locally".to_string(),
+        status: "queued_local_safe_no_execution".to_string(),
+        created_at_ms: 1_780_000_000_100,
+    };
+    let canonical = job.to_json_line();
+    let duplicate_id = canonical.replacen("{\"id\":", "{\"id\":\"shadow\",\"id\":", 1);
+    fs::write(
+        &path,
+        format!("{canonical}\n{duplicate_id}\n{canonical} trailing\n"),
+    )
+    .unwrap();
+    let queue = FilePendingQueue::new(&path);
+
+    let report = queue.read_report().unwrap();
+    let strict_read = queue.read_all();
+    fs::remove_file(path).ok();
+
+    assert_eq!(report.jobs, vec![job]);
+    assert_eq!(report.invalid_lines, 2);
+    assert!(matches!(
+        strict_read,
+        Err(ghostclaw_migration_core::MigrationError::CorruptStore {
+            store: "pending_queue",
+            invalid_lines: 2
+        })
+    ));
+}
+
+#[test]
 fn a2a2a_path_lease_policy_fixture_should_keep_live_actions_disabled() {
     let policy = include_str!("fixtures/p087/a2a2a_path_lease_policy.json");
 
@@ -133,11 +168,14 @@ fn p087_lease_checker() -> PathLeaseChecker {
 }
 
 fn unique_temp_queue_path() -> PathBuf {
+    static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(1);
+
     let mut path = std::env::temp_dir();
     path.push(format!(
-        "ghostclaw-migration-core-p087-queue-test-{}-{}.jsonl",
+        "ghostclaw-migration-core-p087-queue-test-{}-{}-{}.jsonl",
         std::process::id(),
-        ghostclaw_migration_core::schema::now_millis()
+        ghostclaw_migration_core::schema::now_millis(),
+        NEXT_TEMP_ID.fetch_add(1, Ordering::Relaxed)
     ));
     path
 }

@@ -163,6 +163,35 @@ fn file_receipt_store_should_report_corrupt_and_empty_lines() {
 }
 
 #[test]
+fn file_receipt_store_should_reject_noncanonical_records() {
+    let path = unique_temp_receipt_path();
+    let receipt =
+        ghostclaw_migration_core::Receipt::new("status", "ok", "/status", None, None, None);
+    let canonical = receipt.to_json_line();
+    let duplicate_id = canonical.replacen("{\"id\":", "{\"id\":\"shadow\",\"id\":", 1);
+    fs::write(
+        &path,
+        format!("{canonical}\n{duplicate_id}\n{canonical} trailing\n"),
+    )
+    .unwrap();
+    let store = FileReceiptStore::new(&path);
+
+    let report = store.read_report(10).unwrap();
+    let strict_read = store.recent(10);
+    fs::remove_file(path).ok();
+
+    assert_eq!(report.receipts, vec![receipt]);
+    assert_eq!(report.invalid_lines, 2);
+    assert!(matches!(
+        strict_read,
+        Err(MigrationError::CorruptStore {
+            store: "receipt",
+            invalid_lines: 2
+        })
+    ));
+}
+
+#[test]
 fn engine_should_surface_receipt_store_corruption() {
     let path = unique_temp_receipt_path();
     fs::write(&path, "malformed receipt line\n").unwrap();

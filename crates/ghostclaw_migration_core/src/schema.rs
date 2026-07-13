@@ -1,6 +1,5 @@
 //! Schema types shared by parser, policy, engine, and receipts.
 
-use std::fmt::Write as _;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -134,7 +133,7 @@ impl RouteJob {
     pub fn from_json_line(line: &str) -> Result<Self> {
         let lane_name =
             extract_string(line, "lane").ok_or(MigrationError::MissingArgument("lane"))?;
-        Ok(Self {
+        let job = Self {
             id: extract_string(line, "id").ok_or(MigrationError::MissingArgument("id"))?,
             lane: Lane::parse(&lane_name)?,
             task: extract_string(line, "task").ok_or(MigrationError::MissingArgument("task"))?,
@@ -142,7 +141,10 @@ impl RouteJob {
                 .ok_or(MigrationError::MissingArgument("status"))?,
             created_at_ms: extract_number(line, "created_at_ms")
                 .ok_or(MigrationError::MissingArgument("created_at_ms"))?,
-        })
+        };
+        validate_persisted_timestamp(job.created_at_ms)?;
+        require_canonical_json_line(line, &job.to_json_line(), "route_job")?;
+        Ok(job)
     }
 }
 
@@ -210,7 +212,7 @@ impl Receipt {
 
     /// Parses receipts written by [`Receipt::to_json_line`].
     pub fn from_json_line(line: &str) -> Result<Self> {
-        Ok(Self {
+        let receipt = Self {
             id: extract_string(line, "id").ok_or(MigrationError::MissingArgument("id"))?,
             command_kind: extract_string(line, "command_kind")
                 .ok_or(MigrationError::MissingArgument("command_kind"))?,
@@ -223,7 +225,10 @@ impl Receipt {
             reason: extract_nullable_string(line, "reason"),
             created_at_ms: extract_number(line, "created_at_ms")
                 .ok_or(MigrationError::MissingArgument("created_at_ms"))?,
-        })
+        };
+        validate_persisted_timestamp(receipt.created_at_ms)?;
+        require_canonical_json_line(line, &receipt.to_json_line(), "receipt")?;
+        Ok(receipt)
     }
 }
 
@@ -247,8 +252,11 @@ pub fn escape_json(value: &str) -> String {
             '\u{08}' => output.push_str("\\b"),
             '\u{0c}' => output.push_str("\\f"),
             ch if ch <= '\u{1f}' => {
-                write!(&mut output, "\\u{:04x}", ch as u32)
-                    .expect("writing JSON escape to String cannot fail");
+                const HEX: &[u8; 16] = b"0123456789abcdef";
+                let code = ch as u8;
+                output.push_str("\\u00");
+                output.push(HEX[(code >> 4) as usize] as char);
+                output.push(HEX[(code & 0x0f) as usize] as char);
             }
             _ => output.push(ch),
         }
@@ -288,6 +296,30 @@ fn extract_number(line: &str, key: &str) -> Option<u128> {
     let tail = &line[start..];
     let digits: String = tail.chars().take_while(char::is_ascii_digit).collect();
     digits.parse().ok()
+}
+
+fn validate_persisted_timestamp(created_at_ms: u128) -> Result<()> {
+    if created_at_ms == 0 {
+        return Err(MigrationError::InvalidArgument {
+            name: "created_at_ms",
+            value: "zero".to_string(),
+        });
+    }
+    Ok(())
+}
+
+fn require_canonical_json_line(
+    actual: &str,
+    expected: &str,
+    record_name: &'static str,
+) -> Result<()> {
+    if actual != expected {
+        return Err(MigrationError::InvalidArgument {
+            name: record_name,
+            value: "non_canonical_jsonl".to_string(),
+        });
+    }
+    Ok(())
 }
 
 fn read_json_string_at(line: &str, start: usize) -> Option<String> {
@@ -359,6 +391,42 @@ mod tests {
         .is_err());
         assert!(Receipt::from_json_line(
             "{\"id\":\"receipt\",\"command_kind\":\"status\",\"status\":\"ok\",\"redacted_command\":\"/status\",\"lane\":null,\"task\":null,\"reason\":null}"
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn persisted_records_should_reject_zero_timestamps() {
+        assert!(RouteJob::from_json_line(
+            "{\"id\":\"job\",\"lane\":\"review\",\"task\":\"inspect\",\"status\":\"queued\",\"created_at_ms\":0}"
+        )
+        .is_err());
+        assert!(Receipt::from_json_line(
+            "{\"id\":\"receipt\",\"command_kind\":\"status\",\"status\":\"ok\",\"redacted_command\":\"/status\",\"lane\":null,\"task\":null,\"reason\":null,\"created_at_ms\":0}"
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn persisted_records_should_reject_trailing_content() {
+        assert!(RouteJob::from_json_line(
+            "{\"id\":\"job\",\"lane\":\"review\",\"task\":\"inspect\",\"status\":\"queued\",\"created_at_ms\":1} trailing"
+        )
+        .is_err());
+        assert!(Receipt::from_json_line(
+            "{\"id\":\"receipt\",\"command_kind\":\"status\",\"status\":\"ok\",\"redacted_command\":\"/status\",\"lane\":null,\"task\":null,\"reason\":null,\"created_at_ms\":1} trailing"
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn persisted_records_should_reject_duplicate_keys() {
+        assert!(RouteJob::from_json_line(
+            "{\"id\":\"job\",\"id\":\"shadow\",\"lane\":\"review\",\"task\":\"inspect\",\"status\":\"queued\",\"created_at_ms\":1}"
+        )
+        .is_err());
+        assert!(Receipt::from_json_line(
+            "{\"id\":\"receipt\",\"id\":\"shadow\",\"command_kind\":\"status\",\"status\":\"ok\",\"redacted_command\":\"/status\",\"lane\":null,\"task\":null,\"reason\":null,\"created_at_ms\":1}"
         )
         .is_err());
     }
