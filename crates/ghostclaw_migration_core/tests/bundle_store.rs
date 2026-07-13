@@ -50,12 +50,20 @@ fn file_bundle_store_read_report_should_match_p090_fixture() {
     let store = FileBundleStore::new(&path);
 
     let report = store.read_report().unwrap();
+    let strict_read = store.read_all();
     fs::remove_file(path).ok();
 
     assert_eq!(
         report.to_json(),
         include_str!("fixtures/p090/bundle_read_report.json").trim()
     );
+    assert!(matches!(
+        strict_read,
+        Err(ghostclaw_migration_core::MigrationError::CorruptStore {
+            store: "bundle",
+            invalid_lines: 2
+        })
+    ));
 }
 
 #[test]

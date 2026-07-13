@@ -11,7 +11,7 @@ use crate::adapters::codex::CodexDryRunPreview;
 use crate::adapters::lease::LeaseDecision;
 use crate::adapters::telegram::TelegramReplyPreview;
 use crate::adapters::validator::ValidatorResult;
-use crate::error::Result;
+use crate::error::{MigrationError, Result};
 use crate::schema::{escape_json, Receipt, RouteJob};
 
 /// Receipt metadata included in adapter response bundles.
@@ -214,9 +214,16 @@ impl FileBundleStore {
         Ok(())
     }
 
-    /// Reads all valid bundle summaries in insertion order.
+    /// Reads all bundle summaries, failing closed when malformed records exist.
     pub fn read_all(&self) -> Result<Vec<PersistedBundleSummary>> {
-        self.read_report().map(|report| report.bundles)
+        let report = self.read_report()?;
+        if report.invalid_lines > 0 {
+            return Err(MigrationError::CorruptStore {
+                store: "bundle",
+                invalid_lines: report.invalid_lines,
+            });
+        }
+        Ok(report.bundles)
     }
 
     /// Reads bundle storage and reports malformed lines without executing work.

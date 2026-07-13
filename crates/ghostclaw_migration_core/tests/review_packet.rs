@@ -109,11 +109,19 @@ fn review_packet_store_read_report_should_match_p096_fixture() {
     ));
 
     let report = store.read_report().unwrap();
+    let strict_read = store.read_all();
 
     assert_eq!(
         report.to_json(),
         include_str!("fixtures/p096/review_packet_read_report.json").trim()
     );
+    assert!(matches!(
+        strict_read,
+        Err(ghostclaw_migration_core::MigrationError::CorruptStore {
+            store: "review_packet",
+            invalid_lines: 1
+        })
+    ));
 }
 
 #[test]

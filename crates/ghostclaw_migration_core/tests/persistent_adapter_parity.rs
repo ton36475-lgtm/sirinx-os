@@ -83,11 +83,19 @@ fn pending_queue_report_should_count_corrupt_lines_without_executing_jobs() {
     let queue = FilePendingQueue::new(&path);
 
     let report = queue.read_report().unwrap();
+    let strict_read = queue.read_all();
     fs::remove_file(path).ok();
 
     assert_eq!(report.jobs.len(), 2);
     assert_eq!(report.invalid_lines, 2);
     assert_eq!(report.skipped_empty_lines, 1);
+    assert!(matches!(
+        strict_read,
+        Err(ghostclaw_migration_core::MigrationError::CorruptStore {
+            store: "pending_queue",
+            invalid_lines: 2
+        })
+    ));
 }
 
 #[test]

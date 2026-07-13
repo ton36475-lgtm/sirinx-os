@@ -96,11 +96,19 @@ fn status_snapshot_store_read_report_should_match_p093_fixture() {
     ));
 
     let report = store.read_report().unwrap();
+    let strict_read = store.read_all();
 
     assert_eq!(
         report.to_json(),
         include_str!("fixtures/p093/status_snapshot_read_report.json").trim()
     );
+    assert!(matches!(
+        strict_read,
+        Err(ghostclaw_migration_core::MigrationError::CorruptStore {
+            store: "orchestrator_status",
+            invalid_lines: 1
+        })
+    ));
 }
 
 #[test]

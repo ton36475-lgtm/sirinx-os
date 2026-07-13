@@ -4,7 +4,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 use ghostclaw_migration_core::{
     parse_command, CommandEnvelope, Engine, FileReceiptStore, Lane, MemoryReceiptStore,
-    ParsedCommand, ReceiptStore,
+    MigrationError, ParsedCommand, ReceiptStore,
 };
 
 #[test]
@@ -147,11 +147,19 @@ fn file_receipt_store_should_report_corrupt_and_empty_lines() {
     .unwrap();
 
     let report = store.read_report(1).unwrap();
+    let strict_read = store.recent(1);
     fs::remove_file(path).ok();
 
     assert_eq!(report.receipts, vec![second]);
     assert_eq!(report.invalid_lines, 1);
     assert_eq!(report.skipped_empty_lines, 1);
+    assert!(matches!(
+        strict_read,
+        Err(MigrationError::CorruptStore {
+            store: "receipt",
+            invalid_lines: 1
+        })
+    ));
 }
 
 #[test]

@@ -4,7 +4,7 @@ use std::fs::{self, OpenOptions};
 use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
 
-use crate::error::Result;
+use crate::error::{MigrationError, Result};
 use crate::schema::Receipt;
 
 /// Corruption-aware result for an append-only receipt scan.
@@ -28,7 +28,14 @@ pub trait ReceiptStore {
 
     /// Returns recent receipts in newest-first order.
     fn recent(&self, limit: usize) -> Result<Vec<Receipt>> {
-        self.recent_report(limit).map(|report| report.receipts)
+        let report = self.recent_report(limit)?;
+        if report.invalid_lines > 0 {
+            return Err(MigrationError::CorruptStore {
+                store: "receipt",
+                invalid_lines: report.invalid_lines,
+            });
+        }
+        Ok(report.receipts)
     }
 }
 

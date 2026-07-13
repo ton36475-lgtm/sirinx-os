@@ -8,7 +8,7 @@ use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
 
 use crate::adapters::traits::QueueAdapter;
-use crate::error::Result;
+use crate::error::{MigrationError, Result};
 use crate::redaction::redact_sensitive;
 use crate::schema::{escape_json, now_millis, RouteJob};
 
@@ -55,9 +55,16 @@ impl FilePendingQueue {
         Ok(())
     }
 
-    /// Reads all valid route jobs in insertion order.
+    /// Reads all route jobs, failing closed when malformed records exist.
     pub fn read_all(&self) -> Result<Vec<RouteJob>> {
-        self.read_report().map(|report| report.jobs)
+        let report = self.read_report()?;
+        if report.invalid_lines > 0 {
+            return Err(MigrationError::CorruptStore {
+                store: "pending_queue",
+                invalid_lines: report.invalid_lines,
+            });
+        }
+        Ok(report.jobs)
     }
 
     /// Reads queue contents and reports malformed lines without executing jobs.

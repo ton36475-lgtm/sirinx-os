@@ -10,7 +10,7 @@ use std::path::{Path, PathBuf};
 use crate::adapters::bundle::PersistedBundleSummary;
 use crate::adapters::orchestrator_status::{OrchestratorStatusView, StatusFreshnessDecision};
 use crate::adapters::validator::ValidatorResult;
-use crate::error::Result;
+use crate::error::{MigrationError, Result};
 use crate::schema::escape_json;
 
 /// Review packet for the selected bundle handoff to OpenCode.
@@ -4038,9 +4038,16 @@ impl FileReviewPacketStore {
         Ok(())
     }
 
-    /// Reads all valid review packet summaries in insertion order.
+    /// Reads all review packets, failing closed when malformed records exist.
     pub fn read_all(&self) -> Result<Vec<PersistedReviewPacketSummary>> {
-        self.read_report().map(|report| report.packets)
+        let report = self.read_report()?;
+        if report.invalid_lines > 0 {
+            return Err(MigrationError::CorruptStore {
+                store: "review_packet",
+                invalid_lines: report.invalid_lines,
+            });
+        }
+        Ok(report.packets)
     }
 
     /// Reads review packet storage and reports malformed lines without execution.

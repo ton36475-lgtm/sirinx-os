@@ -1,7 +1,7 @@
 # GhostClaw Rust Migration OS V1
 
-Status: `P101_RECEIPT_INTEGRITY_VALIDATED_LOCAL`
-Updated: `2026-07-14T04:47:32+07:00`
+Status: `P101_STRICT_PERSISTENCE_READS_VALIDATED_LOCAL`
+Updated: `2026-07-14T05:05:49+07:00`
 
 ## Purpose
 
@@ -16,6 +16,7 @@ The crate currently covers the P100 immediate scope:
 - lane router / route intent model
 - receipt store
 - corruption-aware receipt read report
+- typed fail-closed convenience reads across persistent stores
 - redaction
 - validation result model
 - local-safe adapter previews
@@ -82,6 +83,7 @@ hardening are committed:
 bd8cbf2 chore: bulk-track all dirty files across sirinx-os
 b561461 docs(rust): reconcile migration validation state
 8d647e4 fix(rust): harden local adapter contracts
+c6308ef fix(rust): surface receipt store corruption
 ```
 
 The Rust migration path is clean in the current worktree. Unrelated dirty lanes
@@ -98,6 +100,9 @@ Current evidence:
 - `docs/migration/P101_RECEIPT_INTEGRITY_GUARD.md`
 - `reports/mission/A2A2A_P101_RECEIPT_INTEGRITY_GUARD_20260714.md`
 - `reports/review/p101/p101_receipt_integrity_guard_20260714.json`
+- `docs/migration/P101_STRICT_PERSISTENCE_READS.md`
+- `reports/mission/A2A2A_P101_STRICT_PERSISTENCE_READS_20260714.md`
+- `reports/review/p101/p101_strict_persistence_reads_20260714.json`
 
 ## Next Gate
 

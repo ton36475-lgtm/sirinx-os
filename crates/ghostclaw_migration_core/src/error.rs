@@ -27,6 +27,13 @@ pub enum MigrationError {
     UnexpectedArgument(String),
     /// Policy guard blocked the command.
     Blocked(String),
+    /// A strict persistence read found malformed non-empty records.
+    CorruptStore {
+        /// Stable store identifier.
+        store: &'static str,
+        /// Number of malformed records observed.
+        invalid_lines: usize,
+    },
     /// System clock failed.
     Time,
     /// File IO failed.
@@ -45,6 +52,10 @@ impl Display for MigrationError {
             }
             Self::UnexpectedArgument(value) => write!(f, "unexpected argument: {value}"),
             Self::Blocked(reason) => write!(f, "blocked by policy: {reason}"),
+            Self::CorruptStore {
+                store,
+                invalid_lines,
+            } => write!(f, "corrupt {store} store: {invalid_lines} invalid line(s)"),
             Self::Time => f.write_str("system time error"),
             Self::Io(err) => write!(f, "io error: {err}"),
         }

@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use crate::adapters::bundle::{select_next_ready_bundle, BundleReadReport, BundleSelection};
 use crate::adapters::lease::LeaseDecision;
 use crate::adapters::queue::QueueReadReport;
-use crate::error::Result;
+use crate::error::{MigrationError, Result};
 use crate::schema::escape_json;
 
 /// Compact queue status derived from a local pending-queue read report.
@@ -310,9 +310,16 @@ impl FileOrchestratorStatusStore {
         Ok(())
     }
 
-    /// Reads all valid status snapshot summaries in insertion order.
+    /// Reads all status summaries, failing closed when malformed records exist.
     pub fn read_all(&self) -> Result<Vec<PersistedOrchestratorStatusSummary>> {
-        self.read_report().map(|report| report.snapshots)
+        let report = self.read_report()?;
+        if report.invalid_lines > 0 {
+            return Err(MigrationError::CorruptStore {
+                store: "orchestrator_status",
+                invalid_lines: report.invalid_lines,
+            });
+        }
+        Ok(report.snapshots)
     }
 
     /// Reads status snapshots and reports malformed lines without executing work.
