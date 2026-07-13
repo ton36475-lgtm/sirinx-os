@@ -1,7 +1,7 @@
 # GhostClaw Rust Migration OS V1
 
-Status: `P101_ADAPTER_HARDENING_VALIDATED_LOCAL`
-Updated: `2026-07-14T04:23:34+07:00`
+Status: `P101_RECEIPT_INTEGRITY_VALIDATED_LOCAL`
+Updated: `2026-07-14T04:47:32+07:00`
 
 ## Purpose
 
@@ -15,6 +15,7 @@ The crate currently covers the P100 immediate scope:
 - policy guard
 - lane router / route intent model
 - receipt store
+- corruption-aware receipt read report
 - redaction
 - validation result model
 - local-safe adapter previews
@@ -58,26 +59,29 @@ crates/ghostclaw_migration_core/
 Fresh local validation from the repository root:
 
 ```text
-cargo fmt --check --manifest-path crates/ghostclaw_migration_core/Cargo.toml
-cargo clippy --offline --locked --manifest-path crates/ghostclaw_migration_core/Cargo.toml --all-targets --all-features -- -D warnings
-cargo test --offline --locked --manifest-path crates/ghostclaw_migration_core/Cargo.toml
-cargo build --offline --locked --manifest-path crates/ghostclaw_migration_core/Cargo.toml
+cargo fmt --manifest-path crates/ghostclaw_migration_core/Cargo.toml -- --check
+cargo clippy --manifest-path crates/ghostclaw_migration_core/Cargo.toml --offline --locked --all-targets -- -D warnings
+cargo test --manifest-path crates/ghostclaw_migration_core/Cargo.toml --offline --locked
+cargo build --manifest-path crates/ghostclaw_migration_core/Cargo.toml --offline --locked
 ```
 
 Result:
 
 - `cargo fmt --check`: passed
-- `cargo clippy --all-targets --all-features -- -D warnings`: passed
-- `cargo test`: passed, 187 tests total, 0 failed
+- `cargo clippy --all-targets -- -D warnings`: passed
+- `cargo test`: passed, 189 tests total, 0 failed
 - `cargo build`: passed
 
 ## Git State
 
-The P100 core and P101 adapter extraction are committed:
+The P100 core, P101 adapter extraction, validation reconciliation, and adapter
+hardening are committed:
 
 ```text
 125a15e feat(ghostclaw): validate Rust migration core after production launch
 bd8cbf2 chore: bulk-track all dirty files across sirinx-os
+b561461 docs(rust): reconcile migration validation state
+8d647e4 fix(rust): harden local adapter contracts
 ```
 
 The Rust migration path is clean in the current worktree. Unrelated dirty lanes
@@ -91,6 +95,9 @@ Current evidence:
 - `docs/migration/P101_ADAPTER_HARDENING.md`
 - `reports/mission/A2A2A_P101_ADAPTER_HARDENING_20260714.md`
 - `reports/review/p101/p101_adapter_hardening_receipt_20260714.json`
+- `docs/migration/P101_RECEIPT_INTEGRITY_GUARD.md`
+- `reports/mission/A2A2A_P101_RECEIPT_INTEGRITY_GUARD_20260714.md`
+- `reports/review/p101/p101_receipt_integrity_guard_20260714.json`
 
 ## Next Gate
 

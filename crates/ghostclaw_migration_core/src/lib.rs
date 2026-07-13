@@ -21,5 +21,5 @@ pub use command::{parse_command, ParsedCommand};
 pub use engine::{Engine, EngineResponse};
 pub use error::MigrationError;
 pub use policy::{PolicyDecision, PolicyGuard};
-pub use receipt::{FileReceiptStore, MemoryReceiptStore, ReceiptStore};
+pub use receipt::{FileReceiptStore, MemoryReceiptStore, ReceiptReadReport, ReceiptStore};
 pub use schema::{CommandEnvelope, Lane, Receipt, RouteJob};

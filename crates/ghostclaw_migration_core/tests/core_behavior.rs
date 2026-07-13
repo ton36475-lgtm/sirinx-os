@@ -128,6 +128,51 @@ fn file_receipt_store_should_round_trip_recent_receipts() {
     assert_eq!(receipts.len(), 1);
 }
 
+#[test]
+fn file_receipt_store_should_report_corrupt_and_empty_lines() {
+    let path = unique_temp_receipt_path();
+    let mut store = FileReceiptStore::new(&path);
+    let first = ghostclaw_migration_core::Receipt::new("first", "ok", "/status", None, None, None);
+    let second =
+        ghostclaw_migration_core::Receipt::new("second", "ok", "/status", None, None, None);
+    store.append(&first).unwrap();
+    fs::write(
+        &path,
+        format!(
+            "{}\nnot-json\n\n{}\n",
+            first.to_json_line(),
+            second.to_json_line()
+        ),
+    )
+    .unwrap();
+
+    let report = store.read_report(1).unwrap();
+    fs::remove_file(path).ok();
+
+    assert_eq!(report.receipts, vec![second]);
+    assert_eq!(report.invalid_lines, 1);
+    assert_eq!(report.skipped_empty_lines, 1);
+}
+
+#[test]
+fn engine_should_surface_receipt_store_corruption() {
+    let path = unique_temp_receipt_path();
+    fs::write(&path, "malformed receipt line\n").unwrap();
+    let store = FileReceiptStore::new(&path);
+    let mut engine = Engine::new(store);
+
+    let response = engine
+        .handle(&CommandEnvelope::cli("/receipts 10"))
+        .unwrap();
+    fs::remove_file(path).ok();
+
+    assert_eq!(response.status, "error");
+    assert_eq!(
+        response.reason.as_deref(),
+        Some("receipt_store_corrupt:invalid_lines=1")
+    );
+}
+
 fn unique_temp_receipt_path() -> PathBuf {
     static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(1);
 

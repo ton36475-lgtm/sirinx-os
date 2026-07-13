@@ -216,7 +216,23 @@ where
     ) -> Result<EngineResponse> {
         let receipt = Receipt::new("receipts", "ok", &envelope.raw, None, None, None);
         self.store.append(&receipt)?;
-        let receipt_count = self.store.recent(limit)?.len();
+        let report = self.store.recent_report(limit)?;
+        let receipt_count = report.receipts.len();
+        if report.invalid_lines > 0 {
+            return Ok(EngineResponse {
+                status: "error".to_string(),
+                command_kind: "receipts".to_string(),
+                message: "Receipt store integrity check failed; malformed lines were preserved."
+                    .to_string(),
+                pending_count: self.pending.len(),
+                receipt_count,
+                queued_job_id: None,
+                reason: Some(format!(
+                    "receipt_store_corrupt:invalid_lines={}",
+                    report.invalid_lines
+                )),
+            });
+        }
         Ok(EngineResponse {
             status: "ok".to_string(),
             command_kind: "receipts".to_string(),
