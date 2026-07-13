@@ -2,6 +2,7 @@
 
 use crate::adapters::traits::ValidatorAdapter;
 use crate::error::Result;
+use crate::redaction::redact_sensitive;
 use crate::schema::{escape_json, option_json};
 
 /// One deterministic validation check.
@@ -45,12 +46,23 @@ impl ValidatorAdapter for StaticValidatorAdapter {
     fn validate(&self, target_id: &str) -> Result<ValidatorResult> {
         Ok(ValidatorResult::from_checks(target_id, self.checks.clone()))
     }
+
+    fn executed_live(&self) -> bool {
+        false
+    }
 }
 
 impl ValidatorResult {
     /// Builds a result from deterministic checks.
     pub fn from_checks(target_id: impl Into<String>, checks: Vec<ValidationCheck>) -> Self {
-        let status = if checks.iter().all(|check| check.passed) {
+        let checks = checks
+            .into_iter()
+            .map(|mut check| {
+                check.evidence = check.evidence.as_deref().map(redact_sensitive);
+                check
+            })
+            .collect::<Vec<_>>();
+        let status = if !checks.is_empty() && checks.iter().all(|check| check.passed) {
             "pass"
         } else {
             "failed"
@@ -85,5 +97,35 @@ impl ValidatorResult {
             self.executed_live,
             checks
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{ValidationCheck, ValidatorResult};
+
+    #[test]
+    fn empty_check_set_should_fail_closed() {
+        let result = ValidatorResult::from_checks("empty", Vec::new());
+
+        assert_eq!(result.status, "failed");
+        assert!(!result.executed_live);
+    }
+
+    #[test]
+    fn validation_evidence_should_be_redacted_on_ingest() {
+        let result = ValidatorResult::from_checks(
+            "redaction",
+            vec![ValidationCheck {
+                name: "provider_check".to_string(),
+                passed: false,
+                evidence: Some("api_key abc123".to_string()),
+            }],
+        );
+
+        assert_eq!(
+            result.checks[0].evidence.as_deref(),
+            Some("api_key [REDACTED_SECRET]")
+        );
     }
 }

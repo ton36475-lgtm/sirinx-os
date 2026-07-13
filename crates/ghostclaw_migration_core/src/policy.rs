@@ -22,6 +22,8 @@ impl Default for PolicyGuard {
                 "git push",
                 "push origin",
                 "deploy",
+                "deployed",
+                "deployment",
                 "production",
                 "telegram bot start",
                 "live telegram",
@@ -31,8 +33,13 @@ impl Default for PolicyGuard {
                 "show secret",
                 "read secret",
                 "token",
+                "tokens",
                 "password",
+                "passwords",
                 "credential",
+                "credentials",
+                "secret",
+                "secrets",
                 "dns",
                 "cloudflare mutation",
                 "r2 mutation",
@@ -48,12 +55,66 @@ impl Default for PolicyGuard {
 impl PolicyGuard {
     /// Evaluates a raw command against hard blocks.
     pub fn evaluate(&self, raw_command: &str) -> PolicyDecision {
-        let normalized = raw_command.to_ascii_lowercase();
+        let normalized = canonicalize_command(raw_command);
         self.blocked_terms
             .iter()
-            .find(|term| normalized.contains(**term))
+            .find(|term| contains_phrase(&normalized, &canonicalize_command(term)))
             .map_or(PolicyDecision::Allowed, |term| {
                 PolicyDecision::Blocked(format!("hard_gate_term:{term}"))
             })
+    }
+}
+
+fn canonicalize_command(value: &str) -> String {
+    let mut output = String::with_capacity(value.len());
+    let mut pending_separator = false;
+
+    for ch in value.chars().flat_map(char::to_lowercase) {
+        if ch.is_alphanumeric() {
+            if pending_separator && !output.is_empty() {
+                output.push(' ');
+            }
+            output.push(ch);
+            pending_separator = false;
+        } else {
+            pending_separator = true;
+        }
+    }
+    output
+}
+
+fn contains_phrase(haystack: &str, needle: &str) -> bool {
+    if needle.is_empty() {
+        return false;
+    }
+    format!(" {haystack} ").contains(&format!(" {needle} "))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{PolicyDecision, PolicyGuard};
+
+    #[test]
+    fn policy_should_block_whitespace_and_punctuation_variants() {
+        let guard = PolicyGuard::default();
+
+        assert!(matches!(
+            guard.evaluate("git\n\tpush origin main"),
+            PolicyDecision::Blocked(_)
+        ));
+        assert!(matches!(
+            guard.evaluate("production-deployment"),
+            PolicyDecision::Blocked(_)
+        ));
+    }
+
+    #[test]
+    fn policy_should_not_block_unrelated_word_substrings() {
+        let guard = PolicyGuard::default();
+
+        assert_eq!(
+            guard.evaluate("review tokenizer implementation locally"),
+            PolicyDecision::Allowed
+        );
     }
 }

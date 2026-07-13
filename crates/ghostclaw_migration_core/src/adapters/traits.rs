@@ -16,9 +16,10 @@ pub trait WorkerAdapter {
     fn preview(&self, job: &RouteJob) -> Result<CodexDryRunPreview>;
 
     /// Reports whether the adapter executed a live worker.
-    fn executed_live(&self) -> bool {
-        false
-    }
+    ///
+    /// Implementations must declare this explicitly so a future live adapter
+    /// cannot inherit a misleading local-only default.
+    fn executed_live(&self) -> bool;
 }
 
 /// Validator boundary for deterministic local checks.
@@ -27,9 +28,10 @@ pub trait ValidatorAdapter {
     fn validate(&self, target_id: &str) -> Result<ValidatorResult>;
 
     /// Reports whether validation used live external execution.
-    fn executed_live(&self) -> bool {
-        false
-    }
+    ///
+    /// Implementations must declare this explicitly so execution provenance
+    /// remains a compile-time-visible part of the adapter contract.
+    fn executed_live(&self) -> bool;
 }
 
 /// Receipt boundary used by engines and adapter tests.

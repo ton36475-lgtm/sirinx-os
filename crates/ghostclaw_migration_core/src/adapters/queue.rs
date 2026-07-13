@@ -9,6 +9,7 @@ use std::path::{Path, PathBuf};
 
 use crate::adapters::traits::QueueAdapter;
 use crate::error::Result;
+use crate::redaction::redact_sensitive;
 use crate::schema::{escape_json, now_millis, RouteJob};
 
 /// Detailed read result for a pending queue scan.
@@ -112,7 +113,7 @@ impl FilePendingQueue {
         writeln!(
             file,
             "{{\"type\":\"clear_pending_local_only\",\"reason\":\"{}\",\"created_at_ms\":{}}}",
-            escape_json(reason),
+            escape_json(&redact_sensitive(reason)),
             now_millis()
         )?;
         Ok(())
@@ -134,5 +135,60 @@ impl QueueAdapter for FilePendingQueue {
 }
 
 fn is_clear_marker(line: &str) -> bool {
-    line.contains("\"type\":\"clear_pending_local_only\"")
+    const PREFIX: &str = "{\"type\":\"clear_pending_local_only\",\"reason\":\"";
+    const TIMESTAMP_FIELD: &str = "\",\"created_at_ms\":";
+
+    let trimmed = line.trim();
+    let Some(body) = trimmed
+        .strip_prefix(PREFIX)
+        .and_then(|value| value.strip_suffix('}'))
+    else {
+        return false;
+    };
+    let Some((encoded_reason, timestamp)) = body.rsplit_once(TIMESTAMP_FIELD) else {
+        return false;
+    };
+
+    is_valid_json_string_fragment(encoded_reason)
+        && !timestamp.is_empty()
+        && timestamp.chars().all(|ch| ch.is_ascii_digit())
+}
+
+fn is_valid_json_string_fragment(value: &str) -> bool {
+    let mut chars = value.chars();
+    while let Some(ch) = chars.next() {
+        if ch == '\\' {
+            match chars.next() {
+                Some('"' | '\\' | '/' | 'b' | 'f' | 'n' | 'r' | 't') => {}
+                Some('u') => {
+                    if !(0..4).all(|_| chars.next().is_some_and(|digit| digit.is_ascii_hexdigit()))
+                    {
+                        return false;
+                    }
+                }
+                _ => return false,
+            }
+        } else if ch == '"' || ch.is_control() {
+            return false;
+        }
+    }
+    true
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_clear_marker;
+
+    #[test]
+    fn clear_marker_should_require_the_complete_generated_shape() {
+        assert!(is_clear_marker(
+            "{\"type\":\"clear_pending_local_only\",\"reason\":\"operator reset\",\"created_at_ms\":123}"
+        ));
+        assert!(!is_clear_marker(
+            "{\"type\":\"clear_pending_local_only\",\"reason\":\"missing timestamp\"}"
+        ));
+        assert!(!is_clear_marker(
+            "{\"id\":\"job\",\"task\":\"clear_pending_local_only\"}"
+        ));
+    }
 }

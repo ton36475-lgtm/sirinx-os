@@ -5,7 +5,7 @@
 //! produce from pure legacy functions.
 
 use crate::redaction::redact_sensitive;
-use crate::schema::{escape_json, option_json};
+use crate::schema::{escape_json, redacted_option_json};
 
 /// One expected legacy behavior fixture.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -74,7 +74,7 @@ impl PythonOracleFixtureSet {
             "{{\"source_module\":\"{}\",\"executed_live\":{},\"note\":{},\"cases\":[{}]}}",
             escape_json(&self.source_module),
             self.executed_live,
-            option_json(self.note.as_deref()),
+            redacted_option_json(self.note.as_deref()),
             cases
         )
     }

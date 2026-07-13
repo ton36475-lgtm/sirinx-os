@@ -18,6 +18,9 @@ pub enum ParsedCommand {
     Route { lane: Lane, task: String },
 }
 
+const DEFAULT_RECEIPT_LIMIT: usize = 10;
+const MAX_RECEIPT_LIMIT: usize = 100;
+
 /// Parses a raw command into the frozen command contract.
 pub fn parse_command(raw: &str) -> Result<ParsedCommand> {
     let trimmed = raw.trim();
@@ -28,20 +31,40 @@ pub fn parse_command(raw: &str) -> Result<ParsedCommand> {
     let Some(command) = parts.next() else {
         return Err(MigrationError::EmptyCommand);
     };
+    let arguments = parts.collect::<Vec<_>>();
     match command {
-        "/status" => Ok(ParsedCommand::Status),
-        "/quota" => Ok(ParsedCommand::Quota),
-        "/pending" => Ok(ParsedCommand::Pending),
-        "/receipts" => {
-            let limit = parts
-                .next()
-                .and_then(|value| value.parse().ok())
-                .unwrap_or(10);
-            Ok(ParsedCommand::Receipts { limit })
-        }
-        "/route" => parse_route(parts.collect::<Vec<_>>().as_slice()),
+        "/status" => parse_without_arguments(&arguments, ParsedCommand::Status),
+        "/quota" => parse_without_arguments(&arguments, ParsedCommand::Quota),
+        "/pending" => parse_without_arguments(&arguments, ParsedCommand::Pending),
+        "/receipts" => parse_receipts(&arguments),
+        "/route" => parse_route(&arguments),
         other => Err(MigrationError::UnknownCommand(other.to_string())),
     }
+}
+
+fn parse_without_arguments(arguments: &[&str], command: ParsedCommand) -> Result<ParsedCommand> {
+    if let Some(argument) = arguments.first() {
+        return Err(MigrationError::UnexpectedArgument((*argument).to_string()));
+    }
+    Ok(command)
+}
+
+fn parse_receipts(arguments: &[&str]) -> Result<ParsedCommand> {
+    if arguments.len() > 1 {
+        return Err(MigrationError::UnexpectedArgument(arguments[1].to_string()));
+    }
+    let limit = match arguments.first() {
+        Some(value) => value
+            .parse::<usize>()
+            .ok()
+            .filter(|parsed| *parsed <= MAX_RECEIPT_LIMIT)
+            .ok_or_else(|| MigrationError::InvalidArgument {
+                name: "limit",
+                value: (*value).to_string(),
+            })?,
+        None => DEFAULT_RECEIPT_LIMIT,
+    };
+    Ok(ParsedCommand::Receipts { limit })
 }
 
 fn parse_route(parts: &[&str]) -> Result<ParsedCommand> {

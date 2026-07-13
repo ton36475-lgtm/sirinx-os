@@ -1,9 +1,13 @@
 //! Schema types shared by parser, policy, engine, and receipts.
 
+use std::fmt::Write as _;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::error::{MigrationError, Result};
 use crate::redaction::redact_sensitive;
+
+static NEXT_RECEIPT_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 
 /// Origin-normalized command envelope.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -120,7 +124,7 @@ impl RouteJob {
             "{{\"id\":\"{}\",\"lane\":\"{}\",\"task\":\"{}\",\"status\":\"{}\",\"created_at_ms\":{}}}",
             escape_json(&self.id),
             self.lane.as_str(),
-            escape_json(&self.task),
+            escape_json(&redact_sensitive(&self.task)),
             escape_json(&self.status),
             self.created_at_ms
         )
@@ -136,7 +140,8 @@ impl RouteJob {
             task: extract_string(line, "task").ok_or(MigrationError::MissingArgument("task"))?,
             status: extract_string(line, "status")
                 .ok_or(MigrationError::MissingArgument("status"))?,
-            created_at_ms: extract_number(line, "created_at_ms").unwrap_or_default(),
+            created_at_ms: extract_number(line, "created_at_ms")
+                .ok_or(MigrationError::MissingArgument("created_at_ms"))?,
         })
     }
 }
@@ -172,15 +177,19 @@ impl Receipt {
         task: Option<&str>,
         reason: Option<String>,
     ) -> Self {
+        let created_at_ms = now_millis();
         Self {
-            id: format!("rcpt-{}", now_millis()),
+            id: format!(
+                "rcpt-{created_at_ms}-{}",
+                NEXT_RECEIPT_SEQUENCE.fetch_add(1, Ordering::Relaxed)
+            ),
             command_kind: command_kind.into(),
             status: status.into(),
             redacted_command: redact_sensitive(raw_command),
             lane: lane.map(|value| value.as_str().to_string()),
             task: task.map(redact_sensitive),
-            reason,
-            created_at_ms: now_millis(),
+            reason: reason.map(|value| redact_sensitive(&value)),
+            created_at_ms,
         }
     }
 
@@ -191,10 +200,10 @@ impl Receipt {
             escape_json(&self.id),
             escape_json(&self.command_kind),
             escape_json(&self.status),
-            escape_json(&self.redacted_command),
+            escape_json(&redact_sensitive(&self.redacted_command)),
             option_json(self.lane.as_deref()),
-            option_json(self.task.as_deref()),
-            option_json(self.reason.as_deref()),
+            redacted_option_json(self.task.as_deref()),
+            redacted_option_json(self.reason.as_deref()),
             self.created_at_ms
         )
     }
@@ -212,7 +221,8 @@ impl Receipt {
             lane: extract_nullable_string(line, "lane"),
             task: extract_nullable_string(line, "task"),
             reason: extract_nullable_string(line, "reason"),
-            created_at_ms: extract_number(line, "created_at_ms").unwrap_or_default(),
+            created_at_ms: extract_number(line, "created_at_ms")
+                .ok_or(MigrationError::MissingArgument("created_at_ms"))?,
         })
     }
 }
@@ -234,6 +244,12 @@ pub fn escape_json(value: &str) -> String {
             '\n' => output.push_str("\\n"),
             '\r' => output.push_str("\\r"),
             '\t' => output.push_str("\\t"),
+            '\u{08}' => output.push_str("\\b"),
+            '\u{0c}' => output.push_str("\\f"),
+            ch if ch <= '\u{1f}' => {
+                write!(&mut output, "\\u{:04x}", ch as u32)
+                    .expect("writing JSON escape to String cannot fail");
+            }
             _ => output.push(ch),
         }
     }
@@ -245,6 +261,14 @@ pub fn option_json(value: Option<&str>) -> String {
     value.map_or_else(
         || "null".to_string(),
         |text| format!("\"{}\"", escape_json(text)),
+    )
+}
+
+/// Emits a redacted JSON string or null at a persistence boundary.
+pub fn redacted_option_json(value: Option<&str>) -> String {
+    value.map_or_else(
+        || "null".to_string(),
+        |text| format!("\"{}\"", escape_json(&redact_sensitive(text))),
     )
 }
 
@@ -267,26 +291,103 @@ fn extract_number(line: &str, key: &str) -> Option<u128> {
 }
 
 fn read_json_string_at(line: &str, start: usize) -> Option<String> {
-    let mut escaped = false;
     let mut output = String::new();
-    for ch in line[start..].chars() {
-        if escaped {
-            match ch {
+    let mut chars = line[start..].chars();
+    while let Some(ch) = chars.next() {
+        match ch {
+            '\\' => match chars.next()? {
                 'n' => output.push('\n'),
                 'r' => output.push('\r'),
                 't' => output.push('\t'),
+                'b' => output.push('\u{08}'),
+                'f' => output.push('\u{0c}'),
                 '\\' => output.push('\\'),
+                '/' => output.push('/'),
                 '"' => output.push('"'),
-                other => output.push(other),
-            }
-            escaped = false;
-            continue;
-        }
-        match ch {
-            '\\' => escaped = true,
+                'u' => {
+                    let mut value = 0u32;
+                    for _ in 0..4 {
+                        value = value.checked_mul(16)? + chars.next()?.to_digit(16)?;
+                    }
+                    output.push(char::from_u32(value)?);
+                }
+                _ => return None,
+            },
             '"' => return Some(output),
+            control if control <= '\u{1f}' => return None,
             other => output.push(other),
         }
     }
     None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{escape_json, Receipt, RouteJob};
+
+    #[test]
+    fn json_escape_should_cover_all_ascii_control_characters() {
+        let escaped = escape_json("a\u{0}b\u{08}c\u{0c}d");
+
+        assert_eq!(escaped, "a\\u0000b\\bc\\fd");
+    }
+
+    #[test]
+    fn receipt_json_should_round_trip_control_characters() {
+        let receipt = Receipt {
+            id: "control\u{0}id".to_string(),
+            command_kind: "test".to_string(),
+            status: "ok".to_string(),
+            redacted_command: "safe".to_string(),
+            lane: None,
+            task: None,
+            reason: Some("line\u{08}break".to_string()),
+            created_at_ms: 1,
+        };
+
+        assert_eq!(
+            Receipt::from_json_line(&receipt.to_json_line()).unwrap(),
+            receipt
+        );
+    }
+
+    #[test]
+    fn persisted_records_should_require_timestamps() {
+        assert!(RouteJob::from_json_line(
+            "{\"id\":\"job\",\"lane\":\"review\",\"task\":\"inspect\",\"status\":\"queued\"}"
+        )
+        .is_err());
+        assert!(Receipt::from_json_line(
+            "{\"id\":\"receipt\",\"command_kind\":\"status\",\"status\":\"ok\",\"redacted_command\":\"/status\",\"lane\":null,\"task\":null,\"reason\":null}"
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn generated_receipt_ids_should_be_unique_within_one_process() {
+        let first = Receipt::new("test", "ok", "/status", None, None, None);
+        let second = Receipt::new("test", "ok", "/status", None, None, None);
+
+        assert_ne!(first.id, second.id);
+    }
+
+    #[test]
+    fn receipt_serialization_should_redact_directly_constructed_fields() {
+        let receipt = Receipt {
+            id: "direct".to_string(),
+            command_kind: "test".to_string(),
+            status: "blocked".to_string(),
+            redacted_command: "Authorization: Bearer abc123".to_string(),
+            lane: None,
+            task: Some("api_key raw-key".to_string()),
+            reason: Some("token=raw-token".to_string()),
+            created_at_ms: 1,
+        };
+        let json = receipt.to_json_line();
+
+        assert!(!json.contains("abc123"));
+        assert!(!json.contains("raw-key"));
+        assert!(!json.contains("raw-token"));
+        assert!(json.contains("[REDACTED_SECRET]"));
+    }
 }

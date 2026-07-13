@@ -1,7 +1,7 @@
 # GhostClaw Rust Migration OS V1
 
-Status: `P101_ADAPTER_EXTRACTION_COMMITTED_VALIDATED_LOCAL`
-Updated: `2026-07-14T03:31:14+07:00`
+Status: `P101_ADAPTER_HARDENING_VALIDATED_LOCAL`
+Updated: `2026-07-14T04:23:34+07:00`
 
 ## Purpose
 
@@ -68,7 +68,7 @@ Result:
 
 - `cargo fmt --check`: passed
 - `cargo clippy --all-targets --all-features -- -D warnings`: passed
-- `cargo test`: passed, 167 tests total, 0 failed
+- `cargo test`: passed, 187 tests total, 0 failed
 - `cargo build`: passed
 
 ## Git State
@@ -88,6 +88,9 @@ Current evidence:
 
 - `reports/mission/A2A2A_RUST_MIGRATION_CURRENT_VALIDATION_20260714.md`
 - `reports/review/p101/rust_migration_current_validation_20260714.json`
+- `docs/migration/P101_ADAPTER_HARDENING.md`
+- `reports/mission/A2A2A_P101_ADAPTER_HARDENING_20260714.md`
+- `reports/review/p101/p101_adapter_hardening_receipt_20260714.json`
 
 ## Next Gate
 

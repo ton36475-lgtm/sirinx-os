@@ -5,7 +5,7 @@
 //! credential files.
 
 use crate::redaction::redact_sensitive;
-use crate::schema::{escape_json, option_json, CommandEnvelope};
+use crate::schema::{escape_json, redacted_option_json, CommandEnvelope};
 
 /// Minimal non-secret Telegram command input.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -52,7 +52,7 @@ impl TelegramCommand {
             "{{\"chat_ref\":\"{}\",\"sender_ref\":\"{}\",\"text\":\"{}\",\"live_send\":false}}",
             escape_json(&self.chat_ref),
             escape_json(&self.sender_ref),
-            escape_json(&self.text)
+            escape_json(&redact_sensitive(&self.text))
         )
     }
 }
@@ -64,10 +64,10 @@ impl TelegramReplyPreview {
             "{{\"adapter\":\"{}\",\"chat_ref\":\"{}\",\"text\":\"{}\",\"live_send\":{},\"status\":\"{}\",\"reason\":{}}}",
             escape_json(&self.adapter),
             escape_json(&self.chat_ref),
-            escape_json(&self.text),
+            escape_json(&redact_sensitive(&self.text)),
             self.live_send,
             escape_json(&self.status),
-            option_json(self.reason.as_deref())
+            redacted_option_json(self.reason.as_deref())
         )
     }
 }
@@ -81,5 +81,23 @@ pub fn preview_telegram_reply(chat_ref: &str, text: &str) -> TelegramReplyPrevie
         live_send: false,
         status: "reply_preview_only".to_string(),
         reason: Some("live_telegram_send_blocked_until_exact_gate".to_string()),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::TelegramCommand;
+
+    #[test]
+    fn telegram_command_json_should_redact_raw_command_text() {
+        let command = TelegramCommand {
+            chat_ref: "local-chat".to_string(),
+            sender_ref: "local-user".to_string(),
+            text: "/route review api_key abc123".to_string(),
+        };
+        let json = command.to_json();
+
+        assert!(json.contains("[REDACTED_SECRET]"));
+        assert!(!json.contains("abc123"));
     }
 }

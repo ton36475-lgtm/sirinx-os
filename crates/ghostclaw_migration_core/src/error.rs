@@ -16,6 +16,15 @@ pub enum MigrationError {
     InvalidLane(String),
     /// A required argument was missing.
     MissingArgument(&'static str),
+    /// An argument could not be parsed or exceeded its bounded range.
+    InvalidArgument {
+        /// Stable argument name.
+        name: &'static str,
+        /// Rejected value.
+        value: String,
+    },
+    /// A command included an argument outside its frozen contract.
+    UnexpectedArgument(String),
     /// Policy guard blocked the command.
     Blocked(String),
     /// System clock failed.
@@ -31,6 +40,10 @@ impl Display for MigrationError {
             Self::UnknownCommand(command) => write!(f, "unknown command: {command}"),
             Self::InvalidLane(lane) => write!(f, "invalid lane: {lane}"),
             Self::MissingArgument(name) => write!(f, "missing argument: {name}"),
+            Self::InvalidArgument { name, value } => {
+                write!(f, "invalid argument {name}: {value}")
+            }
+            Self::UnexpectedArgument(value) => write!(f, "unexpected argument: {value}"),
             Self::Blocked(reason) => write!(f, "blocked by policy: {reason}"),
             Self::Time => f.write_str("system time error"),
             Self::Io(err) => write!(f, "io error: {err}"),

@@ -1,5 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 use ghostclaw_migration_core::{
     parse_command, CommandEnvelope, Engine, FileReceiptStore, Lane, MemoryReceiptStore,
@@ -25,6 +26,22 @@ fn parse_command_should_parse_route_lane_and_task() {
 #[test]
 fn parse_command_should_reject_route_without_task() {
     assert!(parse_command("/route backend_core").is_err());
+}
+
+#[test]
+fn parse_command_should_reject_extra_arguments_for_fixed_commands() {
+    assert!(parse_command("/status unexpected").is_err());
+    assert!(parse_command("/receipts 5 unexpected").is_err());
+}
+
+#[test]
+fn parse_command_should_reject_invalid_or_unbounded_receipt_limits() {
+    assert!(parse_command("/receipts not-a-number").is_err());
+    assert!(parse_command("/receipts 101").is_err());
+    assert_eq!(
+        parse_command("/receipts 100").unwrap(),
+        ParsedCommand::Receipts { limit: 100 }
+    );
 }
 
 #[test]
@@ -112,11 +129,14 @@ fn file_receipt_store_should_round_trip_recent_receipts() {
 }
 
 fn unique_temp_receipt_path() -> PathBuf {
+    static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(1);
+
     let mut path = std::env::temp_dir();
     path.push(format!(
-        "ghostclaw-migration-core-test-{}-{}.jsonl",
+        "ghostclaw-migration-core-test-{}-{}-{}.jsonl",
         std::process::id(),
-        ghostclaw_migration_core::schema::now_millis()
+        ghostclaw_migration_core::schema::now_millis(),
+        NEXT_TEMP_ID.fetch_add(1, Ordering::Relaxed)
     ));
     path
 }

@@ -1,5 +1,7 @@
-use std::fs;
+use std::fs::{self, OpenOptions};
+use std::io::Write;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 use ghostclaw_migration_core::adapters::codex::CodexDryRunAdapter;
 use ghostclaw_migration_core::adapters::queue::FilePendingQueue;
@@ -52,6 +54,43 @@ fn queue_adapter_should_clear_with_append_only_marker() {
 }
 
 #[test]
+fn malformed_clear_marker_should_not_discard_pending_jobs() {
+    let path = unique_temp_queue_path();
+    let queue = FilePendingQueue::new(&path);
+    let job = RouteJob::new(
+        "route-p101-forged-clear".to_string(),
+        Lane::ApiContract,
+        "preserve this pending job",
+    );
+    queue.enqueue(&job).unwrap();
+    let mut file = OpenOptions::new().append(true).open(&path).unwrap();
+    writeln!(
+        file,
+        "{{\"type\":\"clear_pending_local_only\",\"reason\":\"missing timestamp\"}}"
+    )
+    .unwrap();
+
+    let report = queue.list().unwrap();
+    fs::remove_file(path).ok();
+
+    assert_eq!(report.jobs, vec![job]);
+    assert_eq!(report.clear_events, 0);
+    assert_eq!(report.invalid_lines, 1);
+}
+
+#[test]
+fn clear_marker_reason_should_be_redacted_before_persistence() {
+    let path = unique_temp_queue_path();
+    let queue = FilePendingQueue::new(&path);
+    queue.clear_pending_local_only("api_key abc123").unwrap();
+    let contents = fs::read_to_string(&path).unwrap();
+    fs::remove_file(path).ok();
+
+    assert!(contents.contains("[REDACTED_SECRET]"));
+    assert!(!contents.contains("abc123"));
+}
+
+#[test]
 fn receipt_adapter_should_wrap_existing_receipt_store_trait() {
     let mut store = MemoryReceiptStore::default();
     let receipt = Receipt::new("p101", "ok", "/status", None, None, None);
@@ -93,11 +132,14 @@ fn python_oracle_normalizer_should_collapse_whitespace_and_redact() {
 }
 
 fn unique_temp_queue_path() -> PathBuf {
+    static NEXT_TEMP_ID: AtomicU64 = AtomicU64::new(1);
+
     let mut path = std::env::temp_dir();
     path.push(format!(
-        "ghostclaw-migration-core-p101-queue-test-{}-{}.jsonl",
+        "ghostclaw-migration-core-p101-queue-test-{}-{}-{}.jsonl",
         std::process::id(),
-        ghostclaw_migration_core::schema::now_millis()
+        ghostclaw_migration_core::schema::now_millis(),
+        NEXT_TEMP_ID.fetch_add(1, Ordering::Relaxed)
     ));
     path
 }
