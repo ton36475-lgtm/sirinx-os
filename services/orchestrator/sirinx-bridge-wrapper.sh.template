@@ -1,0 +1,31 @@
+#!/bin/sh
+# Phase 5C local worker preview. No tmux, network, or messaging is performed.
+
+set -eu
+
+ACTION_ID="${1:-}"
+WORKER="${2:-}"
+
+case "$ACTION_ID" in
+  queue-status|rust-check|phase5a-validate) ;;
+  *)
+    printf '%s\n' "ERROR: action id is not allow-listed" >&2
+    exit 64
+    ;;
+esac
+
+case "$WORKER" in
+  claude-worker|opencode-worker|codex-worker) ;;
+  *)
+    printf '%s\n' "ERROR: worker is not allow-listed" >&2
+    exit 64
+    ;;
+esac
+
+printf '%s\n' \
+  "status=DRY_RUN" \
+  "action_id=$ACTION_ID" \
+  "worker=$WORKER" \
+  "network_allowed=false" \
+  "tmux_allowed=false" \
+  "telegram_allowed=false"
