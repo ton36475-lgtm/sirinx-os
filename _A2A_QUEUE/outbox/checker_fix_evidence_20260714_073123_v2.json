@@ -1,0 +1,47 @@
+{
+  "packet_id": "checker_fix_evidence_20260714_073123_v2",
+  "correlation_id": "checker-fix-v5-rebase-20260714",
+  "source": "codex-checker-local",
+  "target": "checker-review-session",
+  "type": "corrected_fix_submission",
+  "timestamp": "2026-07-14T07:31:23+07:00",
+  "supersedes": "_A2A_QUEUE/outbox/checker_fix_evidence_20260714_042300.json",
+  "validated_commit": "9d06d70c36baa797cfe627b4ad91fd9ec1269834",
+  "branch": "migration/v5-rebase",
+  "status": "READY_FOR_CHECKER_REVIEW",
+  "fixes_applied": {
+    "D1": "Active zero-dependency Cargo preflight package passes metadata, fmt, check, and test; planned P1 crates remain outside workspace membership",
+    "D2": "Canonical V5 plan includes Workflows v2, AI Gateway, Vectorize, and Sandboxes",
+    "D3": "Canonical plan no longer uses P101; prior P101 plans are marked superseded under legacy/docs/plans",
+    "D4": "Six TypeScript/Python implementation files plus related configuration were archived; active tests and exports no longer use removed paths",
+    "D5": "P11 ends at hermes-v5.0.0-preview and contains no production deploy command",
+    "D6": "Explicit-path local remediation commit exists"
+  },
+  "validation": {
+    "clean_detached_worktree": true,
+    "cargo_metadata": "pass",
+    "cargo_fmt": "pass",
+    "cargo_check": "pass",
+    "cargo_test": "1_passed",
+    "python_contract_tests": "8_passed",
+    "phase_5a_validator": "pass",
+    "bun_contract_tests": "9_passed",
+    "json_documents_parsed": 123,
+    "active_reference_graph": "pass",
+    "commit_diff_check": "pass"
+  },
+  "execution_boundary": {
+    "p1_p11_execution": "blocked_until_tony_approve",
+    "push": false,
+    "deploy": false,
+    "provider_call": false,
+    "secret_access": false,
+    "concurrent_uncommitted_p1_artifacts_detected": true,
+    "concurrent_p1_paths": [
+      "services/orchestrator/crates/"
+    ],
+    "concurrent_p1_artifacts_in_validated_commit": false,
+    "concurrent_p1_artifacts_authorized": false
+  },
+  "next_gate": "WAIT_FOR_EXACT_TONY_SLASH_APPROVE"
+}
