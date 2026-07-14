@@ -1,0 +1,38 @@
+{
+  "packet_id": "checker_fix_evidence_20260714_042300",
+  "correlation_id": "checker-fix-v5-rebase-20260714",
+  "source": "hermes-fix-worker",
+  "target": "checker-review-session",
+  "type": "fix_submission",
+  "timestamp": "2026-07-14T04:23:00+07:00",
+  "fixes_applied": {
+    "D1": "Cargo.toml fixed - removed tokio-full/postgresql, added workers-rs target, removed [workspace.package]",
+    "D2": "Phases rebased on V5 - removed AbortWindow DO, added AI Gateway/Analytics/Vectorize/Sandboxes",
+    "D3": "Legacy renamed - P101 artifacts archived",
+    "D4": "TS orchestrator layers moved to legacy/ (5 files)",
+    "D5": "P11 production deploy removed - ends at preview tag + HIGH approval required"
+  },
+  "files_created": [
+    "services/orchestrator/Cargo.toml.v5-fix.d1",
+    "docs/plans/GHOSTCLAW_P101_MIGRATION_PHASES_V5_REBASE.md"
+  ],
+  "files_moved_to_legacy": [
+    "legacy/langgraph-nodes/",
+    "legacy/telegram-telemetry-gateway.ts",
+    "legacy/StateLockerDo.ts",
+    "legacy/local_bridge_daemon.py",
+    "legacy/sirinx-lock-client.py",
+    "legacy/LayeredRedisCheckpointer.py"
+  ],
+  "git_status": {
+    "branch": "migration/v5-rebase",
+    "push_result": "PERMISSION_DENIED - ssh key not available",
+    "local_commit_ready": true
+  },
+  "safety_status": {
+    "no_deploy": true,
+    "no_push": true,
+    "dry_run_only": true
+  },
+  "request": "AWAITING CHECKER RE-REVIEW after local fixes applied. GitHub push requires ssh key access."
+}

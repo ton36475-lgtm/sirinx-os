@@ -4,24 +4,24 @@
   "source": "hermes+codex",
   "target": "operator",
   "type": "integration_preparation",
-  "status": "CODEX_HARDENED_LOCAL",
+  "status": "ARCHIVED_COMPATIBILITY_EVIDENCE",
   "timestamp": "2026-07-14T05:30:00+07:00",
   "base_commit": "c0cda27615955784736d6877ec847cc3bfc1f91d",
   "phase_5b_artifacts": [
-    "services/orchestrator/telegram-telemetry-gateway.ts",
+    "legacy/telegram-telemetry-gateway.ts",
     "services/orchestrator/telegram-telemetry-gateway.test.ts",
-    "services/orchestrator/wrangler.toml.edge-orchestrator.template"
+    "legacy/cloudflare/wrangler.toml.edge-orchestrator.template"
   ],
   "phase_5c_artifacts": [
-    "services/orchestrator/cloudflare/index.ts",
-    "services/orchestrator/cloudflare/StateLockerDo.ts",
+    "legacy/cloudflare/index.ts",
+    "legacy/StateLockerDo.ts",
     "services/orchestrator/cloudflare/StateLockerDo.test.ts",
     "services/orchestrator/local_bridge_policy.py",
-    "services/orchestrator/local_bridge_daemon.py",
+    "legacy/local_bridge_daemon.py",
     "services/orchestrator/sirinx-bridge-wrapper.sh.template",
-    ".scripts/sirinx-lock-client.py",
+    "legacy/sirinx-lock-client.py",
     ".scripts/tmux-worker-lock-manager.py",
-    "packages/langchain-config/LayeredRedisCheckpointer.py"
+    "legacy/LayeredRedisCheckpointer.py"
   ],
   "validation": {
     "python_contract_tests": 8,
@@ -43,10 +43,11 @@
     "allowed_tier": "B"
   },
   "limitations": [
+    "Archived prototypes are compatibility evidence, not an active runtime.",
     "No live service or provider was called.",
     "FastAPI was compile-checked but not started.",
     "Cloudflare bindings and remote lock behavior remain unverified.",
     "Redis and tmux integration remain disabled."
   ],
-  "notes": "Hermes drafts were security-reviewed and converted to bounded local previews. A separate explicit packet is required for any live action."
+  "notes": "Hermes drafts were security-reviewed and archived during the V5 rebase. A separate explicit packet and Tony approval are required for any P1-P11 action."
 }

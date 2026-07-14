@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ghostclaw-cross-platform-execution-packet.schema.json",
+  "title": "Cross-Platform Execution Packet",
+  "description": "JSON-encapsulated execution packet for Mac/PC remote execution abstraction layer",
+  "type": "object",
+  "required": [
+    "packet_version",
+    "correlation_id",
+    "target_platform",
+    "execution_command",
+    "shell_context",
+    "routing_trace",
+    "timestamp"
+  ],
+  "properties": {
+    "packet_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Packet schema version"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9\\-]{36}$",
+      "description": "UUID v4 correlation identifier for traceability"
+    },
+    "target_platform": {
+      "type": "string",
+      "enum": ["darwin_arm64", "win32-x64-x64", "linux_x64"],
+      "description": "Target execution platform"
+    },
+    "execution_command": {
+      "type": "object",
+      "required": ["type", "payload"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["shell", "grpc", "ssh"],
+          "description": "Execution transport type"
+        },
+        "payload": {
+          "type": "string",
+          "description": "Command or payload to execute"
+        },
+        "working_directory": {
+          "type": "string",
+          "description": "Working directory for command execution"
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 300,
+          "default": 60
+        }
+      }
+    },
+    "shell_context": {
+      "type": "object",
+      "required": ["shell_type", "environment_vars"],
+      "properties": {
+        "shell_type": {
+          "type": "string",
+          "enum": ["zsh", "bash", "pwsh"],
+          "description": "Shell interpreter for the target platform"
+        },
+        "environment_vars": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Environment variables for execution context"
+        },
+        "line_endings": {
+          "type": "string",
+          "enum": ["lf", "crlf"],
+          "description": "Line ending style for the target platform"
+        }
+      }
+    },
+    "routing_trace": {
+      "type": "object",
+      "properties": {
+        "origin_node": {
+          "type": "string",
+          "description": "Origin LangGraph node"
+        },
+        "hop_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of hops for this packet"
+        }
+      }
+    },
+    "error_stream_config": {
+      "type": "object",
+      "properties": {
+        "normalize_stderr": {
+          "type": "boolean",
+          "default": true
+        },
+        "interleave_logs": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of packet creation"
+    }
+  }
+}

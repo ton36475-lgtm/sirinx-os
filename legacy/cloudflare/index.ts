@@ -1,5 +1,3 @@
-import { StateLockerDo } from './StateLockerDo';
-
 interface DurableObjectStubLike {
   fetch(request: Request): Promise<Response>;
 }
@@ -15,8 +13,6 @@ interface WorkerEnv {
 
 const SAFE_PROJECT_ID = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/;
 const ALLOWED_ACTIONS = new Set(['acquire', 'release', 'status']);
-
-export { StateLockerDo };
 
 export default {
   async fetch(request: Request, env: WorkerEnv): Promise<Response> {

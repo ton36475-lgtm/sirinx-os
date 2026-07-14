@@ -1,0 +1,35 @@
+{
+  "task_id": "codex-review-gc-0000",
+  "correlation_id": "codex-task-review-20260714-final",
+  "source": "hermes",
+  "target": "codex-worker",
+  "type": "codex_review_request",
+  "timestamp": "2026-07-14T04:25:00+07:00",
+  "review_package": {
+    "diffs_to_review": [
+      "legacy Cargo drafts → active preflight-only services/orchestrator/Cargo.toml",
+      "P101 plans → canonical GHOSTCLAW_HERMES_V5_MIGRATION_PHASES.md",
+      "Legacy file moves (6 files moved to legacy/)"
+    ],
+    "files_to_verify": [
+      "services/orchestrator/Cargo.toml",
+      "docs/plans/GHOSTCLAW_HERMES_V5_MIGRATION_PHASES.md",
+      "_A2A_QUEUE/outbox/checker_fix_evidence_20260714_042300.json"
+    ]
+  },
+  "instructions_for_codex": {
+    "action": "READ and VERIFY the diff corrections",
+    "checks": [
+      "D1: active preflight Cargo.toml parses and cargo metadata succeeds",
+      "D2: V5 spec compliance (no AbortWindow DO, added AI Gateway/Vectorize/Sandboxes)",
+      "D3: Legacy naming does not pollute main code paths",
+      "D5: P11 ends at preview tag, no production deploy command"
+    ],
+    "output_format": "Return JSON: { status: APPROVED|REJECTED, reasons: [], risk_tier: LOW }"
+  },
+  "safety_status": {
+    "no_deploy": true,
+    "dry_run_review": true,
+    "p1_p11_blocked_until_tony_approve": true
+  }
+}

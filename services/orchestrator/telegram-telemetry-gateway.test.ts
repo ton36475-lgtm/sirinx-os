@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 
-import { TelegramTelemetryGateway } from './telegram-telemetry-gateway';
+import { TelegramTelemetryGateway } from '../../legacy/telegram-telemetry-gateway';
 
 
 describe('TelegramTelemetryGateway', () => {

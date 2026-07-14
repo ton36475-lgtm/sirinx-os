@@ -1,0 +1,30 @@
+[package]
+name = "ghostclaw-hermes-v5-preflight"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "preflight.rs"
+
+[workspace]
+members = []
+resolver = "2"
+
+[workspace.metadata.ghostclaw]
+schema = "ghostclaw.hermes.v5.preflight"
+status = "preflight_only"
+target = "wasm32-unknown-unknown"
+p1_p11_execution = "blocked_until_tony_approve"
+planned_members = [
+  "crates/hermes-core",
+  "crates/hermes-worker",
+  "crates/hermes-governance",
+  "crates/hermes-lock",
+  "crates/hermes-router",
+  "crates/hermes-dispatch",
+  "crates/hermes-feed",
+]
+
+# P1 creates and enrolls planned members after the explicit execution gate.
+# The root package is a zero-dependency build sentinel, not a P1 runtime crate.

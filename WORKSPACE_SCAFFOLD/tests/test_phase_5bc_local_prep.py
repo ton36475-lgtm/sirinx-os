@@ -7,6 +7,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 SERVICE_DIR = ROOT / "services" / "orchestrator"
+LEGACY_DIR = ROOT / "legacy"
 sys.path.insert(0, str(SERVICE_DIR))
 
 from local_bridge_policy import (  # noqa: E402
@@ -26,13 +27,13 @@ def load_module(name: str, path: Path):
     return module
 
 
-lock_client = load_module("sirinx_lock_client", ROOT / ".scripts/sirinx-lock-client.py")
+lock_client = load_module("sirinx_lock_client", LEGACY_DIR / "sirinx-lock-client.py")
 tmux_preview = load_module(
     "tmux_worker_lock_manager", ROOT / ".scripts/tmux-worker-lock-manager.py"
 )
 checkpoint_store = load_module(
     "layered_redis_checkpointer",
-    ROOT / "packages/langchain-config/LayeredRedisCheckpointer.py",
+    LEGACY_DIR / "LayeredRedisCheckpointer.py",
 )
 
 
@@ -89,7 +90,7 @@ class Phase5BCLocalPrepTests(unittest.TestCase):
         self.assertTrue(verify_bridge_token("value", "value"))
 
     def test_daemon_and_wrapper_contain_no_live_dispatch_primitive(self):
-        daemon = (SERVICE_DIR / "local_bridge_daemon.py").read_text()
+        daemon = (LEGACY_DIR / "local_bridge_daemon.py").read_text()
         wrapper = (SERVICE_DIR / "sirinx-bridge-wrapper.sh.template").read_text()
         self.assertNotIn("subprocess", daemon)
         self.assertNotIn("SUPER_SECURE", daemon)

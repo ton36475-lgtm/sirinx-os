@@ -1,0 +1,55 @@
+{
+  "manifest_version": "SIRINX_OS_GODMODE_MASTERPROMPT_MIGRATION_2026-07-14",
+  "correlation_id": "hermes-fullstack-migration-final",
+  "source": "senior-fullstack-developer",
+  "target": "operator",
+  "workspace_audit": {
+    "repo_structure": {
+      "typescript_layers": 78,
+      "python_scripts": 67,
+      "shell_scripts": 23,
+      "agent_configs": 12
+    }
+  },
+  "mcp_connections": {
+    "supabase": "awaiting integration",
+    "cloudflare": "Phase 5B/C ready",
+    "figma": "API researched, integration planned",
+    "clickup": "API researched, integration planned",
+    "github": "API researched, integration planned",
+    "notion": "API researched, integration planned",
+    "linear": "API researched, integration planned"
+  },
+  "rust_workspace_p099": {
+    "planned_crates_not_scaffolded": [
+      "hermes-core",
+      "hermes-worker",
+      "hermes-governance",
+      "hermes-lock",
+      "hermes-router",
+      "hermes-dispatch"
+    ],
+    "cargo_toml": "services/orchestrator/Cargo.toml",
+    "workspace_status": "preflight_only_empty_members",
+    "migration_phases": "docs/plans/GHOSTCLAW_HERMES_V5_MIGRATION_PHASES.md"
+  },
+  "godmode_invariants": {
+    "hard_locked": true,
+    "high_tier_requires_approval": true,
+    "panic_overrides_all": true,
+    "godmode_never_overrides_high": true
+  },
+  "safety_status": {
+    "no_deploy": true,
+    "no_push": true,
+    "dry_run_only": true,
+    "operator_review_required": true
+  },
+  "next_steps_requires_approval": [
+    "Build Phase P1-P6 (Rust Cargo workspace)",
+    "Telegram inline keyboard implementation",
+    "Cloudflare preview planning followed by a separate production gate",
+    "Supabase integration activation",
+    "Full MCP connector wiring"
+  ]
+}

@@ -4,7 +4,7 @@ import {
   StateLockerDo,
   type DurableObjectStateLike,
   type DurableObjectStorageLike,
-} from './StateLockerDo';
+} from '../../../legacy/StateLockerDo';
 
 
 class FakeStorage implements DurableObjectStorageLike {

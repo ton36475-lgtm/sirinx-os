@@ -1,11 +1,11 @@
 # Phase 5B/5C Local Integration Preparation
 
 **Date:** 2026-07-14
-**Status:** `CODEX_HARDENED_LOCAL`
+**Status:** `ARCHIVED_COMPATIBILITY_EVIDENCE`
 
-This lane converts the Hermes Phase 5B/5C draft into bounded preparation
-artifacts. It does not prove a live Telegram, tmux, Redis, Cloudflare, or
-provider integration.
+This lane records the bounded Phase 5B/5C prototypes that were archived during
+the Hermes V5 rebase. It does not declare an active runtime and does not prove
+a live Telegram, tmux, Redis, Cloudflare, or provider integration.
 
 ## Safety Contract
 
@@ -20,16 +20,17 @@ provider integration.
 
 ## Artifacts
 
-- `services/orchestrator/telegram-telemetry-gateway.ts`
+- `legacy/telegram-telemetry-gateway.ts`
 - `services/orchestrator/local_bridge_policy.py`
-- `services/orchestrator/local_bridge_daemon.py`
-- `services/orchestrator/cloudflare/index.ts`
-- `services/orchestrator/cloudflare/StateLockerDo.ts`
+- `legacy/local_bridge_daemon.py`
+- `legacy/cloudflare/index.ts`
+- `legacy/StateLockerDo.ts`
 - `services/orchestrator/sirinx-bridge-wrapper.sh.template`
-- `services/orchestrator/wrangler.toml.edge-orchestrator.template`
-- `.scripts/sirinx-lock-client.py`
+- `legacy/cloudflare/wrangler.toml.edge-orchestrator.template`
+- `legacy/sirinx-lock-client.py`
 - `.scripts/tmux-worker-lock-manager.py`
-- `packages/langchain-config/LayeredRedisCheckpointer.py`
+- `legacy/LayeredRedisCheckpointer.py`
+- `legacy/langgraph-nodes/`
 
 ## Local Validation
 
@@ -41,9 +42,10 @@ provider integration.
 ## Known Limits
 
 - No dependency was installed and no live service was started.
-- The FastAPI adapter was compile-checked only.
+- The archived FastAPI adapter was compile-checked only.
 - `LayeredRedisCheckpointer` is a preparation adapter, not a declared
   `BaseCheckpointSaver` implementation.
+- The active orchestrator does not export the archived Phase 5A prototypes.
 - Cloudflare account bindings, Telegram credentials, Redis connectivity, and
   tmux worker sessions remain untested and gated.
 
