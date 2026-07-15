@@ -1,0 +1,13 @@
+{
+  "name": "@sirinx/skills-api",
+  "version": "0.1.0",
+  "description": "API gateway for SIRINX Skills Kit - autonomous development + marketing automation",
+  "license": "MIT",
+  "main": "src/index.mjs",
+  "scripts": {
+    "dev": "node src/server.mjs",
+    "start": "node src/server.mjs",
+    "check": "node --check src/index.mjs && node --check src/skills-router.mjs"
+  },
+  "dependencies": {}
+}
