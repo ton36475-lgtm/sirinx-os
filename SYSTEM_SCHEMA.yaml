@@ -1,0 +1,155 @@
+# SIRINX OS — Multi-Agent Lane Schema
+# 
+# RULE: Each agent OWNS their lanes. No cross-writes.
+# Coordination happens through A2A sync + Hermes, NOT through shared files.
+#
+# Worktree isolation: each agent works in its own git worktree.
+# Merge happens through Hermes orchestration only.
+#
+# ╔══════════════════════════════════════════════════════════╗
+# ║  LANE ASSIGNMENTS (zero overlap by design)                ║
+# ╚══════════════════════════════════════════════════════════╝
+
+version: 2.0
+created: 2026-07-17
+status: active
+
+# ── WORKTREE MAP ──────────────────────────────────────────
+worktrees:
+  codex:
+    path: ~/sirinx-os/.worktrees/codex
+    branch: vibe/codex
+    role: "Backend + Logic + Core Systems"
+    
+  opencode:
+    path: ~/sirinx-os/.worktrees/opencode
+    branch: vibe/opencode
+    role: "Frontend + QA + Infrastructure"
+    
+  claude:
+    path: ~/sirinx-os/.worktrees/claude
+    branch: vibe/claude
+    role: "Design + Contracts + Documentation"
+    
+  hermes:
+    path: ~/sirinx-os
+    branch: migration/v5-rebase
+    role: "Orchestration + Sync + Main branch"
+    
+  zcode:
+    path: ~/ZCodeProject
+    branch: null  # standalone, no git worktree
+    role: "Research + Local AI + Prototyping"
+
+# ── FILE OWNERSHIP (EXCLUSIVE) ────────────────────────────
+# Each path prefix belongs to EXACTLY ONE agent.
+# Violations = merge conflict, auto-rejected.
+
+lanes:
+  codex:
+    owns:
+      - "services/**"
+      - "crates/**"
+      - "GHOSTCLAW/workers/**"
+      - "GHOSTCLAW/agents/**"
+      - "GHOSTCLAW/protocols/**"
+      - "GHOSTCLAW/models/**"
+      - "ghostclaw-os/**"
+      - "packages/database/**"
+      - "packages/security/**"
+      - "packages/agent-sdk/**"
+    description: "Backend services, Rust crates, GhostClaw core logic, DB layer"
+    
+  opencode:
+    owns:
+      - "apps/**"
+      - "tests/**"
+      - "infra/**"
+      - "infrastructure/**"
+      - "security/**"
+      - "packages/ui/**"
+      - "packages/types/**"
+      - "packages/logger/**"
+      - "devtools/**"
+      - "playwright-report/**"
+    description: "Frontend apps, UI components, tests, infrastructure, security scanning"
+    
+  claude:
+    owns:
+      - "docs/**"
+      - "prompts/**"
+      - "kms/**"
+      - "schemas/**"
+      - "packages/config/**"
+      - "packages/provider-adapters/**"
+      - "WORKSPACE_SCAFFOLD/**"
+      - "openwiki/**"
+      - "examples/**"
+    description: "Architecture docs, API contracts, config schemas, knowledge management"
+    
+  hermes:
+    owns:
+      - "scripts/**"
+      - "integrations/**"
+      - ".ghostclaw_runtime/**"
+      - "00_COMMAND_CENTER/**"
+      - "commands/**"
+      - "workflows/**"
+      - "runbooks/**"
+      - "state/**"
+      - "policies/**"
+      - "policy/**"
+    description: "Orchestration scripts, OmniRoute integration, runtime state, command center"
+    
+  zcode:
+    owns:
+      - "research/**"
+      - "brain/**"
+      - "_SECOND_BRAIN/**"
+      - "_OBSIDIAN_GHOSTCLAW_BRAIN/**"
+      - "ollama/**"
+      - "vault/**"
+    description: "Research outputs, local AI, knowledge vault, Obsidian brain sync"
+
+# ── SHARED READ-ONLY (any agent can READ, none can WRITE) ──
+shared_readonly:
+  - ".env.example"
+  - "AGENTS.md"
+  - "CLAUDE.md"
+  - "RULES_FOR_CODEX.md"
+  - "PROJECT_STATE.md"
+  - "RELEASE_GATE.md"
+  - "package.json"
+  - "pnpm-workspace.yaml"
+  - "turbo.json"
+  - ".gitignore"
+
+# ── COORDINATION PROTOCOL ─────────────────────────────────
+coordination:
+  # A2A pulses — all agents write to their OWN session files
+  a2a_dir: "~/.hermes/profiles/solis/a2a-sync/"
+  
+  # Lock files prevent concurrent writes to same worktree
+  lock_dir: "~/sirinx-os/.worktrees/.locks/"
+  
+  # Hermes is the ONLY agent that merges worktrees to main
+  merge_agent: "hermes"
+  
+  # Merge happens through structured PRs, not direct push
+  merge_protocol:
+    1: "Agent commits to own worktree branch"
+    2: "Agent logs completion via A2A pulse"
+    3: "Hermes reviews A2A state + worktree diff"
+    4: "Hermes merges to migration/v5-rebase"
+    5: "Hermes notifies agent of merge result"
+    
+  # Conflict resolution: Hermes wins, agent rebases
+  conflict_policy: "hermes-resolves"
+
+# ── ANTI-OVERLAP GUARD ────────────────────────────────────
+# Pre-commit hook checks: if a file change touches another lane, REJECT
+guard:
+  enabled: true
+  script: "scripts/guard-lanes.sh"
+  check_on: "pre-commit"
+  reject_message: "BLOCKED: File belongs to another agent's lane. See SYSTEM_SCHEMA.yaml"
