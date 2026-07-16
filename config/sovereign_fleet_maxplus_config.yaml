@@ -1,51 +1,15 @@
-# Sovereign Fleet Free Model Pack - Hermes Configuration
-# Full spec driving goal autoloop end-to-end integration
+# MaxPlus API Configuration
+# IMPORTANT: These values are placeholders - rotate before production
+# Original keys were compromised and removed
 
-credential_pools:
-  maxplus:
-    - api_key: "ccsk-5a33e451552dd5d1a9800e38b3c62b17a6c5279431d359c71f45e128c4638b10"
-      name: "maxplus-key-01"
-      base_url: "https://api.maxplus-ai.cc/v1"
-    - api_key: "ccsk-8ee4b6441586b4d19cc859869c268403e530b1b22ed4b7919599a72193e519b5"
-      name: "maxplus-key-02"
-      base_url: "https://api.maxplus-ai.cc/v1"
-    - api_key: "ccsk-dbfafcc...c386cb"
-      name: "maxplus-key-03-deepseek-v4-pro"
-      priority: 1
-      base_url: "https://api.maxplus-ai.cc/v1"
-    strategy: round_robin
-    exhausted_reset_after_hours: 24
+api_key: "CHANGE_ME_maxplus_api_key"
+secret_key: "CHANGE_ME_maxplus_secret_key"
 
-provider_mapping:
-  opencode-go:
-    endpoint: "https://api.maxplus-ai.cc/v1"
-    api_key_env: "MAXPLUS_API_KEY"
+# Environment settings
+environment: development
+endpoint: https://api.maxplus.example.com/v1
+timeout_ms: 30000
 
-  opencode:
-    endpoint: "https://api.maxplus-ai.cc/v1"
-    api_key_env: "MAXPLUS_API_KEY"
-    priority_models:
-      - maxplus-free/deepseek-v4-pro
-      - maxplus-free/glm-5.2
-      - maxplus-free/kimi-k2.7-code
-
-  maxplus-free:
-    endpoint: "https://api.maxplus-ai.cc/v1"
-    api_key_env: "MAXPLUS_API_KEY"
-
-free_model_pack:
-  priority_order:
-    1: opencode-go/deepseek-v4-pro
-    2: opencode/deepseek-v4-flash-free
-    3: maxplus-free/glm-5.2
-    4: maxplus-free/kimi-k2.7-code
-    5: nvidia/nemotron-3-ultra-550b-a55b:free
-    6: z-ai/glm-5.2
-
-autoloop:
-  max_loops_per_mission: 5
-  budget_guard_usd: 2.00
-  escalation_threshold_usd: 0.50
-  evidence_chain_hash: true
-  real_time_streaming: true
-  websocket_endpoint: "ws.sirinx.co/stream"
+# Rate limiting
+rate_limit_rpm: 60
+rate_limit_burst: 10
