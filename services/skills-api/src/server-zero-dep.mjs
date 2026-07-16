@@ -9,6 +9,7 @@
 import http from 'http';
 import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { homedir } from 'os';
 
 const PORT_SOURCE = process.env.SKILLS_API_PORT
   ? 'SKILLS_API_PORT'
@@ -19,6 +20,7 @@ const PORT = Number(process.env.SKILLS_API_PORT || process.env.SKILLS_WS_PORT ||
 const HOST = process.env.SKILLS_API_HOST || '127.0.0.1';
 const DRY_RUN = process.env.SKILLS_DRY_RUN !== 'false';
 const SKILLS_PATH = '/Users/sirinx/sirinx-os/skills';
+const GHOSTCLAW_SKILLS_PATH = join(homedir(), '.hermes', 'profiles', 'solis', 'skills', 'ghostclaw-os');
 
 if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
   throw new RangeError(`Invalid Skills API port from ${PORT_SOURCE}`);

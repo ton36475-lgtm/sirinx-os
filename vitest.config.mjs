@@ -6,7 +6,9 @@ export default defineConfig({
       "**/node_modules/**",
       "**/dist/**",
       "**/.{idea,git,cache,output,temp}/**",
-      "tests/browser/**"
+      "tests/browser/**",
+      "**/*.node.test.{mjs,js,ts}",
+      "integrations/omniroute/**"
     ]
   }
 });

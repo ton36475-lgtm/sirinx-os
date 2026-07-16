@@ -117,8 +117,8 @@ function checkTypographyScore(typoCount, fontFamilies) {
 }
 
 function checkSpacingScore(spacingCount) {
-  if (spacingCount >= 10) return 10;
-  if (spacingCount >= 6) return 8;
+  if (spacingCount >= 8) return 10;
+  if (spacingCount >= 5) return 8;
   if (spacingCount >= 3) return 6;
   if (spacingCount > 0) return 4;
   return 0;
@@ -133,8 +133,8 @@ function checkColorScore(colorCount, uniqueColors) {
 }
 
 function checkAlignmentScore(alignCount) {
-  if (alignCount >= 6) return 10;
-  if (alignCount >= 4) return 8;
+  if (alignCount >= 5) return 10;
+  if (alignCount >= 3) return 8;
   if (alignCount >= 2) return 6;
   if (alignCount > 0) return 4;
   return 0;

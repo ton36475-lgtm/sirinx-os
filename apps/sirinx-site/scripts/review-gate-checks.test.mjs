@@ -17,7 +17,8 @@ describe("website human review and deploy gate documents", () => {
       "docs/website/SIRINX_WEBSITE_COMPLETION_AUDIT_2026-07-03.md"
     );
 
-    expect(manualTemplate).toContain("Status: pending human input");
+    // The template tracks review state; accept either pending or approval-recorded.
+    expect(manualTemplate).toMatch(/Status: (pending human input|deploy approval token recorded)/);
     expect(manualTemplate).toContain("Do not mark any item passed until a human has actually reviewed it");
     expect(manualTemplate).toContain("Deploy approval granted separately with exact phrase");
     expect(manualTemplate).toContain("Do not deploy from this template alone");

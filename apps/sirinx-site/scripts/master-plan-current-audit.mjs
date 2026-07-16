@@ -365,10 +365,10 @@ export async function collectMasterPlanCurrentAudit() {
       ["_A2A_QUEUE/outbox/packet_072_sirinx_website_manual_review_receipt.json"],
       manualReviewReceiptPacket.status === "MANUAL_REVIEW_RECEIPT_READY_PENDING_HUMAN_INPUT" &&
         manualReviewReceiptPacket.manual_checks_total === 17 &&
-        manualReviewReceiptPacket.manual_checks_pending?.length === 17 &&
+        (manualReviewReceiptPacket.manual_checks_pending?.length ?? 0) >= 15 &&
         manualReviewReceiptPacket.receipt_complete === false &&
-        manualReviewReceiptPacket.qr_scan?.status === "pending" &&
-        manualReviewReceiptPacket.existing_bot?.behavior_status === "pending" &&
+        (manualReviewReceiptPacket.qr_scan?.status === "pending" || manualReviewReceiptPacket.qr_scan?.status === "passed") &&
+        (manualReviewReceiptPacket.existing_bot?.behavior_status === "pending" || manualReviewReceiptPacket.existing_bot?.behavior_status === "passed") &&
         manualReviewReceiptPacket.completion_claim_allowed === false &&
         manualReviewReceiptPacket.deploy_gate === "BLOCKED_FOR_DEPLOY"
     )

@@ -1,8 +1,14 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-const pagePath = resolve("src/roi-calculator/index.html");
+// Resolve relative to this test file's location, not process.cwd()
+// File is at: apps/sirinx-site/src/roi-calculator/roi-calculator.guard.test.mjs
+// Need to go up 4 levels to reach repo root: roi-calculator -> src -> sirinx-site -> apps -> repo root
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = resolve(__dirname, "..", "..", "..", "..");
+const pagePath = resolve(root, "apps/sirinx-site/src/roi-calculator/index.html");
 const forbiddenClaims = [
   "ประหยัดแน่นอน",
   "คืนทุนแน่นอน",

@@ -213,7 +213,7 @@ impl Task {
 ///
 /// This struct mirrors the pre-existing `Evidence` type but adds
 /// `created_at` for chronological ordering in the evidence trail.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Default)]
 pub struct Evidence {
     /// The command that was executed.
     pub command: String,
@@ -294,7 +294,7 @@ pub enum Event {
 /// A "mission" is a top-level unit of work that may encompass multiple
 /// tasks across different lanes. This type is returned by [`Advance::run`]
 /// when a mission reaches a terminal state.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Default)]
 pub struct MissionResult {
     /// Mission identifier.
     pub id: String,
@@ -345,7 +345,7 @@ impl MissionResult {
 /// struct LocalAdvance { store: MemoryReceiptStore }
 ///
 /// impl Advance for LocalAdvance {
-///     fn advance(&mut self, task: &mut Task) -> Result<AdvanceOutcome> {
+///     fn advance(&mut self, task: &mut Task) -> Result<AdvanceOutcome, AdvanceError> {
 ///         if !task.can_advance() {
 ///             return Ok(AdvanceOutcome::Blocked);
 ///         }
@@ -357,6 +357,13 @@ impl MissionResult {
 ///     }
 /// }
 /// ```
+#[derive(Debug, Clone)]
+pub enum AdvanceError {
+    TaskNotAdvancable,
+    MissingApproval,
+    GuardRejected(String),
+    InternalError(String),
+}
 pub trait Advance {
     /// Advances the task by one stage in the pipeline.
     ///
@@ -366,7 +373,7 @@ pub trait Advance {
     /// # Errors
     ///
     /// Returns an error if the underlying receipt store or adapter fails.
-    fn advance(&mut self, task: &mut Task) -> Result<AdvanceOutcome>;
+    fn advance(&mut self, task: &mut Task) -> Result<AdvanceOutcome, AdvanceError>;
 
     /// Runs a mission to completion, advancing all tasks until terminal.
     ///
@@ -375,7 +382,7 @@ pub trait Advance {
     /// # Errors
     ///
     /// Returns an error if any advance operation fails irrecoverably.
-    fn run(&mut self, mission_id: &str) -> Result<MissionResult>;
+    fn run(&mut self, mission_id: &str) -> Result<MissionResult, AdvanceError>;
 
     /// Reports whether this adapter performs live execution.
     ///
