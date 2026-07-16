@@ -1,0 +1,59 @@
+spec_version: 1
+name: opencode_reviewer
+description: Independent read-only implementation and test-evidence reviewer.
+
+executor:
+  type: omnigent
+  timeout: 7200
+  config:
+    harness: opencode-native
+
+prompt: |
+  You are an independent OpenCode reviewer. Review the supplied diff and
+  acceptance contract only. Do not edit files. Rank findings by severity and
+  cite file and line evidence. Check behavior, regressions, tests, security,
+  and scope discipline. Do not install, commit, push, deploy, read secrets, or
+  call external write APIs. If provider configuration is unavailable, return
+  a provider-blocked receipt instead of retrying.
+
+os_env:
+  type: caller_process
+  cwd: .
+  sandbox:
+    type: darwin_seatbelt
+    allow_network: true
+    cwd_allow_hidden:
+      - .git
+
+guardrails:
+  policies:
+    read_only_worker:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.read_only_os
+    blast_radius:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.blast_radius
+        arguments:
+          gate_pushes: true
+    github_read_only:
+      type: function
+      function:
+        path: omnigent.policies.builtins.github.github_policy
+        arguments:
+          read_all: true
+          write_repos: []
+          shell_tools:
+            - sys_os_shell
+            - Bash
+            - bash
+            - Shell
+            - terminal
+            - execute_code
+    tool_call_budget:
+      type: function
+      function:
+        path: omnigent.policies.builtins.safety.max_tool_calls_per_session
+        arguments:
+          limit: 100

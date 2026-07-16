@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { getTelegramCommandCatalog } from "./telegram-command-registry.mjs";
 
 export const DEFAULT_TELEGRAM_GATEWAY_CONFIG_PATH = "configs/hermes_telegram_gateway.config.json";
 
@@ -57,8 +58,32 @@ export function validateTelegramGatewayConfig(config, options = {}) {
   if (config?.credentials?.printValues !== false) {
     issues.push("credential_values_must_not_be_printed");
   }
+  if (config?.credentials?.tokenEnvKey !== "TelegramBotToken") {
+    issues.push("canonical_telegram_token_key_required");
+  }
+  if (config?.credentials?.primaryChatEnvKey !== "TelegramHomeChannel") {
+    issues.push("canonical_telegram_home_channel_key_required");
+  }
+  if (config?.credentials?.fallbackChatEnvKey !== "TelegramChatId") {
+    issues.push("canonical_telegram_chat_id_key_required");
+  }
+  if (config?.credentials?.approvalSigningKeyEnvKey !== "GhostClawTelegramTrustKey") {
+    issues.push("canonical_telegram_trust_key_required");
+  }
   if (config?.gates?.liveSend?.status !== "closed") {
     issues.push("live_send_gate_must_be_closed");
+  }
+  if (config?.gates?.liveSend?.receiptSchema !== "ghostclaw.telegram.approval-receipt.v2") {
+    issues.push("signed_live_send_receipt_v2_required");
+  }
+  if (config?.gates?.liveSend?.singleUse !== true) {
+    issues.push("live_send_receipt_single_use_required");
+  }
+  if (config?.gates?.liveSend?.signatureAlgorithm !== "hmac-sha256") {
+    issues.push("live_send_receipt_hmac_required");
+  }
+  if (!config?.gates?.liveSend?.pendingReceiptRoot || !config?.gates?.liveSend?.consumedReceiptRoot) {
+    issues.push("live_send_receipt_roots_required");
   }
   if (config?.blockedActions?.liveTelegramSend !== true) {
     issues.push("live_telegram_send_must_be_blocked_by_default");
@@ -66,22 +91,26 @@ export function validateTelegramGatewayConfig(config, options = {}) {
   if (config?.routing?.queuePayloadExecution !== false) {
     issues.push("queue_payload_execution_must_be_false");
   }
-  if (config?.modelRouting) {
-    if (config.modelRouting.provider !== "openrouter") {
-      issues.push("model_routing_provider_must_be_openrouter");
-    }
-    if (config.modelRouting.profile !== "fable5") {
-      issues.push("model_routing_profile_must_be_fable5");
-    }
-    if (config.modelRouting.apiKeyEnvKey !== "OPENROUTER_API_KEY") {
-      issues.push("model_routing_openrouter_env_key_required");
-    }
-    if (config.modelRouting.defaultProviderCall !== false) {
-      issues.push("model_routing_default_provider_call_must_be_false");
-    }
-    if (config.gates?.openRouterFable5ProviderCall?.status !== "closed") {
-      issues.push("openrouter_fable5_provider_call_gate_must_be_closed");
-    }
+  if (!config?.commands?.registryPath) {
+    issues.push("command_registry_path_required");
+  }
+  if (config?.commands?.sourceOfTruth !== "registry") {
+    issues.push("command_registry_must_be_source_of_truth");
+  }
+  if (config?.commands?.inlineCommandCopiesAllowed !== false) {
+    issues.push("inline_command_copies_must_be_disabled");
+  }
+  if (config?.modelRouting?.sourceOfTruth !== "configs/ghostclaw_agent_coordination.config.json") {
+    issues.push("model_routing_coordination_source_required");
+  }
+  if (config?.modelRouting?.directProviderCall !== false) {
+    issues.push("model_routing_direct_provider_call_must_be_false");
+  }
+  if (config?.modelRouting?.providerCredentialMutation !== false) {
+    issues.push("model_routing_credential_mutation_must_be_false");
+  }
+  if (config.gates?.providerCall?.status !== "closed") {
+    issues.push("provider_call_gate_must_be_closed");
   }
 
   const secretLikePaths = collectSecretLikeValues(config);
@@ -104,33 +133,47 @@ export function validateTelegramGatewayConfig(config, options = {}) {
 export async function getTelegramGatewayConfigStatus(options = {}) {
   const loaded = await loadTelegramGatewayConfig(options);
   const validation = validateTelegramGatewayConfig(loaded.config, options);
+  let commandCatalog = null;
+  let commandRegistryError = null;
+  try {
+    commandCatalog = getTelegramCommandCatalog({
+      configPath: resolve(options.root || process.cwd(), loaded.config.commands?.registryPath || "")
+    });
+  } catch (error) {
+    commandRegistryError = error instanceof Error ? error.message : String(error);
+  }
+  const registryValid = Boolean(commandCatalog?.validation?.ok);
+  const ready = validation.valid && registryValid;
   return {
     title: "Hermes Telegram Gateway Config",
-    status: validation.valid ? "telegram-gateway-config-ready-local-safe" : "telegram-gateway-config-invalid",
+    status: ready ? "telegram-gateway-config-ready-local-safe" : "telegram-gateway-config-invalid",
     configPath: loaded.configPath,
     mode: loaded.config.mode || "unknown",
     approvalReference: loaded.config.approval_reference || null,
     liveSendGate: loaded.config.gates?.liveSend?.status || "unknown",
     webhookGate: loaded.config.gates?.webhookActivation?.status || "unknown",
     runtimeRestartGate: loaded.config.gates?.runtimeRestart?.status || "unknown",
-    acceptedCommands: loaded.config.commands?.accepted || [],
+    commandRegistry: {
+      path: loaded.config.commands?.registryPath || null,
+      sourceOfTruth: loaded.config.commands?.sourceOfTruth || null,
+      version: commandCatalog?.registry?.version || null,
+      valid: registryValid,
+      error: commandRegistryError
+    },
+    acceptedCommands: commandCatalog?.acceptedCommands || [],
+    callbackCommands: commandCatalog?.callbackCommands || [],
     routing: {
       controlPlane: loaded.config.routing?.controlPlane,
       a2a2aInboxPath: loaded.config.routing?.a2a2aInboxPath,
       queuePayloadExecution: loaded.config.routing?.queuePayloadExecution === true
     },
-    modelRouting: loaded.config.modelRouting
-      ? {
-          provider: loaded.config.modelRouting.provider,
-          model: loaded.config.modelRouting.model,
-          profile: loaded.config.modelRouting.profile,
-          apiKeyEnvKey: loaded.config.modelRouting.apiKeyEnvKey,
-          defaultProviderCall: loaded.config.modelRouting.defaultProviderCall === true,
-          providerCallGate: loaded.config.gates?.openRouterFable5ProviderCall?.status || "unknown",
-          providerCallApproval:
-            loaded.config.gates?.openRouterFable5ProviderCall?.requiredApproval || null
-        }
-      : null,
+    modelRouting: {
+      sourceOfTruth: loaded.config.modelRouting?.sourceOfTruth || null,
+      directProviderCall: loaded.config.modelRouting?.directProviderCall === true,
+      providerCredentialMutation: loaded.config.modelRouting?.providerCredentialMutation === true,
+      providerCallGate: loaded.config.gates?.providerCall?.status || "unknown",
+      providerCallApprovalPattern: loaded.config.gates?.providerCall?.requiredApprovalPattern || null
+    },
     guardrails: {
       defaultLiveSend: loaded.config.gateway?.defaultLiveSend === true,
       webhookEnabled: loaded.config.gateway?.webhook?.enabled === true,
@@ -138,6 +181,20 @@ export async function getTelegramGatewayConfigStatus(options = {}) {
       tokenValuesStoredInRepo: loaded.config.credentials?.storeValuesInRepo === true,
       tokenValuesPrinted: loaded.config.credentials?.printValues === true,
       secretLikeValuesPresent: validation.secretLikePaths.length > 0
+    },
+    credentialContract: {
+      tokenEnvKey: loaded.config.credentials?.tokenEnvKey || null,
+      primaryChatEnvKey: loaded.config.credentials?.primaryChatEnvKey || null,
+      fallbackChatEnvKey: loaded.config.credentials?.fallbackChatEnvKey || null,
+      approvalSigningKeyEnvKey: loaded.config.credentials?.approvalSigningKeyEnvKey || null,
+      legacyEnvKeysAccepted: Boolean(loaded.config.credentials?.legacyEnvKeys)
+    },
+    approvalReceipt: {
+      schema: loaded.config.gates?.liveSend?.receiptSchema || null,
+      singleUse: loaded.config.gates?.liveSend?.singleUse === true,
+      signatureAlgorithm: loaded.config.gates?.liveSend?.signatureAlgorithm || null,
+      pendingRoot: loaded.config.gates?.liveSend?.pendingReceiptRoot || null,
+      consumedRoot: loaded.config.gates?.liveSend?.consumedReceiptRoot || null
     },
     validation,
     updatedAt: nowIso(options)

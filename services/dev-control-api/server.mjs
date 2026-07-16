@@ -46,6 +46,11 @@ import { createCenterBrainSyncDryRun, getCenterBrainHubStatus } from "./src/cent
 import { createRepoIntakeReviewDryRun, getRepoIntakeGateStatus } from "./src/repo-intake-gate.mjs";
 import { createTeamRuntimeBridgeDryRun, getTeamRuntimeBridgeStatus } from "./src/team-runtime-bridge.mjs";
 import {
+  getCloudflareDeployStatus,
+  createCloudflareDeployDryRun,
+  simulateCloudflareDeploy
+} from "./src/cloudflare-deploy-approval.mjs";
+import {
   createOpenRouterQwenAdapterDryRun,
   getOpenRouterQwenAdapterStatus
 } from "./src/openrouter-qwen-adapter.mjs";
@@ -57,7 +62,6 @@ import { getGhostClawControlPlaneStatus } from "./src/ghostclaw-control-plane-st
 import {
   createOpenRouterFable5AdapterDryRun,
   getOpenRouterFable5AdapterStatus,
-  OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
   runOpenRouterFable5LiveSmoke
 } from "./src/openrouter-fable5-adapter.mjs";
 import {
@@ -88,6 +92,7 @@ import {
 } from "./src/hermes-image-edit.mjs";
 import { getHermesAllJobsReadiness } from "./src/hermes-all-jobs-readiness.mjs";
 import { createLatentmasBenchDryRun, getLatentmasStatus } from "./src/latentmas-status.mjs";
+import { getGodmodeV5IntegrationStatus } from "./src/godmode-v5-integration-status.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -516,6 +521,28 @@ export async function handleRequest(request, response) {
       dryRunOnly: true,
       externalWrites: false
     });
+    return;
+  }
+
+  // ===== Skills API proxy =====
+  if (request.method === "GET" && url.pathname === "/api/skills/status") {
+    const skillsApiPort = process.env.SKILLS_API_PORT || 3800;
+    try {
+      const res = await fetch(`http://127.0.0.1:${skillsApiPort}/health`);
+      const data = await res.json();
+      sendJson(request, response, 200, {
+        skillsApiOnline: true,
+        skillsApiData: data,
+        proxyPort: skillsApiPort
+      });
+    } catch {
+      sendJson(request, response, 200, {
+        skillsApiOnline: false,
+        message: `Skills API not reachable on port ${skillsApiPort}`,
+        skillsDir: hermesSkillDir,
+        localSkillsCount: hermesSkills.length
+      });
+    }
     return;
   }
 
@@ -1023,6 +1050,32 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/godmode-v5/integration-status") {
+    try {
+      const payload = await getGodmodeV5IntegrationStatus({
+        repoRoot: projectRoot,
+        Requests: {
+          TelegramLiveSend: queryFlag(url, "telegramLiveSend"),
+          ProviderCall: queryFlag(url, "providerCall"),
+          CloudflareWrite: queryFlag(url, "cloudflareWrite"),
+          CloudflareDeploy: queryFlag(url, "cloudflareDeploy"),
+          GitPush: queryFlag(url, "gitPush"),
+          Install: queryFlag(url, "install")
+        }
+      });
+      sendJson(request, response, 200, payload);
+    } catch (error) {
+      sendJson(request, response, 503, {
+        Schema: "ghostclaw.godmode-v5.integration-status-error.v1",
+        Status: "Unavailable",
+        Error: "integration_status_unavailable",
+        Message: String(error?.message || error).slice(0, 300),
+        NoExternalSideEffects: true
+      });
+    }
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/model-routing-approval/openrouter-qwen") {
     sendJson(request, response, 200, getOpenRouterQwenModelRoutingApproval());
     return;
@@ -1384,34 +1437,6 @@ export async function handleRequest(request, response) {
   if (request.method === "POST" && url.pathname === "/api/openrouter-fable5-adapter/smoke") {
     try {
       const body = await readJson(request);
-      if (body.approval !== OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL) {
-        sendJson(request, response, 200, {
-          title: "OpenRouter Fable5 Live Smoke",
-          status: "blocked-openrouter-fable5-live-smoke",
-          mode: "bounded-provider-smoke",
-          requestId: String(body.requestId || "openrouter-fable5-live-smoke").trim(),
-          provider: "OpenRouter",
-          model: String(body.model || "anthropic/claude-fable-5").trim(),
-          providerCalled: false,
-          commandExecuted: false,
-          secretsRead: false,
-          keyValuePrinted: false,
-          canCallPaidApi: false,
-          providerAttemptCount: 0,
-          retryPolicy: {
-            maxProviderAttempts: 1,
-            retryAllowed: false,
-            repeatedRetryBlocked: true,
-            retryAfterFailure: false,
-            reason: "Fable5 is a gated high-cost route; failed smoke results must stop for operator review."
-          },
-          requiredApproval: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
-          blockedReason: "missing_exact_provider_call_approval",
-          nextRecommendedAction:
-            "Use the dry-run endpoint first, then include the exact approval only for one bounded provider-call smoke."
-        });
-        return;
-      }
       sendJson(request, response, 200, await runOpenRouterFable5LiveSmoke(body));
     } catch (error) {
       sendJson(request, response, 400, {
@@ -1676,6 +1701,42 @@ export async function handleRequest(request, response) {
       recordDryRunAuditEvent("invalid-json", body, 400);
       sendJson(request, response, 400, body);
     }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/cloudflare/deploy/status") {
+    sendJson(request, response, 200, await getCloudflareDeployStatus({ repoRoot: projectRoot }));
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/cloudflare/deploy/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(
+        request,
+        response,
+        200,
+        await createCloudflareDeployDryRun(body.gate || "user", { repoRoot: projectRoot })
+      );
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_request",
+        error: "cloudflare_deploy_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/cloudflare/deploy/simulate") {
+    sendJson(
+      request,
+      response,
+      200,
+      await simulateCloudflareDeploy({ repoRoot: projectRoot })
+    );
     return;
   }
 

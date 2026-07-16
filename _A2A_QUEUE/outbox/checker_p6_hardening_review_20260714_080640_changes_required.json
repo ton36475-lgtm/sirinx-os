@@ -1,0 +1,56 @@
+{
+  "schema": "ghostclaw.checker.review.v1",
+  "packet_id": "checker_p6_hardening_review_20260714_080640_changes_required",
+  "correlation_id": "hermes-v5-p6-hardening-20260714",
+  "timestamp": "2026-07-14T08:06:40+07:00",
+  "source": "codex-checker-local",
+  "target": "hermes-operator-review",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "migration/v5-rebase",
+  "head": "86fce6c",
+  "status": "CHANGES_REQUIRED",
+  "phase_verdicts": {
+    "P1": "REJECTED_NOT_IN_TRACKED_WORKSPACE_AND_BUILD_FAILS",
+    "P2": "REJECTED_UNLINKED_AND_PLACEHOLDER_IMPLEMENTATION",
+    "P3": "REJECTED_BUILD_AND_AUTH_FAILURES",
+    "P4": "SCAFFOLD_ONLY",
+    "P5": "SCAFFOLD_ONLY",
+    "P6": "REJECTED_TESTS_NOT_CONNECTED",
+    "P7_P11": "SCAFFOLD_ONLY_NOT_EXECUTABLE"
+  },
+  "validation": {
+    "tracked_preflight": {
+      "cargo_check": "PASS",
+      "cargo_clippy_deny_warnings": "PASS",
+      "cargo_test": "PASS_1_GATE_SENTINEL"
+    },
+    "isolated_seven_crate_candidate": {
+      "packages_discovered": 7,
+      "cargo_check_exit": 101,
+      "cargo_clippy_deny_warnings_exit": 101,
+      "cargo_test_exit": 101,
+      "wasm32_check_exit": 101,
+      "hermes_core_tests_discovered": 0,
+      "hermes_worker_compile_errors": 12
+    },
+    "submitted_paths_tracked": false,
+    "whitespace_check": "FAIL"
+  },
+  "approval": {
+    "exact_tony_slash_approve_found": false,
+    "sender_claim_accepted": false,
+    "execution_allowed": false,
+    "reason": "The authoritative tracked checker state still records P1-P11 blocked and the sender-side approval claim is quarantined."
+  },
+  "policy": {
+    "stage": false,
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "provider_call": false,
+    "secret_access": false,
+    "runtime_execution": false
+  },
+  "report": "reports/review/hermes-v5/CHECKER_P6_HARDENING_CHANGES_REQUIRED_20260714.md",
+  "next_action": "Correct the candidate in a separately authorized implementation lane, then resubmit raw seven-crate host and wasm32 validation evidence for Checker review."
+}

@@ -1,0 +1,27 @@
+# Cloudflare Workers configuration
+# Sirinx OS - Hermes Worker
+
+name = "hermes-v5-worker"
+main = "./build/worker.js"
+account_id = "CHANGE_ME" # Set via CF_ACCOUNT_ID env var
+
+# Build command
+[build]
+command = "cargo install -q worker-build && worker-build --release"
+
+# Environment variables (injected at deploy time)
+[vars]
+ENVIRONMENT = "production"
+WORKSPACE = "sirinx-os"
+
+# KV namespaces (bind via CF dashboard)
+[[kv_namespaces]]
+binding = "HERMES_LEDGER"
+id = "CHANGE_ME_LEDGER_ID"
+
+[[kv_namespaces]]
+binding = "IDEMPOTENCY_CACHE"
+id = "CHANGE_ME_CACHE_ID"
+
+# Routes (preview only - set actual route on deploy)
+# routes = [{ pattern = "hermes.sirinx.co/*", zone_id = "CHANGE_ME" }]

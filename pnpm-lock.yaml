@@ -130,6 +130,12 @@ importers:
 
   services/news-api: {}
 
+  services/orchestrator:
+    devDependencies:
+      wrangler:
+        specifier: 4.100.0
+        version: 4.100.0
+
 packages:
 
   '@a2a-js/sdk@0.2.5':

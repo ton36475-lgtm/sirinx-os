@@ -17,18 +17,29 @@ import {
 } from "./a2a2a-status-surface.mjs";
 import { getCodexTaskRunnerStatus, runCodexTask } from "./codex-task-runner.mjs";
 import {
-  createOpenRouterFable5AdapterDryRun,
-  getOpenRouterFable5AdapterStatus
-} from "./openrouter-fable5-adapter.mjs";
-import {
   formatHermesAllJobsReadinessMessage,
   getHermesAllJobsReadiness
 } from "./hermes-all-jobs-readiness.mjs";
+import { getRuntimeFoundationStatus, readRuntimeSecretCompat } from "./runtime-foundation.mjs";
+import { getAgentCoordinationStatus } from "./agent-coordination-contract.mjs";
+import { getGodmodeV5RuntimeStatus } from "./godmode-v5-state-contract.mjs";
 import {
-  createOpenRouterFusionRouterDryRun,
-  getOpenRouterFusionRouterStatus
-} from "./openrouter-fusion-router.mjs";
-import { getRuntimeFoundationStatus, readRuntimeSecret } from "./runtime-foundation.mjs";
+  createCloudflarePreviewPacket,
+  formatCloudflarePreviewPacketMessage,
+  formatCloudflareReadinessMessage,
+  getCloudflareDeploymentReadiness
+} from "./cloudflare-deployment-readiness.mjs";
+import {
+  buildTelegramCommandMenuFromRegistry,
+  getTelegramCommandCatalog,
+  resolveTelegramCommand
+} from "./telegram-command-registry.mjs";
+import {
+  digestTelegramRecipientTarget,
+  authorizeTelegramExactGate,
+  getTelegramCommandGateScope,
+  getTelegramExecutionIntent
+} from "./telegram-exact-gate.mjs";
 
 function nowIso(options = {}) {
   const now = options.now || (() => new Date());
@@ -70,116 +81,88 @@ function commandRequestsLiveSend(input = {}) {
   return /\blivesend\s*[:=]?\s*true\b/.test(raw) || /\btelegram\s+livesend\s*[:=]?\s*true\b/.test(raw);
 }
 
-export function buildTelegramCommandMenu() {
+function stripGateMaterial(options = {}) {
+  const {
+    exactGate,
+    approvalReceipt,
+    approvalReceiptPath,
+    requiredExactGate,
+    executionExactGate,
+    executionApprovalReceipt,
+    executionApprovalReceiptPath,
+    liveSendExactGate,
+    liveSendApprovalReceipt,
+    liveSendApprovalReceiptPath,
+    executionRequested,
+    providerCall,
+    deploy,
+    runtimeMutation,
+    ...runtimeOptions
+  } = options;
+  return runtimeOptions;
+}
+
+function blockedCommandResult(command, commandDefinition, handler, gateAssessment, options = {}) {
+  const reason = gateAssessment?.reason || "exact_gate_required";
   return {
-    inline_keyboard: [
-      [
-        { text: "MCP Sync", callback_data: "cmd:mcp-sync" },
-        { text: "Model Swap", callback_data: "cmd:model-swap" },
-        { text: "Reset", callback_data: "cmd:runtime-reset" }
-      ],
-      [
-        { text: "Hermes Status", callback_data: "cmd:status" },
-        { text: "All Jobs Ready", callback_data: "cmd:hermes-all-jobs-ready" }
-      ],
-      [
-        { text: "Fusion Smoke", callback_data: "cmd:fusion-smoke" }
-      ],
-      [
-        { text: "Fable5 Preview", callback_data: "cmd:fable5-preview" }
-      ],
-      [
-        { text: "Codex Queue", callback_data: "cmd:codex-status" },
-        { text: "Agent Loop", callback_data: "cmd:agent-loop-status" }
-      ],
-      [
-        { text: "Run Fusion Loop", callback_data: "cmd:agent-loop-fusion" },
-        { text: "Daily Report", callback_data: "cmd:daily-report" }
-      ],
-      [
-        { text: "A2A2A Status", callback_data: "cmd:a2a2a-status" }
-      ],
-      [
-        { text: "Dispatch Preview", callback_data: "cmd:a2a2a-dispatch-preview" }
-      ],
-      [
-        { text: "Gate Check", callback_data: "cmd:a2a2a-gate-check" }
-      ],
-      [
-        { text: "Execute Ready", callback_data: "cmd:a2a2a-execute-readiness" }
-      ],
-      [
-        { text: "Execute Cmd", callback_data: "cmd:a2a2a-execute-command-preview" }
-      ],
-      [
-        { text: "Completion Audit", callback_data: "cmd:a2a2a-completion-audit" }
-      ],
-      [
-        { text: "Live Gate Ready", callback_data: "cmd:a2a2a-live-gate-readiness" }
-      ]
-    ]
+    title: "SIRINX Telegram Command Router",
+    status: "blocked-telegram-command-execution",
+    command,
+    commandId: commandDefinition?.id || null,
+    handler,
+    owner: commandDefinition?.owner || null,
+    actionClass: commandDefinition?.actionClass || null,
+    requiresExactGate: Boolean(commandDefinition?.requiresExactGate),
+    messagePreview: `Execution blocked: ${reason}`,
+    hasInlineKeyboard: false,
+    actionResult: null,
+    executionGate: gateAssessment,
+    sendResult: {
+      status: "telegram-send-not-attempted",
+      telegramSent: false,
+      keyValuePrinted: false,
+      updatedAt: nowIso(options)
+    },
+    externalWrites: false,
+    providerCalled: false,
+    commandExecuted: false,
+    keyValuePrinted: false,
+    updatedAt: nowIso(options)
   };
 }
 
+export function buildTelegramCommandMenu() {
+  return buildTelegramCommandMenuFromRegistry();
+}
+
 export function getTelegramCommandRouterStatus(options = {}) {
+  const catalog = getTelegramCommandCatalog(options.registryOptions || {});
   return {
     title: "SIRINX Telegram Command Router",
     status: "telegram-command-router-ready",
     mode: "dry-run-first-with-explicit-live-send-gate",
-    acceptedCommands: [
-      "/commands",
-      "/status",
-      "/hermes all jobs ready",
-      "/hermes all jobs ready liveSend true",
-      "/hermes mcp-sync",
-      "/hermes model-swap",
-      "/hermes runtime-reset",
-      "/fusion smoke",
-      "/fable5 preview",
-      "/codex status",
-      "/codex run status",
-      "/agent loop status",
-      "/agent loop fusion",
-      "/a2a2a status",
-      "/a2a2a dispatch preview",
-      "/a2a2a gate check <exact gate>",
-      "/a2a2a execute readiness",
-      "/a2a2a execute command preview <exact gate>",
-      "/a2a2a completion audit",
-      "/a2a2a live gate readiness",
-      "/daily report"
-    ],
-    callbackCommands: [
-      "cmd:mcp-sync",
-      "cmd:model-swap",
-      "cmd:runtime-reset",
-      "cmd:status",
-      "cmd:hermes-all-jobs-ready",
-      "cmd:fusion-smoke",
-      "cmd:fable5-preview",
-      "cmd:codex-status",
-      "cmd:agent-loop-status",
-      "cmd:agent-loop-fusion",
-      "cmd:a2a2a-status",
-      "cmd:a2a2a-dispatch-preview",
-      "cmd:a2a2a-gate-check",
-      "cmd:a2a2a-execute-readiness",
-      "cmd:a2a2a-execute-command-preview",
-      "cmd:a2a2a-completion-audit",
-      "cmd:a2a2a-live-gate-readiness",
-      "cmd:daily-report"
-    ],
+    registryVersion: catalog.registry.version,
+    registryValidation: catalog.validation,
+    acceptedCommands: catalog.acceptedCommands,
+    callbackCommands: catalog.callbackCommands,
+    commandMetadata: catalog.commands.map((command) => ({
+      id: command.id,
+      handler: command.handler,
+      owner: command.owner,
+      actionClass: command.actionClass,
+      requiresExactGate: command.requiresExactGate
+    })),
     guardrails: {
+      singleWriterRole: catalog.registry.policies.singleWriterRole,
       arbitraryShell: false,
       deploy: false,
       push: false,
       publish: false,
-      providerCallOnlyForFusionSmoke: false,
-      fusionSmokeTelegramPreviewOnly: true,
-      fusionProviderCallRequiresSeparateGate: true,
-      providerCallRequiresOpenRouterKey: true,
-      fable5PreviewReadOnly: true,
-      fable5ProviderCallRequiresExplicitGate: true,
+      providerCallFromTelegramCommand: false,
+      providerCallsRequireSeparateExactGate: true,
+      modelRoutingUsesCoordinationContract: true,
+      legacyFusionAliasesPreviewOnly: true,
+      telegramCommandRegistrySingleSource: true,
       hermesAllJobsReadyReadOnly: true,
       telegramLiveSendTrueRequiresExactGate: true,
       a2a2aStatusReadOnly: true,
@@ -196,18 +179,61 @@ export function getTelegramCommandRouterStatus(options = {}) {
   };
 }
 
-function formatStatusMessage(foundation, codex, loop) {
+function formatStatusMessage(foundation, codex, loop, coordination) {
   return [
     "SIRINX Hermes Runtime Status",
     "",
     `Runtime: ${foundation.status}`,
-    `OpenRouter ready: ${foundation.readiness.openRouter ? "yes" : "no"}`,
+    `Architecture route: ${coordination.modelRoutes.architecture.status}`,
+    `Review route: ${coordination.modelRoutes.review.status}`,
     `Telegram ready: ${foundation.readiness.telegram ? "yes" : "no"}`,
     `Cloudflare ready: ${foundation.readiness.cloudflare ? "yes" : "no"}`,
     `Codex runner: ${codex.status}`,
     `Agent loop: ${loop.status}`,
     "",
     foundation.warnings.length ? `Warnings: ${foundation.warnings.join(", ")}` : "Warnings: none"
+  ].join("\n");
+}
+
+function formatAgentTeamStatusMessage(coordination) {
+  const routeLine = (label, route) => {
+    const selected = route?.selected ? ` (${route.selected})` : "";
+    return `${label}: ${route?.status || "unknown"}${selected}`;
+  };
+  return [
+    "GhostClaw Agentic Coding Team",
+    "",
+    `Coordination: ${coordination.status}`,
+    `Commander: ${coordination.ownership.missionCommander}`,
+    `Architecture: ${coordination.ownership.architectureOwner}`,
+    `Sole repo writer: ${coordination.ownership.repoWriter}`,
+    `Review: ${coordination.ownership.reviewOwner}`,
+    `Validation: ${coordination.ownership.validationOwner}`,
+    "",
+    routeLine("Architecture route", coordination.modelRoutes.architecture),
+    routeLine("Implementation route", coordination.modelRoutes.implementation),
+    routeLine("Review route", coordination.modelRoutes.review),
+    "",
+    `Active lease conflicts: ${coordination.assignmentConflicts.length}`,
+    coordination.warnings.length ? `Warnings: ${coordination.warnings.join(", ")}` : "Warnings: none"
+  ].join("\n");
+}
+
+function formatGodmodeV5StatusMessage(state) {
+  const completed = Object.values(state.ExitCriteria).filter(Boolean).length;
+  const total = Object.keys(state.ExitCriteria).length;
+  return [
+    "GhostClaw GODMODE V5",
+    "",
+    `Phase: ${state.Phase} (${state.PhaseIndex + 1}/${state.PhaseOrder.length})`,
+    `Owner: ${state.Owner}`,
+    `Status: ${state.Status}`,
+    `Exit criteria: ${completed}/${total}`,
+    `Attempt: ${state.Attempt}/${state.MaxRetries}`,
+    `Abort required: ${state.AbortRequired ? "yes" : "no"}`,
+    `Can advance: ${state.CanAdvance ? "yes" : "no"}`,
+    "",
+    "External action authorized: no"
   ].join("\n");
 }
 
@@ -223,11 +249,13 @@ function formatResultMessage(title, result) {
 async function resolveTelegramTarget(options = {}) {
   const botCredential = options.token
     ? { ok: true, value: options.token, error: null }
-    : await readRuntimeSecret("TELEGRAM_BOT_TOKEN", options);
+    : await readRuntimeSecretCompat("TelegramBotToken", ["TELEGRAM_BOT_TOKEN"], options);
   const home = options.chatId
     ? { ok: true, value: options.chatId, error: null }
-    : await readRuntimeSecret("TELEGRAM_HOME_CHANNEL", options);
-  const fallback = home.ok ? home : await readRuntimeSecret("TELEGRAM_CHAT_ID", options);
+    : await readRuntimeSecretCompat("TelegramHomeChannel", ["TELEGRAM_HOME_CHANNEL"], options);
+  const fallback = home.ok
+    ? home
+    : await readRuntimeSecretCompat("TelegramChatId", ["TELEGRAM_CHAT_ID"], options);
 
   return {
     ok: botCredential.ok && fallback.ok,
@@ -238,12 +266,43 @@ async function resolveTelegramTarget(options = {}) {
 }
 
 export async function sendTelegramRouterMessage(message, options = {}) {
+  const gateAssessment = await authorizeTelegramExactGate(
+    {
+      scope: "telegram_live_send",
+      commandId: safeString(options.commandId || "direct_message"),
+      requestId: safeString(options.requestId)
+    },
+    {
+      ...options,
+      exactGate: options.liveSendExactGate || options.exactGate,
+      approvalReceipt: options.liveSendApprovalReceipt || options.approvalReceipt,
+      approvalReceiptPath: options.liveSendApprovalReceiptPath || options.approvalReceiptPath,
+      approvalReceiptRoot: options.liveSendApprovalReceiptRoot || options.approvalReceiptRoot,
+      consumedReceiptRoot: options.liveSendConsumedReceiptRoot || options.consumedReceiptRoot,
+      expectedReceiptId: options.liveSendExpectedReceiptId || options.expectedReceiptId,
+      receiptSigningKey: options.telegramApprovalSigningKey || options.receiptSigningKey,
+      allowProvidedReceiptObject: options.allowProvidedReceiptObject === true,
+      consumeReceipt: options.consumeTelegramApprovalReceipt || options.consumeReceipt
+    }
+  );
+  if (!gateAssessment.authorized) {
+    return {
+      status: "blocked-telegram-send-exact-gate",
+      telegramSent: false,
+      blockedReason: gateAssessment.reason,
+      gateAssessment,
+      keyValuePrinted: false,
+      updatedAt: nowIso(options)
+    };
+  }
+
   const target = await resolveTelegramTarget(options);
   if (!target.ok) {
     return {
       status: "blocked-telegram-send",
       telegramSent: false,
       blockedReason: target.error,
+      gateAssessment,
       tokenPresent: target.token.present !== false,
       chatTargetPresent: target.chat.present !== false,
       keyValuePrinted: false,
@@ -251,17 +310,32 @@ export async function sendTelegramRouterMessage(message, options = {}) {
     };
   }
 
+  const recipientMatched =
+    Boolean(gateAssessment.recipientTargetDigest) &&
+    gateAssessment.recipientTargetDigest === digestTelegramRecipientTarget(target.chat.value);
+  if (!recipientMatched) {
+    return {
+      status: "blocked-telegram-send-recipient-mismatch",
+      telegramSent: false,
+      blockedReason: "approval_receipt_recipient_target_mismatch",
+      gateAssessment: { ...gateAssessment, recipientMatched: false },
+      keyValuePrinted: false,
+      updatedAt: nowIso(options)
+    };
+  }
+
   const fetchImpl = options.fetchImpl || globalThis.fetch;
+  const body = {
+    chat_id: target.chat.value,
+    text: message.text,
+    disable_web_page_preview: true,
+    ...(message.replyMarkup ? { reply_markup: message.replyMarkup } : {})
+  };
+  if (options.parseMode) body.parse_mode = options.parseMode;
   const response = await fetchImpl(`https://api.telegram.org/bot${target.token.value}/sendMessage`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      chat_id: target.chat.value,
-      text: message.text,
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      ...(message.replyMarkup ? { reply_markup: message.replyMarkup } : {})
-    })
+    body: JSON.stringify(body)
   });
   const text = await response.text();
   let json = null;
@@ -279,6 +353,7 @@ export async function sendTelegramRouterMessage(message, options = {}) {
     messageIdPresent: Boolean(json?.result?.message_id),
     chatIdPresent: Boolean(json?.result?.chat?.id),
     errorClass: response.ok ? null : safeString(json?.description || text).slice(0, 300),
+    gateAssessment: { ...gateAssessment, recipientMatched: true },
     keyValuePrinted: false,
     updatedAt: nowIso(options)
   };
@@ -286,178 +361,210 @@ export async function sendTelegramRouterMessage(message, options = {}) {
 
 export async function handleTelegramCommand(input = {}, options = {}) {
   const command = normalizeCommand(input.command || input.text || input.callbackData);
-  const reportedCommand = command.startsWith("/a2a2a gate check")
-    ? "/a2a2a gate check"
-    : command.startsWith("/a2a2a execute readiness")
-      ? "/a2a2a execute readiness"
-      : command.startsWith("/a2a2a execute command preview")
-        ? "/a2a2a execute command preview"
-        : command.startsWith("/hermes all jobs ready")
-          ? "/hermes all jobs ready"
-      : command;
+  const commandDefinition = resolveTelegramCommand(command, options.registryOptions || {});
+  const handler = commandDefinition?.handler || "unknown_command";
+  const reportedCommand = command.startsWith("cmd:") ? command : commandDefinition?.textCommands?.[0] || command;
+  const authorizationOptions = options;
+  const executionIntent = getTelegramExecutionIntent(options);
+  let executionGate = {
+    required: Boolean(commandDefinition?.requiresExactGate),
+    authorized: false,
+    status: executionIntent.requested ? "pending_exact_gate" : "preview_only_gate_not_consumed",
+    reason: null,
+    scope: commandDefinition ? getTelegramCommandGateScope(commandDefinition) : null,
+    commandId: commandDefinition?.id || null,
+    keyValuePrinted: false
+  };
+
+  if (executionIntent.requested) {
+    if (!commandDefinition?.requiresExactGate) {
+      executionGate = {
+        ...executionGate,
+        status: "blocked_exact_gate",
+        reason: "command_not_execution_capable"
+      };
+      return blockedCommandResult(reportedCommand, commandDefinition, handler, executionGate, options);
+    }
+
+    executionGate = await authorizeTelegramExactGate(
+      {
+        scope: getTelegramCommandGateScope(commandDefinition),
+        commandId: commandDefinition.id,
+        requestId: safeString(options.requestId)
+      },
+      {
+        ...options,
+        exactGate: options.executionExactGate || options.exactGate,
+        approvalReceipt: options.executionApprovalReceipt || options.approvalReceipt,
+        approvalReceiptPath: options.executionApprovalReceiptPath || options.approvalReceiptPath,
+        approvalReceiptRoot: options.executionApprovalReceiptRoot || options.approvalReceiptRoot,
+        consumedReceiptRoot: options.executionConsumedReceiptRoot || options.consumedReceiptRoot,
+        expectedReceiptId: options.executionExpectedReceiptId || options.expectedReceiptId,
+        receiptSigningKey: options.telegramApprovalSigningKey || options.receiptSigningKey,
+        allowProvidedReceiptObject: options.allowProvidedReceiptObject === true,
+        consumeReceipt: options.consumeTelegramApprovalReceipt || options.consumeReceipt
+      }
+    );
+    if (!executionGate.authorized) {
+      return blockedCommandResult(reportedCommand, commandDefinition, handler, executionGate, options);
+    }
+  }
+
+  options = stripGateMaterial(options);
   let message;
   let actionResult = null;
 
-  if (command === "/commands" || command === "cmd:commands") {
+  if (handler === "command_menu") {
     message = {
       text: "SIRINX Command Menu\nเลือกคำสั่งที่ต้องการให้ Hermes/Codex ตรวจหรือรันแบบปลอดภัย",
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/status" || command === "cmd:status") {
-    const [foundation, codex, loop] = await Promise.all([
+  } else if (handler === "runtime_status") {
+    const [foundation, codex, loop, coordination] = await Promise.all([
       getRuntimeFoundationStatus(options),
       getCodexTaskRunnerStatus(options),
-      getAgentLoopRuntimeStatus(options)
+      getAgentLoopRuntimeStatus(options),
+      getAgentCoordinationStatus(options)
     ]);
     message = {
-      text: formatStatusMessage(foundation, codex, loop),
+      text: formatStatusMessage(foundation, codex, loop, coordination),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command.startsWith("/hermes all jobs ready") || command === "cmd:hermes-all-jobs-ready") {
+  } else if (handler === "agent_team_status") {
+    actionResult = await getAgentCoordinationStatus(options);
+    message = {
+      text: formatAgentTeamStatusMessage(actionResult),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (handler === "godmode_v5_status") {
+    actionResult = await getGodmodeV5RuntimeStatus(options);
+    message = {
+      text: formatGodmodeV5StatusMessage(actionResult),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (handler === "all_jobs_readiness") {
     actionResult = await getHermesAllJobsReadiness({
       ...options,
-      liveSendRequested: command === "cmd:hermes-all-jobs-ready" ? false : commandRequestsLiveSend(input)
+      liveSendRequested: command.startsWith("cmd:") ? false : commandRequestsLiveSend(input)
     });
     message = {
       text: formatHermesAllJobsReadinessMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/fusion smoke" || command === "cmd:fusion-smoke") {
-    const status = getOpenRouterFusionRouterStatus(options);
-    actionResult = createOpenRouterFusionRouterDryRun(
-      {
-        requestId: "telegram-fusion-smoke-preview",
-        goal: "Preview OpenRouter Fusion routing for Hermes without provider execution."
-      },
-      options
-    );
+  } else if (handler === "model_smoke_preview") {
+    actionResult = await getAgentCoordinationStatus(options);
     message = {
       text: [
-        "OpenRouter Fusion Smoke Preview",
+        "Agent Model Smoke Preview",
         "",
         `Status: ${actionResult.status}`,
-        `Provider: ${status.provider}`,
-        `Model: ${status.model}`,
-        `Provider called: ${actionResult.providerCalled ? "yes" : "no"}`,
-        `Secrets read: ${actionResult.secretsRead ? "yes" : "no"}`,
-        "Retry loop: blocked",
-        "Next gate: separate bounded provider-call approval required"
+        `Architecture: ${actionResult.modelRoutes.architecture.status}`,
+        `Review: ${actionResult.modelRoutes.review.status}`,
+        "Provider called: no",
+        "Secrets read: no",
+        "Direct execution: blocked",
+        "Route source: configs/ghostclaw_agent_coordination.config.json"
       ].join("\n"),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/fable5 preview" || command === "cmd:fable5-preview") {
-    const status = getOpenRouterFable5AdapterStatus(options);
-    actionResult = createOpenRouterFable5AdapterDryRun(
-      {
-        requestId: "telegram-fable5-preview",
-        goal: "Configure Hermes Telegram to route high-reasoning tasks through OpenRouter Fable5 in preview-only mode."
-      },
-      options
-    );
-    message = {
-      text: [
-        "OpenRouter Fable5 Preview",
-        "",
-        `Status: ${actionResult.status}`,
-        `Provider: ${status.provider}`,
-        `Model: ${status.model.primary}`,
-        `Provider called: ${actionResult.providerCalled ? "yes" : "no"}`,
-        `Secrets read: ${actionResult.secretsRead ? "yes" : "no"}`,
-        `Next gate: ${status.gates.providerCall.requiredApproval}`
-      ].join("\n"),
-      replyMarkup: buildTelegramCommandMenu()
-    };
-  } else if (command === "/codex status" || command === "cmd:codex-status") {
+  } else if (handler === "codex_status") {
     const codex = getCodexTaskRunnerStatus(options);
     message = {
       text: `Codex Runner: ${codex.status}\nAllowed tasks: ${codex.allowedTasks.map((task) => task.id).join(", ")}`,
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/codex run status") {
+  } else if (handler === "codex_run_status") {
     actionResult = await runCodexTask({ requestId: "telegram-codex-status", task: "status" }, options);
     message = {
       text: formatResultMessage("Codex Local Task", actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/agent loop status" || command === "cmd:agent-loop-status") {
+  } else if (handler === "agent_loop_status") {
     const loop = getAgentLoopRuntimeStatus(options);
     message = {
       text: `Agent Loop: ${loop.status}\nStages: ${loop.stages.join(" -> ")}`,
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/agent loop fusion" || command === "cmd:agent-loop-fusion") {
-    actionResult = await runAgentLoop({ requestId: "telegram-agent-loop-fusion", goal: "Review fusion runtime readiness" }, options);
+  } else if (handler === "agent_loop_preview") {
+    actionResult = await runAgentLoop(
+      { requestId: "telegram-agent-loop-preview", goal: "Review coordinated agent runtime readiness" },
+      options
+    );
     message = {
-      text: formatResultMessage("Agent Loop Fusion Runtime", actionResult),
+      text: formatResultMessage("Agent Loop Runtime Preview", actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/a2a2a status" || command === "cmd:a2a2a-status") {
+  } else if (handler === "a2a2a_status") {
     actionResult = await getA2A2AStatusSurface(options);
     message = {
       text: formatA2A2AStatusMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/a2a2a dispatch preview" || command === "cmd:a2a2a-dispatch-preview") {
+  } else if (handler === "a2a2a_dispatch_preview") {
     actionResult = await getA2A2ADispatchPreviewSurface(options);
     message = {
       text: formatA2A2ADispatchPreviewMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command.startsWith("/a2a2a gate check") || command === "cmd:a2a2a-gate-check") {
+  } else if (handler === "a2a2a_gate_check") {
     actionResult = await getA2A2AGateCheckSurface({
       ...options,
-      gateText: command === "cmd:a2a2a-gate-check" ? "" : extractA2A2AGateCheckText(input)
+      gateText: command.startsWith("cmd:") ? "" : extractA2A2AGateCheckText(input)
     });
     message = {
       text: formatA2A2AGateCheckMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command.startsWith("/a2a2a execute readiness") || command === "cmd:a2a2a-execute-readiness") {
+  } else if (handler === "a2a2a_execute_readiness") {
     actionResult = await getA2A2AExecuteReadinessSurface({
       ...options,
-      gateText: command === "cmd:a2a2a-execute-readiness" ? "" : extractA2A2AExecuteReadinessText(input)
+      gateText: command.startsWith("cmd:") ? "" : extractA2A2AExecuteReadinessText(input)
     });
     message = {
       text: formatA2A2AExecuteReadinessMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command.startsWith("/a2a2a execute command preview") || command === "cmd:a2a2a-execute-command-preview") {
+  } else if (handler === "a2a2a_execute_command_preview") {
     actionResult = await getA2A2AExecuteCommandPreviewSurface({
       ...options,
-      gateText: command === "cmd:a2a2a-execute-command-preview" ? "" : extractA2A2AExecuteCommandPreviewText(input)
+      gateText: command.startsWith("cmd:") ? "" : extractA2A2AExecuteCommandPreviewText(input)
     });
     message = {
       text: formatA2A2AExecuteCommandPreviewMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/a2a2a completion audit" || command === "cmd:a2a2a-completion-audit") {
+  } else if (handler === "a2a2a_completion_audit") {
     actionResult = await getA2A2ACompletionAuditSurface(options);
     message = {
       text: formatA2A2ACompletionAuditMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/a2a2a live gate readiness" || command === "cmd:a2a2a-live-gate-readiness") {
+  } else if (handler === "a2a2a_live_gate_readiness") {
     actionResult = await getA2A2ALiveGateReadinessSurface(options);
     message = {
       text: formatA2A2ALiveGateReadinessMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/daily report" || command === "cmd:daily-report") {
-    const foundation = await getRuntimeFoundationStatus(options);
+  } else if (handler === "daily_report") {
+    const [foundation, coordination] = await Promise.all([
+      getRuntimeFoundationStatus(options),
+      getAgentCoordinationStatus(options)
+    ]);
     message = {
       text: [
         "SIRINX Daily Runtime Report",
         "",
         `Runtime: ${foundation.status}`,
-        `OpenRouter: ${foundation.readiness.openRouter ? "ready" : "blocked"}`,
+        `Architecture route: ${coordination.modelRoutes.architecture.status}`,
+        `Review route: ${coordination.modelRoutes.review.status}`,
         `Telegram: ${foundation.readiness.telegram ? "ready" : "blocked"}`,
         `Cloudflare: ${foundation.readiness.cloudflare ? "ready" : "blocked"}`,
         "",
-        "Next: run /agent loop fusion after credentials are complete."
+        "Next: run /agent loop preview after provider health gates are complete."
       ].join("\n"),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/hermes mcp-sync" || command === "cmd:mcp-sync") {
+  } else if (handler === "mcp_sync_preview") {
     actionResult = await runAgentLoop({
       requestId: "telegram-mcp-sync",
       goal: "Sync MCP tools (codex-mcp, slayer-mcp) to Codex via A2A packet. One-button sync."
@@ -479,30 +586,42 @@ export async function handleTelegramCommand(input = {}, options = {}) {
       ].join("\n"),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/hermes model-swap" || command === "cmd:model-swap") {
-    const config = {
-      current: "deepseek-v4-pro",
-      target: "claude-fable-5",
-      requiresGate: "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE"
-    };
+  } else if (handler === "model_route_preview") {
+    actionResult = await getAgentCoordinationStatus(options);
+    const architecture = actionResult.modelRoutes.architecture;
+    const implementation = actionResult.modelRoutes.implementation;
+    const review = actionResult.modelRoutes.review;
     message = {
       text: [
-        "Model Swap Request",
+        "Agent Team Model Routes",
         "",
-        `[CURRENT] ${config.current}`,
-        `[TARGET] ${config.target}`,
+        `Architecture: ${architecture.status}${architecture.selected ? ` (${architecture.selected})` : ""}`,
+        `Implementation: ${implementation.status}${implementation.selected ? ` (${implementation.selected})` : ""}`,
+        `Review: ${review.status}${review.selected ? ` (${review.selected})` : ""}`,
         "",
-        `Gate Required: ${config.requiresGate}`,
+        "Provider called: no",
+        "Route source: configs/ghostclaw_agent_coordination.config.json",
         "",
         "[SAFETY]",
         "dry_run: true",
         "provider_call: false",
-        "live_send: false",
-        "swap_pending_approval: true"
+        "live_send: false"
       ].join("\n"),
       replyMarkup: buildTelegramCommandMenu()
     };
-  } else if (command === "/hermes runtime-reset" || command === "cmd:runtime-reset") {
+  } else if (handler === "cloudflare_readiness") {
+    actionResult = await getCloudflareDeploymentReadiness(options);
+    message = {
+      text: formatCloudflareReadinessMessage(actionResult),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (handler === "cloudflare_preview_packet") {
+    actionResult = await createCloudflarePreviewPacket(options);
+    message = {
+      text: formatCloudflarePreviewPacketMessage(actionResult),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (handler === "runtime_reset_preview") {
     actionResult = await runAgentLoop({
       requestId: "telegram-runtime-reset",
       goal: "Clear runtime queues and re-check all readiness lanes. Safe local reset."
@@ -532,7 +651,10 @@ export async function handleTelegramCommand(input = {}, options = {}) {
 
   const sendResult =
     options.liveSend === true
-      ? await sendTelegramRouterMessage(message, options)
+      ? await sendTelegramRouterMessage(message, {
+          ...authorizationOptions,
+          commandId: commandDefinition?.id || "unknown_command"
+        })
       : {
           status: "telegram-send-preview",
           telegramSent: false,
@@ -544,6 +666,13 @@ export async function handleTelegramCommand(input = {}, options = {}) {
     title: "SIRINX Telegram Command Router",
     status: sendResult.telegramSent ? "completed-telegram-command" : "blocked-or-preview-telegram-command",
     command: reportedCommand,
+    commandId: commandDefinition?.id || null,
+    handler,
+    owner: commandDefinition?.owner || null,
+    actionClass: commandDefinition?.actionClass || null,
+    requiresExactGate: Boolean(commandDefinition?.requiresExactGate),
+    executionIntent,
+    executionGate,
     messagePreview: message.text.slice(0, 1200),
     hasInlineKeyboard: Boolean(message.replyMarkup),
     actionResult,

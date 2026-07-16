@@ -7,7 +7,8 @@
     "codex-build-captain",
     "glm52-worker",
     "deepseek-worker",
-    "kimi-worker"
+    "kimi-worker",
+    "gridguist-designer"
   ],
   "agents": {
     "build": {

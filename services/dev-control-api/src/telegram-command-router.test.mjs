@@ -5,9 +5,28 @@ import {
   handleTelegramCommand,
   sendTelegramRouterMessage
 } from "./telegram-command-router.mjs";
+import { createTelegramApprovalReceipt } from "./telegram-exact-gate.mjs";
 
 const fixedNow = () => new Date("2026-06-15T14:30:00.000Z");
 const secretLikePattern = /bot[0-9]+:[A-Za-z0-9_-]{20,}|TELEGRAM_BOT_TOKEN\s*=\s*[^"'\s]{8,}/;
+const liveSendGate = "APPROVE_TELEGRAM_GATEWAY_LIVE_SEND_A019E53EE";
+const signingKey = "telegram-router-test-signing-key-32-bytes-minimum";
+
+function liveSendReceipt(commandId, recipientTarget = "test-chat") {
+  return createTelegramApprovalReceipt({
+    receiptId: `receipt-${commandId}`,
+    scope: "telegram_live_send",
+    commandId,
+    requestedBy: "codex_build_captain",
+    approvedBy: "hermes_commander",
+    exactGate: liveSendGate,
+    recipientTarget,
+    configuredChatMatched: true,
+    tokenPresenceOnlyChecked: true,
+    issuedAt: "2026-06-15T14:25:00.000Z",
+    expiresAt: "2026-06-15T14:35:00.000Z"
+  }, { signingKey });
+}
 
 describe("Telegram command router", () => {
   it("exposes a simple button menu and safe command map", () => {
@@ -16,13 +35,15 @@ describe("Telegram command router", () => {
 
     expect(status.status).toBe("telegram-command-router-ready");
     expect(status.mode).toBe("dry-run-first-with-explicit-live-send-gate");
+    expect(status.registryVersion).toBe("2.3.0");
+    expect(status.registryValidation.ok).toBe(true);
     expect(status.guardrails.arbitraryShell).toBe(false);
     expect(status.guardrails.liveSendRequiresExplicitTrue).toBe(true);
-    expect(status.guardrails.providerCallOnlyForFusionSmoke).toBe(false);
-    expect(status.guardrails.fusionSmokeTelegramPreviewOnly).toBe(true);
-    expect(status.guardrails.fusionProviderCallRequiresSeparateGate).toBe(true);
-    expect(status.guardrails.fable5PreviewReadOnly).toBe(true);
-    expect(status.guardrails.fable5ProviderCallRequiresExplicitGate).toBe(true);
+    expect(status.guardrails.providerCallFromTelegramCommand).toBe(false);
+    expect(status.guardrails.providerCallsRequireSeparateExactGate).toBe(true);
+    expect(status.guardrails.modelRoutingUsesCoordinationContract).toBe(true);
+    expect(status.guardrails.legacyFusionAliasesPreviewOnly).toBe(true);
+    expect(status.guardrails.telegramCommandRegistrySingleSource).toBe(true);
     expect(status.guardrails.hermesAllJobsReadyReadOnly).toBe(true);
     expect(status.guardrails.telegramLiveSendTrueRequiresExactGate).toBe(true);
     expect(status.guardrails.a2a2aStatusReadOnly).toBe(true);
@@ -33,9 +54,10 @@ describe("Telegram command router", () => {
     expect(status.guardrails.a2a2aCompletionAuditReadOnly).toBe(true);
     expect(status.guardrails.a2a2aLiveGateReadinessReadOnly).toBe(true);
     expect(status.acceptedCommands).toContain("/commands");
+    expect(status.acceptedCommands).toContain("/team status");
+    expect(status.acceptedCommands).toContain("/godmode status");
     expect(status.acceptedCommands).toContain("/hermes all jobs ready");
     expect(status.acceptedCommands).toContain("/hermes all jobs ready liveSend true");
-    expect(status.acceptedCommands).toContain("/fable5 preview");
     expect(status.acceptedCommands).toContain("/a2a2a status");
     expect(status.acceptedCommands).toContain("/a2a2a dispatch preview");
     expect(status.acceptedCommands).toContain("/a2a2a gate check <exact gate>");
@@ -43,9 +65,14 @@ describe("Telegram command router", () => {
     expect(status.acceptedCommands).toContain("/a2a2a execute command preview <exact gate>");
     expect(status.acceptedCommands).toContain("/a2a2a completion audit");
     expect(status.acceptedCommands).toContain("/a2a2a live gate readiness");
+    expect(status.acceptedCommands).toContain("/cloudflare readiness");
+    expect(status.acceptedCommands).toContain("/cloudflare preview packet");
+    expect(status.acceptedCommands).toContain("/model smoke preview");
+    expect(status.acceptedCommands).toContain("/agent loop preview");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:status");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:team-status");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:godmode-status");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:hermes-all-jobs-ready");
-    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:fable5-preview");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:a2a2a-status");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:a2a2a-dispatch-preview");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:a2a2a-gate-check");
@@ -53,6 +80,83 @@ describe("Telegram command router", () => {
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:a2a2a-execute-command-preview");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:a2a2a-completion-audit");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:a2a2a-live-gate-readiness");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:cloudflare-readiness");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:cloudflare-preview-packet");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:model-smoke-preview");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:agent-loop-preview");
+  });
+
+  it("renders the canonical five-phase GODMODE V5 state without authorizing execution", async () => {
+    const result = await handleTelegramCommand(
+      { text: "/godmode status" },
+      { liveSend: false, now: fixedNow, root: process.cwd(), repoRoot: process.cwd() }
+    );
+
+    expect(result.commandId).toBe("godmode_status");
+    expect(result.owner).toBe("hermes_commander");
+    expect(result.messagePreview).toContain("GhostClaw GODMODE V5");
+    expect(result.actionResult.PhaseOrder).toHaveLength(5);
+    expect(result.messagePreview).toContain(
+      `Phase: ${result.actionResult.Phase} (${result.actionResult.PhaseIndex + 1}/5)`
+    );
+    expect(result.messagePreview).toContain("External action authorized: no");
+    expect(result.actionResult.AbortWindow).toBe(900);
+    expect(result.actionResult.MaxRetries).toBe(3);
+    expect(result.externalWrites).toBe(false);
+  });
+
+  it("shows Cloudflare R3 readiness without deploying or calling Cloudflare", async () => {
+    const result = await handleTelegramCommand(
+      { callbackData: "cmd:cloudflare-readiness" },
+      { liveSend: false, now: fixedNow, root: process.cwd(), repoRoot: process.cwd() }
+    );
+
+    expect(result.commandId).toBe("cloudflare_readiness");
+    expect(result.messagePreview).toContain("Cloudflare Deployment Readiness");
+    expect(result.messagePreview).toContain("Deploy executed: no");
+    expect(result.actionResult.externalRequests).toBe(false);
+    expect(result.actionResult.deploy).toBe(false);
+    expect(result.externalWrites).toBe(false);
+  });
+
+  it("previews a blocked Cloudflare R4 packet without execution", async () => {
+    const result = await handleTelegramCommand(
+      { text: "/cloudflare preview packet" },
+      { liveSend: false, now: fixedNow, root: process.cwd(), repoRoot: process.cwd() }
+    );
+
+    expect(result.commandId).toBe("cloudflare_preview_packet");
+    expect(result.messagePreview).toContain("Cloudflare Preview Packet");
+    expect(result.actionResult.status).toBe("blocked-preview-packet");
+    expect(result.actionResult.execute).toBe(false);
+    expect(result.providerCalled).toBe(false);
+    expect(result.externalWrites).toBe(false);
+  });
+
+  it("renders the read-only team ownership and model routes from the coordination contract", async () => {
+    const result = await handleTelegramCommand(
+      { callbackData: "cmd:team-status" },
+      {
+        liveSend: false,
+        now: fixedNow,
+        root: process.cwd(),
+        repoRoot: process.cwd(),
+        providerHealth: {
+          claude_code_oauth: "pending_auth",
+          codex_local: "ready",
+          opencode_glm52: "ready",
+          opencode_fallback: "ready"
+        }
+      }
+    );
+
+    expect(result.commandId).toBe("team_status");
+    expect(result.handler).toBe("agent_team_status");
+    expect(result.owner).toBe("hermes_commander");
+    expect(result.actionClass).toBe("read_only");
+    expect(result.messagePreview).toContain("GhostClaw Agentic Coding Team");
+    expect(result.messagePreview).toContain("Sole repo writer: codex_build_captain");
+    expect(result.externalWrites).toBe(false);
   });
 
   it("previews /commands without live sending", async () => {
@@ -65,7 +169,25 @@ describe("Telegram command router", () => {
     expect(JSON.stringify(result)).not.toMatch(secretLikePattern);
   });
 
-  it("sends through an injected Telegram fetch implementation", async () => {
+  it("blocks an injected Telegram send without an exact gate receipt", async () => {
+    const fetchImpl = vi.fn();
+    const result = await sendTelegramRouterMessage(
+      { text: "hello", replyMarkup: buildTelegramCommandMenu() },
+      {
+        token: "test-token",
+        chatId: "test-chat",
+        commandId: "direct_message",
+        fetchImpl,
+        now: fixedNow
+      }
+    );
+
+    expect(result.status).toBe("blocked-telegram-send-exact-gate");
+    expect(result.telegramSent).toBe(false);
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("sends through an injected Telegram fetch only with a target-bound exact gate receipt", async () => {
     const fetchImpl = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -76,6 +198,12 @@ describe("Telegram command router", () => {
       {
         token: "test-token",
         chatId: "test-chat",
+        commandId: "direct_message",
+        liveSendExactGate: liveSendGate,
+        liveSendApprovalReceipt: liveSendReceipt("direct_message"),
+        telegramApprovalSigningKey: signingKey,
+        allowProvidedReceiptObject: true,
+        consumeTelegramApprovalReceipt: async () => true,
         fetchImpl,
         now: fixedNow
       }
@@ -84,8 +212,33 @@ describe("Telegram command router", () => {
     expect(result.status).toBe("sent-telegram-message");
     expect(result.messageIdPresent).toBe(true);
     expect(result.chatIdPresent).toBe(true);
+    expect(result.gateAssessment.recipientMatched).toBe(true);
     expect(fetchImpl).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(fetchImpl.mock.calls[0][1].body)).not.toHaveProperty("parse_mode");
     expect(JSON.stringify(result)).not.toMatch(secretLikePattern);
+  });
+
+  it("blocks a live send when the approval receipt is bound to another recipient", async () => {
+    const fetchImpl = vi.fn();
+    const result = await sendTelegramRouterMessage(
+      { text: "hello" },
+      {
+        token: "test-token",
+        chatId: "test-chat",
+        commandId: "direct_message",
+        liveSendExactGate: liveSendGate,
+        liveSendApprovalReceipt: liveSendReceipt("direct_message", "different-chat"),
+        telegramApprovalSigningKey: signingKey,
+        allowProvidedReceiptObject: true,
+        consumeTelegramApprovalReceipt: async () => true,
+        fetchImpl,
+        now: fixedNow
+      }
+    );
+
+    expect(result.status).toBe("blocked-telegram-send-recipient-mismatch");
+    expect(result.telegramSent).toBe(false);
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 
   it("runs command router status and sends a sanitized response through injected fetch", async () => {
@@ -101,6 +254,11 @@ describe("Telegram command router", () => {
         chatId: "test-chat",
         fetchImpl,
         liveSend: true,
+        liveSendExactGate: liveSendGate,
+        liveSendApprovalReceipt: liveSendReceipt("runtime_status"),
+        telegramApprovalSigningKey: signingKey,
+        allowProvidedReceiptObject: true,
+        consumeTelegramApprovalReceipt: async () => true,
         now: fixedNow,
         envPath: "/tmp/sirinx-telegram-router-missing-env"
       }
@@ -133,53 +291,32 @@ describe("Telegram command router", () => {
     expect(JSON.stringify(result)).not.toMatch(secretLikePattern);
   });
 
-  it("previews OpenRouter Fable5 routing without provider calls or Telegram sends", async () => {
+
+  it("previews canonical model health without provider calls or Telegram sends", async () => {
     const fetchImpl = vi.fn();
     const result = await handleTelegramCommand(
-      { text: "/fable5 preview" },
+      { text: "/model smoke preview" },
       {
         token: "test-token",
         chatId: "test-chat",
         fetchImpl,
         now: fixedNow,
-        envPath: "/tmp/sirinx-telegram-router-missing-env"
+        envPath: "/tmp/sirinx-telegram-router-missing-env",
+        providerHealth: {
+          claude_code_oauth: "pending_auth",
+          codex_local: "ready",
+          opencode_glm52: "ready",
+          opencode_fallback: "ready"
+        }
       }
     );
 
     expect(result.status).toBe("blocked-or-preview-telegram-command");
-    expect(result.command).toBe("/fable5 preview");
-    expect(result.messagePreview).toContain("OpenRouter Fable5 Preview");
-    expect(result.messagePreview).toContain("Model: anthropic/claude-fable-5");
+    expect(result.command).toBe("/model smoke preview");
+    expect(result.messagePreview).toContain("Agent Model Smoke Preview");
     expect(result.messagePreview).toContain("Provider called: no");
-    expect(result.actionResult.status).toBe("dry-run-openrouter-fable5-adapter-ready");
-    expect(result.actionResult.requestPreview.body.model).toBe("anthropic/claude-fable-5");
-    expect(result.providerCalled).toBe(false);
-    expect(result.externalWrites).toBe(false);
-    expect(fetchImpl).not.toHaveBeenCalled();
-    expect(JSON.stringify(result)).not.toMatch(secretLikePattern);
-  });
-
-  it("previews Fusion smoke without provider calls, retries, or Telegram sends", async () => {
-    const fetchImpl = vi.fn();
-    const result = await handleTelegramCommand(
-      { text: "/fusion smoke" },
-      {
-        token: "test-token",
-        chatId: "test-chat",
-        fetchImpl,
-        now: fixedNow,
-        envPath: "/tmp/sirinx-telegram-router-missing-env"
-      }
-    );
-
-    expect(result.status).toBe("blocked-or-preview-telegram-command");
-    expect(result.command).toBe("/fusion smoke");
-    expect(result.messagePreview).toContain("OpenRouter Fusion Smoke Preview");
-    expect(result.messagePreview).toContain("Provider called: no");
-    expect(result.messagePreview).toContain("Retry loop: blocked");
-    expect(result.actionResult.status).toBe("dry-run-openrouter-fusion-router-ready");
-    expect(result.actionResult.providerCalled).toBe(false);
-    expect(result.actionResult.secretsRead).toBe(false);
+    expect(result.messagePreview).toContain("Route source: configs/ghostclaw_agent_coordination.config.json");
+    expect(result.actionResult.modelRoutes.review.selected).toBe("glm/glm-5.2");
     expect(result.providerCalled).toBe(false);
     expect(result.externalWrites).toBe(false);
     expect(fetchImpl).not.toHaveBeenCalled();

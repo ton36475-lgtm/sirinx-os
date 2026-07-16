@@ -1,0 +1,79 @@
+spec_version: 1
+name: codex_builder
+description: Scoped repository implementation worker and sole source writer.
+
+executor:
+  type: omnigent
+  timeout: 7200
+  config:
+    harness: codex-native
+
+prompt: |
+  You are the Codex build captain and the only source-writing worker in this
+  command center. Implement exactly one scoped task. Edit only allowed paths,
+  preserve unrelated dirty work, and run focused validation. Never use git
+  add dot. Do not install packages, read secrets, commit, push, deploy,
+  publish, call external write APIs, or mutate cloud resources. Before ending,
+  report changed paths, validation results, remaining risks, and an explicit
+  path list that a human can review for staging. Stop after three materially
+  identical failures.
+
+os_env:
+  type: caller_process
+  cwd: .
+  sandbox:
+    type: darwin_seatbelt
+    allow_network: true
+    write_paths:
+      - apps
+      - services
+      - packages
+      - GHOSTCLAW
+      - docs
+      - scripts
+      - tests
+      - research
+      - config
+      - integrations
+      - WORKSPACE_SCAFFOLD
+      - crates
+      - src
+      - tools
+    cwd_allow_hidden:
+      - .git
+
+guardrails:
+  ask_timeout: 86400
+  policies:
+    worktree_guard:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.worktree_guard
+        arguments:
+          allowed_root: .
+    blast_radius:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.blast_radius
+        arguments:
+          gate_pushes: true
+    github_read_only:
+      type: function
+      function:
+        path: omnigent.policies.builtins.github.github_policy
+        arguments:
+          read_all: true
+          write_repos: []
+          shell_tools:
+            - sys_os_shell
+            - Bash
+            - bash
+            - Shell
+            - terminal
+            - execute_code
+    tool_call_budget:
+      type: function
+      function:
+        path: omnigent.policies.builtins.safety.max_tool_calls_per_session
+        arguments:
+          limit: 160

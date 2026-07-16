@@ -6,6 +6,7 @@ import {
   getRuntimeFoundationStatus,
   parseRuntimeEnvContent,
   readRuntimeSecret,
+  readRuntimeSecretCompat,
   writeRuntimeFoundationAudit
 } from "./runtime-foundation.mjs";
 
@@ -76,6 +77,22 @@ describe("runtime foundation env parser", () => {
       expect(status.keys.OPENROUTER_API_KEY).toMatchObject({ present: true, nonempty: true });
       expect(JSON.stringify(status)).not.toContain(secret.value);
       expect(JSON.stringify(status)).not.toMatch(secretLikePattern);
+    });
+  });
+
+  it("prefers UpperCamelCase runtime keys while accepting a legacy alias", async () => {
+    await withTempEnv(`OpenRouterApiKey=${"c".repeat(32)}\nOPENROUTER_API_KEY=${"l".repeat(32)}\n`, async (envPath) => {
+      const canonical = await readRuntimeSecretCompat("OpenRouterApiKey", ["OPENROUTER_API_KEY"], { envPath });
+      expect(canonical.ok).toBe(true);
+      expect(canonical.sourceKey).toBe("OpenRouterApiKey");
+      expect(canonical.legacyFallbackUsed).toBe(false);
+    });
+
+    await withTempEnv(`OPENROUTER_API_KEY=${"l".repeat(32)}\n`, async (envPath) => {
+      const legacy = await readRuntimeSecretCompat("OpenRouterApiKey", ["OPENROUTER_API_KEY"], { envPath });
+      expect(legacy.ok).toBe(true);
+      expect(legacy.sourceKey).toBe("OPENROUTER_API_KEY");
+      expect(legacy.legacyFallbackUsed).toBe(true);
     });
   });
 

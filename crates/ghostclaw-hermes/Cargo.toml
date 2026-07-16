@@ -1,0 +1,14 @@
+[package]
+name = "ghostclaw-hermes"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "ghostclaw-hermes"
+path = "src/main.rs"
+
+[dependencies]
+axum = { version = "0.7", features = ["ws"] }
+tokio = { version = "1", features = ["full"] }
+ghostclaw-core = { path = "../ghostclaw-core" }
+anyhow = "1"

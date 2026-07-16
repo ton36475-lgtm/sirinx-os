@@ -1,0 +1,9 @@
+# Deploy readiness check
+cf_api_token: *** (session only)
+telegram_token: *** (session only)
+
+worker.js exists: ✅ (mock)
+wrangler.toml exists: ✅
+KV namespaces: ⏸ pending create
+
+Estimated deploy: ready after KV setup

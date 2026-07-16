@@ -299,3 +299,25 @@ agents:
     input_protocol: task with capability requirements from hermes
     output_protocol: model assignment with routing justification
     default_model_hint: deepseek-v4
+
+  - id: gridguist
+    name: GridGuist
+    lane: design_review
+    description: UI/Design review agent applying Swiss Design, Editorial Grid, and Technical Minimalism principles. Analyzes CSS for layout systems, reviews code for minimalism compliance, and audits for performance + accessibility.
+    mutates_files: false
+    tier_access: [B, C]
+    owns:
+      - Swiss Design layout analysis
+      - CSS grid and spacing system review
+      - typography and color system scoring
+      - code minimalism review
+      - performance and accessibility audit
+      - design principle enforcement
+    forbidden:
+      - modifying source files
+      - deploying or pushing changes
+    requires_lease: false
+    requires_receipt: true
+    input_protocol: target component name, CSS content, or file path
+    output_protocol: structured report with scores, metrics, and recommendations
+    default_model_hint: deepseek-v4

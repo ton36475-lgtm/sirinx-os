@@ -1,13 +1,13 @@
 # End-to-End Goal Specification
 
-**Goal:** ผสาน SIRINX Skills Kit เข้ากับ sirinx-os เพื่อสร้าง AI-Powered Development + Marketing Automation Platform
+**Goal:** ผสาน SIRINX Skills Kit เข้ากับ ghostclaw-os เพื่อสร้าง AI-Powered Development + Marketing Automation Platform
 
 ---
 
 ## 🎯 Ultimate Goal
 
 ### Vision Statement
-เปลี่ยน sirinx-os ให้เป็น **Autonomous AI Agent Platform** ที่ทำงานได้เอง 4 ด้าน:
+เปลี่ยน ghostclaw-os ให้เป็น **Autonomous AI Agent Platform** ที่ทำงานได้เอง 4 ด้าน:
 - **Development** - ออกแบบ/เขียนโค้ดอัตโนมัติ
 - **Knowledge** - สร้าง Knowledge Base จาก Web
 - **Creative** - สร้างภาพ/วิดีโอโดยอัตโนมัติ
@@ -116,11 +116,11 @@ Ready to Post (ยังไม่โพสต์จริง)
 
 ---
 
-## 🔗 sirinx-os Integration Points
+## 🔗 ghostclaw-os Integration Points
 
 ### Services ที่เชื่อม
 
-| sirinx-os Service | Skills Used |
+| ghostclaw-os Service | Skills Used |
 |-------------------|-------------|
 | `services/dev-control-api` | codex-workflow-synthesizer |
 | `services/hermes-api` | knowledge-sync-engine, mcp-integration-manager |
@@ -206,7 +206,7 @@ Phase 4:
 - [x] Skeleton + Schema สร้างแล้ว
 
 ### Milestone 2: Integration (Next)
-- [ ] sirinx-os skills-api service
+- [ ] ghostclaw-os skills-api service
 - [ ] MCP servers integration
 - [ ] Knowledge Base connection
 

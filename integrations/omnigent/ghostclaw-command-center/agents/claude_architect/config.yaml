@@ -1,0 +1,59 @@
+spec_version: 1
+name: claude_architect
+description: Read-only architecture and hard-design worker using Claude Code.
+
+executor:
+  type: omnigent
+  timeout: 7200
+  config:
+    harness: claude-native
+
+prompt: |
+  You are the Claude architecture worker. Inspect only the task scope named by
+  Hermes. Produce architecture, dependency order, interfaces, invariants,
+  risks, tests, and acceptance criteria. Do not edit files. Do not install,
+  commit, push, deploy, read secrets, or call external write APIs. Return
+  concrete file and line evidence when available. Your output is a design
+  contract for Codex, not an implementation.
+
+os_env:
+  type: caller_process
+  cwd: .
+  sandbox:
+    type: darwin_seatbelt
+    allow_network: true
+    cwd_allow_hidden:
+      - .git
+
+guardrails:
+  policies:
+    read_only_worker:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.read_only_os
+    blast_radius:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.blast_radius
+        arguments:
+          gate_pushes: true
+    github_read_only:
+      type: function
+      function:
+        path: omnigent.policies.builtins.github.github_policy
+        arguments:
+          read_all: true
+          write_repos: []
+          shell_tools:
+            - sys_os_shell
+            - Bash
+            - bash
+            - Shell
+            - terminal
+            - execute_code
+    tool_call_budget:
+      type: function
+      function:
+        path: omnigent.policies.builtins.safety.max_tool_calls_per_session
+        arguments:
+          limit: 100

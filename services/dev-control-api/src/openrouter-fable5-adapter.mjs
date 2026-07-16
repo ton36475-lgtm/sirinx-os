@@ -1,4 +1,6 @@
-import { readRuntimeSecret } from "./runtime-foundation.mjs";
+import { readRuntimeSecretCompat } from "./runtime-foundation.mjs";
+import { join, resolve } from "node:path";
+import { authorizeProviderCallExactGate } from "./provider-call-exact-gate.mjs";
 
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const OPENROUTER_CHAT_COMPLETIONS_ENDPOINT = `${OPENROUTER_BASE_URL}/chat/completions`;
@@ -12,6 +14,8 @@ const FABLE5_SMOKE_RETRY_POLICY = {
   reason: "Fable5 is a gated high-cost route; failed smoke results must stop for operator review."
 };
 export const OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL = "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE";
+const DEFAULT_PROVIDER_APPROVAL_ROOT = ".ghostclaw_runtime/provider-approvals/pending";
+const DEFAULT_PROVIDER_APPROVAL_CONSUMED_ROOT = ".ghostclaw_runtime/provider-approvals/consumed";
 
 export const openRouterFable5AdapterBlockedActions = [
   "deploy",
@@ -96,10 +100,10 @@ export function buildOpenRouterFable5RequestPreview(input = {}) {
     endpoint: OPENROUTER_CHAT_COMPLETIONS_ENDPOINT,
     method: "POST",
     headersPreview: {
-      authorization: "Bearer env:OPENROUTER_API_KEY (not read in dry-run)",
+      authorization: "Bearer env:OpenRouterApiKey (legacy OPENROUTER_API_KEY accepted; not read in dry-run)",
       "content-type": "application/json",
-      "http-referer": "env:HERMES_SITE_URL or https://dev.sirinx.co",
-      "x-openrouter-title": "env:HERMES_APP_TITLE or Hermes Fable5 Command Layer"
+      "http-referer": "env:HermesSiteUrl (legacy HERMES_SITE_URL accepted) or https://dev.sirinx.co",
+      "x-openrouter-title": "env:HermesAppTitle (legacy HERMES_APP_TITLE accepted) or Hermes Fable5 Command Layer"
     },
     body: {
       model,
@@ -256,12 +260,151 @@ function sanitizeOpenRouterResponse(json, text) {
   };
 }
 
+function resolveApprovalReceipt(body = {}, options = {}) {
+  if (options.approvalReceipt) {
+    return {
+      approvalReceipt: options.approvalReceipt,
+      approvalReceiptPath: null,
+      approvalReceiptRoot: null,
+      expectedReceiptId: options.expectedReceiptId || options.approvalReceipt.receiptId,
+      error: null
+    };
+  }
+  if (options.approvalReceiptPath) {
+    return {
+      approvalReceipt: null,
+      approvalReceiptPath: options.approvalReceiptPath,
+      approvalReceiptRoot: options.approvalReceiptRoot || null,
+      expectedReceiptId: options.expectedReceiptId || null,
+      error: null
+    };
+  }
+
+  const receiptId = safeString(body.approvalReceiptId);
+  if (!receiptId) {
+    return {
+      approvalReceipt: null,
+      approvalReceiptPath: null,
+      approvalReceiptRoot: null,
+      expectedReceiptId: null,
+      error: "approval_receipt_required"
+    };
+  }
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/.test(receiptId)) {
+    return {
+      approvalReceipt: null,
+      approvalReceiptPath: null,
+      approvalReceiptRoot: null,
+      expectedReceiptId: null,
+      error: "approval_receipt_id_invalid"
+    };
+  }
+
+  const approvalReceiptRoot = resolve(
+    options.approvalReceiptRoot || DEFAULT_PROVIDER_APPROVAL_ROOT
+  );
+  return {
+    approvalReceipt: null,
+    approvalReceiptPath: join(approvalReceiptRoot, `${receiptId}.json`),
+    approvalReceiptRoot,
+    expectedReceiptId: receiptId,
+    error: null
+  };
+}
+
+async function readApprovalSigningKey(options = {}) {
+  if (options.approvalSigningKey) {
+    return { ok: true, value: options.approvalSigningKey, source: "injected" };
+  }
+
+  const canonical = await readRuntimeSecretCompat(
+    "ProviderApprovalSigningKey",
+    ["PROVIDER_APPROVAL_SIGNING_KEY"],
+    options
+  );
+  if (canonical.ok) return { ...canonical, source: "ProviderApprovalSigningKey" };
+  return { ...canonical, source: "missing" };
+}
+
+function publicApprovalGate(gate = {}) {
+  const { receiptPath, consumedPath, ...safeGate } = gate;
+  return safeGate;
+}
+
 export async function runOpenRouterFable5LiveSmoke(body = {}, options = {}) {
   const startedAt = nowIso(options);
   const input = buildLiveSmokeInput(body);
+  const receiptInput = resolveApprovalReceipt(body, options);
+  let signingCredential = { ok: false, value: "", source: "not_read" };
+  if (!receiptInput.error) {
+    signingCredential = await readApprovalSigningKey(options);
+  }
+
+  const approvalGate = await authorizeProviderCallExactGate(
+    {
+      requestId: input.requestId,
+      commandId: "openrouter_fable5_live_smoke",
+      provider: "OpenRouter",
+      model: input.model,
+      maxTokens: input.max_tokens
+    },
+    {
+      requiredExactGate: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+      exactGate: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+      approvalReceipt: receiptInput.approvalReceipt,
+      approvalReceiptPath: receiptInput.approvalReceiptPath,
+      approvalReceiptRoot: receiptInput.approvalReceiptRoot,
+      expectedReceiptId: receiptInput.expectedReceiptId,
+      consumedReceiptRoot: resolve(
+        options.consumedReceiptRoot || DEFAULT_PROVIDER_APPROVAL_CONSUMED_ROOT
+      ),
+      allowProvidedReceiptObject: options.allowProvidedReceiptObject === true,
+      receiptSigningKey: signingCredential.value,
+      consumeReceipt: options.consumeReceipt,
+      now: options.now
+    }
+  );
+
+  if (receiptInput.error && !approvalGate.issues.includes(receiptInput.error)) {
+    approvalGate.authorized = false;
+    approvalGate.status = "blocked_exact_gate";
+    approvalGate.reason = receiptInput.error;
+    approvalGate.issues.unshift(receiptInput.error);
+  }
+
+  const approvalGateReport = publicApprovalGate(approvalGate);
+
+  if (!approvalGate.authorized) {
+    return {
+      title: "OpenRouter Fable5 Live Smoke",
+      status: "blocked-openrouter-fable5-live-smoke",
+      mode: "bounded-provider-smoke",
+      requestId: input.requestId,
+      provider: "OpenRouter",
+      model: input.model,
+      providerCalled: false,
+      commandExecuted: false,
+      secretsRead: signingCredential.source !== "not_read" && signingCredential.source !== "injected",
+      keyValuePrinted: false,
+      canCallPaidApi: false,
+      providerAttemptCount: 0,
+      retryPolicy: FABLE5_SMOKE_RETRY_POLICY,
+      requiredApproval: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+      blockedReason:
+        ["exact_gate_required", "approval_receipt_required"].includes(approvalGate.reason)
+          ? "missing_exact_provider_call_approval"
+          : approvalGate.reason,
+      approvalGate: approvalGateReport,
+      nextRecommendedAction:
+        "Create a short-lived, target-bound provider receipt with budget confirmation before one bounded smoke.",
+      startedAt,
+      updatedAt: nowIso(options)
+    };
+  }
+
   const openRouterCredential = options.apiKey
     ? { ok: true, present: true, value: options.apiKey, error: null }
-    : await readRuntimeSecret("OPENROUTER_API_KEY", options);
+    : await readRuntimeSecretCompat("OpenRouterApiKey", ["OPENROUTER_API_KEY"], options);
 
   if (!openRouterCredential.ok) {
     return {
@@ -279,7 +422,8 @@ export async function runOpenRouterFable5LiveSmoke(body = {}, options = {}) {
       providerAttemptCount: 0,
       retryPolicy: FABLE5_SMOKE_RETRY_POLICY,
       blockedReason: openRouterCredential.error || "missing_openrouter_api_key_value",
-      nextRecommendedAction: "Set a non-empty OPENROUTER_API_KEY in the approved Hermes runtime environment, then rerun one bounded smoke.",
+      approvalGate: approvalGateReport,
+      nextRecommendedAction: "Set a non-empty OpenRouterApiKey (or legacy OPENROUTER_API_KEY) in the approved Hermes runtime environment, then rerun one bounded smoke.",
       startedAt,
       updatedAt: nowIso(options)
     };
@@ -287,8 +431,8 @@ export async function runOpenRouterFable5LiveSmoke(body = {}, options = {}) {
 
   const requestPreview = buildOpenRouterFable5RequestPreview(input);
   const fetchImpl = options.fetchImpl || globalThis.fetch;
-  const referer = safeString(process.env.HERMES_SITE_URL, "https://dev.sirinx.local");
-  const title = safeString(process.env.HERMES_APP_TITLE, "SIRINX Hermes Fable5");
+  const referer = safeString(process.env.HermesSiteUrl || process.env.HERMES_SITE_URL, "https://dev.sirinx.local");
+  const title = safeString(process.env.HermesAppTitle || process.env.HERMES_APP_TITLE, "SIRINX Hermes Fable5");
   const controller = options.fetchImpl ? null : new AbortController();
   const timeout = controller ? setTimeout(() => controller.abort(), 15000) : null;
 
@@ -327,6 +471,7 @@ export async function runOpenRouterFable5LiveSmoke(body = {}, options = {}) {
         canCallPaidApi: true,
         providerAttemptCount: 1,
         retryPolicy: FABLE5_SMOKE_RETRY_POLICY,
+        approvalGate: approvalGateReport,
         httpStatus: response.status,
         errorClass: classifyOpenRouterFable5Error(response.status),
         responsePreview: safeString(json?.error?.message || text).slice(0, 500),
@@ -350,6 +495,7 @@ export async function runOpenRouterFable5LiveSmoke(body = {}, options = {}) {
       canCallPaidApi: true,
       providerAttemptCount: 1,
       retryPolicy: FABLE5_SMOKE_RETRY_POLICY,
+      approvalGate: approvalGateReport,
       httpStatus: response.status,
       response: sanitizeOpenRouterResponse(json, text),
       startedAt,
@@ -370,6 +516,7 @@ export async function runOpenRouterFable5LiveSmoke(body = {}, options = {}) {
       canCallPaidApi: true,
       providerAttemptCount: 1,
       retryPolicy: FABLE5_SMOKE_RETRY_POLICY,
+      approvalGate: approvalGateReport,
       errorClass: error.name === "AbortError" ? "REQUEST_TIMEOUT" : "NETWORK_OR_FETCH_ERROR",
       responsePreview: safeString(error.message).slice(0, 300),
       nextRecommendedAction: "Stop. Do not retry automatically; inspect local network/provider gateway state first.",

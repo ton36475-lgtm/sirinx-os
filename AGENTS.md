@@ -2346,3 +2346,30 @@ For model selection, coding worker routing, OpenRouter integration, local model 
 - `config/model-router/model_router.registry.yaml`
 
 Core rule: cheapest safe model first; paid models only behind budget gate; T4 (deploy/secret/customer) requires human gate.
+
+---
+
+## Appendix B — Omnigent Hermes Command Center
+
+The project-local Omnigent bundle is:
+
+- `integrations/omnigent/ghostclaw-command-center/`
+- `.omnigent/config.yaml`
+- `scripts/omnigent-ghostclaw-command-center`
+
+Role ownership is fixed: Hermes coordinates, Claude produces read-only
+architecture, Codex is the sole repository writer, and OpenCode plus Hermes
+perform independent read-only review. Never dispatch overlapping write scopes.
+Antigravity is attended-only and is not registered as a headless worker.
+
+Safe local checks:
+
+```text
+scripts/omnigent-ghostclaw-command-center validate
+scripts/omnigent-ghostclaw-command-center status
+```
+
+The loopback server is a local control plane only. Starting a provider session,
+Antigravity session, push, deploy, publish, secret access, or cloud mutation
+requires its own exact gate. Omnigent worker output is evidence, not permission
+to stage or commit.

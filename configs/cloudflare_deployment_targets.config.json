@@ -1,0 +1,195 @@
+{
+  "$schema": "ghostclaw.cloudflare.deployment_targets.v1",
+  "version": "1.0.0",
+  "recommendedPreviewTarget": "hermes_orchestrator_preview",
+  "topology": {
+    "frontend": "sirinx_pages_frontend",
+    "publicRouter": "sirinx_main_router",
+    "agentControlPlane": "cloudflare_agent_control_plane",
+    "orchestrator": "hermes_orchestrator_preview",
+    "workerToWorkerTransport": "service_binding",
+    "publicCommandIngress": "telegram_gateway_to_hermes_a2a2a"
+  },
+  "gates": {
+    "R3": {
+      "mode": "readiness_only",
+      "network": false,
+      "deploy": false
+    },
+    "R4": {
+      "mode": "preview_only",
+      "requiredGatePattern": "APPROVE_CLOUDFLARE_PREVIEW_DEPLOY_PACKET_<packet_id>",
+      "readinessReceiptPath": ".ghostclaw_runtime/a2a2a/evidence/cloudflare-r3-readiness.json",
+      "prerequisiteGatePatterns": {
+        "oauthLogin": "APPROVE_CLOUDFLARE_R4_OAUTH_LOGIN_PACKET_<packet_id>",
+        "resourceDiscovery": "APPROVE_CLOUDFLARE_R4_RESOURCE_DISCOVERY_PACKET_<packet_id>",
+        "resourceCreation": "APPROVE_CLOUDFLARE_R4_RESOURCE_CREATE_PACKET_<packet_id>",
+        "secretProvision": "APPROVE_CLOUDFLARE_R4_SECRET_PROVISION_PACKET_<packet_id>"
+      },
+      "requiresBuildProof": true,
+      "requiresSmokePlan": true,
+      "requiresRollbackPlan": true
+    },
+    "R5": {
+      "mode": "production",
+      "requiredGatePattern": "APPROVE_CLOUDFLARE_PRODUCTION_DEPLOY_<release_id>",
+      "requiresPreviewReceipt": true,
+      "requiresSmokePass": true,
+      "requiresRollbackVerification": true
+    }
+  },
+  "targets": [
+    {
+      "id": "sirinx_pages_frontend",
+      "label": "SIRINX Pages Frontend",
+      "platform": "cloudflare_pages",
+      "sourcePath": "apps/sirinx-site",
+      "configPath": "apps/sirinx-site/wrangler.jsonc",
+      "requiredPaths": [
+        "apps/sirinx-site/package.json",
+        "apps/sirinx-site/wrangler.jsonc",
+        "apps/sirinx-site/public/_headers"
+      ],
+      "buildCommand": "pnpm --filter @sirinx/site build",
+      "validationCommand": "pnpm --filter @sirinx/site check",
+      "outputDirectory": "apps/sirinx-site/dist",
+      "previewCommandTemplate": "wrangler pages deploy dist --project-name=sirinx-co --branch=<preview_branch>",
+      "previewEligible": true,
+      "blockers": [
+        "Fresh build and release-readiness receipts are required before preview upload.",
+        "The current Cloudflare dashboard configuration must be compared with the checked-in Wrangler config."
+      ]
+    },
+    {
+      "id": "sirinx_main_router",
+      "label": "SIRINX Main Router",
+      "platform": "cloudflare_worker",
+      "sourcePath": "infra/cloudflare/main-router",
+      "configPath": "infra/cloudflare/main-router/wrangler.jsonc",
+      "requiredPaths": [
+        "infra/cloudflare/main-router/src/worker.js",
+        "infra/cloudflare/main-router/src/worker.test.js",
+        "infra/cloudflare/main-router/wrangler.jsonc"
+      ],
+      "buildCommand": "node --check infra/cloudflare/main-router/src/worker.js",
+      "validationCommand": "pnpm cloudflare:main-router:test",
+      "outputDirectory": null,
+      "previewCommandTemplate": null,
+      "previewEligible": false,
+      "blockers": [
+        "The checked-in config claims production routes and a D1 binding.",
+        "A separate preview config with no production routes is required."
+      ]
+    },
+    {
+      "id": "hermes_orchestrator_preview",
+      "label": "Hermes V5 Orchestrator Preview",
+      "platform": "cloudflare_worker_wasm",
+      "sourcePath": "services/orchestrator",
+      "configPath": "services/orchestrator/wrangler.preview.jsonc",
+      "requiredPaths": [
+        "services/orchestrator/package.json",
+        "services/orchestrator/wrangler.preview.jsonc",
+        "services/orchestrator/scripts/verify-deploy-contract.mjs",
+        "services/orchestrator/crates/hermes-worker/src/lib.rs"
+      ],
+      "buildCommand": "pnpm --filter @sirinx/hermes-v5-worker build:worker",
+      "validationCommand": "pnpm --filter @sirinx/hermes-v5-worker test",
+      "outputDirectory": "services/orchestrator/build",
+      "artifactEvidence": {
+        "manifestPath": "services/orchestrator/build/artifact-manifest.json",
+        "schema": "sirinx.hermes-worker-artifact.v1",
+        "requiredFiles": [
+          "index.js",
+          "index_bg.wasm",
+          "worker/shim.mjs"
+        ]
+      },
+      "previewConfigurationEvidence": {
+        "ownerAllowlistVar": "HERMES_OWNER_ALLOWLIST",
+        "ownerPrincipalRegistry": {
+          "path": "configs/ghostclaw_agent_coordination.config.json",
+          "schema": "ghostclaw.agent_coordination.v1",
+          "allowedRoleIds": [
+            "hermes_commander"
+          ]
+        },
+        "kvBindings": [
+          "HERMES_LEDGER",
+          "IDEMPOTENCY_CACHE"
+        ]
+      },
+      "remoteReadinessEvidence": {
+        "path": ".ghostclaw_runtime/a2a2a/evidence/cloudflare-r4-remote-readiness.json",
+        "schema": "ghostclaw.cloudflare.remote_readiness_evidence.v1",
+        "requiredKvBindings": [
+          "HERMES_LEDGER",
+          "IDEMPOTENCY_CACHE"
+        ],
+        "requiredSecretBindings": [
+          "HERMES_API_TOKEN"
+        ]
+      },
+      "previewCommandTemplate": "pnpm --filter @sirinx/hermes-v5-worker deploy:preview",
+      "previewEligible": true,
+      "blockers": []
+    },
+    {
+      "id": "cloudflare_agent_control_plane",
+      "label": "Cloudflare Agent Control Plane",
+      "platform": "cloudflare_agents_sdk",
+      "sourcePath": "apps/cloudflare-agent-team",
+      "configPath": "apps/cloudflare-agent-team/wrangler.jsonc.example",
+      "requiredPaths": [
+        "apps/cloudflare-agent-team/README.md",
+        "apps/cloudflare-agent-team/SECURITY.md",
+        "apps/cloudflare-agent-team/src/index.ts",
+        "apps/cloudflare-agent-team/wrangler.jsonc.example"
+      ],
+      "buildCommand": null,
+      "validationCommand": "pnpm cloudflare-agent-team:check",
+      "outputDirectory": null,
+      "previewCommandTemplate": null,
+      "previewEligible": false,
+      "blockers": [
+        "The entrypoint intentionally returns HTTP 501.",
+        "The Agents SDK dependency and production Wrangler config do not exist.",
+        "Durable Object, D1, R2, and Queue resources remain proposal-only."
+      ]
+    },
+    {
+      "id": "legacy_edge_gateway",
+      "label": "Legacy Sovereign Edge Gateway",
+      "platform": "cloudflare_worker",
+      "sourcePath": "services/edge-gateway",
+      "configPath": "services/edge-gateway/wrangler.toml",
+      "requiredPaths": [
+        "services/edge-gateway/src/index.ts",
+        "services/edge-gateway/wrangler.toml"
+      ],
+      "buildCommand": null,
+      "validationCommand": null,
+      "outputDirectory": null,
+      "previewCommandTemplate": null,
+      "previewEligible": false,
+      "blockers": [
+        "Compatibility date and authentication design require review.",
+        "Production upstream URLs are embedded in the current config.",
+        "This legacy gateway is not part of the first preview lane."
+      ]
+    }
+  ],
+  "security": {
+    "secretsRequiredNamesOnly": [
+      "CLOUDFLARE_API_TOKEN",
+      "CLOUDFLARE_ACCOUNT_ID",
+      "HERMES_API_TOKEN"
+    ],
+    "secretValuesAllowed": false,
+    "directDeployFromTelegram": false,
+    "directProviderCallFromTelegram": false,
+    "productionRoutesAllowedInPreview": false,
+    "serviceBindingsPreferredForWorkerToWorker": true,
+    "receiptRequired": true
+  }
+}

@@ -1,0 +1,175 @@
+policy_version: "1.0.0"
+mission_id: "P101-D22354812-FULLSTACK-REFACTOR-RUST-MIGRATION-20260713"
+parent_packets:
+  - "P098-D22354812-FULL-SPEC-GOAL-AUTOLOOP-ALL-PROJECTS-20260708"
+  - "P099-D22354812-HERMES-FREE-MODEL-FLEET-AUTOLOOP-V2-20260708"
+  - "P100-D22354812-MARKETING-RESEARCH-TOOLCHAIN-AUTOLOOP-20260708"
+
+approval:
+  requested_mode: "MAXIMUM_AUTONOMY"
+  effective_mode: "MAX_LOCAL_AUTONOMY_WITH_HARD_BLOCKS"
+  user_scope_approval: "LOCAL_SAFE_ENGINEERING"
+  requester_approver_separation_required: true
+  self_approval_forbidden: true
+  evidence_pack_required: true
+  receipt_required: true
+
+loop:
+  fail_closed: true
+  max_goal_iterations: 5
+  max_safe_fix_rounds: 2
+  max_schema_repair_retries: 3
+  halt_on_unclassified_risk: true
+  one_repo_at_a_time: true
+  one_active_file_lease_per_worker: true
+
+canonical_protocol:
+  - "00_repo_intake"
+  - "01_backend_core"
+  - "02_database_domain_schema"
+  - "03_service_logic"
+  - "04_api_contract_freeze"
+  - "05_api_route_handler"
+  - "06_api_client_wiring"
+  - "07_frontend_state_hooks"
+  - "08_components"
+  - "09_page_route"
+  - "10_local_uat"
+  - "11_commit_gate"
+
+rust_migration_protocol:
+  - "SPEC_INTAKE"
+  - "CONTRACT_EXTRACT"
+  - "STRATEGY_DESIGN"
+  - "FILE_LEASE_APPROVAL"
+  - "IMPLEMENT"
+  - "VALIDATE"
+  - "REVIEW"
+  - "HUMAN_DECISION"
+  - "PUSH_DEPLOY"
+
+repo_candidates:
+  - path: "/Users/sirinx/sirinx-os"
+    project_id: "GHO"
+    priority: 1
+  - path: "/Users/sirinx/sirinx-agent-native-os"
+    project_id: "GHO"
+    priority: 2
+  - path: "/Users/sirinx/sirinx-co"
+    project_id: "SRX"
+    priority: 3
+
+allowed_actions:
+  - "read_repo"
+  - "read_git_metadata"
+  - "write_scoped_local_artifacts"
+  - "write_scoped_local_source_after_file_lease"
+  - "format_scoped_files"
+  - "lint"
+  - "typecheck"
+  - "compile"
+  - "unit_test"
+  - "integration_test_local"
+  - "build_local"
+  - "schema_validation"
+  - "api_contract_extraction"
+  - "behavior_fixture_generation"
+  - "differential_parity_test"
+  - "write_diff_summary"
+  - "write_receipt"
+  - "write_a2a_packet"
+  - "create_patch_file"
+
+approval_required_actions:
+  - "git_commit"
+  - "dependency_upgrade"
+  - "database_schema_write_even_local"
+  - "external_provider_call"
+  - "authorized_browser_session"
+  - "analytics_tracker_activation"
+
+hard_blocked_actions:
+  - "git_push"
+  - "production_deploy"
+  - "dns_mutation"
+  - "cloudflare_mutation"
+  - "r2_write"
+  - "d1_write"
+  - "kv_write"
+  - "webhook_activation"
+  - "secret_read"
+  - "secret_print"
+  - "model_download"
+  - "gpu_live_job"
+  - "live_line_send"
+  - "live_telegram_send"
+  - "live_email_send"
+  - "crm_customer_write"
+  - "payment_mutation"
+  - "production_database_migration"
+  - "rollback_execution"
+  - "anti_bot_bypass"
+  - "cloudflare_or_queueit_evasion"
+  - "unauthorized_network_interception"
+  - "credential_attack"
+  - "logged_in_social_scraping"
+  - "pii_harvesting"
+  - "third_party_pixel_cloning"
+  - "destructive_delete"
+  - "chmod_777"
+  - "git_add_all"
+
+protected_scopes:
+  - name: "SIRINX production website"
+    rule: "Do not modify production website files under this packet. Use a separately named website gate."
+  - name: "Public branding and customer copy"
+    rule: "Do not rewrite or internationalize public content unless the packet names exact files and copy locks."
+  - name: "Secrets and credentials"
+    rule: "Check presence only; never read, print, copy, log, or embed values."
+
+language_quality_gates:
+  python:
+    audit_commands:
+      - "python -m compileall -q"
+      - "ruff check (when installed)"
+      - "mypy (when configured and installed)"
+      - "pytest -q (when configured and dependencies exist)"
+  javascript_typescript:
+    audit_commands:
+      - "package script: typecheck"
+      - "package script: lint"
+      - "package script: test"
+      - "package script: build"
+    dependency_install: "blocked"
+  go:
+    audit_commands:
+      - "gofmt -l"
+      - "go vet ./... with GOPROXY=off"
+      - "go test ./... with GOPROXY=off"
+  rust:
+    audit_commands:
+      - "cargo fmt --check"
+      - "cargo clippy --offline --all-targets --all-features -- -D warnings"
+      - "cargo test --offline --all"
+  shell:
+    audit_commands:
+      - "bash -n"
+      - "shellcheck (when installed)"
+  config:
+    audit_commands:
+      - "JSON parse"
+      - "YAML parse"
+      - "TOML parse"
+
+acceptance:
+  required:
+    - "scoped diff only"
+    - "public API contract documented before Rust implementation"
+    - "tests pass or blockers are recorded exactly"
+    - "no hard-blocked action attempted"
+    - "changed-file summary exists"
+    - "receipt includes commands, exit codes, hashes, and residual risks"
+  stop_before:
+    - "git_commit"
+    - "git_push"
+    - "deploy"

@@ -1,0 +1,113 @@
+spec_version: 1
+name: ghostclaw_hermes_command_center
+description: >-
+  Local GhostClaw command center. Hermes coordinates bounded architecture,
+  implementation, and independent review without owning source or Git state.
+
+spawn: false
+async: true
+timers: false
+
+executor:
+  type: omnigent
+  context_window: 200000
+  config:
+    harness: claude-sdk
+
+prompt: |
+  You are the Hermes Command Center for the SIRINX/GhostClaw agentic coding
+  team. You coordinate work; you do not edit source code, own Git state, or
+  execute deployment actions.
+
+  Team contract:
+  - claude_architect inspects architecture and returns a read-only design.
+  - codex_builder is the only worker allowed to modify repository files.
+  - opencode_reviewer independently reviews diffs and test evidence.
+  - hermes_validator checks scope, policy, receipts, and completion claims.
+  - Antigravity is an attended observer launched separately, never a headless
+    worker.
+
+  Dispatch rules:
+  1. Read the task contract and identify dependencies before dispatch.
+  2. Send architecture work before implementation when design is unresolved.
+  3. Never dispatch overlapping write scopes. Only codex_builder may receive
+     purpose=implement; all other workers receive review, explore, or search.
+  4. Every dispatch must include a title, purpose, allowed paths, blocked
+     paths, acceptance criteria, and validation commands.
+  5. No worker may install packages, read secrets, commit, push, deploy,
+     publish, call external write APIs, or mutate cloud resources.
+  6. Separate implementation proof, review proof, human approval proof, and
+     live deployment proof. Never infer one from another.
+  7. Stop after three materially identical failures and return a blocker with
+     evidence instead of retrying the same path.
+  8. Return a compact mission report with worker receipts and the next exact
+     safe action. Do not mark work complete without validation evidence.
+
+tools:
+  agents:
+    - claude_architect
+    - codex_builder
+    - opencode_reviewer
+    - hermes_validator
+  timeout: 7200
+
+os_env:
+  type: caller_process
+  cwd: .
+  sandbox:
+    type: darwin_seatbelt
+    allow_network: false
+    cwd_allow_hidden:
+      - .git
+
+guardrails:
+  ask_timeout: 86400
+  policies:
+    read_only_orchestrator:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.read_only_os
+    blast_radius:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.blast_radius
+        arguments:
+          gate_pushes: true
+    github_read_only:
+      type: function
+      function:
+        path: omnigent.policies.builtins.github.github_policy
+        arguments:
+          read_all: true
+          write_repos: []
+          shell_tools:
+            - sys_os_shell
+            - Bash
+            - bash
+            - Shell
+            - terminal
+            - execute_code
+    spawn_bounds:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.spawn_bounds
+        arguments:
+          max_dispatches_per_turn: 4
+          dispatch_tools:
+            - sys_session_send
+    purpose_guard:
+      type: function
+      function:
+        path: omnigent.policies.builtins.orchestration.headless_subagent_purpose_guard
+        arguments:
+          allowed_purposes:
+            - implement
+            - review
+            - explore
+            - search
+    tool_call_budget:
+      type: function
+      function:
+        path: omnigent.policies.builtins.safety.max_tool_calls_per_session
+        arguments:
+          limit: 120

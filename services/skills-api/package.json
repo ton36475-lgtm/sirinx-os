@@ -1,13 +1,18 @@
 {
   "name": "@sirinx/skills-api",
   "version": "0.1.0",
-  "description": "API gateway for SIRINX Skills Kit - autonomous development + marketing automation",
+  "description": "API gateway for GhostClaw OS Skills Kit",
   "license": "MIT",
+  "type": "module",
   "main": "src/index.mjs",
   "scripts": {
-    "dev": "node src/server.mjs",
-    "start": "node src/server.mjs",
-    "check": "node --check src/index.mjs && node --check src/skills-router.mjs"
+    "dev": "node src/index.mjs",
+    "start": "node src/index.mjs",
+    "ws": "node src/websocket-server.mjs"
   },
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.21.0",
+    "ws": "^8.18.0",
+    "cors": "^2.8.5"
+  }
 }

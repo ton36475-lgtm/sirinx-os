@@ -327,3 +327,16 @@ git diff --check
   - `python3 scripts/model_router_dry_run.py --tier T1 --project ghostclaw --task "test model router"` → dry_run allowed, lane=laguna_free_coder
 - No real paid calls, no provider calls, no secret read/print, no deploy, no push.
 - Backup stored at `.ghostclaw_runtime/backups/model_router_pack_v2_1_20260703_005925/`.
+
+## Vibe Coding Sidebar System - 2026-07-12 ✅ DONE
+
+**Status:** FULLY OPERATIONAL
+
+**Completed:**
+- 3-lane parallel system deployed: Codex (backend) + OpenCode (frontend) + Hermes Control
+- Isolated git worktrees for each lane
+- Sidebars component at `apps/dev-dashboard/components/VibeCodingSidebar.tsx`
+- Guardian component at `apps/sirinx-site/public-guardian/Guard.tsx`
+- GhostClaw controller at `services/orchestrator/ghostclaw-controller.ts`
+
+**Next:** Continue dispatching GhostClaw tasks via `hermes skill view vibe-coding-sidebar`

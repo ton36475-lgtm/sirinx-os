@@ -20,6 +20,7 @@ Date: 2026-05-20
 | `website-browser-automation` | `/Users/sirinx/.agents/skills/website-browser-automation/SKILL.md` | Browser QA and screenshots. | No account changes, sends, purchases, or deletes. |
 | `doc-coauthoring` | `/Users/sirinx/.codex/skills/anthropics-doc-coauthoring/SKILL.md` | Structured docs, plans, specs, decision records. | No raw chat logs or secrets in docs. |
 | `github:github` | `/Users/sirinx/.codex/plugins/cache/openai-curated/github/dc902811/skills/github/SKILL.md` | GitHub repository orientation and triage. | Push/PR requires exact approval. |
+| `grid-guist` | `/Users/sirinx/sirinx-os/skills/grid-guist/run.js` | UI/Design review (Swiss Design, Editorial Grid, Technical Minimalism). | Read-only analysis; no file edits or external sends. |
 
 ## Candidate Skills For Later
 

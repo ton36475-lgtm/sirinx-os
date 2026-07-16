@@ -1,0 +1,11 @@
+[workspace]
+members = [
+  "crates/hermes-core",
+  "crates/hermes-worker",
+  "crates/hermes-governance",
+  "crates/hermes-lock",
+  "crates/hermes-router",
+  "crates/hermes-dispatch",
+  "crates/hermes-feed"
+]
+resolver = "2"

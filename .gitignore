@@ -32,6 +32,7 @@ logs/
 .hermes/
 .ghostclaw_runtime/
 data/
+memory/live/
 archive/
 
 # Python runtime cache
@@ -48,5 +49,21 @@ secrets/
 SIRINX_SECRET_BACKUP*.tar.gz
 SIRINX_SECRET_BACKUP*.tar.gz.enc
 
+# Rust build artifacts
+target/
+
+# AI agent local workdirs (not project source)
+.opencode/
+.vibe-coding/
+.worktrees/
+.omnigent/
+.mcp.json
+
 # OS/editor noise
 .DS_Store
+
+# Integrations with embedded repos
+integrations/cynative/
+integrations/markdownify-mcp/
+integrations/omniroute/
+packages/skills-kit/

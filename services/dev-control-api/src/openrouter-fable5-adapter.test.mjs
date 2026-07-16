@@ -5,11 +5,42 @@ import {
   classifyOpenRouterFable5Error,
   createOpenRouterFable5AdapterDryRun,
   getOpenRouterFable5AdapterStatus,
+  OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
   runOpenRouterFable5LiveSmoke
 } from "./openrouter-fable5-adapter.mjs";
+import { createProviderCallApprovalReceipt } from "./provider-call-exact-gate.mjs";
 
 const fixedNow = () => new Date("2026-07-03T02:30:00.000Z");
 const secretLikePattern = /sk-[A-Za-z0-9_-]{20,}|OPENROUTER_API_KEY\s*=\s*[^"'\s]{12,}/;
+const approvalSigningKey = "test-only-provider-approval-signing-key-2026";
+
+function providerReceipt(requestId, maxTokens = 64, model = "anthropic/claude-fable-5") {
+  return createProviderCallApprovalReceipt({
+    receiptId: `provider-receipt-${requestId}`,
+    commandId: "openrouter_fable5_live_smoke",
+    requestId,
+    provider: "OpenRouter",
+    model,
+    maxTokens,
+    requestedBy: "codex_build_captain",
+    approvedBy: "hermes_commander",
+    exactGate: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+    budgetConfirmed: true,
+    issuedAt: "2026-07-03T02:25:00.000Z",
+    expiresAt: "2026-07-03T02:35:00.000Z"
+  }, { signingKey: approvalSigningKey });
+}
+
+function providerGateOptions(requestId, maxTokens = 64) {
+  return {
+    exactGate: OPENROUTER_FABLE5_PROVIDER_CALL_APPROVAL,
+    approvalReceipt: providerReceipt(requestId, maxTokens),
+    approvalSigningKey,
+    allowProvidedReceiptObject: true,
+    consumeReceipt: async () => true,
+    now: fixedNow
+  };
+}
 
 describe("OpenRouter Fable5 Adapter policy", () => {
   it("exposes the locked Fable5 policy without enabling provider calls", () => {
@@ -46,7 +77,9 @@ describe("OpenRouter Fable5 Adapter policy", () => {
       max_tokens: 3072,
       stream: false
     });
-    expect(preview.headersPreview.authorization).toBe("Bearer env:OPENROUTER_API_KEY (not read in dry-run)");
+    expect(preview.headersPreview.authorization).toBe(
+      "Bearer env:OpenRouterApiKey (legacy OPENROUTER_API_KEY accepted; not read in dry-run)"
+    );
     expect(preview.providerCalled).toBe(false);
     expect(preview.secretsRead).toBe(false);
     expect(JSON.stringify(preview)).not.toMatch(secretLikePattern);
@@ -110,7 +143,7 @@ describe("OpenRouter Fable5 Adapter policy", () => {
     expect(classifyOpenRouterFable5Error(500)).toBe("PROVIDER_OR_GATEWAY_ERROR");
   });
 
-  it("blocks live smoke before fetch when the key is missing", async () => {
+  it("blocks live smoke before secret access when the approval receipt is missing", async () => {
     const fetchImpl = vi.fn();
     const result = await runOpenRouterFable5LiveSmoke(
       { requestId: "missing-key-live-smoke" },
@@ -121,10 +154,30 @@ describe("OpenRouter Fable5 Adapter policy", () => {
     expect(result.providerCalled).toBe(false);
     expect(result.providerAttemptCount).toBe(0);
     expect(result.retryPolicy.retryAllowed).toBe(false);
-    expect(result.secretsRead).toBe(true);
+    expect(result.secretsRead).toBe(false);
+    expect(result.blockedReason).toBe("missing_exact_provider_call_approval");
     expect(result.keyValuePrinted).toBe(false);
     expect(fetchImpl).not.toHaveBeenCalled();
     expect(JSON.stringify(result)).not.toMatch(secretLikePattern);
+  });
+
+  it("checks credentials only after a target-bound provider receipt passes", async () => {
+    const requestId = "missing-key-after-provider-gate";
+    const fetchImpl = vi.fn();
+    const result = await runOpenRouterFable5LiveSmoke(
+      { requestId, max_tokens: 64 },
+      {
+        ...providerGateOptions(requestId),
+        envPath: "/tmp/sirinx-missing-openrouter-env",
+        fetchImpl
+      }
+    );
+
+    expect(result.status).toBe("blocked-openrouter-fable5-live-smoke");
+    expect(result.approvalGate.authorized).toBe(true);
+    expect(result.providerCalled).toBe(false);
+    expect(result.secretsRead).toBe(true);
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 
   it("runs a bounded live smoke through an injected fetch implementation", async () => {
@@ -150,7 +203,7 @@ describe("OpenRouter Fable5 Adapter policy", () => {
         goal: "Return compact JSON only.",
         max_tokens: 64
       },
-      { apiKey: "test-key", fetchImpl, now: fixedNow }
+      { apiKey: "test-key", fetchImpl, ...providerGateOptions("injected-fable5-live-smoke") }
     );
     const request = JSON.parse(fetchImpl.mock.calls[0][1].body);
 
@@ -177,7 +230,7 @@ describe("OpenRouter Fable5 Adapter policy", () => {
         goal: "Return compact JSON only.",
         max_tokens: 64
       },
-      { apiKey: "test-key", fetchImpl, now: fixedNow }
+      { apiKey: "test-key", fetchImpl, ...providerGateOptions("injected-fable5-5xx") }
     );
 
     expect(fetchImpl).toHaveBeenCalledTimes(1);
@@ -203,7 +256,7 @@ describe("OpenRouter Fable5 Adapter policy", () => {
         goal: "Return compact JSON only.",
         max_tokens: 64
       },
-      { apiKey: "test-key", fetchImpl, now: fixedNow }
+      { apiKey: "test-key", fetchImpl, ...providerGateOptions("injected-fable5-network-error") }
     );
 
     expect(fetchImpl).toHaveBeenCalledTimes(1);
