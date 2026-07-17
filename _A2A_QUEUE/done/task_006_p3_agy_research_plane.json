@@ -1,16 +1,39 @@
 {
-  "task_id": "task_006_p3_agy_research_plane",
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-006",
+    "correlation_id": "a2a-solar-1-preview-1721172805-12350",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator",
+      "role": "task-orchestrator"
+    },
+    "to": {
+      "agent": "opencode-reviewer",
+      "role": "independent_reviewer"
+    },
+    "action_requested": "AGY Research Plane Integration",
+    "context": {
+      "goal": "Verify AGY CLI exists and run deep research on Google Drive folder ID 14jjSnprC7AxqPCo8pl6hDZYtg8tuehs- to create recursive inventory. Output to 01_recursive_drive_inventory.jsonl",
+      "constraints": ["read-only", "no mutate cloud", "dry-run first"],
+      "lane": "scripts",
+      "files": ["research-analyzer.py"],
+      "deliverables": ["AGY CLI verification", "research inventory JSONL file"],
+      "command_source": "frontier-generator"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T00:00:05.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
   "priority": "P3",
-  "tier": "B",
-  "model": "solar-1-preview",
-  "title": "AGY Research Plane Integration - CEH Folder Inventory",
-  "description": "Verify AGY CLI exists and run deep research on Google Drive folder ID 14jjSnprC7AxqPCo8pl6hDZYtg8tuehs- to create recursive inventory.",
-  "steps": [
-    "Verify AGY CLI exists (which agy)",
-    "Run: agy research --goal 'Create recursive inventory of Google Drive folder ID 14jjSnprC7AxqPCo8pl6hDZYtg8tuehs-' --output 01_recursive_drive_inventory.jsonl",
-    "Parse results + store via research-analyzer.py"
-  ],
-  "output_file": "01_recursive_drive_inventory.jsonl",
-  "auto_approve": true,
-  "created_at": "2026-07-17T00:00:05Z"
+  "tier": "B"
 }

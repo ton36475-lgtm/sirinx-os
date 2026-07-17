@@ -1,17 +1,39 @@
 {
-  "task_id": "task_003_p1_api_gateway_expansion",
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-003",
+    "correlation_id": "a2a-fable-v5-1721172802-12347",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator",
+      "role": "task-orchestrator"
+    },
+    "to": {
+      "agent": "claude-architect",
+      "role": "chief_architect"
+    },
+    "action_requested": "API Gateway Expansion",
+    "context": {
+      "goal": "Create missing API Gateway endpoints: /ready, /api/a2a/dispatch, /api/agents/status, /api/deploy/trigger. Connect to existing /health endpoint.",
+      "constraints": ["no deploy", "no git push", "dry-run first"],
+      "lane": "services/api-gateway",
+      "files": ["routers/ready.py", "routers/a2a_dispatch.py", "routers/agents_status.py", "routers/deploy_trigger.py"],
+      "deliverables": ["4 new endpoint implementations", "router registration"],
+      "command_source": "frontier-generator"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T00:00:02.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
   "priority": "P1",
-  "tier": "A",
-  "model": "fable-v5",
-  "title": "API Gateway Expansion - Missing Endpoints",
-  "description": "Create missing endpoints: /ready, /api/a2a/dispatch, /api/agents/status, /api/deploy/trigger. Connect to existing /health endpoint.",
-  "endpoints": [
-    {"route": "/ready", "purpose": "Readiness check endpoint"},
-    {"route": "/api/a2a/dispatch", "purpose": "A2A task dispatch endpoint"},
-    {"route": "/api/agents/status", "purpose": "Agent status monitoring"},
-    {"route": "/api/deploy/trigger", "purpose": "Deployment trigger API"},
-    {"route": "/health", "purpose": "exists - verify working"}
-  ],
-  "auto_approve": true,
-  "created_at": "2026-07-17T00:00:02Z"
+  "tier": "A"
 }
