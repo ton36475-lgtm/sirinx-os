@@ -55,5 +55,6 @@
     "allowed": true,
     "tier": "A",
     "reason": "safe"
-  }
+  },
+  "dispatch_error": "error: unexpected argument '--no-stream' found\n\n  tip: a similar argument exists: '--no-alt-screen'\n\nUsage: codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]\n\nFor more information, try "
 }
