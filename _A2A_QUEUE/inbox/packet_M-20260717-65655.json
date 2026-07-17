@@ -1,0 +1,81 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-20260717-65655",
+  "correlation_id": "a2a-hermes-1784245733-3401",
+  "phase": "dispatch",
+  "from": {
+    "agent": "human-operator",
+    "role": "operator"
+  },
+  "to": {
+    "agent": "hermes-commander",
+    "role": "mission_commander"
+  },
+  "action_requested": "review_design",
+  "context": {
+    "goal": "Continue the existing unfinished work only: review local evidence and report the current status of P-102/BUILD-05 (Hermes to OmniRoute status boundary) and dependent P-107/ORCH-02 (Auto-Loop to OmniRoute). Verify artifacts, tests, and receipts without executing OmniRoute, Auto-Loop, the Hermes gateway, or any A2A consumer. Do not claim that all CLI tools are wired or healthy, and do not claim completion without evidence.",
+    "constraints": [
+      "read_only=true",
+      "local_files_only=true",
+      "status_report_only=true",
+      "dry_run=true",
+      "runtime_queue_execution=false",
+      "bridge_execution=false",
+      "a2a_queue_consumption=false",
+      "omniroute_execution=false",
+      "auto_loop_execution=false",
+      "provider_call=false",
+      "external_message_send=false",
+      "network_write=false",
+      "deploy=false",
+      "push=false",
+      "cloud_mutation=false",
+      "secret_read=false",
+      "env_read=false",
+      "install=false",
+      "service_start=false",
+      "gateway_restart=false",
+      "file_mutation=false",
+      "git_stage=false",
+      "git_commit=false",
+      "git_push=false",
+      "no_self_approval"
+    ],
+    "lane": "integrations/omniroute-connector",
+    "files": [
+      "_A2A_QUEUE/inbox/packet_102_wire_omniroute_gateway.json",
+      "PROJECT_STATE.md",
+      "docs/FULL_AUTOMATION_MASTER_PLAN_V2.md",
+      "docs/FULL_AUTOMATION_MASTER_PLAN_V3.md",
+      "integrations/omniroute-connector/index.mjs",
+      "tests/omniroute-connector.test.mjs",
+      "scripts/auto-loop-engineering.mjs",
+      "/Users/sirinx/project-hermes/docs/superpowers/specs/2026-07-17-hermes-routing-status-boundary.md",
+      "/Users/sirinx/project-hermes/config/hermes_routing_status_policy.json"
+    ],
+    "depends_on": [
+      "P-102/BUILD-05",
+      "P-107/ORCH-02"
+    ],
+    "deliverables": [
+      "local_status_report",
+      "evidence_paths",
+      "unresolved_gates",
+      "next_safe_action"
+    ],
+    "command_source": "mission"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "within_lane": "local_file_bus_only",
+    "max_turns": 1
+  },
+  "human_approval_required": false,
+  "timestamp": "2026-07-16T23:48:53.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "hard_block_and_simulate"
+  }
+}

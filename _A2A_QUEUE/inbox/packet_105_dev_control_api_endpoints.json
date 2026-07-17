@@ -1,0 +1,69 @@
+{
+  "project": "sirinx-hermes-pending-work-dispatch",
+  "priority": "P2",
+  "title": "P-105: Dev Control API missing endpoints",
+  "agent": "hermes",
+  "status": "inbox",
+  "risk": "safe",
+  "input": [
+    "PROJECT_STATE.md",
+    "services/dev-control-api"
+  ],
+  "output": [],
+  "approval_required": false,
+  "created_at": "2026-07-16T23:53:55.000Z",
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-b39baf49",
+    "correlation_id": "a2a-hermes-dispatch-P105-b39baf49",
+    "phase": "command_intent:goal",
+    "from": {
+      "agent": "human-operator",
+      "role": "operator"
+    },
+    "to": {
+      "agent": "hermes-commander",
+      "role": "mission-commander"
+    },
+    "action_requested": "goal_define",
+    "context": {
+      "goal": "Decompose and produce an execution plan for PROJECT_STATE.md pending item P-105: Dev Control API missing endpoints. Note this item is already dispatched to Codex per PROJECT_STATE.md; your job is to review status and produce a step-by-step plan and file-lease boundaries for the remaining endpoint work in services/dev-control-api. Constraints: do NOT directly mutate repository files, deploy, push, or read secrets. Do NOT self-approve Tier C/D actions -- any provider call, external send, or irreversible step requires explicit human approval first. Output a plan and open risks only.",
+      "files": [
+        "PROJECT_STATE.md",
+        "services/dev-control-api"
+      ],
+      "lane": "services/dev-control-api",
+      "constraints": [
+        "dry_run=true",
+        "provider_call=requires_human_approval",
+        "external_message_send=false",
+        "deploy=false",
+        "push=false",
+        "secret_read=false",
+        "no_direct_file_mutation",
+        "no_self_approval"
+      ],
+      "deliverables": [
+        "execution_plan",
+        "file_lease_boundaries",
+        "open_risks"
+      ],
+      "command_source": "human_operator_dispatch_2026-07-17"
+    },
+    "response_expected": {
+      "format": "packet_and_dry_run_preview",
+      "within_lane": "local_file_bus_only",
+      "max_turns": 1
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-16T23:53:55.000Z",
+    "ttl_seconds": 900,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "notes": "dry_run=true; no_direct_file_mutation; no_self_approval; deploy=false; push=false; secret_read=false; re-routed to hermes-commander per human operator request 2026-07-17",
+  "id": "packet_105_dev_control_api_endpoints"
+}
