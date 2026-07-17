@@ -10,11 +10,18 @@ export type AgentRole =
   | "hermes-commander"
   | "opus-architect"
   | "codex-captain"
+  | "claude-architect"
+  | "opencode-reviewer"
+  | "copilot-agent"
+  | "cline-agent"
+  | "antigravity2"
   | "glm-worker"
   | "deepseek-worker"
   | "kob-validator"
   | "command-broker"
-  | "human-operator";
+  | "human-operator"
+  | "manus-agent"
+  | "line-operator-mcp";
 
 export type ActionClass =
   | "READ"

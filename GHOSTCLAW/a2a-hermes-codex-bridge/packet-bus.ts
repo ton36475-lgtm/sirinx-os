@@ -11,7 +11,7 @@ export const DEFAULT_QUEUE_ROOT = "_A2A_QUEUE";
 
 export type PacketStatus = "inbox" | "working" | "outbox" | "done" | "blocked";
 export type PacketRisk = "safe" | "medium" | "high" | "critical";
-export type PacketAgent = "hermes" | "codex" | "opus" | "kob" | "human";
+export type PacketAgent = "hermes" | "codex" | "claude" | "opencode" | "copilot" | "opus" | "kob" | "human";
 
 export interface A2APacket {
   id: string;

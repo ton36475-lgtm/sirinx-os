@@ -3,9 +3,61 @@
 // https://github.com/diegosouzapw/OmniRoute
 // MIT License · npm: omniroute v3.8.48
 
-import { spawn } from 'node:child_process';
+import { existsSync, realpathSync, statSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { delimiter, dirname, join, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-export function getOmniRouteStatus() {
+const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
+const CMUX_SHIM_PART = 'cmux-cli-shims';
+
+function containsCmuxShim(candidate) {
+  return candidate.split(sep).includes(CMUX_SHIM_PART);
+}
+
+export function getOmniRouteCandidates({
+  homeDir = homedir(),
+  pathValue = process.env.PATH ?? '',
+  repoBinary = resolve(MODULE_DIR, '../omniroute/bin/omniroute.mjs')
+} = {}) {
+  const pathCandidates = pathValue
+    .split(delimiter)
+    .filter(Boolean)
+    .filter((directory) => !containsCmuxShim(directory))
+    .map((directory) => join(directory, 'omniroute'));
+
+  return [...new Set([
+    join(homeDir, '.local', 'bin', 'omniroute'),
+    ...pathCandidates,
+    repoBinary
+  ])];
+}
+
+export function resolveOmniRouteBinary({ candidates } = {}) {
+  const inspectedCandidates = candidates ?? getOmniRouteCandidates();
+
+  for (const candidate of inspectedCandidates) {
+    if (!candidate || containsCmuxShim(candidate) || !existsSync(candidate)) {
+      continue;
+    }
+
+    try {
+      const resolvedCandidate = realpathSync(candidate);
+      if (containsCmuxShim(resolvedCandidate) || !statSync(resolvedCandidate).isFile()) {
+        continue;
+      }
+      return resolvedCandidate;
+    } catch {
+      // Broken links and unreadable paths are unavailable, not executable fallbacks.
+    }
+  }
+
+  return null;
+}
+
+export function getOmniRouteStatus(options = {}) {
+  const binaryPath = resolveOmniRouteBinary(options);
+
   return {
     name: 'omniroute',
     description: 'Free AI Gateway — 250+ providers, 90+ free, RTK+Caveman compression',
@@ -16,6 +68,11 @@ export function getOmniRouteStatus() {
     stars: 17698,
     installMethod: 'npm install -g omniroute',
     binary: 'omniroute',
+    installation: {
+      installed: binaryPath !== null,
+      state: binaryPath === null ? 'not-installed' : 'local-artifact-found',
+      binaryPath
+    },
     capabilities: {
       providers: '250+',
       freeProviders: '90+',
@@ -37,13 +94,13 @@ export function getOmniRouteStatus() {
       externalCallGate: true  // needs approval before provider call
     },
     integrationPlan: {
-      step1: 'npx omniroute --version (verify install)',
-      step2: 'npx omniroute start (local proxy :8787)',
+      step1: 'Detect a local launcher or repo artifact without executing it',
+      step2: 'Require an exact execution gate before starting local proxy :8787',
       step3: 'Point GhostClaw agents to OmniRoute endpoint',
       step4: 'Configure free-tier providers first',
       step5: 'Enable RTK+Caveman compression'
     },
-    runCommand: 'npx omniroute'
+    runCommand: null
   };
 }
 
@@ -71,10 +128,18 @@ export function getOmniRouteIntegrationConfig() {
   };
 }
 
-export async function runOmniRouteCommand(args = []) {
+export async function runOmniRouteCommand(args = [], options = {}) {
+  const status = getOmniRouteStatus(options);
+  const installed = status.installation.installed;
+
   return {
-    command: `omniroute ${args.join(' ')}`,
-    status: 'pending-install',
-    note: 'Run after npm install -g omniroute completes'
+    commandPreview: ['omniroute', ...args],
+    status: installed ? 'blocked-execution-gate' : 'not-installed',
+    installed,
+    binaryPath: status.installation.binaryPath,
+    executionAllowed: false,
+    note: installed
+      ? 'Local artifact detected; execution remains blocked pending an exact approval gate'
+      : 'No usable local OmniRoute artifact detected; install is not authorized by this status check'
   };
 }
