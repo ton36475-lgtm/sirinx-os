@@ -32,9 +32,9 @@ AGENT_PRIORITY = [
 
 # Map actual CLI agents
 CLI_AGENTS = {
-    "opencode-reviewer": {"cli": "/opt/homebrew/bin/opencode", "model": "moonshot-v1-256k-kimi3"},
-    "codex-captain": {"cli": "/Users/sirinx/.local/bin/codex", "model": "deepseek-v4-pro"},
-    "cline-planner": {"cli": "cline", "model": "glm-5.2"},
+    "opencode-reviewer": {"cli": "/opt/homebrew/bin/opencode", "model": "moonshot-v1-128k-kimi3", "endpoint": "http://localhost:18789"},
+    "codex-captain": {"cli": "/Users/sirinx/.local/bin/codex", "model": "deepseek-v4-pro", "endpoint": "http://localhost:18789"},
+    "cline-planner": {"cli": "cline", "model": "glm-5.2", "endpoint": "http://localhost:18789"},
 }
 
 def sync_status():
@@ -42,7 +42,11 @@ def sync_status():
     status = {"timestamp": datetime.now(timezone.utc).isoformat(), "agents": {}}
     
     for agent in AGENT_PRIORITY:
-        cli_name = agent["cli"].split("/")[-1] if "/" in agent["cli"] else agent["cli"]
+        cli = agent.get("cli")
+        if cli is None:
+            status["agents"][agent["name"]] = {"available": False, "model": agent["model"]}
+            continue
+        cli_name = cli.split("/")[-1] if "/" in cli else cli
         try:
             result = subprocess.run(
                 ["which", cli_name], capture_output=True, text=True, timeout=5
@@ -51,7 +55,7 @@ def sync_status():
             status["agents"][agent["name"]] = {
                 "available": available,
                 "model": agent["model"],
-                "cli_path": agent["cli"] if available else None
+                "cli_path": cli if available else None
             }
         except:
             status["agents"][agent["name"]] = {"available": False, "model": agent["model"]}
