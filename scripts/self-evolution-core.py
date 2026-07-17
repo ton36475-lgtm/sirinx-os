@@ -12,7 +12,7 @@ Architecture: 4-level evolution pipeline
   L4: Test suite + mutation routing
   L5: Mutation engine (error → skill → evolve)
 
-Node identity: poipet_pc_heavy_worker
+Node identity: local_mac_m2_core
 Gateway: OmniRoute API Gateway :20128 (250 providers, 94 MCP tools)
 
 Usage:
@@ -37,7 +37,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # ─── Identity ───
-NODE_IDENTITY = "poipet_pc_heavy_worker"
+NODE_IDENTITY = "local_mac_m2_core"
 OMNIROUTE_ENDPOINT = "http://127.0.0.1:20128"
 CANONICAL_VERSION = "2.0"
 MIN_DISK_GB = 15.0

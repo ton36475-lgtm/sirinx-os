@@ -1,6 +1,6 @@
 {
   "gateway_configuration": {
-    "node_identity": "poipet_pc_heavy_worker",
+    "node_identity": "local_mac_m2_core",
     "core_endpoint": "http://127.0.0.1:20128",
     "hermes_bridge_port": 8644,
     "skills_api_port": 3800,
