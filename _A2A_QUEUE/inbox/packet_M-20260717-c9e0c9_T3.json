@@ -1,0 +1,17 @@
+{
+  "mission_id": "M-20260717-c9e0c9",
+  "task_id": "T3",
+  "to": {
+    "agent": "codex-captain"
+  },
+  "context": {
+    "goal": "Run pnpm hq:test to verify fix",
+    "tier": "A",
+    "mission": "fix failing tests in the repo"
+  },
+  "depends_on": [
+    "T2"
+  ],
+  "timeout": 120,
+  "timestamp": "2026-07-17T01:21:28.086348+00:00"
+}

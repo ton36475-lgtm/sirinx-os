@@ -1,8 +1,8 @@
 {
-  "a2a2a_version": "2.0",
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-packet_M-20260717-45696",
   "mission_id": "M-20260717-45696",
-  "correlation_id": "a2a-opencode-1784234317-20003",
-  "phase": "dispatch",
+  "timestamp": "2026-07-16T20:38:37.000Z",
   "from": {
     "agent": "human-operator",
     "role": "operator"
@@ -11,32 +11,21 @@
     "agent": "opencode-reviewer",
     "role": "independent_reviewer"
   },
-  "action_requested": "Test A2A bridge - list files",
   "context": {
     "goal": "Test A2A bridge - list files",
-    "constraints": [
-      "no deploy",
-      "no git push",
-      "no cloud mutation",
-      "no secret read or print",
-      "no external send",
-      "dry-run first"
-    ],
-    "lane": "",
-    "files": [],
-    "deliverables": [],
-    "command_source": "operator"
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "a2a-opencode-1784234317-20003"
   },
-  "response_expected": {
-    "format": "receipt_json",
-    "max_turns": 3
+  "payload": {
+    "type": "task",
+    "action": "Test A2A bridge - list files",
+    "depends_on": [],
+    "timeout": 300
   },
-  "human_approval_required": false,
-  "timestamp": "2026-07-16T20:38:37.000Z",
-  "ttl_seconds": 86400,
-  "status": "PENDING",
-  "safe_execution_v3": {
-    "mode": "full_auto_yolo_safe_execution",
-    "blocked_action_behavior": "auto_block_and_continue"
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.651575+00:00"
   }
 }

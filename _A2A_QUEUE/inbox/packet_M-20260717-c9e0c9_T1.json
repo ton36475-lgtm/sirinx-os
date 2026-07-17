@@ -1,0 +1,15 @@
+{
+  "mission_id": "M-20260717-c9e0c9",
+  "task_id": "T1",
+  "to": {
+    "agent": "codex-captain"
+  },
+  "context": {
+    "goal": "Identify the root cause of: fix failing tests in the repo",
+    "tier": "A",
+    "mission": "fix failing tests in the repo"
+  },
+  "depends_on": [],
+  "timeout": 300,
+  "timestamp": "2026-07-17T01:21:28.086043+00:00"
+}

@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "generated": "2026-07-17",
+  "description": "OmniRoute AI Gateway wiring config for 47 Ronin agents. All agents route LLM calls through localhost:20128 instead of direct provider calls.",
+  "gateway": {
+    "base_url": "http://localhost:20128",
+    "health_endpoint": "http://localhost:20128/api/health",
+    "chat_endpoint": "http://localhost:20128/api/chat",
+    "models_endpoint": "http://localhost:20128/api/models",
+    "fallback_strategy": "local-ollama",
+    "fallback_url": "http://localhost:11434",
+    "timeout_ms": 30000,
+    "retry_count": 2,
+    "rate_limit_per_min": 60
+  },
+  "agent_routing": {
+    "shogun": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-chat",
+      "max_tokens": 8192,
+      "temperature": 0.7
+    },
+    "planner": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-chat",
+      "max_tokens": 8192,
+      "temperature": 0.3
+    },
+    "codex-captain": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-coder",
+      "max_tokens": 16384,
+      "temperature": 0.1
+    },
+    "claude-architect": {
+      "primary_model": "claude-sonnet-4",
+      "fallback_model": "glm-5.2",
+      "max_tokens": 16384,
+      "temperature": 0.2
+    },
+    "opencode-reviewer": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-chat",
+      "max_tokens": 8192,
+      "temperature": 0.1
+    },
+    "ml-researcher": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-chat",
+      "max_tokens": 16384,
+      "temperature": 0.5
+    },
+    "content-writer": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-chat",
+      "max_tokens": 8192,
+      "temperature": 0.8
+    },
+    "default": {
+      "primary_model": "glm-5.2",
+      "fallback_model": "deepseek-chat",
+      "max_tokens": 8192,
+      "temperature": 0.3
+    }
+  },
+  "cost_guard": {
+    "max_cost_per_request_usd": 0.10,
+    "max_cost_per_goal_usd": 5.00,
+    "max_cost_per_day_usd": 20.00,
+    "free_tier_first": true,
+    "free_models_priority": ["glm-5.2", "deepseek-chat", "qwen2.5:32b"]
+  },
+  "safety": {
+    "block_external_without_gateway": false,
+    "log_all_requests": true,
+    "mask_pii_in_logs": true,
+    "secret_scan_before_send": true
+  }
+}

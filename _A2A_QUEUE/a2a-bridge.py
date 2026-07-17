@@ -123,20 +123,67 @@ def find_cli(cli_name: str) -> str | None:
     return shutil.which(cli_name)
 
 
+# ─── Safety Gates (TypeScript broker equivalent) ───
+
+# Hard-deny patterns — never execute
+FORBIDDEN_PATTERNS = [
+    r"\.env\b", r"AUTH|TOKEN|SECRET|PASSWORD|API_KEY", r"credentials?",
+    r"rm\s+-rf\s+/", r"git\s+push\s+--force", r"mkfs",
+    r"DROP\s+TABLE|DELETE\s+FROM", r"eval\s*\(|exec\s*\(",
+    r"curl.*\|\s*(bash|sh|python)", r"wget.*\|\s*(bash|sh)",
+]
+
+# Tier C actions — require human approval
+TIER_C_KEYWORDS = [
+    "deploy", "push", "release", "publish", "cloudflare",
+    "customer", "send.*message", "external.*api", "payment"
+]
+
+import re as _re
+def safety_scan(prompt: str, cli: str) -> dict:
+    """Evaluate command before dispatch. Returns {allowed, tier, reason}."""
+    prompt_lower = prompt.lower()
+
+    # Check forbidden patterns
+    for pattern in FORBIDDEN_PATTERNS:
+        if _re.search(pattern, prompt, _re.IGNORECASE):
+            return {"allowed": False, "tier": "X", "reason": f"FORBIDDEN pattern matched: {pattern}"}
+
+    # Check Tier C (requires approval)
+    for kw in TIER_C_KEYWORDS:
+        if _re.search(kw, prompt_lower):
+            return {"allowed": False, "tier": "C", "reason": f"Tier C action detected: {kw}"}
+
+    # Determine tier
+    tier = "A"
+    if any(w in prompt_lower for w in ["write", "create", "modify", "edit", "fix", "build"]):
+        tier = "B"
+
+    return {"allowed": True, "tier": tier, "reason": "safe"}
+
+def mask_secrets(text: str) -> str:
+    """Redact secrets from output before logging"""
+    patterns = [
+        (r"(?i)(api[_-]?key|token|secret|password)\s*[=:]\s*\S+", r"\1=***REDACTED***"),
+        (r"(?i)(sk-[a-zA-Z0-9]{20,})", r"sk-***REDACTED***"),
+        (r"(?i)(Bearer\s+[a-zA-Z0-9\-._~+\/]+)", r"Bearer ***REDACTED***"),
+        (r"(?i)(ghp_[a-zA-Z0-9]{36})", r"ghp_***REDACTED***"),
+        (r"(?i)(AKIA[A-Z0-9]{16})", r"AKIA***REDACTED***"),
+    ]
+    for pattern, replacement in patterns:
+        text = _re.sub(pattern, replacement, text)
+    return text
+
+
 def cli_prompt_flags(cli: str, prompt: str) -> list[str]:
     """Build CLI invocation args for each tool."""
     if cli == "hermes":
-        # Hermes: hermes chat -q "prompt"
         return ["chat", "-q", prompt]
     elif cli == "codex":
-        # Codex (Rust): codex exec -s workspace-write "prompt"
-        # (exec subcommand already in CLI_FLAGS, prompt is positional)
         return [prompt]
     elif cli in ("claude", "claude-code"):
-        # Claude Code: claude -p "prompt"
         return ["-p", prompt]
     elif cli == "opencode":
-        # OpenCode: opencode -p "prompt"
         return ["-p", prompt]
     else:
         return [prompt]
@@ -190,21 +237,44 @@ def process_packet(packet_path: Path) -> dict[str, Any]:
     if not cli_path:
         return {"error": f"CLI not found: {cli_name}", "correlation_id": correlation_id}
 
+    # ─── Safety Gate: scan before dispatch ───
+    gate = safety_scan(goal, cli_name)
+    if not gate["allowed"]:
+        log.warning("SAFETY GATE BLOCKED: tier=%s reason=%s", gate["tier"], gate["reason"])
+        receipt = build_receipt(msg, "blocked", f"SAFETY: {gate['reason']}")
+        result = {
+            "mission_id": mission_id,
+            "correlation_id": correlation_id,
+            "agent_dispatched": cli_name,
+            "return_code": -10,
+            "safety_gate": gate,
+            "receipt": receipt,
+            "processed_at": now_iso(),
+        }
+        out_path = QUEUE_ROOT / "blocked" / f"bridge_{correlation_id}_{uuid.uuid4().hex[:8]}.json"
+        out_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
+        return result
+
     lane = msg.get("context", {}).get("lane", "")
     workdir = str(PROJECT_ROOT / lane) if lane and (PROJECT_ROOT / lane).exists() else None
 
-    log.info("Dispatching agent=%s → cli=%s | mission=%s | goal=%.60s", to_agent, cli_name, mission_id, goal)
+    log.info("Dispatching agent=%s → cli=%s | tier=%s | mission=%s | goal=%.60s", to_agent, cli_name, gate["tier"], mission_id, goal)
 
     rc, stdout, stderr = run_cli(cli_path, goal, workdir)
 
-    receipt = build_receipt(msg, "completed" if rc == 0 else "failed", stderr[:500] if stderr else "")
+    # ─── Post-dispatch: mask secrets in output ───
+    stdout_masked = mask_secrets(stdout[:2000])
+    stderr_masked = mask_secrets(stderr[:1000])
+
+    receipt = build_receipt(msg, "completed" if rc == 0 else "failed", stderr_masked[:500] if stderr_masked else "")
     result = {
         "mission_id": mission_id,
         "correlation_id": correlation_id,
         "agent_dispatched": cli_name,
+        "safety_tier": gate["tier"],
         "return_code": rc,
-        "stdout_truncated": stdout[:2000],
-        "stderr_truncated": stderr[:1000],
+        "stdout_truncated": stdout_masked,
+        "stderr_truncated": stderr_masked,
         "receipt": receipt,
         "processed_at": now_iso(),
     }

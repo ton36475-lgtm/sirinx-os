@@ -1,27 +1,31 @@
 {
-  "packet_id": "packet_051_phase_5c_durable_object_integration",
-  "correlation_id": "sirinx-phase5c-durable-object-20260714-001",
-  "source": "hermes",
-  "target": "operator",
-  "type": "implementation_evidence",
-  "status": "ARCHIVED_SUPERSEDED",
-  "phase": "5C",
-  "subphase": "Durable Object Mutex Spec",
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-packet_051_phase_5c_durable_object_integration",
+  "mission_id": "M-packet_051_phase_5c_durable_object_integration",
   "timestamp": "2026-07-14T04:00:00+07:00",
-  "deliverables": [
-    "legacy/cloudflare/wrangler.toml.edge-orchestrator.template",
-    "legacy/StateLockerDo.ts",
-    "legacy/local_bridge_daemon.py",
-    "services/orchestrator/sirinx-bridge-wrapper.sh.template",
-    ".ghostclaw/schemas/sirinx-state-locker-durable-object.schema.json"
-  ],
-  "safety_constraints": {
-    "no_deploy": true,
-    "no_push": true,
-    "no_cloud_mutation": true,
-    "dry_run_only": true,
-    "allowed_tier": "B"
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
   },
-  "next_phase_ready": false,
-  "notes": "Archived Phase 5C prototype evidence. It is not an active integration target and does not authorize deployment."
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'packet_id': 'packet_051_phase_5c_durable_object_integration', 'correlation_id': 'sirinx-phase5c-du",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "sirinx-phase5c-durable-object-20260714-001"
+  },
+  "payload": {
+    "type": "task",
+    "action": "",
+    "depends_on": [],
+    "timeout": 300
+  },
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.650857+00:00"
+  }
 }

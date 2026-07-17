@@ -1,84 +1,31 @@
 {
-  "project": "sirinx-line-bot",
-  "priority": "P1",
-  "title": "OpenCode: LINE Integration Testing + Sandbox QA",
-  "agent": "codex",
-  "status": "inbox",
-  "risk": "safe",
-  "input": [
-    ".hermes/hermes-agent/plugins/platforms/line/sirinx/",
-    ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
-    ".hermes/hermes-agent/tests/gateway/test_line_plugin.py"
-  ],
-  "output": [
-    ".hermes/hermes-agent/plugins/platforms/line/sirinx/tests/"
-  ],
-  "approval_required": false,
-  "created_at": "2026-07-07T12:00:00.000Z",
-  "a2a2a_message": {
-    "a2a2a_version": "2.0",
-    "mission_id": "M-032",
-    "correlation_id": "sirinx-line-bot-032",
-    "phase": "test:integration",
-    "from": {
-      "agent": "human",
-      "role": "product-owner"
-    },
-    "to": {
-      "agent": "codex-captain",
-      "role": "qa-captain"
-    },
-    "action_requested": "verify",
-    "context": {
-      "goal": "Build integration test suite for SIRINX LINE bot under Hermes LINE plugin. Test message interception, intent classification, ROI calculator state machine, Flex Message output structure, governance risk gates, and postback handling against LINE Messaging API sandbox (mock HTTP endpoints). Tests must comply with Hermes Agent testing conventions (pytest, scripts/run_tests.sh compatible, subprocess-per-file isolation).",
-      "files": [
-        ".hermes/hermes-agent/plugins/platforms/line/sirinx/",
-        ".hermes/hermes-agent/plugins/platforms/line/adapter.py",
-        ".hermes/hermes-agent/tests/gateway/test_line_plugin.py"
-      ],
-      "lane": ".hermes/hermes-agent/plugins/platforms/line/sirinx/tests",
-      "constraints": [
-        "dry_run=false",
-        "deploy=false",
-        "push=false",
-        "secret_read=false",
-        "no_live_send",
-        "no_real_line_api_calls",
-        "mock_aiohttp_responses",
-        "pytest_only",
-        "scripts/run_tests.sh_compatible",
-        "do_not_modify_existing_test_line_plugin.py",
-        "all_new_tests_in_plugins/platforms/line/sirinx/tests/"
-      ],
-      "deliverables": [
-        "test_intent_classifier.py — 15+ cases per intent, edge cases, Thai/English mixing",
-        "test_roi_calculator.py — state machine transitions, input parsing, calculation math, edge values",
-        "test_flex_templates.py — structural validation of Flex Message JSON output",
-        "test_governance.py — deny list matches, handoff detection, receipt writing",
-        "test_sirinx_bot.py — end-to-end message processing through SirinxBot orchestrator",
-        "test_postback.py — postback action routing and response generation"
-      ],
-      "command_source": "mission",
-      "license_policy": {
-        "requested_license": "MIT",
-        "repo_license_file_present": false,
-        "assertion": "intent_only_until_license_file_exists"
-      }
-    },
-    "response_expected": {
-      "format": "packet_and_test_report",
-      "within_lane": "local_file_bus_only",
-      "max_turns": 2
-    },
-    "human_approval_required": false,
-    "timestamp": "2026-07-07T12:00:00.000Z",
-    "ttl_seconds": 3600,
-    "status": "PENDING",
-    "safe_execution_v3": {
-      "mode": "full_auto_yolo_safe_execution",
-      "blocked_action_behavior": "auto_block_and_continue"
-    }
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-packet_032_sirinx_line_integration_test",
+  "mission_id": "M-packet_032_sirinx_line_integration_test",
+  "timestamp": "2026-07-17T01:20:15.657997+00:00",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
   },
-  "notes": "Mock aiohttp for LINE API; verify Flex Message structural validity (type, altText, contents); test ROI calculator edge cases (min bill=10K, max area=50K sqm, extreme daytime values); verify governance blocks forbidden claims like 'guaranteed savings'",
-  "id": "packet_032_sirinx_line_integration_test"
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'project': 'sirinx-line-bot', 'priority': 'P1', 'title': 'OpenCode: LINE Integration Testing + Sand",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_032_sirinx_line_integration_test"
+  },
+  "payload": {
+    "type": "task",
+    "action": "",
+    "depends_on": [],
+    "timeout": 300
+  },
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.658216+00:00"
+  }
 }

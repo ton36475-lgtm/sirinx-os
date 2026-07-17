@@ -1,34 +1,31 @@
 {
-  "id": "packet_012",
-  "project": "ghostclaw",
-  "priority": "P0",
-  "title": "Hermes review request for LANE_1 Codex recorder architecture draft",
-  "agent": "hermes",
-  "status": "inbox",
-  "risk": "safe",
-  "input": [
-    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
-    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_INPUT_WORKSHEET_2026-06-29.md",
-    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_ROUTE_RECEIPT_2026-06-29.md",
-    "_A2A_QUEUE/outbox/packet_011_ghostclaw_lane1_hermes_route_receipt.json",
-    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
-    "_OBSIDIAN_GHOSTCLAW_BRAIN/17_ACCEPTANCE_CRITERIA.md"
-  ],
-  "output": [
-    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DRAFT_REVIEW_REQUEST_2026-06-29.md",
-    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
-    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md"
-  ],
-  "approval_required": false,
-  "dry_run": true,
-  "live_send": false,
-  "provider_call": false,
-  "external_message_send": false,
-  "runtime_queue_execution": false,
-  "deploy": false,
-  "push": false,
-  "lane2_authorized": false,
-  "review_request": true,
-  "decision_record": false,
-  "notes": "Local file-bus review request only. Hermes should review the Codex recorder draft and either route to Opus for the final packet, request revision, or explicitly open a Codex-as-recorder gate. This packet is not Hermes approval and does not authorize LANE_2."
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-packet_012_ghostclaw_lane1_hermes_draft_review",
+  "mission_id": "M-packet_012_ghostclaw_lane1_hermes_draft_review",
+  "timestamp": "2026-07-17T01:20:15.652689+00:00",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'id': 'packet_012', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes review request for L",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_012_ghostclaw_lane1_hermes_draft_review"
+  },
+  "payload": {
+    "type": "task",
+    "action": "",
+    "depends_on": [],
+    "timeout": 300
+  },
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.652701+00:00"
+  }
 }

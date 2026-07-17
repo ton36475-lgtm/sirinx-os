@@ -1,68 +1,31 @@
 {
-  "project": "sirinx-hermes-pending-work-dispatch",
-  "priority": "P2",
-  "title": "P-106: Skills API serve skills as JSON",
-  "agent": "hermes",
-  "status": "inbox",
-  "risk": "safe",
-  "input": [
-    "PROJECT_STATE.md"
-  ],
-  "output": [],
-  "approval_required": false,
-  "created_at": "2026-07-16T23:53:55.000Z",
-  "a2a2a_message": {
-    "a2a2a_version": "2.0",
-    "mission_id": "M-20260717-88d9cd14",
-    "correlation_id": "a2a-hermes-dispatch-P106-88d9cd14",
-    "phase": "command_intent:goal",
-    "from": {
-      "agent": "human-operator",
-      "role": "operator"
-    },
-    "to": {
-      "agent": "hermes-commander",
-      "role": "mission-commander"
-    },
-    "action_requested": "goal_define",
-    "context": {
-      "goal": "Decompose and produce an execution plan for PROJECT_STATE.md pending item P-106: Skills API serve skills as JSON. This item is currently unassigned. Your job is to produce a step-by-step plan, propose an owner (Codex/Claude/OpenCode), and file-lease boundaries for exposing the Skills API (:3800) skill list as JSON. Constraints: do NOT directly mutate repository files, deploy, push, or read secrets. Do NOT self-approve Tier C/D actions -- any provider call, external send, or irreversible step requires explicit human approval first. Output a plan, proposed owner, and open risks only.",
-      "files": [
-        "PROJECT_STATE.md"
-      ],
-      "lane": "",
-      "constraints": [
-        "dry_run=true",
-        "provider_call=requires_human_approval",
-        "external_message_send=false",
-        "deploy=false",
-        "push=false",
-        "secret_read=false",
-        "no_direct_file_mutation",
-        "no_self_approval"
-      ],
-      "deliverables": [
-        "execution_plan",
-        "proposed_owner",
-        "file_lease_boundaries",
-        "open_risks"
-      ],
-      "command_source": "human_operator_dispatch_2026-07-17"
-    },
-    "response_expected": {
-      "format": "packet_and_dry_run_preview",
-      "within_lane": "local_file_bus_only",
-      "max_turns": 1
-    },
-    "human_approval_required": false,
-    "timestamp": "2026-07-16T23:53:55.000Z",
-    "ttl_seconds": 900,
-    "status": "PENDING",
-    "safe_execution_v3": {
-      "mode": "full_auto_yolo_safe_execution",
-      "blocked_action_behavior": "auto_block_and_continue"
-    }
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-packet_106_skills_api_json",
+  "mission_id": "M-packet_106_skills_api_json",
+  "timestamp": "2026-07-17T01:20:15.656492+00:00",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
   },
-  "notes": "dry_run=true; no_direct_file_mutation; no_self_approval; deploy=false; push=false; secret_read=false; re-routed to hermes-commander per human operator request 2026-07-17",
-  "id": "packet_106_skills_api_json"
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'project': 'sirinx-hermes-pending-work-dispatch', 'priority': 'P2', 'title': 'P-106: Skills API ser",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_106_skills_api_json"
+  },
+  "payload": {
+    "type": "task",
+    "action": "",
+    "depends_on": [],
+    "timeout": 300
+  },
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.656505+00:00"
+  }
 }

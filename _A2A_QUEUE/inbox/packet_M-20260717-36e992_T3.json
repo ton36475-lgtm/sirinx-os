@@ -1,0 +1,17 @@
+{
+  "mission_id": "M-20260717-36e992",
+  "task_id": "T3",
+  "to": {
+    "agent": "devops-engineer"
+  },
+  "context": {
+    "goal": "HUMAN APPROVAL REQUIRED: deploy to production",
+    "tier": "C",
+    "mission": "deploy to production"
+  },
+  "depends_on": [
+    "T2"
+  ],
+  "timeout": 0,
+  "timestamp": "2026-07-17T01:21:35.880730+00:00"
+}

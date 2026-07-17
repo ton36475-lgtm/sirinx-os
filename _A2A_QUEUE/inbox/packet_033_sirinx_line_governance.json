@@ -1,83 +1,31 @@
 {
-  "project": "sirinx-line-bot",
-  "priority": "P1",
-  "title": "Governance: SIRINX LINE Risk Gate + Auto-send Prevention",
-  "agent": "hermes",
-  "status": "inbox",
-  "risk": "safe",
-  "input": [
-    ".hermes/hermes-agent/plugins/platforms/line/sirinx/governance.py",
-    ".hermes/hermes-agent/plugins/platforms/line/sirinx/__init__.py"
-  ],
-  "output": [
-    ".hermes/hermes-agent/plugins/platforms/line/sirinx/governance.py"
-  ],
-  "approval_required": false,
-  "created_at": "2026-07-07T12:00:00.000Z",
-  "a2a2a_message": {
-    "a2a2a_version": "2.0",
-    "mission_id": "M-033",
-    "correlation_id": "sirinx-line-bot-033",
-    "phase": "policy:governance",
-    "from": {
-      "agent": "human",
-      "role": "product-owner"
-    },
-    "to": {
-      "agent": "hermes-commander",
-      "role": "policy-enforcer"
-    },
-    "action_requested": "policy_enforce",
-    "context": {
-      "goal": "Review and harden SIRINX LINE governance: deny-list patterns for forbidden claims (guaranteed ROI, zero downtime, no risk), human handoff detection keywords, commitment phrase patterns, auto-send/broadcast kill switches (env-gated), and GHOSTCLAW receipt writing. Ensure zero auto-send without human gate by default, and all human handoff requests write provenance receipts to ~/.ghostclaw/receipts/.",
-      "files": [
-        ".hermes/hermes-agent/plugins/platforms/line/sirinx/governance.py",
-        ".hermes/hermes-agent/plugins/platforms/line/sirinx/__init__.py"
-      ],
-      "lane": ".hermes/hermes-agent/plugins/platforms/line/sirinx",
-      "constraints": [
-        "dry_run=false",
-        "deploy=false",
-        "push=false",
-        "secret_read=false",
-        "no_blanket_approval",
-        "no_live_send",
-        "do_not_modify_adapter.py",
-        "do_not_modify_other_sirinx_files",
-        "LINE_AUTO_SEND_ENABLED_default=false",
-        "LINE_BROADCAST_ENABLED_default=false",
-        "all_receipts_written_to_~/.ghostclaw/receipts/"
-      ],
-      "deliverables": [
-        "DenyList with 14+ forbidden claim patterns covering Thai + English",
-        "Handoff keyword detection (price inquiry, negotiation, commitment)",
-        "Commitment pattern detection (sign contract, agree deal, delivery date)",
-        "RiskAssessment dataclass with is_risky, requires_human, requires_handoff flags",
-        "RiskGate class with env-gated auto_send and broadcast checks",
-        "GovernanceReceipt with receipt_id, chat_id, action, status, payload, reason, timestamp",
-        "Claim guard that prepends disclaimer text when risky patterns matched in bot replies"
-      ],
-      "command_source": "mission",
-      "license_policy": {
-        "requested_license": "MIT",
-        "repo_license_file_present": false,
-        "assertion": "intent_only_until_license_file_exists"
-      }
-    },
-    "response_expected": {
-      "format": "packet_and_policy_report",
-      "within_lane": "local_file_bus_only",
-      "max_turns": 1
-    },
-    "human_approval_required": false,
-    "timestamp": "2026-07-07T12:00:00.000Z",
-    "ttl_seconds": 1800,
-    "status": "PENDING",
-    "safe_execution_v3": {
-      "mode": "full_auto_yolo_safe_execution",
-      "blocked_action_behavior": "auto_block_and_continue"
-    }
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-packet_033_sirinx_line_governance",
+  "mission_id": "M-packet_033_sirinx_line_governance",
+  "timestamp": "2026-07-17T01:20:15.659530+00:00",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
   },
-  "notes": "Deny list must prevent: guaranteed savings, 30% reduction, zero downtime, no risk claims, free energy claims; Handoff keywords must include price negotiation patterns; All receipts follow existing ~/.ghostclaw/receipts/ convention",
-  "id": "packet_033_sirinx_line_governance"
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'project': 'sirinx-line-bot', 'priority': 'P1', 'title': 'Governance: SIRINX LINE Risk Gate + Auto-",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_033_sirinx_line_governance"
+  },
+  "payload": {
+    "type": "task",
+    "action": "",
+    "depends_on": [],
+    "timeout": 300
+  },
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.659546+00:00"
+  }
 }

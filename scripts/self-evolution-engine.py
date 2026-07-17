@@ -99,34 +99,121 @@ def check_a2a_queue() -> dict:
     return counts
 
 def auto_repair_disk() -> list[str]:
-    """Auto-repair: clean caches if disk low"""
+    """L3 Auto-Purge: aggressive disk cleanup when space is low"""
     actions = []
     disk = check_disk()
-    if disk.get("warning", True):
-        # Clean safe targets
-        targets = [
+    free = disk.get("free_gb", 0)
+
+    # Always clean pycache (zero risk)
+    run_cmd("find /Users/sirinx/sirinx-os -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null")
+    actions.append("Cleaned: __pycache__")
+
+    if free < 15.0:
+        log("WARN", f"Disk low ({free:.1f}GB) — aggressive cleanup")
+
+        # 1. Package manager caches
+        rc, _ = run_cmd("pnpm store prune 2>/dev/null", timeout=60)
+        if rc == 0: actions.append("Cleaned: pnpm store prune")
+
+        rc, _ = run_cmd("npm cache clean --force 2>/dev/null", timeout=60)
+        if rc == 0: actions.append("Cleaned: npm cache")
+
+        rc, _ = run_cmd("bun pm cache rm 2>/dev/null", timeout=30)
+        if rc == 0: actions.append("Cleaned: bun cache")
+
+        # 2. Build artifacts older than 24h
+        targets_24h = [
             "apps/centerbrain-shell/.next",
-            ".cache",
+            ".turbo",
+            "integrations/omniroute/.build",
         ]
-        for t in targets:
+        for t in targets_24h:
             p = REPO_ROOT / t
             if p.exists():
                 run_cmd(f"rm -rf {p}")
                 actions.append(f"Cleaned: {t}")
-        # Clean pycache
-        run_cmd("find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null")
-        actions.append("Cleaned: __pycache__")
+
+        # 3. Log rotation — keep last 100 lines of each log
+        log_dirs = [
+            Path.home() / ".hermes" / "logs",
+            REPO_ROOT / "logs",
+        ]
+        for ld in log_dirs:
+            if ld.exists():
+                for lf in ld.glob("*.log"):
+                    if lf.stat().st_size > 1_000_000:  # >1MB
+                        run_cmd(f"tail -100 {lf} > {lf}.tmp && mv {lf}.tmp {lf}")
+                        actions.append(f"Rotated: {lf.name}")
+
+        # 4. A2A outbox archive — move old packets
+        outbox = REPO_ROOT / "_A2A_QUEUE" / "outbox"
+        archive = REPO_ROOT / "_A2A_QUEUE" / "archive"
+        if outbox.exists():
+            archive.mkdir(exist_ok=True)
+            import time as _time
+            cutoff = _time.time() - 86400  # 24h
+            count = 0
+            for f in outbox.glob("*.json"):
+                if f.stat().st_mtime < cutoff:
+                    f.rename(archive / f.name)
+                    count += 1
+            if count:
+                actions.append(f"Archived: {count} old outbox packets (>24h)")
+
+        # 5. System caches
+        cache_targets = [
+            REPO_ROOT / ".cache",
+            Path.home() / "Library" / "Caches" / "dev.kdrag0n.MacVirt",
+            Path.home() / "Library" / "Caches" / "camoufox",
+            Path.home() / "Library" / "Caches" / "ms-playwright",
+        ]
+        for ct in cache_targets:
+            if ct.exists():
+                run_cmd(f"rm -rf {ct}")
+                actions.append(f"Cleaned: {ct.name}")
+
+        # 6. Codex sessions (3.9GB hog)
+        codex_sessions = Path.home() / ".codex" / "sessions"
+        if codex_sessions.exists():
+            du_rc, du_out = run_cmd(f"du -sh {codex_sessions}")
+            run_cmd(f"rm -rf {codex_sessions}")
+            actions.append(f"Cleaned: codex sessions ({du_out})")
+
+        # 7. Claude old versions
+        claude_ver = Path.home() / ".local" / "share" / "claude" / "versions"
+        if claude_ver.exists():
+            versions = sorted(claude_ver.iterdir(), key=lambda p: p.stat().st_mtime, reverse=True)
+            for old in versions[1:]:  # Keep latest
+                run_cmd(f"rm -rf {old}")
+            if len(versions) > 1:
+                actions.append(f"Cleaned: {len(versions)-1} old Claude versions")
+
     return actions
 
 def auto_repair_services() -> list[str]:
-    """Auto-repair: restart down services"""
+    """L3 Auto-repair: restart down services"""
     actions = []
     services = check_services()
-    # Don't auto-start OmniRoute (too heavy for 8GB)
-    # Just log status
+
+    # Service restart map (only safe-to-restart services)
+    restart_map = {
+        "skills-api": {"cmd": "cd /Users/sirinx/sirinx-os && node apps/dev-dashboard/server.mjs &", "port": 3800, "safe": True},
+        "dev-control": {"cmd": "cd /Users/sirinx/sirinx-os && node services/dev-control-api/server.mjs &", "port": 8711, "safe": True},
+        "hermes-gateway": {"cmd": "hermes gateway restart", "port": 8644, "safe": True},
+    }
+
     for name, status in services.items():
         if status != "up":
-            actions.append(f"WARNING: {name} is down (not auto-started)")
+            if name in restart_map and restart_map[name]["safe"]:
+                log("WARN", f"Service {name} down — attempting restart")
+                rc, out = run_cmd(restart_map[name]["cmd"], timeout=15)
+                if rc == 0:
+                    actions.append(f"Restarted: {name}")
+                else:
+                    actions.append(f"FAILED restart: {name} — {out[:80]}")
+            else:
+                actions.append(f"WARNING: {name} is down (manual restart needed)")
+
     return actions
 
 def detect_error_patterns() -> list[dict]:

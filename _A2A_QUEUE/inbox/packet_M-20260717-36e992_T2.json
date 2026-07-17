@@ -1,0 +1,17 @@
+{
+  "mission_id": "M-20260717-36e992",
+  "task_id": "T2",
+  "to": {
+    "agent": "audit-agent"
+  },
+  "context": {
+    "goal": "Security scan before deploy",
+    "tier": "A",
+    "mission": "deploy to production"
+  },
+  "depends_on": [
+    "T1"
+  ],
+  "timeout": 120,
+  "timestamp": "2026-07-17T01:21:35.880613+00:00"
+}

@@ -1,8 +1,8 @@
 {
-  "id": "mcp_line_send_message_3143c46c",
-  "schema": "a2a-bridge.packet.v1",
-  "correlation_id": "mcp-8ed3fd893bb0",
+  "schema": "a2a2a.message.v2",
+  "message_id": "msg-mcp_line_send_message_3143c46c",
   "mission_id": "mcp-line_send_message",
+  "timestamp": "2026-07-16T23:50:47.971680+00:00",
   "from": {
     "agent": "manus-agent",
     "role": "external_mcp_client"
@@ -11,40 +11,21 @@
     "agent": "line-operator-send_message",
     "role": "mcp_operator"
   },
-  "action_requested": "line_send_message",
   "context": {
     "goal": "MCP tool call: line_send_message",
-    "args_redacted": {
-      "userId": "U1234567890abcdef1234567890abcdef",
-      "message": "Hello from Manus!"
-    },
-    "mode": "dry-run",
-    "dry_run": true,
-    "auto_approved": true
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "mcp-8ed3fd893bb0"
   },
-  "human_approval_required": false,
-  "timestamp": "2026-07-16T23:50:47.971680+00:00",
-  "status": "ROUTED",
-  "receipt": {
-    "schema": "manus-mcp-bridge.receipt.v1",
-    "receipt_id": "mcp-8ed3fd893bb0",
-    "tool_name": "line_send_message",
-    "args_keys": [
-      "userId",
-      "message"
-    ],
-    "args_redacted": {
-      "userId": "U1234567890abcdef1234567890abcdef",
-      "message": "Hello from Manus!"
-    },
-    "line_mode": "dry-run",
-    "auto_approved": true,
-    "dry_run": true,
-    "decision_status": "simulated",
-    "reason": "ok",
-    "timestamp": "2026-07-16T23:50:47.971659+00:00",
-    "checksums": {
-      "receipt_hash": "588bb649b8ee59b73a0209e3da1f6ba002fc05c1bdfec1f9da85bc33d376eb3c"
-    }
+  "payload": {
+    "type": "task",
+    "action": "MCP tool call: line_send_message",
+    "depends_on": [],
+    "timeout": 300
+  },
+  "meta": {
+    "source": "task-dag-resolver",
+    "version": "2.0",
+    "converted_at": "2026-07-17T01:20:15.657333+00:00"
   }
 }

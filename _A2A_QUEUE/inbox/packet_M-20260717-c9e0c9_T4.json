@@ -1,0 +1,17 @@
+{
+  "mission_id": "M-20260717-c9e0c9",
+  "task_id": "T4",
+  "to": {
+    "agent": "opencode-reviewer"
+  },
+  "context": {
+    "goal": "Review the fix for: fix failing tests in the repo",
+    "tier": "A",
+    "mission": "fix failing tests in the repo"
+  },
+  "depends_on": [
+    "T3"
+  ],
+  "timeout": 180,
+  "timestamp": "2026-07-17T01:21:28.086445+00:00"
+}
