@@ -1,21 +1,21 @@
 {
   "node_identity": "local_mac_m2_core",
-  "timestamp": "2026-07-17T10:07:50.389269+00:00",
-  "epoch": 1784282870,
-  "processes": "node 537 localhost:18789\nnode 537 localhost:18789\npython3.1 942 localhost:9119\npython3.1 63321 localhost:8643\npython3.1 63321 *:8644\npython3.1 63321 *:8644\nnode 80822 localhost:8730\nnode 80830 localhost:8710\nnode 80848 localhost:8711\nnode 80907 localhost:8720\nnode 81132 *:3800",
+  "timestamp": "2026-07-17T10:26:22.980526+00:00",
+  "epoch": 1784283982,
+  "processes": "node 537 localhost:18789\nnode 537 localhost:18789\npython3.1 942 localhost:9119\npython3.1 63321 localhost:8643\npython3.1 63321 *:8644\npython3.1 63321 *:8644\nnode 80830 localhost:8710\nnode 80848 localhost:8711\nnode 81132 *:3800",
   "git": {
-    "head": "944283d3783b",
+    "head": "e81a5ed46670",
     "branch": "migration/v5-rebase",
-    "dirty_files": 2
+    "dirty_files": 1
   },
   "a2a_queue": {
     "inbox": 0,
     "outbox": 0,
     "done": 7,
-    "blocked": 26,
+    "blocked": 31,
     "approvals": 0
   },
-  "disk_free_gb": 17.56,
+  "disk_free_gb": 16.42,
   "services": {
     "skills-api": "up",
     "dev-control": "up",
