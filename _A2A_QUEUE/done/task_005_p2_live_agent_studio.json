@@ -1,0 +1,26 @@
+{
+  "task_id": "task_005_p2_live_agent_studio",
+  "priority": "P2",
+  "tier": "B",
+  "model": "solar-1-preview",
+  "title": "Live Agent Studio - Full Chat + Avatar + OBS Overlay",
+  "description": "Build apps/live-agent-studio from 4 stub files to full implementation with ChatPanel, AvatarDisplay, TTS, and OBS overlay integration.",
+  "structure": {
+    "path": "apps/live-agent-studio/",
+    "components": [
+      "ChatPanel.tsx",
+      "ApprovalQueue.tsx",
+      "TTSButton.tsx",
+      "AvatarDisplay.tsx"
+    ],
+    "services": [
+      "ChatGateway.ts",
+      "AvatarService.ts",
+      "TTSService.ts"
+    ],
+    "hooks": [],
+    "types": []
+  },
+  "auto_approve": true,
+  "created_at": "2026-07-17T00:00:04Z"
+}

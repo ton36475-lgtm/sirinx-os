@@ -1,0 +1,16 @@
+{
+  "task_id": "task_006_p3_agy_research_plane",
+  "priority": "P3",
+  "tier": "B",
+  "model": "solar-1-preview",
+  "title": "AGY Research Plane Integration - CEH Folder Inventory",
+  "description": "Verify AGY CLI exists and run deep research on Google Drive folder ID 14jjSnprC7AxqPCo8pl6hDZYtg8tuehs- to create recursive inventory.",
+  "steps": [
+    "Verify AGY CLI exists (which agy)",
+    "Run: agy research --goal 'Create recursive inventory of Google Drive folder ID 14jjSnprC7AxqPCo8pl6hDZYtg8tuehs-' --output 01_recursive_drive_inventory.jsonl",
+    "Parse results + store via research-analyzer.py"
+  ],
+  "output_file": "01_recursive_drive_inventory.jsonl",
+  "auto_approve": true,
+  "created_at": "2026-07-17T00:00:05Z"
+}
