@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-07-17T05:04:56.817122+00:00",
+  "node": "local_mac_m2_core",
+  "total_packets": 31,
+  "dispatched": 27,
+  "tier_c_held": 4,
+  "remaining": 4,
+  "collected_done": 0,
+  "collected_errors": 0,
+  "by_lane": {
+    "qa": 6,
+    "backend": 2,
+    "integration": 3,
+    "infra": 4,
+    "frontend": 5,
+    "line-bot": 3,
+    "architecture": 1,
+    "review": 4,
+    "agent-sync": 1,
+    "other": 2
+  },
+  "by_worktree": {
+    "codex": 19,
+    "claude": 2,
+    "opencode": 10
+  },
+  "recommendations": [
+    "⚠️ 4 Tier C packets need human approval before dispatch",
+    "📦 Codex lane overloaded (19 tasks) — consider splitting",
+    "✅ 27 Tier A/B packets ready for auto-dispatch"
+  ]
+}
