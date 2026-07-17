@@ -1,0 +1,74 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-014",
+    "correlation_id": "a2a-fable-v5-1784286763-m014",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator-moa",
+      "role": "task-orchestrator",
+      "model_chain": "kimi-k3→fable-v5→solar-1-preview",
+      "authoring_model": "fable-v5-codestral"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build_captain"
+    },
+    "action_requested": "API Gateway Expansion — Add 4 Missing Endpoints to Existing TS/Express Gateway",
+    "context": {
+      "goal": "The existing API Gateway at services/api-gateway/ is a TypeScript/Express service (NOT Python as the refactor plan assumed). It currently has:\n  - routes/ghostclaw-routes.ts (agents, task-queue, agent-runs, ghostclaw/run, /health)\n  - controllers/ghostclaw-controllers.ts\n  - middleware/ghostclaw-middleware.ts\n  - contracts/ghostclaw-api.yaml\n\nMissing endpoints that MUST be added as new TS route files:\n  1. GET  /ready           — Readiness probe (checks DB connection, OmniRoute reachability, queue health)\n  2. POST /api/a2a/dispatch — Accept A2A task packets, validate schema, write to _A2A_QUEUE/inbox/\n  3. GET  /api/agents/status — Return status of all agents (scan _A2A_QUEUE/assigned/{claude,codex,opencode}/ for active packets)\n  4. POST /api/deploy/trigger — Deployment trigger (DRY-RUN ONLY: log intent, require approval token, do NOT execute deploy)",
+      "verified_state": {
+        "existing_tech_stack": "TypeScript + Express",
+        "existing_routes": "ghostclaw-routes.ts (/health, /agents, /task-queue, /agents/:id/runs, /ghostclaw/run)",
+        "existing_controllers": "ghostclaw-controllers.ts (agentController, taskQueueController, agentRunController)",
+        "existing_middleware": "ghostclaw-middleware.ts",
+        "note": "task_003 was placed in done/ but endpoints were never created. REBIRTH task."
+      },
+      "constraints": [
+        "Match existing TypeScript/Express patterns",
+        "No deploy",
+        "No git push",
+        "/api/deploy/trigger MUST be dry-run only (log intent, return 202, do NOT execute)",
+        "/api/a2a/dispatch MUST validate packet schema before writing to inbox",
+        "/api/agents/status MUST be read-only (scan assigned/ directory)",
+        "/ready MUST check real dependencies (OmniRoute health, queue directory writability)"
+      ],
+      "lane": "services/api-gateway",
+      "files_to_create": [
+        "routes/ready-routes.ts",
+        "routes/a2a-dispatch-routes.ts",
+        "routes/agents-status-routes.ts",
+        "routes/deploy-trigger-routes.ts",
+        "controllers/ready-controller.ts",
+        "controllers/a2a-dispatch-controller.ts",
+        "controllers/agents-status-controller.ts",
+        "controllers/deploy-trigger-controller.ts"
+      ],
+      "deliverables": [
+        "4 new route files following existing Express Router pattern",
+        "4 new controller files with proper TypeScript types",
+        "Router registration in a new index.ts or gateway entry point",
+        "Schema validation for A2A dispatch packets (validate a2a2a_message structure)",
+        "Dry-run safety on deploy trigger"
+      ],
+      "command_source": "frontier-generator-moa",
+      "refactor_plan_ref": "docs/FULL_SYSTEM_REFACTOR_PLAN.md §P1-4"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 5
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T11:12:43.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P1",
+  "tier": "B",
+  "auto_approved": true,
+  "tier_rationale": "Tier B: Adds new files alongside existing TS gateway. Does not modify existing routes/controllers. Deploy endpoint is dry-run only. Moderate complexity due to Express pattern matching."
+}

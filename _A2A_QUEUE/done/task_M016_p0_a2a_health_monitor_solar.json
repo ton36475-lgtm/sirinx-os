@@ -1,0 +1,67 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-016",
+    "correlation_id": "a2a-solar1-1784286763-m016",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator-moa",
+      "role": "task-orchestrator",
+      "model_chain": "kimi-k3→fable-v5→solar-1-preview",
+      "authoring_model": "solar-1-preview"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build_captain"
+    },
+    "action_requested": "A2A Queue Health Monitor Script — Auto-Detect Stale/Orphaned Task Packets",
+    "context": {
+      "goal": "The A2A queue has a systemic problem: tasks are being moved to done/ WITHOUT being executed (task_001 through task_011 all landed in done/ but their work was never done — verified: services/ai-backend/ doesn't exist, dev-dashboard still has 3 files, orchestrator still has 7083 files).\n\nCreate a Python monitoring script at scripts/a2a_queue_health.py that:\n1. Scans _A2A_QUEUE/inbox/, _A2A_QUEUE/assigned/{claude,codex,opencode}/, _A2A_QUEUE/done/, _A2A_QUEUE/blocked/\n2. For each packet, validates: JSON schema correctness, status field, TTL expiry (ttl_seconds + timestamp vs now)\n3. Flags packets in done/ whose deliverables were NOT actually produced (cross-reference with filesystem)\n4. Reports: inbox count, assigned count by agent, done count, stale packets (TTL expired), orphaned packets (no deliverable evidence)\n5. Outputs a health report JSON to scripts/a2a_health_report.json\n6. Optional CLI flag: --auto-rewire (moves stale done/ packets back to inbox/ if deliverables missing)",
+      "verified_state": {
+        "queue_structure": [
+          "inbox/ (currently empty except .gitkeep)",
+          "assigned/claude/, assigned/codex/, assigned/opencode/ (all empty)",
+          "done/ (11 task packets + other archives — ALL suspected unexecuted)",
+          "blocked/ (unknown)",
+          "archive/ (90+ historical packets)"
+        ],
+        "known_problem": "Tasks moved to done without execution. This is the ROOT CAUSE of the refactor plan stalls."
+      },
+      "constraints": [
+        "Read-only by default (no file moves without --auto-rewire flag)",
+        "No deploy",
+        "No git push",
+        "Do NOT modify existing packets, only read + report",
+        "--auto-rewire must confirm each move with dry-run output first"
+      ],
+      "lane": "scripts",
+      "files_to_create": [
+        "scripts/a2a_queue_health.py"
+      ],
+      "deliverables": [
+        "scripts/a2a_queue_health.py — standalone Python 3.12 script",
+        "Run it once and produce scripts/a2a_health_report.json as baseline",
+        "CLI: python3 scripts/a2a_queue_health.py [--auto-rewire] [--json]",
+        "Validates a2a2a_message schema, TTL, and deliverable evidence"
+      ],
+      "command_source": "frontier-generator-moa",
+      "refactor_plan_ref": "Cross-cutting: addresses systemic task execution failure"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 4
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T11:12:43.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P0",
+  "tier": "A",
+  "auto_approved": true,
+  "tier_rationale": "Tier A: Read-only monitoring script. Creates one new file in scripts/. No existing file modification, no deploy, no push. The --auto-rewire is opt-in and dry-run first."
+}
