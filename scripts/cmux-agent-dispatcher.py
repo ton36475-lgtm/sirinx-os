@@ -48,6 +48,22 @@ def log(level, msg):
 
 
 # ─── LANE ROUTING MATRIX ──────────────────────────────────────────
+# Frontier Models: Kimi3/Fable5/Solar for creation
+# Secondary Models: GLM/DeepSeek for review/media
+
+FRONTIER_MODELS = {
+    "kimi3": "moonshot-v1-256k-kimi3",
+    "fable5": "fable-v5-codestral", 
+    "solar": "solar-1-preview",
+}
+
+SECONDARY_MODELS = {
+    "glm": "glm-5.2",
+    "deepseek": "deepseek-v4-pro",
+}
+
+# OpenClaw gateway endpoint (used as OmniRoute substitute)
+API_ENDPOINT = "http://localhost:18789"
 
 LANE_MAP = {
     # Lane → (worktree, agent_name, capabilities)
