@@ -1,12 +1,12 @@
 {
   "node_identity": "poipet_pc_heavy_worker",
-  "timestamp": "2026-07-17T01:35:25.843545+00:00",
-  "epoch": 1784252125,
-  "processes": "node 537 localhost:18789\nnode 537 localhost:18789\npython3.1 942 localhost:9119\npython3.1 63321 localhost:8643\npython3.1 63321 *:8644\npython3.1 63321 *:8644\nnode 80822 localhost:8730\nnode 80830 localhost:8710\nnode 80848 localhost:8711\nnode 80907 localhost:8720\nnode 81132 *:3800\nnode 91492 *:20128\nnode 91492 localhost:20131\nnode 91492 localhost:20132",
+  "timestamp": "2026-07-17T01:44:31.409012+00:00",
+  "epoch": 1784252671,
+  "processes": "node 537 localhost:18789\nnode 537 localhost:18789\npython3.1 942 localhost:9119\npython3.1 63321 localhost:8643\npython3.1 63321 *:8644\npython3.1 63321 *:8644\nnode 80822 localhost:8730\nnode 80830 localhost:8710\nnode 80848 localhost:8711\nnode 80907 localhost:8720\nnode 81132 *:3800",
   "git": {
-    "head": "e5e08c37c276",
+    "head": "aec683ebd823",
     "branch": "migration/v5-rebase",
-    "dirty_files": 143
+    "dirty_files": 3
   },
   "a2a_queue": {
     "inbox": 31,
@@ -15,11 +15,11 @@
     "blocked": 0,
     "approvals": 5
   },
-  "disk_free_gb": 16.84,
+  "disk_free_gb": 18.84,
   "services": {
     "skills-api": "up",
     "dev-control": "up",
-    "omniroute": "up",
+    "omniroute": "down",
     "hermes-gateway": "up"
   }
 }
