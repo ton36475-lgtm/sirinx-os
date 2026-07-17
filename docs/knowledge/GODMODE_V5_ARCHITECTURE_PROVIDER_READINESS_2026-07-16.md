@@ -70,6 +70,9 @@ The CLI restrictions follow Anthropic's documented `--tools`,
 - Fail-closed CLI probes: missing signing key and missing exact-gate stdin both
   stopped before provider execution. A non-empty but too-short signing key is
   reported as read without being reported as bound to an approval.
+- Independent reviewer verdict: `VERIFIED` for the current working-tree snapshot.
+  The reviewed source now matches commit `71e77a0`; this readiness-document update
+  remains unstaged.
 
 ## Exact Next Gate
 

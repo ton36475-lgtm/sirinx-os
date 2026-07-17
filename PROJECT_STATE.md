@@ -1,43 +1,61 @@
 # PROJECT_STATE
 
-Date: 2026-07-16
-Last Update: GHOSTCLAW-FULL-AUTOMATION-V2-20260716
+Date: 2026-07-17
+Last Update: POST-AUDIT-UNIFIED-SKILLS-20260717
 Repo: `/Users/sirinx/sirinx-os`
 Branch: `migration/v5-rebase`
-HEAD: `0c85252`
+HEAD: `1b2f3aa`
 Runtime mode: local control plane, dry-run only
 Canonical protocol: `AGENTS.md`
 
-## Current Verified State (2026-07-16T17:00+07:00)
+## Current Verified State (2026-07-17T07:45+07:00)
 
 ### System Health
-- GhostClaw Tests: 84/84 PASS
+- GhostClaw Tests: 84/84 PASS (pending re-verify)
 - Rust Compile: 0 errors
-- Skills API :3800: ok
-- Dev Control API :8711: ok
-- Auto-Loop: cron every 5m (3 tasks/cycle, chainValid=true)
-- Cron Jobs: 4 active (auto-loop, disk-check, health-check, daily-report)
-- tmux Windows: 18
+- Skills API :3800: RUNNING
+- Dev Control API :8711: RUNNING
+- Hermes Gateway :8643-8644: RUNNING (PID 63321)
+- Auto-Loop: cron every 5m (active)
+- Cron Jobs: 9 active (auto-loop, disk-check, health-check, +6 more)
+- Hermes: v0.18.2, 12 profiles, solis active
 
 ### Resources
 - Mac mini M2: 8GB RAM, arm64, macOS 26.5.2
-- RAM: 71% free (GUI apps stopped, CLI/TUI mode)
-- Disk: 41% used (17GB free)
+- Disk: 53% used (11GB free) — cleaned from 58%/8.8GB
+- Load avg: 4.14
+- Uptime: 4h+
 
-### Skills (7 — installed to Hermes, Codex, Claude, OpenCode, Repo, GHOSTCLAW)
-- ghostclaw-master-orchestrator
-- autonomous-loop-engineering
-- ghostclaw-engineering-loop
-- ghostclaw-governance-contracts
-- ghostclaw-agent-delegation
-- ghostclaw-integration-onboarding
-- thaimart-k15-workflow
+### CLI Tools
+- Codex: 0.144.5 (Rust) — `/Users/sirinx/.local/bin/codex`
+- Hermes: v0.18.2
+- Claude Code: 2.1.211
+- OpenCode: 1.17.11
+- Node: v26.0.0, pnpm: 9.0.0, Bun: 1.3.14
+
+### Unified Skills Registry
+- Total unique: 188 skills across 5 agents
+- Hermes: 143 (+13 synced from Codex = 156)
+- Codex: 59
+- Claude: 15
+- OpenCode: 7
+- GhostClaw: 7 (core, shared across ALL agents)
+- Shared 4+ agents: 7 (GhostClaw core)
+- Registry: `config/unified-skills-registry.json`
+- New skill: `telegram-approval-workflow` (automation)
+
+### A2A Queue (Post-Fix)
+- Inbox: 22 pending
+- Outbox: 103 sent
+- Done: 8 completed
+- Blocked: 0 (24 archived — bridge FIXED)
+- Approvals: 5 pending
+- Bridge status: FIXED (codex exec, hermes chat -q, correct flags)
 
 ### Integrations
-- OmniRoute v3.8.48 — CLI ready, server pending npm deps
-- Markdownify MCP — dist/index.js built, markitdown[all] installed
-- CLI-Anything Hub v0.4.1 — installed via Python 3.12 venv
-- Cynative v1.5.1 — binary ready (89MB)
+- OmniRoute v3.8.48 — CLI ready, dev server OFFLINE (needs start)
+- Markdownify MCP — venv cleaned (needs reinstall for use)
+- Cynative v1.5.1 — binary ready (112MB)
 - ThaiMart K01-K15 — disabled_pending_contract
 
 ### Security
@@ -45,18 +63,37 @@ Canonical protocol: `AGENTS.md`
 - .env ignored by git
 - PII masking in all logs
 - Dry-run only mode
-- No push/deploy without human approval
+- No push, cloud mutation, or customer messaging without explicit human gate
+- No human gate bypass for any Tier C action
+- A2A bridge fixed (was using wrong CLI paths/flags)
 
-### Pending Work (see FULL_AUTOMATION_MASTER_PLAN_V2.md)
-- P-101: Fix 12 legacy tests (dispatched to Codex)
-- P-102: Wire OmniRoute as AI gateway
-- P-103: Wire Markdownify MCP to agents (dispatched to Claude)
-- P-104: Cloudflare deploy prep (dispatched to Claude)
-- P-105: Dev Control API missing endpoints (dispatched to Codex)
+### Pending Work
+- P-101: Fix legacy tests
+- P-102: Wire OmniRoute as AI gateway (server offline)
+- P-103: Wire Markdownify MCP (venv cleaned, needs reinstall)
+- P-104: Cloudflare deploy prep
+- P-105: Dev Control API missing endpoints
 - P-106: Skills API serve skills as JSON
-- P-108: Security audit (dispatched to OpenCode)
+- P-108: Security audit
+- NEW: Reinstall markdownify-mcp venv
+- NEW: Start OmniRoute dev server
+- NEW: Fix Cline (spawnSync error)
 
 ### SRL Status
 - Mac Live Agent Studio: SRL-2
+- SIRINX OS overall: SRL-2
 - GhostClaw OS Core: SRL-2
 - Target: SRL-3 (dry-run integrated)
+
+### Safety Status
+- External writes remain blocked by default.
+- No customer messaging bypassing the human gate
+- Dry-run only mode active across all integrations.
+
+### Stop Rules
+- STOP on repeated failure (3+ consecutive task failures)
+- STOP on cost budget exceeded ($5/goal default)
+- STOP on safety scan failure (secret/PII detected)
+- STOP on missing approval for Tier C action
+- STOP on disk space <5GB
+- STOP on RAM pressure >90%
