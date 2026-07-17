@@ -1,0 +1,39 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252105.52818,
+  "message_id": "msg-error_mutation_mut_1784252081_4ef548",
+  "mission_id": "M-error_mutation_mut_1784252081_4ef548",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'mutation_id': 'mut_1784252081_4ef548', 'error_log': '_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py\", line 799, in call_soon\\n    self._check_closed()\\n  File \"/o",
+    "tier": "A"
+  },
+  "payload": {
+    "mutation_id": "mut_1784252081_4ef548",
+    "error_log": "_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py\", line 799, in call_soon\n    self._check_closed()\n  File \"/opt/homebrew/Cellar/python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py\", line 545, in _check_closed\n    raise RuntimeError('Event loop is closed')\nRuntimeError: Event loop is closed\n[test] Ollama local AI\n[test] Kimi CLI\n./scripts/test-ai-hq.sh: line 22: kimi: command not found\n ELIFECYCLE  Command failed.",
+    "detected_at": 1784252081.599682,
+    "detected_at_iso": "2026-07-17T01:34:41.600486+00:00",
+    "source_node": "poipet_pc_heavy_worker",
+    "status": "MUTATION_READY",
+    "safety": {
+      "allowed": true,
+      "tier": "A",
+      "reason": "safe"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

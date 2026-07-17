@@ -1,8 +1,10 @@
 {
-  "schema": "a2a2a.message.v2",
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.495157,
   "message_id": "msg-packet_010_creature_viewer",
   "mission_id": "M-packet_010_creature_viewer",
-  "timestamp": "2026-07-17T01:20:15.653401+00:00",
   "from": {
     "agent": "hermes-commander",
     "role": "commander"
@@ -18,14 +20,40 @@
     "correlation_id": "corr-packet_010_creature_viewer"
   },
   "payload": {
-    "type": "task",
-    "action": "",
-    "depends_on": [],
-    "timeout": 300
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_010_creature_viewer",
+    "mission_id": "M-packet_010_creature_viewer",
+    "timestamp": "2026-07-17T01:20:15.653401+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'id': 'packet_010', 'project': 'pocket-hatchery', 'priority': 'P3', 'title': 'Build read-only creat",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_010_creature_viewer"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.653407+00:00"
+    }
   },
-  "meta": {
-    "source": "task-dag-resolver",
-    "version": "2.0",
-    "converted_at": "2026-07-17T01:20:15.653407+00:00"
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "B",
+    "reason": "safe"
   }
 }

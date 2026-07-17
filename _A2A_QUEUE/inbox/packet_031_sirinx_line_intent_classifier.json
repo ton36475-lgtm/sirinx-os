@@ -1,8 +1,10 @@
 {
-  "schema": "a2a2a.message.v2",
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.503082,
   "message_id": "msg-packet_031_sirinx_line_intent_classifier",
   "mission_id": "M-packet_031_sirinx_line_intent_classifier",
-  "timestamp": "2026-07-17T01:20:15.661426+00:00",
   "from": {
     "agent": "hermes-commander",
     "role": "commander"
@@ -18,14 +20,40 @@
     "correlation_id": "corr-packet_031_sirinx_line_intent_classifier"
   },
   "payload": {
-    "type": "task",
-    "action": "",
-    "depends_on": [],
-    "timeout": 300
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_031_sirinx_line_intent_classifier",
+    "mission_id": "M-packet_031_sirinx_line_intent_classifier",
+    "timestamp": "2026-07-17T01:20:15.661426+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'project': 'sirinx-line-bot', 'priority': 'P0', 'title': 'Hermes: SIRINX LINE Intent Classifier', '",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_031_sirinx_line_intent_classifier"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.661441+00:00"
+    }
   },
-  "meta": {
-    "source": "task-dag-resolver",
-    "version": "2.0",
-    "converted_at": "2026-07-17T01:20:15.661441+00:00"
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
   }
 }

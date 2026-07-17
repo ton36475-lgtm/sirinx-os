@@ -1,6 +1,14 @@
 {
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.492943,
+  "message_id": "msg-packet_M-20260717-c9e0c9_T1",
   "mission_id": "M-20260717-c9e0c9",
-  "task_id": "T1",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
   "to": {
     "agent": "codex-captain"
   },
@@ -9,7 +17,25 @@
     "tier": "A",
     "mission": "fix failing tests in the repo"
   },
-  "depends_on": [],
-  "timeout": 300,
-  "timestamp": "2026-07-17T01:21:28.086043+00:00"
+  "payload": {
+    "mission_id": "M-20260717-c9e0c9",
+    "task_id": "T1",
+    "to": {
+      "agent": "codex-captain"
+    },
+    "context": {
+      "goal": "Identify the root cause of: fix failing tests in the repo",
+      "tier": "A",
+      "mission": "fix failing tests in the repo"
+    },
+    "depends_on": [],
+    "timeout": 300,
+    "timestamp": "2026-07-17T01:21:28.086043+00:00"
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "B",
+    "reason": "safe"
+  }
 }

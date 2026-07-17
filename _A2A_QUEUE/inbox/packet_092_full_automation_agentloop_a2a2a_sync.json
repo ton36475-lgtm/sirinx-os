@@ -1,8 +1,10 @@
 {
-  "schema": "a2a2a.message.v2",
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.502448,
   "message_id": "msg-packet_092_full_automation_agentloop_a2a2a_sync",
   "mission_id": "M-2026-0708-092",
-  "timestamp": "2026-07-08T01:30:00.000Z",
   "from": {
     "agent": "hermes-commander",
     "role": "commander_router"
@@ -18,14 +20,40 @@
     "correlation_id": "sirinx-a2a2a-p092tlg"
   },
   "payload": {
-    "type": "task",
-    "action": "Apply LINE OA webhook overlay to apps/web-sirinx, register route before express.json(), enforce dry-run safety, run full test/build gate, and request Telegram command center approval for commit.",
-    "depends_on": [],
-    "timeout": 300
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_092_full_automation_agentloop_a2a2a_sync",
+    "mission_id": "M-2026-0708-092",
+    "timestamp": "2026-07-08T01:30:00.000Z",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander_router"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build_captain"
+    },
+    "context": {
+      "goal": "Apply LINE OA webhook overlay to apps/web-sirinx, register route before express.json(), enforce dry-run safety, run full test/build gate, and request Telegram command center approval for commit.",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "sirinx-a2a2a-p092tlg"
+    },
+    "payload": {
+      "type": "task",
+      "action": "Apply LINE OA webhook overlay to apps/web-sirinx, register route before express.json(), enforce dry-run safety, run full test/build gate, and request Telegram command center approval for commit.",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.660527+00:00"
+    }
   },
-  "meta": {
-    "source": "task-dag-resolver",
-    "version": "2.0",
-    "converted_at": "2026-07-17T01:20:15.660527+00:00"
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "B",
+    "reason": "safe"
   }
 }

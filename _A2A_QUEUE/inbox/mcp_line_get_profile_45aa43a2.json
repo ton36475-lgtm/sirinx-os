@@ -1,8 +1,10 @@
 {
-  "schema": "a2a2a.message.v2",
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.497675,
   "message_id": "msg-mcp_line_get_profile_45aa43a2",
   "mission_id": "mcp-line_get_profile",
-  "timestamp": "2026-07-16T23:50:47.971269+00:00",
   "from": {
     "agent": "manus-agent",
     "role": "external_mcp_client"
@@ -18,14 +20,40 @@
     "correlation_id": "mcp-2f413c1f0fdd"
   },
   "payload": {
-    "type": "task",
-    "action": "MCP tool call: line_get_profile",
-    "depends_on": [],
-    "timeout": 300
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-mcp_line_get_profile_45aa43a2",
+    "mission_id": "mcp-line_get_profile",
+    "timestamp": "2026-07-16T23:50:47.971269+00:00",
+    "from": {
+      "agent": "manus-agent",
+      "role": "external_mcp_client"
+    },
+    "to": {
+      "agent": "line-operator-get_profile",
+      "role": "mcp_operator"
+    },
+    "context": {
+      "goal": "MCP tool call: line_get_profile",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "mcp-2f413c1f0fdd"
+    },
+    "payload": {
+      "type": "task",
+      "action": "MCP tool call: line_get_profile",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.656065+00:00"
+    }
   },
-  "meta": {
-    "source": "task-dag-resolver",
-    "version": "2.0",
-    "converted_at": "2026-07-17T01:20:15.656065+00:00"
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
   }
 }

@@ -1,6 +1,14 @@
 {
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.490196,
+  "message_id": "msg-packet_M-20260717-36e992_T1",
   "mission_id": "M-20260717-36e992",
-  "task_id": "T1",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
   "to": {
     "agent": "devops-engineer"
   },
@@ -9,7 +17,25 @@
     "tier": "A",
     "mission": "deploy to production"
   },
-  "depends_on": [],
-  "timeout": 120,
-  "timestamp": "2026-07-17T01:21:35.880398+00:00"
+  "payload": {
+    "mission_id": "M-20260717-36e992",
+    "task_id": "T1",
+    "to": {
+      "agent": "devops-engineer"
+    },
+    "context": {
+      "goal": "Pre-deploy checklist: deploy to production",
+      "tier": "A",
+      "mission": "deploy to production"
+    },
+    "depends_on": [],
+    "timeout": 120,
+    "timestamp": "2026-07-17T01:21:35.880398+00:00"
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": false,
+    "tier": "C",
+    "reason": "Tier C: deploy"
+  }
 }

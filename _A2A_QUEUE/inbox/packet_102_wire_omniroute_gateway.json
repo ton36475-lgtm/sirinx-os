@@ -1,8 +1,10 @@
 {
-  "schema": "a2a2a.message.v2",
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.502149,
   "message_id": "msg-packet_102_wire_omniroute_gateway",
   "mission_id": "M-packet_102_wire_omniroute_gateway",
-  "timestamp": "2026-07-17T01:20:15.660067+00:00",
   "from": {
     "agent": "hermes-commander",
     "role": "commander"
@@ -18,14 +20,40 @@
     "correlation_id": "corr-packet_102_wire_omniroute_gateway"
   },
   "payload": {
-    "type": "task",
-    "action": "",
-    "depends_on": [],
-    "timeout": 300
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_102_wire_omniroute_gateway",
+    "mission_id": "M-packet_102_wire_omniroute_gateway",
+    "timestamp": "2026-07-17T01:20:15.660067+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'project': 'sirinx-hermes-pending-work-dispatch', 'priority': 'P1', 'title': 'P-102 / BUILD-05: Wir",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_102_wire_omniroute_gateway"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.660082+00:00"
+    }
   },
-  "meta": {
-    "source": "task-dag-resolver",
-    "version": "2.0",
-    "converted_at": "2026-07-17T01:20:15.660082+00:00"
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "B",
+    "reason": "safe"
   }
 }
