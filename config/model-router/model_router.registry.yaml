@@ -41,6 +41,26 @@ models:
     free_tier: true
     priority: 3
 
+  moonshot-v1-128k-kimi3:
+    provider: "maxplus-free"
+    model: "maxplus-free/moonshot-v1-128k"
+    role: "chinese_model_pool"
+    context_length: 128000
+    capabilities: [reasoning, tool_call, code_generation, multilingual_chinese]
+    free_tier: true
+    priority: 4
+    tags: [chinese, kimi3, moonshot, cn_model_pool]
+
+  moonshot-kimi-2.7:
+    provider: "maxplus-free"
+    model: "maxplus-free/moonshot-v1-256k"
+    role: "ultra_long_context"
+    context_length: 256000
+    capabilities: [reasoning, function_call, long_context, chinese_optimized]
+    free_tier: true
+    priority: 5
+    tags: [chinese, kimi3, moonshot, cn_model_pool]
+
 escalation_chain:
   - maxplus-free/deepseek-v4-pro
   - opencode/deepseek-v4-flash-free

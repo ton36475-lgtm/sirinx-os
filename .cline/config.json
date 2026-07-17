@@ -1,0 +1,23 @@
+{
+  "provider": "anthropic",
+  "anthropicBaseUrl": "http://localhost:20128/api/anthropic",
+  "anthropicModelId": "auto",
+  "anthropicApiKey": "omniroute-free-tier",
+  "apiModelId": "auto",
+  "openAiBaseUrl": "http://localhost:20128/api/openai",
+  "openAiModelId": "auto",
+  "openAiStreamingEnabled": true,
+  "allowedCommands": [
+    "npm", "npx", "node", "pnpm", "git",
+    "ls", "cat", "grep", "find", "curl",
+    "python3", "cargo", "rustc", "bash", "sh"
+  ],
+  "alwaysAllowReadOnly": true,
+  "alwaysAllowWrite": true,
+  "alwaysAllowExecute": true,
+  "alwaysAllowBrowser": true,
+  "profile": {
+    "name": "OmniRoute-Free-Tier",
+    "description": "Cline routes via OmniRoute :20128 with free tier models: GLM-5.2, Kimi3/Moonshot, DeepSeek. No paid API calls."
+  }
+}
