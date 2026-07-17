@@ -12,12 +12,30 @@ from datetime import datetime, timezone
 WS = Path("/Users/sirinx/sirinx-os")
 A2A = WS / "_A2A_QUEUE"
 
-# Agent priority: Fable5 first, then Kimi3, then GLM backup
+# Agent priority: MOA Frontier Model chain
 AGENT_PRIORITY = [
-    {"name": "opencode-reviewer", "model": "fable-v5-codestral", "cli": "/opt/homebrew/bin/opencode"},
-    {"name": "codex-captain", "model": "moonshot-kimi-2.7", "cli": "/Users/sirinx/.local/bin/codex"},
-    {"name": "cline-backup", "model": "glm-5.2", "cli": "cline"},
+    # Kimi K3 - Chinese long context
+    {"name": "opencode-reviewer", "model": "moonshot-v1-256k-kimi3", "cli": "/opt/homebrew/bin/opencode", "role": "chinese_long_context"},
+    
+    # Fable5 - Code generation
+    {"name": "claudecode-architect", "model": "fable-v5-codestral", "cli": None, "role": "code_generation"},  # Not installed
+    
+    # GPT 5.6Sol Ultra - DeepSeek fallback for code
+    {"name": "codex-captain", "model": "deepseek-v4-pro", "cli": "/Users/sirinx/.local/bin/codex", "role": "backend_code"},
+    
+    # GLM-5.2 - Planning + fallback
+    {"name": "cline-planner", "model": "glm-5.2", "cli": "cline", "role": "planning"},
+    
+    # AGY Gemini 3.5 Flash - Research + extension
+    {"name": "agy-researcher", "model": "gemini-3.5-flash", "cli": "agy", "role": "research"},
 ]
+
+# Map actual CLI agents
+CLI_AGENTS = {
+    "opencode-reviewer": {"cli": "/opt/homebrew/bin/opencode", "model": "moonshot-v1-256k-kimi3"},
+    "codex-captain": {"cli": "/Users/sirinx/.local/bin/codex", "model": "deepseek-v4-pro"},
+    "cline-planner": {"cli": "cline", "model": "glm-5.2"},
+}
 
 def sync_status():
     """Get current status of all agents."""
@@ -49,23 +67,22 @@ def adaptive_dispatch(packet_file: Path):
     if isinstance(goal, dict):
         goal = goal.get("title", str(goal))[:100]
     
-    # Find first available agent
-    for agent in AGENT_PRIORITY:
-        if Path(agent["cli"]).exists() or agent["cli"] == "cline":
-            # Dispatch to this agent
-            if agent["name"] == "opencode-reviewer":
-                cmd = f"cd {WS}/.worktrees/opencode && opencode ask --model {agent['model']} '{goal}'"
-            elif agent["name"] == "codex-captain":
-                cmd = f"cd {WS}/.worktrees/codex && codex --model {agent['model']} '{goal}' --no-stream"
+    # Use CLI_AGENTS mapping (only agents with real CLI)
+    for name, cfg in CLI_AGENTS.items():
+        cli = cfg["cli"]
+        model = cfg["model"]
+        
+        if cli == "cline" or Path(cli).exists():
+            if name == "opencode-reviewer":
+                cmd = f"cd {WS}/.worktrees/opencode && opencode ask --model {model} '{goal}'"
+            elif name == "codex-captain":
+                cmd = f"cd {WS}/.worktrees/codex && codex --model {model} '{goal}' --no-stream"
             else:
-                cmd = f"cline '{goal}'"  # Uses ~/.cline/config.json (OmniRoute)
+                cmd = f"cline '{goal}'"
             
-            # Run in background
             subprocess.Popen(cmd, shell=True)
-            
-            # Log dispatch
-            print(f"A2A2A: Dispatched to {agent['name']} via {agent['model']}")
-            return agent["name"]
+            print(f"A2A2A: Dispatched to {name} via {model}")
+            return name
     
     return None
 
