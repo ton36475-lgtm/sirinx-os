@@ -1,0 +1,25 @@
+{
+  "agent": "codex-captain",
+  "worktree": "codex",
+  "path": "/Users/sirinx/sirinx-os/.worktrees/codex",
+  "timestamp": "2026-07-17T09:44:56.744867+00:00",
+  "task_count": 2,
+  "tasks": [
+    {
+      "id": "error_mutation_mut_1784280967_3160d9.json",
+      "lane": "mutation",
+      "tier": "A",
+      "goal": "",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T09:44:56.745009+00:00"
+    },
+    {
+      "id": "error_mutation_mut_1784281000_f92a99.json",
+      "lane": "mutation",
+      "tier": "A",
+      "goal": "",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T09:44:56.745146+00:00"
+    }
+  ]
+}

@@ -245,6 +245,12 @@ def collect_results() -> dict:
 
 def run_dispatch_cycle() -> dict:
     """Full cycle: read → brainstorm → dispatch → collect."""
+    # Emergency stop check
+    panic_flag = WORKSPACE / ".hermes" / "panic.flag"
+    if panic_flag.exists():
+        log("PANIC", "Emergency stop triggered - all dispatch halted")
+        return {"phase": "panic_stop", "dispatched": 0}
+
     log("DISPATCHER", "═══ Starting CMUX Agent Dispatch Cycle ═══")
 
     # Step 1: Read inbox

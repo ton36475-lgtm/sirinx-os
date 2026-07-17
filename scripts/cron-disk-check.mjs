@@ -9,11 +9,12 @@ function getDiskUsage() {
   const output = execSync('df -h /').toString();
   const lines = output.trim().split('\n');
   const parts = lines[1].split(/\s+/);
+  // df -h columns: Filesystem, Size, Used, Avail, Capacity, iused, ifree, %iused, Mounted on
   return {
-    total: parts[0],
-    used: parts[1],
-    available: parts[2],
-    capacity: parseInt(parts[3]),
+    total: parts[1],
+    used: parts[2],
+    available: parts[3],
+    capacity: parseInt(parts[4]),
   };
 }
 
