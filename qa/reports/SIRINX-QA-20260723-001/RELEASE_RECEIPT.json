@@ -1,0 +1,35 @@
+{
+  "run_id": "SIRINX-QA-20260723-001",
+  "status": "PARTIAL",
+  "mode": "AUDIT_ONLY",
+  "decision": "NOT_APPLICABLE",
+  "tests": {
+    "planned": 0,
+    "executed": 0,
+    "passed": 0,
+    "failed": 0,
+    "blocked": 0
+  },
+  "policy_sha256": "366c1d04a786df9ffc6ce5aa85954038f230783d79f5b7808504c9a1cb986692",
+  "requirements_sha256": "6f9b68937b0e27fdfd08ac18c9da858b871af965dc0f2027b65e24db27a1e854",
+  "plan_sha256": "e940e768fd33bb9078c7fac6c9da6a1b3a4d46a3ed754d319af3c89a82dd0897",
+  "scope_sha256": "53874d39d36cd8525088ad3c417d405ea61b7661189610f3afc1589b0d06f21f",
+  "repository": "/Users/sirinx/sirinx-os",
+  "commit_sha": "b55f81ecd372ff23a34fcf33c2744706447e14ca",
+  "source_tree": "e06b9bc2a948a9f50a7570c235a72c0354cdbe84",
+  "worktree_dirty": true,
+  "build_identity": "NOT_AVAILABLE",
+  "build_id": null,
+  "artifact_sha256": null,
+  "deployment_id": null,
+  "evidence_manifest_sha256": "b83a5716e69a9281ae4d9045b4f9e03bcae8f2743d2d14fc2fd89bffa833dae8",
+  "receipt_chain_head": null,
+  "expires_at": null,
+  "waiver_ids": [],
+  "human_release_approval": "NOT_GRANTED",
+  "limitations": [
+    "Target build and deployment are unavailable.",
+    "No QA execution occurred.",
+    "AUDIT_ONLY cannot authorize release."
+  ]
+}

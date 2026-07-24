@@ -48,9 +48,12 @@ PROJECT_ROOT = QUEUE_ROOT.parent
 # ── Configuration ──────────────────────────────────────────────────────────────
 MCP_HOST = os.environ.get("SIRINX_MCP_HOST", "127.0.0.1")
 MCP_PORT = int(os.environ.get("SIRINX_MCP_PORT", "8788"))
-AUTO_APPROVE = os.environ.get("SIRINX_MCP_AUTO_APPROVE", "true").lower() in ("1", "true", "yes")
+AUTO_APPROVE = os.environ.get("SIRINX_MCP_AUTO_APPROVE", "false").lower() in ("1", "true", "yes")
 LINE_MODE = os.environ.get("SIRINX_LINE_MODE", "dry-run")  # "dry-run" | "live" | "disabled"
 DRY_RUN = LINE_MODE != "live"
+
+if MCP_HOST not in {"127.0.0.1", "localhost", "::1"}:
+    raise RuntimeError("Refusing to expose the Manus MCP bridge outside loopback")
 
 # ── MCP Protocol Helpers ──────────────────────────────────────────────────────
 
@@ -86,7 +89,7 @@ def stable_hash(value: dict[str, Any]) -> str:
 MCP_TOOLS: list[dict[str, Any]] = [
     {
         "name": "line_send_message",
-        "description": "Send a text message to a LINE user via the Official Account.",
+        "description": "Validate a draft LINE message. Live sending is blocked by default.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -104,7 +107,7 @@ MCP_TOOLS: list[dict[str, Any]] = [
     },
     {
         "name": "line_get_profile",
-        "description": "Get a LINE user's profile information (display name, picture, status message).",
+        "description": "Validate a LINE profile lookup request in dry-run mode.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -118,7 +121,7 @@ MCP_TOOLS: list[dict[str, Any]] = [
     },
     {
         "name": "line_get_user_id",
-        "description": "Get the default DESTINATION_USER_ID (requires DESTINATION_USER_ID to be set).",
+        "description": "Report whether a default destination is configured without exposing it.",
         "inputSchema": {
             "type": "object",
             "properties": {},
@@ -144,7 +147,7 @@ MCP_TOOLS: list[dict[str, Any]] = [
 
 # ── Policy Enforcement ────────────────────────────────────────────────────────
 
-LINE_SEND_BLOCKED = bool(os.environ.get("SIRINX_LINE_SEND_BLOCKED", "false").lower() in ("1", "true"))
+LINE_SEND_BLOCKED = bool(os.environ.get("SIRINX_LINE_SEND_BLOCKED", "true").lower() in ("1", "true"))
 LINE_BROADCAST_BLOCKED = True  # Always blocked by policy
 LINE_TOOLS_BLOCKED: set[str] = {
     "line_broadcast",
@@ -198,7 +201,7 @@ def build_receipt(
         "receipt_id": receipt_id,
         "tool_name": tool_name,
         "args_keys": list(args.keys()),
-        "args_redacted": {k: "<redacted>" if "token" in k.lower() or "secret" in k.lower() or "key" in k.lower() else v for k, v in args.items()},
+        "args_redacted": {k: "<redacted>" for k in args},
         "line_mode": LINE_MODE,
         "auto_approved": AUTO_APPROVE,
         "dry_run": DRY_RUN,
@@ -258,16 +261,6 @@ def handle_line_send_message(args: dict[str, Any]) -> dict[str, Any]:
     if violations:
         return {"status": "blocked", "violations": violations, "detail": "Policy violations detected"}
 
-    if LINE_SEND_BLOCKED:
-        receipt = build_receipt("line_send_message", args, "blocked", "SIRINX_LINE_SEND_BLOCKED=true")
-        write_a2a_packet("line_send_message", args, receipt)
-        return {
-            "status": "blocked",
-            "reason": "LINE send is blocked by SIRINX_LINE_SEND_BLOCKED env var",
-            "dry_run": True,
-            "receipt_id": receipt["receipt_id"],
-        }
-
     message = args.get("message", "")
     user_id = args.get("userId", os.environ.get("DESTINATION_USER_ID", ""))
 
@@ -277,26 +270,39 @@ def handle_line_send_message(args: dict[str, Any]) -> dict[str, Any]:
     if len(message) > 2000:
         return {"status": "error", "reason": "Message exceeds 2000 character limit"}
 
-    receipt = build_receipt("line_send_message", args, "completed" if not DRY_RUN else "simulated", "ok")
+    if LINE_SEND_BLOCKED:
+        receipt = build_receipt("line_send_message", args, "blocked", "SIRINX_LINE_SEND_BLOCKED=true")
+        write_a2a_packet("line_send_message", args, receipt)
+        return {
+            "status": "blocked",
+            "reason": "LINE send is blocked by policy",
+            "dry_run": True,
+            "receipt_id": receipt["receipt_id"],
+        }
+
+    receipt = build_receipt(
+        "line_send_message",
+        args,
+        "simulated" if DRY_RUN else "blocked",
+        "dry-run only" if DRY_RUN else "live connector unavailable",
+    )
     write_a2a_packet("line_send_message", args, receipt)
 
     if DRY_RUN:
         return {
             "status": "simulated",
-            "detail": f"DRY-RUN: Would send message to {user_id[:6]}...",
+            "detail": "DRY-RUN: Message was validated but not sent",
             "message_length": len(message),
-            "user_id_prefix": user_id[:6],
+            "target_present": bool(user_id),
             "line_mode": LINE_MODE,
             "receipt_id": receipt["receipt_id"],
             "auto_approved": AUTO_APPROVE,
         }
 
-    # LIVE mode would invoke the LINE OA MCP server here
-    # For now: simulate success
+    # The live connector is intentionally not implemented in this bridge.
     return {
-        "status": "completed",
-        "detail": f"Message sent to {user_id[:6]}...",
-        "message_length": len(message),
+        "status": "blocked",
+        "reason": "Live LINE connector requires a separately approved implementation",
         "receipt_id": receipt["receipt_id"],
     }
 
@@ -307,25 +313,26 @@ def handle_line_get_profile(args: dict[str, Any]) -> dict[str, Any]:
     if not user_id:
         return {"status": "error", "reason": "No userId provided"}
 
-    receipt = build_receipt("line_get_profile", args, "completed" if not DRY_RUN else "simulated", "ok")
+    receipt = build_receipt(
+        "line_get_profile",
+        args,
+        "simulated" if DRY_RUN else "blocked",
+        "dry-run only" if DRY_RUN else "live connector unavailable",
+    )
     write_a2a_packet("line_get_profile", args, receipt)
 
     if DRY_RUN:
         return {
             "status": "simulated",
-            "detail": f"DRY-RUN: Would get profile for {user_id[:6]}...",
-            "user_id_prefix": user_id[:6],
+            "detail": "DRY-RUN: Profile lookup was validated but not performed",
+            "target_present": bool(user_id),
             "line_mode": LINE_MODE,
             "receipt_id": receipt["receipt_id"],
         }
 
     return {
-        "status": "completed",
-        "detail": "Profile retrieved",
-        "displayName": "(simulated)",
-        "userId": user_id,
-        "pictureUrl": None,
-        "statusMessage": None,
+        "status": "blocked",
+        "reason": "Live LINE profile lookup requires separate approval",
         "receipt_id": receipt["receipt_id"],
     }
 
@@ -336,9 +343,8 @@ def handle_line_get_user_id(_args: dict[str, Any]) -> dict[str, Any]:
     if not dest_id:
         return {"status": "error", "reason": "DESTINATION_USER_ID is not set"}
     return {
-        "status": "completed",
-        "userId": dest_id[:6] + "..." if len(dest_id) > 6 else dest_id,
-        "masked": True,
+        "status": "available",
+        "configured": True,
     }
 
 
@@ -351,7 +357,7 @@ def handle_bridge_health(_args: dict[str, Any]) -> dict[str, Any]:
         "line_mode": LINE_MODE,
         "dry_run": DRY_RUN,
         "auto_approve": AUTO_APPROVE,
-        "queue_root": str(QUEUE_ROOT),
+        "send_blocked": LINE_SEND_BLOCKED,
     }
 
 
@@ -365,7 +371,7 @@ def handle_bridge_status(_args: dict[str, Any]) -> dict[str, Any]:
         "send_blocked": LINE_SEND_BLOCKED,
         "broadcast_blocked": LINE_BROADCAST_BLOCKED,
         "tools_available": [t["name"] for t in MCP_TOOLS],
-        "allowlist": list(QUEUE_ROOT.iterdir()) if QUEUE_ROOT.exists() else [],
+        "queue_available": QUEUE_ROOT.exists(),
     }
 
 
@@ -389,7 +395,7 @@ def handle_tool_call(name: str, args: dict[str, Any]) -> dict[str, Any]:
         return handler(args)
     except Exception as e:
         log.error("Tool call failed: %s: %s", name, e)
-        return {"status": "error", "reason": str(e)}
+        return {"status": "error", "reason": "Tool call failed; inspect local bridge logs"}
 
 
 # ── MCP Request Handler (JSON-RPC 2.0 over HTTP) ─────────────────────────────
@@ -480,7 +486,7 @@ class MCPRequestHandler(BaseHTTPRequestHandler):
             params = body.get("params", {})
             tool_name = params.get("name", "")
             tool_args = params.get("arguments", {})
-            log.info("Tool call: %s | args=%s", tool_name, {k: v if len(str(v)) < 50 else str(v)[:50] + "..." for k, v in tool_args.items()})
+            log.info("Tool call: %s | arg_keys=%s", tool_name, sorted(tool_args))
 
             result = handle_tool_call(tool_name, tool_args)
             self._send_json(jsonrpc_result({

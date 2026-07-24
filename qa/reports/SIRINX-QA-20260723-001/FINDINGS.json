@@ -1,0 +1,61 @@
+{
+  "schema_version": "sirinx.qa.findings-index.v1",
+  "run_id": "SIRINX-QA-20260723-001",
+  "findings": [
+    {
+      "finding_id": "FND-001",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-001"],
+      "state": "BLOCKED",
+      "severity": "NOT_ASSIGNED",
+      "title": "Build and deployment identities are unavailable",
+      "description": "Source scope is identified, but no current build, artifact digest, or deployment identity exists.",
+      "evidence_refs": ["EVD-TARGET-001"],
+      "waiver_id": null
+    },
+    {
+      "finding_id": "FND-002",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-002"],
+      "state": "BLOCKED",
+      "severity": "S2",
+      "title": "Safe test adapter and network guard are not verified",
+      "description": "Form, API, analytics, LINE, and other external writes remain denied.",
+      "evidence_refs": ["EVD-SAFETY-001"],
+      "waiver_id": null
+    },
+    {
+      "finding_id": "FND-003",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-009"],
+      "state": "BLOCKED",
+      "severity": "S2",
+      "title": "ROI formula package and tolerances are absent",
+      "description": "The ROI calculator cannot receive a PASS without approved formula provenance and tolerances.",
+      "evidence_refs": ["EVD-ROI-001"],
+      "waiver_id": null
+    },
+    {
+      "finding_id": "FND-004",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-003", "QA-REQ-010"],
+      "state": "NOT_RUN",
+      "severity": "NOT_ASSIGNED",
+      "title": "QA execution has not started",
+      "description": "No tests, browser runs, services, or agent lanes were executed.",
+      "evidence_refs": ["EVD-EXECUTION-001"],
+      "waiver_id": null
+    },
+    {
+      "finding_id": "FND-005",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-011"],
+      "state": "FAIL",
+      "severity": "S3",
+      "title": "Legacy visual-bot verdict is incompatible with its receipt schema",
+      "description": "The implementation can emit baseline_initialized_needs_second_run, but the existing receipt schema rejects that value.",
+      "evidence_refs": ["EVD-LEGACY-QA-001"],
+      "waiver_id": null
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "sirinx.qa.evidence-index.v1",
+  "run_id": "SIRINX-QA-20260723-001",
+  "status": "PARTIAL",
+  "evidence": [
+    {
+      "evidence_id": "EVD-TARGET-001",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-001"],
+      "source": "qa/packets/SIRINX-QA-20260723-001/TARGET_IDENTITY.json",
+      "observed_at": "2026-07-23T12:46:59Z",
+      "observer": "codex-local",
+      "environment": "LOCAL_WORKTREE_AUDIT_ONLY",
+      "build_identity": "NOT_AVAILABLE",
+      "sha256": "63c8a524725d0e6215bc0a1d55f76b6d05ce09169acfe9a593a0f9af19f9c451",
+      "state": "PASS",
+      "redaction": "NOT_REQUIRED",
+      "limitations": [
+        "Proves source identity only; it does not prove build, runtime, deployment, or production health."
+      ]
+    },
+    {
+      "evidence_id": "EVD-LEGACY-QA-001",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-011"],
+      "source": "qa/baselines/legacy-qa-source-manifest.yaml",
+      "observed_at": "2026-07-23T12:46:59Z",
+      "observer": "codex-local",
+      "environment": "LOCAL_WORKTREE_AUDIT_ONLY",
+      "build_identity": "NOT_AVAILABLE",
+      "sha256": "41ab81f8a4e146d269732c6ff49bfc4eac4fc0189a7a13e879d5e9ad206c3619",
+      "state": "FAIL",
+      "redaction": "NOT_REQUIRED",
+      "limitations": [
+        "The source manifest binds a static comparison of the implementation and receipt schema; the visual bot was not executed."
+      ]
+    },
+    {
+      "evidence_id": "EVD-SAFETY-001",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-002"],
+      "source": "qa/packets/SIRINX-QA-20260723-001/TEST_PLAN.yaml",
+      "observed_at": "2026-07-23T12:46:59Z",
+      "observer": "codex-local",
+      "environment": "LOCAL_WORKTREE_AUDIT_ONLY",
+      "build_identity": "NOT_AVAILABLE",
+      "sha256": "e940e768fd33bb9078c7fac6c9da6a1b3a4d46a3ed754d319af3c89a82dd0897",
+      "state": "BLOCKED",
+      "redaction": "NOT_REQUIRED",
+      "limitations": [
+        "The plan records unresolved safe adapters and no local artifact allowlist; it is not proof of an enforced network guard."
+      ]
+    },
+    {
+      "evidence_id": "EVD-ROI-001",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-009"],
+      "source": "qa/baselines/sirinx-business-critical-journeys.yaml",
+      "observed_at": "2026-07-23T12:46:59Z",
+      "observer": "codex-local",
+      "environment": "LOCAL_WORKTREE_AUDIT_ONLY",
+      "build_identity": "NOT_AVAILABLE",
+      "sha256": "2529b4f9cc525702c7fa3115d95afe7d2bdca9e9a141fc0efb567489c84a21c4",
+      "state": "BLOCKED",
+      "redaction": "NOT_REQUIRED",
+      "limitations": [
+        "Records the missing approved formula and tolerances; no ROI calculation was executed."
+      ]
+    },
+    {
+      "evidence_id": "EVD-EXECUTION-001",
+      "run_id": "SIRINX-QA-20260723-001",
+      "requirement_ids": ["QA-REQ-003", "QA-REQ-010"],
+      "source": "qa/packets/SIRINX-QA-20260723-001/TEST_PLAN.yaml",
+      "observed_at": "2026-07-23T12:46:59Z",
+      "observer": "codex-local",
+      "environment": "LOCAL_WORKTREE_AUDIT_ONLY",
+      "build_identity": "NOT_AVAILABLE",
+      "sha256": "e940e768fd33bb9078c7fac6c9da6a1b3a4d46a3ed754d319af3c89a82dd0897",
+      "state": "NOT_RUN",
+      "redaction": "NOT_REQUIRED",
+      "limitations": [
+        "Records planning state only; it is not current product-test evidence."
+      ]
+    }
+  ]
+}

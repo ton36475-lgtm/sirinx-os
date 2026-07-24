@@ -1,0 +1,693 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/ghostclaw/unified-runtime-contracts.v1.schema.json",
+  "title": "GhostClaw Unified Runtime Contracts V1",
+  "description": "Closed, fail-closed contracts for local-first GhostClaw command intake, work delivery, exact approvals, evidence receipts, redrive, and node registration. This schema grants no execution authority.",
+  "oneOf": [
+    { "$ref": "#/$defs/commandEnvelopeV1" },
+    { "$ref": "#/$defs/actionManifestV2" },
+    { "$ref": "#/$defs/workMessageV1" },
+    { "$ref": "#/$defs/stageLeaseV1" },
+    { "$ref": "#/$defs/stageResultV1" },
+    { "$ref": "#/$defs/modelCatalogEntryV1" },
+    { "$ref": "#/$defs/routeReceiptV1" },
+    { "$ref": "#/$defs/evidenceManifestV1" },
+    { "$ref": "#/$defs/approvalGrantV2" },
+    { "$ref": "#/$defs/transitionReceiptV2" },
+    { "$ref": "#/$defs/redriveRequestV1" },
+    { "$ref": "#/$defs/nodeManifestV1" }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dataClass": {
+      "type": "string",
+      "enum": ["public", "internal", "confidential", "restricted"]
+    },
+    "riskTier": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "X"]
+    },
+    "actionType": {
+      "type": "string",
+      "enum": [
+        "read_local",
+        "validate_local",
+        "write_local_scoped",
+        "install",
+        "provider_call",
+        "live_send",
+        "git_push",
+        "deploy",
+        "cloud_mutation",
+        "production_db_mutation",
+        "secret_access"
+      ]
+    },
+    "exactTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_type", "target_ref", "target_digest"],
+      "properties": {
+        "target_type": {
+          "type": "string",
+          "enum": ["workspace_path", "git_ref", "service", "channel", "resource", "provider", "node"]
+        },
+        "target_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "not": { "pattern": "(^|/)\\.\\.(/|$)|[*?{}\\[\\]]" }
+        },
+        "target_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "commandEnvelopeV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "message_id",
+        "correlation_id",
+        "idempotency_key",
+        "source",
+        "received_at",
+        "goal",
+        "constraints",
+        "attachments",
+        "payload_digest"
+      ],
+      "properties": {
+        "kind": { "const": "CommandEnvelopeV1" },
+        "schema_version": { "const": "1.0.0" },
+        "message_id": { "$ref": "#/$defs/identifier" },
+        "correlation_id": { "$ref": "#/$defs/identifier" },
+        "idempotency_key": { "$ref": "#/$defs/identifier" },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["channel", "node_id", "principal_ref"],
+          "properties": {
+            "channel": { "type": "string", "enum": ["telegram", "local_cli", "schedule", "event", "api"] },
+            "node_id": { "$ref": "#/$defs/identifier" },
+            "principal_ref": { "$ref": "#/$defs/identifier" }
+          }
+        },
+        "received_at": { "$ref": "#/$defs/timestamp" },
+        "goal": { "type": "string", "minLength": 1, "maxLength": 12000 },
+        "constraints": {
+          "type": "array",
+          "maxItems": 100,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        },
+        "attachments": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["artifact_ref", "content_type", "size_bytes", "digest"],
+            "properties": {
+              "artifact_ref": { "$ref": "#/$defs/identifier" },
+              "content_type": { "type": "string", "minLength": 1, "maxLength": 160 },
+              "size_bytes": { "type": "integer", "minimum": 0, "maximum": 52428800 },
+              "digest": { "$ref": "#/$defs/digest" }
+            }
+          }
+        },
+        "payload_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "actionManifestV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "action_id",
+        "task_id",
+        "action_type",
+        "operation",
+        "risk_tier",
+        "data_class",
+        "targets",
+        "dry_run",
+        "impact",
+        "limits",
+        "idempotency_key",
+        "plan_digest",
+        "scope_digest",
+        "action_digest"
+      ],
+      "properties": {
+        "kind": { "const": "ActionManifestV2" },
+        "schema_version": { "const": "2.0.0" },
+        "action_id": { "$ref": "#/$defs/identifier" },
+        "task_id": { "$ref": "#/$defs/identifier" },
+        "action_type": {
+          "allOf": [
+            { "$ref": "#/$defs/actionType" },
+            { "not": { "const": "secret_access" } }
+          ]
+        },
+        "operation": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "lane": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "risk_tier": { "$ref": "#/$defs/riskTier" },
+        "data_class": { "$ref": "#/$defs/dataClass" },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": { "$ref": "#/$defs/exactTarget" }
+        },
+        "dry_run": { "type": "boolean" },
+        "impact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["external_write", "customer_visible", "production", "financial"],
+          "properties": {
+            "external_write": { "type": "boolean" },
+            "customer_visible": { "type": "boolean" },
+            "production": { "type": "boolean" },
+            "financial": { "type": "boolean" }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_calls", "max_runtime_seconds", "max_cost_usd"],
+          "properties": {
+            "max_calls": { "type": "integer", "minimum": 0, "maximum": 1000 },
+            "max_runtime_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+            "max_cost_usd": { "type": "number", "minimum": 0, "maximum": 1000000 }
+          }
+        },
+        "idempotency_key": { "$ref": "#/$defs/identifier" },
+        "plan_digest": { "$ref": "#/$defs/digest" },
+        "scope_digest": { "$ref": "#/$defs/digest" },
+        "action_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "workMessageV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "message_id",
+        "task_id",
+        "stage",
+        "attempt",
+        "max_attempts",
+        "priority",
+        "available_at",
+        "status",
+        "payload_ref",
+        "payload_digest",
+        "failure_class",
+        "redrive_generation"
+      ],
+      "properties": {
+        "kind": { "const": "WorkMessageV1" },
+        "schema_version": { "const": "1.0.0" },
+        "message_id": { "$ref": "#/$defs/identifier" },
+        "task_id": { "$ref": "#/$defs/identifier" },
+        "stage": { "type": "string", "enum": ["TRIAGE", "MAKER", "CHECKER", "GUARD", "EXECUTE", "VERIFY"] },
+        "attempt": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "max_attempts": { "const": 3 },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "available_at": { "$ref": "#/$defs/timestamp" },
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "CLAIMED", "VERIFYING", "DELIVERED", "DEAD_LETTER", "EFFECT_UNKNOWN", "QUARANTINED"]
+        },
+        "claim": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["owner", "expires_at", "version"],
+          "properties": {
+            "owner": { "$ref": "#/$defs/identifier" },
+            "expires_at": { "$ref": "#/$defs/timestamp" },
+            "version": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "payload_ref": { "$ref": "#/$defs/identifier" },
+        "payload_digest": { "$ref": "#/$defs/digest" },
+        "failure_class": {
+          "type": ["string", "null"],
+          "enum": [null, "NETWORK_TIMEOUT", "RATE_LIMIT", "TEMPORARY_UNAVAILABLE", "FATAL_POLICY", "FATAL_SCHEMA", "FATAL_AUTH", "FATAL_INTEGRITY", "FATAL_PERMISSION", "FATAL_UNKNOWN", "EFFECT_UNKNOWN"]
+        },
+        "redrive_generation": { "type": "integer", "minimum": 0 },
+        "parent_message_id": { "anyOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] }
+      }
+    },
+    "stageLeaseV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "lease_id",
+        "task_id",
+        "message_id",
+        "worker_id",
+        "node_id",
+        "stage",
+        "attempt",
+        "permitted_actions",
+        "targets",
+        "capability_digest",
+        "scope_digest",
+        "resources",
+        "nonce",
+        "issued_at",
+        "expires_at",
+        "cas_version"
+      ],
+      "properties": {
+        "kind": { "const": "StageLeaseV1" },
+        "schema_version": { "const": "1.0.0" },
+        "lease_id": { "$ref": "#/$defs/identifier" },
+        "task_id": { "$ref": "#/$defs/identifier" },
+        "message_id": { "$ref": "#/$defs/identifier" },
+        "worker_id": { "$ref": "#/$defs/identifier" },
+        "node_id": { "$ref": "#/$defs/identifier" },
+        "stage": { "type": "string", "enum": ["TRIAGE", "MAKER", "CHECKER", "GUARD", "EXECUTE", "VERIFY"] },
+        "attempt": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "permitted_actions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/actionType" },
+              { "not": { "const": "secret_access" } }
+            ]
+          }
+        },
+        "targets": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/exactTarget" } },
+        "capability_digest": { "$ref": "#/$defs/digest" },
+        "scope_digest": { "$ref": "#/$defs/digest" },
+        "resources": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_runtime_seconds", "max_memory_mb", "max_processes"],
+          "properties": {
+            "max_runtime_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+            "max_memory_mb": { "type": "integer", "minimum": 64, "maximum": 1048576 },
+            "max_processes": { "type": "integer", "minimum": 1, "maximum": 128 }
+          }
+        },
+        "nonce": { "$ref": "#/$defs/identifier" },
+        "issued_at": { "$ref": "#/$defs/timestamp" },
+        "expires_at": { "$ref": "#/$defs/timestamp" },
+        "cas_version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "stageResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "result_id",
+        "lease_id",
+        "task_id",
+        "worker_id",
+        "node_id",
+        "status",
+        "artifact_digests",
+        "evidence_digests",
+        "argv_receipt",
+        "exit_code",
+        "started_at",
+        "finished_at"
+      ],
+      "properties": {
+        "kind": { "const": "StageResultV1" },
+        "schema_version": { "const": "1.0.0" },
+        "result_id": { "$ref": "#/$defs/identifier" },
+        "lease_id": { "$ref": "#/$defs/identifier" },
+        "task_id": { "$ref": "#/$defs/identifier" },
+        "worker_id": { "$ref": "#/$defs/identifier" },
+        "node_id": { "$ref": "#/$defs/identifier" },
+        "status": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED", "EFFECT_UNKNOWN"] },
+        "artifact_digests": { "type": "array", "items": { "$ref": "#/$defs/digest" } },
+        "evidence_digests": { "type": "array", "items": { "$ref": "#/$defs/digest" } },
+        "argv_receipt": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        },
+        "exit_code": { "type": ["integer", "null"], "minimum": 0, "maximum": 255 },
+        "telemetry": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "runtime_ms": { "type": "integer", "minimum": 0 },
+            "peak_memory_mb": { "type": "integer", "minimum": 0 },
+            "network_requests": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "started_at": { "$ref": "#/$defs/timestamp" },
+        "finished_at": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "modelCatalogEntryV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "catalog_entry_id",
+        "provider_id",
+        "model_id",
+        "allowed_roles",
+        "max_data_class",
+        "max_input_tokens",
+        "max_output_tokens",
+        "max_cost_usd",
+        "external",
+        "verification_evidence_digest",
+        "verified_at",
+        "enabled"
+      ],
+      "properties": {
+        "kind": { "const": "ModelCatalogEntryV1" },
+        "schema_version": { "const": "1.0.0" },
+        "catalog_entry_id": { "$ref": "#/$defs/identifier" },
+        "provider_id": { "$ref": "#/$defs/identifier" },
+        "model_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "allowed_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["architect", "maker", "checker", "research", "summary"] }
+        },
+        "max_data_class": { "$ref": "#/$defs/dataClass" },
+        "max_input_tokens": { "type": "integer", "minimum": 1 },
+        "max_output_tokens": { "type": "integer", "minimum": 1 },
+        "max_cost_usd": { "type": "number", "minimum": 0 },
+        "external": { "type": "boolean" },
+        "verification_evidence_digest": { "$ref": "#/$defs/digest" },
+        "verified_at": { "$ref": "#/$defs/timestamp" },
+        "enabled": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "external": { "const": true } }, "required": ["external"] },
+          "then": { "properties": { "max_data_class": { "const": "public" } } }
+        }
+      ]
+    },
+    "routeReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "route_receipt_id",
+        "catalog_digest",
+        "provider_id",
+        "model_id",
+        "request_digest",
+        "data_class",
+        "approval_digest",
+        "estimated_input_tokens",
+        "estimated_output_tokens",
+        "budget_before_usd",
+        "budget_after_usd",
+        "external",
+        "created_at"
+      ],
+      "properties": {
+        "kind": { "const": "RouteReceiptV1" },
+        "schema_version": { "const": "1.0.0" },
+        "route_receipt_id": { "$ref": "#/$defs/identifier" },
+        "catalog_digest": { "$ref": "#/$defs/digest" },
+        "provider_id": { "$ref": "#/$defs/identifier" },
+        "model_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "request_digest": { "$ref": "#/$defs/digest" },
+        "data_class": { "$ref": "#/$defs/dataClass" },
+        "approval_digest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "estimated_input_tokens": { "type": "integer", "minimum": 0 },
+        "estimated_output_tokens": { "type": "integer", "minimum": 0 },
+        "budget_before_usd": { "type": "number", "minimum": 0 },
+        "budget_after_usd": { "type": "number", "minimum": 0 },
+        "external": { "type": "boolean" },
+        "created_at": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "evidenceManifestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "evidence_id",
+        "artifact_ref",
+        "content_digest",
+        "size_bytes",
+        "data_class",
+        "redaction_status",
+        "collector_version",
+        "created_at",
+        "expires_at",
+        "receipt_head_digest"
+      ],
+      "properties": {
+        "kind": { "const": "EvidenceManifestV1" },
+        "schema_version": { "const": "1.0.0" },
+        "evidence_id": { "$ref": "#/$defs/identifier" },
+        "artifact_ref": { "$ref": "#/$defs/identifier" },
+        "content_digest": { "$ref": "#/$defs/digest" },
+        "size_bytes": { "type": "integer", "minimum": 0, "maximum": 1073741824 },
+        "data_class": { "$ref": "#/$defs/dataClass" },
+        "redaction_status": { "type": "string", "enum": ["NOT_REQUIRED", "REDACTED", "REJECTED_SECRET_LIKE"] },
+        "collector_version": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "created_at": { "$ref": "#/$defs/timestamp" },
+        "expires_at": { "$ref": "#/$defs/timestamp" },
+        "receipt_head_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "approvalGrantV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "grant_id",
+        "task_id",
+        "action_type",
+        "operation",
+        "targets",
+        "action_digest",
+        "plan_digest",
+        "scope_digest",
+        "approver_ref",
+        "nonce",
+        "issued_at",
+        "expires_at",
+        "max_calls",
+        "max_cost_usd"
+      ],
+      "properties": {
+        "kind": { "const": "ApprovalGrantV2" },
+        "schema_version": { "const": "2.0.0" },
+        "grant_id": { "$ref": "#/$defs/identifier" },
+        "task_id": { "$ref": "#/$defs/identifier" },
+        "action_type": {
+          "allOf": [
+            { "$ref": "#/$defs/actionType" },
+            { "not": { "const": "secret_access" } }
+          ]
+        },
+        "operation": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "targets": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/exactTarget" } },
+        "action_digest": { "$ref": "#/$defs/digest" },
+        "plan_digest": { "$ref": "#/$defs/digest" },
+        "scope_digest": { "$ref": "#/$defs/digest" },
+        "approver_ref": { "$ref": "#/$defs/identifier" },
+        "nonce": { "$ref": "#/$defs/identifier" },
+        "issued_at": { "$ref": "#/$defs/timestamp" },
+        "expires_at": { "$ref": "#/$defs/timestamp" },
+        "max_calls": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "max_cost_usd": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "conditions": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 500 } }
+      }
+    },
+    "transitionReceiptV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "receipt_id",
+        "task_id",
+        "from_state",
+        "to_state",
+        "actor_ref",
+        "node_id",
+        "action_digest",
+        "state_before_digest",
+        "state_after_digest",
+        "evidence_digests",
+        "previous_receipt_digest",
+        "receipt_digest",
+        "created_at"
+      ],
+      "properties": {
+        "kind": { "const": "TransitionReceiptV2" },
+        "schema_version": { "const": "2.0.0" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "receipt_id": { "$ref": "#/$defs/identifier" },
+        "task_id": { "$ref": "#/$defs/identifier" },
+        "from_state": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "to_state": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "actor_ref": { "$ref": "#/$defs/identifier" },
+        "node_id": { "$ref": "#/$defs/identifier" },
+        "action_digest": { "$ref": "#/$defs/digest" },
+        "approval_digest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "lease_digest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "route_digest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "state_before_digest": { "$ref": "#/$defs/digest" },
+        "state_after_digest": { "$ref": "#/$defs/digest" },
+        "evidence_digests": { "type": "array", "items": { "$ref": "#/$defs/digest" } },
+        "previous_receipt_digest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "receipt_digest": { "$ref": "#/$defs/digest" },
+        "created_at": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "redriveRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schema_version",
+        "request_id",
+        "original_message_id",
+        "original_payload_digest",
+        "original_receipt_head",
+        "effect_proof",
+        "new_message_id",
+        "new_idempotency_key",
+        "reason",
+        "checker_receipt_digest",
+        "guard_receipt_digest",
+        "requested_at"
+      ],
+      "properties": {
+        "kind": { "const": "RedriveRequestV1" },
+        "schema_version": { "const": "1.0.0" },
+        "request_id": { "$ref": "#/$defs/identifier" },
+        "original_message_id": { "$ref": "#/$defs/identifier" },
+        "original_payload_digest": { "$ref": "#/$defs/digest" },
+        "original_receipt_head": { "$ref": "#/$defs/digest" },
+        "effect_proof": { "const": "NOT_APPLIED" },
+        "new_message_id": { "$ref": "#/$defs/identifier" },
+        "new_idempotency_key": { "$ref": "#/$defs/identifier" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "checker_receipt_digest": { "$ref": "#/$defs/digest" },
+        "guard_receipt_digest": { "$ref": "#/$defs/digest" },
+        "approval_digest": { "anyOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "requested_at": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "nodeManifestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "node_kind": { "not": { "const": "mac_control" } } },
+            "required": ["node_kind"]
+          },
+          "then": {
+            "properties": {
+              "control_plane_writer": { "const": false },
+              "capabilities": {
+                "items": {
+                  "enum": ["read_local", "validate_local", "write_local_scoped"]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "trust_zone": { "const": "public_edge" } },
+            "required": ["trust_zone"]
+          },
+          "then": {
+            "properties": {
+              "control_plane_writer": { "const": false },
+              "max_data_class": { "const": "public" },
+              "capabilities": {
+                "items": { "enum": ["read_local", "validate_local"] }
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "kind",
+        "schema_version",
+        "node_id",
+        "node_kind",
+        "trust_zone",
+        "os",
+        "architecture",
+        "capabilities",
+        "max_data_class",
+        "egress_enabled",
+        "control_plane_writer",
+        "concurrency",
+        "identity_key_ref",
+        "attestation_digest",
+        "observed_at"
+      ],
+      "properties": {
+        "kind": { "const": "NodeManifestV1" },
+        "schema_version": { "const": "1.0.0" },
+        "node_id": { "$ref": "#/$defs/identifier" },
+        "node_kind": { "type": "string", "enum": ["mac_control", "pc_worker", "vps_worker", "cloudflare_worker", "edge_node"] },
+        "trust_zone": { "type": "string", "enum": ["local_control", "private_lan", "private_cloud", "public_edge"] },
+        "os": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "architecture": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/actionType" },
+              { "not": { "const": "secret_access" } }
+            ]
+          }
+        },
+        "max_data_class": { "$ref": "#/$defs/dataClass" },
+        "egress_enabled": { "type": "boolean" },
+        "control_plane_writer": { "type": "boolean" },
+        "concurrency": { "type": "integer", "minimum": 0, "maximum": 128 },
+        "identity_key_ref": { "$ref": "#/$defs/identifier" },
+        "attestation_digest": { "$ref": "#/$defs/digest" },
+        "observed_at": { "$ref": "#/$defs/timestamp" }
+      }
+    }
+  }
+}

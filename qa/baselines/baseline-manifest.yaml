@@ -1,0 +1,16 @@
+schema_version: "sirinx.qa.baselines.v1"
+status: "CANDIDATE_AWAITING_POLICY_APPROVAL"
+timezone: "Asia/Bangkok"
+provenance:
+  supplied_by: "human_owner"
+  supplied_at: "2026-07-23"
+  revalidated_in_current_run: false
+profiles:
+  accessibility: "qa/baselines/wcag-2.2-aa-profile.yaml"
+  security: "qa/baselines/asvs-5.0.0-applicability.yaml"
+  performance: "qa/baselines/core-web-vitals.yaml"
+  journeys: "qa/baselines/sirinx-business-critical-journeys.yaml"
+rules:
+  missing_profile: "BLOCKED"
+  version_drift: "BLOCKED"
+  unsupported_claim: "FAIL"

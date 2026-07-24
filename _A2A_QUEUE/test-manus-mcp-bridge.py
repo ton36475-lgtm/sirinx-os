@@ -18,16 +18,26 @@ import importlib.util
 import json
 import os
 import sys
+import tempfile
 import time
 import uuid
 from pathlib import Path
 from typing import Any
+
+# Make the test deterministic and fail-closed regardless of the caller's shell.
+os.environ["SIRINX_MCP_AUTO_APPROVE"] = "false"
+os.environ["SIRINX_LINE_MODE"] = "dry-run"
+os.environ["SIRINX_LINE_SEND_BLOCKED"] = "true"
+os.environ["SIRINX_MCP_HOST"] = "127.0.0.1"
 
 # Load the bridge module (file has hyphens so can't use regular import)
 _bridge_path = str(Path(__file__).resolve().parent / "manus-mcp-bridge.py")
 _spec = importlib.util.spec_from_file_location("manus_mcp_bridge", _bridge_path)
 _bridge = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_bridge)
+
+_test_queue_tmp = tempfile.TemporaryDirectory(prefix="manus-mcp-test-")
+_bridge.QUEUE_ROOT = Path(_test_queue_tmp.name)
 
 MCP_TOOLS = _bridge.MCP_TOOLS
 TOOL_HANDLERS = _bridge.TOOL_HANDLERS
@@ -140,7 +150,9 @@ section("3. AUTHORIZED-REVERSE-ENGINEERING: Tool Handler Response Validation")
 result = handle_bridge_health({})
 test("bridge_health returns status ok", result.get("status") == "ok", str(result))
 test("bridge_health has version", "version" in result, str(result))
-test("bridge_health has auto_approve", "auto_approve" in result, str(result))
+test("bridge_health reports auto-approve disabled", result.get("auto_approve") is False, str(result))
+test("bridge_health reports sends blocked", result.get("send_blocked") is True, str(result))
+test("bridge_health does not expose local paths", "queue_root" not in result, str(result))
 
 # bridge_status
 result = handle_bridge_status({})
@@ -155,12 +167,12 @@ test("line_get_user_id returns error when no DESTINATION_USER_ID", result.get("s
 # line_get_profile (dry-run mode)
 result = handle_line_get_profile({"userId": "U1234567890abcdef1234567890abcdef"})
 test("line_get_profile returns simulated in dry-run", result.get("status") == "simulated", str(result))
-test("line_get_profile has user_id_prefix", "user_id_prefix" in result, str(result))
+test("line_get_profile masks target identity", result.get("target_present") is True, str(result))
 
 # line_send_message (dry-run mode)
 result = handle_line_send_message({"userId": "U1234567890abcdef1234567890abcdef", "message": "Hello from Manus!"})
-test("line_send_message returns simulated in dry-run", result.get("status") == "simulated", str(result))
-test("line_send_message has message_length", result.get("message_length") == 17, str(result))
+test("line_send_message is blocked by default", result.get("status") == "blocked", str(result))
+test("line_send_message remains dry-run", result.get("dry_run") is True, str(result))
 test("line_send_message has receipt_id", bool(result.get("receipt_id")), str(result))
 
 # line_send_message without userId and no DESTINATION_USER_ID
@@ -194,8 +206,8 @@ test("Receipt has schema", receipt.get("schema") == "manus-mcp-bridge.receipt.v1
 test("Receipt has receipt_id", bool(receipt.get("receipt_id")), str(receipt))
 test("Receipt has tool_name", receipt.get("tool_name") == "line_send_message", str(receipt))
 test("Receipt has dry_run", receipt.get("dry_run") == True, str(receipt))
-test("Receipt has auto_approved", receipt.get("auto_approved") == True, str(receipt))
-test("Receipt has args_redacted (no secrets leaked)", "secret" not in json.dumps(receipt["args_redacted"]), str(receipt["args_redacted"]))
+test("Receipt has auto_approved false", receipt.get("auto_approved") is False, str(receipt))
+test("Receipt redacts every argument value", all(v == "<redacted>" for v in receipt["args_redacted"].values()), str(receipt["args_redacted"]))
 
 # Unknown tool
 result = handle_tool_call("nonexistent_tool", {})
@@ -207,7 +219,7 @@ test("Unknown tool returns error", result.get("status") == "error", str(result))
 section("5. SENIOR-FULLSTACK-BUILDER: A2A Packet Integration Test")
 
 # Test packet writing to inbox
-inbox = Path(__file__).resolve().parent / "inbox"
+inbox = _bridge.QUEUE_ROOT / "inbox"
 inbox.mkdir(parents=True, exist_ok=True)
 
 receipt = build_receipt("test_tool", {"test": "data"}, "simulated", "integration_test")
@@ -223,7 +235,7 @@ if packet_path.exists():
     test("Packet has correlation_id", bool(packet.get("correlation_id")), str(packet.get("correlation_id")))
     test("Packet from.agent is manus-agent", packet.get("from", {}).get("agent") == "manus-agent", str(packet.get("from")))
     test("Packet has receipt embedded", bool(packet.get("receipt")), str(packet.get("receipt")))
-    test("Packet human_approval_required respects AUTO_APPROVE", packet.get("human_approval_required") == False, str(packet.get("human_approval_required")))
+    test("Non-send test packet does not require approval", packet.get("human_approval_required") is False, str(packet.get("human_approval_required")))
 
     # Cleanup test packet
     packet_path.unlink()
@@ -261,7 +273,7 @@ test("A2A bridge routes line-operator-mcp", '"line-operator-mcp"' in bridge_cont
 allowlist = json.loads(Path("/Users/sirinx/.config/thclaws/mcp_allowlist.json").read_text())
 test("Allowlist has manus-mcp-bridge", "manus-mcp-bridge" in allowlist.get("mcp_servers", {}), str(allowlist.get("mcp_servers", {}).keys()))
 test("Allowlist has line-bot", "line-bot" in allowlist.get("mcp_servers", {}), str(allowlist.get("mcp_servers", {}).keys()))
-test("Allowlist has auto_approve_default", allowlist.get("config", {}).get("auto_approve_default") == True, str(allowlist.get("config")))
+test("Allowlist defaults auto-approve off", allowlist.get("config", {}).get("auto_approve_default") is False, str(allowlist.get("config")))
 
 # Check policy exists
 test("Manus MCP policy exists", Path("/Users/sirinx/sirinx-os/policy/manus-mcp-policy.yaml").exists(), "Missing policy file")
@@ -269,8 +281,11 @@ test("Manus MCP policy exists", Path("/Users/sirinx/sirinx-os/policy/manus-mcp-p
 # Check opencode config updated
 opencode = json.loads(Path("/Users/sirinx/.config/opencode/opencode.json").read_text())
 test("OpenCode MCP has manus-mcp-bridge", "manus-mcp-bridge" in opencode.get("mcp", {}), str(opencode.get("mcp", {}).keys()))
-test("OpenCode manus-mcp-bridge enabled", opencode["mcp"]["manus-mcp-bridge"].get("enabled") == True, "Not enabled")
-test("OpenCode line-bot enabled", opencode["mcp"]["line-bot"].get("enabled") == True, "Not enabled")
+test("OpenCode manus-mcp-bridge enabled", opencode["mcp"]["manus-mcp-bridge"].get("enabled") is True, "Not enabled")
+test("OpenCode manus-mcp-bridge uses local HTTP", opencode["mcp"]["manus-mcp-bridge"].get("url") == "http://127.0.0.1:8788/mcp", str(opencode["mcp"]["manus-mcp-bridge"]))
+test("OpenCode line-bot remains disabled", opencode["mcp"]["line-bot"].get("enabled") is False, "Unexpectedly enabled")
+test("OpenCode allows bridge health only", opencode.get("permission", {}).get("manus-mcp-bridge_bridge_health") == "allow", "Health tool is not allowed")
+test("OpenCode allows bridge status only", opencode.get("permission", {}).get("manus-mcp-bridge_bridge_status") == "allow", "Status tool is not allowed")
 test("OpenCode line-bot broadcast blocked", opencode.get("tools", {}).get("line-bot.broadcast*") == False, "Broadcast not blocked")
 test("OpenCode line-bot push blocked", opencode.get("tools", {}).get("line-bot.push*") == False, "Push not blocked")
 

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/qa/schemas/waiver.schema.json",
+  "title": "SIRINX QA Waiver",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "waiver_id",
+    "finding_id",
+    "underlying_state",
+    "owner",
+    "independent_approver",
+    "rationale",
+    "compensating_control",
+    "scope_sha256",
+    "artifact_sha256",
+    "issued_at",
+    "expires_at",
+    "nonce"
+  ],
+  "properties": {
+    "waiver_id": {"type": "string", "pattern": "^WVR-[0-9]{3,}$"},
+    "finding_id": {"type": "string", "pattern": "^FND-[0-9]{3,}$"},
+    "underlying_state": {"const": "FAIL"},
+    "owner": {"type": "string", "minLength": 1},
+    "independent_approver": {"type": "string", "minLength": 1},
+    "rationale": {"type": "string", "minLength": 1},
+    "compensating_control": {"type": "string", "minLength": 1},
+    "scope_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "nonce": {"type": "string", "minLength": 16}
+  }
+}
