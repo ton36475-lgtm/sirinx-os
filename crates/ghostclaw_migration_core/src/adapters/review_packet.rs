@@ -1006,6 +1006,47 @@ pub struct TransitionApplyExecutionPacketNoMutation {
     pub reason: String,
 }
 
+/// Operator-facing mutation gate preview for a transition apply execution packet.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TransitionApplyMutationGatePreview {
+    /// Gate id for this advisory artifact.
+    pub gate_id: String,
+    /// Aggregate mutation gate preview status.
+    pub status: String,
+    /// Gate preview generation is always dry-run.
+    pub dry_run: bool,
+    /// Whether the execution packet chain claims live execution.
+    pub live_execution: bool,
+    /// Short human-facing gate title.
+    pub title: String,
+    /// Manual operator action. This is an instruction, not execution.
+    pub operator_action: String,
+    /// No-mutation execution packet used to prepare this gate.
+    pub execution_packet: TransitionApplyExecutionPacketNoMutation,
+    /// Approval type being gated: `apply`, `reject`, or `hold`.
+    pub approval_type: String,
+    /// Transition action that would require a later exact mutation approval.
+    pub transition_action: String,
+    /// Whether a human approval is required before any later mutation step.
+    pub human_mutation_approval_required: bool,
+    /// Whether exact gate-specific mutation approval is required.
+    pub exact_mutation_approval_required: bool,
+    /// Mutation remains forbidden at this preview layer.
+    pub mutation_allowed: bool,
+    /// Provider calls and other external actions remain forbidden.
+    pub external_actions_allowed: bool,
+    /// Whether this gate preview may consume queue entries.
+    pub queue_consumption_allowed: bool,
+    /// Whether this gate preview may mutate source files.
+    pub source_mutation_allowed: bool,
+    /// Whether this gate preview may mutate persisted orchestrator state.
+    pub state_mutation_allowed: bool,
+    /// Next local-safe action.
+    pub next_action: String,
+    /// Stable machine-readable decision reason.
+    pub reason: String,
+}
+
 impl ReviewWorkerHandoffStatus {
     /// Serializes the handoff status to compact JSON.
     pub fn to_json(&self) -> String {
@@ -1656,6 +1697,33 @@ impl TransitionApplyExecutionPacketNoMutation {
             escape_json(&self.transition_action),
             self.packet_only,
             self.mutation_requires_next_gate,
+            self.queue_consumption_allowed,
+            self.source_mutation_allowed,
+            self.state_mutation_allowed,
+            escape_json(&self.next_action),
+            escape_json(&self.reason)
+        )
+    }
+}
+
+impl TransitionApplyMutationGatePreview {
+    /// Serializes the transition apply mutation gate preview to compact JSON.
+    pub fn to_json(&self) -> String {
+        format!(
+            "{{\"gate_id\":\"{}\",\"gate_kind\":\"transition_apply_mutation_gate_preview\",\"status\":\"{}\",\"dry_run\":{},\"live_execution\":{},\"title\":\"{}\",\"operator_action\":\"{}\",\"execution_packet\":{},\"approval_type\":\"{}\",\"transition_action\":\"{}\",\"human_mutation_approval_required\":{},\"exact_mutation_approval_required\":{},\"mutation_allowed\":{},\"external_actions_allowed\":{},\"queue_consumption_allowed\":{},\"source_mutation_allowed\":{},\"state_mutation_allowed\":{},\"next_action\":\"{}\",\"reason\":\"{}\"}}",
+            escape_json(&self.gate_id),
+            escape_json(&self.status),
+            self.dry_run,
+            self.live_execution,
+            escape_json(&self.title),
+            escape_json(&self.operator_action),
+            self.execution_packet.to_json(),
+            escape_json(&self.approval_type),
+            escape_json(&self.transition_action),
+            self.human_mutation_approval_required,
+            self.exact_mutation_approval_required,
+            self.mutation_allowed,
+            self.external_actions_allowed,
             self.queue_consumption_allowed,
             self.source_mutation_allowed,
             self.state_mutation_allowed,
@@ -2462,6 +2530,50 @@ pub fn prepare_transition_apply_execution_packet_no_mutation(
     }
 }
 
+/// Creates an operator-facing mutation gate preview without applying transitions.
+pub fn create_transition_apply_mutation_gate_preview(
+    gate_id: impl Into<String>,
+    execution_packet: &TransitionApplyExecutionPacketNoMutation,
+) -> TransitionApplyMutationGatePreview {
+    let (
+        execution_chain_dry_run,
+        live_execution,
+        queue_consumption_claimed,
+        source_mutation_claimed,
+        state_mutation_claimed,
+    ) = transition_apply_execution_packet_safety_evidence(execution_packet);
+    let (status, reason, next_action, operator_action, exact_mutation_approval_required) =
+        transition_apply_mutation_gate_preview_decision(
+            execution_packet,
+            execution_chain_dry_run,
+            live_execution,
+            queue_consumption_claimed,
+            source_mutation_claimed,
+            state_mutation_claimed,
+        );
+
+    TransitionApplyMutationGatePreview {
+        gate_id: gate_id.into(),
+        status: status.to_string(),
+        dry_run: true,
+        live_execution,
+        title: "Manual transition apply mutation gate preview".to_string(),
+        operator_action: operator_action.to_string(),
+        execution_packet: execution_packet.clone(),
+        approval_type: execution_packet.approval_type.clone(),
+        transition_action: execution_packet.transition_action.clone(),
+        human_mutation_approval_required: true,
+        exact_mutation_approval_required,
+        mutation_allowed: false,
+        external_actions_allowed: false,
+        queue_consumption_allowed: false,
+        source_mutation_allowed: false,
+        state_mutation_allowed: false,
+        next_action: next_action.to_string(),
+        reason: reason.to_string(),
+    }
+}
+
 fn transition_apply_execution_gate_preview_decision(
     execution_plan: &TransitionApplyExecutionPlan,
 ) -> (&'static str, &'static str, &'static str, &'static str, bool) {
@@ -2581,6 +2693,162 @@ fn transition_apply_execution_packet_decision(
             false,
         ),
     }
+}
+
+fn transition_apply_execution_packet_safety_evidence(
+    execution_packet: &TransitionApplyExecutionPacketNoMutation,
+) -> (bool, bool, bool, bool, bool) {
+    let approval = execution_packet.approval_status.approval.as_ref();
+    let execution_chain_dry_run = execution_packet.dry_run
+        && execution_packet.approval_status.dry_run
+        && approval.map(|approval| approval.dry_run).unwrap_or(true);
+    let live_execution = execution_packet.live_execution
+        || execution_packet.approval_status.live_execution
+        || approval
+            .map(|approval| approval.live_execution)
+            .unwrap_or(false);
+    let queue_consumption_claimed = execution_packet.queue_consumption_allowed
+        || execution_packet.approval_status.queue_consumption_allowed
+        || approval
+            .map(|approval| approval.queue_consumption_allowed)
+            .unwrap_or(false);
+    let source_mutation_claimed = execution_packet.source_mutation_allowed
+        || execution_packet.approval_status.source_mutation_allowed
+        || approval
+            .map(|approval| approval.source_mutation_allowed)
+            .unwrap_or(false);
+    let state_mutation_claimed = execution_packet.state_mutation_allowed
+        || execution_packet.approval_status.state_mutation_allowed
+        || approval
+            .map(|approval| approval.state_mutation_allowed)
+            .unwrap_or(false);
+
+    (
+        execution_chain_dry_run,
+        live_execution,
+        queue_consumption_claimed,
+        source_mutation_claimed,
+        state_mutation_claimed,
+    )
+}
+
+fn transition_apply_mutation_gate_preview_decision(
+    execution_packet: &TransitionApplyExecutionPacketNoMutation,
+    execution_chain_dry_run: bool,
+    live_execution: bool,
+    queue_consumption_claimed: bool,
+    source_mutation_claimed: bool,
+    state_mutation_claimed: bool,
+) -> (&'static str, &'static str, &'static str, &'static str, bool) {
+    if live_execution {
+        return (
+            "blocked_live_execution_flag",
+            "transition_apply_execution_packet_live_flag_present",
+            "stop_before_transition_apply_mutation_gate",
+            "do_not_apply_transition",
+            false,
+        );
+    }
+    if queue_consumption_claimed || source_mutation_claimed || state_mutation_claimed {
+        return (
+            "blocked_transition_apply_execution_packet_mutation_enabled",
+            "transition_apply_execution_packet_mutation_enabled",
+            "reject_transition_apply_execution_packet",
+            "do_not_apply_transition",
+            false,
+        );
+    }
+    if !execution_chain_dry_run
+        || !execution_packet.packet_only
+        || !execution_packet.mutation_requires_next_gate
+    {
+        return (
+            "blocked_transition_apply_execution_packet_not_ready",
+            "transition_apply_execution_packet_gate_flags_not_ready",
+            "prepare_transition_apply_execution_packet_no_mutation",
+            "do_not_apply_transition",
+            false,
+        );
+    }
+    let (
+        expected_approval_type,
+        expected_approval_status,
+        expected_transition_action,
+        ready_status,
+        ready_reason,
+        ready_next_action,
+        ready_operator_action,
+    ) = match execution_packet.status.as_str() {
+        "ready_for_transition_apply_execution_packet_no_mutation" => (
+            "apply",
+            "ready_for_transition_apply_execution_approval_intake",
+            "packet_mark_review_result_accepted_and_unlock_next_packet",
+            "ready_for_transition_apply_mutation_gate_preview",
+            "apply_execution_packet_ready_for_mutation_gate",
+            "wait_for_exact_transition_apply_mutation_approval",
+            "request_exact_transition_apply_mutation_approval",
+        ),
+        "ready_for_rejection_record_execution_packet_no_mutation" => (
+            "reject",
+            "ready_for_rejection_record_execution_approval_intake",
+            "packet_record_review_result_rejected",
+            "ready_for_rejection_record_mutation_gate_preview",
+            "rejection_record_execution_packet_ready_for_mutation_gate",
+            "wait_for_exact_rejection_record_mutation_approval",
+            "request_exact_rejection_record_mutation_approval",
+        ),
+        "ready_for_hold_record_execution_packet_no_mutation" => (
+            "hold",
+            "ready_for_hold_record_execution_approval_intake",
+            "packet_record_review_result_hold",
+            "ready_for_hold_record_mutation_gate_preview",
+            "hold_record_execution_packet_ready_for_mutation_gate",
+            "wait_for_exact_hold_record_mutation_approval",
+            "request_exact_hold_record_mutation_approval",
+        ),
+        _ => {
+            return (
+                "blocked_transition_apply_execution_packet_not_ready",
+                "transition_apply_execution_packet_status_not_ready",
+                "wait_for_ready_transition_apply_execution_packet",
+                "do_not_apply_transition",
+                false,
+            );
+        }
+    };
+
+    let nested_approval_matches = execution_packet
+        .approval_status
+        .approval
+        .as_ref()
+        .map(|approval| {
+            approval.approval_type == expected_approval_type
+                && approval.status == "transition_apply_execution_approval_ready"
+        })
+        .unwrap_or(false);
+    if execution_packet.approval_type != expected_approval_type
+        || execution_packet.transition_action != expected_transition_action
+        || execution_packet.approval_status.status != expected_approval_status
+        || !execution_packet.approval_status.approval_present
+        || execution_packet.approval_status.approval_type != expected_approval_type
+        || !nested_approval_matches
+    {
+        return (
+            "blocked_transition_apply_execution_packet_inconsistent",
+            "transition_apply_execution_packet_status_type_action_inconsistent",
+            "reject_inconsistent_transition_apply_execution_packet",
+            "do_not_apply_transition",
+            false,
+        );
+    }
+
+    (
+        ready_status,
+        ready_reason,
+        ready_next_action,
+        ready_operator_action,
+        true,
+    )
 }
 
 fn transition_apply_execution_approval_intake_decision(

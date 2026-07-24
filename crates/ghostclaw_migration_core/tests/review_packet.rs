@@ -12,6 +12,7 @@ use ghostclaw_migration_core::adapters::review_packet::{
     create_review_handoff_bundle_manifest, create_review_handoff_operator_card,
     create_review_result_transition_gate, create_review_worker_handoff_envelope,
     create_transition_apply_execution_gate_preview, create_transition_apply_gate_preview,
+    create_transition_apply_mutation_gate_preview,
     evaluate_human_transition_decision_intake_status, evaluate_review_candidate_intake_status,
     evaluate_review_handoff_bundle_manifest_status, evaluate_review_outbox_status,
     evaluate_review_result_transition_gate_status, evaluate_review_worker_handoff_status,
@@ -31,7 +32,7 @@ use ghostclaw_migration_core::adapters::review_packet::{
     SelectedBundleReviewPacket, TransitionApplyApproval, TransitionApplyApprovalReadReport,
     TransitionApplyExecutionApproval, TransitionApplyExecutionApprovalReadReport,
     TransitionApplyExecutionGatePreview, TransitionApplyExecutionPacketNoMutation,
-    TransitionApplyExecutionPlan,
+    TransitionApplyExecutionPlan, TransitionApplyMutationGatePreview,
 };
 use ghostclaw_migration_core::adapters::validator::{ValidationCheck, ValidatorResult};
 
@@ -1836,6 +1837,260 @@ fn transition_apply_execution_packet_should_block_non_ready_approval_status() {
     assert!(!packet.mutation_requires_next_gate);
 }
 
+#[test]
+fn transition_apply_mutation_gate_preview_should_match_apply_fixture() {
+    let gate = ready_transition_apply_mutation_gate_preview();
+
+    assert_eq!(
+        gate.to_json(),
+        include_str!("fixtures/p115/transition_apply_mutation_gate_preview_apply.json").trim()
+    );
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_surface_reject_and_hold_gates() {
+    let reject_status = reject_transition_apply_execution_approval_intake_status();
+    let reject_packet =
+        prepare_transition_apply_execution_packet_no_mutation("p114-reject-packet", &reject_status);
+    let reject_gate =
+        create_transition_apply_mutation_gate_preview("p115-reject-mutation-gate", &reject_packet);
+    assert_eq!(
+        reject_gate.status,
+        "ready_for_rejection_record_mutation_gate_preview"
+    );
+    assert_eq!(
+        reject_gate.operator_action,
+        "request_exact_rejection_record_mutation_approval"
+    );
+    assert!(reject_gate.exact_mutation_approval_required);
+    assert!(!reject_gate.mutation_allowed);
+    assert!(!reject_gate.external_actions_allowed);
+    assert!(!reject_gate.queue_consumption_allowed);
+    assert!(!reject_gate.state_mutation_allowed);
+
+    let hold_status = hold_transition_apply_execution_approval_intake_status();
+    let hold_packet =
+        prepare_transition_apply_execution_packet_no_mutation("p114-hold-packet", &hold_status);
+    let hold_gate =
+        create_transition_apply_mutation_gate_preview("p115-hold-mutation-gate", &hold_packet);
+    assert_eq!(
+        hold_gate.status,
+        "ready_for_hold_record_mutation_gate_preview"
+    );
+    assert_eq!(
+        hold_gate.operator_action,
+        "request_exact_hold_record_mutation_approval"
+    );
+    assert!(hold_gate.exact_mutation_approval_required);
+    assert!(!hold_gate.mutation_allowed);
+    assert!(!hold_gate.external_actions_allowed);
+    assert!(!hold_gate.queue_consumption_allowed);
+    assert!(!hold_gate.state_mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_live_packet() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.live_execution = true;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-live-gate", &packet);
+
+    assert_eq!(gate.status, "blocked_live_execution_flag");
+    assert!(gate.live_execution);
+    assert!(!gate.exact_mutation_approval_required);
+    assert!(gate.execution_packet.live_execution);
+    assert_eq!(gate.operator_action, "do_not_apply_transition");
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_nested_live_approval() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet
+        .approval_status
+        .approval
+        .as_mut()
+        .unwrap()
+        .live_execution = true;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-nested-live-gate", &packet);
+
+    assert_eq!(gate.status, "blocked_live_execution_flag");
+    assert!(gate.live_execution);
+    assert!(
+        gate.execution_packet
+            .approval_status
+            .approval
+            .as_ref()
+            .unwrap()
+            .live_execution
+    );
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_queue_consumption_claim() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.queue_consumption_allowed = true;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-queue-mutation-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_mutation_enabled"
+    );
+    assert!(gate.execution_packet.queue_consumption_allowed);
+    assert!(!gate.queue_consumption_allowed);
+    assert!(!gate.mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_source_mutation_claim() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.source_mutation_allowed = true;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-source-mutation-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_mutation_enabled"
+    );
+    assert!(gate.execution_packet.source_mutation_allowed);
+    assert!(!gate.source_mutation_allowed);
+    assert!(!gate.mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_state_mutation_claim() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.state_mutation_allowed = true;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-state-mutation-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_mutation_enabled"
+    );
+    assert!(!gate.exact_mutation_approval_required);
+    assert!(gate.execution_packet.state_mutation_allowed);
+    assert!(!gate.state_mutation_allowed);
+    assert!(!gate.mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_nested_mutation_claim() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet
+        .approval_status
+        .approval
+        .as_mut()
+        .unwrap()
+        .source_mutation_allowed = true;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-nested-mutation-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_mutation_enabled"
+    );
+    assert!(
+        gate.execution_packet
+            .approval_status
+            .approval
+            .as_ref()
+            .unwrap()
+            .source_mutation_allowed
+    );
+    assert!(!gate.mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_non_dry_run_packet() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.dry_run = false;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-non-dry-run-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_not_ready"
+    );
+    assert!(!gate.execution_packet.dry_run);
+    assert!(!gate.exact_mutation_approval_required);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_non_packet_only_input() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.packet_only = false;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-non-packet-only-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_not_ready"
+    );
+    assert!(!gate.execution_packet.packet_only);
+    assert!(!gate.exact_mutation_approval_required);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_missing_next_gate_flag() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.mutation_requires_next_gate = false;
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-no-next-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_not_ready"
+    );
+    assert!(!gate.execution_packet.mutation_requires_next_gate);
+    assert!(!gate.exact_mutation_approval_required);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_approval_type_mismatch() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.approval_type = "reject".to_string();
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-type-mismatch-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_inconsistent"
+    );
+    assert!(!gate.exact_mutation_approval_required);
+    assert!(!gate.mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_transition_action_mismatch() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.transition_action = "packet_record_review_result_rejected".to_string();
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-action-mismatch-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_inconsistent"
+    );
+    assert!(!gate.exact_mutation_approval_required);
+    assert!(!gate.mutation_allowed);
+}
+
+#[test]
+fn transition_apply_mutation_gate_preview_should_block_non_ready_packet() {
+    let mut packet = ready_transition_apply_execution_packet_no_mutation();
+    packet.status = "blocked_execution_approval_not_ready".to_string();
+
+    let gate = create_transition_apply_mutation_gate_preview("p115-non-ready-gate", &packet);
+
+    assert_eq!(
+        gate.status,
+        "blocked_transition_apply_execution_packet_not_ready"
+    );
+    assert!(!gate.exact_mutation_approval_required);
+}
+
 fn pass_validator() -> ValidatorResult {
     ValidatorResult::from_checks(
         "packet-p095",
@@ -2279,6 +2534,13 @@ fn ready_transition_apply_execution_packet_no_mutation() -> TransitionApplyExecu
 {
     let status = ready_transition_apply_execution_approval_intake_status();
     prepare_transition_apply_execution_packet_no_mutation("p114-apply-packet", &status)
+}
+
+fn ready_transition_apply_mutation_gate_preview() -> TransitionApplyMutationGatePreview {
+    create_transition_apply_mutation_gate_preview(
+        "p115-apply-mutation-gate",
+        &ready_transition_apply_execution_packet_no_mutation(),
+    )
 }
 
 fn reject_transition_apply_gate_preview(

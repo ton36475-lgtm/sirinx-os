@@ -396,3 +396,17 @@
 - Added guard behavior for live-flagged, mutating, and non-ready execution approval statuses.
 - Added fixture-backed tests for apply execution packet JSON plus reject/hold, live, mutating, and non-ready approval status paths.
 - Kept execution packet preparation local-only; it does not execute the decision, consume queue entries, mutate orchestrator state, invoke OpenCode, execute workers, call providers, send Telegram messages, push, deploy, commit, mutate source files, or mutate Cloudflare/R2.
+
+## P115/P247 Later
+
+- Add an operator-facing mutation gate preview after the P114/P246 no-mutation execution packet.
+- Require exact gate-specific mutation approval before any future apply/reject/hold transition mutation.
+- Keep this as a preview layer only; it must not consume queue entries or mutate source/state.
+
+## P115/P247 Implemented
+
+- Added `TransitionApplyMutationGatePreview` for final operator-facing mutation gate previews.
+- Added `create_transition_apply_mutation_gate_preview()` to classify apply, reject, hold, live-flagged, non-dry-run, mutating, inconsistent, and non-ready execution packets while preserving the nested packet evidence.
+- Added explicit `mutation_allowed=false` and `external_actions_allowed=false` boundaries to every preview result.
+- Added fixture-backed tests for the apply mutation gate preview plus reject/hold, top-level and nested live/mutation claims, all queue/source/state mutation flags, packet gate flags, type/action mismatches, and non-ready packet paths.
+- Kept mutation gate preview local-only; it does not execute the transition, consume queue entries, mutate orchestrator state, invoke OpenCode, execute workers, call providers, send Telegram messages, push, deploy, commit, mutate source files, or mutate Cloudflare/R2.

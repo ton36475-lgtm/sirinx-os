@@ -29,7 +29,7 @@
 
 use axum::{
     extract::{
-        ws::{Message, WebSocket, WebSocketUpgrade},
+        ws::{WebSocket, WebSocketUpgrade},
         Path, Query, State,
     },
     http::StatusCode,
@@ -37,7 +37,7 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use ghostclaw_core::{Advance, AdvanceOutcome, Event, MissionResult, RiskTier, Stage, Task};
+use ghostclaw_core::{AdvanceOutcome, Event, MissionResult, RiskTier, Task};
 use serde::{Deserialize, Serialize};
 
 // ─────────────────────────────────────────────────────────────

@@ -1,5 +1,6 @@
 //! Adapter boundaries around the deterministic core.
 
+pub mod agent_alignment;
 pub mod bundle;
 pub mod cli;
 pub mod codex;

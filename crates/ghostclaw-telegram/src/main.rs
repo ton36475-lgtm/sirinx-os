@@ -163,6 +163,7 @@ pub struct CommandResult {
 /// than the authorized chat ID.
 pub struct TelegramBot {
     /// The teloxide bot instance.
+    #[allow(dead_code)]
     bot: Bot,
     /// Bot configuration.
     config: BotConfig,

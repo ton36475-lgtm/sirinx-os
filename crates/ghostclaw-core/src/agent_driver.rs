@@ -3,8 +3,7 @@
 
 use serde::{Deserialize, Serialize};
 
-// Re-export from launch_gate
-use crate::launch_gate::{LaunchAgent, get_agent_launch_gate_status, RiskLevel};
+// (launch_gate imports reserved for future use)
 
 pub const AGENT_DRIVER_BLOCKED_ACTIONS: &[&str] = &[
     "file_edit_by_agent", "mcp_server_start", "install_packages", "message_send", "deploy", "push", "publish"

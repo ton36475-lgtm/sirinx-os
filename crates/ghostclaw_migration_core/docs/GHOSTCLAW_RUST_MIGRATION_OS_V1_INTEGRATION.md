@@ -593,3 +593,27 @@ Accepted execution approvals become `ready_for_transition_apply_execution_packet
 Live-flagged approval intake blocks as `blocked_live_execution_flag`. Mutation-enabled approval intake blocks as `blocked_execution_approval_mutation_enabled`. Non-ready approval intake blocks as `blocked_execution_approval_not_ready`.
 
 Even when ready, the packet keeps `packet_only=true`, `mutation_requires_next_gate=true`, `queue_consumption_allowed=false`, `source_mutation_allowed=false`, and `state_mutation_allowed=false`. It does not execute the decision, consume queue entries, mutate persisted orchestrator state, invoke OpenCode, execute workers, send Telegram messages, call providers, mutate Cloudflare/R2, commit, push, or deploy.
+
+## P115/P247 Transition Apply Mutation Gate Preview
+
+P115/P247 converts a ready P114/P246 no-mutation execution packet into an operator-facing mutation gate preview. The gate identifies the exact apply, rejection-record, or hold-record transition that a later approval may authorize, but the preview itself grants no mutation permission.
+
+The mutation gate preview records:
+
+- gate id and gate status
+- dry-run and live-execution flags
+- human-facing title and operator action
+- nested no-mutation execution packet
+- approval type and transition action
+- human-mutation-approval-required flag
+- exact-mutation-approval-required flag
+- explicit mutation-allowed and external-actions-allowed flags
+- queue/source/state mutation flags
+- advisory next action
+- decision reason
+
+Ready apply packets become `ready_for_transition_apply_mutation_gate_preview` and request `request_exact_transition_apply_mutation_approval`. Ready rejection-record packets become `ready_for_rejection_record_mutation_gate_preview`; ready hold-record packets become `ready_for_hold_record_mutation_gate_preview`.
+
+Live claims on either the packet or its nested execution approval chain block as `blocked_live_execution_flag`. Queue-consumption, source-mutation, or state-mutation claims anywhere in that chain block as `blocked_transition_apply_execution_packet_mutation_enabled`. Packets that are not dry-run and packet-only, do not require a next mutation gate, or have a non-ready status block as `blocked_transition_apply_execution_packet_not_ready`. Ready packet statuses whose approval type, nested approval status/type, or transition action do not match block as `blocked_transition_apply_execution_packet_inconsistent`.
+
+The full input packet, including its packet id and nested execution approval evidence, is preserved in every result so a blocked contradiction cannot be hidden by safe top-level defaults. Even when ready, the mutation gate preview keeps `human_mutation_approval_required=true`, `exact_mutation_approval_required=true`, `mutation_allowed=false`, `external_actions_allowed=false`, `queue_consumption_allowed=false`, `source_mutation_allowed=false`, and `state_mutation_allowed=false`. It does not execute the transition, consume queue entries, mutate persisted orchestrator state, invoke OpenCode, execute workers, send Telegram messages, call providers, mutate Cloudflare/R2, commit, push, or deploy.

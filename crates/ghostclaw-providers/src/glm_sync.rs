@@ -1,7 +1,7 @@
 // crates/ghostclaw-providers/src/glm_sync.rs
 // GLM Provider - implements LlmProvider trait
 
-use super::{LlmProvider, ProviderResponse};
+use super::LlmProvider;
 
 pub struct GlmProvider {
     pub base_url: String,
@@ -26,7 +26,7 @@ impl LlmProvider for GlmProvider {
         "glm-4.7"
     }
 
-    fn complete(&self, system: Option<&str>, prompt: &str) -> String {
+    fn complete(&self, _system: Option<&str>, _prompt: &str) -> String {
         // Return endpoint info for verification
         format!("GLM_ENDPOINT: {} | MODEL: {}", 
             self.endpoint(), 

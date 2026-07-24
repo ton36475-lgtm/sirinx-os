@@ -2,9 +2,11 @@
 // Provider traits
 
 pub mod glm_sync;
+pub mod kimi;
 pub mod openrouter;
 
 pub use glm_sync::GlmProvider;
+pub use kimi::KimiProvider;
 pub use openrouter::OpenRouterProvider;
 
 pub struct ProviderResponse {

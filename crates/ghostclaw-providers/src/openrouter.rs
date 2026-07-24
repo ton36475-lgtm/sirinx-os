@@ -1,7 +1,7 @@
 // crates/ghostclaw-providers/src/openrouter.rs
 // OpenRouter Provider
 
-use crate::{LlmProvider, ProviderResponse};
+use crate::LlmProvider;
 
 pub struct OpenRouterProvider {
     base_url: String,
@@ -22,7 +22,7 @@ impl LlmProvider for OpenRouterProvider {
         "openrouter-free"
     }
 
-    fn complete(&self, system: Option<&str>, prompt: &str) -> String {
+    fn complete(&self, _system: Option<&str>, _prompt: &str) -> String {
         format!("OPENROUTER_ENDPOINT: {}/chat/completions | MODEL: {}", 
             self.base_url,
             self.model
