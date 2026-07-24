@@ -5,12 +5,12 @@
   "bridge": {
     "host": "127.0.0.1",
     "port": 8788,
-    "auto_approve": true,
+    "auto_approve": false,
     "dry_run": true
   },
   "line": {
     "mode": "dry-run",
-    "send_blocked": false,
+    "send_blocked": true,
     "broadcast_blocked": true,
     "production_webhook": "https://www.sirinx.co/api/line/webhook",
     "allowed_tools": [

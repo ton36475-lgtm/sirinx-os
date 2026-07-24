@@ -11,14 +11,16 @@ describe("Telegram command registry", () => {
     const catalog = getTelegramCommandCatalog();
     const menu = buildTelegramCommandMenuFromRegistry();
 
-    expect(catalog.validation).toMatchObject({ ok: true, commandCount: 23, enabledCommandCount: 23 });
-    expect(catalog.registry.version).toBe("2.3.0");
+    expect(catalog.validation).toMatchObject({ ok: true, commandCount: 24, enabledCommandCount: 24 });
+    expect(catalog.registry.version).toBe("2.4.0");
     expect(catalog.registry.policies.singleWriterRole).toBe("codex_build_captain");
     expect(catalog.registry.policies.arbitraryShell).toBe(false);
     expect(catalog.registry.policies.directDeploy).toBe(false);
     expect(catalog.registry.policies.directPush).toBe(false);
     expect(catalog.acceptedCommands).toContain("/team status");
+    expect(catalog.acceptedCommands).toContain("/ui lockspec");
     expect(menu.inline_keyboard.flat()).toContainEqual({ text: "Agent Team", callback_data: "cmd:team-status" });
+    expect(menu.inline_keyboard.flat()).toContainEqual({ text: "UI Lockspec", callback_data: "cmd:ui-lockspec" });
     expect(menu.inline_keyboard.flat()).toContainEqual({
       text: "Cloudflare Ready",
       callback_data: "cmd:cloudflare-readiness"
@@ -28,6 +30,7 @@ describe("Telegram command registry", () => {
   it("resolves aliases, callbacks, and prefix commands to the same handler", () => {
     expect(resolveTelegramCommand("/command")?.handler).toBe("command_menu");
     expect(resolveTelegramCommand("cmd:team-status")?.handler).toBe("agent_team_status");
+    expect(resolveTelegramCommand("/ui lockspec")?.handler).toBe("command_center_ui_lockspec");
     expect(
       resolveTelegramCommand("/a2a2a gate check APPROVE_EXACT_GATE")?.handler
     ).toBe("a2a2a_gate_check");

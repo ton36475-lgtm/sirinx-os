@@ -93,6 +93,7 @@ import {
 import { getHermesAllJobsReadiness } from "./src/hermes-all-jobs-readiness.mjs";
 import { createLatentmasBenchDryRun, getLatentmasStatus } from "./src/latentmas-status.mjs";
 import { getGodmodeV5IntegrationStatus } from "./src/godmode-v5-integration-status.mjs";
+import { createA2aHandshakeDryRun } from "./src/a2a-handshake.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -521,6 +522,25 @@ export async function handleRequest(request, response) {
       dryRunOnly: true,
       externalWrites: false
     });
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/handshake/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createA2aHandshakeDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_a2a_handshake",
+        error: error.code || "invalid_a2a_handshake",
+        issues: Array.isArray(error.issues) ? error.issues : [],
+        dryRunOnly: true,
+        authenticatedSessionCreated: false,
+        providerCalled: false,
+        externalWrites: false,
+        queueMutated: false
+      });
+    }
     return;
   }
 

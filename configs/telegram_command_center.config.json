@@ -1,6 +1,6 @@
 {
   "$schema": "ghostclaw.telegram.command_center.v2",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "defaultExecutionMode": "preview",
   "menu": {
     "title": "SIRINX Command Center",
@@ -8,6 +8,7 @@
     "rows": [
       ["runtime_status", "team_status"],
       ["godmode_status"],
+      ["ui_lockspec"],
       ["all_jobs_readiness", "daily_report"],
       ["a2a2a_status", "a2a2a_dispatch_preview"],
       ["a2a2a_gate_check", "a2a2a_execute_readiness"],
@@ -51,6 +52,18 @@
       "matchMode": "exact",
       "handler": "runtime_status",
       "owner": "hermes_commander",
+      "actionClass": "read_only",
+      "requiresExactGate": false,
+      "enabled": true
+    },
+    {
+      "id": "ui_lockspec",
+      "label": "UI Lockspec",
+      "callbackData": "cmd:ui-lockspec",
+      "textCommands": ["/ui lockspec", "/command center lockspec"],
+      "matchMode": "exact",
+      "handler": "command_center_ui_lockspec",
+      "owner": "frontend_guardian",
       "actionClass": "read_only",
       "requiresExactGate": false,
       "enabled": true

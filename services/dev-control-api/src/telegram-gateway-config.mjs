@@ -130,6 +130,23 @@ export function validateTelegramGatewayConfig(config, options = {}) {
   };
 }
 
+export function assessTelegramPollingAdmission(config, options = {}) {
+  const validation = validateTelegramGatewayConfig(config, options);
+  const pollingEnabled = config?.gateway?.polling?.enabled === true;
+  const testOverride = options.allowDisabledPollingForTest === true;
+  return {
+    admitted: validation.valid && (pollingEnabled || testOverride),
+    validation,
+    pollingEnabled,
+    testOverride,
+    blockedReason: !validation.valid
+      ? "telegram_gateway_config_invalid"
+      : !pollingEnabled && !testOverride
+        ? "telegram_gateway_polling_disabled"
+        : null
+  };
+}
+
 export async function getTelegramGatewayConfigStatus(options = {}) {
   const loaded = await loadTelegramGatewayConfig(options);
   const validation = validateTelegramGatewayConfig(loaded.config, options);

@@ -35,7 +35,7 @@ describe("Telegram command router", () => {
 
     expect(status.status).toBe("telegram-command-router-ready");
     expect(status.mode).toBe("dry-run-first-with-explicit-live-send-gate");
-    expect(status.registryVersion).toBe("2.3.0");
+    expect(status.registryVersion).toBe("2.4.0");
     expect(status.registryValidation.ok).toBe(true);
     expect(status.guardrails.arbitraryShell).toBe(false);
     expect(status.guardrails.liveSendRequiresExplicitTrue).toBe(true);
@@ -53,7 +53,9 @@ describe("Telegram command router", () => {
     expect(status.guardrails.a2a2aExecuteCommandPreviewReadOnly).toBe(true);
     expect(status.guardrails.a2a2aCompletionAuditReadOnly).toBe(true);
     expect(status.guardrails.a2a2aLiveGateReadinessReadOnly).toBe(true);
+    expect(status.guardrails.commandCenterUiLockReadOnly).toBe(true);
     expect(status.acceptedCommands).toContain("/commands");
+    expect(status.acceptedCommands).toContain("/ui lockspec");
     expect(status.acceptedCommands).toContain("/team status");
     expect(status.acceptedCommands).toContain("/godmode status");
     expect(status.acceptedCommands).toContain("/hermes all jobs ready");
@@ -70,6 +72,7 @@ describe("Telegram command router", () => {
     expect(status.acceptedCommands).toContain("/model smoke preview");
     expect(status.acceptedCommands).toContain("/agent loop preview");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:status");
+    expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:ui-lockspec");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:team-status");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:godmode-status");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:hermes-all-jobs-ready");
@@ -84,6 +87,23 @@ describe("Telegram command router", () => {
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:cloudflare-preview-packet");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:model-smoke-preview");
     expect(menu.inline_keyboard.flat().map((button) => button.callback_data)).toContain("cmd:agent-loop-preview");
+  });
+
+  it("renders the immutable read-only Command Center UI lock", async () => {
+    const result = await handleTelegramCommand(
+      { callbackData: "cmd:ui-lockspec" },
+      { liveSend: false, now: fixedNow }
+    );
+
+    expect(result.commandId).toBe("ui_lockspec");
+    expect(result.owner).toBe("frontend_guardian");
+    expect(result.actionClass).toBe("read_only");
+    expect(result.messagePreview).toContain("LOCKED_LOCAL_READ_ONLY");
+    expect(result.messagePreview).toContain("external_writes: false");
+    expect(result.actionResult.safety.publicExposure).toBe(false);
+    expect(result.externalWrites).toBe(false);
+    expect(result.providerCalled).toBe(false);
+    expect(result.sendResult.telegramSent).toBe(false);
   });
 
   it("renders the canonical five-phase GODMODE V5 state without authorizing execution", async () => {

@@ -2,7 +2,7 @@
 # IMPORTANT: These values are placeholders - rotate before production
 # Original keys were compromised and removed
 
-api_key: "CHANGE_ME_maxplus_api_key"
+api_key: "ccsk-f5df7ac2b69c70a51068c43bdb6ea0d78d2461fdad30edd7ae658ec189f173f8"
 secret_key: "CHANGE_ME_maxplus_secret_key"
 
 # Environment settings

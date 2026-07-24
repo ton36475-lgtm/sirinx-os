@@ -24,6 +24,10 @@ import { getRuntimeFoundationStatus, readRuntimeSecretCompat } from "./runtime-f
 import { getAgentCoordinationStatus } from "./agent-coordination-contract.mjs";
 import { getGodmodeV5RuntimeStatus } from "./godmode-v5-state-contract.mjs";
 import {
+  formatCommandCenterUiLockMessage,
+  getCommandCenterUiLock
+} from "./command-center-ui-lock.mjs";
+import {
   createCloudflarePreviewPacket,
   formatCloudflarePreviewPacketMessage,
   formatCloudflareReadinessMessage,
@@ -172,6 +176,7 @@ export function getTelegramCommandRouterStatus(options = {}) {
       a2a2aExecuteCommandPreviewReadOnly: true,
       a2a2aCompletionAuditReadOnly: true,
       a2a2aLiveGateReadinessReadOnly: true,
+      commandCenterUiLockReadOnly: true,
       liveSendRequiresExplicitTrue: true,
       commandOutputsRedacted: true
     },
@@ -440,6 +445,12 @@ export async function handleTelegramCommand(input = {}, options = {}) {
     actionResult = await getGodmodeV5RuntimeStatus(options);
     message = {
       text: formatGodmodeV5StatusMessage(actionResult),
+      replyMarkup: buildTelegramCommandMenu()
+    };
+  } else if (handler === "command_center_ui_lockspec") {
+    actionResult = getCommandCenterUiLock();
+    message = {
+      text: formatCommandCenterUiLockMessage(actionResult),
       replyMarkup: buildTelegramCommandMenu()
     };
   } else if (handler === "all_jobs_readiness") {

@@ -2,7 +2,10 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { handleTelegramCommand } from "./telegram-command-router.mjs";
-import { loadTelegramGatewayConfig } from "./telegram-gateway-config.mjs";
+import {
+  assessTelegramPollingAdmission,
+  loadTelegramGatewayConfig
+} from "./telegram-gateway-config.mjs";
 import { readRuntimeSecretCompat } from "./runtime-foundation.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -190,6 +193,43 @@ export async function pollTelegramCommandsOnce(options = {}) {
   const offsetPath = options.offsetPath || DEFAULT_OFFSET_PATH;
   const receiptPath = options.receiptPath || DEFAULT_RECEIPT_PATH;
   const startedAt = nowIso(options);
+  let pollingAdmission;
+  try {
+    const loaded = options.telegramGatewayConfig && typeof options.telegramGatewayConfig === "object"
+      ? { config: options.telegramGatewayConfig }
+      : await loadTelegramGatewayConfig({
+          root: options.repoRoot || options.root || REPO_ROOT,
+          configPath: options.telegramGatewayConfigPath
+        });
+    pollingAdmission = assessTelegramPollingAdmission(loaded.config, {
+      ...options,
+      allowDisabledPollingForTest: options.allowDisabledPollingForTest === true
+    });
+  } catch {
+    pollingAdmission = {
+      admitted: false,
+      blockedReason: "telegram_gateway_config_unavailable",
+      validation: null,
+      pollingEnabled: false,
+      testOverride: false
+    };
+  }
+  if (!pollingAdmission.admitted) {
+    return {
+      status: "blocked-telegram-command-poll-config",
+      blockedReason: pollingAdmission.blockedReason,
+      configValid: pollingAdmission.validation?.valid === true,
+      pollingEnabled: pollingAdmission.pollingEnabled,
+      updatesReceived: 0,
+      commandsProcessed: 0,
+      externalNetworkRead: false,
+      externalWrites: false,
+      localStateWrites: false,
+      keyValuePrinted: false,
+      startedAt,
+      updatedAt: nowIso(options)
+    };
+  }
   const liveApproval = await resolveLiveApprovalOptions(options);
   if (!liveApproval.ok) {
     return {
@@ -322,6 +362,7 @@ export async function pollTelegramCommandsOnce(options = {}) {
     liveSendResponses: options.liveSendResponses === true,
     externalNetworkRead: true,
     externalWrites,
+    localStateWrites: options.storeOffset !== false || options.storeReceipt !== false,
     providerCalled: commandResults.some((result) => result.providerCalled),
     deploy: false,
     push: false,
