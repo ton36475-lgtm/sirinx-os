@@ -225,13 +225,31 @@ export function getSafeReplacement(actionClass) {
 }
 
 export function routeBlockedAction(decision, context = {}) {
-  if (!["auto_blocked", "hard_blocked"].includes(decision?.status)) {
+  if (
+    decision?.status === "approved" &&
+    ["A", "B"].includes(decision?.final_tier) &&
+    decision?.receipt_written === true
+  ) {
     return {
       blocked: false,
       replacement_required: false,
       replacement_actions: [],
       human_prompt_required: false,
       continue_pipeline: true
+    };
+  }
+
+  if (!["auto_blocked", "hard_blocked"].includes(decision?.status)) {
+    return {
+      blocked: true,
+      replacement_required: false,
+      replacement_actions: [],
+      human_prompt_required: decision?.human_approval_required === true,
+      continue_pipeline: false,
+      hold_reason:
+        decision?.status === "approved"
+          ? "approval_missing_safe_tier_or_receipt"
+          : decision?.status || "unknown_decision_status"
     };
   }
 

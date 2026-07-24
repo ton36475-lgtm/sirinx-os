@@ -39,12 +39,37 @@ describe("Safe Replacement Router", () => {
   });
 
   it("allows approved decisions to continue without replacement", () => {
-    const decision = { status: "approved", final_tier: "A" };
+    const decision = { status: "approved", final_tier: "A", receipt_written: true };
     const routing = routeBlockedAction(decision, { action_class: "read_only" });
 
     expect(routing.blocked).toBe(false);
     expect(routing.replacement_required).toBe(false);
     expect(routing.continue_pipeline).toBe(true);
+  });
+
+  it("holds an approval claim without a persisted receipt or safe tier", () => {
+    for (const decision of [
+      { status: "approved", final_tier: "A", receipt_written: false },
+      { status: "approved", final_tier: "D", receipt_written: true }
+    ]) {
+      const routing = routeBlockedAction(decision, { action_class: "read_only" });
+      expect(routing.blocked).toBe(true);
+      expect(routing.continue_pipeline).toBe(false);
+      expect(routing.hold_reason).toBe("approval_missing_safe_tier_or_receipt");
+    }
+  });
+
+  it("holds checker and quorum states instead of treating them as executable", () => {
+    for (const status of ["checker_required", "quorum_required", "unknown_status"]) {
+      const routing = routeBlockedAction(
+        { status, final_tier: "B", human_approval_required: false },
+        { action_class: "code_patch_allowed_path" }
+      );
+      expect(routing.blocked).toBe(true);
+      expect(routing.replacement_required).toBe(false);
+      expect(routing.continue_pipeline).toBe(false);
+      expect(routing.hold_reason).toBe(status);
+    }
   });
 
   it("evaluates push as blocked and replaces with safe actions", () => {

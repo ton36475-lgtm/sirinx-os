@@ -1,8 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { afterAll, describe, expect, it } from "vitest";
 import { AutoApproveEngine, createEngine } from "./auto-approve-engine.mjs";
 
 describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
-  const engine = new AutoApproveEngine();
+  const receiptDir = mkdtempSync(path.join(tmpdir(), "ghostclaw-approval-test-"));
+  const engine = new AutoApproveEngine({ receiptDir });
+  afterAll(() => rmSync(receiptDir, { recursive: true, force: true }));
 
   it("should evaluate tier thresholds correctly based on scores", () => {
     expect(engine.scoreToTier(95)).toBe("A");
@@ -30,13 +35,14 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
 
   it("should correctly resolve mappings for action tier caps", () => {
     expect(engine.getActionTierCap("read_only")).toBe("A");
-    expect(engine.getActionTierCap("local_commit_allowed_scope")).toBe("B");
+    expect(engine.getActionTierCap("local_commit_allowed_scope")).toBe("D");
     expect(engine.getActionTierCap("lockfile_bound_dependency_repair")).toBe("C");
     expect(engine.getActionTierCap("dependency_install")).toBe("D");
     expect(engine.getActionTierCap("model_download")).toBe("X");
     expect(engine.getActionTierCap("gpu_inference")).toBe("X");
-    expect(engine.getActionTierCap("push")).toBe("X");
-    expect(engine.getActionTierCap("unknown_hacker_action")).toBe("D");
+    expect(engine.getActionTierCap("push")).toBe("D");
+    expect(engine.getActionTierCap("commit")).toBe("D");
+    expect(engine.getActionTierCap("unknown_hacker_action")).toBe("X");
   });
 
   it("should auto-approve Tier B local validation work", () => {
@@ -46,11 +52,28 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
       action_class: "no_install_validation",
       display_score: 88,
       decision_id: "test-dec-tier-b-auto-approve",
-      evidence_pack: { command: "pnpm vitest run focused-suite" }
+      evidence_pack: { command: "pnpm vitest run focused-suite" },
+      checker_passed: true,
+      checker_receipt_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     };
     const res = engine.evaluateAutonomousApproval(ctx);
     expect(res.status).toBe("approved");
     expect(res.final_tier).toBe("B");
+    expect(res.human_approval_required).toBe(false);
+  });
+
+  it("should not approve Tier B without an independent checker receipt", () => {
+    const res = engine.evaluateAutonomousApproval({
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "code_patch_allowed_path",
+      display_score: 95,
+      decision_id: "test-dec-tier-b-checker-required",
+      evidence_pack: { source: "synthetic-test" }
+    });
+    expect(res.status).toBe("checker_required");
+    expect(res.final_tier).toBe("B");
+    expect(res.reason).toBe("independent_checker_receipt_required");
     expect(res.human_approval_required).toBe(false);
   });
 
@@ -70,7 +93,7 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(res.human_approval_required).toBe(false);
   });
 
-  it("should auto-block unknown action classes as Tier D", () => {
+  it("should hard-block unknown action classes as Tier X", () => {
     const ctx = {
       requester_agent: "codex",
       approver_agent: "hermes",
@@ -81,7 +104,7 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     };
     const res = engine.evaluateAutonomousApproval(ctx);
     expect(res.status).toBe("auto_blocked");
-    expect(res.final_tier).toBe("D");
+    expect(res.final_tier).toBe("X");
     expect(res.reason).toBe("policy_tier_auto_blocked");
     expect(res.human_approval_required).toBe(false);
   });
@@ -143,7 +166,7 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(res.reason).toBe("missing_required_metadata_fields");
   });
 
-  it("should enforce auto-block on Tier D and X without flagging human interaction required", () => {
+  it("should hold normal push as Tier D pending exact human approval", () => {
     const ctx = {
       requester_agent: "hermes",
       approver_agent: "codex",
@@ -154,12 +177,26 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     };
     const res = engine.evaluateAutonomousApproval(ctx);
     expect(res.status).toBe("auto_blocked");
-    expect(res.human_approval_required).toBe(false);
-    expect(res.final_tier).toBe("X");
+    expect(res.human_approval_required).toBe(true);
+    expect(res.final_tier).toBe("D");
+    expect(res.reason).toBe("exact_human_approval_required");
   });
 
-  it("should classify push deploy secret model download and GPU actions as Tier X", () => {
-    for (const action_class of ["push", "deploy", "secret_access", "model_download", "gpu_inference"]) {
+  it("should hold push and deploy at Tier D while hard-denying Tier X actions", () => {
+    for (const action_class of ["push", "deploy"]) {
+      const res = engine.evaluateAutonomousApproval({
+        requester_agent: "codex",
+        approver_agent: "hermes",
+        action_class,
+        display_score: 99,
+        decision_id: `test-dec-x-${action_class}`,
+        evidence_pack: { action_class }
+      });
+      expect(res.status).toBe("auto_blocked");
+      expect(res.final_tier).toBe("D");
+      expect(res.human_approval_required).toBe(true);
+    }
+    for (const action_class of ["secret_access", "model_download", "gpu_inference"]) {
       const res = engine.evaluateAutonomousApproval({
         requester_agent: "codex",
         approver_agent: "hermes",
@@ -174,7 +211,7 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     }
   });
 
-  it("should auto-block dependency install without human approval prompt", () => {
+  it("should hold dependency install for an exact human approval", () => {
     const ctx = {
       requester_agent: "codex",
       approver_agent: "hermes",
@@ -186,7 +223,7 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     const res = engine.evaluateAutonomousApproval(ctx);
     expect(res.status).toBe("auto_blocked");
     expect(res.final_tier).toBe("D");
-    expect(res.human_approval_required).toBe(false);
+    expect(res.human_approval_required).toBe(true);
   });
 
   it("should auto-block hard violations immediately", () => {
@@ -205,7 +242,7 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
     expect(res.human_approval_required).toBe(false);
   });
 
-  it("should approve local commit only when validation and file-scope guards pass", () => {
+  it("should hold local commit even when validation and file-scope guards pass", () => {
     const ctx = {
       requester_agent: "codex",
       approver_agent: "hermes",
@@ -218,8 +255,9 @@ describe("GhostClaw Autonomous Mutual Approval Runtime v2 Matrix", () => {
       blocked_actions: []
     };
     const res = engine.evaluateAutonomousApproval(ctx);
-    expect(res.status).toBe("approved");
-    expect(res.final_tier).toBe("B");
+    expect(res.status).toBe("auto_blocked");
+    expect(res.final_tier).toBe("D");
+    expect(res.human_approval_required).toBe(true);
   });
 
   it("should reject local commit when validation has not passed", () => {

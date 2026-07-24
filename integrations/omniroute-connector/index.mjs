@@ -95,7 +95,7 @@ export function getOmniRouteStatus(options = {}) {
     },
     integrationPlan: {
       step1: 'Detect a local launcher or repo artifact without executing it',
-      step2: 'Require an exact execution gate before starting local proxy :8787',
+      step2: 'Require an exact execution gate before starting local proxy :20128',
       step3: 'Point GhostClaw agents to OmniRoute endpoint',
       step4: 'Configure free-tier providers first',
       step5: 'Enable RTK+Caveman compression'
@@ -106,7 +106,7 @@ export function getOmniRouteStatus(options = {}) {
 
 export function getOmniRouteIntegrationConfig() {
   return {
-    endpoint: 'http://127.0.0.1:8787',  // default OmniRoute local
+    endpoint: 'http://127.0.0.1:20128',  // canonical SIRINX OmniRoute loopback endpoint
     providerStrategy: 'auto-fallback-free-first',
     compression: {
       rtk: true,

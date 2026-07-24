@@ -51,6 +51,107 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.attention-rail {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.55fr);
+  gap: 22px 30px;
+  margin: 22px 0;
+  padding: 22px;
+  border: 1px solid #25404b;
+  border-radius: 8px;
+  background: #0b151a;
+  color: #edf8f8;
+  box-shadow: 0 18px 50px rgba(4, 17, 22, 0.2);
+}
+
+.attention-lead,
+.attention-evidence,
+.attention-evidence li {
+  min-width: 0;
+}
+
+.attention-kicker,
+.attention-meta {
+  margin: 0;
+  color: #73e2de;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.attention-lead h2 {
+  max-width: 24ch;
+  margin-top: 8px;
+  font-size: clamp(1.35rem, 2.6vw, 2.15rem);
+  line-height: 1.08;
+}
+
+.attention-copy {
+  max-width: 58ch;
+  margin: 12px 0 0;
+  color: #abc0c5;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.attention-evidence {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attention-evidence li {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid #25383f;
+}
+
+.attention-evidence li:last-child {
+  border-bottom: 0;
+}
+
+.attention-evidence strong {
+  font-size: 0.9rem;
+}
+
+.attention-evidence li > span:last-child {
+  color: #abc0c5;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.evidence-label {
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.evidence-observed {
+  color: #73e2de;
+}
+
+.evidence-unverified {
+  color: #e8b969;
+}
+
+.evidence-blocked {
+  color: #ff8f91;
+}
+
+.attention-meta {
+  grid-column: 1 / -1;
+  padding-top: 14px;
+  border-top: 1px solid #25383f;
+  color: #839a9f;
+}
+
 .eyebrow {
   margin: 0 0 6px;
   font-size: 0.75rem;
@@ -1175,6 +1276,20 @@ h2 {
   }
 }
 
+@media (max-width: 860px) {
+  .attention-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .attention-evidence li {
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+
+  .attention-evidence li > span:last-child {
+    grid-column: 2;
+  }
+}
+
 @media (max-width: 840px) {
   .topbar {
     align-items: flex-start;
@@ -1232,6 +1347,21 @@ h2 {
 
   .action-row {
     grid-template-columns: 1fr;
+  }
+
+  .attention-rail {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 18px;
+  }
+
+  .attention-evidence li {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .attention-evidence li > span:last-child {
+    grid-column: auto;
   }
 
   .run-button {

@@ -101,15 +101,72 @@ class GhostClawCoreEngine:
         self._log("L3-HEALTH", f"Current free disk space: {free_gb:.2f} GB")
 
         actions = []
+        warnings = []
+        purge_enabled = os.environ.get("SELF_EVOLUTION_ALLOW_PURGE") == "1"
+
+        # All deletion targets must resolve inside one of these explicit cache/temp roots.
+        allowlisted_roots = [
+            (Path.home() / ".npm" / "_cacache").resolve(),
+            Path("/tmp").resolve(),
+        ]
+        pnpm_rc, pnpm_store_out, _ = self._run(["pnpm", "store", "path"])
+        if pnpm_rc == 0 and pnpm_store_out:
+            allowlisted_roots.append(Path(pnpm_store_out.splitlines()[-1]).expanduser().resolve())
+
+        def allowed_target(target: Path) -> bool:
+            try:
+                resolved = target.expanduser().resolve()
+                return any(resolved == root or resolved.is_relative_to(root)
+                           for root in allowlisted_roots)
+            except (OSError, RuntimeError) as exc:
+                warnings.append(f"BLOCKED_UNSAFE_PATH: {target} ({exc})")
+                return False
+
+        def plan_or_delete(target: Path, label: str) -> bool:
+            if not allowed_target(target):
+                warning = f"BLOCKED_UNSAFE_PATH: {target}"
+                warnings.append(warning)
+                self._log("L3-WARN", warning)
+                return False
+            if not target.exists():
+                return False
+            if not purge_enabled:
+                action = f"WOULD_PURGE: {label} ({target})"
+                actions.append(action)
+                self._log("L3-DRY-RUN", action)
+                return False
+            try:
+                if target.is_dir() and not target.is_symlink():
+                    shutil.rmtree(target)
+                else:
+                    target.unlink()
+                actions.append(f"Purged: {label} ({target})")
+                return True
+            except (OSError, RuntimeError) as exc:
+                warning = f"PURGE_FAILED: {target} ({exc})"
+                warnings.append(warning)
+                self._log("L3-ERROR", warning)
+                return False
 
         if free_gb < self.min_disk_threshold_gb:
-            self._log("L3-REPAIR", "Disk space critical! Executing emergency purge protocols...")
+            mode = "enabled" if purge_enabled else "dry-run"
+            self._log("L3-REPAIR", f"Disk space critical; purge mode: {mode}")
 
             # 1. Package manager caches
-            for cmd, label in [
-                (["pnpm", "store", "prune"], "pnpm store"),
-                (["npm", "cache", "clean", "--force"], "npm cache"),
+            for cmd, label, target in [
+                (["pnpm", "store", "prune"], "pnpm store", Path(pnpm_store_out) if pnpm_rc == 0 and pnpm_store_out else None),
+                (["npm", "cache", "clean", "--force"], "npm cache", Path.home() / ".npm" / "_cacache"),
             ]:
+                if target is None or not allowed_target(target):
+                    warning = f"BLOCKED_UNSAFE_PATH: {target or label}"
+                    warnings.append(warning)
+                    self._log("L3-WARN", warning)
+                    continue
+                if not purge_enabled:
+                    action = f"WOULD_PURGE: {label} ({target.resolve()})"
+                    actions.append(action)
+                    self._log("L3-DRY-RUN", action)
+                    continue
                 try:
                     r = subprocess.run(cmd, capture_output=True, text=True,
                                        timeout=60, cwd=str(self.workspace))
@@ -128,18 +185,12 @@ class GhostClawCoreEngine:
             ]
             for target in artifact_targets:
                 if target.exists():
-                    try:
-                        sz = sum(f.stat().st_size for f in target.rglob('*') if f.is_file())
-                        shutil.rmtree(target)
-                        actions.append(f"Cleaned: {target.name} ({sz/(2**20):.0f}MB)")
-                    except Exception:
-                        pass
+                    plan_or_delete(target, target.name)
 
             # 3. Python cache
             for pyc in self.workspace.rglob("__pycache__"):
                 if pyc.is_dir():
-                    shutil.rmtree(pyc, ignore_errors=True)
-            actions.append("Cleaned: __pycache__")
+                    plan_or_delete(pyc, "__pycache__")
 
             # 4. Log rotation (>1MB → keep last 100 lines)
             for log_dir in [Path.home() / ".hermes" / "logs", self.workspace / "logs"]:
@@ -147,9 +198,16 @@ class GhostClawCoreEngine:
                     for lf in log_dir.glob("*.log"):
                         try:
                             if lf.stat().st_size > 1_000_000:
-                                subprocess.run(f"tail -100 {lf} > {lf}.tmp && mv {lf}.tmp {lf}",
-                                               shell=True, timeout=10)
-                                actions.append(f"Rotated: {lf.name}")
+                                if not allowed_target(lf):
+                                    warning = f"BLOCKED_UNSAFE_PATH: {lf}"
+                                    warnings.append(warning)
+                                    self._log("L3-WARN", warning)
+                                elif not purge_enabled:
+                                    actions.append(f"WOULD_PURGE: rotate {lf}")
+                                else:
+                                    lines = lf.read_text(errors="replace").splitlines()[-100:]
+                                    lf.write_text("\n".join(lines) + "\n")
+                                    actions.append(f"Rotated: {lf.name}")
                         except Exception:
                             pass
 
@@ -160,8 +218,8 @@ class GhostClawCoreEngine:
                 for f in archive_dir.glob("*.json"):
                     try:
                         if f.stat().st_mtime < (time.time() - 86400):
-                            f.unlink()
-                            purged += 1
+                            if plan_or_delete(f, "archived packet"):
+                                purged += 1
                     except Exception:
                         pass
                 if purged:
@@ -178,12 +236,7 @@ class GhostClawCoreEngine:
             ]
             for cache in sys_caches:
                 if cache.exists():
-                    try:
-                        sz = sum(f.stat().st_size for f in cache.rglob('*') if f.is_file())
-                        shutil.rmtree(cache)
-                        actions.append(f"Cleaned: {cache.name} ({sz/(2**20):.0f}MB)")
-                    except Exception:
-                        pass
+                    plan_or_delete(cache, cache.name)
 
             # 7. Claude old versions (keep latest)
             claude_ver = Path.home() / ".local" / "share" / "claude" / "versions"
@@ -191,24 +244,24 @@ class GhostClawCoreEngine:
                 versions = sorted(claude_ver.iterdir(),
                                   key=lambda p: p.stat().st_mtime, reverse=True)
                 for old in versions[1:]:
-                    try:
-                        shutil.rmtree(old)
-                        actions.append(f"Removed: claude {old.name}")
-                    except Exception:
-                        pass
+                    plan_or_delete(old, f"claude {old.name}")
 
             # 8. Trash
             trash = Path.home() / ".Trash"
-            if trash.exists():
-                for item in trash.iterdir():
-                    try:
-                        if item.is_dir():
-                            shutil.rmtree(item)
-                        else:
-                            item.unlink()
-                    except Exception:
-                        pass
-                actions.append("Cleaned: Trash")
+            if trash.exists() and trash.is_dir():
+                try:
+                    trash_items = list(trash.iterdir())
+                except OSError as exc:
+                    warning = f"Trash unavailable for enumeration: {trash} ({exc})"
+                    warnings.append(warning)
+                    self._log("L3-WARN", warning)
+                else:
+                    for item in trash_items:
+                        plan_or_delete(item, f"Trash/{item.name}")
+            else:
+                warning = f"Trash unavailable or not a directory: {trash}"
+                warnings.append(warning)
+                self._log("L3-WARN", warning)
 
         # Recheck
         _, _, free = shutil.disk_usage(self.workspace)
@@ -219,6 +272,8 @@ class GhostClawCoreEngine:
             "before_gb": round(before_gb, 2),
             "after_gb": round(after_gb, 2),
             "actions": actions,
+            "warnings": warnings,
+            "purge_enabled": purge_enabled,
             "critical": after_gb < self.min_disk_threshold_gb,
         }
 
@@ -619,6 +674,9 @@ if __name__ == "__main__":
         print(json.dumps(result, indent=2))
     elif mode == "--test":
         result = engine.run_test_suite()
+        print(json.dumps(result, indent=2))
+    elif mode == "--dry-run":
+        result = engine.run_l3_disk_purger()
         print(json.dumps(result, indent=2))
     else:
         # Full evolution loop

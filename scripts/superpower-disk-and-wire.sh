@@ -29,7 +29,7 @@ for d in \
   "/Users/sirinx/sirinx-os/.cache"; do
   if [ -d "$d" ]; then
     SZ=$(du -sh "$d" 2>/dev/null | awk '{print $1}')
-    rm -rf "$d"
+    rm -rf "$d" || true
     echo "│ ✅ ${d##*/} (${SZ})"
   fi
 done
@@ -83,7 +83,7 @@ for d in \
   "/Users/sirinx/Library/Caches/Codex"; do
   if [ -d "$d" ]; then
     SZ=$(du -sh "$d" 2>/dev/null | awk '{print $1}')
-    rm -rf "$d"
+    rm -rf "$d" || true
     echo "│ ✅ ${d##*/} (${SZ})"
   fi
 done
@@ -92,7 +92,7 @@ done
 echo "├─ UV Cache"
 if [ -d "/Users/sirinx/.local/share/uv" ]; then
   SZ=$(du -sh /Users/sirinx/.local/share/uv 2>/dev/null | awk '{print $1}')
-  rm -rf /Users/sirinx/.local/share/uv
+  rm -rf /Users/sirinx/.local/share/uv || true
   echo "│ ✅ uv cache (${SZ})"
 fi
 
@@ -100,7 +100,7 @@ fi
 echo "├─ Codex Sessions"
 if [ -d "/Users/sirinx/.codex/sessions" ]; then
   SZ=$(du -sh /Users/sirinx/.codex/sessions 2>/dev/null | awk '{print $1}')
-  rm -rf /Users/sirinx/.codex/sessions
+  rm -rf /Users/sirinx/.codex/sessions || true
   echo "│ ✅ codex sessions (${SZ})"
 fi
 
@@ -111,7 +111,7 @@ if [ -d "$CLAUDE_VER" ]; then
   cd "$CLAUDE_VER"
   VERSIONS=(*)
   for v in "${VERSIONS[@]:1}"; do  # Keep latest
-    [ -d "$v" ] && rm -rf "$v" && echo "│ ✅ removed claude $v"
+    [ -d "$v" ] && { rm -rf "$v" || true; } && echo "│ ✅ removed claude $v"
   done
 fi
 
@@ -168,7 +168,7 @@ else
 fi
 
 # Check canonical A2A
-INBOX_COUNT=$(ls /Users/sirinx/sirinx-os/_A2A_QUEUE/inbox/*.json 2>/dev/null | wc -l | tr -d ' ')
+INBOX_COUNT=$(find /Users/sirinx/sirinx-os/_A2A_QUEUE/inbox -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
 echo "✅ A2A inbox: ${INBOX_COUNT} packets (canonical v2)"
 
 # Evolution engine

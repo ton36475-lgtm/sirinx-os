@@ -1,19 +1,22 @@
 import fs from "fs";
 import path from "path";
+import { createHash } from "node:crypto";
 
 const DEFAULT_POLICY_PATH = "/Users/sirinx/sirinx-os/GHOSTCLAW/policies/action-tier-cap.yaml";
+const DEFAULT_RECEIPT_DIR = "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a";
 
 const EMBEDDED_POLICY = {
   schema: "ghostclaw.action_tier_cap.v2",
-  mode: "autonomous_mutual_approval",
+  mode: "fail_closed_guarded_execution",
   metadata: {
     version: "2.0.0",
     effective_date: "2026-06-29",
-    description: "Enforces zero-human-interaction policy loops via agent mutual approval and policy gates"
+    description: "Allows bounded local decisions while holding red actions for an exact human gate"
   },
   autonomous_mutual_approval: {
     enabled: true,
-    human_approval_required: false,
+    tier_d_requires_exact_human_approval: true,
+    tier_x_is_not_approvable: true,
     fallback_behavior: "auto_block"
   },
   agents: {
@@ -23,24 +26,25 @@ const EMBEDDED_POLICY = {
   tier_rank: { A: 4, B: 3, C: 2, D: 1, X: 0 },
   action_tier_cap: {
     read_only: "A",
-    runtime_artifact_write: "A",
-    governance_doc_write: "A",
+    runtime_artifact_write: "B",
+    governance_doc_write: "B",
     no_install_validation: "B",
     allowed_path_staging: "B",
     source_mutation_allowed_path: "B",
     schema_upgrade_allowed_path: "B",
     code_patch_allowed_path: "B",
-    local_commit_allowed_scope: "B",
+    local_commit_allowed_scope: "D",
     lockfile_bound_dependency_repair: "C",
-    non_production_branch_push: "C",
-    staging_deploy_with_rollback: "C",
+    non_production_branch_push: "D",
+    staging_deploy_with_rollback: "D",
     dependency_install: "D",
     model_download: "X",
     gpu_inference: "X",
     external_network_write: "D",
-    push: "X",
-    deploy: "X",
-    production_action: "X",
+    commit: "D",
+    push: "D",
+    deploy: "D",
+    production_action: "D",
     secret_access: "X",
     ambiguous_input: "X",
     recursive_codex_launch: "X",
@@ -147,7 +151,7 @@ const EMBEDDED_POLICY = {
     "recursive_codex_launch_requested",
     "recursive_moa_launch_requested"
   ],
-  unknown_action_class_default: "D"
+  unknown_action_class_default: "X"
 };
 
 function loadYamlPolicy(policyPath) {
@@ -160,18 +164,20 @@ function loadYamlPolicy(policyPath) {
 }
 
 function parseMinimalYaml(text) {
-  const lines = text.split(/\r?\n/);
+  const lines = text
+    .split(/\r?\n/)
+    .map((raw) => ({
+      raw,
+      trimmed: raw.trim(),
+      indent: raw.length - raw.trimStart().length
+    }))
+    .filter((line) => line.trimmed && !line.trimmed.startsWith("#"));
   const root = {};
   const stack = [{ obj: root, indent: -1 }];
 
-  for (let raw of lines) {
-    const trimmed = raw.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-
-    const indent = raw.length - raw.trimStart().length;
-    const last = stack[stack.length - 1];
-
-    while (indent <= last.indent && stack.length > 1) {
+  for (let index = 0; index < lines.length; index += 1) {
+    const { trimmed, indent } = lines[index];
+    while (indent <= stack[stack.length - 1].indent && stack.length > 1) {
       stack.pop();
     }
 
@@ -179,19 +185,18 @@ function parseMinimalYaml(text) {
 
     if (trimmed.startsWith("- ")) {
       const value = trimmed.slice(2).trim();
-      if (!Array.isArray(current)) {
-        // This simplistic parser expects well-ordered lists under scalar keys
-        continue;
-      }
+      if (!Array.isArray(current)) throw new Error("invalid_yaml_list_parent");
       const parsedValue = parseScalar(value);
       current.push(parsedValue);
     } else if (trimmed.includes(":")) {
       const idx = trimmed.indexOf(":");
       const key = trimmed.slice(0, idx).trim();
-      let value = trimmed.slice(idx + 1).trim();
+      const value = trimmed.slice(idx + 1).trim();
 
       if (value === "") {
-        const newObj = {};
+        const next = lines[index + 1];
+        const newObj =
+          next && next.indent > indent && next.trimmed.startsWith("- ") ? [] : {};
         if (Array.isArray(current)) {
           current.push(newObj);
         } else {
@@ -224,11 +229,16 @@ function parseScalar(value) {
 }
 
 export class AutoApproveEngine {
-  constructor(policyPath = DEFAULT_POLICY_PATH) {
+  constructor(policyPath = DEFAULT_POLICY_PATH, options = {}) {
+    if (policyPath && typeof policyPath === "object") {
+      options = policyPath;
+      policyPath = DEFAULT_POLICY_PATH;
+    }
     const loaded = loadYamlPolicy(policyPath);
     this.policy = loaded && Object.keys(loaded).length > 0 && Array.isArray(loaded.hard_violations_force_x)
       ? loaded
       : EMBEDDED_POLICY;
+    this.receiptDir = options.receiptDir || DEFAULT_RECEIPT_DIR;
   }
 
   scoreToTier(score) {
@@ -260,7 +270,7 @@ export class AutoApproveEngine {
   getActionTierCap(actionClass) {
     const canonical = this.getCanonicalActionClass(actionClass);
     const mapping = this.policy.action_tier_cap || {};
-    return mapping[canonical] || this.policy.unknown_action_class_default || "D";
+    return mapping[canonical] || this.policy.unknown_action_class_default || "X";
   }
 
   hasHardViolation(violations = []) {
@@ -307,6 +317,18 @@ export class AutoApproveEngine {
       }, context);
     }
 
+    const allowedApprovers = new Set(
+      (this.policy.agents?.allowed_approvers || []).map((agent) => String(agent).toLowerCase())
+    );
+    if (!allowedApprovers.has(String(approver_agent).toLowerCase())) {
+      return this.buildDecision({
+        status: "auto_blocked",
+        final_tier: "X",
+        human_approval_required: false,
+        reason: "approver_not_allowlisted"
+      }, context);
+    }
+
     if (this.hasHardViolation(violations)) {
       return this.buildDecision({
         status: "auto_blocked",
@@ -340,25 +362,35 @@ export class AutoApproveEngine {
     const scoreTier = this.scoreToTier(effective_score);
     const final_tier = this.applyActionTierCap(scoreTier, action_class);
 
+    const checkerReceiptValid =
+      context.checker_passed === true &&
+      /^sha256:[a-f0-9]{64}$/.test(String(context.checker_receipt_digest || ""));
     let status = "auto_blocked";
-    if ((this.policy.auto_approve_tiers || []).includes(final_tier)) {
+    if (final_tier === "B" && !checkerReceiptValid) {
+      status = "checker_required";
+    } else if ((this.policy.auto_approve_tiers || []).includes(final_tier)) {
       status = "approved";
     } else if ((this.policy.agent_quorum_tiers || []).includes(final_tier)) {
       status = "quorum_required";
     }
 
+    const humanApprovalRequired = final_tier === "D";
     return this.buildDecision({
       status,
       final_tier,
       effective_score,
       display_score: Number(display_score),
       confidence_label: this.confidenceLabel(display_score),
-      human_approval_required: false,
+      human_approval_required: humanApprovalRequired,
       reason: status === "approved"
-        ? "autonomous_mutual_approval_passed"
-        : status === "quorum_required"
-          ? "agent_quorum_required"
-          : "policy_tier_auto_blocked"
+        ? "bounded_local_approval_passed"
+        : status === "checker_required"
+          ? "independent_checker_receipt_required"
+          : status === "quorum_required"
+            ? "agent_quorum_required"
+            : humanApprovalRequired
+              ? "exact_human_approval_required"
+              : "policy_tier_auto_blocked"
     }, context, receipt_id);
   }
 
@@ -376,18 +408,37 @@ export class AutoApproveEngine {
       }
     };
 
-    const runtimeDir = "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a";
+    const receiptPayload = JSON.stringify(receipt);
+    receipt.receipt_digest = `sha256:${createHash("sha256").update(receiptPayload).digest("hex")}`;
+    const decisionDigest = createHash("sha256")
+      .update(String(context.decision_id || "missing"))
+      .digest("hex");
+    const receiptPath = path.join(this.receiptDir, `receipt_${decisionDigest}.json`);
     try {
-      if (!fs.existsSync(runtimeDir)) fs.mkdirSync(runtimeDir, { recursive: true });
+      if (!fs.existsSync(this.receiptDir)) fs.mkdirSync(this.receiptDir, { recursive: true });
       fs.writeFileSync(
-        path.join(runtimeDir, `receipt_${context.decision_id}.json`),
-        JSON.stringify(receipt, null, 2)
+        receiptPath,
+        JSON.stringify(receipt, null, 2),
+        { flag: "wx" }
       );
-    } catch {
-      // Non-blocking: isolated tests should not fail due to fs issues
+    } catch (error) {
+      return {
+        status: "auto_blocked",
+        final_tier: "X",
+        human_approval_required: false,
+        reason: "receipt_persistence_failed",
+        receipt_id: null,
+        receipt_written: false,
+        receipt_error_code: error?.code || "UNKNOWN"
+      };
     }
 
-    return { ...decision, receipt_id: receipt.receipt_id };
+    return {
+      ...decision,
+      receipt_id: receipt.receipt_id,
+      receipt_digest: receipt.receipt_digest,
+      receipt_written: true
+    };
   }
 }
 

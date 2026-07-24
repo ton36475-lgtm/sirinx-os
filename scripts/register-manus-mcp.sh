@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Register Manus.ai MCP Bridge with various tools
 # Part of SIRINX OS GhostClaw MCP Infrastructure
-set -e
+set -euo pipefail
 
 BRIDGE_DIR="$(cd "$(dirname "$0")/../_A2A_QUEUE" && pwd)"
 BRIDGE_SCRIPT="$BRIDGE_DIR/manus-mcp-bridge.py"
@@ -96,21 +96,17 @@ with open('$OPENCODE_CONFIG') as f:
 if 'mcp' not in cfg:
     cfg['mcp'] = {}
 cfg['mcp']['manus-mcp-bridge'] = {
-    'type': 'local',
-    'command': ['python3', '$BRIDGE_SCRIPT'],
+    'type': 'remote',
+    'url': '$MCP_URL',
     'enabled': True,
-    'env': {
-        'SIRINX_MCP_AUTO_APPROVE': 'true',
-        'SIRINX_LINE_MODE': 'dry-run',
-    }
 }
-# Enable line-bot if present
+# Keep the credentialed LINE connector disabled. The local bridge is dry-run.
 if 'line-bot' in cfg.get('mcp', {}):
-    cfg['mcp']['line-bot']['enabled'] = True
+    cfg['mcp']['line-bot']['enabled'] = False
 with open('$OPENCODE_CONFIG', 'w') as f:
     json.dump(cfg, f, indent=2)
     f.write('\n')
-print('  ✓ Added manus-mcp-bridge and enabled line-bot')
+print('  ✓ Added local HTTP bridge; line-bot remains disabled')
 "
     fi
 }
@@ -155,7 +151,7 @@ if 'mcpServers' not in cfg:
 cfg['mcpServers']['manus-mcp-bridge'] = {
     'type': 'http',
     'url': '$MCP_URL',
-    'autoApprove': True,
+    'autoApprove': False,
 }
 with open('$GEMINI_CONFIG', 'w') as f:
     json.dump(cfg, f, indent=2)
@@ -163,7 +159,7 @@ with open('$GEMINI_CONFIG', 'w') as f:
 print('  ✓ Registered with Gemini')
 " 2>/dev/null
     else
-        echo '{"mcpServers":{"manus-mcp-bridge":{"type":"http","url":"'"$MCP_URL"'","autoApprove":true}}}' > "$GEMINI_CONFIG"
+        echo '{"mcpServers":{"manus-mcp-bridge":{"type":"http","url":"'"$MCP_URL"'","autoApprove":false}}}' > "$GEMINI_CONFIG"
         log "  ✓ Created Gemini config with manus-mcp-bridge"
     fi
 }

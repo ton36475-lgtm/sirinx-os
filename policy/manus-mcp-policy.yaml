@@ -10,15 +10,14 @@ target:
 
 classification:
   lane: MANUS_MCP_LINE_BRIDGE
-  default_gate: YELLOW_AUTO_APPROVED
-  auto_approve_default: true
+  default_gate: YELLOW_APPROVAL_REQUIRED
+  auto_approve_default: false
   production_path: SIRINX_WEBHOOK_ONLY via LINE OA
 
 # ── Allowed Actions ───────────────────────────────────────────────────────────
 allowed:
   - read_line_profile
   - read_line_user_id
-  - send_line_message_auto_approved
   - draft_line_message
   - inspect_bridge_health
   - inspect_bridge_status
@@ -44,7 +43,7 @@ blocked:
 # ── Required Controls ─────────────────────────────────────────────────────────
 required_controls:
   - mcp_allowlist_only
-  - auto_approve_enabled_by_default
+  - auto_approve_disabled_by_default
   - dry_run_mode_by_default
   - no_secret_logging
   - no_customer_data_in_receipts
@@ -60,17 +59,14 @@ required_controls:
 required_environment_defaults:
   SIRINX_MCP_HOST: "127.0.0.1"
   SIRINX_MCP_PORT: "8788"
-  SIRINX_MCP_AUTO_APPROVE: "true"
+  SIRINX_MCP_AUTO_APPROVE: "false"
   SIRINX_LINE_MODE: "dry-run"
-  SIRINX_LINE_SEND_BLOCKED: "false"
+  SIRINX_LINE_SEND_BLOCKED: "true"
 
 # ── Auto-Approval Rules ───────────────────────────────────────────────────────
 auto_approval:
-  enabled: true
-  conditions:
-    - dry_run_mode: true  # Always auto-approve in dry-run
-    - tool_in: ["bridge_health", "bridge_status", "line_get_profile", "line_get_user_id"]
-    - tool_and: ["line_send_message", "message_length < 2000", "mode=dry-run"]
+  enabled: false
+  conditions: []
   requires_human:
     - live_mode_enabled
     - line_send_message_in_live_mode
@@ -87,7 +83,8 @@ receipts_required:
 # ── Notes ─────────────────────────────────────────────────────────────────────
 notes: |
   This policy governs the Manus.ai ↔ LINE OA MCP bridge connection.
-  Auto-approval is enabled by default for all MCP tool calls in dry-run mode.
+  Auto-approval is disabled by default. LINE sends remain blocked even in dry-run
+  until a human explicitly approves the scoped operation.
   Live mode requires manually setting SIRINX_LINE_MODE=live and explicit
   human approval for send operations.
   The bridge is designed for operator/admin tooling and must not replace

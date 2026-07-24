@@ -1,9 +1,9 @@
 schema: ghostclaw.action_tier_cap.v2
-mode: autonomous_mutual_approval
+mode: fail_closed_guarded_execution
 metadata:
   version: "2.0.0"
   effective_date: "2026-06-29"
-  description: "Enforces zero-human-interaction policy loops via agent mutual approval and policy gates"
+  description: "Allows bounded local decisions while holding red actions for an exact human gate"
   canonical_terminology:
     brainstorm: canonical
     beststorm: legacy_alias
@@ -11,7 +11,8 @@ metadata:
 
 autonomous_mutual_approval:
   enabled: true
-  human_approval_required: false
+  tier_d_requires_exact_human_approval: true
+  tier_x_is_not_approvable: true
   fallback_behavior: auto_block
 
   rules:
@@ -42,32 +43,33 @@ tier_rank:
 action_tier_cap:
   # Tier A: Safe & Read-Only Actions (Auto-Approve)
   read_only: A
-  runtime_artifact_write: A
-  governance_doc_write: A
+  runtime_artifact_write: B
+  governance_doc_write: B
 
-  # Tier B: Controlled Local Automation & Local Commits (Auto-Approve)
+  # Tier B: Controlled Local Automation
   no_install_validation: B
   allowed_path_staging: B
   source_mutation_allowed_path: B
   schema_upgrade_allowed_path: B
   code_patch_allowed_path: B
-  local_commit_allowed_scope: B
+  local_commit_allowed_scope: D
 
   # Tier C: Medium Risk Environment Mutations (Agent Quorum Required)
   lockfile_bound_dependency_repair: C
-  non_production_branch_push: C
-  staging_deploy_with_rollback: C
+  non_production_branch_push: D
+  staging_deploy_with_rollback: D
 
-  # Tier D: External/Resource Bounds Breach (Auto-Block, No Human Prompt)
+  # Tier D: Exact human approval required; this engine never executes it
   dependency_install: D
   model_download: X
   gpu_inference: X
   external_network_write: D
+  commit: D
 
-  # Tier X: High Risk / Strict Forbidden Actions (Hard Block, No Human Prompt)
-  push: X
-  deploy: X
-  production_action: X
+  # Tier X: Strict forbidden actions (hard block, not approvable)
+  push: D
+  deploy: D
+  production_action: D
   secret_access: X
   ambiguous_input: X
   recursive_codex_launch: X
@@ -182,7 +184,7 @@ action_class_aliases:
   recursive_moa_launch: recursive_moa_launch
   kv_only_protocol: kv_only_protocol
 
-unknown_action_class_default: D
+unknown_action_class_default: X
 
 invariants:
   - "violations override everything and force tier X"

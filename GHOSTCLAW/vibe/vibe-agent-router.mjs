@@ -50,7 +50,7 @@ const WORKER_REGISTRY = {
     module_path: null, // Agent definition: GHOSTCLAW/agents/codex-captain.md
     policy_path: join(__dirname, '..', 'policies', 'autonomous-safe-execution-v3.yaml'),
     autonomy_level: 'B',
-    task_types: ['file_operation', 'code_generation', 'git_operation', 'docs_update'],
+    task_types: ['file_operation', 'code_generation', 'git_operation', 'docs_update', 'research', 'analysis', 'rust_migration', 'monorepo_sync'],
     description: 'Code execution worker — writes to allowed paths',
   },
   'glm-worker': {
@@ -68,6 +68,22 @@ const WORKER_REGISTRY = {
     autonomy_level: 'B',
     task_types: ['research', 'analysis'],
     description: 'DeepSeek research worker',
+  },
+  'kimi-worker': {
+    id: 'kimi-worker',
+    module_path: null, // Agent definition: GHOSTCLAW/agents/kimi-worker.md
+    policy_path: join(__dirname, '..', 'workers', 'kimi', 'kimi-worker.policy.yaml'),
+    autonomy_level: 'A2',
+    task_types: ['code_generation', 'patch_planning', 'test_planning', 'moa_reference_vote', 'rust_migration', 'monorepo_sync', 'reverse_engineering'],
+    description: 'Kimi K2.7 Code worker — code generation and reference votes',
+  },
+  'claude-worker': {
+    id: 'claude-worker',
+    module_path: null, // Agent definition: GHOSTCLAW/agents/claude-reviewer.md
+    policy_path: null,
+    autonomy_level: 'A2',
+    task_types: ['code_review', 'architecture_design', 'docs_update', 'research', 'analysis'],
+    description: 'Claude review worker — architecture and documentation',
   },
   'kob-validator': {
     id: 'kob-validator',

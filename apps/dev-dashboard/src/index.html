@@ -20,6 +20,32 @@
         </div>
       </header>
 
+      <section class="attention-rail" aria-labelledby="attentionTitle">
+        <div class="attention-lead">
+          <p class="attention-kicker">Now / Needs Attention</p>
+          <h2 id="attentionTitle">Control plane is safe to inspect, not safe to activate.</h2>
+          <p class="attention-copy">Checkout evidence only. Runtime reload, provider access, Telegram delivery, push, and deploy remain unverified or blocked.</p>
+        </div>
+        <ul class="attention-evidence" aria-label="Current safety evidence">
+          <li>
+            <span class="evidence-label evidence-observed">Observed</span>
+            <strong>Targeted dispatcher gates contained</strong>
+            <span>Local tests quarantine unknown actions; runtime reload and activation remain unverified.</span>
+          </li>
+          <li>
+            <span class="evidence-label evidence-unverified">Unverified</span>
+            <strong>Runtime activation</strong>
+            <span>No gateway reload, scheduler activation, provider call, or live delivery is claimed.</span>
+          </li>
+          <li>
+            <span class="evidence-label evidence-blocked">Blocked</span>
+            <strong>External effects</strong>
+            <span>Install, provider, live send, push, deploy, and cloud require exact approval; secret access is hard-denied.</span>
+          </li>
+        </ul>
+        <p class="attention-meta">UI lock v1.0.0 · Telegram registry v2.4.0 · private surface only</p>
+      </section>
+
       <section class="grid summary-grid" aria-label="Operational summary">
         <article class="metric">
           <span class="metric-label">Release Mode</span>

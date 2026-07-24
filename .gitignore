@@ -62,6 +62,16 @@ target/
 # OS/editor noise
 .DS_Store
 
+# Generated system status and architecture reports
+ghostclaw_manager_architecture_report.*
+system-status-report.*
+
+# Runtime evidence collection
+evidence/
+
+# External security skills (embedded repo)
+security/anthropic-cybersecurity-skills/
+
 # Integrations with embedded repos
 integrations/cynative/
 integrations/markdownify-mcp/
