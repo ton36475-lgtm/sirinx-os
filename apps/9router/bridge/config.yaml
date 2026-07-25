@@ -1,0 +1,229 @@
+# 9Router Bridge Configuration — A2A Model Bridge for all 11 agents
+# Maps every agent to its model, role, transport, and bridge routing rules.
+# Cloudflare Worker frontend at wrangler.toml -> OMNIROUTE_BASE_URL
+
+schema_version: "ghostclaw.a2a.model_bridge.v2"
+bridge_id: "9router-a2a-bridge"
+bridge_ts: "2026-07-26T"
+last_sync: ""
+
+# ── 11 AGENTS ────────────────────────────────────────────────────────────
+
+agents:
+  - id: hermes
+    display: "Hermes Commander"
+    role: commander
+    model: hermes-prime-lite
+    provider: ollama
+    type: local
+    status: running
+    outbox: 63
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/hermes"
+    queue_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/queue/hermes"
+    skills: [routing, orchestration, tool_capable]
+    bridge_tags: [commander, primary]
+
+  - id: codex
+    display: "OpenAI Codex"
+    role: build_captain
+    model: gpt-5.4
+    provider: openai
+    type: cloud
+    status: running
+    outbox: 39
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/codex"
+    skills: [coding, implementation, repo_patch]
+    bridge_tags: [builder, primary]
+
+  - id: opencode
+    display: "OpenCode Lite"
+    role: reviewer
+    model: deepseek-chat
+    provider: openrouter
+    type: cloud
+    status: running
+    outbox: 10
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/opencode"
+    skills: [review, verification, testing]
+    bridge_tags: [reviewer, primary]
+
+  - id: zcode
+    display: "ZCode CLI (GLM-5.2)"
+    role: safety_architect
+    model: glm-5.2
+    provider: zai/zhipu
+    type: cloud
+    status: running
+    outbox: 6
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/zcode"
+    cli_config: "/Users/sirinx/.zcode/config.json"
+    skills: [safety_review, architecture, policy_compliance, long_context]
+    bridge_tags: [architect, reviewer]
+    mcp_servers: [cua-driver, lightpanda]
+
+  - id: kiro
+    display: "Kiro CLI"
+    role: default_builder
+    model: free-model
+    provider: multi
+    type: local
+    status: running
+    outbox: 4
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/kiro"
+    cli_binary: "/Users/sirinx/.local/bin/kiro-cli"
+    skills: [builder, implementation, gate_scripts, agent_startup]
+    bridge_tags: [builder, standby_operator]
+    queue_owner: true
+    owned_task_ids:
+      - TASK-20260724-002  # Create Maker quality gate
+      - TASK-20260724-007  # Activate standby agents
+      - TASK-20260724-008  # Start OmniRoute service
+
+  - id: copilot
+    display: "GitHub Copilot CLI"
+    role: git_assistant
+    model: gpt-5.4
+    provider: github
+    type: cloud
+    status: running
+    outbox: 4
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/copilot"
+    cli_binary: "/Users/sirinx/.local/bin/copilot"
+    skills: [git_ops, file_cleanup, staging_setup, mcp_config]
+    bridge_tags: [git_ops, primary]
+    owned_task_ids:
+      - TASK-20260724-005  # Clean 51 unstaged files
+      - TASK-20260724-006  # Setup git remote staging
+
+  - id: claude
+    display: "Claude (Claude Code CLI)"
+    role: chief_architect
+    model: claude-sonnet-4-20250514
+    provider: anthropic
+    type: cloud
+    status: standby
+    outbox: 2
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/claude"
+    skills: [architecture, heavy_debug, system_design, docs]
+    bridge_tags: [architect, standby]
+    standby_trigger: architecture_task_in_outbox
+    tier: T3
+
+  - id: antigravity2
+    display: "Antigravity 2"
+    role: support_agent
+    model: default
+    provider: local
+    type: local
+    status: standby
+    outbox: 2
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/antigravity2"
+    skills: [support, help]
+    bridge_tags: [support, standby]
+    standby_trigger: with_hermes
+
+  - id: webmcp
+    display: "WebMCP"
+    role: web_automation
+    model: default
+    provider: local
+    type: local
+    status: standby
+    outbox: 1
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/webmcp"
+    skills: [web_tasks, browser, mcp]
+    bridge_tags: [web, standby]
+    standby_trigger: web_task_in_outbox
+
+  - id: planner
+    display: "Planner"
+    role: strategic_planner
+    model: default
+    provider: local
+    type: local
+    status: standby
+    outbox: 1
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/planner"
+    skills: [planning, strategy, roadmap]
+    bridge_tags: [planner, standby]
+    standby_trigger: planning_task_in_outbox
+
+  - id: zai_tui
+    display: "ZAI TUI"
+    role: terminal_interface
+    model: default
+    provider: local
+    type: local
+    status: running
+    outbox: 3
+    transport: a2a_outbox
+    a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/zai_tui"
+    skills: [terminal, clickup, interface]
+    bridge_tags: [interface, primary]
+
+# ── ROUTING RULES ─────────────────────────────────────────────────────────
+
+routing:
+  default: hermes
+  architecture: [claude, zcode, hermes]
+  coding: [codex, kiro, opencode]
+  git_ops: [copilot, codex]
+  review: [opencode, zcode]
+  web: [webmcp, codex]
+  planning: [planner, hermes]
+  support: [antigravity2, hermes]
+  interface: [zai_tui, hermes]
+  omni_route: [kiro, hermes]
+
+# ── BRIDGE PEER SYNC ──────────────────────────────────────────────────────
+
+sync_groups:
+  - name: "build-team"
+    members: [codex, kiro, copilot, opencode]
+    sync_mode: bidirectional
+    interval_seconds: 30
+
+  - name: "architect-team"
+    members: [claude, zcode, hermes]
+    sync_mode: bidirectional
+    interval_seconds: 60
+
+  - name: "standby-pool"
+    members: [antigravity2, webmcp, planner, kiro]
+    sync_mode: unidirectional
+    direction: kiro->standbys
+    interval_seconds: 120
+
+  - name: "full-mesh"
+    members: [hermes, codex, opencode, zcode, kiro, copilot, claude, antigravity2, webmcp, planner, zai_tui]
+    sync_mode: bidirectional
+    interval_seconds: 300
+
+# ── OMNIROUTE ─────────────────────────────────────────────────────────────
+
+omni_route:
+  enabled: true
+  base_url: "http://127.0.0.1:20128"
+  worker_route: "dev.sirinx.co/9router"
+  webhook_sync: true
+  bridge_mode: "hybrid"
+  fallback: "jsonl"
+
+# ── CLOUDFLARE WORKER ─────────────────────────────────────────────────────
+
+cloudflare_worker:
+  enabled: true
+  worker_name: "9router-api"
+  routes:
+    - pattern: "dev.sirinx.co/9router"
+  observability: false

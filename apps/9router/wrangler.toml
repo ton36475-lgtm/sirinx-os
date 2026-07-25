@@ -3,6 +3,9 @@ main = "src/index.js"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
 
+# Serve the dashboard as static assets alongside the Worker API
+assets = { directory = "dashboard", not_found_handling = "none" }
+
 # Route to domain
 routes = [
   { pattern = "dev.sirinx.co/9router", zone_id = "{ZONE_ID_PLACEHOLDER}" }
