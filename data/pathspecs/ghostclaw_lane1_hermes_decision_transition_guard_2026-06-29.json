@@ -1,0 +1,48 @@
+{
+  "allowed_transitions": {
+    "block": "record_blocker_and_keep_lane1_closed",
+    "open_codex_recorder_gate": "codex_recorder_draft_allowed_local_docs_only",
+    "request_revision": "return_to_codex_draft_revision",
+    "route_to_opus": "await_opus_architecture_packet"
+  },
+  "blocked_actions": {
+    "cloud_mutation": false,
+    "customer_send": false,
+    "deploy": false,
+    "external_message_send": false,
+    "install": false,
+    "merge_script_execution": false,
+    "migration": false,
+    "paid_provider_call": false,
+    "provider_call": false,
+    "push": false,
+    "runtime_queue_execution": false,
+    "secret_read": false,
+    "telegram_live_send": false
+  },
+  "codex_recorder_gate_open": false,
+  "current_actionable_packet": "packet_013",
+  "decision_path": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+  "decision_record": true,
+  "errors": [],
+  "evidence_paths": [
+    "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json"
+  ],
+  "generated_at": "2026-06-29",
+  "lane2_authorized": false,
+  "next_transition": "await_opus_architecture_packet",
+  "notes": "Local transition guard only. It does not create a Hermes decision, mutate queue state, or authorize external action.",
+  "provider_call": false,
+  "runtime_queue_execution": false,
+  "schema": "ghostclaw.lane1.hermes_decision_transition_guard.v1",
+  "state_mutation_performed": false,
+  "status": "validated_decision_transition_ready",
+  "transition_allowed": true,
+  "validated_decision": "route_to_opus",
+  "validator": [
+    "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py"
+  ]
+}

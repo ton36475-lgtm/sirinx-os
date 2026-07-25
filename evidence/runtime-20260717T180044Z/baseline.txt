@@ -1,0 +1,68 @@
+utc_timestamp=2026-07-17T18:00:44Z
+repo_root=/Users/sirinx/sirinx-os
+branch=migration/v5-rebase
+head_sha=b55f81ecd372ff23a34fcf33c2744706447e14ca
+
+=== GIT STATUS ===
+ M configs/hermes/skill-bundles/unknowcoding-coding-team.yaml
+ M docs/knowledge/HERMES_NIGHT_OPERATOR_RUNBOOK.md
+ m integrations/omniroute
+ m packages/skills-kit
+ M workflows/obra-superpowers-workflow.md
+?? docs/integration/obra-unknowcoding-mapping.md
+?? packages/workflows/
+?? scripts/hermes-night-watch-config-free.mjs
+?? scripts/hermes-night-watch-config-free.test.mjs
+
+=== OPENCODE VERSION ===
+1.17.11
+
+=== AUTHENTICATED PROVIDERS ===
+
+┌  Credentials ~/.local/share/opencode/auth.json
+│
+●  OpenCode Go api
+│
+●  maxplus api
+│
+└  2 credentials
+
+┌  Environment
+│
+●  Cloudflare Workers AI CLOUDFLARE_ACCOUNT_ID
+│
+●  Cloudflare AI Gateway CLOUDFLARE_API_TOKEN
+│
+●  Cloudflare AI Gateway CLOUDFLARE_ACCOUNT_ID
+│
+└  3 environment variables
+
+=== MCP STATUS ===
+
+┌  MCP Servers
+│
+●  ○ codex-cli disabled
+│      npx -y codex-mcp-server
+│
+●  ✓ cloudflare-docs connected
+│      https://docs.mcp.cloudflare.com/mcp
+│
+●  ○ cloudflare-bindings disabled
+│      https://bindings.mcp.cloudflare.com/mcp
+│
+●  ○ cloudflare-api disabled
+│      https://mcp.cloudflare.com/mcp
+│
+●  ○ notion disabled
+│      https://mcp.notion.com/mcp
+│
+●  ○ github disabled
+│      https://api.githubcopilot.com/mcp/
+│
+●  ○ line-bot disabled
+│      npx -y @line/line-bot-mcp-server
+│
+●  ○ manus-mcp-bridge disabled
+│      python3 /Users/sirinx/sirinx-os/_A2A_QUEUE/manus-mcp-bridge.py
+│
+└  8 server(s)

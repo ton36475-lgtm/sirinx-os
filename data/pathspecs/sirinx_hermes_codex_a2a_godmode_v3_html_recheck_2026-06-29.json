@@ -1,0 +1,52 @@
+{
+  "schema": "sirinx.hermes_codex_a2a_godmode_v3.html_recheck.v1",
+  "status": "source_read_local_only",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "local_evidence_only",
+  "source_path": "/Users/sirinx/Downloads/hermes_codex_a2a_godmode_integration_v3/project_hermes_codex_a2a_godmode_integration_v3.html",
+  "line_count": 78,
+  "claims_v3_3_merge_kit_present": false,
+  "claims_all_chats_read": false,
+  "topology": {
+    "Hermes": "Mission commander, memory sync, queue routing, run log, watchdog.",
+    "Opus/KOB": "Architecture, risk review, task decomposition, release readiness.",
+    "Codex": "Real workspace executor, patches, tests, validation, git integration.",
+    "GLM / DeepSeek": "Worker drafts, debugging, alternatives, test ideas, creative prompts."
+  },
+  "risk_engine": {
+    "safe": "Execute immediately.",
+    "medium": "Execute with diff, validation, rollback note.",
+    "high": "Patch plan only.",
+    "critical": "Auto-block and continue other work."
+  },
+  "no_ask_not_approve_all": true,
+  "interpretation": [
+    "Hermes can coordinate and route; Codex remains the real workspace executor for local patches, tests, validation, and git evidence.",
+    "GLM, DeepSeek, or other models can help with draft wording, debugging alternatives, test ideas, and creative prompts only inside the current approval boundary.",
+    "No-Ask mode does not unlock deploy, push, cloud mutation, customer send, secret read, provider call, runtime queue execution, or merge script execution.",
+    "This v3 HTML source is not the GhostClaw YOLO v3.3 merge kit and does not clear BLOCK-V3-3-ARTIFACT."
+  ],
+  "safety_flags": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "database_migration": false,
+    "testnet_deploy": false,
+    "wallet_transaction": false
+  },
+  "evidence": [
+    "/Users/sirinx/Downloads/hermes_codex_a2a_godmode_integration_v3/project_hermes_codex_a2a_godmode_integration_v3.html",
+    "docs/knowledge/SIRINX_HERMES_CODEX_A2A_GODMODE_V3_HTML_RECHECK_2026-06-29.md"
+  ],
+  "verification": [
+    "wc -l /Users/sirinx/Downloads/hermes_codex_a2a_godmode_integration_v3/project_hermes_codex_a2a_godmode_integration_v3.html",
+    "rg -n \"No-Ask|Approve|Hermes|Codex|A2A|topology|permission|approval|godmode|GODMODE\" /Users/sirinx/Downloads/hermes_codex_a2a_godmode_integration_v3/project_hermes_codex_a2a_godmode_integration_v3.html",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_hermes_codex_a2a_godmode_html_recheck -v"
+  ],
+  "next_safe_action": "Use this HTML as v3 topology evidence only; continue to require the exact ghostclaw_repo_merge_kit_v3_3.zip before any staging merge intake."
+}

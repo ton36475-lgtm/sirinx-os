@@ -1,0 +1,95 @@
+{
+  "schema": "sirinx.a2a_adaptive_sync.control_status.v1",
+  "status": "a2a_adaptive_sync_control_status_ready_local_only",
+  "generated_at": "2026-06-29",
+  "next_outbox_packet": "packet_021",
+  "control_plane_mode": "a2a2-adaptive-sync-control-plane",
+  "evidence_boundary": "local_file_bus_only",
+  "local_read_only": true,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "raw_chat_content_stored": false,
+  "real_export_loaded": false,
+  "connector_read_performed": false,
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "external_message_send": false,
+  "lane2_authorized": false,
+  "current_actionable_packet": "packet_013",
+  "latest_outbox_packet": "packet_021",
+  "queue_counts": {
+    "inbox": 4,
+    "outbox": 9,
+    "working": 1,
+    "done": 8,
+    "blocked": 0,
+    "total": 22
+  },
+  "open_blockers": [
+    "BLOCK-CHAT-EXPORT",
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY",
+    "BLOCK-V3-3-ARTIFACT",
+    "BLOCK-R0-APPROVALS"
+  ],
+  "source_evidence": [
+    "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
+    "docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md",
+    "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json",
+    "data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json",
+    "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json"
+  ],
+  "next_safe_actions": [
+    {
+      "id": "review_packet_021_status",
+      "owner": "Operator / Hermes",
+      "action": "Review this read-only adaptive sync status packet before choosing the next local lane.",
+      "gate": "local_review_only"
+    },
+    {
+      "id": "provide_all_chat_source",
+      "owner": "Operator",
+      "action": "Provide a ChatGPT export path or explicitly authorized read-only connector scope before all-chat mapping.",
+      "gate": "operator_supplied_source_required"
+    },
+    {
+      "id": "record_hermes_packet_013_decision",
+      "owner": "Hermes",
+      "action": "Record a separate packet_013 decision artifact, then run the transition guard.",
+      "gate": "hermes_decision_record_required"
+    },
+    {
+      "id": "provide_v3_3_artifact",
+      "owner": "Operator",
+      "action": "Place or point to the exact ghostclaw_repo_merge_kit_v3_3.zip artifact before staging-only merge validation.",
+      "gate": "exact_artifact_required"
+    },
+    {
+      "id": "preserve_r0_gates",
+      "owner": "Operator",
+      "action": "Provide one explicit approval packet per R0 gate before external action.",
+      "gate": "r0_gate_specific_approval_required"
+    }
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "paid_provider_call",
+    "provider_call",
+    "runtime_queue_execution",
+    "connector_read",
+    "external_upload",
+    "telegram_live_send",
+    "external_message_send",
+    "merge_script_execution",
+    "install",
+    "migration",
+    "state_mutation",
+    "claims_all_chats_read",
+    "completion_claim"
+  ]
+}

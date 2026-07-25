@@ -1,0 +1,74 @@
+{
+  "title": "SIRINX Real Runtime Foundation",
+  "status": "runtime-foundation-ready",
+  "mode": "safe-env-readiness",
+  "envPath": "/Users/sirinx/.hermes/profiles/solis/.env",
+  "envFileReadable": true,
+  "envReadError": null,
+  "keys": {
+    "OPENROUTER_API_KEY": {
+      "present": true,
+      "nonempty": true,
+      "count": 1,
+      "lineNumbers": [
+        421
+      ]
+    },
+    "TELEGRAM_BOT_TOKEN": {
+      "present": true,
+      "nonempty": true,
+      "count": 1,
+      "lineNumbers": [
+        427
+      ]
+    },
+    "TELEGRAM_HOME_CHANNEL": {
+      "present": true,
+      "nonempty": true,
+      "count": 1,
+      "lineNumbers": [
+        429
+      ]
+    },
+    "TELEGRAM_CHAT_ID": {
+      "present": false,
+      "nonempty": false,
+      "count": 0,
+      "lineNumbers": []
+    },
+    "CLOUDFLARE_ACCOUNT_ID": {
+      "present": true,
+      "nonempty": true,
+      "count": 1,
+      "lineNumbers": [
+        434
+      ]
+    },
+    "CLOUDFLARE_API_TOKEN": {
+      "present": true,
+      "nonempty": true,
+      "count": 1,
+      "lineNumbers": [
+        433
+      ]
+    }
+  },
+  "readiness": {
+    "openRouter": true,
+    "telegram": true,
+    "cloudflare": true
+  },
+  "malformed": {
+    "count": 0,
+    "secretLikeCount": 0,
+    "lines": []
+  },
+  "guardrails": {
+    "shellSourceUsed": false,
+    "secretValuesReturned": false,
+    "secretValuesPrinted": false,
+    "exactKeyValueParserOnly": true
+  },
+  "warnings": [],
+  "updatedAt": "2026-06-15T14:28:56.131Z"
+}

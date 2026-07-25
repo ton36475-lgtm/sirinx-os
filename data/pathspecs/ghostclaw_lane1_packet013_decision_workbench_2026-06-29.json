@@ -1,0 +1,103 @@
+{
+  "schema": "ghostclaw.lane1.packet013_decision_workbench.v1",
+  "status": "offline_workbench_not_decision",
+  "generated_at": "2026-06-29",
+  "current_actionable_packet": "packet_013",
+  "decision_record": false,
+  "codex_recorder_gate_open": false,
+  "lane2_authorized": false,
+  "claims_final_opus_packet": false,
+  "allowed_decisions": [
+    "route_to_opus",
+    "request_revision",
+    "open_codex_recorder_gate",
+    "block"
+  ],
+  "required_evidence_paths": [
+    "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_CODEX_RECORDER_GATE_REQUEST_2026-06-29.md",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INBOX_INDEX_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_INPUT_WORKSHEET_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json",
+    "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_VALIDATOR_2026-06-29.md",
+    "data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_context_packet_registry_2026-06-29.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md"
+  ],
+  "validator_paths": [
+    "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_VALIDATOR_2026-06-29.md"
+  ],
+  "decision_output_if_human_or_hermes_decides": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+  "decision_requirements": [
+    "decision must be one of route_to_opus, request_revision, open_codex_recorder_gate, or block",
+    "decision must cite exact local evidence paths reviewed",
+    "decision must preserve blocked external actions",
+    "codex_recorder_gate_open can be true only when decision=open_codex_recorder_gate",
+    "lane2_authorized stays false until final packet exists and Hermes separately approves Lane 2"
+  ],
+  "decision_option_matrix": [
+    {
+      "decision": "route_to_opus",
+      "effect": "Keep Codex recorder gate closed and route the worksheet/draft to Opus or Hermes architecture reviewer.",
+      "codex_recorder_gate_open": false,
+      "lane2_authorized": false,
+      "next_safe_action": "Record Hermes decision file, then prepare Opus-facing packet handoff."
+    },
+    {
+      "decision": "request_revision",
+      "effect": "Keep Codex recorder gate closed and ask Codex to revise the existing draft before another review.",
+      "codex_recorder_gate_open": false,
+      "lane2_authorized": false,
+      "next_safe_action": "Record revision request with exact change list and evidence paths."
+    },
+    {
+      "decision": "open_codex_recorder_gate",
+      "effect": "Allow Codex to act only as recorder for the final LANE_1 architecture packet using local evidence.",
+      "codex_recorder_gate_open": true,
+      "lane2_authorized": false,
+      "next_safe_action": "Record Hermes decision file, then Codex creates final packet without starting LANE_2."
+    },
+    {
+      "decision": "block",
+      "effect": "Keep all gates closed and record the blocking reason.",
+      "codex_recorder_gate_open": false,
+      "lane2_authorized": false,
+      "next_safe_action": "Record blocker and continue unrelated local-only work."
+    }
+  ],
+  "current_blockers": [
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY",
+    "BLOCK-CHAT-EXPORT",
+    "BLOCK-V3-3-ARTIFACT",
+    "BLOCK-R0-APPROVALS"
+  ],
+  "safety_flags": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false,
+    "lane2_start": false
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_packet013_decision_workbench -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_hermes_decision_validator -v",
+    "python3 -m json.tool data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json > /dev/null",
+    "python3 -m json.tool data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json > /dev/null",
+    "git diff --check"
+  ],
+  "notes": "Offline review workbench only. This is not a Hermes decision, not approval, and not a final architecture packet."
+}

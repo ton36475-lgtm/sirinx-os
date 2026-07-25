@@ -1,0 +1,116 @@
+{
+  "schema": "sirinx.browser_use.candidate_lane.v1",
+  "status": "browser_use_candidate_lane_ready_local_only",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "public_repo_metadata_and_local_policy_only",
+  "next_outbox_packet": "packet_025",
+  "candidate_repo": {
+    "full_name": "browser-use/browser-use",
+    "url": "https://github.com/browser-use/browser-use",
+    "license": "MIT",
+    "default_branch": "main",
+    "description": "Make websites accessible for AI agents. Automate tasks online with ease.",
+    "metadata_captured_at": "2026-06-29T19:25:00+07:00"
+  },
+  "source_urls": [
+    "https://github.com/browser-use/browser-use",
+    "https://raw.githubusercontent.com/browser-use/browser-use/main/README.md",
+    "https://raw.githubusercontent.com/browser-use/browser-use/main/skills/browser-use/SKILL.md",
+    "https://docs.browser-use.com"
+  ],
+  "observed_capabilities": [
+    "local headless browser navigation through browser-use CLI",
+    "page state inspection and screenshots",
+    "click, input, key, select, upload, hover, and tab commands",
+    "data extraction through title, html, text, value, attributes, bbox, and eval commands",
+    "agent workflow through browser_use beta Agent and ChatBrowserUse examples",
+    "custom tools and MCP documentation surface",
+    "Browser Use Cloud, profile sync, tunnel, cookies, and remote browser modes"
+  ],
+  "recommended_sirinx_lanes": [
+    {
+      "id": "browser_qa_localhost",
+      "status": "candidate_safe_after_install_gate",
+      "scope": "localhost and explicitly approved staging URLs only",
+      "allowed_after_gate": [
+        "open_localhost_page",
+        "inspect_state",
+        "capture_screenshot",
+        "extract_non_sensitive_dom_text",
+        "write_local_report"
+      ]
+    },
+    {
+      "id": "web_workflow_dry_run",
+      "status": "planning_only",
+      "scope": "scripted dry-run flows with mock accounts and no submit/transaction step",
+      "allowed_after_gate": [
+        "plan_steps",
+        "record_selectors",
+        "dry_run_click_path_on_safe_fixture",
+        "write_local_report"
+      ]
+    }
+  ],
+  "install_performed": false,
+  "browser_execution": false,
+  "cloud_browser_use": false,
+  "profile_sync": false,
+  "cookie_access": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "secret_read": false,
+  "deploy": false,
+  "push": false,
+  "cloud_mutation": false,
+  "runtime_queue_execution": false,
+  "blocked_actions": [
+    "install_browser_use",
+    "browser_use_cloud",
+    "profile_sync",
+    "cookie_export",
+    "cookie_import",
+    "real_chrome_profile",
+    "saved_login_use",
+    "form_submit",
+    "transaction_confirm",
+    "customer_send",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "secret_read",
+    "tunnel",
+    "captcha_bypass",
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "runtime_queue_execution",
+    "install",
+    "migration"
+  ],
+  "required_future_gates": [
+    {
+      "gate": "APPROVE_INSTALL_BROWSER_USE_SANDBOX",
+      "required_for": "uv/pip install or CLI availability check that may modify dependencies",
+      "minimum_scope": "repo, package manager, version pin, rollback, cost cap, and no secrets"
+    },
+    {
+      "gate": "APPROVE_BROWSER_USE_LOCALHOST_QA",
+      "required_for": "opening localhost or explicitly named staging URL with browser-use",
+      "minimum_scope": "target URL, allowed commands, blocked selectors, data handling, screenshot path, and stop conditions"
+    },
+    {
+      "gate": "APPROVE_BROWSER_USE_CLOUD",
+      "required_for": "Browser Use Cloud, API key, remote browser, profile sync, tunnel, or paid model calls",
+      "minimum_scope": "account, API key handling, max cost, target resource id, rollback, retention, and no raw secrets in logs"
+    },
+    {
+      "gate": "APPROVE_BROWSER_USE_REAL_PROFILE",
+      "required_for": "real Chrome profile, cookies, saved logins, or authenticated third-party pages",
+      "minimum_scope": "profile name, target domains, data minimization, PII boundary, and human confirmation steps"
+    }
+  ],
+  "next_safe_action": "Review this candidate lane and keep Browser Use in planning/readiness mode until a single gate-specific approval opens installation or a bounded localhost QA run.",
+  "notes": "No Browser Use package was installed, no browser automation command was executed, and no cloud/profile/cookie/provider path was opened."
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "sirinx.hermes_gateway.current_recheck_packet.v1",
+  "status": "hermes_gateway_current_recheck_ready_local_only",
+  "checked_at": "2026-06-29T10:51:49+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "next_outbox_packet": "packet_023",
+  "source_recheck": "data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json",
+  "evidence_boundary": "localhost_read_only",
+  "target": "127.0.0.1:9000",
+  "gateway_reachable": false,
+  "blocker": {
+    "id": "BLOCK-HERMES-GATEWAY",
+    "status": "open",
+    "reason": "Current read-only HTTP probes to 127.0.0.1:9000 returned curl exit code 7 connection refused."
+  },
+  "queue_counts": {
+    "inbox": 4,
+    "outbox": 11,
+    "working": 1,
+    "done": 8,
+    "blocked": 0,
+    "total": 24
+  },
+  "latest_outbox_packet": "packet_023",
+  "probes": [
+    {
+      "id": "health",
+      "command": "curl -fsS --max-time 3 http://127.0.0.1:9000/health",
+      "result": "failed",
+      "exit_code": 7,
+      "summary": "Failed to connect to 127.0.0.1 port 9000; connection refused."
+    },
+    {
+      "id": "knowledge_status",
+      "command": "curl -fsS --max-time 3 http://127.0.0.1:9000/knowledge/status",
+      "result": "failed",
+      "exit_code": 7,
+      "summary": "Failed to connect to 127.0.0.1 port 9000; connection refused."
+    }
+  ],
+  "restart_attempted": false,
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "decision_record": false,
+  "state_mutation": false,
+  "lane2_authorized": false,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "source_evidence": [
+    "data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json",
+    "docs/knowledge/SIRINX_HERMES_GATEWAY_RECHECK_2026-06-29.md",
+    "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
+    "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json"
+  ],
+  "forbidden_actions": [
+    "restart_hermes",
+    "runtime_queue_execution",
+    "provider_call",
+    "paid_provider_call",
+    "external_message_send",
+    "telegram_live_send",
+    "decision_record",
+    "state_mutation",
+    "lane2_authorization",
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "install",
+    "migration"
+  ],
+  "next_safe_action": "Hermes or the operator starts/verifies the gateway separately; Codex then reruns read-only probes before any live routing, packet_013 decision, or LANE_2 claim."
+}

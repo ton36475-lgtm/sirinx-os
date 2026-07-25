@@ -1,0 +1,50 @@
+{
+  "schema": "sirinx.ghostclaw_v3_3.artifact_gate_validator.v1",
+  "status": "validator_not_artifact",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "local_evidence_only",
+  "expected_artifact_basename": "ghostclaw_repo_merge_kit_v3_3.zip",
+  "expected_artifact_path": "/Users/sirinx/Downloads/ghostclaw_repo_merge_kit_v3_3.zip",
+  "claims_artifact_present": false,
+  "artifact_gate_passed": false,
+  "validator_script": "WORKSPACE_SCAFFOLD/scripts/validate_ghostclaw_v3_3_artifact_gate.py",
+  "template": "WORKSPACE_SCAFFOLD/templates/ghostclaw_v3_3_artifact_gate_packet.template.json",
+  "required_archive_entry_kinds": [
+    "routers.ts",
+    "agentic.ts",
+    "llmAnalysis.ts",
+    "schema.ts",
+    "db.ts",
+    "tests",
+    "ci",
+    "staging_manifest",
+    "receipt"
+  ],
+  "required_policy_evidence": {
+    "pass_count_required": true,
+    "fail_count_required": true,
+    "fail_must_equal": 0
+  },
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false,
+    "feature_branch_creation": false,
+    "wallet_transaction": false,
+    "live_send": false
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_ghostclaw_v3_3_artifact_gate_validator -v",
+    "python3 -m json.tool data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json > /dev/null",
+    "python3 -m json.tool WORKSPACE_SCAFFOLD/templates/ghostclaw_v3_3_artifact_gate_packet.template.json > /dev/null",
+    "git diff --check"
+  ],
+  "notes": "This validator defines the metadata-only artifact gate. It does not prove the real v3.3 artifact exists, does not extract into the repo, and does not run the merge script."
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "sirinx.uat_crud_mongodb.work_report_queue.v1",
+  "status": "telegram_draft_ready_local_only",
+  "generated_at": "2026-07-02",
+  "evidence_boundary": "local_evidence_only",
+  "source_packet": "_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json",
+  "claims_goal_complete": false,
+  "dry_run": true,
+  "live_send": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "line_send": false,
+  "customer_send": false,
+  "secret_read": false,
+  "real_env_read": false,
+  "runtime_queue_execution": false,
+  "mongodb_connect": false,
+  "database_write": false,
+  "database_migration": false,
+  "customer_data": false,
+  "production_data": false,
+  "dependency_install": false,
+  "browser_automation_execution": false,
+  "public_tunnel": false,
+  "cloud_mutation": false,
+  "source_indexes": [
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_SECURITY_RULES_2026-07-02.md",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.md",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.json",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_A2A_QUEUE_VISIBILITY_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json",
+    "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_work_report.py"
+  ],
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_uat_crud_mongodb_work_report_packet -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_uat_crud_mongodb_a2a_queue_visibility -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_uat_crud_mongodb_hermes_review_packet -v"
+  ],
+  "items": [
+    {
+      "id": "UAT-CRUD-MONGODB-WORK-REPORT-PACKET-028",
+      "priority": "P1",
+      "owner": "Codex",
+      "status": "telegram_draft_ready_local_only",
+      "gate": "telegram_live_send_gate_closed",
+      "current_actionable_packet": "packet_027",
+      "next_action": "Review the Telegram-safe work report draft for packet_027; do not live-send or execute CRUD UAT without a separate exact approval gate.",
+      "evidence": [
+        "data/pathspecs/sirinx_uat_crud_mongodb_work_report_contract_2026-07-02.json",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_DRAFT_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_028_sirinx_uat_crud_mongodb_work_report_draft.json",
+        "_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.md",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_A2A_QUEUE_VISIBILITY_2026-07-02.md",
+        "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_work_report.py",
+        "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_packet.py"
+      ],
+      "blocked_by": [
+        "telegram_live_send_gate_closed",
+        "uat_crud_execution_not_approved",
+        "mongodb_connection_not_approved",
+        "database_write_not_approved",
+        "dependency_install_not_approved",
+        "public_tunnel_not_approved"
+      ],
+      "allowed_actions": [
+        "read_local_files",
+        "review_work_report_draft",
+        "run_local_tests",
+        "update_status_docs"
+      ],
+      "forbidden_actions": [
+        "deploy",
+        "push",
+        "secret_read",
+        "real_env_read",
+        "paid_provider_call",
+        "provider_call",
+        "runtime_queue_execution",
+        "mongodb_connect",
+        "database_write",
+        "database_migration",
+        "customer_data",
+        "production_data",
+        "install",
+        "dependency_install",
+        "browser_execution",
+        "public_tunnel",
+        "cloud_mutation",
+        "customer_send",
+        "telegram_live_send",
+        "line_send",
+        "external_message_send",
+        "merge_script_execution",
+        "state_mutation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "approval_scope": "hermes_decision_review_only",
+  "blocked_actions": {
+    "cloud_mutation": false,
+    "customer_send": false,
+    "deploy": false,
+    "external_message_send": false,
+    "install": false,
+    "merge_script_execution": false,
+    "migration": false,
+    "paid_provider_call": false,
+    "provider_call": false,
+    "push": false,
+    "runtime_queue_execution": false,
+    "secret_read": false,
+    "telegram_live_send": false
+  },
+  "claims_final_opus_packet": false,
+  "codex_recorder_gate_open": false,
+  "current_actionable_packet": "packet_013",
+  "current_blockers": [
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY",
+    "BLOCK-CHAT-EXPORT",
+    "BLOCK-V3-3-ARTIFACT",
+    "BLOCK-R0-APPROVALS"
+  ],
+  "decision_record": false,
+  "draft_decision": "route_to_opus",
+  "draft_reason": "route_to_opus is reviewable from local evidence while the Codex recorder gate remains closed.",
+  "generated_at": "2026-06-29",
+  "lane2_authorized": false,
+  "notes": "Draft-only Hermes-facing decision aid. This is not a decision record, not a final packet, and not a gate unlock.",
+  "required_before_action": [
+    "Hermes or operator records docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+    "Decision validates with WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py",
+    "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py"
+  ],
+  "reviewed_evidence_paths": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_INPUT_WORKSHEET_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json"
+  ],
+  "schema": "ghostclaw.lane1.packet013_decision_draft.v1",
+  "source_readiness": "data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json",
+  "source_workbench": "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json",
+  "status": "draft_for_hermes_review_not_decision"
+}

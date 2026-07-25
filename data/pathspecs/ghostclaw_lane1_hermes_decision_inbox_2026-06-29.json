@@ -1,0 +1,59 @@
+{
+  "schema": "ghostclaw.lane1.hermes_decision_inbox.v1",
+  "status": "local_only_inbox_index_not_decision",
+  "current_actionable_packet": "packet_013",
+  "next_safe_action": "Hermes records a separate decision file",
+  "decision_record": false,
+  "final_packet_exists": false,
+  "lane2_authorized": false,
+  "packets": [
+    {
+      "id": "packet_011",
+      "path": "_A2A_QUEUE/inbox/packet_011_ghostclaw_lane1_opus_architecture.json",
+      "purpose": "route LANE_1 architecture request to Hermes/Opus",
+      "status": "inbox",
+      "decision_record": false,
+      "lane2_authorized": false
+    },
+    {
+      "id": "packet_012",
+      "path": "_A2A_QUEUE/inbox/packet_012_ghostclaw_lane1_hermes_draft_review.json",
+      "purpose": "request Hermes review of Codex recorder draft",
+      "status": "inbox",
+      "review_request": true,
+      "decision_record": false,
+      "lane2_authorized": false
+    },
+    {
+      "id": "packet_013",
+      "path": "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+      "purpose": "ask Hermes whether to open Codex-as-recorder gate",
+      "status": "inbox",
+      "codex_recorder_gate_requested": true,
+      "codex_recorder_gate_open": false,
+      "requested_decision": "open_codex_recorder_gate",
+      "decision_record": false,
+      "lane2_authorized": false
+    }
+  ],
+  "blocked_actions": {
+    "provider_call": false,
+    "runtime_queue_execution": false,
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false
+  },
+  "blockers": {
+    "chat_export": "missing_user_export_or_connector_source",
+    "hermes_gateway": "unreachable_127.0.0.1_9000_in_latest_recheck",
+    "final_opus_packet": "missing",
+    "hermes_decision": "missing",
+    "v3_3_artifact": "missing_exact_ghostclaw_repo_merge_kit_v3_3_zip",
+    "r0_approvals": "missing"
+  },
+  "required_decision_output": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+  "notes": "Index only. This file does not decide, approve, execute, live-send, call providers, deploy, push, or authorize LANE_2."
+}

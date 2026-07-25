@@ -1,0 +1,20 @@
+{
+  "a2a_sync_system": {
+    "name": "Agent-to-Agent Synchronization via OmniRoute",
+    "components": {
+      "kimi_cli": "Computer-use execution layer (stub installed)",
+      "cmux": "Computer-use multiplexer for concurrent sessions",
+      "omniroute_client": "A2A message router (port 20128)",
+      "sync_protocol": "WebSocket + REST hybrid for A2A state sync",
+      "state_layer": "PostgreSQL-backed event log for agent handoffs"
+    },
+    "flow": [
+      "1. Agent A (Maker) creates computer-use session \u2192 Kimi CLI",
+      "2. cmux manages session isolation + concurrency limits",
+      "3. OmniRoute broadcasts A2A event: SESSION_READY",
+      "4. Agent B (Checker) receives via OmniRoute \u2192 attaches to session",
+      "5. cmux switches context \u2192 Agent B control",
+      "6. State persisted to PostgreSQL for recovery/audit"
+    ]
+  }
+}

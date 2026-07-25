@@ -1,0 +1,107 @@
+{
+  "vibe_coding_sidebar": {
+    "version": "6.1.1",
+    "mode": "AUTONOMOUS_ALLWORK",
+    "approval_mode": "ALLWORK_APPROVED",
+    "created_at": "2026-07-18T18:46:19.852319",
+    "lanes": {
+      "codex": {
+        "role": "Backend Services",
+        "branch": "vibe/codex",
+        "worktree": ".worktrees/codex",
+        "ownership": [
+          "services/",
+          "crates/",
+          "ghostclaw-os/",
+          "packages/database+security"
+        ],
+        "agent": "codex",
+        "auto_approve": true,
+        "max_concurrent": 3
+      },
+      "opencode": {
+        "role": "Frontend Apps/UI",
+        "branch": "vibe/opencode",
+        "worktree": ".worktrees/opencode",
+        "ownership": [
+          "apps/",
+          "tests/",
+          "infra/",
+          "packages/ui+types+logger"
+        ],
+        "agent": "opencode",
+        "auto_approve": true,
+        "max_concurrent": 3
+      },
+      "claude": {
+        "role": "Design/Docs/Schemas",
+        "branch": "vibe/claude",
+        "worktree": ".worktrees/claude",
+        "ownership": [
+          "docs/",
+          "prompts/",
+          "kms/",
+          "schemas/",
+          "packages/config"
+        ],
+        "agent": "claude",
+        "auto_approve": true,
+        "max_concurrent": 3
+      },
+      "hermes": {
+        "role": "Orchestration/Merge",
+        "branch": "main",
+        "worktree": ".",
+        "ownership": [
+          "scripts/",
+          "integrations/",
+          ".ghostclaw_runtime/",
+          "workflows/"
+        ],
+        "agent": "hermes",
+        "auto_approve": true,
+        "max_concurrent": 3,
+        "merge_authority": true
+      }
+    },
+    "autonomous_settings": {
+      "parallel_dispatch": true,
+      "auto_merge": true,
+      "lane_guards": true,
+      "a2a_sync": true,
+      "error_recovery": true,
+      "rollback_on_failure": true,
+      "max_parallel_lanes": 4,
+      "session_timeout": 3600,
+      "verification_required": false
+    },
+    "omniroute_integration": {
+      "enabled": true,
+      "endpoint": "http://localhost:20128",
+      "provider_chain": [
+        "GLM 5.2 (Cointh)",
+        "DeepSeek V4 Pro",
+        "Claude Sonnet"
+      ],
+      "status": "NOT_RUNNING"
+    },
+    "a2a_sync_integration": {
+      "enabled": true,
+      "system": "/Users/sirinx/sirinx-os/a2a-sync-omniroute/",
+      "events": [
+        "SESSION_CREATED",
+        "SESSION_HANDED_OFF",
+        "TASK_COMPLETE"
+      ],
+      "obsidian_brain_sync": true
+    },
+    "safety_features": {
+      "pre_commit_hooks": true,
+      "lane_guard_enforcement": true,
+      "file_ownership_validation": true,
+      "merge_protocol": "HERMES_ONLY",
+      "rollback_support": true,
+      "audit_trail": true
+    }
+  }
+}

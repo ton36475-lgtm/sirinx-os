@@ -1,0 +1,146 @@
+{
+  "schema": "sirinx.a2a_adaptive_sync.next_safe_action_sequencer.v1",
+  "status": "a2a_next_safe_action_sequencer_ready_local_only",
+  "generated_at": "2026-06-29T10:45:00+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "next_outbox_packet": "packet_022",
+  "source_status_packet": "packet_021",
+  "control_plane_mode": "a2a2-adaptive-sync-control-plane",
+  "evidence_boundary": "local_file_bus_only",
+  "local_read_only": true,
+  "current_actionable_packet": "packet_013",
+  "selected_next_lane": "record_hermes_packet_013_decision",
+  "selected_next_packet": "packet_013",
+  "selected_next_owner": "Hermes",
+  "selection_reason": "packet_013 is the current actionable local inbox packet and final packet, LANE_2, and Codex recorder actions remain blocked until a separate Hermes decision artifact exists",
+  "latest_outbox_packet": "packet_022",
+  "queue_counts": {
+    "inbox": 4,
+    "outbox": 10,
+    "working": 1,
+    "done": 8,
+    "blocked": 0,
+    "total": 23
+  },
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "connector_read_performed": false,
+  "external_message_send": false,
+  "telegram_live_send": false,
+  "decision_record": false,
+  "state_mutation": false,
+  "lane2_authorized": false,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "raw_chat_content_stored": false,
+  "real_export_loaded": false,
+  "sequenced_safe_actions": [
+    {
+      "rank": 1,
+      "id": "record_hermes_packet_013_decision",
+      "owner": "Hermes",
+      "action": "Record a separate local packet_013 decision artifact, then run the decision validator and transition guard.",
+      "gate": "hermes_decision_record_required",
+      "required_evidence": [
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INTAKE_HANDOFF_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py",
+        "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py"
+      ],
+      "does_not_authorize": [
+        "decision_record",
+        "state_mutation",
+        "codex_recorder_gate_open",
+        "lane2_authorization"
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "provide_all_chat_source",
+      "owner": "Operator",
+      "action": "Provide a ChatGPT export path or explicitly authorized read-only connector scope before all-chat mapping.",
+      "gate": "operator_supplied_source_required",
+      "required_evidence": [
+        "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+        "WORKSPACE_SCAFFOLD/scripts/build_all_chat_export_intake_map.py",
+        "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json"
+      ],
+      "does_not_authorize": [
+        "connector_read_performed",
+        "raw_chat_content_stored",
+        "claims_all_chats_read"
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "provide_v3_3_artifact",
+      "owner": "Operator",
+      "action": "Place or point to the exact ghostclaw_repo_merge_kit_v3_3.zip artifact before staging-only merge validation.",
+      "gate": "exact_artifact_required",
+      "required_evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/validate_ghostclaw_v3_3_artifact_gate.py",
+        "data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json"
+      ],
+      "does_not_authorize": [
+        "merge_script_execution",
+        "feature_branch_creation",
+        "commit",
+        "push"
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "provide_r0_gate_specific_approval",
+      "owner": "Operator",
+      "action": "Provide one explicit approval packet per R0 gate before external action.",
+      "gate": "r0_gate_specific_approval_required",
+      "required_evidence": [
+        "data/pathspecs/sirinx_r0_gate_specific_approval_contract_2026-06-29.json",
+        "WORKSPACE_SCAFFOLD/scripts/validate_r0_gate_approval.py"
+      ],
+      "does_not_authorize": [
+        "blanket_approval",
+        "secret_read",
+        "production_deploy",
+        "customer_send"
+      ]
+    }
+  ],
+  "open_blockers": [
+    "BLOCK-CHAT-EXPORT",
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY",
+    "BLOCK-V3-3-ARTIFACT",
+    "BLOCK-R0-APPROVALS"
+  ],
+  "source_evidence": [
+    "data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json",
+    "docs/knowledge/SIRINX_A2A_ADAPTIVE_SYNC_CONTROL_STATUS_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
+    "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+    "docs/knowledge/SIRINX_CODEX_HERMES_EXECUTION_QUEUE_2026-06-29.md",
+    "data/pathspecs/sirinx_active_goal_completion_requirements_matrix_2026-06-29.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md"
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "paid_provider_call",
+    "provider_call",
+    "runtime_queue_execution",
+    "connector_read",
+    "external_message_send",
+    "telegram_live_send",
+    "decision_record",
+    "state_mutation",
+    "lane2_authorization",
+    "merge_script_execution",
+    "install",
+    "migration",
+    "raw_chat_content_stored",
+    "claims_all_chats_read"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "mcpServers": {
+    "sirinx-files": {
+      "type": "stdio",
+      "command": "/Users/sirinx/sirinx-os/scripts/mcp-sirinx-files.sh",
+      "args": [
+        "/Users/sirinx/sirinx-os"
+      ],
+      "env": {}
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=bygvsfungvzjhnrxufmn"
+    },
+    "unreal-engine": {
+      "type": "http",
+      "url": "http://127.0.0.1:8000/mcp"
+    },
+    "linear": {
+      "type": "http",
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "firecrawl": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"]
+    },
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "git": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"]
+    },
+    "sqlite": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "/Users/sirinx/sirinx-os/data/knowledge-base.sqlite"],
+      "env": {}
+    },
+    "ghostclaw-core": {
+      "type": "stdio",
+      "command": "cargo",
+      "args": ["run", "--package", "ghostclaw-core", "--manifest-path", "/Users/sirinx/sirinx-os/Cargo.toml"],
+      "env": {
+        "RUST_LOG": "info"
+      }
+    },
+    "ghostclaw-providers": {
+      "type": "stdio",
+      "command": "cargo",
+      "args": ["run", "--package", "ghostclaw-providers", "--manifest-path", "/Users/sirinx/sirinx-os/Cargo.toml"],
+      "env": {
+        "RUST_LOG": "info",
+        "OPENROUTER_API_KEY": "{env:OPENROUTER_API_KEY}",
+        "OLLAMA_HOST": "http://127.0.0.1:11434"
+      }
+    },
+    "ghostclaw-telegram": {
+      "type": "stdio",
+      "command": "cargo",
+      "args": ["run", "--package", "ghostclaw-telegram", "--manifest-path", "/Users/sirinx/sirinx-os/Cargo.toml"],
+      "env": {
+        "RUST_LOG": "info",
+        "TELEGRAM_BOT_TOKEN": "{env:TELEGRAM_BOT_TOKEN}"
+      }
+    },
+    "ghostclaw-mcp": {
+      "type": "stdio",
+      "command": "cargo",
+      "args": ["run", "--package", "ghostclaw-mcp", "--manifest-path", "/Users/sirinx/sirinx-os/Cargo.toml"],
+      "env": {
+        "RUST_LOG": "info"
+      }
+    },
+    "kimi-moonshot": {
+      "type": "stdio",
+      "command": "cargo",
+      "args": ["run", "--package", "ghostclaw-providers", "--manifest-path", "/Users/sirinx/sirinx-os/Cargo.toml"],
+      "env": {
+        "RUST_LOG": "info",
+        "KIMI_OAUTH_TOKEN": "{env:KIMI_OAUTH_TOKEN}"
+      }
+    }
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "kind": "solar-proposal",
+  "name": "Real Hotel Solar Demo",
+  "payload": {
+    "customerId": "real-demo-001",
+    "siteName": "Real Hotel Solar Demo",
+    "province": "Phuket",
+    "utility": "PEA",
+    "phase": "three",
+    "monthlyBillThb": 185000,
+    "dayUsageRatio": 0.62,
+    "nightUsageRatio": 0.38,
+    "airConditionerCount": 48,
+    "evCount": 2,
+    "backupLoadKw": 18,
+    "backupHoursTarget": 3,
+    "roofAreaM2": 620,
+    "budgetThb": 3900000
+  },
+  "result": {
+    "id": "solar-proposal-real-demo-001-2026-05-13",
+    "generatedAt": "2026-05-13T06:34:42.731Z",
+    "customer": {
+      "customerId": "real-demo-001",
+      "siteName": "Real Hotel Solar Demo",
+      "province": "Phuket",
+      "utility": "PEA",
+      "phase": "three",
+      "monthlyBillThb": {
+        "value": 185000,
+        "kind": "measured",
+        "source": "Operator intake form"
+      },
+      "dayUsageRatio": {
+        "value": 0.62,
+        "kind": "assumption",
+        "source": "Operator intake form"
+      },
+      "nightUsageRatio": {
+        "value": 0.38,
+        "kind": "assumption",
+        "source": "Operator intake form"
+      },
+      "airConditionerCount": {
+        "value": 48,
+        "kind": "measured",
+        "source": "Operator intake form"
+      },
+      "evCount": {
+        "value": 2,
+        "kind": "measured",
+        "source": "Operator intake form"
+      },
+      "backupLoadKw": {
+        "value": 18,
+        "kind": "assumption",
+        "source": "Operator intake form",
+        "note": "Critical loads only unless the site survey confirms whole-site backup."
+      },
+      "backupHoursTarget": {
+        "value": 3,
+        "kind": "assumption",
+        "source": "Operator intake form"
+      },
+      "roofAreaM2": {
+        "value": 620,
+        "kind": "assumption",
+        "source": "Operator intake form"
+      },
+      "budgetThb": {
+        "value": 3900000,
+        "kind": "assumption",
+        "source": "Operator intake form"
+      },
+      "roiExpectationYears": {
+        "value": 7,
+        "kind": "assumption",
+        "source": "Operator intake form"
+      }
+    },
+    "behavior": {
+      "monthlyConsumptionKwh": {
+        "value": 44047.62,
+        "kind": "estimated",
+        "source": "Configurable operator assumption. Replace with customer tariff/TOU bill before final proposal.",
+        "note": "Derived from monthly bill THB 185000 / 4.2 THB/kWh."
+      },
+      "dailyConsumptionKwh": {
+        "value": 1447.98,
+        "kind": "estimated",
+        "source": "Configurable operator assumption. Replace with customer tariff/TOU bill before final proposal.",
+        "note": "Monthly kWh normalized to average calendar month."
+      },
+      "daytimeKwhPerDay": {
+        "value": 897.75,
+        "kind": "estimated",
+        "source": "Operator intake form"
+      },
+      "nighttimeKwhPerDay": {
+        "value": 550.23,
+        "kind": "estimated",
+        "source": "Operator intake form"
+      },
+      "backupEnergyKwh": {
+        "value": 54,
+        "kind": "assumption",
+        "source": "Backup load kW x target autonomy hours",
+        "note": "Critical-load autonomy estimate, not whole-home backup."
+      }
+    },
+    "design": {
+      "mode": "hybrid-ess",
+      "pvSizeKwp": {
+        "value": 13,
+        "kind": "estimated",
+        "source": "Design engine: roof limit, load model, inverter oversizing rules"
+      },
+      "inverter": {
+        "id": "deye-sun-10k-sg04lp3-eu",
+        "brand": "Deye",
+        "model": "SUN-10K-SG04LP3-EU",
+        "phase": "three",
+        "category": "hybrid",
+        "ratedPowerKw": 10,
+        "acVoltage": "220/380 V",
+        "batteryVoltageClass": "LV",
+        "supportedBatteryComms": [
+          "CAN",
+          "RS485"
+        ],
+        "exportLimitSupported": true,
+        "antiIslandingCertified": true,
+        "peaRegistration": {
+          "approved": true,
+          "issueDate": "2025-02-20",
+          "expiryDate": "2028-02-20",
+          "sourceUrl": "https://smartlist.pea.co.th/public/products/inverter/pdf",
+          "sourceLabel": "PEA smart inverter list, item 45, data shown as of 6 Feb 2026",
+          "verifiedAt": "2026-05-13"
+        },
+        "notes": [
+          "Hybrid LV inverter entry is seeded from PEA Smart List for demonstration.",
+          "Final installer workflow must re-check PEA Smart List before quoting."
+        ]
+      },
+      "inverterTargetKw": {
+        "value": 81.08,
+        "kind": "estimated",
+        "source": "PV size and configurable oversizing ratio"
+      },
+      "battery": {
+        "id": "gsl051314a-b-gbp2",
+        "brand": "GSL Energy",
+        "model": "GSL051314A-B-GBP2",
+        "chemistry": "LiFePO4",
+        "nominalKwh": 16.08,
+        "usableKwh": 12.86,
+        "voltageV": 51.2,
+        "cycleLife": 10000,
+        "recommendedDod": 0.8,
+        "continuousCRate": 0.5,
+        "ipRating": "IP65",
+        "communicationPorts": [
+          "CAN",
+          "RS485",
+          "WiFi"
+        ],
+        "maxParallelModules": 16,
+        "warrantyYears": 15,
+        "sourceUrl": "https://gsl-energyusa.com/14kwh-and-16kwh-floor-standing-home-energy-storage-battery-system/",
+        "notes": [
+          "Seeded from public GSL 16 kWh product references.",
+          "Installer must verify inverter-specific BMS protocol profile before sale."
+        ]
+      },
+      "batteryModules": {
+        "value": 28,
+        "kind": "estimated",
+        "source": "Backup energy and nighttime shifting requirement"
+      },
+      "batteryUsableKwh": {
+        "value": 360.08,
+        "kind": "estimated",
+        "source": "Selected battery usable capacity x module count"
+      },
+      "estimatedAnnualProductionKwh": {
+        "value": 18850,
+        "kind": "estimated",
+        "source": "1450 kWh/kWp/year Thailand yield assumption"
+      },
+      "selfConsumptionRatio": {
+        "value": 1,
+        "kind": "estimated",
+        "source": "Daily production vs daytime load plus battery shifted nighttime load"
+      },
+      "compatibility": [
+        {
+          "id": "phase-match",
+          "label": "Phase compatibility",
+          "passed": true,
+          "severity": "blocker",
+          "explanation": "SUN-10K-SG04LP3-EU is three-phase and customer site is three-phase."
+        },
+        {
+          "id": "pea-approval",
+          "label": "PEA registered inverter",
+          "passed": true,
+          "severity": "blocker",
+          "explanation": "PEA smart inverter list, item 45, data shown as of 6 Feb 2026"
+        },
+        {
+          "id": "anti-islanding",
+          "label": "Anti-islanding",
+          "passed": true,
+          "severity": "blocker",
+          "explanation": "Grid-connected designs must use anti-islanding certified inverter data."
+        },
+        {
+          "id": "export-limit",
+          "label": "Export limitation",
+          "passed": true,
+          "severity": "warning",
+          "explanation": "Enable export limit logic unless the utility agreement explicitly allows export."
+        },
+        {
+          "id": "battery-selected",
+          "label": "Battery sizing available",
+          "passed": true,
+          "severity": "blocker",
+          "explanation": "28 x GSL051314A-B-GBP2 provides 360.08 usable kWh."
+        },
+        {
+          "id": "bms-communication",
+          "label": "BMS communication",
+          "passed": true,
+          "severity": "blocker",
+          "explanation": "GSL051314A-B-GBP2 supports CAN, RS485, WiFi; inverter supports CAN, RS485."
+        }
+      ],
+      "assumptions": [
+        "Solar yield is a configurable Thailand-average estimate until site irradiance and shade analysis are measured.",
+        "Backup design is for critical loads only unless whole-home backup is explicitly surveyed.",
+        "PEA approval status must be refreshed before issuing a binding commercial quote."
+      ],
+      "engineeringWarnings": []
+    },
+    "roi": {
+      "monthlySavingsThb": {
+        "value": 6597.5,
+        "kind": "estimated",
+        "source": "Self-consumed solar kWh x tariff assumption"
+      },
+      "annualSavingsThb": {
+        "value": 79170,
+        "kind": "estimated",
+        "source": "Self-consumed solar kWh x tariff assumption"
+      },
+      "batteryContributionThb": {
+        "value": 469202.24,
+        "kind": "estimated",
+        "source": "Nighttime energy shifted through ESS x tariff assumption",
+        "note": "Battery value also includes resilience; simple ROI alone can understate backup value."
+      },
+      "simplePaybackYears": {
+        "value": 89.6,
+        "kind": "estimated",
+        "source": "Estimated CAPEX / annual savings"
+      },
+      "capexThb": {
+        "value": 7094480,
+        "kind": "estimated",
+        "source": "Configurable PV, battery, and hybrid integration cost assumptions"
+      },
+      "tenYearCashflowThb": [
+        {
+          "year": 1,
+          "savings": 79170,
+          "cumulative": -7015310
+        },
+        {
+          "year": 2,
+          "savings": 81545.1,
+          "cumulative": -6933764.9
+        },
+        {
+          "year": 3,
+          "savings": 83991.45,
+          "cumulative": -6849773.45
+        },
+        {
+          "year": 4,
+          "savings": 86511.2,
+          "cumulative": -6763262.25
+        },
+        {
+          "year": 5,
+          "savings": 89106.53,
+          "cumulative": -6674155.72
+        },
+        {
+          "year": 6,
+          "savings": 91779.73,
+          "cumulative": -6582375.99
+        },
+        {
+          "year": 7,
+          "savings": 94533.12,
+          "cumulative": -6487842.87
+        },
+        {
+          "year": 8,
+          "savings": 97369.11,
+          "cumulative": -6390473.76
+        },
+        {
+          "year": 9,
+          "savings": 100290.19,
+          "cumulative": -6290183.57
+        },
+        {
+          "year": 10,
+          "savings": 103298.89,
+          "cumulative": -6186884.67
+        }
+      ],
+      "resilienceValue": {
+        "backupLoadKw": 18,
+        "autonomyHours": 20,
+        "usableBackupKwh": 360.08,
+        "note": "Resilience value is operational confidence, not counted as guaranteed bill savings."
+      }
+    },
+    "executiveSummary": "Real Hotel Solar Demo is modeled as a hybrid-ess solar design with 13 kWp PV and SUN-10K-SG04LP3-EU. Estimated monthly savings are THB 6,597.5 with simple payback around 89.6 years. Backup plan: 28 x GSL051314A-B-GBP2 for 360.08 usable kWh. No blocking compatibility issue is present in the current rule set.",
+    "billOfMaterials": [
+      {
+        "item": "Deye SUN-10K-SG04LP3-EU",
+        "quantity": 1,
+        "notes": "10 kW three-phase hybrid inverter"
+      },
+      {
+        "item": "550W-class PV module",
+        "quantity": 24,
+        "notes": "Panel brand/model to be selected from approved installer catalog."
+      },
+      {
+        "item": "GSL Energy GSL051314A-B-GBP2",
+        "quantity": 28,
+        "notes": "16.08 kWh LiFePO4, IP65, CAN/RS485/WiFi"
+      },
+      {
+        "item": "Protection, wiring, mounting, export limit/CT accessories",
+        "quantity": 1,
+        "notes": "Final engineering BOM depends on site survey, roof type, ACDB layout, and utility requirements."
+      }
+    ],
+    "thailandComplianceSummary": [
+      {
+        "id": "phase-match",
+        "label": "Phase compatibility",
+        "passed": true,
+        "severity": "blocker",
+        "explanation": "SUN-10K-SG04LP3-EU is three-phase and customer site is three-phase."
+      },
+      {
+        "id": "pea-approval",
+        "label": "PEA registered inverter",
+        "passed": true,
+        "severity": "blocker",
+        "explanation": "PEA smart inverter list, item 45, data shown as of 6 Feb 2026"
+      },
+      {
+        "id": "anti-islanding",
+        "label": "Anti-islanding",
+        "passed": true,
+        "severity": "blocker",
+        "explanation": "Grid-connected designs must use anti-islanding certified inverter data."
+      },
+      {
+        "id": "export-limit",
+        "label": "Export limitation",
+        "passed": true,
+        "severity": "warning",
+        "explanation": "Enable export limit logic unless the utility agreement explicitly allows export."
+      }
+    ],
+    "nextActions": [
+      "Verify latest PEA Smart List status for inverter model before final quote.",
+      "Replace tariff assumption with measured bill and TOU rate if available.",
+      "Perform site survey for roof shading, structure, ACDB, grounding, and backup-load separation.",
+      "Confirm battery BMS protocol profile with inverter firmware before procurement."
+    ]
+  },
+  "id": "solar-proposal-real-hotel-solar-demo-2026-05-13T06-34-42-749Z",
+  "savedAt": "2026-05-13T06:34:42.749Z"
+}

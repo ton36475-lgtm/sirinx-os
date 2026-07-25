@@ -1,0 +1,72 @@
+{
+  "allowed_decisions": [
+    "block",
+    "open_codex_recorder_gate",
+    "request_revision",
+    "route_to_opus"
+  ],
+  "blocked_actions": {
+    "cloud_mutation": false,
+    "customer_send": false,
+    "deploy": false,
+    "external_message_send": false,
+    "install": false,
+    "merge_script_execution": false,
+    "migration": false,
+    "paid_provider_call": false,
+    "provider_call": false,
+    "push": false,
+    "runtime_queue_execution": false,
+    "secret_read": false,
+    "telegram_live_send": false
+  },
+  "codex_recorder_gate_open": false,
+  "current_actionable_packet": "packet_013",
+  "decision_path": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+  "decision_record": false,
+  "generated_at": "2026-06-29",
+  "lane2_authorized": false,
+  "next_safe_action": "Hermes records a separate local decision artifact, then Codex validates it and reruns the transition guard before any gate state change.",
+  "notes": "Handoff only. It does not create the Hermes decision file or authorize external action.",
+  "provider_call": false,
+  "recommended_reviewed_evidence_paths": [
+    "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json",
+    "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json"
+  ],
+  "required_fields": [
+    "approval_scope",
+    "cloud_mutation",
+    "codex_recorder_gate_open",
+    "customer_send",
+    "decision",
+    "decision_record",
+    "deploy",
+    "install",
+    "lane2_authorized",
+    "merge_script_execution",
+    "migration",
+    "paid_provider_call",
+    "push",
+    "reviewed_evidence_paths",
+    "runtime_queue_execution",
+    "secret_read"
+  ],
+  "runtime_queue_execution": false,
+  "schema": "ghostclaw.lane1.hermes_decision_intake_handoff.v1",
+  "state_mutation_performed": false,
+  "status": "awaiting_hermes_decision_record",
+  "template_paths": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json"
+  ],
+  "transition_guard": "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py",
+  "validation_commands": [
+    "python3 WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+    "python3 WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py --decision docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md"
+  ],
+  "validator": "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py"
+}

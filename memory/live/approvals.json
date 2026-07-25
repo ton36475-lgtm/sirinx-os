@@ -1,0 +1,19 @@
+[
+  {
+    "id": "5ddcd4e7-adcf-42c3-b72b-edd0176e5744",
+    "action_type": "THAIMART_LIVE_PUBLISH",
+    "target_reference": "38d17668-dae7-4384-9485-2411fbddd949",
+    "payload_snapshot": {
+      "product_sku": "TEST-SEED-001",
+      "product_title_th": "ผลิตภัญญาสติ๊กเกอร์ทดสอบ",
+      "product_price_thaimart": 145.5,
+      "product_stock_thaimart": 100,
+      "timestamp": "2026-07-08T18:48:22.527Z",
+      "engine_version": "TigrimOSR-v0.6.2"
+    },
+    "gate_status": "WAITING",
+    "resolved_by": null,
+    "resolved_at": null,
+    "created_at": "2026-07-08T18:48:22.523Z"
+  }
+]

@@ -1,0 +1,95 @@
+{
+  "schema": "sirinx.active_goal.blocker_recheck.v1",
+  "status": "blockers_confirmed_current_state",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "local_evidence_only",
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "fresh_probes": [
+    {
+      "id": "hermes_health",
+      "command": "curl -fsS --max-time 2 http://127.0.0.1:9000/health",
+      "exit_code": 7,
+      "result": "Failed to connect to 127.0.0.1 port 9000"
+    },
+    {
+      "id": "hermes_knowledge_status",
+      "command": "curl -fsS --max-time 2 http://127.0.0.1:9000/knowledge/status",
+      "exit_code": 7,
+      "result": "Failed to connect to 127.0.0.1 port 9000"
+    },
+    {
+      "id": "targeted_artifact_and_export_search",
+      "command": "rg --files -g 'ghostclaw_repo_merge_kit_v3_3.zip' -g 'Master_Agentic_OS_Dashboard.pdf' -g 'SKILL (3).md' -g 'project_hermes_codex_a2a_godmode_integration_v3 (1).html' -g 'conversations.json' -g 'chat.html' -g 'chatgpt*.zip' -g '*chatgpt*export*' /Users/sirinx/Downloads /Users/sirinx/sirinx-os /Users/sirinx/SIRINXDev /Users/sirinx/Documents",
+      "exit_code": 1,
+      "matches_found": false,
+      "result": "No exact v3.3 artifact or ChatGPT export candidate matched the targeted filenames in the searched roots."
+    },
+    {
+      "id": "project_hermes_continuation_board",
+      "command": "sed -n '1,220p' /Users/sirinx/project-hermes/HERMES_AGENT_CODEX_CONTINUATION_BOARD_2026-05-30.md",
+      "exit_code": 0,
+      "stale_against_current_probe": true,
+      "result": "Board says A2A and knowledge/status were healthy on 2026-05-30, but current curl probes failed with exit code 7."
+    }
+  ],
+  "completion_blockers": [
+    {
+      "id": "BLOCK-CHAT-EXPORT",
+      "status": "open",
+      "current_evidence": "Targeted search found no conversations.json, chat.html, chatgpt*.zip, or *chatgpt*export* candidate in searched roots.",
+      "required_evidence": "Operator-provided ChatGPT export or connector-backed conversation source mapped through the intake contract."
+    },
+    {
+      "id": "BLOCK-LANE1-OPUS-PACKET",
+      "status": "open",
+      "current_evidence": "packet_013 remains a request for Hermes decision; no final LANE_1 Opus packet or Hermes decision record exists.",
+      "required_evidence": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md plus Hermes decision record."
+    },
+    {
+      "id": "BLOCK-HERMES-GATEWAY",
+      "status": "open",
+      "current_evidence": "Current health and knowledge/status curl probes both failed with exit code 7.",
+      "required_evidence": "Read-only Hermes gateway health/status proof or an approved local-only alternative decision path."
+    },
+    {
+      "id": "BLOCK-V3-3-ARTIFACT",
+      "status": "open",
+      "current_evidence": "Targeted search found no ghostclaw_repo_merge_kit_v3_3.zip, dashboard PDF, SKILL (3).md, or exact HTML (1) artifact.",
+      "required_evidence": "Exact local path to ghostclaw_repo_merge_kit_v3_3.zip and bundled policy test evidence."
+    },
+    {
+      "id": "BLOCK-R0-APPROVALS",
+      "status": "open",
+      "current_evidence": "No gate-specific approval packet with target, environment, rollback, and evidence path exists.",
+      "required_evidence": "Explicit approval packet per R0 gate before any deploy, push, cloud mutation, customer send, secret read, paid/provider call, testnet deploy, wallet action, or migration."
+    }
+  ],
+  "safety_flags": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false,
+    "database_migration": false,
+    "testnet_deploy": false,
+    "wallet_transaction": false
+  },
+  "evidence": [
+    "data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_RECHECK_2026-06-29.md",
+    "data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json",
+    "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json"
+  ],
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_blocker_recheck -v",
+    "python3 -m json.tool data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json > /dev/null",
+    "git diff --check"
+  ],
+  "next_safe_action": "Operator/Hermes can clear one blocker with current proof; otherwise continue local-only docs/tests/status work without claiming completion."
+}

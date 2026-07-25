@@ -1,0 +1,183 @@
+{
+  "report_meta": {
+    "title": "SIRINX OS System Structure & Status Report",
+    "generated_at": "2026-07-21T04:13:47+07:00",
+    "method": "read-only snapshot (git status, df, ps, cron list)",
+    "reporter_profile": "solis (Hermes Agent)",
+    "source_of_truth": "live measurements — NOT PROJECT_STATE.md (which is stale/contradictory)",
+    "caveat": "single snapshot, not time-series"
+  },
+  "host": {
+    "machine": "MacminiSirinx.local",
+    "os": "macOS 26.5.2 (Darwin 25.5.0, arm64, Apple M2 T8112)",
+    "uptime_hours": 8.93,
+    "load_average": [
+      1.89,
+      1.88,
+      2.25
+    ],
+    "users": 5,
+    "toolchain": {
+      "python": "3.12.13",
+      "node": "v26.0.0",
+      "codex_cli": "0.144.6",
+      "homebrew_python": "/opt/homebrew/bin/python3.12"
+    }
+  },
+  "disk": {
+    "filesystem": "/dev/disk3s5",
+    "total_gib": 228,
+    "used_gib": 191,
+    "free_gib": 11,
+    "used_pct": 95,
+    "status": "CRITICAL",
+    "outside_repo_usage": {
+      "~/.hermes": "9.9 GB",
+      "~/.npm": "3.3 GB",
+      "~/.local/share": "363 MB",
+      "~/.codex/sessions": "38 MB"
+    },
+    "in_repo_usage": {
+      "target/": "378 MB",
+      ".git/": "63 MB",
+      "pnpm-lock.yaml": "340 KB"
+    }
+  },
+  "git": {
+    "branch": "migration/v5-rebase",
+    "remote": "https://github.com/ton36475-lgtm/sirinx-os.git",
+    "up_to_date_with_origin": true,
+    "working_tree": {
+      "modified": 35,
+      "untracked": 64,
+      "submodule_dirty": 0
+    },
+    "stash": "empty",
+    "submodule_error": "no submodule mapping found for path 'integrations/cynative'",
+    "last_commits": [
+      "b55f81e auto: automation loop checkpoint 1784286983",
+      "3cb9df0 auto: automation loop checkpoint 1784286692",
+      "9ed4f6b feat(cron): Frontier Model Evolution Routing + A2A2A Dispatch Working"
+    ]
+  },
+  "cron_jobs": [
+    {
+      "name": "loop-engineering-v4",
+      "schedule": "every 5m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:08:45+07:00"
+    },
+    {
+      "name": "disk-health-v4",
+      "schedule": "every 10m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:05:42+07:00"
+    },
+    {
+      "name": "health-check-v4",
+      "schedule": "every 15m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:00:42+07:00"
+    },
+    {
+      "name": "self-evolution-v4",
+      "schedule": "every 30m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T00:43:40+07:00"
+    },
+    {
+      "name": "daily-report-v4",
+      "schedule": "0 8 * * *",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-20T08:00:29+07:00"
+    },
+    {
+      "name": "agent-dispatch-loop",
+      "schedule": "every 7m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:09:44+07:00"
+    },
+    {
+      "name": "agent-collect-brainstorm",
+      "schedule": "every 20m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T00:53:41+07:00"
+    },
+    {
+      "name": "full-auto-loop-tier-cd",
+      "schedule": "every 3m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-20T23:04:24+07:00"
+    },
+    {
+      "name": "frontier-model-generator",
+      "schedule": "every 12m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:09:45+07:00"
+    },
+    {
+      "name": "qa-gate-v1",
+      "schedule": "every 30m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "never (paused 2026-07-21T03:59:39+07:00)"
+    }
+  ],
+  "processes_observed": {
+    "hermes": [
+      "PID 2620 hermes --profile",
+      "PID 2630 hermes_cli.main",
+      "PID 2705 hermes_cli.main"
+    ],
+    "codex": [
+      "ChatGPT.app Codex Framework renderer",
+      "codex-code-mode-host",
+      "Codex Computer Use service"
+    ],
+    "mcp_servers": "multiple node ./mcp/server.{mjs,cjs} + TypeScript/Pyright LSP",
+    "dev_control_api": "not confirmed in ps snapshot",
+    "skills_api": "not confirmed in ps snapshot"
+  },
+  "documentation_drift": [
+    {
+      "field": "Disk usage",
+      "project_state_md_claims": "53% (11GB free)",
+      "measured": "95% (11GB free)",
+      "match": false
+    },
+    {
+      "field": "Cron jobs",
+      "project_state_md_claims": "9 active",
+      "measured": "0 active (10 paused/error)",
+      "match": false
+    },
+    {
+      "field": "Load average",
+      "project_state_md_claims": "4.14",
+      "measured": "1.89",
+      "match": true
+    },
+    {
+      "field": "Services running",
+      "project_state_md_claims": "Skills API :3800 + Dev API :8711 RUNNING",
+      "measured": "not confirmable from ps",
+      "match": null
+    }
+  ],
+  "warnings": [
+    "DISK 95% — root cause of likely automation write failures",
+    "ALL 10 cron jobs paused with error status since ~2026-07-18",
+    "WORKING TREE DIRTY (35 modified + 64 untracked) — NEVER run git reset --hard (would wipe uncommitted work)",
+    "PROJECT_STATE.md is stale/contradictory — use this live report instead",
+    "Submodule mapping error for integrations/cynative may cause false dirty state"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "sirinx.codex_hermes.work_report_contract.v1",
+  "status": "telegram_draft_ready",
+  "generated_at": "2026-06-29",
+  "delivery": "telegram-draft",
+  "source_queue": "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+  "source_protocol": "/Users/sirinx/project-hermes/HERMES_TELEGRAM_WORK_REPORT_PROTOCOL.md",
+  "builder": "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_work_report.py",
+  "output_doc": "docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_DRAFT_2026-06-29.md",
+  "current_queue_item": "LANE1-HERMES-DECISION-PACKET-013",
+  "draft_status": "BLOCKED",
+  "dry_run": true,
+  "live_send": false,
+  "provider_call": false,
+  "external_message_send": false,
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "telegram_live_send": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false,
+    "wallet_action": false
+  },
+  "draft_report_body": "Hermes work report.\nstatus: BLOCKED\ntask: LANE1-HERMES-DECISION-PACKET-013 - Use the recorded route_to_opus decision as local evidence; route final LANE_1 Opus architecture packet authoring while keeping the Codex recorder gate and LANE_2 closed.\naudit: data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json\nteam: planner, context, coder, qa, reviewer, reporter\nfiles:\n- _A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json\n- docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md\n- _A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json\n- data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json\n- data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json\n- data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json\ntests:\n- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator_packet -v\n- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator -v\n- python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_execution_queue -v\nblockers:\n- BLOCK-LANE1-OPUS-PACKET\n- BLOCK-HERMES-GATEWAY\nnext: Use the recorded route_to_opus decision as local evidence; route final LANE_1 Opus architecture packet authoring while keeping the Codex recorder gate and LANE_2 closed.\ndelivery: telegram-draft\ndry_run: true\nlive_send: false\nprovider_call: false\nexternal_message_send: false\ndeploy: false\npush: false\ncloud_mutation: false\ncustomer_send: false\nsecret_read: false\npaid_provider_call: false\nruntime_queue_execution: false\ntelegram_live_send: false",
+  "live_send_gate": "APPROVE_TELEGRAM_WORK_REPORT_SEND",
+  "notes": "This contract renders a local Telegram-safe draft only. It does not send Telegram messages, call providers, execute queue items, or authorize external actions."
+}

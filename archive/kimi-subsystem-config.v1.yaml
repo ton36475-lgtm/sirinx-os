@@ -1,0 +1,79 @@
+# GHOSTCLAW Vibe Coding Kimi Subsystem Config
+# Version: 1.0.0
+# Integrates Kimi K2.7 Code into Vibe Coding pipeline
+
+schema: ghostclaw.vibe_kimi_subsystem.v1
+version: "1.0.0"
+effective_date: "2026-07-19"
+
+# Kimi Worker Registration for Vibe Coding
+kimi_worker_registration:
+  id: "kimi-worker"
+  name: "kimi-vibe-coding-worker"
+  model: "kimi_k2_7_code"
+  display_name: "Kimi K2.7 Code"
+  provider: "moonshot_ai"
+  lane: "code_patch"
+  model_lane: "kimi"
+  role: "coding_tool_use_reference"
+  autonomy_level: "A2"
+  
+  # Reports to Codex Build Captain (per Authority Chain)
+  reports_to: "codex-build-captain"
+  policy_file: "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml"
+
+# Vibe Task Types Kimi Can Handle
+allowed_vibe_task_types:
+  - code_generation
+  - test_planning
+  - patch_planning
+  - moa_reference_vote
+
+# Security Guardrails
+security_guardrails:
+  # Must follow action tier cap
+  action_tier_cap_file: "GHOSTCLAW/policies/action-tier-cap.yaml"
+  
+  # Blocked actions (hard stop)
+  blocked_actions:
+    - model_download
+    - gpu_live_inference
+    - secret_access
+    - deploy
+    - push
+    - production_action
+    - live_provider_call
+    - self_approval
+
+# Integration Points
+integration_points:
+  vibe_agent_router: "GHOSTCLAW/vibe/vibe-agent-router.mjs"
+  worker_registry: "GHOSTCLAW/workers/registry/worker-registry.json"
+  policy_guard: "GHOSTCLAW/policies/action-tier-cap.yaml"
+
+# Cost Efficiency Settings
+cost_efficiency:
+  max_tokens_per_task: 75000
+  max_tasks_per_pipeline: 10
+  dry_run_default: true
+  evidence_required: true
+
+# Vibe Coding Pipeline Hook
+pipeline_hooks:
+  pre_generate: "check_mutual_approval"
+  post_generate: "write_receipt"
+  block_action: "produce_blocked_receipt"
+
+# Required Evidence for Kimi Tasks
+evidence_pack:
+  required: true
+  fields:
+    - task_id
+    - decision_id
+    - requester_agent
+    - approver_agent
+    - artifacts
+
+# Status
+status: "configured_ready_for_integration"
+notes: "Kimi worker already exists in registry. This config maps it to vibe coding tasks."

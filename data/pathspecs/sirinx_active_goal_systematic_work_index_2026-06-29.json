@@ -1,0 +1,850 @@
+{
+  "schema": "sirinx.active_goal.systematic_work_index.v1",
+  "status": "in_progress_not_complete",
+  "objective": "\u0e2d\u0e48\u0e32\u0e19\u0e44\u0e1f\u0e25\u0e4c\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14\u0e17\u0e35\u0e48\u0e43\u0e2b\u0e49\u0e44\u0e1b\u0e2d\u0e22\u0e48\u0e32\u0e07\u0e25\u0e30\u0e40\u0e2d\u0e35\u0e22\u0e14\u0e2d\u0e35\u0e01\u0e04\u0e23\u0e31\u0e49\u0e07 \u0e17\u0e27\u0e19\u0e41\u0e1c\u0e19\u0e01\u0e32\u0e23\u0e14\u0e33\u0e40\u0e19\u0e34\u0e19\u0e01\u0e32\u0e23\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14\u0e2d\u0e22\u0e48\u0e32\u0e07\u0e25\u0e30\u0e40\u0e2d\u0e35\u0e22\u0e14 \u0e17\u0e33\u0e07\u0e32\u0e19\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14\u0e15\u0e48\u0e2d\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34\u0e23\u0e48\u0e27\u0e21\u0e01\u0e31\u0e1a Codex and Hermes \u0e08\u0e32\u0e01\u0e41\u0e1c\u0e19\u0e07\u0e32\u0e19\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14\u0e43\u0e19\u0e17\u0e38\u0e01\u0e46\u0e41\u0e0a\u0e17\u0e23\u0e27\u0e21\u0e40\u0e02\u0e49\u0e32\u0e14\u0e49\u0e27\u0e22\u0e01\u0e31\u0e19\u0e2d\u0e22\u0e48\u0e32\u0e07\u0e40\u0e1b\u0e47\u0e19\u0e23\u0e30\u0e1a\u0e1a",
+  "evidence_boundary": "local_evidence_only",
+  "claims_all_chats_read": false,
+  "next_safe_action": "Human reviews the local website and packet_039 through packet_040, confirms LINE QR on a real device, confirms existing bot behavior manually, then provides separate exact deploy approval only if ready; deploy, webhook, analytics, CRM, live sends, repair, runtime, and external actions remain closed",
+  "source_files": [
+    "PROJECT_STATE.md",
+    "NEXT_ACTIONS.md",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
+    "docs/knowledge/SIRINX_CODEX_HERMES_UNIFIED_CONTINUATION_2026-06-29.md",
+    "_OBSIDIAN_GHOSTCLAW_BRAIN/16_STATUS_BOARD.md",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json",
+    "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+    "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
+    "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+    "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+    "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+    "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts",
+    "data/pathspecs/sirinx_codex_hermes_work_report_contract_2026-06-29.json",
+    "_A2A_QUEUE/outbox/packet_014_codex_hermes_work_report_draft.json",
+    "data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json",
+    "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+    "data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json",
+    "data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json",
+    "data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_blocker_clearance_validator_2026-06-29.json",
+    "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+    "data/pathspecs/sirinx_active_goal_read_only_probe_runner_2026-06-29.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_READ_ONLY_PROBE_RUNNER_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_completion_requirements_matrix_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_context_packet_registry_2026-06-29.json",
+    "data/pathspecs/sirinx_active_goal_source_file_receipt_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_intake_handoff_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INTAKE_HANDOFF_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json",
+    "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_intake_handoff.py",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_handoff_packet.py",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_preflight_audit_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json",
+    "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py",
+    "WORKSPACE_SCAFFOLD/scripts/validate_lane1_opus_architecture_packet.py",
+    "data/pathspecs/ghostclaw_lane1_opus_architecture_packet_gate_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET_GATE_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_opus_architecture_packet_gate.py",
+    "data/pathspecs/ghostclaw_lane1_opus_authoring_bundle_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_AUTHORING_BUNDLE_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_opus_authoring_bundle.py",
+    "data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json",
+    "data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+    "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+    "data/pathspecs/sirinx_active_goal_current_blocker_refresh_2026-06-29.json",
+    "data/pathspecs/sirinx_r0_gate_specific_approval_contract_2026-06-29.json",
+    "WORKSPACE_SCAFFOLD/manifests/active_goal_local_evidence_durability_2026-06-29.json",
+    "data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json",
+    "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_REQUEST_PACKET_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json",
+    "WORKSPACE_SCAFFOLD/tests/test_all_chat_export_request_packet.py",
+    "data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json",
+    "docs/knowledge/SIRINX_A2A_ADAPTIVE_SYNC_CONTROL_STATUS_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
+    "WORKSPACE_SCAFFOLD/tests/test_a2a_adaptive_sync_control_status_packet.py",
+    "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
+    "docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
+    "WORKSPACE_SCAFFOLD/tests/test_a2a_next_safe_action_sequencer_packet.py",
+    "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
+    "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+    "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py",
+    "data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json",
+    "docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md",
+    "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+    "WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py",
+    "docs/website/SIRINX_WEBSITE_QUALITY_AUDIT.md",
+    "docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.md",
+    "docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.json",
+    "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+    "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_line_hermes_review_packet.py",
+    "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+    "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.md",
+    "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.json",
+    "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_line_uat_verification_receipt_packet.py",
+    "_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json",
+    "docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.md",
+    "docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.json",
+    "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_human_review_deploy_gate_packet.py",
+    "skills/uat-crud-mongodb/SKILL.md",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_SECURITY_RULES_2026-07-02.md",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.md",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.json",
+    "data/pathspecs/sirinx_uat_crud_mongodb_hermes_review_packet_2026-07-02.json",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_A2A_QUEUE_VISIBILITY_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json",
+    "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_hermes_review_packet.py",
+    "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_a2a_queue_visibility.py",
+    "data/pathspecs/sirinx_uat_crud_mongodb_work_report_queue_2026-07-02.json",
+    "data/pathspecs/sirinx_uat_crud_mongodb_work_report_contract_2026-07-02.json",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_DRAFT_2026-07-02.md",
+    "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_A2A_VISIBILITY_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_028_sirinx_uat_crud_mongodb_work_report_draft.json",
+    "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_packet.py",
+    "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_a2a_visibility.py",
+    "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_REFACTOR_PACKET_2026-07-02.md",
+    "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_REFACTOR_A2A_VISIBILITY_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_030_sirinx_coding_engine_security_rules_refactor.json",
+    "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_refactor_packet.py",
+    "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_refactor_a2a_visibility.py",
+    "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_WORK_REPORT_DRAFT_2026-07-02.md",
+    "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_WORK_REPORT_A2A_VISIBILITY_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_031_sirinx_coding_engine_security_rules_work_report_draft.json",
+    "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_work_report_packet.py",
+    "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_work_report_a2a_visibility.py",
+    "_A2A_QUEUE/outbox/packet_032_ghostclaw_lane1_opus_final_packet_authoring_request.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_FINAL_PACKET_AUTHORING_REQUEST_2026-07-02.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET032_A2A_SYNC_RECEIPT_2026-07-02.md",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_packet032_a2a_sync_receipt.py",
+    "WORKSPACE_SCAFFOLD/tests/test_lane1_opus_final_packet_authoring_request.py",
+    "_A2A_QUEUE/outbox/packet_033_active_goal_blocker_refresh_hermes_handoff.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_REFRESH_HERMES_HANDOFF_2026-07-02.md",
+    "WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_refresh_hermes_handoff_packet.py",
+    "_A2A_QUEUE/outbox/packet_034_active_goal_blocker_clearance_approval_matrix.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_APPROVAL_MATRIX_2026-07-02.md",
+    "WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_clearance_approval_matrix_packet.py",
+    "_A2A_QUEUE/outbox/packet_035_active_goal_chat_export_readonly_mapping_gate_request.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_CHAT_EXPORT_READONLY_MAPPING_GATE_REQUEST_2026-07-02.md",
+    "WORKSPACE_SCAFFOLD/tests/test_active_goal_chat_export_readonly_mapping_gate_request_packet.py",
+    "WORKSPACE_SCAFFOLD/scripts/validate_chatgpt_export_readonly_source_receipt.py",
+    "data/pathspecs/sirinx_chatgpt_export_readonly_source_receipt_validator_2026-07-02.json",
+    "docs/knowledge/SIRINX_CHATGPT_EXPORT_READONLY_SOURCE_RECEIPT_VALIDATOR_2026-07-02.md",
+    "WORKSPACE_SCAFFOLD/tests/test_chatgpt_export_readonly_source_receipt_validator.py",
+    "_A2A_QUEUE/outbox/packet_036_chatgpt_export_readonly_source_receipt_validator.json",
+    "WORKSPACE_SCAFFOLD/tests/test_chatgpt_export_readonly_source_receipt_validator_packet.py",
+    "data/pathspecs/sirinx_active_goal_current_probe_refresh_2026-07-02.json",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_CURRENT_PROBE_REFRESH_2026-07-02.md",
+    "_A2A_QUEUE/outbox/packet_037_active_goal_current_probe_refresh.json",
+    "WORKSPACE_SCAFFOLD/tests/test_active_goal_current_probe_refresh_packet.py",
+    "_A2A_QUEUE/outbox/packet_038_hermes_gateway_repair_approval_gate.json",
+    "data/pathspecs/sirinx_hermes_gateway_repair_approval_gate_2026-07-02.json",
+    "docs/knowledge/SIRINX_HERMES_GATEWAY_REPAIR_APPROVAL_GATE_2026-07-02.md",
+    "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_repair_approval_gate_packet.py"
+  ],
+  "completion_blockers": [
+    {
+      "id": "BLOCK-CHAT-EXPORT",
+      "status": "open",
+      "required_evidence": "ChatGPT export or connector-backed conversation source parsed into repo/path/status/blocker/next_action/source map"
+    },
+    {
+      "id": "BLOCK-LANE1-OPUS-PACKET",
+      "status": "open",
+      "required_evidence": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md plus Hermes decision record"
+    },
+    {
+      "id": "BLOCK-HERMES-GATEWAY",
+      "status": "open",
+      "required_evidence": "read-only Hermes gateway health/status proof or approved local-only alternative"
+    },
+    {
+      "id": "BLOCK-V3-3-ARTIFACT",
+      "status": "open",
+      "required_evidence": "exact local path to ghostclaw_repo_merge_kit_v3_3.zip and bundled policy test evidence"
+    },
+    {
+      "id": "BLOCK-R0-APPROVALS",
+      "status": "open",
+      "required_evidence": "explicit approval packet per R0 gate"
+    }
+  ],
+  "workstreams": [
+    {
+      "id": "ghostclaw_lane1",
+      "status": "hermes_decision_recorded_final_packet_missing",
+      "owner": "Hermes",
+      "current_actionable_packet": "packet_013",
+      "evidence": [
+        "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+        "data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json",
+        "data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json",
+        "data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_READINESS_2026-06-29.md",
+        "data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_MODEL_CHOICE_BOUNDARY_2026-06-29.md",
+        "data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+        "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INBOX_INDEX_2026-06-29.md"
+      ],
+      "lane2_authorized": false,
+      "next_safe_action": "Hermes/Opus reviews packet_032 and produces final LANE_1 Opus architecture packet candidate"
+    },
+    {
+      "id": "ghostclaw_lane1_hermes_decision_intake_handoff",
+      "status": "handoff_ready_not_decision",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_intake_handoff.py",
+        "data/pathspecs/ghostclaw_lane1_hermes_decision_intake_handoff_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INTAKE_HANDOFF_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_intake_handoff.py",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_handoff_packet.py"
+      ],
+      "next_safe_action": "Hermes records the separate decision file, then Codex validates it and reruns the transition guard"
+    },
+    {
+      "id": "ghostclaw_lane1_hermes_decision_preflight_audit",
+      "status": "ready_for_hermes_decision_review_not_decision",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_preflight_audit.py",
+        "data/pathspecs/ghostclaw_lane1_hermes_decision_preflight_audit_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py"
+      ],
+      "next_safe_action": "Hermes reviews the preflight audit and records a separate final decision file before any gate state changes"
+    },
+    {
+      "id": "ghostclaw_lane1_opus_architecture_packet_gate",
+      "status": "validator_ready_final_packet_missing",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/validate_lane1_opus_architecture_packet.py",
+        "data/pathspecs/ghostclaw_lane1_opus_architecture_packet_gate_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET_GATE_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_opus_architecture_packet_gate.py"
+      ],
+      "next_safe_action": "Use the validator only after Hermes/Opus produces a separate final packet and decision evidence"
+    },
+    {
+      "id": "ghostclaw_lane1_opus_authoring_bundle",
+      "status": "authoring_bundle_ready_not_final_packet",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/ghostclaw_lane1_opus_authoring_bundle_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_AUTHORING_BUNDLE_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_opus_authoring_bundle.py"
+      ],
+      "next_safe_action": "Hermes/Opus reviews the authoring bundle; final packet and decision remain separate required artifacts"
+    },
+    {
+      "id": "ghostclaw_lane1_packet013_decision_draft",
+      "status": "draft_for_hermes_review_not_decision",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_draft.py",
+        "data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_DRAFT_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_015_ghostclaw_lane1_hermes_decision_draft.json",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_draft.py"
+      ],
+      "next_safe_action": "Hermes reviews the draft and records a separate final decision file before any gate state changes"
+    },
+    {
+      "id": "ghostclaw_lane1_hermes_decision_transition_guard",
+      "status": "validated_decision_transition_ready",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py",
+        "data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_transition_guard.py"
+      ],
+      "next_safe_action": "Route final LANE_1 Opus architecture packet authoring; the transition guard maps route_to_opus to await_opus_architecture_packet while keeping LANE_2 unauthorized"
+    },
+    {
+      "id": "ghostclaw_lane1_opus_final_packet_authoring_request",
+      "status": "authoring_request_ready_local_only",
+      "owner": "Codex",
+      "current_actionable_packet": "packet_013",
+      "lane2_authorized": false,
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_032_ghostclaw_lane1_opus_final_packet_authoring_request.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_FINAL_PACKET_AUTHORING_REQUEST_2026-07-02.md",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET032_A2A_SYNC_RECEIPT_2026-07-02.md",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_packet032_a2a_sync_receipt.py",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+        "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_AUTHORING_BUNDLE_2026-06-29.md",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET_GATE_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_lane1_opus_final_packet_authoring_request.py"
+      ],
+      "next_safe_action": "Hermes/Opus reviews packet_032 and creates a separate final packet candidate; validation required before any recorder gate or LANE_2 work."
+    },
+    {
+      "id": "active_goal_blocker_refresh_hermes_handoff",
+      "status": "handoff_ready_local_only",
+      "current_actionable_packet": "packet_013",
+      "lane2_authorized": false,
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_033_active_goal_blocker_refresh_hermes_handoff.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_REFRESH_HERMES_HANDOFF_2026-07-02.md",
+        "data/pathspecs/sirinx_active_goal_current_blocker_refresh_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_CURRENT_BLOCKER_REFRESH_2026-06-29.md",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_refresh_hermes_handoff_packet.py"
+      ],
+      "next_safe_action": "Hermes/KOB reviews packet_033 locally and chooses one blocker-clearing lane; Codex validates future evidence before changing completion status."
+    },
+    {
+      "id": "active_goal_blocker_clearance_approval_matrix",
+      "status": "approval_matrix_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_034_active_goal_blocker_clearance_approval_matrix.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_APPROVAL_MATRIX_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_033_active_goal_blocker_refresh_hermes_handoff.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_REFRESH_HERMES_HANDOFF_2026-07-02.md",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_blocker_clearance_approval_matrix_packet.py"
+      ],
+      "next_safe_action": "Hermes/KOB/operator reviews packet_034 locally and selects exactly one blocker-clearance gate; Codex validates future evidence before changing completion status."
+    },
+    {
+      "id": "active_goal_chat_export_readonly_mapping_gate_request",
+      "status": "gate_request_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_035_active_goal_chat_export_readonly_mapping_gate_request.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_CHAT_EXPORT_READONLY_MAPPING_GATE_REQUEST_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_034_active_goal_blocker_clearance_approval_matrix.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_APPROVAL_MATRIX_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_chat_export_readonly_mapping_gate_request_packet.py"
+      ],
+      "next_safe_action": "Operator reviews packet_035 and may provide APPROVE_CHATGPT_EXPORT_READONLY_MAPPING_<path>_<date>; Codex validates receipt metadata before loading or mapping anything."
+    },
+    {
+      "id": "chatgpt_export_readonly_source_receipt_validator",
+      "status": "validator_review_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_036_chatgpt_export_readonly_source_receipt_validator.json",
+        "WORKSPACE_SCAFFOLD/scripts/validate_chatgpt_export_readonly_source_receipt.py",
+        "data/pathspecs/sirinx_chatgpt_export_readonly_source_receipt_validator_2026-07-02.json",
+        "docs/knowledge/SIRINX_CHATGPT_EXPORT_READONLY_SOURCE_RECEIPT_VALIDATOR_2026-07-02.md",
+        "WORKSPACE_SCAFFOLD/tests/test_chatgpt_export_readonly_source_receipt_validator.py",
+        "_A2A_QUEUE/outbox/packet_035_active_goal_chat_export_readonly_mapping_gate_request.json",
+        "WORKSPACE_SCAFFOLD/tests/test_chatgpt_export_readonly_source_receipt_validator_packet.py"
+      ],
+      "next_safe_action": "Review packet_036 locally; exact approval and a valid receipt metadata envelope are required before source loading or metadata-only mapping."
+    },
+    {
+      "id": "active_goal_current_probe_refresh",
+      "status": "probe_refresh_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_037_active_goal_current_probe_refresh.json",
+        "data/pathspecs/sirinx_active_goal_current_probe_refresh_2026-07-02.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_CURRENT_PROBE_REFRESH_2026-07-02.md",
+        "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+        "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_current_probe_refresh_packet.py"
+      ],
+      "latest_probe": {
+        "exact_v3_3_artifact_found": false,
+        "chat_export_candidate_found": false,
+        "hermes_gateway_available": false,
+        "hermes_gateway_error": "ConnectionRefusedError"
+      },
+      "next_safe_action": "Review packet_037 locally as current blocker evidence; choose exactly one blocker-clearing gate before Codex validates any clearance claim."
+    },
+    {
+      "id": "hermes_gateway_repair_approval_gate",
+      "status": "approval_gate_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_038_hermes_gateway_repair_approval_gate.json",
+        "data/pathspecs/sirinx_hermes_gateway_repair_approval_gate_2026-07-02.json",
+        "docs/knowledge/SIRINX_HERMES_GATEWAY_REPAIR_APPROVAL_GATE_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_037_active_goal_current_probe_refresh.json",
+        "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_repair_approval_gate_packet.py"
+      ],
+      "next_safe_action": "Hermes/KOB/operator reviews packet_038 and provides APPROVE_LOCAL_STACK_REPAIR_HERMES_GATEWAY_<target>_<date> plus required fields before any local repair attempt"
+    },
+    {
+      "id": "ghostclaw_v3_3",
+      "status": "blocked_exact_artifact_missing",
+      "owner": "Codex",
+      "evidence": [
+        "docs/knowledge/SIRINX_GHOSTCLAW_V3_3_MERGE_INTAKE_2026-06-29.md",
+        "docs/knowledge/SIRINX_GHOSTCLAW_V3_3_PREFLIGHT_RECHECK_2026-06-29.md",
+        "data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_CODEX_A2A_GODMODE_V3_HTML_RECHECK_2026-06-29.md",
+        "data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_V3_3_ARTIFACT_GATE_VALIDATOR_2026-06-29.md",
+        "docs/superpowers/plans/2026-06-29-ghostclaw-yolo-v3-3-staging-merge.md"
+      ],
+      "next_safe_action": "place or point to exact ghostclaw_repo_merge_kit_v3_3.zip and policy evidence, then run metadata-only artifact gate validator"
+    },
+    {
+      "id": "hermes_codex_a2a_godmode_v3_html",
+      "status": "source_read_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_CODEX_A2A_GODMODE_V3_HTML_RECHECK_2026-06-29.md"
+      ],
+      "next_safe_action": "Use as topology evidence only; keep v3.3 merge kit blocked until exact zip exists"
+    },
+    {
+      "id": "all_chat_consolidation",
+      "status": "request_packet_ready_export_missing",
+      "owner": "Operator",
+      "evidence": [
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
+        "docs/knowledge/SIRINX_CODEX_HERMES_UNIFIED_CONTINUATION_2026-06-29.md",
+        "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_CONTRACT_2026-06-29.md",
+        "data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_MAPPER_2026-06-29.md",
+        "data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_REQUEST_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json"
+      ],
+      "next_safe_action": "review packet_020 request, then provide a ChatGPT export or connector-backed source before running the metadata-only mapper"
+    },
+    {
+      "id": "all_chat_export_request_packet",
+      "status": "request_packet_ready_no_export_loaded",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_REQUEST_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json",
+        "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_CONTRACT_2026-06-29.md",
+        "data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_MAPPER_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_all_chat_export_request_packet.py"
+      ],
+      "next_safe_action": "Operator provides a local ChatGPT export path or explicitly authorized read-only connector scope; Codex records receipt metadata before metadata-only mapping."
+    },
+    {
+      "id": "active_goal_blocker_recheck",
+      "status": "blockers_confirmed_current_state",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_active_goal_blocker_recheck_2026-06-29.json",
+        "data/pathspecs/sirinx_active_goal_blocker_clearance_validator_2026-06-29.json",
+        "data/pathspecs/sirinx_active_goal_current_blocker_refresh_2026-06-29.json",
+        "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+        "data/pathspecs/sirinx_active_goal_read_only_probe_runner_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_READ_ONLY_PROBE_RUNNER_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_RECHECK_2026-06-29.md",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_VALIDATOR_2026-06-29.md"
+      ],
+      "next_safe_action": "Validate one proposed blocker clearance packet before any blocker or completion claim changes"
+    },
+    {
+      "id": "active_goal_read_only_probe_runner",
+      "status": "runner_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+        "data/pathspecs/sirinx_active_goal_read_only_probe_runner_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_READ_ONLY_PROBE_RUNNER_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json"
+      ],
+      "latest_probe": {
+        "exact_v3_3_artifact_found": false,
+        "chat_export_candidate_found": false,
+        "hermes_gateway_available": false,
+        "hermes_gateway_error": "ConnectionRefusedError"
+      },
+      "next_safe_action": "Run the read-only probe runner before refreshing blocker evidence; treat candidates as requiring gate validators, not clearance."
+    },
+    {
+      "id": "active_goal_completion_requirements_matrix",
+      "status": "requirements_mapped_not_complete",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_active_goal_completion_requirements_matrix_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_REQUIREMENTS_MATRIX_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_completion_requirements_matrix.py"
+      ],
+      "next_safe_action": "Use requirement-level evidence before any active-goal completion claim"
+    },
+    {
+      "id": "active_goal_context_packet_registry",
+      "status": "active_local_context_registry",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_active_goal_context_packet_registry_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_CONTEXT_PACKET_REGISTRY_2026-06-29.md"
+      ],
+      "next_safe_action": "Use source metadata to refresh context without claiming all chats or stale runtime health"
+    },
+    {
+      "id": "active_goal_source_file_receipt",
+      "status": "current_local_scan_partial",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_active_goal_source_file_receipt_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_SOURCE_FILE_RECEIPT_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_source_file_receipt.py"
+      ],
+      "next_safe_action": "Use receipt to distinguish current local files from user-message summaries; do not claim all files were read until exact sources exist"
+    },
+    {
+      "id": "local_evidence_durability",
+      "status": "ignored_pathspecs_manifested",
+      "owner": "Codex",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/manifests/active_goal_local_evidence_durability_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_LOCAL_EVIDENCE_DURABILITY_MANIFEST_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_local_evidence_durability_manifest.py"
+      ],
+      "next_safe_action": "Use the manifest as local review surface; do not force-add ignored data without a scoped git decision"
+    },
+    {
+      "id": "pocket_hatchery_r0",
+      "status": "local_evidence_done_r0_blocked",
+      "owner": "Operator",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/config/pocket_hatchery_release_gate.json",
+        "data/pathspecs/sirinx_r0_gate_specific_approval_contract_2026-06-29.json",
+        "apps/pocket-hatchery/ops/release_gate_evidence.md"
+      ],
+      "next_safe_action": "approve R0-01, R0-02, or R0-03 individually if desired"
+    },
+    {
+      "id": "obsidian_brain_sync",
+      "status": "active",
+      "owner": "Codex",
+      "evidence": [
+        "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+        "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/memory/obsidian_sync.jsonl"
+      ],
+      "next_safe_action": "append concise pulse after verified local work"
+    },
+    {
+      "id": "codex_hermes_execution_queue",
+      "status": "active_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+        "docs/knowledge/SIRINX_CODEX_HERMES_EXECUTION_QUEUE_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_codex_hermes_execution_queue.py",
+        "data/pathspecs/sirinx_codex_hermes_work_report_contract_2026-06-29.json",
+        "docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_DRAFT_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_work_report.py",
+        "WORKSPACE_SCAFFOLD/tests/test_codex_hermes_work_report.py"
+      ],
+      "next_safe_action": "use the ordered queue for Codex/Hermes continuation without runtime execution"
+    },
+    {
+      "id": "codex_hermes_a2a_queue_status",
+      "status": "local_queue_indexed_not_executed",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
+        "docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/reports/codex_hermes_a2a_queue_status_latest_2026-06-29.json",
+        "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_a2a_queue_status.py",
+        "WORKSPACE_SCAFFOLD/tests/test_codex_hermes_a2a_queue_status.py",
+        "_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json",
+        "_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json",
+        "_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json",
+        "_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json"
+      ],
+      "next_safe_action": "use the file-bus snapshot for local Codex/Hermes coordination only; do not execute queue items"
+    },
+    {
+      "id": "a2a_adaptive_sync_control_status",
+      "status": "a2a_adaptive_sync_control_status_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_a2a_adaptive_sync_control_status_2026-06-29.json",
+        "docs/knowledge/SIRINX_A2A_ADAPTIVE_SYNC_CONTROL_STATUS_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
+        "data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json",
+        "WORKSPACE_SCAFFOLD/tests/test_a2a_adaptive_sync_control_status_packet.py"
+      ],
+      "next_safe_action": "Review packet_021 as the current local control status; then choose one separate gated blocker-clearing lane."
+    },
+    {
+      "id": "a2a_next_safe_action_sequencer",
+      "status": "a2a_next_safe_action_sequencer_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_a2a_next_safe_action_sequencer_2026-06-29.json",
+        "docs/knowledge/SIRINX_A2A_NEXT_SAFE_ACTION_SEQUENCER_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
+        "WORKSPACE_SCAFFOLD/tests/test_a2a_next_safe_action_sequencer_packet.py"
+      ],
+      "next_safe_action": "Treat packet_022 as historical sequencer evidence; packet_026 records route_to_opus, so the current local lane is final Opus packet authoring."
+    },
+    {
+      "id": "hermes_gateway_current_recheck_packet",
+      "status": "hermes_gateway_current_recheck_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+        "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_current_recheck_packet.py"
+      ],
+      "next_safe_action": "Review packet_023 as current localhost evidence; Hermes/operator starts or verifies 127.0.0.1:9000 separately before any live routing or packet_013 decision claim."
+    },
+    {
+      "id": "hermes_a2a_codex_sync_all_jobs_packet",
+      "status": "goal_command_inbox_ready_local_only",
+      "owner": "Hermes / Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_hermes_a2a_codex_sync_all_jobs_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_A2A_CODEX_SYNC_ALL_JOBS_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.ts",
+        "GHOSTCLAW/a2a-hermes-codex-bridge/command-intents.test.ts",
+        "docs/superpowers/decisions/2026-06-29-a2a-sync-hermes-goal-mission-brainstorm.md"
+      ],
+      "next_safe_action": "Review packet_024 as a local /goal command for sync-all-jobs coordination; keep packet_013 as the current actionable Hermes decision lane and keep MIT as intent-only until a LICENSE file exists."
+    },
+    {
+      "id": "codex_hermes_work_report",
+      "status": "telegram_draft_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_codex_hermes_work_report_contract_2026-06-29.json",
+        "docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_DRAFT_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_014_codex_hermes_work_report_draft.json",
+        "docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_PACKET_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/scripts/build_codex_hermes_work_report.py",
+        "WORKSPACE_SCAFFOLD/tests/test_codex_hermes_work_report.py",
+        "WORKSPACE_SCAFFOLD/tests/test_codex_hermes_work_report_packet.py",
+        "/Users/sirinx/project-hermes/HERMES_TELEGRAM_WORK_REPORT_PROTOCOL.md"
+      ],
+      "next_safe_action": "read the local Telegram-safe draft or record APPROVE_TELEGRAM_WORK_REPORT_SEND separately before any live Telegram send"
+    },
+    {
+      "id": "hermes_gateway_recheck",
+      "status": "unreachable_blocker_open",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_GATEWAY_RECHECK_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_recheck.py"
+      ],
+      "next_safe_action": "Hermes or the operator starts/verifies 127.0.0.1:9000 before any live routing claim"
+    },
+    {
+      "id": "browser_use_candidate_lane",
+      "status": "browser_use_candidate_lane_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_browser_use_candidate_lane_2026-06-29.json",
+        "docs/knowledge/SIRINX_BROWSER_USE_CANDIDATE_LANE_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+        "WORKSPACE_SCAFFOLD/tests/test_browser_use_candidate_lane.py"
+      ],
+      "next_safe_action": "Review Browser Use as candidate evidence only; use APPROVE_INSTALL_BROWSER_USE_SANDBOX or another gate-specific approval before install or browser execution."
+    },
+    {
+      "id": "sirinx_website_line_hermes_review",
+      "status": "review_packet_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "docs/website/SIRINX_WEBSITE_QUALITY_AUDIT.md",
+        "docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.md",
+        "docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.json",
+        "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+        "apps/sirinx-site/scripts/closed-gate-checks.mjs",
+        "apps/sirinx-site/scripts/closed-gate-checks.test.mjs",
+        "apps/sirinx-site/tests/line-integration.spec.ts",
+        "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_line_hermes_review_packet.py"
+      ],
+      "next_safe_action": "Hermes/operator reviews packet_029 locally; APPROVE_DEPLOY_SIRINX_SITE_<date>, APPROVE_LINE_WEBHOOK_<scope>_<date>, APPROVE_PRODUCTION_ANALYTICS_<scope>_<date>, or APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date> is required before deploy, webhook, production analytics, or CRM/customer data storage."
+    },
+    {
+      "id": "sirinx_website_line_uat_verification_receipt",
+      "status": "local_uat_verified_no_deploy",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+        "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.md",
+        "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.json",
+        "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+        "apps/sirinx-site/package.json",
+        "apps/sirinx-site/scripts/check.mjs",
+        "apps/sirinx-site/scripts/closed-gate-checks.test.mjs",
+        "apps/sirinx-site/scripts/server.test.mjs",
+        "apps/sirinx-site/tests/line-integration.spec.ts",
+        "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_line_uat_verification_receipt_packet.py"
+      ],
+      "verified_counts": {
+        "built_site_files_checked": 17,
+        "closed_gate_regression_tests": 3,
+        "server_tests": 2,
+        "line_browser_uat_tests": 42
+      },
+      "next_safe_action": "Hermes/operator reviews packet_039 as local UAT verification evidence; deploy, LINE webhook, production analytics, CRM/customer storage, live sends, public tunnel, and local stack restart still require separate exact approval."
+    },
+    {
+      "id": "sirinx_website_human_review_deploy_gate",
+      "status": "pending_human_review_no_deploy",
+      "owner": "Codex",
+      "evidence": [
+        "_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json",
+        "docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.md",
+        "docs/knowledge/SIRINX_WEBSITE_HUMAN_REVIEW_DEPLOY_GATE_2026-07-02.json",
+        "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+        "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.md",
+        "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.json",
+        "docs/superpowers/plans/2026-07-02-quote-roi-crm-readiness.md",
+        "WORKSPACE_SCAFFOLD/tests/test_sirinx_website_human_review_deploy_gate_packet.py"
+      ],
+      "required_human_evidence": [
+        "local_website_review",
+        "line_qr_real_device_scan",
+        "existing_bot_manual_check",
+        "explicit_deploy_approval_after_review"
+      ],
+      "next_sprint_gates": [
+        "quote_flow_requires_APPROVE_QUOTE_FLOW_LOCAL_IMPLEMENTATION",
+        "roi_calculator_requires_APPROVE_ROI_CALCULATOR_LOCAL_IMPLEMENTATION",
+        "crm_lead_capture_requires_APPROVE_CRM_CUSTOMER_DATA_STORAGE"
+      ],
+      "next_safe_action": "Human reviews the local website and packet_039, confirms LINE QR on a real device, confirms existing website bot behavior manually, then gives separate exact deploy approval only if ready."
+    },
+    {
+      "id": "uat_crud_mongodb_security_rules",
+      "status": "review_packet_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "skills/uat-crud-mongodb/SKILL.md",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_SECURITY_RULES_2026-07-02.md",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.md",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.json",
+        "data/pathspecs/sirinx_uat_crud_mongodb_hermes_review_packet_2026-07-02.json",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_A2A_QUEUE_VISIBILITY_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json",
+        "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_hermes_review_packet.py",
+        "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_a2a_queue_visibility.py"
+      ],
+      "next_safe_action": "Hermes/operator reviews packet_027 locally; exact UAT gate required before MongoDB, CRUD, install, browser automation, tunnel, secret access, or customer data actions."
+    },
+    {
+      "id": "uat_crud_mongodb_work_report",
+      "status": "telegram_draft_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "data/pathspecs/sirinx_uat_crud_mongodb_work_report_queue_2026-07-02.json",
+        "data/pathspecs/sirinx_uat_crud_mongodb_work_report_contract_2026-07-02.json",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_DRAFT_2026-07-02.md",
+        "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_WORK_REPORT_A2A_VISIBILITY_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_028_sirinx_uat_crud_mongodb_work_report_draft.json",
+        "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_packet.py",
+        "WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_work_report_a2a_visibility.py"
+      ],
+      "next_safe_action": "Review packet_028 as a local Telegram draft only; exact Telegram send and UAT execution gates required before live send or CRUD UAT."
+    },
+    {
+      "id": "coding_engine_security_rules_refactor",
+      "status": "review_packet_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "packages/policy-core/src/index.mjs",
+        "services/dev-control-api/src/vibe-coding-agent.mjs",
+        "skills/uat-crud-mongodb/run.mjs",
+        "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_REFACTOR_PACKET_2026-07-02.md",
+        "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_REFACTOR_A2A_VISIBILITY_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_030_sirinx_coding_engine_security_rules_refactor.json",
+        "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_refactor_packet.py",
+        "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_refactor_a2a_visibility.py"
+      ],
+      "next_safe_action": "Review packet_030 locally; exact approval required before real MCP execution, runtime queue execution, provider calls, deploy, push, or production/customer data actions."
+    },
+    {
+      "id": "coding_engine_security_rules_work_report",
+      "status": "telegram_draft_ready_local_only",
+      "owner": "Codex",
+      "evidence": [
+        "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_WORK_REPORT_DRAFT_2026-07-02.md",
+        "docs/knowledge/SIRINX_CODING_ENGINE_SECURITY_RULES_WORK_REPORT_A2A_VISIBILITY_2026-07-02.md",
+        "_A2A_QUEUE/outbox/packet_031_sirinx_coding_engine_security_rules_work_report_draft.json",
+        "_A2A_QUEUE/outbox/packet_030_sirinx_coding_engine_security_rules_refactor.json",
+        "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_work_report_packet.py",
+        "WORKSPACE_SCAFFOLD/tests/test_coding_engine_security_rules_work_report_a2a_visibility.py"
+      ],
+      "next_safe_action": "Review packet_031 as a local Telegram draft only; exact Telegram send and real MCP execution gates required before live send or execution."
+    }
+  ],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "database_migration": false,
+    "testnet_deploy": false,
+    "wallet_transaction": false
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator_packet -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_systematic_work_index -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_blocker_recheck -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_blocker_clearance_validator -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_read_only_probe_runner -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_current_blocker_refresh -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_completion_requirements_matrix -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_context_packet_registry -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_source_file_receipt -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_local_evidence_durability_manifest -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_packet013_decision_workbench -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_packet013_decision_readiness -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_packet013_decision_draft -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_hermes_decision_preflight_audit -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_opus_authoring_bundle -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_hermes_decision_validator -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_ghostclaw_v3_3_artifact_gate_validator -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_intake_contract -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_intake_mapper -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_hermes_codex_a2a_godmode_html_recheck -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_execution_queue -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_a2a_queue_status -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_hermes_a2a_codex_sync_all_jobs_packet -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_work_report -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_codex_hermes_work_report_packet -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_hermes_gateway_recheck -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_r0_gate_specific_approval_contract -v",
+    "python3 -m json.tool data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json > /dev/null",
+    "node scripts/check-operating-files.mjs",
+    "git diff --check",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_request_packet -v",
+    "python3 -m json.tool data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json > /dev/null"
+  ],
+  "notes": "This is a local-only systematic work index. It is not a completion claim and not an approval packet."
+}

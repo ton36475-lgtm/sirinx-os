@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GhostClaw Manager Architecture Report</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true, theme:'dark'});</script>
+<style>
+ body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d1117;color:#e6edf3;margin:0;padding:24px;line-height:1.55}
+ h1{color:#58a6ff;border-bottom:1px solid #30363d;padding-bottom:8px}
+ h2{color:#7ee787;margin-top:28px}
+ h3{color:#d2a8ff}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+ .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px}
+ .card h3{margin:0 0 6px;font-size:13px;color:#8b949e}
+ .card .big{font-size:20px;font-weight:700}
+ .crit{color:#ff7b72} .warn{color:#d29922} .ok{color:#7ee787} .info{color:#58a6ff}
+ table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+ th,td{border:1px solid #30363d;padding:9px;text-align:left;vertical-align:top}
+ th{background:#010409;color:#58a6ff}
+ tr:nth-child(even){background:#11161d}
+ .mermaid{background:#010409;border:1px solid #30363d;border-radius:8px;padding:16px;margin-top:12px}
+ .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+ .b-crit{background:#ff7b7222;color:#ff7b72} .b-high{background:#d2992222;color:#d29922} .b-med{background:#58a6ff22;color:#58a6ff} .b-low{background:#7ee78722;color:#7ee787}
+ .note{background:#161b22;border-left:4px solid #58a6ff;padding:12px;margin-top:14px;border-radius:0 8px 8px 0}
+ pre{background:#010409;border:1px solid #30363d;border-radius:8px;padding:14px;overflow:auto;max-height:420px;font-size:12px}
+</style></head><body>
+<h1>SIRINX GHOSTCLAW Manager - Architecture Report</h1>
+<p><b>Source:</b> SIRINX_GHOSTCLAW_MASTER_v3.0.txt (4497 lines, 18 files, generated 2026-07-21 by Kimi3/KimiSwarm3)<br/>
+<b>Analyzed by:</b> solis (Hermes) — read-only code review, no execution &nbsp;|&nbsp; <b>Generated:</b> 2026-07-21T05:30+07:00<br/>
+<span class="badge b-crit">VERDICT: DESIGN-SOLID / SAFETY-CRITICAL-DEFECTS / NOT-PRODUCTION-READY</span></p>
+
+<h2>1. System Purpose</h2>
+<p>Multi-agent orchestration (47 Ronin Swarm) + semi-automatic crisis recovery + QA gating + brainstorm auto-approval on Apple Silicon M2</p>
+<p><b>Swarm pipeline:</b> <code>Pre-flight to Marut(schema) to Akkee(api) to Wayu(QA) to Hermes-QA(deep) to [APPROVED]Deploy / [FAIL]Retry(max3)</code></p>
+
+<h2>2. Architecture Diagram (Mermaid)</h2>
+<div class="mermaid">
+flowchart TB
+    TG["Telegram Easy Button"] -->|human override P0| ROUTER
+    GH["Git Webhooks / n8n"] --> ROUTER
+    KUDU_ALERT["Kudu System Alerts"] --> ROUTER
+    subgraph ROUTER["OmniRoute Mesh Router (Event Bus + Routing Table)"]
+        PRE["Pre-flight: disk>10GB, temp<75C, ram>4GB"]
+    end
+    ROUTER --> BRAIN["BrainStorm Analyzer 6-factor"]
+    ROUTER --> PRE
+    PRE -->|degraded| RECO["Crisis Recovery 5 phases"]
+    PRE --> MARUT["Marut schema"]
+    MARUT --> AKKEE["Akkee api"]
+    AKKEE --> WAYU["Wayu QA gate"]
+    WAYU -->|APPROVE| HQA["Hermes-QA deep"]
+    HQA -->|APPROVED| DEPLOY["_deploy() git add -A + commit"]
+    HQA -->|REJECT| AKKEE
+    WAYU -->|REJECT| AKKEE
+    LENS["AgentLensManager 6 lanes + locks"] -.isolates.-> MARUT & AKKEE & WAYU
+    RECO -->|git_protection| GITMUT["git rm -f + commit D2"]
+    DEPLOY -->|no human gate D1| ORIGIN["origin/migration/v5-rebase"]
+    style DEPLOY fill:#ff7b72,stroke:#fff
+    style GITMUT fill:#ff7b72,stroke:#fff
+    style RECO fill:#d29922,stroke:#fff
+    style BRAIN fill:#58a6ff,stroke:#fff
+</div>
+
+<h2>3. Components (18 files)</h2>
+<table><tr><th>Component</th><th>Role</th></tr>
+<tr><td><code>sirinx_crisis_recovery.py</code></td><td>KuduHermesBridge: 5-phase recovery (thermal/disk/git/cron/service). Metric sensor + self-healing playbooks.</td></tr>
+<tr><td><code>omniroute_swarm_orchestrator.py</code></td><td>OmniRouteSwarmOrchestrator: 7 agents (marut/akkee/wayu/hermes_dev/hermes_qa/kudu_sysops/unlimited_ocr) + 6 KimiSwarm3 patterns + Ollama API loop + auto-deploy.</td></tr>
+<tr><td><code>brain_storm_system.py</code></td><td>BrainStormAnalyzer: 6-factor risk analysis, 4 approval tiers (AUTO_APPROVE>90% / CONDITIONAL / HUMAN_REVIEW / REJECT).</td></tr>
+<tr><td><code>agent_lens_manager.py</code></td><td>AgentLensManager: 6 lane types, conflict rules, resource locking (threading.Lock), status-lock anti-deletion.</td></tr>
+<tr><td><code>telegram_omniroute_controller.py</code></td><td>TelegramOmniRouteController: easy-button bot (NORMAL/DEGRADED/CRISIS keyboards) wired to recovery + orchestrator.</td></tr>
+<tr><td><code>github_actions_auto_recovery.yml</code></td><td>7-job CI/CD: health-check to auto-recovery to qa-gate to swarm-test to deploy to drift-detection to kimi3-validation.</td></tr>
+<tr><td><code>docker-compose.m2.yml</code></td><td>10 services (ollama/open-webui/n8n/postgres/redis/prometheus/grafana/sirinx-qa/watchtower/cloudflared) on arm64 bridge net.</td></tr>
+<tr><td><code>agent_communication_schema.json</code></td><td>JSON-Schema draft-07 for A2A messages (task_assignment/result/consensus/drift/recovery/health).</td></tr>
+<tr><td><code>system_health_dashboard.html</code></td><td>Tabbed dashboard w/ Mermaid (overview/swarm/kimi3/github/recovery/json).</td></tr>
+<tr><td><code>production.md / README.md</code></td><td>Master doc + quick-start.</td></tr>
+<tr><td><code>prompt_patterns/*</code></td><td>7 agent system prompts (hermes_dev, hermes_qa, kudu_sysops, omniroute_router, marut, akkee, wayu).</td></tr>
+</table><h2>4. Strengths</h2><div class="note"><ul><li>Clear 5-phase recovery ordering (thermal to disk to git to cron to service) is a safe sequence.</li>
+<li>AgentLensManager uses threading.Lock + resource locks + status-lock anti-deletion for good isolation.</li>
+<li>BrainStorm 6-factor + 4-tier approval with human escalation on critical/security/financial is sound governance.</li>
+<li>A2A JSON-Schema is well-structured and versioned (kimi3/kimiswarm3 versions).</li>
+<li>Dashboard + production.md give the team a single source of truth.</li>
+<li>QA veto gate (Hermes-QA) before any deploy is the correct human-in-code pattern.</li>
+</ul></div><h2>5. Critical Defects</h2><table><tr><th>ID</th><th>Sev</th><th>File</th><th>Issue / Impact / Fix</th></tr><tr><td>D1</td><td><span class='badge b-crit'>CRITICAL</span></td><td><code>omniroute_swarm_orchestrator.py / sirinx_crisis_recovery.py</code></td><td><b>Issue:</b> Auto-deploy runs git add -A and git commit; Wayu emits APPROVE_AND_TRIGGER_GIT_PUSH then Hermes-QA APPROVED triggers _deploy() which commits. No human approval, no dry-run, no branch protection. Violates AGENTS.md A5/A6 and the project no-push-without-approval rule.<br/><b>Impact:</b> Unattended code could be committed/pushed to migration/v5-rebase automatically.<br/><b>Fix:</b> Gate _deploy behind explicit human confirmation; default to dry-run; never auto-commit on main tree.</td></tr>
+<tr><td>D2</td><td><span class='badge b-crit'>CRITICAL</span></td><td><code>sirinx_crisis_recovery.py (git_protection)</code></td><td><b>Issue:</b> On submodule failure it runs git rm -f integrations/cynative then git commit -m non-interactively. Mutates working tree and commits without review.<br/><b>Impact:</b> Silent destructive mutation of repo history.<br/><b>Fix:</b> Never auto-commit; only stash; report submodule error for human.</td></tr>
+<tr><td>D3</td><td><span class='badge b-high'>HIGH</span></td><td><code>sirinx_crisis_recovery.py (disk_recovery)</code></td><td><b>Issue:</b> Uses bare shutil.rmtree(target/) and os.remove walks in ~/.hermes / ~/.codex with try/except but no allowlist/dry-run guard. Could delete recent sessions/cache. Same destructive pattern your background codex audit was meant to harden.<br/><b>Impact:</b> Potential loss of recent Codex/Hermes sessions if paths drift.<br/><b>Fix:</b> Add allowlist (only __pycache__, ~/.npm/_cacache, /tmp) + SELF_EVOLUTION_ALLOW_PURGE opt-in dry-run.</td></tr>
+<tr><td>D4</td><td><span class='badge b-high'>HIGH</span></td><td><code>sirinx_crisis_recovery.py / telegram controller</code></td><td><b>Issue:</b> get_live_metrics hardcodes fallback disk 228/191/11/95 and PIDs 2620/2630/2705; disk_recovery frees estimated space (space_freed += 3.3 for npm without verifying). Metrics are synthetic, not measured.<br/><b>Impact:</b> Recovery report can claim success while disk stays 95%.<br/><b>Fix:</b> Compute real freed bytes from before/after du; remove hardcoded guesses.</td></tr>
+<tr><td>D5</td><td><span class='badge b-med'>MEDIUM</span></td><td><code>omniroute_swarm_orchestrator.py</code></td><td><b>Issue:</b> Calls Ollama models (deepseek-coder-v2:16b, llama3:70b-q4, qwen2.5:32b, glm-edge-code:uncensored, baidu/Unlimited-OCR) not verified present on this 8GB M2. 70B model cannot load on 8GB. No model-availability check. Declares 47 Ronin but only 7 agents defined.<br/><b>Impact:</b> Swarm loop fails at first agent call; roster mismatch.<br/><b>Fix:</b> Pre-flight model check; right-size models to M2 (8B/14B max); reconcile 47 vs 7.</td></tr>
+<tr><td>D6</td><td><span class='badge b-med'>MEDIUM</span></td><td><code>github_actions_auto_recovery.yml</code></td><td><b>Issue:</b> deploy job runs wrangler deploy + supabase db push + git push --tags automatically on success — cloud mutation + push without human gate. Runs on macos-latest, not the M2.<br/><b>Impact:</b> Unattended production deploy from CI.<br/><b>Fix:</b> Add environment protection / required reviewer; gate auto-push behind manual approval.</td></tr>
+<tr><td>D7</td><td><span class='badge b-low'>LOW</span></td><td><code>agent_communication_schema.json / prompts</code></td><td><b>Issue:</b> Schema references 9 AgentRoles incl strategic_advisor but orchestrator defines 7; brainstorm consensus hardcodes only 4 agents. Inconsistent agent registry.<br/><b>Impact:</b> Schema/code drift in agent roster.<br/><b>Fix:</b> Single source-of-truth agent registry shared by schema + orchestrator + brainstorm.</td></tr>
+<tr><td>D8</td><td><span class='badge b-low'>LOW</span></td><td><code>sirinx_crisis_recovery.py (syntax)</code></td><td><b>Issue:</b> handoff() uses state['handoff_at': None] = ... — invalid dict literal. Would SyntaxError if handoff invoked. (The main-file copy uses __main__ correctly; this is in the recovered snippet.)<br/><b>Impact:</b> Runtime crash if handoff invoked.<br/><b>Fix:</b> Fix to state['handoff_at'] = datetime.utcnow().isoformat().</td></tr>
+</table><h2>6. Security Posture</h2><div class="note"><b>Good:</b><ul><li>Command blocklist in kudu_sysops prompt (no rm -rf /, no chmod 777, no sudo)</li><li>BrainStorm human escalation on critical/security</li><li>Never git reset --hard (uses stash) — aligns with your root-cause bug</li></ul><b>Gaps:</b><ul><li>No actual allowlist enforcement in Python (only documented in prompts)</li><li>Secrets (TELEGRAM_BOT_TOKEN, CLOUDFLARE_API_TOKEN, POSTGRES_PASSWORD=sirinx2026) in plaintext in docker-compose/env appendices</li><li>auto-deploy bypasses the documented human gate</li></ul></div><h2>7. Recommendation</h2><div class="note"><p>ARCHITECTURE APPROVED FOR REVIEW. Do NOT run on this Mac mini in current form: D1/D2 (auto-commit/deploy) and D3 (unguarded rmtree) violate project safety law. Recommend: (1) add dry-run+allowlist to recovery, (2) gate _deploy behind human approval, (3) verify models fit 8GB M2, (4) reconcile agent registry. Then pilot in staging.</p></div><h2>8. Full Structure (JSON)</h2><pre>{
+  "report_meta": {
+    "title": "SIRINX GHOSTCLAW Manager — Architecture & Analysis Report",
+    "source": "SIRINX_GHOSTCLAW_MASTER_v3.0.txt (4497 lines, 18 files, generated 2026-07-21 by Kimi3/KimiSwarm3)",
+    "analyzed_by": "solis (Hermes) — read-only code review, no execution",
+    "generated_at": "2026-07-21T05:30+07:00",
+    "verdict": "DESIGN-SOLID / SAFETY-CRITICAL-DEFECTS / NOT-PRODUCTION-READY"
+  },
+  "system_purpose": "Multi-agent orchestration (47 Ronin Swarm) + semi-automatic crisis recovery + QA gating + brainstorm auto-approval on Apple Silicon M2",
+  "components": {
+    "sirinx_crisis_recovery.py": "KuduHermesBridge: 5-phase recovery (thermal/disk/git/cron/service). Metric sensor + self-healing playbooks.",
+    "omniroute_swarm_orchestrator.py": "OmniRouteSwarmOrchestrator: 7 agents (marut/akkee/wayu/hermes_dev/hermes_qa/kudu_sysops/unlimited_ocr) + 6 KimiSwarm3 patterns + Ollama API loop + auto-deploy.",
+    "brain_storm_system.py": "BrainStormAnalyzer: 6-factor risk analysis, 4 approval tiers (AUTO_APPROVE>90% / CONDITIONAL / HUMAN_REVIEW / REJECT).",
+    "agent_lens_manager.py": "AgentLensManager: 6 lane types, conflict rules, resource locking (threading.Lock), status-lock anti-deletion.",
+    "telegram_omniroute_controller.py": "TelegramOmniRouteController: easy-button bot (NORMAL/DEGRADED/CRISIS keyboards) wired to recovery + orchestrator.",
+    "github_actions_auto_recovery.yml": "7-job CI/CD: health-check to auto-recovery to qa-gate to swarm-test to deploy to drift-detection to kimi3-validation.",
+    "docker-compose.m2.yml": "10 services (ollama/open-webui/n8n/postgres/redis/prometheus/grafana/sirinx-qa/watchtower/cloudflared) on arm64 bridge net.",
+    "agent_communication_schema.json": "JSON-Schema draft-07 for A2A messages (task_assignment/result/consensus/drift/recovery/health).",
+    "system_health_dashboard.html": "Tabbed dashboard w/ Mermaid (overview/swarm/kimi3/github/recovery/json).",
+    "production.md / README.md": "Master doc + quick-start.",
+    "prompt_patterns/*": "7 agent system prompts (hermes_dev, hermes_qa, kudu_sysops, omniroute_router, marut, akkee, wayu)."
+  },
+  "swarm_pipeline": "Pre-flight to Marut(schema) to Akkee(api) to Wayu(QA) to Hermes-QA(deep) to [APPROVED]Deploy / [FAIL]Retry(max3)",
+  "kimi3_skills": [
+    "long_context",
+    "multimodal",
+    "swarm_coordination",
+    "code_analysis",
+    "self_healing",
+    "mcp_tools",
+    "knowledge_base"
+  ],
+  "kimiswarm3_patterns": [
+    "sequential",
+    "parallel",
+    "pipeline",
+    "consensus",
+    "competitive",
+    "hierarchical"
+  ],
+  "github_frameworks": [
+    "CrewAI",
+    "AutoGen",
+    "LangChain",
+    "Ollama",
+    "vLLM",
+    "Unsloth",
+    "HuggingFace",
+    "Unlimited-OCR"
+  ],
+  "strengths": [
+    "Clear 5-phase recovery ordering (thermal to disk to git to cron to service) is a safe sequence.",
+    "AgentLensManager uses threading.Lock + resource locks + status-lock anti-deletion for good isolation.",
+    "BrainStorm 6-factor + 4-tier approval with human escalation on critical/security/financial is sound governance.",
+    "A2A JSON-Schema is well-structured and versioned (kimi3/kimiswarm3 versions).",
+    "Dashboard + production.md give the team a single source of truth.",
+    "QA veto gate (Hermes-QA) before any deploy is the correct human-in-code pattern."
+  ],
+  "critical_defects": [
+    {
+      "id": "D1",
+      "severity": "CRITICAL",
+      "file": "omniroute_swarm_orchestrator.py / sirinx_crisis_recovery.py",
+      "issue": "Auto-deploy runs git add -A and git commit; Wayu emits APPROVE_AND_TRIGGER_GIT_PUSH then Hermes-QA APPROVED triggers _deploy() which commits. No human approval, no dry-run, no branch protection. Violates AGENTS.md A5/A6 and the project no-push-without-approval rule.",
+      "impact": "Unattended code could be committed/pushed to migration/v5-rebase automatically.",
+      "fix": "Gate _deploy behind explicit human confirmation; default to dry-run; never auto-commit on main tree."
+    },
+    {
+      "id": "D2",
+      "severity": "CRITICAL",
+      "file": "sirinx_crisis_recovery.py (git_protection)",
+      "issue": "On submodule failure it runs git rm -f integrations/cynative then git commit -m non-interactively. Mutates working tree and commits without review.",
+      "impact": "Silent destructive mutation of repo history.",
+      "fix": "Never auto-commit; only stash; report submodule error for human."
+    },
+    {
+      "id": "D3",
+      "severity": "HIGH",
+      "file": "sirinx_crisis_recovery.py (disk_recovery)",
+      "issue": "Uses bare shutil.rmtree(target/) and os.remove walks in ~/.hermes / ~/.codex with try/except but no allowlist/dry-run guard. Could delete recent sessions/cache. Same destructive pattern your background codex audit was meant to harden.",
+      "impact": "Potential loss of recent Codex/Hermes sessions if paths drift.",
+      "fix": "Add allowlist (only __pycache__, ~/.npm/_cacache, /tmp) + SELF_EVOLUTION_ALLOW_PURGE opt-in dry-run."
+    },
+    {
+      "id": "D4",
+      "severity": "HIGH",
+      "file": "sirinx_crisis_recovery.py / telegram controller",
+      "issue": "get_live_metrics hardcodes fallback disk 228/191/11/95 and PIDs 2620/2630/2705; disk_recovery frees estimated space (space_freed += 3.3 for npm without verifying). Metrics are synthetic, not measured.",
+      "impact": "Recovery report can claim success while disk stays 95%.",
+      "fix": "Compute real freed bytes from before/after du; remove hardcoded guesses."
+    },
+    {
+      "id": "D5",
+      "severity": "MEDIUM",
+      "file": "omniroute_swarm_orchestrator.py",
+      "issue": "Calls Ollama models (deepseek-coder-v2:16b, llama3:70b-q4, qwen2.5:32b, glm-edge-code:uncensored, baidu/Unlimited-OCR) not verified present on this 8GB M2. 70B model cannot load on 8GB. No model-availability check. Declares 47 Ronin but only 7 agents defined.",
+      "impact": "Swarm loop fails at first agent call; roster mismatch.",
+      "fix": "Pre-flight model check; right-size models to M2 (8B/14B max); reconcile 47 vs 7."
+    },
+    {
+      "id": "D6",
+      "severity": "MEDIUM",
+      "file": "github_actions_auto_recovery.yml",
+      "issue": "deploy job runs wrangler deploy + supabase db push + git push --tags automatically on success — cloud mutation + push without human gate. Runs on macos-latest, not the M2.",
+      "impact": "Unattended production deploy from CI.",
+      "fix": "Add environment protection / required reviewer; gate auto-push behind manual approval."
+    },
+    {
+      "id": "D7",
+      "severity": "LOW",
+      "file": "agent_communication_schema.json / prompts",
+      "issue": "Schema references 9 AgentRoles incl strategic_advisor but orchestrator defines 7; brainstorm consensus hardcodes only 4 agents. Inconsistent agent registry.",
+      "impact": "Schema/code drift in agent roster.",
+      "fix": "Single source-of-truth agent registry shared by schema + orchestrator + brainstorm."
+    },
+    {
+      "id": "D8",
+      "severity": "LOW",
+      "file": "sirinx_crisis_recovery.py (syntax)",
+      "issue": "handoff() uses state['handoff_at': None] = ... — invalid dict literal. Would SyntaxError if handoff invoked. (The main-file copy uses __main__ correctly; this is in the recovered snippet.)",
+      "impact": "Runtime crash if handoff invoked.",
+      "fix": "Fix to state['handoff_at'] = datetime.utcnow().isoformat()."
+    }
+  ],
+  "security_posture": {
+    "good": [
+      "Command blocklist in kudu_sysops prompt (no rm -rf /, no chmod 777, no sudo)",
+      "BrainStorm human escalation on critical/security",
+      "Never git reset --hard (uses stash) — aligns with your root-cause bug"
+    ],
+    "gaps": [
+      "No actual allowlist enforcement in Python (only documented in prompts)",
+      "Secrets (TELEGRAM_BOT_TOKEN, CLOUDFLARE_API_TOKEN, POSTGRES_PASSWORD=sirinx2026) in plaintext in docker-compose/env appendices",
+      "auto-deploy bypasses the documented human gate"
+    ]
+  },
+  "recommendation": "ARCHITECTURE APPROVED FOR REVIEW. Do NOT run on this Mac mini in current form: D1/D2 (auto-commit/deploy) and D3 (unguarded rmtree) violate project safety law. Recommend: (1) add dry-run+allowlist to recovery, (2) gate _deploy behind human approval, (3) verify models fit 8GB M2, (4) reconcile agent registry. Then pilot in staging."
+}</pre><script id="arch-data" type="application/json">{
+  "report_meta": {
+    "title": "SIRINX GHOSTCLAW Manager — Architecture & Analysis Report",
+    "source": "SIRINX_GHOSTCLAW_MASTER_v3.0.txt (4497 lines, 18 files, generated 2026-07-21 by Kimi3/KimiSwarm3)",
+    "analyzed_by": "solis (Hermes) — read-only code review, no execution",
+    "generated_at": "2026-07-21T05:30+07:00",
+    "verdict": "DESIGN-SOLID / SAFETY-CRITICAL-DEFECTS / NOT-PRODUCTION-READY"
+  },
+  "system_purpose": "Multi-agent orchestration (47 Ronin Swarm) + semi-automatic crisis recovery + QA gating + brainstorm auto-approval on Apple Silicon M2",
+  "components": {
+    "sirinx_crisis_recovery.py": "KuduHermesBridge: 5-phase recovery (thermal/disk/git/cron/service). Metric sensor + self-healing playbooks.",
+    "omniroute_swarm_orchestrator.py": "OmniRouteSwarmOrchestrator: 7 agents (marut/akkee/wayu/hermes_dev/hermes_qa/kudu_sysops/unlimited_ocr) + 6 KimiSwarm3 patterns + Ollama API loop + auto-deploy.",
+    "brain_storm_system.py": "BrainStormAnalyzer: 6-factor risk analysis, 4 approval tiers (AUTO_APPROVE>90% / CONDITIONAL / HUMAN_REVIEW / REJECT).",
+    "agent_lens_manager.py": "AgentLensManager: 6 lane types, conflict rules, resource locking (threading.Lock), status-lock anti-deletion.",
+    "telegram_omniroute_controller.py": "TelegramOmniRouteController: easy-button bot (NORMAL/DEGRADED/CRISIS keyboards) wired to recovery + orchestrator.",
+    "github_actions_auto_recovery.yml": "7-job CI/CD: health-check to auto-recovery to qa-gate to swarm-test to deploy to drift-detection to kimi3-validation.",
+    "docker-compose.m2.yml": "10 services (ollama/open-webui/n8n/postgres/redis/prometheus/grafana/sirinx-qa/watchtower/cloudflared) on arm64 bridge net.",
+    "agent_communication_schema.json": "JSON-Schema draft-07 for A2A messages (task_assignment/result/consensus/drift/recovery/health).",
+    "system_health_dashboard.html": "Tabbed dashboard w/ Mermaid (overview/swarm/kimi3/github/recovery/json).",
+    "production.md / README.md": "Master doc + quick-start.",
+    "prompt_patterns/*": "7 agent system prompts (hermes_dev, hermes_qa, kudu_sysops, omniroute_router, marut, akkee, wayu)."
+  },
+  "swarm_pipeline": "Pre-flight to Marut(schema) to Akkee(api) to Wayu(QA) to Hermes-QA(deep) to [APPROVED]Deploy / [FAIL]Retry(max3)",
+  "kimi3_skills": [
+    "long_context",
+    "multimodal",
+    "swarm_coordination",
+    "code_analysis",
+    "self_healing",
+    "mcp_tools",
+    "knowledge_base"
+  ],
+  "kimiswarm3_patterns": [
+    "sequential",
+    "parallel",
+    "pipeline",
+    "consensus",
+    "competitive",
+    "hierarchical"
+  ],
+  "github_frameworks": [
+    "CrewAI",
+    "AutoGen",
+    "LangChain",
+    "Ollama",
+    "vLLM",
+    "Unsloth",
+    "HuggingFace",
+    "Unlimited-OCR"
+  ],
+  "strengths": [
+    "Clear 5-phase recovery ordering (thermal to disk to git to cron to service) is a safe sequence.",
+    "AgentLensManager uses threading.Lock + resource locks + status-lock anti-deletion for good isolation.",
+    "BrainStorm 6-factor + 4-tier approval with human escalation on critical/security/financial is sound governance.",
+    "A2A JSON-Schema is well-structured and versioned (kimi3/kimiswarm3 versions).",
+    "Dashboard + production.md give the team a single source of truth.",
+    "QA veto gate (Hermes-QA) before any deploy is the correct human-in-code pattern."
+  ],
+  "critical_defects": [
+    {
+      "id": "D1",
+      "severity": "CRITICAL",
+      "file": "omniroute_swarm_orchestrator.py / sirinx_crisis_recovery.py",
+      "issue": "Auto-deploy runs git add -A and git commit; Wayu emits APPROVE_AND_TRIGGER_GIT_PUSH then Hermes-QA APPROVED triggers _deploy() which commits. No human approval, no dry-run, no branch protection. Violates AGENTS.md A5/A6 and the project no-push-without-approval rule.",
+      "impact": "Unattended code could be committed/pushed to migration/v5-rebase automatically.",
+      "fix": "Gate _deploy behind explicit human confirmation; default to dry-run; never auto-commit on main tree."
+    },
+    {
+      "id": "D2",
+      "severity": "CRITICAL",
+      "file": "sirinx_crisis_recovery.py (git_protection)",
+      "issue": "On submodule failure it runs git rm -f integrations/cynative then git commit -m non-interactively. Mutates working tree and commits without review.",
+      "impact": "Silent destructive mutation of repo history.",
+      "fix": "Never auto-commit; only stash; report submodule error for human."
+    },
+    {
+      "id": "D3",
+      "severity": "HIGH",
+      "file": "sirinx_crisis_recovery.py (disk_recovery)",
+      "issue": "Uses bare shutil.rmtree(target/) and os.remove walks in ~/.hermes / ~/.codex with try/except but no allowlist/dry-run guard. Could delete recent sessions/cache. Same destructive pattern your background codex audit was meant to harden.",
+      "impact": "Potential loss of recent Codex/Hermes sessions if paths drift.",
+      "fix": "Add allowlist (only __pycache__, ~/.npm/_cacache, /tmp) + SELF_EVOLUTION_ALLOW_PURGE opt-in dry-run."
+    },
+    {
+      "id": "D4",
+      "severity": "HIGH",
+      "file": "sirinx_crisis_recovery.py / telegram controller",
+      "issue": "get_live_metrics hardcodes fallback disk 228/191/11/95 and PIDs 2620/2630/2705; disk_recovery frees estimated space (space_freed += 3.3 for npm without verifying). Metrics are synthetic, not measured.",
+      "impact": "Recovery report can claim success while disk stays 95%.",
+      "fix": "Compute real freed bytes from before/after du; remove hardcoded guesses."
+    },
+    {
+      "id": "D5",
+      "severity": "MEDIUM",
+      "file": "omniroute_swarm_orchestrator.py",
+      "issue": "Calls Ollama models (deepseek-coder-v2:16b, llama3:70b-q4, qwen2.5:32b, glm-edge-code:uncensored, baidu/Unlimited-OCR) not verified present on this 8GB M2. 70B model cannot load on 8GB. No model-availability check. Declares 47 Ronin but only 7 agents defined.",
+      "impact": "Swarm loop fails at first agent call; roster mismatch.",
+      "fix": "Pre-flight model check; right-size models to M2 (8B/14B max); reconcile 47 vs 7."
+    },
+    {
+      "id": "D6",
+      "severity": "MEDIUM",
+      "file": "github_actions_auto_recovery.yml",
+      "issue": "deploy job runs wrangler deploy + supabase db push + git push --tags automatically on success — cloud mutation + push without human gate. Runs on macos-latest, not the M2.",
+      "impact": "Unattended production deploy from CI.",
+      "fix": "Add environment protection / required reviewer; gate auto-push behind manual approval."
+    },
+    {
+      "id": "D7",
+      "severity": "LOW",
+      "file": "agent_communication_schema.json / prompts",
+      "issue": "Schema references 9 AgentRoles incl strategic_advisor but orchestrator defines 7; brainstorm consensus hardcodes only 4 agents. Inconsistent agent registry.",
+      "impact": "Schema/code drift in agent roster.",
+      "fix": "Single source-of-truth agent registry shared by schema + orchestrator + brainstorm."
+    },
+    {
+      "id": "D8",
+      "severity": "LOW",
+      "file": "sirinx_crisis_recovery.py (syntax)",
+      "issue": "handoff() uses state['handoff_at': None] = ... — invalid dict literal. Would SyntaxError if handoff invoked. (The main-file copy uses __main__ correctly; this is in the recovered snippet.)",
+      "impact": "Runtime crash if handoff invoked.",
+      "fix": "Fix to state['handoff_at'] = datetime.utcnow().isoformat()."
+    }
+  ],
+  "security_posture": {
+    "good": [
+      "Command blocklist in kudu_sysops prompt (no rm -rf /, no chmod 777, no sudo)",
+      "BrainStorm human escalation on critical/security",
+      "Never git reset --hard (uses stash) — aligns with your root-cause bug"
+    ],
+    "gaps": [
+      "No actual allowlist enforcement in Python (only documented in prompts)",
+      "Secrets (TELEGRAM_BOT_TOKEN, CLOUDFLARE_API_TOKEN, POSTGRES_PASSWORD=sirinx2026) in plaintext in docker-compose/env appendices",
+      "auto-deploy bypasses the documented human gate"
+    ]
+  },
+  "recommendation": "ARCHITECTURE APPROVED FOR REVIEW. Do NOT run on this Mac mini in current form: D1/D2 (auto-commit/deploy) and D3 (unguarded rmtree) violate project safety law. Recommend: (1) add dry-run+allowlist to recovery, (2) gate _deploy behind human approval, (3) verify models fit 8GB M2, (4) reconcile agent registry. Then pilot in staging."
+}</script></body></html>

@@ -1,0 +1,81 @@
+{
+  "schema": "ghostclaw.lane1.hermes_decision_validator.v1",
+  "status": "local_only_validator_not_decision",
+  "generated_at": "2026-06-29",
+  "validates": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md"
+  ],
+  "validator_script": "WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py",
+  "decision_record": false,
+  "codex_recorder_gate_open": false,
+  "lane2_authorized": false,
+  "deploy": false,
+  "push": false,
+  "provider_call": false,
+  "allowed_decisions": [
+    "route_to_opus",
+    "request_revision",
+    "open_codex_recorder_gate",
+    "block"
+  ],
+  "required_fields": [
+    "HERMES_REVIEW_DECISION_RECORD",
+    "decision",
+    "decision_record",
+    "codex_recorder_gate_open",
+    "lane2_authorized",
+    "approval_scope",
+    "reviewed_evidence_paths",
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "paid_provider_call",
+    "runtime_queue_execution",
+    "merge_script_execution",
+    "install",
+    "migration"
+  ],
+  "blocked_actions": [
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "paid_provider_call",
+    "runtime_queue_execution",
+    "merge_script_execution",
+    "install",
+    "migration",
+    "lane2_start"
+  ],
+  "decision_rules": [
+    "decision must be one of route_to_opus, request_revision, open_codex_recorder_gate, or block",
+    "decision_record must be true in an actual decision file",
+    "codex_recorder_gate_open can be true only when decision=open_codex_recorder_gate",
+    "lane2_authorized must remain false",
+    "approval_scope must be local_decision_only",
+    "reviewed_evidence_paths must include at least three relative local evidence paths",
+    "reviewed_evidence_paths cannot include secret-like paths"
+  ],
+  "non_action_boundary": {
+    "validator_is_decision": false,
+    "validator_authorizes_external_action": false,
+    "blanket_approval_actionable": false,
+    "gate_specific_approval_required_for": [
+      "deploy",
+      "push",
+      "cloud_mutation",
+      "customer_send",
+      "secret_read",
+      "paid_provider_call"
+    ]
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_lane1_hermes_decision_validator -v",
+    "python3 WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+    "python3 -m json.tool data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json > /dev/null"
+  ],
+  "notes": "Local validator for a future Hermes decision artifact only. This contract is not a Hermes decision, not approval, and not a final architecture packet."
+}

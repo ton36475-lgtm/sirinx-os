@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 — thClaws</title>
+  <meta name="theme-color" content="#08090d" />
+  <link rel="icon" type="image/png" href="/assets/logo-line-art.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="/" class="nav__brand">
+      <img src="/assets/logo-line-art.png" alt="" width="32" height="32" class="nav__mark" />
+      <span class="nav__wordmark">thClaws</span>
+    </a>
+    <nav class="nav__links">
+      <a href="/">home</a>
+      <a href="/downloads.html">downloads</a>
+      <a href="https://github.com/thClaws/thClaws" rel="noopener">github ↗</a>
+    </nav>
+  </header>
+
+  <main class="nf">
+    <div class="nf__box">
+      <div class="nf__head">§ &nbsp; signal lost</div>
+      <h1 class="nf__title">404</h1>
+      <p class="nf__lede">that path returned no bytes. fall back to a known good location.</p>
+      <div class="nf__cmd">
+        <span style="color: var(--cyan);">$</span>
+        thclaws --route <span style="color: var(--fg-3);">"<span id="path">/unknown</span>"</span> &nbsp;<span style="color: var(--fg-3);"># resource not found</span>
+      </div>
+      <a class="btn btn--primary" href="/">return home →</a>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('path').textContent = location.pathname || '/unknown';
+  </script>
+  <script data-goatcounter="https://thclaws.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

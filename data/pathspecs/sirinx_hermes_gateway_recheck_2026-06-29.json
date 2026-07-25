@@ -1,0 +1,52 @@
+{
+  "schema": "sirinx.hermes_gateway.recheck.v1",
+  "status": "unreachable",
+  "checked_at": "2026-06-29T06:08:00+07:00",
+  "evidence_boundary": "localhost_read_only",
+  "target": "127.0.0.1:9000",
+  "blocker": {
+    "id": "BLOCK-HERMES-GATEWAY",
+    "status": "open",
+    "reason": "Hermes gateway did not listen on TCP port 9000 and read-only HTTP probes returned connection refused."
+  },
+  "probes": [
+    {
+      "id": "tcp_9000_listen",
+      "command": "lsof -nP -iTCP:9000 -sTCP:LISTEN",
+      "result": "failed",
+      "exit_code": 1,
+      "summary": "No listener reported on TCP port 9000."
+    },
+    {
+      "id": "health",
+      "command": "curl -fsS --max-time 3 -w HTTP_STATUS http://127.0.0.1:9000/health",
+      "result": "failed",
+      "exit_code": 7,
+      "http_status": "000",
+      "summary": "Connection refused."
+    },
+    {
+      "id": "knowledge_status",
+      "command": "curl -fsS --max-time 3 -w HTTP_STATUS http://127.0.0.1:9000/knowledge/status",
+      "result": "failed",
+      "exit_code": 7,
+      "http_status": "000",
+      "summary": "Connection refused."
+    }
+  ],
+  "runtime_queue_execution": false,
+  "provider_call": false,
+  "external_message_send": false,
+  "restart_attempted": false,
+  "decision_record": false,
+  "lane2_authorized": false,
+  "next_safe_action": "Keep file-bus-only evidence and ask Hermes or the operator to start/verify the gateway before claiming live routing.",
+  "non_actions": [
+    "No Hermes restart attempted.",
+    "No runtime queue execution.",
+    "No provider/model call.",
+    "No external message send.",
+    "No LANE_2 authorization.",
+    "No deploy, push, cloud mutation, migration, install, wallet action, live send, or secret read."
+  ]
+}

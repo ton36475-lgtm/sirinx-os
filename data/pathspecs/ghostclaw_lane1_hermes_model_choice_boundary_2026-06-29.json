@@ -1,0 +1,50 @@
+{
+  "schema": "ghostclaw.lane1.hermes_model_choice_boundary.v1",
+  "status": "model_choice_allowed_draft_only",
+  "date": "2026-06-29",
+  "lane": "GHOSTCLAW_LANE_1",
+  "models": "any",
+  "allowed_for_vibe_coding_drafts": true,
+  "allowed_without_gate": [
+    "draft_assistance",
+    "architecture_wording",
+    "local_review_synthesis"
+  ],
+  "decision_record": false,
+  "lane2_authorized": false,
+  "separate_action_gate_required": true,
+  "provider_execution_performed": false,
+  "blocked_actions": {
+    "provider_call": false,
+    "paid_provider_call": false,
+    "secret_read": false,
+    "runtime_queue_execution": false,
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "external_message_send": false,
+    "migration": false,
+    "merge_script_execution": false
+  },
+  "blocked_without_gate": [
+    "provider_call",
+    "paid_provider_call",
+    "secret_read",
+    "runtime_queue_execution",
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "external_message_send",
+    "migration",
+    "merge_script_execution"
+  ],
+  "source_evidence": [
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md",
+    "WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json",
+    "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+    "docs/knowledge/SIRINX_R0_GATE_SPECIFIC_APPROVAL_CONTRACT_2026-06-29.md"
+  ],
+  "next_safe_action": "Hermes may use any model only for draft assistance; a separate validated decision and gate-specific approval are required before any execution action."
+}

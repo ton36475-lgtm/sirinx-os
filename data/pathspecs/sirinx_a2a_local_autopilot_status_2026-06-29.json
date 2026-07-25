@@ -1,0 +1,737 @@
+{
+  "autonomous_local_coordination": true,
+  "autopilot_counts": {
+    "already_done": 6,
+    "auto_acknowledge_local_only": 7,
+    "blocked_requires_gate_specific_approval": 15,
+    "observe_working_local_only": 1
+  },
+  "autopilot_packets": [
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "inbox",
+      "id": "packet_010",
+      "path": "_A2A_QUEUE/inbox/packet_010_creature_viewer.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "inbox",
+      "title": "Build read-only creature viewer scaffold"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "inbox",
+      "id": "packet_011",
+      "path": "_A2A_QUEUE/inbox/packet_011_ghostclaw_lane1_opus_architecture.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "inbox",
+      "title": "Route LANE_1 Opus architecture request through Hermes"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "inbox",
+      "id": "packet_012",
+      "path": "_A2A_QUEUE/inbox/packet_012_ghostclaw_lane1_hermes_draft_review.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "inbox",
+      "title": "Hermes review request for LANE_1 Codex recorder architecture draft"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required",
+        "hermes_decision_missing"
+      ],
+      "deploy": false,
+      "folder": "inbox",
+      "id": "packet_013",
+      "path": "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "inbox",
+      "title": "Hermes gate request to open Codex-as-recorder path for LANE_1 architecture packet"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "inbox",
+      "id": "packet_024_sirinx_hermes_a2a_codex_sync_all_jobs",
+      "path": "_A2A_QUEUE/inbox/packet_024_sirinx_hermes_a2a_codex_sync_all_jobs.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "inbox",
+      "title": "Hermes A2A Codex goal command"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required",
+        "risk_not_safe:critical"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "outbox_4cef7180",
+      "path": "_A2A_QUEUE/outbox/outbox_4cef7180.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "critical",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "codex-sidecar:generic_push:D-a90b09c0"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required",
+        "risk_not_safe:critical"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "outbox_722d9680",
+      "path": "_A2A_QUEUE/outbox/outbox_722d9680.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "critical",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "codex-sidecar:dependency_install:D-3569fa75"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "outbox_76e32cce",
+      "path": "_A2A_QUEUE/outbox/outbox_76e32cce.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "codex-sidecar:file_read:D-545a3cda"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_011_route_receipt",
+      "path": "_A2A_QUEUE/outbox/packet_011_ghostclaw_lane1_hermes_route_receipt.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Hermes local route receipt for LANE_1 Opus architecture request"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_014",
+      "path": "_A2A_QUEUE/outbox/packet_014_codex_hermes_work_report_draft.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Codex/Hermes Telegram-safe work report draft for packet_013 continuation"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_015",
+      "path": "_A2A_QUEUE/outbox/packet_015_ghostclaw_lane1_hermes_decision_draft.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Draft-only Hermes decision aid for LANE_1 packet_013"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_016",
+      "path": "_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Hermes decision intake handoff for LANE_1 packet_013"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_017",
+      "path": "_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Hermes decision preflight audit for LANE_1 packet_013"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_018",
+      "path": "_A2A_QUEUE/outbox/packet_018_ghostclaw_lane1_opus_architecture_packet_gate.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Opus architecture packet gate validator for LANE_1"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_019",
+      "path": "_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "GhostClaw LANE_1 Opus architecture packet authoring bundle"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_020",
+      "path": "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "SIRINX all-chat export source request"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_021",
+      "path": "_A2A_QUEUE/outbox/packet_021_sirinx_a2a_adaptive_sync_control_status.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "A2A adaptive sync control status"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_022",
+      "path": "_A2A_QUEUE/outbox/packet_022_sirinx_a2a_next_safe_action_sequencer.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "A2A next safe action sequencer"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": true,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "approval_required"
+      ],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_023",
+      "path": "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Hermes gateway current recheck"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report",
+        "update_local_status_snapshot"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "auto_acknowledge_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "outbox",
+      "id": "packet_025",
+      "path": "_A2A_QUEUE/outbox/packet_025_sirinx_browser_use_candidate_lane.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "safe packet without approval requirement or risky flags",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "outbox",
+      "title": "Browser Use candidate lane intake for SIRINX/Hermes"
+    },
+    {
+      "agent": "kob",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "observe_working_local_only",
+      "blockers": [],
+      "deploy": false,
+      "folder": "working",
+      "id": "packet_009",
+      "path": "_A2A_QUEUE/working/packet_009_release_captain.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "working packet is observed but not mutated by autopilot",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "working",
+      "title": "Run Release Captain and score readiness"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "already_done",
+      "blockers": [],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_001",
+      "path": "_A2A_QUEUE/done/packet_001_memory_distiller.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "done packet is indexed for audit only",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Memory Distiller on uploaded policy pack"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "already_done",
+      "blockers": [],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_002",
+      "path": "_A2A_QUEUE/done/packet_002_creature_catalog_schema.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "done packet is indexed for audit only",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Generate creature catalog schema"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "already_done",
+      "blockers": [],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_003",
+      "path": "_A2A_QUEUE/done/packet_003_hatch_state_machine.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "done packet is indexed for audit only",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Generate deterministic hatch/evolve state transition spec"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "already_done",
+      "blockers": [],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_004",
+      "path": "_A2A_QUEUE/done/packet_004_metadata_manifest.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "done packet is indexed for audit only",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Generate metadata manifest draft"
+    },
+    {
+      "agent": "opus",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "risk_not_safe:medium"
+      ],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_005",
+      "path": "_A2A_QUEUE/done/packet_005_contract_actions.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "medium",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Draft contract action table without paid randomness"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "blocked_requires_gate_specific_approval",
+      "blockers": [
+        "risk_not_safe:medium"
+      ],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_006",
+      "path": "_A2A_QUEUE/done/packet_006_wallet_flow.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "packet requires a gate-specific approval or missing decision evidence",
+      "risk": "medium",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Draft wallet connection flow using public wallet path"
+    },
+    {
+      "agent": "codex",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "already_done",
+      "blockers": [],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_007",
+      "path": "_A2A_QUEUE/done/packet_007_pause_unpause_tests.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "done packet is indexed for audit only",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Create pause/unpause acceptance tests"
+    },
+    {
+      "agent": "hermes",
+      "allowed_operations": [
+        "read_packet",
+        "write_local_report"
+      ],
+      "approval_required": false,
+      "autopilot_decision": "already_done",
+      "blockers": [],
+      "deploy": false,
+      "folder": "done",
+      "id": "packet_008",
+      "path": "_A2A_QUEUE/done/packet_008_security_sentinel_waxwing.json",
+      "provider_call": false,
+      "push": false,
+      "reason": "done packet is indexed for audit only",
+      "risk": "safe",
+      "runtime_queue_execution": false,
+      "secret_read": false,
+      "status": "done",
+      "title": "Run Security Sentinel for waxwing exposure"
+    }
+  ],
+  "blocked_actions": {
+    "cloud_mutation": false,
+    "customer_send": false,
+    "deploy": false,
+    "external_message_send": false,
+    "install": false,
+    "merge_script_execution": false,
+    "migration": false,
+    "paid_provider_call": false,
+    "push": false,
+    "runtime_queue_execution": false,
+    "secret_read": false,
+    "telegram_live_send": false
+  },
+  "claims_all_chats_read": false,
+  "claims_goal_complete": false,
+  "cloud_mutation": false,
+  "current_actionable_packet": "packet_013",
+  "current_actionable_packet_folder": "inbox",
+  "customer_send": false,
+  "deploy": false,
+  "evidence_boundary": "local_file_bus_only",
+  "execution_mode": "safe_local_autopilot",
+  "generated_at": "2026-06-29",
+  "install": false,
+  "license_file_mutation": false,
+  "merge_script_execution": false,
+  "migration": false,
+  "next_safe_action": "Use safe local autopilot for queue visibility, local acknowledgements, and report generation only; create a gate-specific approval packet before any external or runtime action.",
+  "notes": "Autopilot does not move queue files, execute Hermes runtime packets, call providers, read secrets, send messages, deploy, push, install, migrate, run merge scripts, or mutate license files.",
+  "packet_counts": {
+    "blocked": 0,
+    "done": 8,
+    "inbox": 5,
+    "outbox": 27,
+    "total": 41,
+    "working": 1
+  },
+  "paid_provider_call": false,
+  "provider_call": false,
+  "push": false,
+  "queue_file_mutation": false,
+  "queue_root": "_A2A_QUEUE",
+  "runtime_queue_execution": false,
+  "schema": "sirinx.a2a.local_autopilot_status.v1",
+  "secret_read": false,
+  "status": "local_autopilot_ready",
+  "telegram_live_send": false
+}

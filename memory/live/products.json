@@ -1,0 +1,21 @@
+[
+  {
+    "id": "38d17668-dae7-4384-9485-2411fbddd949",
+    "sku": "TEST-SEED-001",
+    "title_th": "ผลิตภัญญาสติ๊กเกอร์ทดสอบ",
+    "description_th": "ผลิตภัญญาสติ๊กเกอร์ทดสอบสำหรับการตรวจสอบการทำงานของระบบอัตโนมัติ",
+    "price_base": 150,
+    "price_thaimart": 145.5,
+    "stock_sirinx": 100,
+    "stock_thaimart": 100,
+    "category_id": "STICKERS",
+    "design_tokens": {
+      "DESIGN_VARIANCE": 7,
+      "MOTION_INTENSITY": 4,
+      "VISUAL_DENSITY": 6
+    },
+    "sync_status": "PENDING_GATE",
+    "created_at": "2026-07-08T18:48:22.518Z",
+    "updated_at": "2026-07-08T18:48:22.523Z"
+  }
+]

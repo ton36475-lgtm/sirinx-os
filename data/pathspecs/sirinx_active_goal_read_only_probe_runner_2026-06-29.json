@@ -1,0 +1,49 @@
+{
+  "schema": "sirinx.active_goal.read_only_probe_runner.v1",
+  "status": "runner_ready_local_only",
+  "generated_at": "2026-06-29",
+  "local_read_only": true,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "clears_blockers": false,
+  "script": "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+  "latest_report": "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+  "doc": "docs/knowledge/SIRINX_ACTIVE_GOAL_READ_ONLY_PROBE_RUNNER_2026-06-29.md",
+  "probe_scope": [
+    "filename-only scan for ghostclaw_repo_merge_kit_v3_3.zip",
+    "filename-only scan for ChatGPT export candidates",
+    "TCP connect probe for Hermes gateway on 127.0.0.1:9000"
+  ],
+  "default_roots": [
+    "/Users/sirinx/Downloads",
+    "/Users/sirinx/sirinx-os",
+    "/Users/sirinx/project-hermes"
+  ],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false,
+    "wallet_action": false,
+    "live_send": false
+  },
+  "current_probe_summary": {
+    "exact_v3_3_artifact_found": false,
+    "chat_export_candidate_found": false,
+    "hermes_gateway_available": false,
+    "hermes_gateway_error": "ConnectionRefusedError"
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_read_only_probe_runner -v",
+    "python3 WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py --output WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+    "python3 -m json.tool data/pathspecs/sirinx_active_goal_read_only_probe_runner_2026-06-29.json > /dev/null",
+    "python3 -m json.tool WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json > /dev/null"
+  ],
+  "notes": "This runner makes repeated blocker probes reproducible. It is not a blocker clearance packet, not a Hermes decision, not a completion claim, and not approval for external actions."
+}

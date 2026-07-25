@@ -1,0 +1,72 @@
+{
+  "schema": "sirinx.all_chat_export.request_packet.v1",
+  "status": "request_packet_ready_no_export_loaded",
+  "generated_at": "2026-06-29",
+  "mode": "local_file_bus_outbox_only",
+  "evidence_boundary": "no_export_loaded",
+  "blocker": "BLOCK-CHAT-EXPORT",
+  "next_outbox_packet": "packet_020",
+  "claims_all_chats_read": false,
+  "raw_chat_content_stored": false,
+  "real_export_loaded": false,
+  "connector_read_performed": false,
+  "external_upload": false,
+  "provider_call": false,
+  "paid_provider_call": false,
+  "runtime_queue_execution": false,
+  "required_operator_input": "chatgpt_export_or_connector_backed_source",
+  "allowed_input_sources": [
+    "operator_supplied_chatgpt_export",
+    "explicit_read_only_connector_source"
+  ],
+  "required_receipt_fields": [
+    "source_kind",
+    "local_path_or_connector_scope",
+    "operator_supplied",
+    "read_only",
+    "source_hash_or_query_id",
+    "redaction_confirmed",
+    "raw_chat_content_stored",
+    "claims_all_chats_read",
+    "permission",
+    "freshness",
+    "confidence"
+  ],
+  "evidence_paths": [
+    "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+    "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_CONTRACT_2026-06-29.md",
+    "data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json",
+    "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_MAPPER_2026-06-29.md",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_REQUIREMENTS_MATRIX_2026-06-29.md",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_SOURCE_FILE_RECEIPT_2026-06-29.md",
+    "docs/knowledge/SIRINX_CODEX_HERMES_EXECUTION_QUEUE_2026-06-29.md"
+  ],
+  "allowed_actions": [
+    "request_operator_supplied_source",
+    "record_source_receipt_metadata",
+    "run_metadata_only_mapper_after_source_exists",
+    "update_status_docs",
+    "run_local_tests"
+  ],
+  "forbidden_actions": [
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "customer_send",
+    "secret_read",
+    "paid_provider_call",
+    "provider_call",
+    "runtime_queue_execution",
+    "external_upload",
+    "connector_read_performed",
+    "raw_chat_content_stored",
+    "claims_all_chats_read",
+    "telegram_live_send",
+    "external_message_send",
+    "merge_script_execution",
+    "install",
+    "migration"
+  ],
+  "next_safe_action": "Operator provides a local ChatGPT export path or explicitly authorized read-only connector scope; Codex then records receipt metadata before running the metadata-only mapper.",
+  "notes": "This request packet asks for the missing all-chat source. It does not import a source, read connector data, store raw chat content, or prove all chats were read."
+}

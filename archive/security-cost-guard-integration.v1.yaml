@@ -1,0 +1,106 @@
+# Security Cost Guard Integration v1
+# Maps Cybersecurity Skills to GhostClaw Tier System for cost-efficient agent work
+
+schema: ghostclaw.security_cost_guard.v1
+mode: fail_closed_guarded_execution
+metadata:
+  version: "1.0.0"
+  effective_date: "2026-07-19"
+  source: "anthropic-cybersecurity-skills integration"
+  parent_policy: "action-tier-cap.yaml"
+
+# Cost guard per security domain
+security_domain_cost_multipliers:
+  # Tier A - Read-only security analysis (auto-approve, low cost)
+  digital-forensics: 1.0
+  threat-intelligence: 1.5
+  compliance-governance: 1.0
+  
+  # Tier B - Defensive security (controlled cost)
+  container-security: 2.0
+  endpoint-security: 2.0
+  cloud-security: 2.5
+  api-security: 2.0
+  devsecops: 2.0
+  
+  # Tier C - Network/system analysis (quorum required)
+  network-security: 3.0
+  security-operations: 3.0
+  web-application-security: 3.0
+  
+  # Tier D - Red team/offensive (human approval required)
+  red-teaming: 5.0
+  penetration-testing: 5.0
+  malware-analysis: 4.0
+
+# Agent cost budget per hour (tokens)
+agent_budgets:
+  hermes_commander: unlimited  # routing only
+  opus_architect: 50000
+  codex_builder: 100000
+  glm_worker: 75000
+  deepseek_worker: 75000
+  kob_validator: 50000
+
+# Skill routing map
+skill_routing:
+  ai-security:
+    target_lane: codex
+    tier: B
+    max_tokens: 50000
+    description: "AI/ML adversarial defense - prompt injection, MCP security"
+    
+  mobile-security:
+    target_lane: codex
+    tier: B
+    max_tokens: 40000
+    description: "Android/iOS security - static analysis, dynamic testing"
+    
+  threat-hunting:
+    target_lane: codex
+    tier: B
+    max_tokens: 60000
+    description: "Hypothesis-driven hunting - EVTX, LOTL detection"
+
+# Guardrails for cost-efficient execution
+guardrails:
+  - max_tokens_per_skill: 50000
+  - max_concurrent_agents: 4
+  - cost_guard_enabled: true
+  - dry_run_first: true
+  - evidence_required: true
+  - receipt_required: true
+
+# Forbidden patterns in security work
+forbidden_patterns:
+  - "download from anywhere"  # must use allowlisted sources only
+  - "automatic extraction into EASYROMS"  # blocked by policy
+  - "raw-disk subprocess"  # blocked
+  - "arbitrary shell endpoint"  # blocked
+  - "embedded secret"  # blocked
+
+# Allowed security tools (Termux/macOS compatible)
+allowed_tools:
+  - volatility3  # memory forensics
+  - sigma-rules  # SIEM detection
+  - yara         # malware scanning
+  - nmap         # network discovery (dry-run)
+  - burpsuite    # mobile proxy (manual review)
+
+# Security workflow hooks
+workflow_hooks:
+  pre_validation:
+    - "security scan for hidden eval/exec"
+    - "license gate check"
+    - "cost estimate calculation"
+    
+  post_execution:
+    - "receipt write to .ghostclaw_runtime/a2a2a/receipts/"
+    - "findings summarize to vault/missions/"
+
+# Integration status
+integration_status:
+  source_repo: "mukul975/Anthropic-Cybersecurity-Skills"
+  clone_path: "security/anthropic-cybersecurity-skills"
+  status: "analyzed_ready_for_integration"
+  domains_ready: ["ai-security", "mobile-security"]

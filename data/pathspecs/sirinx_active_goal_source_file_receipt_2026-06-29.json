@@ -1,0 +1,132 @@
+{
+  "schema": "sirinx.active_goal.source_file_receipt.v1",
+  "status": "current_local_scan_partial",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "local_evidence_only",
+  "claims_all_files_read": false,
+  "claims_all_chats_read": false,
+  "external_action_authorized": false,
+  "scan_roots": [
+    "/Users/sirinx/sirinx-os",
+    "/Users/sirinx/Downloads",
+    "/Users/sirinx/project-hermes"
+  ],
+  "scan_command": "find /Users/sirinx/sirinx-os /Users/sirinx/Downloads /Users/sirinx/project-hermes -maxdepth 5 -name <user-named-source>",
+  "source_file_receipts": [
+    {
+      "id": "backend-router-routers",
+      "expected_name": "routers.ts",
+      "category": "backend_router",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact source file or merge kit before claiming code review or patch readiness."
+    },
+    {
+      "id": "backend-router-agentic",
+      "expected_name": "agentic.ts",
+      "category": "backend_router",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact source file or merge kit before applying zod import or router integration fixes."
+    },
+    {
+      "id": "database-layer-schema",
+      "expected_name": "schema.ts",
+      "category": "database_layer",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact schema file or merge kit before creating migration or seed work."
+    },
+    {
+      "id": "database-layer-db",
+      "expected_name": "db.ts",
+      "category": "database_layer",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact db file or merge kit before patching lazy DB initialization."
+    },
+    {
+      "id": "llm-risk-analysis",
+      "expected_name": "llmAnalysis.ts",
+      "category": "llm_risk_analysis",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact analysis file or merge kit before wiring analyzer procedures into routers."
+    },
+    {
+      "id": "dashboard-spec-pdf",
+      "expected_name": "Master_Agentic_OS_Dashboard.pdf",
+      "category": "dashboard_spec",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact PDF path before doing a PDF-level dashboard spec review."
+    },
+    {
+      "id": "skill-pack",
+      "expected_name": "SKILL (3).md",
+      "category": "skill_pack",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact skill pack file before treating GhostClaw skill details as current local source."
+    },
+    {
+      "id": "todo",
+      "expected_name": "todo.md",
+      "category": "todo",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "unverified_current_file_missing",
+      "next_safe_action": "Wait for exact TODO file before reconciling backend/frontend done states against current source."
+    },
+    {
+      "id": "ghostclaw-merge-kit",
+      "expected_name": "ghostclaw_repo_merge_kit_v3_3.zip",
+      "category": "merge_kit",
+      "current_local_status": "not_found_in_current_local_scan",
+      "local_paths": [],
+      "evidence_authority": "user_message_summary_only",
+      "current_verdict": "blocked_exact_artifact_missing",
+      "next_safe_action": "Place or point to the exact zip, then run metadata-only artifact gate validation before any merge script."
+    },
+    {
+      "id": "hermes-codex-a2a-godmode-html",
+      "expected_name": "project_hermes_codex_a2a_godmode_integration_v3 (1).html",
+      "category": "html_spec",
+      "current_local_status": "found_equivalent_name_read_local_only",
+      "local_paths": [
+        "/Users/sirinx/Downloads/hermes_codex_a2a_godmode_integration_v3/project_hermes_codex_a2a_godmode_integration_v3.html"
+      ],
+      "evidence_authority": "current_local_file",
+      "current_verdict": "topology_source_read_not_v3_3_merge_kit",
+      "next_safe_action": "Use as topology and No-Ask boundary evidence only; it does not clear the v3.3 artifact gate."
+    }
+  ],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false
+  },
+  "notes": "This receipt maps the user-named source files to current local evidence. It is not an all-files-read claim, not an all-chat import, and not merge approval."
+}

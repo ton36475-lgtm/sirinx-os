@@ -1,0 +1,72 @@
+{
+  "schema": "sirinx.active_goal.blocker_clearance_validator.v1",
+  "status": "validator_not_clearance",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "local_evidence_only",
+  "clearance_packet_record": false,
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "validator_script": "WORKSPACE_SCAFFOLD/scripts/validate_active_goal_blocker_clearance.py",
+  "template": "WORKSPACE_SCAFFOLD/templates/active_goal_blocker_clearance_packet.template.json",
+  "active_packet_path": "docs/knowledge/SIRINX_ACTIVE_GOAL_BLOCKER_CLEARANCE_PACKET.md",
+  "allowed_blocker_ids": [
+    "BLOCK-CHAT-EXPORT",
+    "BLOCK-LANE1-OPUS-PACKET",
+    "BLOCK-HERMES-GATEWAY",
+    "BLOCK-V3-3-ARTIFACT",
+    "BLOCK-R0-APPROVALS"
+  ],
+  "required_packet_fields": [
+    "schema",
+    "status",
+    "clearance_packet_record",
+    "blocker_id",
+    "clearance_scope",
+    "claims_goal_complete",
+    "claims_all_chats_read",
+    "operator_review_complete",
+    "evidence_paths",
+    "blocked_actions"
+  ],
+  "required_evidence_by_blocker": {
+    "BLOCK-CHAT-EXPORT": [
+      "sirinx.all_chat_export.intake_map.v1 JSON",
+      "real_export_loaded=true",
+      "raw_chat_content_stored=false",
+      "records non-empty"
+    ],
+    "BLOCK-LANE1-OPUS-PACKET": [
+      "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md",
+      "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md"
+    ],
+    "BLOCK-HERMES-GATEWAY": [
+      "read-only gateway evidence with hermes_gateway_available=true"
+    ],
+    "BLOCK-V3-3-ARTIFACT": [
+      "exact ghostclaw_repo_merge_kit_v3_3.zip",
+      "bundled policy test pass evidence"
+    ],
+    "BLOCK-R0-APPROVALS": [
+      "valid single-gate SIRINX_R0_GATE_APPROVAL_PACKET"
+    ]
+  },
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_active_goal_blocker_clearance_validator -v",
+    "python3 -m json.tool data/pathspecs/sirinx_active_goal_blocker_clearance_validator_2026-06-29.json > /dev/null",
+    "python3 -m json.tool WORKSPACE_SCAFFOLD/templates/active_goal_blocker_clearance_packet.template.json > /dev/null",
+    "git diff --check"
+  ],
+  "notes": "This validator can classify one proposed blocker clearance packet as clearable or blocked. It does not clear blockers, mark the goal complete, or authorize external actions."
+}

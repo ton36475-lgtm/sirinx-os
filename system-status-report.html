@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SIRINX OS System Structure & Status Report</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true, theme:'dark'});</script>
+<style>
+  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#0d1117;color:#e6edf3;margin:0;padding:24px;line-height:1.5}
+  h1{color:#58a6ff;border-bottom:1px solid #30363d;padding-bottom:8px}
+  h2{color:#7ee787;margin-top:32px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px}
+  .card h3{margin:0 0 6px;font-size:14px;color:#58a6ff}
+  .card .big{font-size:22px;font-weight:700}
+  .crit{color:#ff7b72}.warn{color:#d29922}.ok{color:#7ee787}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+  th,td{border:1px solid #30363d;padding:8px;text-align:left}
+  th{background:#161b22;color:#58a6ff}
+  tr:nth-child(even){background:#11161d}
+  .mermaid{background:#010409;border:1px solid #30363d;border-radius:8px;padding:16px;margin-top:12px}
+  .note{background:#161b22;border-left:4px solid #d29922;padding:12px;margin-top:16px;border-radius:4px}
+  pre{background:#010409;border:1px solid #30363d;border-radius:8px;padding:16px;overflow:auto;max-height:420px;font-size:12px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700}
+  .b-crit{background:#ff7b7222;color:#ff7b72}.b-ok{background:#7ee78722;color:#7ee787}.b-warn{background:#d2992222;color:#d29922}
+</style>
+</head>
+<body>
+<h1>📋 SIRINX OS — รายงานโครงสร้างและสถานะระบบ</h1>
+<p><b>Generated:</b> 2026-07-21T04:13:47+07:00 &nbsp;|&nbsp; <b>Method:</b> read-only snapshot &nbsp;|&nbsp; <b>Profile:</b> solis</p>
+<p><span class="badge b-warn">SOURCE = LIVE MEASUREMENT</span> ไม่ใช่ PROJECT_STATE.md (ล้าสมัย/ขัดแย้ง)</p>
+
+<h2>1. แผนผังโครงสร้างระบบ (Mermaid)</h2>
+<div class="mermaid">
+flowchart TB
+    HOST["🖥️ Mac mini M2 — macOS 26.5.2<br/>Disk 95% ⚠️ 11GB free"]
+    subgraph ORCH["Orchestration Layer"]
+        HER["Hermes Agent<br/>(solis profile) PID 2620/2630/2705"]
+        CODEX["Codex CLI 0.144.6<br/>(ChatGPT.app host)"]
+    end
+    subgraph CRON["Cron Automation — 10 jobs ALL PAUSED ⚠️"]
+        direction TB
+        C1["loop-engineering-v4 · 5m"]
+        C2["disk-health-v4 · 10m"]
+        C3["health-check-v4 · 15m"]
+        C4["self-evolution-v4 · 30m"]
+        C5["full-auto-loop-tier-cd · 3m"]
+        C6["agent-dispatch-loop · 7m"]
+        C7["agent-collect-brainstorm · 20m"]
+        C8["frontier-model-generator · 12m"]
+        C9["qa-gate-v1 · 30m"]
+        C10["daily-report-v4 · 08:00"]
+    end
+    subgraph SVC["Services / Apps"]
+        DCAPI["dev-control-api :8711"]
+        SKILLS["skills-api :3800"]
+        DASH["dev-dashboard<br/>(apps/dev-dashboard)"]
+    end
+    subgraph MESH["Agent Mesh (47 Ronin)"]
+        GC["GHOSTCLAW agents"]
+        OM["Omniroute A2A gateway"]
+        A2A["_A2A_QUEUE"]
+    end
+    subgraph STORE["Storage"]
+        HM["~/.hermes 9.9GB ⚠️"]
+        NPM["~/.npm 3.3GB"]
+        CDX["~/.codex/sessions 38MB"]
+        TGT["target/ 378MB"]
+        GIT[".git/ 63MB"]
+    end
+    subgraph GITW["Git Working Tree<br/>migration/v5-rebase"]
+        MOD["35 modified"]
+        UNT["64 untracked"]
+        SUB["integrations/cynative ⚠️<br/>submodule err"]
+    end
+    HOST --- ORCH
+    ORCH --- CRON
+    ORCH --- MESH
+    HOST --- STORE
+    HOST --- GITW
+    HER --> CRON
+    HER --> SVC
+    MESH --> OM --> A2A
+    DCAPI --> HER
+    CRON -.->|error| STOP["⛔ all paused"]
+    GITW --- MOD & UNT & SUB
+</div>
+
+<h2>2. สรุปสถานะหลัก</h2>
+<div class="grid">
+  <div class="card"><h3>Disk</h3><div class="big crit">95%</div><div>191/228 GiB · เหลือ 11GiB ⚠️</div></div>
+  <div class="card"><h3>Cron Jobs</h3><div class="big crit">0/10</div><div>ทำงาน · ทุกตัว paused(error)</div></div>
+  <div class="card"><h3>Working Tree</h3><div class="big warn">99</div><div>35 modified + 64 untracked</div></div>
+  <div class="card"><h3>Host</h3><div class="big ok">M2</div><div>macOS 26.5.2 · uptime 8.9h</div></div>
+</div>
+
+<h2>3. Cron Automation (10 jobs — หยุดหมด)</h2>
+<table>
+<tr><th>Job</th><th>Schedule</th><th>State</th><th>Last Status</th><th>Last Run</th></tr>
+<tr><td>loop-engineering-v4</td><td>every 5m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T01:08:45+07:00</td></tr>
+<tr><td>disk-health-v4</td><td>every 10m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T01:05:42+07:00</td></tr>
+<tr><td>health-check-v4</td><td>every 15m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T01:00:42+07:00</td></tr>
+<tr><td>self-evolution-v4</td><td>every 30m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T00:43:40+07:00</td></tr>
+<tr><td>daily-report-v4</td><td>0 8 * * *</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-20T08:00:29+07:00</td></tr>
+<tr><td>agent-dispatch-loop</td><td>every 7m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T01:09:44+07:00</td></tr>
+<tr><td>agent-collect-brainstorm</td><td>every 20m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T00:53:41+07:00</td></tr>
+<tr><td>full-auto-loop-tier-cd</td><td>every 3m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-20T23:04:24+07:00</td></tr>
+<tr><td>frontier-model-generator</td><td>every 12m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>2026-07-18T01:09:45+07:00</td></tr>
+<tr><td>qa-gate-v1</td><td>every 30m</td><td><span class='badge b-crit'>paused</span></td><td>error</td><td>never (paused 2026-07-21T03:59:39+07:00)</td></tr>
+</table>
+
+<h2>4. ความขัดแย้งเอกสาร (Documentation Drift)</h2>
+<table>
+<tr><th>Field</th><th>PROJECT_STATE.md อ้าง</th><th>วัดสดได้</th><th>Match</th></tr>
+<tr><td>Disk usage</td><td>53% (11GB free)</td><td>95% (11GB free)</td><td><span class='badge b-crit'>MISMATCH</span></td></tr>
+<tr><td>Cron jobs</td><td>9 active</td><td>0 active (10 paused/error)</td><td><span class='badge b-crit'>MISMATCH</span></td></tr>
+<tr><td>Load average</td><td>4.14</td><td>1.89</td><td><span class='badge b-ok'>OK</span></td></tr>
+<tr><td>Services running</td><td>Skills API :3800 + Dev API :8711 RUNNING</td><td>not confirmable from ps</td><td><span class='badge b-warn'>?</span></td></tr>
+</table>
+
+<h2>5. คำเตือนสำหรับทีมวิเคราะห์</h2>
+<div class="note">
+<ul>
+<li>DISK 95% — root cause of likely automation write failures</li>
+<li>ALL 10 cron jobs paused with error status since ~2026-07-18</li>
+<li>WORKING TREE DIRTY (35 modified + 64 untracked) — NEVER run git reset --hard (would wipe uncommitted work)</li>
+<li>PROJECT_STATE.md is stale/contradictory — use this live report instead</li>
+<li>Submodule mapping error for integrations/cynative may cause false dirty state</li>
+</ul>
+</div>
+
+<h2>6. ข้อมูลโครงสร้างฉบับเต็ม (JSON)</h2>
+<p>ฝังไว้ในหน้านี้ด้วย (ดู source) และมีไฟล์ <code>system-status-report.json</code> แยก:</p>
+<pre id="json">{
+  "report_meta": {
+    "title": "SIRINX OS System Structure & Status Report",
+    "generated_at": "2026-07-21T04:13:47+07:00",
+    "method": "read-only snapshot (git status, df, ps, cron list)",
+    "reporter_profile": "solis (Hermes Agent)",
+    "source_of_truth": "live measurements — NOT PROJECT_STATE.md (which is stale/contradictory)",
+    "caveat": "single snapshot, not time-series"
+  },
+  "host": {
+    "machine": "MacminiSirinx.local",
+    "os": "macOS 26.5.2 (Darwin 25.5.0, arm64, Apple M2 T8112)",
+    "uptime_hours": 8.93,
+    "load_average": [
+      1.89,
+      1.88,
+      2.25
+    ],
+    "users": 5,
+    "toolchain": {
+      "python": "3.12.13",
+      "node": "v26.0.0",
+      "codex_cli": "0.144.6",
+      "homebrew_python": "/opt/homebrew/bin/python3.12"
+    }
+  },
+  "disk": {
+    "filesystem": "/dev/disk3s5",
+    "total_gib": 228,
+    "used_gib": 191,
+    "free_gib": 11,
+    "used_pct": 95,
+    "status": "CRITICAL",
+    "outside_repo_usage": {
+      "~/.hermes": "9.9 GB",
+      "~/.npm": "3.3 GB",
+      "~/.local/share": "363 MB",
+      "~/.codex/sessions": "38 MB"
+    },
+    "in_repo_usage": {
+      "target/": "378 MB",
+      ".git/": "63 MB",
+      "pnpm-lock.yaml": "340 KB"
+    }
+  },
+  "git": {
+    "branch": "migration/v5-rebase",
+    "remote": "https://github.com/ton36475-lgtm/sirinx-os.git",
+    "up_to_date_with_origin": true,
+    "working_tree": {
+      "modified": 35,
+      "untracked": 64,
+      "submodule_dirty": 0
+    },
+    "stash": "empty",
+    "submodule_error": "no submodule mapping found for path 'integrations/cynative'",
+    "last_commits": [
+      "b55f81e auto: automation loop checkpoint 1784286983",
+      "3cb9df0 auto: automation loop checkpoint 1784286692",
+      "9ed4f6b feat(cron): Frontier Model Evolution Routing + A2A2A Dispatch Working"
+    ]
+  },
+  "cron_jobs": [
+    {
+      "name": "loop-engineering-v4",
+      "schedule": "every 5m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:08:45+07:00"
+    },
+    {
+      "name": "disk-health-v4",
+      "schedule": "every 10m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:05:42+07:00"
+    },
+    {
+      "name": "health-check-v4",
+      "schedule": "every 15m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:00:42+07:00"
+    },
+    {
+      "name": "self-evolution-v4",
+      "schedule": "every 30m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T00:43:40+07:00"
+    },
+    {
+      "name": "daily-report-v4",
+      "schedule": "0 8 * * *",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-20T08:00:29+07:00"
+    },
+    {
+      "name": "agent-dispatch-loop",
+      "schedule": "every 7m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:09:44+07:00"
+    },
+    {
+      "name": "agent-collect-brainstorm",
+      "schedule": "every 20m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T00:53:41+07:00"
+    },
+    {
+      "name": "full-auto-loop-tier-cd",
+      "schedule": "every 3m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-20T23:04:24+07:00"
+    },
+    {
+      "name": "frontier-model-generator",
+      "schedule": "every 12m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:09:45+07:00"
+    },
+    {
+      "name": "qa-gate-v1",
+      "schedule": "every 30m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "never (paused 2026-07-21T03:59:39+07:00)"
+    }
+  ],
+  "processes_observed": {
+    "hermes": [
+      "PID 2620 hermes --profile",
+      "PID 2630 hermes_cli.main",
+      "PID 2705 hermes_cli.main"
+    ],
+    "codex": [
+      "ChatGPT.app Codex Framework renderer",
+      "codex-code-mode-host",
+      "Codex Computer Use service"
+    ],
+    "mcp_servers": "multiple node ./mcp/server.{mjs,cjs} + TypeScript/Pyright LSP",
+    "dev_control_api": "not confirmed in ps snapshot",
+    "skills_api": "not confirmed in ps snapshot"
+  },
+  "documentation_drift": [
+    {
+      "field": "Disk usage",
+      "project_state_md_claims": "53% (11GB free)",
+      "measured": "95% (11GB free)",
+      "match": false
+    },
+    {
+      "field": "Cron jobs",
+      "project_state_md_claims": "9 active",
+      "measured": "0 active (10 paused/error)",
+      "match": false
+    },
+    {
+      "field": "Load average",
+      "project_state_md_claims": "4.14",
+      "measured": "1.89",
+      "match": true
+    },
+    {
+      "field": "Services running",
+      "project_state_md_claims": "Skills API :3800 + Dev API :8711 RUNNING",
+      "measured": "not confirmable from ps",
+      "match": null
+    }
+  ],
+  "warnings": [
+    "DISK 95% — root cause of likely automation write failures",
+    "ALL 10 cron jobs paused with error status since ~2026-07-18",
+    "WORKING TREE DIRTY (35 modified + 64 untracked) — NEVER run git reset --hard (would wipe uncommitted work)",
+    "PROJECT_STATE.md is stale/contradictory — use this live report instead",
+    "Submodule mapping error for integrations/cynative may cause false dirty state"
+  ]
+}</pre>
+
+<script id="report-data" type="application/json">{
+  "report_meta": {
+    "title": "SIRINX OS System Structure & Status Report",
+    "generated_at": "2026-07-21T04:13:47+07:00",
+    "method": "read-only snapshot (git status, df, ps, cron list)",
+    "reporter_profile": "solis (Hermes Agent)",
+    "source_of_truth": "live measurements — NOT PROJECT_STATE.md (which is stale/contradictory)",
+    "caveat": "single snapshot, not time-series"
+  },
+  "host": {
+    "machine": "MacminiSirinx.local",
+    "os": "macOS 26.5.2 (Darwin 25.5.0, arm64, Apple M2 T8112)",
+    "uptime_hours": 8.93,
+    "load_average": [
+      1.89,
+      1.88,
+      2.25
+    ],
+    "users": 5,
+    "toolchain": {
+      "python": "3.12.13",
+      "node": "v26.0.0",
+      "codex_cli": "0.144.6",
+      "homebrew_python": "/opt/homebrew/bin/python3.12"
+    }
+  },
+  "disk": {
+    "filesystem": "/dev/disk3s5",
+    "total_gib": 228,
+    "used_gib": 191,
+    "free_gib": 11,
+    "used_pct": 95,
+    "status": "CRITICAL",
+    "outside_repo_usage": {
+      "~/.hermes": "9.9 GB",
+      "~/.npm": "3.3 GB",
+      "~/.local/share": "363 MB",
+      "~/.codex/sessions": "38 MB"
+    },
+    "in_repo_usage": {
+      "target/": "378 MB",
+      ".git/": "63 MB",
+      "pnpm-lock.yaml": "340 KB"
+    }
+  },
+  "git": {
+    "branch": "migration/v5-rebase",
+    "remote": "https://github.com/ton36475-lgtm/sirinx-os.git",
+    "up_to_date_with_origin": true,
+    "working_tree": {
+      "modified": 35,
+      "untracked": 64,
+      "submodule_dirty": 0
+    },
+    "stash": "empty",
+    "submodule_error": "no submodule mapping found for path 'integrations/cynative'",
+    "last_commits": [
+      "b55f81e auto: automation loop checkpoint 1784286983",
+      "3cb9df0 auto: automation loop checkpoint 1784286692",
+      "9ed4f6b feat(cron): Frontier Model Evolution Routing + A2A2A Dispatch Working"
+    ]
+  },
+  "cron_jobs": [
+    {
+      "name": "loop-engineering-v4",
+      "schedule": "every 5m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:08:45+07:00"
+    },
+    {
+      "name": "disk-health-v4",
+      "schedule": "every 10m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:05:42+07:00"
+    },
+    {
+      "name": "health-check-v4",
+      "schedule": "every 15m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:00:42+07:00"
+    },
+    {
+      "name": "self-evolution-v4",
+      "schedule": "every 30m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T00:43:40+07:00"
+    },
+    {
+      "name": "daily-report-v4",
+      "schedule": "0 8 * * *",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-20T08:00:29+07:00"
+    },
+    {
+      "name": "agent-dispatch-loop",
+      "schedule": "every 7m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:09:44+07:00"
+    },
+    {
+      "name": "agent-collect-brainstorm",
+      "schedule": "every 20m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T00:53:41+07:00"
+    },
+    {
+      "name": "full-auto-loop-tier-cd",
+      "schedule": "every 3m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-20T23:04:24+07:00"
+    },
+    {
+      "name": "frontier-model-generator",
+      "schedule": "every 12m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "2026-07-18T01:09:45+07:00"
+    },
+    {
+      "name": "qa-gate-v1",
+      "schedule": "every 30m",
+      "state": "paused",
+      "last_status": "error",
+      "last_run": "never (paused 2026-07-21T03:59:39+07:00)"
+    }
+  ],
+  "processes_observed": {
+    "hermes": [
+      "PID 2620 hermes --profile",
+      "PID 2630 hermes_cli.main",
+      "PID 2705 hermes_cli.main"
+    ],
+    "codex": [
+      "ChatGPT.app Codex Framework renderer",
+      "codex-code-mode-host",
+      "Codex Computer Use service"
+    ],
+    "mcp_servers": "multiple node ./mcp/server.{mjs,cjs} + TypeScript/Pyright LSP",
+    "dev_control_api": "not confirmed in ps snapshot",
+    "skills_api": "not confirmed in ps snapshot"
+  },
+  "documentation_drift": [
+    {
+      "field": "Disk usage",
+      "project_state_md_claims": "53% (11GB free)",
+      "measured": "95% (11GB free)",
+      "match": false
+    },
+    {
+      "field": "Cron jobs",
+      "project_state_md_claims": "9 active",
+      "measured": "0 active (10 paused/error)",
+      "match": false
+    },
+    {
+      "field": "Load average",
+      "project_state_md_claims": "4.14",
+      "measured": "1.89",
+      "match": true
+    },
+    {
+      "field": "Services running",
+      "project_state_md_claims": "Skills API :3800 + Dev API :8711 RUNNING",
+      "measured": "not confirmable from ps",
+      "match": null
+    }
+  ],
+  "warnings": [
+    "DISK 95% — root cause of likely automation write failures",
+    "ALL 10 cron jobs paused with error status since ~2026-07-18",
+    "WORKING TREE DIRTY (35 modified + 64 untracked) — NEVER run git reset --hard (would wipe uncommitted work)",
+    "PROJECT_STATE.md is stale/contradictory — use this live report instead",
+    "Submodule mapping error for integrations/cynative may cause false dirty state"
+  ]
+}</script>
+</body>
+</html>

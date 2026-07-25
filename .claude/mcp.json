@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "sirinx-files": {
-      "command": "/Users/sirinx/sirinx-os/scripts/mcp-sirinx-files.sh",
-      "args": []
-    }
-  }
-}

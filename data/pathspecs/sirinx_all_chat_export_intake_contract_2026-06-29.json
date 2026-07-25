@@ -1,0 +1,113 @@
+{
+  "schema": "sirinx.all_chat_export.intake_contract.v1",
+  "status": "waiting_for_export",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "no_export_loaded",
+  "claims_all_chats_read": false,
+  "raw_chat_content_stored": false,
+  "next_safe_action": "Operator provides ChatGPT export or connector-backed source",
+  "allowed_input_sources": [
+    "chatgpt_export",
+    "connector_backed_source"
+  ],
+  "source_requirements": {
+    "chatgpt_export": [
+      "local_path",
+      "export_timestamp",
+      "hash",
+      "operator_supplied"
+    ],
+    "connector_backed_source": [
+      "connector_name",
+      "query_scope",
+      "operator_authorized",
+      "read_only"
+    ]
+  },
+  "record_schema": {
+    "required_fields": [
+      "source_id",
+      "source_kind",
+      "conversation_id_hash",
+      "title_redacted",
+      "source_path",
+      "repo",
+      "paths",
+      "status",
+      "blockers",
+      "next_action",
+      "evidence",
+      "permission",
+      "freshness",
+      "confidence"
+    ],
+    "optional_fields": [
+      "related_packets",
+      "related_gates",
+      "owner",
+      "lane",
+      "notes_redacted"
+    ],
+    "status_values": [
+      "new",
+      "mapped",
+      "duplicate",
+      "blocked",
+      "superseded",
+      "needs_human_review"
+    ],
+    "confidence_values": [
+      "low",
+      "medium",
+      "high"
+    ]
+  },
+  "redaction_rules": [
+    "Do not store message bodies in this repo.",
+    "Hash conversation identifiers before writing records.",
+    "Redact titles that contain names, accounts, credentials, customer data, or private project labels.",
+    "Store only repo/path/status/blocker/next_action/source mapping fields.",
+    "Keep source files local unless the operator authorizes a connector-backed read."
+  ],
+  "safety_flags": {
+    "raw_chat_content_stored": false,
+    "secrets_allowed": false,
+    "provider_call": false,
+    "external_upload": false,
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "runtime_queue_execution": false
+  },
+  "sample_redacted_record": {
+    "source_id": "chatgpt-export-placeholder",
+    "source_kind": "chatgpt_export",
+    "conversation_id_hash": "sha256-placeholder",
+    "title_redacted": "SIRINX GHOSTCLAW planning thread",
+    "source_path": "operator-provided-local-export-path",
+    "repo": "/Users/sirinx/sirinx-os",
+    "paths": [
+      "PROJECT_STATE.md",
+      "NEXT_ACTIONS.md"
+    ],
+    "status": "needs_human_review",
+    "blockers": [
+      "BLOCK-CHAT-EXPORT"
+    ],
+    "next_action": "Map this source into repo/path/status/blocker/next_action/source fields after export is available.",
+    "evidence": [
+      "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json"
+    ],
+    "permission": "operator_supplied_local_file_required",
+    "freshness": "unknown_until_export_loaded",
+    "confidence": "low"
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_intake_contract -v",
+    "python3 -m json.tool data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json > /dev/null",
+    "node scripts/check-operating-files.mjs",
+    "git diff --check"
+  ],
+  "notes": "This contract prepares the all-chat import map. It does not import any chat export and does not prove all chats were read."
+}

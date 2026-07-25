@@ -1,0 +1,89 @@
+{
+  "schema": "sirinx.chatgpt_export.readonly_source_receipt_validator.v1",
+  "status": "validator_ready_no_export_loaded",
+  "generated_at": "2026-07-02",
+  "evidence_boundary": "metadata_receipt_only",
+  "source_loaded": false,
+  "connector_read_performed": false,
+  "raw_chat_content_stored": false,
+  "claims_all_chats_read": false,
+  "approval_status": "not_granted",
+  "approval_gate": "APPROVE_CHATGPT_EXPORT_READONLY_MAPPING_<path>_<date>",
+  "validator_script": "WORKSPACE_SCAFFOLD/scripts/validate_chatgpt_export_readonly_source_receipt.py",
+  "source_packet": "_A2A_QUEUE/outbox/packet_035_active_goal_chat_export_readonly_mapping_gate_request.json",
+  "input_contracts": [
+    "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+    "data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json"
+  ],
+  "required_receipt_fields": [
+    "source_kind",
+    "local_path_or_connector_scope",
+    "operator_supplied",
+    "read_only",
+    "source_hash_or_query_id",
+    "redaction_confirmed",
+    "raw_chat_content_stored",
+    "claims_all_chats_read",
+    "permission",
+    "freshness",
+    "confidence",
+    "approval_phrase"
+  ],
+  "allowed_source_kinds": [
+    "chatgpt_export",
+    "connector_backed_source"
+  ],
+  "required_false_fields": [
+    "raw_chat_content_stored",
+    "claims_all_chats_read",
+    "connector_read_performed",
+    "real_export_loaded",
+    "external_upload",
+    "provider_call",
+    "runtime_queue_execution",
+    "secret_read",
+    "deploy",
+    "push"
+  ],
+  "forbidden_raw_content_fields": [
+    "raw_chat",
+    "raw_chat_content",
+    "raw_message",
+    "message_body",
+    "message_text",
+    "messages",
+    "conversation",
+    "conversations",
+    "transcript",
+    "content",
+    "parts",
+    "text"
+  ],
+  "validation_decisions": {
+    "valid": "receipt_metadata_valid_source_still_not_loaded",
+    "invalid": "fix_receipt_metadata_before_source_load_or_mapping"
+  },
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "secret_read": false,
+    "provider_call": false,
+    "runtime_queue_execution": false,
+    "connector_read_performed": false,
+    "real_export_loaded": false,
+    "raw_chat_content_stored": false,
+    "claims_all_chats_read": false,
+    "external_upload": false,
+    "line_webhook_activation": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "database_write": false,
+    "database_migration": false
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_chatgpt_export_readonly_source_receipt_validator -v",
+    "python3 -m json.tool data/pathspecs/sirinx_chatgpt_export_readonly_source_receipt_validator_2026-07-02.json > /dev/null",
+    "git diff --check"
+  ],
+  "notes": "This validator checks receipt metadata only. It does not load a ChatGPT export, read a connector, store raw chat content, claim all chats were read, or authorize any external action."
+}

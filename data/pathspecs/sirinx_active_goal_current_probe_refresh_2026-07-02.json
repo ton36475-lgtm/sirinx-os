@@ -1,0 +1,111 @@
+{
+  "schema": "sirinx.active_goal.current_probe_refresh.v1",
+  "status": "blockers_still_open_local_only",
+  "generated_at": "2026-07-02T07:20:00+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "current_actionable_packet": "packet_013",
+  "source_packet": "packet_036",
+  "new_packet": "packet_037",
+  "evidence_boundary": "local_read_only",
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "external_action_authorized": false,
+  "lane2_authorized": false,
+  "final_lane1_packet_present": false,
+  "probe_runner": {
+    "script": "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+    "report": "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+    "status": "probe_completed_local_only",
+    "hermes_gateway_available": false,
+    "hermes_gateway_error": "ConnectionRefusedError",
+    "exact_v3_3_artifact_found": false,
+    "chat_export_candidate_found": false,
+    "artifact_candidates": [],
+    "chat_export_candidates": []
+  },
+  "direct_gateway_probes": [
+    {
+      "target": "http://127.0.0.1:9000/health",
+      "method": "GET",
+      "read_only": true,
+      "exit_code": 7,
+      "result": "connection_refused",
+      "service_repair": false,
+      "service_restart": false
+    },
+    {
+      "target": "http://127.0.0.1:9000/knowledge/status",
+      "method": "GET",
+      "read_only": true,
+      "exit_code": 7,
+      "result": "connection_refused",
+      "service_repair": false,
+      "service_restart": false
+    }
+  ],
+  "bounded_artifact_search": {
+    "target_basename": "ghostclaw_repo_merge_kit_v3_3.zip",
+    "read_only": true,
+    "roots": [
+      "/Users/sirinx/Downloads",
+      "/Users/sirinx/SIRINXDev",
+      "/Users/sirinx/sirinx-os",
+      "/Users/sirinx/Documents/Codex"
+    ],
+    "maxdepth": 6,
+    "found": false,
+    "matches": []
+  },
+  "completion_blockers": [
+    {
+      "id": "BLOCK-CHAT-EXPORT",
+      "status": "open",
+      "current_evidence": "No ChatGPT export or connector-backed source candidate found in current read-only probe."
+    },
+    {
+      "id": "BLOCK-LANE1-OPUS-PACKET",
+      "status": "open",
+      "current_evidence": "Final LANE_1 Opus architecture packet remains absent."
+    },
+    {
+      "id": "BLOCK-HERMES-GATEWAY",
+      "status": "open",
+      "current_evidence": "Direct read-only curls to 127.0.0.1:9000 health and knowledge/status returned connection refused."
+    },
+    {
+      "id": "BLOCK-V3-3-ARTIFACT",
+      "status": "open",
+      "current_evidence": "Bounded local search found no ghostclaw_repo_merge_kit_v3_3.zip candidate."
+    },
+    {
+      "id": "BLOCK-R0-APPROVALS",
+      "status": "open",
+      "current_evidence": "No gate-specific R0 approval packet was provided or consumed."
+    }
+  ],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "provider_call": false,
+    "runtime_queue_execution": false,
+    "real_mcp_execution": false,
+    "database_write": false,
+    "database_migration": false,
+    "dependency_install": false,
+    "public_tunnel": false,
+    "service_repair": false,
+    "service_restart": false,
+    "line_send": false,
+    "line_webhook_activation": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "final_packet_creation": false,
+    "lane2_authorization": false
+  },
+  "next_safe_action": "Hermes/KOB/operator reviews packet_037 as current blocker evidence; choose exactly one blocker-clearing gate or provide the missing artifact/source before Codex validates any clearance claim.",
+  "notes": "This refresh records current local read-only probes only. It does not clear blockers, repair services, load ChatGPT exports, create the final Opus packet, authorize LANE_2, or execute any external action."
+}

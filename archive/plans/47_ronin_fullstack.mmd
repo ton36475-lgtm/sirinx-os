@@ -1,0 +1,142 @@
+graph TD
+    %% ============ TELEGRAM / COMMAND GATEWAY ============
+    subgraph TG["📡 Command Gateway (solis / Hermes) — เทียบ SpaceX Launch Control + Anthropic RS Gate"]
+        USER["ผู้ใช้ (Telegram)"]
+        SOLIS["solis · Hermes Agent<br/>รับคำสั่ง · ประเมิน Tier · อนุมัติ/ปฏิเสธ"]
+        TIER{"จำแนก Tier<br/>A0-A7"}
+        USER --> SOLIS --> TIER
+        TIER -->|A0-A3| AUTO["ดำเนินการอัตโนมัติ"]
+        TIER -->|A4| WORK["ส่ง Worker (workspace)"]
+        TIER -->|A5+| QUEUE["Approval Queue<br/>รอ human YES"]
+        TIER -->|ผิดกฎ AGENTS| BLOCK["🚫 บล็อก + แจงเหตุผล"]
+    end
+
+    %% ============ SHOGUNATE (EXECUTIVE) ============
+    subgraph SH["🏯 Shogunate — D1 (เทียบ SpaceX CEO Office + Anthropic Exec)"]
+        OISHI["01 Ōishi<br/>CEO / Mission Commander"]
+        KAMBEI["02 Kambei<br/>COO · แตก DAG"]
+        ASHITAKA["03 Ashitaka<br/>CTO"]
+        SAN["04 San<br/>CPO"]
+        YUPA["05 Yupa<br/>CFO / Audit"]
+    end
+    SOLIS -.ผ่านเกณฑ์.-> OISHI
+    OISHI --> KAMBEI --> ASHITAKA
+    OISHI --> SAN
+    OISHI --> YUPA
+
+    %% ============ FORGE (BUILD/BACKEND) ============
+    subgraph FORGE["⚒️ Forge Division — D2 (เทียบ SpaceX Propulsion & Vehicle Eng)"]
+        KATSUSHIRO["06 Katsushiro<br/>VP Eng / Codex"]
+        GOROBEI["07 Gorobei<br/>Principal Architect"]
+        KYUZO["08 Kyuzo<br/>Staff Reviewer"]
+        HEIHACHI["09 Heihachi<br/>SRE / Platform"]
+        SHICHIROJI["10 Shichiroji<br/>Sr Backend"]
+        KIKUCHIYO["11 Kikuchiyo<br/>Backend"]
+    end
+
+    %% ============ AVIONICS (FRONTEND) ============
+    subgraph AVIO["🎛️ Avionics Division — D3 (เทียบ SpaceX GNC / Avionics)"]
+        BATOU["12 Batou<br/>Sr Frontend"]
+        TOGUSA["13 Togusa<br/>Frontend"]
+    end
+
+    %% ============ VISION (DESIGN) ============
+    subgraph VIS["🎨 Vision Division — D4 (เทียบ Anthropic Product + Human Spaceflight)"]
+        EBOSHI["14 Eboshi<br/>Design Dir"]
+        NAUSICAA["15 Nausicaä<br/>Product Designer"]
+        KUSHANA["16 Kushana<br/>Creative Eng"]
+        HAKU["17 Haku<br/>Tech Writer"]
+    end
+
+    %% ============ INTERPRETABILITY (AI/ML) ============
+    subgraph INTERP["🔬 Interpretability Division — D5 (เทียบ Anthropic Interpretability & Research)"]
+        ARAMAKI["18 Aramaki<br/>ML Research Lead"]
+        MORO["19 Moro<br/>Data Scientist"]
+        OKKOTO["20 Okkoto<br/>Prompt Eng"]
+        KUSANAGI["21 Kusanagi<br/>AI Safety / Red-team"]
+    end
+
+    %% ============ MISSION ASSURANCE (SECURITY) ============
+    subgraph ASSURE["🛡️ Mission Assurance — D6 (เทียบ SpaceX Safety + Anthropic Alignment)"]
+        SABURO["22 Saburo<br/>CISO"]
+        JIRO["23 Jiro<br/>Pentester"]
+        YUBABA["24 Yubaba<br/>Compliance"]
+        ZENIBA["25 Zeniba<br/>Internal Auditor"]
+    end
+
+    %% ============ RANGE OPS (OPS/SRE/QA) ============
+    subgraph RANGE["🚀 Range Ops Division — D7 (เทียบ SpaceX Launch Ops / Range)"]
+        KAMAJI["26 Kamaji<br/>QA Director"]
+        ISHIKAWA["27 Ishikawa<br/>Sr QA"]
+        SAITO["28 Saito<br/>QA Eng"]
+        MITO["29 Mito<br/>Data Engineer"]
+    end
+
+    %% ============ COMMS (INTEGRATION) ============
+    subgraph COMMS["📡 Comms Division — D8 (เทียบ SpaceX Starlink / Comms)"]
+        TOMOE["30 Tomoe<br/>VP Growth"]
+        GEN["31 Gen<br/>Marketing"]
+        BORMA["32 Borma<br/>Perf Marketer"]
+    end
+
+    %% ============ COMMERCIAL (SALES) ============
+    subgraph COMM["💰 Commercial Division — D9 (เทียบ SpaceX Commercial + Anthropic GTM)"]
+        KATSUMOTO["33 Katsumoto<br/>VP Sales"]
+        MIYAMOTO["34 Miyamoto<br/>Solar ROI"]
+        CHIHIRO["35 Chihiro<br/>CRM Mgr"]
+    end
+
+    %% ============ MANUFACTURING (OPS) ============
+    subgraph MFG["🏭 Manufacturing Division — D10 (เทียบ SpaceX Manufacturing + Supply)"]
+        HORIBE["36 Horibe<br/>VP Ops"]
+        AZUMA["37 Azuma<br/>SRE On-Call"]
+        NOFACE["38 No-Face<br/>Cost Controller"]
+    end
+
+    %% ============ DREAM (EVOLUTION) ============
+    subgraph DREAM["🧬 Dream Division — D11 (เทียบ SpaceX Autonomy + Anthropic Scalable Oversight)"]
+        YAKUL["39 Yakul<br/>Memory Keeper"]
+        USAGI["40 Usagi<br/>Integration Dir"]
+        SANJURO["41 Sanjuro<br/>LINE Bot Mgr"]
+        PAZU["42 Pazu<br/>Webhook Spec"]
+        OHMU["43 Ohmu<br/>GPU Lab"]
+    end
+
+    %% ============ TREASURY + DEFENSE CAPSTONE ============
+    subgraph DEF["⚔️ Treasury & Defense — D12/D13"]
+        HIDETORA["44 Hidetora<br/>Local AI"]
+        KITSUNE["45 Kitsune<br/>Self-Healing"]
+        TARO["46 Taro<br/>Dream/Evolution"]
+        RYU["47 Ryū<br/>System Sentinel"]
+    end
+
+    %% ============ DISPATCH EDGES ============
+    KAMBEI --> FORGE
+    KAMBEI --> AVIO
+    SAN --> VIS
+    ASHITAKA --> INTERP
+    OISHI --> ASSURE
+    HORIBE --> RANGE
+    TOMOE --> COMMS
+    KATSUMOTO --> COMM
+    HORIBE --> MFG
+    TARO --> DREAM
+    YUPA --> DEF
+
+    %% ============ FEEDBACK / SAFETY LOOP ============
+    RYU -.monitor.-> SOLIS
+    KITSUNE -.heal on error.-> FORGE
+    KITSUNE -.heal on error.-> RANGE
+    TARO -.mutate in sandbox.-> FORGE
+    YAKUL -.brain sync.-> OISHI
+
+    classDef gate fill:#ffd966,stroke:#bf9000,stroke-width:2px;
+    classDef exec fill:#f4cccc,stroke:#990000,stroke-width:2px;
+    classDef forge fill:#d9ead3,stroke:#38761d;
+    classDef safe fill:#cfe2f3,stroke:#1155cc;
+    classDef dream fill:#e6d0ff,stroke:#741b47;
+    class SOLIS,TG gate;
+    class OISHI,KAMBEI,ASHITAKA,SAN,YUPA exec;
+    class KATSUSHIRO,GOROBEI,KYUZO,HEIHACHI,SHICHIROJI,KIKUCHIYO,BATOU,TOGUSA forge;
+    class SABURO,JIRO,YUBABA,ZENIBA,RYU,KITSUNE safe;
+    class TARO,DREAM,OHMU,YAKUL dream;

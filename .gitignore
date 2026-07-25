@@ -1,48 +1,56 @@
-# Secrets and local environment
-.env
-.env.*
-!.env.example
-!.env.*.example
+# ── Build artifacts ─────────────────────────────────────────────────
+**/target/
+**/node_modules/
+**/dist/
+**/build/
+**/.turbo/
+**/.next/
+**/.cache/
+**/.gradle/
+**/.pnpm-store/
+**/.vite/
+**/.vitest/
+**/playwright-report/
+**/.nyc_output/
+**/coverage/
 
-# Dependency and build output
-node_modules/
-.pnpm-store/
-.turbo/
-.next/
-dist/
-build/
-coverage/
+# ── Rust ────────────────────────────────────────────────────────────
+**/*.rlib
+**/*.d
+**/Cargo.lock
 
-# Test and browser reports
-playwright-report/
-test-results/
-
-# Runtime logs and process state
-ops/logs/
-ops/pids/
-logs/
-*.log
-*.pid
-
-# Local control/state folders
-.thclaws/
-.hermes/
-data/
-archive/
-
-# Python runtime cache
-__pycache__/
-*.py[cod]
-
-# Secret/key material
-*.pem
-*.key
-*.keystore
-*.p12
-*.pfx
-secrets/
-SIRINX_SECRET_BACKUP*.tar.gz
-SIRINX_SECRET_BACKUP*.tar.gz.enc
-
-# OS/editor noise
+# ── OS / editor ─────────────────────────────────────────────────────
 .DS_Store
+**/.DS_Store
+**/*.swp
+**/*.swo
+**/*~
+.vscode/
+.idea/
+
+# ── Runtime state (don't track live runtime state) ──────────────────
+.ghostclaw_runtime/
+.omnigent/
+.thclaws/
+.vibe-coding/
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# ── Env / secrets ───────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ── Logs ────────────────────────────────────────────────────────────
+*.log
+**/logs/
+
+# ── Worktrees (do not nest) ─────────────────────────────────────────
+.worktrees/
+
+# ── Large generated content ─────────────────────────────────────────
+**/workerd
+**/*.bin
+data/large/

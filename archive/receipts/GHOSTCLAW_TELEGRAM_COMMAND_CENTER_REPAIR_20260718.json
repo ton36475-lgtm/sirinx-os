@@ -1,0 +1,26 @@
+{
+  "schema": "ghostclaw.local_repair_receipt.v1",
+  "sequence": 0,
+  "receipt_id": "gcr-20260718-telegram-command-center-repair",
+  "created_at": "2026-07-17T20:22:26Z",
+  "actor": "codex-root",
+  "action": "local_repair_and_verification",
+  "tier": "MEDIUM",
+  "evidence_ref": "docs/audit/GHOSTCLAW_TELEGRAM_COMMAND_CENTER_REPAIR_20260718.md",
+  "evidence_digest": "sha256:8844d624e4575b14e25c13b950492a3c9baedfed0a625814694af2389fa12a70",
+  "previous_receipt_digest": null,
+  "result": "PASS_LOCAL_RUNTIME_UNVERIFIED",
+  "external_effects": {
+    "install": false,
+    "provider_call": false,
+    "live_send": false,
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "cloud_mutation": false,
+    "production_database_write": false,
+    "secret_access": false
+  },
+  "digest_method": "sha256(JSON.stringify(receipt_without_receipt_digest))",
+  "receipt_digest": "sha256:a2619d1ee42207d0bdf231bd4eec81db1fcb8f54a0a8ea719ad2ee52319ec580"
+}

@@ -1,0 +1,84 @@
+{
+  "plan_id": "plan-mrs4962u",
+  "task_graph_id": "vibe-mrs4962u-ft7g4x",
+  "timestamp": "2026-07-19T18:15:32.359Z",
+  "router_id": "vibe-agent-router",
+  "router_version": "1.0.0",
+  "requester": "vibe-agent",
+  "approver": "hermes-commander",
+  "requester_agent": "vibe-agent",
+  "approver_agent": "hermes-commander",
+  "decision_id": "decision-plan-mrs4962u",
+  "approval_status": "approved",
+  "approval_reason": "Mutual approval constraint satisfied",
+  "mutual_approval": {
+    "decision_id": "decision-plan-mrs4962u",
+    "requested": true,
+    "status": "approved",
+    "reason": "Mutual approval constraint satisfied",
+    "requester_agent": "vibe-agent",
+    "approver_agent": "hermes-commander",
+    "self_approval_allowed": false,
+    "human_approval_required": false,
+    "receipt_required": true
+  },
+  "receipt_required": true,
+  "evidence_pack": {
+    "id": "evidence-plan-mrs4962u",
+    "required": true,
+    "receipt_required": true,
+    "requester_agent": "vibe-agent",
+    "approver_agent": "hermes-commander",
+    "decision_id": "decision-plan-mrs4962u",
+    "artifacts": [
+      {
+        "task_id": "vibe-mrs4962u-ft7g4x",
+        "type": "execution_plan",
+        "format": "json",
+        "decision_id": "decision-plan-mrs4962u"
+      },
+      {
+        "task_id": "vibe-mrs4962u-ft7g4x",
+        "type": "decision_artifact",
+        "format": "json",
+        "decision_id": "decision-plan-mrs4962u"
+      },
+      {
+        "task_id": "vibe-mrs4962u-ft7g4x-t1",
+        "type": "receipt",
+        "format": "json"
+      }
+    ]
+  },
+  "results": [
+    {
+      "task_id": "vibe-mrs4962u-ft7g4x-t1",
+      "status": "manual_required",
+      "reason": "Worker \"codex-worker\" has no executable module. Manual action required.",
+      "worker_description": "Code execution worker — writes to allowed paths",
+      "receipt": {
+        "task_id": "vibe-mrs4962u-ft7g4x-t1",
+        "status": "manual_required",
+        "worker": "codex-worker",
+        "command": "Implement Model Routing Phase 1 from GHOSTCLAW/workflows/model-routing-phase1-plan.md. Tasks: configure LiteLLM proxy, set up cost controls, create cache optimization. Task type: code_generation. Worker: codex-worker",
+        "description": "Code generation task",
+        "timestamp": "2026-07-19T18:15:32.359Z",
+        "plan_id": "plan-mrs4962u",
+        "decision_id": "decision-plan-mrs4962u",
+        "requester_agent": "vibe-agent",
+        "approver_agent": "hermes-commander",
+        "receipt_required": true,
+        "evidence_pack_id": "evidence-plan-mrs4962u"
+      }
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "completed": 0,
+    "blocked": 0,
+    "failed": 0,
+    "manual": 1,
+    "skipped": 0
+  },
+  "archive_path": "/Users/sirinx/sirinx-os/GHOSTCLAW/vibe/archive/plan-mrs4962u"
+}

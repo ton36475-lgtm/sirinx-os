@@ -1,0 +1,157 @@
+{
+  "id": "sirinx-agent-team",
+  "version": "2026-05-28.draft",
+  "status": "draft_only_not_dispatched",
+  "mode": "local_only",
+  "orchestrator": "hermes",
+  "source_of_truth": [
+    ".hermes/context.md",
+    ".hermes/state.json",
+    ".hermes/reports/SIRINX_CONTINUATION_BACKLOG_2026-05-28.md",
+    "docs/agents/SIRINX_AGENT_TEAM_TOPOLOGY.md",
+    "docs/agents/SIRINX_VIBE_CODING_AGENT_ROLE_CONFIG.md"
+  ],
+  "global_blocks": [
+    "source_code_implementation_without_APPROVE_IMPLEMENTATION",
+    "package_install",
+    "mcp_server_start_or_reload",
+    "external_connector_activation",
+    "paid_provider_call",
+    "secret_read_or_print",
+    "message_send",
+    "deploy_push_publish",
+    "automatic_live_agent_dispatch"
+  ],
+  "nodes": [
+    {
+      "id": "hermes-orchestrator",
+      "lane": "control",
+      "role": "Route work, enforce policy, stop unsafe actions",
+      "skills": ["hermes-project-planning", "sirinx-spec-first-swarm"],
+      "autonomy": "A4_local_bounded",
+      "status": "draft"
+    },
+    {
+      "id": "context-manager",
+      "lane": "control",
+      "role": "Maintain context, state, decision logs, reports",
+      "skills": ["sirinx-spec-first-swarm"],
+      "autonomy": "A2_docs_state",
+      "status": "draft"
+    },
+    {
+      "id": "planner",
+      "lane": "planning",
+      "role": "Break goals into phases and ownership lanes",
+      "skills": ["hermes-project-planning"],
+      "autonomy": "A2_planning",
+      "status": "draft"
+    },
+    {
+      "id": "grill-agent",
+      "lane": "planning",
+      "role": "Extract missing requirements and acceptance criteria",
+      "skills": ["sirinx-spec-first-swarm"],
+      "autonomy": "A2_requirements",
+      "status": "draft"
+    },
+    {
+      "id": "spec-writer",
+      "lane": "planning",
+      "role": "Write requirements, specs, implementation plans, QA checklists",
+      "skills": ["sirinx-spec-first-swarm"],
+      "autonomy": "A2_docs",
+      "status": "draft"
+    },
+    {
+      "id": "environment-scanner",
+      "lane": "runtime",
+      "role": "Detect scripts, services, ports, dirty state, local readiness",
+      "skills": ["start-run-debug"],
+      "autonomy": "A1_read_only",
+      "status": "draft"
+    },
+    {
+      "id": "vibe-coding-agent",
+      "lane": "build-planning",
+      "role": "Convert operator goals into implementation packets and safe file scopes",
+      "skills": ["subagent-driven-development", "test-driven-development", "verification-before-completion"],
+      "autonomy": "A3_draft_before_approval_A4_after_approval",
+      "status": "draft"
+    },
+    {
+      "id": "coder-agent",
+      "lane": "build",
+      "role": "Implement only the approved target",
+      "skills": ["test-driven-development", "systematic-debugging"],
+      "autonomy": "A4_after_APPROVE_IMPLEMENTATION_only",
+      "status": "blocked_until_approval"
+    },
+    {
+      "id": "qa-guardrail",
+      "lane": "verification",
+      "role": "Run tests, browser checks, secret scan, diff check",
+      "skills": ["verification-before-completion", "website-browser-automation"],
+      "autonomy": "A2_verification",
+      "status": "draft"
+    },
+    {
+      "id": "code-reviewer",
+      "lane": "verification",
+      "role": "Review scope, correctness, maintainability, risk",
+      "skills": ["code-review", "requesting-code-review"],
+      "autonomy": "A2_review",
+      "status": "draft"
+    },
+    {
+      "id": "runtime-devops",
+      "lane": "runtime",
+      "role": "Local service status and runbook checks",
+      "skills": ["start-run-debug"],
+      "autonomy": "A2_local_status",
+      "status": "draft"
+    },
+    {
+      "id": "browser-qa",
+      "lane": "verification",
+      "role": "Local dashboard and browser smoke checks",
+      "skills": ["website-browser-automation", "browser"],
+      "autonomy": "A2_localhost_only",
+      "status": "draft"
+    },
+    {
+      "id": "knowledge-curator",
+      "lane": "knowledge",
+      "role": "Update Obsidian, digest, provenance, and knowledge docs",
+      "skills": ["knowledge-curator", "sirinx-ai-hq"],
+      "autonomy": "A2_docs",
+      "status": "draft"
+    },
+    {
+      "id": "n8n-workflow-architect",
+      "lane": "workflow",
+      "role": "Design n8n workflow and MCP policy without activation",
+      "skills": ["mcp-builder"],
+      "autonomy": "A2_docs_only",
+      "status": "draft"
+    },
+    {
+      "id": "security-reviewer",
+      "lane": "security",
+      "role": "Enforce secret boundary, validator shield, external gates",
+      "skills": ["validator-shield", "code-review"],
+      "autonomy": "A2_security_review",
+      "status": "draft"
+    },
+    {
+      "id": "reporter",
+      "lane": "knowledge",
+      "role": "Summarize changed files, commands, verification, risks, next action",
+      "skills": ["sirinx-spec-first-swarm"],
+      "autonomy": "A2_report",
+      "status": "draft"
+    }
+  ],
+  "first_recommended_implementation_target": "APPROVE_IMPLEMENTATION for n8n permission policy display"
+}
+

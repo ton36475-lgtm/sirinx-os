@@ -1,0 +1,95 @@
+{
+  "schema": "sirinx.all_chat_export.intake_mapper.v1",
+  "status": "mapper_ready_no_export_loaded",
+  "generated_at": "2026-06-29",
+  "evidence_boundary": "no_export_loaded",
+  "claims_all_chats_read": false,
+  "raw_chat_content_stored": false,
+  "real_export_loaded": false,
+  "mapper_script": "WORKSPACE_SCAFFOLD/scripts/build_all_chat_export_intake_map.py",
+  "input_contract": "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+  "output_schema": "sirinx.all_chat_export.intake_map.v1",
+  "allowed_input_sources": [
+    "chatgpt_export",
+    "connector_backed_source"
+  ],
+  "output_record_fields": [
+    "source_id",
+    "source_kind",
+    "conversation_id_hash",
+    "title_redacted",
+    "source_path",
+    "repo",
+    "paths",
+    "status",
+    "blockers",
+    "next_action",
+    "evidence",
+    "permission",
+    "freshness",
+    "confidence"
+  ],
+  "routing_rules": [
+    {
+      "match": [
+        "packet_013",
+        "LANE_1",
+        "Opus",
+        "Hermes decision"
+      ],
+      "blocker": "BLOCK-LANE1-OPUS-PACKET",
+      "path": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_WORKBENCH_2026-06-29.md"
+    },
+    {
+      "match": [
+        "v3.3",
+        "merge kit",
+        "ghostclaw_repo_merge_kit_v3_3.zip"
+      ],
+      "blocker": "BLOCK-V3-3-ARTIFACT",
+      "path": "docs/knowledge/SIRINX_GHOSTCLAW_V3_3_PREFLIGHT_RECHECK_2026-06-29.md"
+    },
+    {
+      "match": [
+        "R0",
+        "testnet",
+        "approval"
+      ],
+      "blocker": "BLOCK-R0-APPROVALS",
+      "path": "docs/knowledge/SIRINX_R0_GATE_SPECIFIC_APPROVAL_CONTRACT_2026-06-29.md"
+    },
+    {
+      "match": [
+        "ChatGPT export",
+        "all chats",
+        "all-chat"
+      ],
+      "blocker": "BLOCK-CHAT-EXPORT",
+      "path": "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_CONTRACT_2026-06-29.md"
+    }
+  ],
+  "redaction_rules": [
+    "Hash conversation identifiers before writing records.",
+    "Redact titles containing email addresses, credentials, token markers, customer markers, or private markers.",
+    "Do not write message bodies, transcripts, token values, cookies, or provider payloads to output.",
+    "Use message bodies only in process memory for blocker/path routing when an operator-supplied export is passed to the CLI."
+  ],
+  "safety_flags": {
+    "provider_call": false,
+    "external_upload": false,
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "runtime_queue_execution": false,
+    "secret_read": false
+  },
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_intake_mapper -v",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_all_chat_export_intake_contract -v",
+    "python3 -m json.tool data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json > /dev/null",
+    "node scripts/check-operating-files.mjs",
+    "git diff --check"
+  ],
+  "notes": "This file proves the mapper contract exists. It does not prove a real ChatGPT export was loaded and does not prove all chats were read."
+}

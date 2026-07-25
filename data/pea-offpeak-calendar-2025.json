@@ -1,0 +1,30 @@
+{
+  "source": {
+    "name": "PEA Off-Peak Calendar",
+    "authority": "Provincial Electricity Authority",
+    "page_url": "https://www.pea.co.th/announcements/off-peak-calendar",
+    "image_url": "https://www.pea.co.th/sites/default/files/documents/off-peak/off-peak-2568.jpg",
+    "source_year_be": 2568,
+    "source_year_ce": 2025,
+    "retrieved_at": "2026-06-01",
+    "language": "th"
+  },
+  "status": {
+    "official_page_loaded": true,
+    "official_current_year_on_page": false,
+    "current_year_ce": 2026,
+    "requires_manual_review": true,
+    "reason": "The official PEA page currently exposes the 2568/2025 calendar image. Do not use this file as a 2026 source without a newer official PEA asset."
+  },
+  "tou_rule_summary": {
+    "off_peak_basis": "Image-marked green dates are Off-Peak dates for TOU customers.",
+    "known_use": "Solar, battery, EV charging, and TOU billing simulation planning.",
+    "data_quality": "source-image-captured-not-ocr-certified"
+  },
+  "supabase_ready": {
+    "write_allowed": false,
+    "table_candidate": "pea_offpeak_calendars",
+    "required_approval": "APPROVE_SUPABASE_WRITE_PEA_OFFPEAK",
+    "blocked_until": "An official 2026 PEA source is confirmed or the operator accepts 2025 historical intake."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "sirinx.r0.gate_specific_approval_contract.v1",
+  "status": "contract_not_approval",
+  "generated_at": "2026-06-29",
+  "approval_packet_record": false,
+  "blanket_approval_actionable": false,
+  "runtime_execution": false,
+  "validates": [
+    "docs/knowledge/SIRINX_R0_GATE_APPROVAL_PACKET.md"
+  ],
+  "validator_script": "WORKSPACE_SCAFFOLD/scripts/validate_r0_gate_approval.py",
+  "template": "WORKSPACE_SCAFFOLD/templates/r0_gate_specific_approval_packet.template.json",
+  "allowed_gate_ids": [
+    "R0-01",
+    "R0-02",
+    "R0-03"
+  ],
+  "allowed_actions": [
+    "testnet_deploy",
+    "real_wallet_connector_implementation",
+    "merge_staging_to_main"
+  ],
+  "never_authorized_by_this_contract": [
+    "secret_read"
+  ],
+  "required_fields": [
+    "SIRINX_R0_GATE_APPROVAL_PACKET",
+    "approval_packet_record",
+    "gate_id",
+    "action",
+    "target",
+    "environment",
+    "rollback",
+    "evidence_path",
+    "approval_scope",
+    "approved_by",
+    "approval_expires_at",
+    "blanket_approval",
+    "approve_all"
+  ],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "wallet_transaction": false
+  },
+  "validation_rules": [
+    "approval packet must include the SIRINX_R0_GATE_APPROVAL_PACKET marker",
+    "approval_packet_record must be true in a real approval packet",
+    "gate_id must be R0-01, R0-02, or R0-03",
+    "action must name exactly one allowed R0 action",
+    "approval_scope must be single_gate_only",
+    "blanket_approval and approve_all must be false",
+    "rollback and evidence_path must be existing relative local paths",
+    "secret-like paths are rejected",
+    "secret_read is not authorized by this local contract"
+  ],
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_r0_gate_specific_approval_contract -v",
+    "python3 WORKSPACE_SCAFFOLD/scripts/validate_r0_gate_approval.py docs/knowledge/SIRINX_R0_GATE_APPROVAL_PACKET.md",
+    "python3 -m json.tool data/pathspecs/sirinx_r0_gate_specific_approval_contract_2026-06-29.json > /dev/null",
+    "python3 -m json.tool WORKSPACE_SCAFFOLD/templates/r0_gate_specific_approval_packet.template.json > /dev/null"
+  ],
+  "notes": "Contract and validator only. This is not approval, not execution, and not permission for secret reads."
+}

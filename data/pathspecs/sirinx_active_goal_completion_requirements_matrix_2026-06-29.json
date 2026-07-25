@@ -1,0 +1,217 @@
+{
+  "schema": "sirinx.active_goal.completion_requirements_matrix.v1",
+  "status": "requirements_mapped_not_complete",
+  "generated_at": "2026-06-29",
+  "objective": "อ่านไฟล์ทั้งหมดที่ให้ไปอย่างละเอียดอีกครั้ง ทวนแผนการดำเนินการทั้งหมดอย่างละเอียด ทำงานทั้งหมดต่ออัตโนมัติร่วมกับ Codex and Hermes จากแผนงานทั้งหมดในทุกๆแชทรวมเข้าด้วยกันอย่างเป็นระบบ",
+  "evidence_boundary": "local_evidence_only",
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "external_action_authorized": false,
+  "latest_read_only_probes": {
+    "artifact_or_export_candidate_count": 0,
+    "hermes_gateway_tcp_connect": false,
+    "hermes_gateway_error": "ConnectionRefusedError on 127.0.0.1:9000",
+    "latest_probe_report": "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+    "probe_runner": "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+    "notes": "No exact v3.3 merge kit, ChatGPT export, or connector-backed source was found in the latest local scan roots."
+  },
+  "requirements": [
+    {
+      "id": "REQ-LOCAL-SOURCE-READ",
+      "requirement": "Read and re-check all currently available local files named or referenced for the active goal.",
+      "completion_state": "partial",
+      "verdict": "partial_current_local_sources_only",
+      "evidence": [
+        "data/pathspecs/sirinx_active_goal_source_file_receipt_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_SOURCE_FILE_RECEIPT_2026-06-29.md",
+        "data/pathspecs/sirinx_hermes_codex_a2a_godmode_v3_html_recheck_2026-06-29.json"
+      ],
+      "required_to_complete": [
+        "Exact local paths for the missing backend router/database/LLM/PDF/SKILL/TODO/zip inputs, or a connector-backed source proving their contents."
+      ],
+      "next_safe_action": "Keep the source-file receipt authoritative until exact files appear."
+    },
+    {
+      "id": "REQ-ALL-CHAT-CONSOLIDATION",
+      "requirement": "Consolidate plans from all chats into a systematic continuation surface.",
+      "completion_state": "blocked",
+      "verdict": "blocked_missing_export",
+      "evidence": [
+        "data/pathspecs/sirinx_all_chat_export_intake_contract_2026-06-29.json",
+        "data/pathspecs/sirinx_all_chat_export_intake_mapper_2026-06-29.json",
+        "docs/knowledge/SIRINX_ALL_CHAT_EXPORT_INTAKE_MAPPER_2026-06-29.md",
+        "data/pathspecs/sirinx_all_chat_export_request_packet_2026-06-29.json",
+        "_A2A_QUEUE/outbox/packet_020_sirinx_all_chat_export_request.json"
+      ],
+      "required_to_complete": [
+        "ChatGPT export or connector-backed conversation source parsed into redacted repo/path/status/blocker/next_action/source rows."
+      ],
+      "next_safe_action": "Review packet_020 request, then wait for operator-supplied ChatGPT export or connector-backed source before running metadata-only mapper."
+    },
+    {
+      "id": "REQ-PLAN-REVIEW",
+      "requirement": "Review the full plan in detail and keep the next work ordered.",
+      "completion_state": "active",
+      "verdict": "active_local_plan_indexed",
+      "evidence": [
+        "data/pathspecs/sirinx_active_goal_systematic_work_index_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_SYSTEMATIC_WORK_INDEX_2026-06-29.md",
+        "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json"
+      ],
+      "required_to_complete": [
+        "All blockers cleared and the ordered queue re-verified against current files and runtime evidence."
+      ],
+      "next_safe_action": "Continue from the ordered local queue without changing gate state."
+    },
+    {
+      "id": "REQ-CODEX-HERMES-AUTONOMY",
+      "requirement": "Continue automatically with Codex and Hermes while preserving review gates.",
+      "completion_state": "partial",
+      "verdict": "hermes_decision_recorded_runtime_still_blocked",
+      "evidence": [
+        "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+        "_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+        "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+        "_A2A_QUEUE/outbox/packet_014_codex_hermes_work_report_draft.json",
+        "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json",
+        "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json"
+      ],
+      "required_to_complete": [
+        "Read-only gateway health proof, final LANE_1 packet evidence, or explicit local-only alternative accepted by the operator."
+      ],
+      "next_safe_action": "Hermes packet_013 decision is recorded; keep file-bus packets local while final LANE_1 packet and gateway proof remain missing."
+    },
+    {
+      "id": "REQ-LANE1-FINAL-PACKET",
+      "requirement": "Produce the GhostClaw LANE_1 Opus architecture packet before LANE_2 build work.",
+      "completion_state": "blocked",
+      "verdict": "blocked_missing_final_opus_packet",
+      "evidence": [
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+        "_A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
+        "data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json",
+        "data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json",
+        "data/pathspecs/ghostclaw_lane1_opus_architecture_packet_gate_2026-06-29.json",
+        "data/pathspecs/ghostclaw_lane1_opus_authoring_bundle_2026-06-29.json",
+        "_A2A_QUEUE/outbox/packet_019_ghostclaw_lane1_opus_authoring_bundle.json"
+      ],
+      "required_to_complete": [
+        "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md",
+        "Opus packet gate validation after the final packet exists."
+      ],
+      "next_safe_action": "Hermes packet_013 decision is recorded; Hermes/Opus may use packet_019 as authoring input only, then validate the separate final packet with the Opus packet gate."
+    },
+    {
+      "id": "REQ-HERMES-GATEWAY",
+      "requirement": "Verify Hermes gateway status before claiming live Hermes routing.",
+      "completion_state": "blocked",
+      "verdict": "blocked_connection_refused",
+      "evidence": [
+        "data/pathspecs/sirinx_hermes_gateway_recheck_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_GATEWAY_RECHECK_2026-06-29.md",
+        "data/pathspecs/sirinx_hermes_gateway_current_recheck_packet_2026-06-29.json",
+        "docs/knowledge/SIRINX_HERMES_GATEWAY_CURRENT_RECHECK_PACKET_2026-06-29.md",
+        "_A2A_QUEUE/outbox/packet_023_sirinx_hermes_gateway_current_recheck.json"
+      ],
+      "required_to_complete": [
+        "Read-only health/status proof from 127.0.0.1:9000 or an approved local-only alternative."
+      ],
+      "next_safe_action": "Operator or Hermes starts/verifies gateway; Codex only records read-only proof."
+    },
+    {
+      "id": "REQ-V3-3-MERGE-KIT",
+      "requirement": "Verify and stage the GhostClaw YOLO v3.3 integration pack before backend merge work.",
+      "completion_state": "blocked",
+      "verdict": "blocked_exact_artifact_missing",
+      "evidence": [
+        "data/pathspecs/sirinx_ghostclaw_v3_3_artifact_gate_validator_2026-06-29.json",
+        "docs/knowledge/SIRINX_GHOSTCLAW_V3_3_ARTIFACT_GATE_VALIDATOR_2026-06-29.md",
+        "docs/knowledge/SIRINX_GHOSTCLAW_V3_3_PREFLIGHT_RECHECK_2026-06-29.md"
+      ],
+      "required_to_complete": [
+        "Exact local path to ghostclaw_repo_merge_kit_v3_3.zip.",
+        "Bundled policy test pass evidence."
+      ],
+      "next_safe_action": "Place or point to exact artifact, then run metadata-only artifact gate validator."
+    },
+    {
+      "id": "REQ-R0-GATE-APPROVALS",
+      "requirement": "Keep deploy, push, cloud mutation, customer send, secret read, paid/provider, runtime, wallet, and migration actions behind exact approval gates.",
+      "completion_state": "blocked",
+      "verdict": "blocked_gate_specific_approval_missing",
+      "evidence": [
+        "data/pathspecs/sirinx_r0_gate_specific_approval_contract_2026-06-29.json",
+        "docs/knowledge/SIRINX_R0_GATE_SPECIFIC_APPROVAL_CONTRACT_2026-06-29.md",
+        "WORKSPACE_SCAFFOLD/templates/r0_gate_specific_approval_packet.template.json"
+      ],
+      "required_to_complete": [
+        "One explicit approval packet per R0 gate with target, environment, rollback, and evidence path."
+      ],
+      "next_safe_action": "Do not execute R0 actions until exact packet validates."
+    },
+    {
+      "id": "REQ-SAFETY-GATES",
+      "requirement": "Preserve local-only safety gates while continuing work.",
+      "completion_state": "satisfied",
+      "verdict": "satisfied_for_current_local_work",
+      "evidence": [
+        "data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json",
+        "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md",
+        "AUTONOMOUS_RUN_LOG.md"
+      ],
+      "required_to_complete": [
+        "Maintain gate-specific approvals for every future external action."
+      ],
+      "next_safe_action": "Keep all external action flags false until an exact gate packet exists."
+    },
+    {
+      "id": "REQ-OBSIDIAN-BRAIN-SYNC",
+      "requirement": "Append concise Obsidian pulses after meaningful verified local work.",
+      "completion_state": "active",
+      "verdict": "satisfied_for_current_local_work",
+      "evidence": [
+        "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+        "/Users/sirinx/SIRINXDev/.ghostclaw_runtime/a2async/memory/obsidian_sync.jsonl"
+      ],
+      "required_to_complete": [
+        "Continue appending concise, secret-free pulses after future verified local work."
+      ],
+      "next_safe_action": "Write a pulse after this requirements matrix is verified."
+    },
+    {
+      "id": "REQ-VERIFICATION-BUNDLE",
+      "requirement": "Verify local artifacts before reporting progress.",
+      "completion_state": "active",
+      "verdict": "current_verification_bundle_required",
+      "evidence": [
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_completion_requirements_matrix.py",
+        "WORKSPACE_SCAFFOLD/tests/test_active_goal_read_only_probe_runner.py",
+        "WORKSPACE_SCAFFOLD/scripts/probe_active_goal_blockers.py",
+        "WORKSPACE_SCAFFOLD/reports/active_goal_read_only_probe_latest_2026-06-29.json",
+        "python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v",
+        "./node_modules/.bin/vitest run apps/centerbrain-shell/src/lib/*.test.ts",
+        "node scripts/check-operating-files.mjs",
+        "git diff --check"
+      ],
+      "required_to_complete": [
+        "Focused tests, full Python tests, Vitest, operating file check, diff check, JSON validation, and build where UI data changes."
+      ],
+      "next_safe_action": "Run the verification bundle after every matrix or queue edit."
+    }
+  ],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false
+  },
+  "notes": "This matrix makes the completion audit requirement-by-requirement. It is not a completion claim and does not clear any blocker."
+}
