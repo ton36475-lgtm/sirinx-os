@@ -1,0 +1,21 @@
+name = "omni-bridge"
+main = "src/index.js"
+compatibility_date = "2026-07-25"
+
+# Secrets are NOT set here. wrangler.toml is committed; anything in it is public
+# to everyone with repo access. Bind them instead with:
+#
+#   wrangler secret put DEEPSEEK_API_KEY
+#   wrangler secret put GROQ_API_KEY
+#   wrangler secret put OPENROUTER_API_KEY
+#   wrangler secret put ALIBABA_API_KEY
+#   wrangler secret put GEMINI_API_KEY
+#
+# Any subset works — a provider with no bound secret is skipped.
+
+[observability]
+enabled = true
+
+[vars]
+# Non-secret configuration only.
+OMNI_BRIDGE_ENV = "production"

@@ -1,0 +1,17 @@
+{
+  "name": "omni-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenAI-compatible edge proxy with provider fallback, running as a Cloudflare Worker",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "verify:models": "node scripts/verify-models.mjs"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0",
+    "wrangler": "^4.0.0"
+  }
+}
