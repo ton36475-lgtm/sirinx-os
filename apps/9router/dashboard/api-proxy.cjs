@@ -6,16 +6,19 @@
  * state on disk.
  *
  * Usage:
- *   node dashboard/api-proxy.js [port]
+ *   node dashboard/api-proxy.cjs [port]
  *
  * Routes:
  *   GET  /api/proxy/bridge-state  — Reads bridge_active.json
  *   GET  /api/proxy/queue         — Lists queue/*.json tasks
  *   GET  /api/proxy/outbox/:agent — Lists outbox entries for an agent
+ *   POST /api/proxy/scan          — Scan all agent outboxes
  *   GET  /api/proxy/health        — Health check for the proxy itself
  *
  * Gracefully falls back to synthetic responses if runtime files
  * don't exist or are unreadable.
+ *
+ * This is a .cjs file to avoid ESM issues in projects with "type": "module".
  */
 
 const http = require('http');

@@ -424,7 +424,7 @@ case "${1:-list}" in
   status)  status ;;
   list)    list_agents ;;
   watch)
-    local interval="${2:-15}"
+    interval="${2:-15}"
     watch_loop "$interval"
     ;;
   *)
