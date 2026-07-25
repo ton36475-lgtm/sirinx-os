@@ -1,0 +1,16 @@
+{
+  "name": "9router",
+  "version": "0.1.0",
+  "private": true,
+  "description": "9Router — Cloudflare Worker API gateway for OmniRoute with premium dashboard",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:dashboard": "wrangler pages deploy dashboard/ --project-name=9router-dashboard",
+    "start": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
