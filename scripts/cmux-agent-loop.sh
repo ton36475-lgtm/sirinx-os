@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/opt/homebrew/bin/bash
 # ─── A2A Cmux Agent Auto-Loop ──────────────────────────────────────────
 # Manages all 11 agents in a cmux/tmux session with auto-restart.
 # Each agent gets its own window in a named cmux session.
@@ -385,7 +385,7 @@ watch_loop() {
     rotation_index=$((rotation_index + 3))
 
     # Show status every 2 minutes
-    if [ $(( $(date +%s) % 120 )) -lt $poll_interval ]; then
+    if [ $(( $(date +%s) % 120 )) -lt "$poll_interval" ]; then
       local running_count=0
       for agent in "${AGENTS[@]}"; do
         agent_is_running "$agent" && running_count=$((running_count + 1))
