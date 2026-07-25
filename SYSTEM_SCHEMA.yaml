@@ -1,0 +1,28 @@
+# SIRINX-OS Lane Guard Schema
+# Defines file ownership per lane for the Vibe Coding multi-lane governance hook.
+# The migration lane owns "*" (wildcard) to allow cross-lane consolidation commits.
+
+  codex:
+    ownership:
+      - services/api-gateway/**
+      - services/dev-control-api/**
+      - services/hermes-api/**
+      - services/postgres-state/**
+
+  opencode:
+    ownership:
+      - packages/**
+
+  claude:
+    ownership:
+      - apps/public-web/**
+      - schemas/**
+
+  hermes:
+    ownership:
+      - .hermes/**
+      - integrations/**
+
+  migration:
+    ownership:
+      - "*"  # wildcard — allows any path for consolidation/deploy commits
