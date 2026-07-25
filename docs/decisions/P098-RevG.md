@@ -1,8 +1,17 @@
 # P098 Rev G — Alibaba MaaS lane, and per-family routing by measured latency
 
-**Status:** `[PROPOSED]`
+**Status:** `[APPROVED — wired 2026-07-25]`
 **Raised:** 2026-07-25
-**Approval token required:** Tony must type verbatim → `🔴 APPROVE P098 Rev G`
+**Approved:** 2026-07-25 by Tony (Terbo), sole human authority.
+**Approval line received:**
+
+```
+🔴 APPROVE P098 Rev G
+```
+
+*(received as `🔴 APPROVE P098 Rev Gบช` — the token is complete and the trailing
+two characters are an IME artifact, not a different decision. Recorded as
+received rather than silently tidied.)*
 **Amends:** the chain established by Rev F. **Related:** Rev D (maxplus), Rev E (no local tier).
 
 ---
@@ -121,12 +130,47 @@ returned `OK.</think></think>OK.` to a one-word prompt — reasoning markup leak
 into content. `strip_reasoning_markup` removes it, with a test using that exact
 string and another asserting the word "think" in ordinary prose survives.
 
-`TieredRouter::standard()` is **unchanged**. The provider exists and can be used
-explicitly; the default chain in §2 waits for the 🔴 line, because Rev F is locked.
+### Wired 2026-07-25
+
+`crates/providers/src/family.rs` classifies a model id by prefix and returns the
+lanes Rev G §3 prefers for it. Prefix matching rather than a lookup table: one
+lane alone lists 151 ids, and a table goes stale on the first point release.
+
+`TieredRouter::for_model(model)` builds the chain; `standard()` now delegates to
+it. The primary comes from the family, the leaf and the Rev E remainder are the
+same for everything.
+
+**The leaf reads `MAXPLUS_KEY_CHINESE`, not `MAXPLUS_API_KEY`.** A maxplus pool is
+bound to the key, and on 2026-07-25 the key held in `MAXPLUS_API_KEY` was moved to
+the VIP pool, which answers model lists but rejects inference — 400 at the root,
+503 on `/maxpools` and `/subpools`. The Chinese Specials key is the one that
+completes requests, so that is the one the leaf uses, with the old variable as a
+fallback.
+
+Five routing tests assert the wiring rather than the intent:
 
 ```
-$ cargo test -p ghostclaw-providers
-33 passed; 0 failed
+glm_goes_to_cointh_first ........................... ok
+qwen_deepseek_and_kimi_go_to_alibaba_first ......... ok
+claude_starts_at_the_leaf_because_no_primary_serves_it  ok
+maxplus_is_never_above_a_primary ................... ok
+the_chain_still_works_with_every_optional_key_missing  ok
+```
+
+`maxplus_is_never_above_a_primary` is the one worth keeping: Rev D §3 classifies
+maxplus as LEAF, and this fails if it ever sorts first for a model a primary
+serves — the way that classification would quietly stop being true.
+
+The first version of these tests failed intermittently. Environment variables are
+process-global and cargo runs tests in a crate on parallel threads, so the "no
+keys configured" case was racing the others. They now share a mutex.
+
+```
+$ cargo test -p ghostclaw-providers   # ×3, stable
+44 passed; 0 failed
+
+$ cargo test --workspace
+102 passed; 0 failed
 ```
 
 ## 8. Cost note
