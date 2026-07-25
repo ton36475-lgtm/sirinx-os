@@ -1,0 +1,159 @@
+{
+  "name": "GhostClaw Status → Telegram",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "ghostclaw-status"
+    },
+    {
+      "parameters": {
+        "url": "https://9router-api.tondhm-z999.workers.dev/api/status",
+        "options": {}
+      },
+      "id": "http-status",
+      "name": "GET Bridge Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://9router-api.tondhm-z999.workers.dev/api/models",
+        "options": {}
+      },
+      "id": "http-models",
+      "name": "GET Models",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "const status = $input.first().json;\nconst models = $input.last().json;\n\nconst omniStatus = status?.services?.omniRoute?.reachable ? '✅ Connected' : '❌ Down';\nconst modelCount = models?.stats?.total || 0;\nconst providerCount = models?.stats?.providers || 0;\nconst agents = status?.a2aBridges?.bridges || [];\nconst agentCount = agents.length;\nconst runningAgents = agents.filter(a => a.status === 'running').length;\n\nreturn [{\n  json: {\n    text: `🤖 *GhostClaw System Status*\n━━━━━━━━━━━━━━━━━\n📡 OmniRoute: ${omniStatus}\n🧠 Models: ${modelCount} from ${providerCount} providers\n👥 Agents: ${agentCount} (${runningAgents} running)\n🕐 Last: ${new Date().toLocaleTimeString()}`\n  }\n}];"
+      },
+      "id": "format-msg",
+      "name": "Format Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "tg-send",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const models = $input.first().json;\nconst providers = models?.providers || [];\n\nlet text = '📊 *Provider Overview*\\n━━━━━━━━━━━━━━━━━\\n';\n\nfor (const p of providers.slice(0, 5)) {\n  const status = p.models?.length > 0 ? '✅' : '⚠️';\n  text += `${status} *${p.provider}*: ${p.models?.length || 0} models\\n`;\n}\n\nif (providers.length > 5) {\n  text += `\\n... and ${providers.length - 5} more providers`;\n}\n\nreturn [{ json: { text } }];"
+      },
+      "id": "format-providers",
+      "name": "Format Providers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 500]
+    },
+    {
+      "parameters": {
+        "chatId": "",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "tg-providers",
+      "name": "Send Providers to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [850, 500]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "GET Bridge Status",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET Models",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Bridge Status": {
+      "main": [
+        [
+          {
+            "node": "Format Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Models": {
+      "main": [
+        [
+          {
+            "node": "Format Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Format Providers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Message": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Providers": {
+      "main": [
+        [
+          {
+            "node": "Send Providers to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "pinData": {},
+  "versionId": "1",
+  "triggerCount": 0,
+  "tagIds": []
+}
