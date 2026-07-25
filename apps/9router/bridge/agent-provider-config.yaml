@@ -1,0 +1,178 @@
+# 9Router — A2A Bridge Provider Config for ZCode Agents
+# ======================================================
+# All agents sync through 9router on Cloudflare + OmniRoute
+
+schema_version: ghostclaw.a2a.model_bridge.v2
+bridge_id: 9router-a2a-bridge
+bridge_ts: "2026-07-26"
+last_sync: ""
+default_provider: custom:omniroute-free
+default_base_url: http://127.0.0.1:20128/v1
+
+# ── Provider Endpoint Configuration ──────────────────
+endpoints:
+  omniroute:
+    url: http://127.0.0.1:20128/v1
+    api_key: omniroute-free
+    type: chat_completions
+    default_model: auto/best-coding
+
+  9router:
+    url: https://dev.sirinx.co/9router/api
+    api_key_env: OMNIROUTE_API_KEY
+    type: chat_completions
+    default_model: auto/best-free
+
+  cloudflare:
+    url: https://dev.sirinx.co/9router/api
+    type: chat_completions
+    models_prefix: cf/@cf/
+
+# ── 11 Agents ────────────────────────────────────────
+agents:
+  hermes:
+    model: kiro-auto
+    provider: omniroute
+    role: commander
+    route_to: 9router
+
+  codex:
+    model: cl/deepseek/deepseek-v4-pro
+    provider: omniroute
+    role: builder
+    route_to: 9router
+
+  opencode:
+    model: cl/deepseek/deepseek-v4-pro
+    provider: omniroute
+    role: reviewer
+    route_to: 9router
+
+  zcode:
+    model: auto/best-coding
+    provider: omniroute
+    role: architect
+    route_to: 9router
+
+  kiro:
+    model: kr/claude-sonnet-5
+    provider: omniroute
+    role: builder
+    route_to: 9router
+    sync_with: [copilot, zcode]
+
+  copilot:
+    model: auto/best-coding
+    provider: omniroute
+    role: builder
+    route_to: 9router
+    sync_with: [kiro]
+
+  claude:
+    model: cc/claude-sonnet-5
+    provider: omniroute
+    role: architect
+    route_to: 9router
+
+  antigravity2:
+    model: auto/best-reasoning
+    provider: omniroute
+    role: guard
+    route_to: 9router
+
+  webmcp:
+    model: auto/best-fast
+    provider: omniroute
+    role: automator
+    route_to: 9router
+
+  planner:
+    model: auto/best-reasoning
+    provider: omniroute
+    role: planner
+    route_to: 9router
+
+  zai_tui:
+    model: auto/best-fast
+    provider: omniroute
+    role: interface
+    route_to: 9router
+
+# ── Sync Groups ──────────────────────────────────────
+sync_groups:
+  build-team:
+    agents: [codex, kiro, copilot]
+    interval: 15
+    route: omniroute
+
+  architect-team:
+    agents: [zcode, claude, opencode]
+    interval: 30
+    route: omniroute
+
+  command:
+    agents: [hermes, planner]
+    interval: 10
+    route: omniroute
+
+  standby-pool:
+    agents: [antigravity2, webmcp, zai_tui]
+    interval: 60
+    route: 9router
+
+  full-mesh:
+    agents: [hermes, codex, opencode, zcode, kiro, copilot, claude]
+    interval: 300
+    route: 9router
+
+# ── Routing Rules ────────────────────────────────────
+routes:
+  - type: default
+    target: hermes
+    provider: omniroute
+
+  - type: coding
+    target: [codex, kiro]
+    provider: omniroute
+
+  - type: review
+    target: opencode
+    provider: omniroute
+
+  - type: architecture
+    target: [zcode, claude]
+    provider: omniroute
+
+  - type: planning
+    target: planner
+    provider: omniroute
+
+  - type: security
+    target: antigravity2
+    provider: omniroute
+
+  - type: web
+    target: webmcp
+    provider: omniroute
+
+  - type: tui
+    target: zai_tui
+    provider: omniroute
+
+  - type: triad-sync
+    target: [kiro, copilot, zcode]
+    provider: omniroute
+    route_to: 9router
+
+  - type: cloudflare-free
+    target: all
+    provider: omniroute
+    model_prefix: cf/@cf/
+    route_to: 9router
+
+  aliyun-maas:
+    url: "https://ws-pmpu62szcpaossb6.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+    api_key_env: ALIYUN_MAAS_API_KEY
+    type: chat_completions
+    default_model: qwen3-coder-plus
+    models_prefix: qwen/@aliyun/

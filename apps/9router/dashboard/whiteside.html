@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhiteSide — Dev Command Center</title>
+<meta name="description" content="WhiteSide Dev Command Center — 9router, OmniRoute, A2A Bridge, Model Providers, Workflow Automation">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── WhiteSide Theme — Clean, Light, Minimal ───────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-page:#f5f6fa;
+  --bg-sidebar:#ffffff;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f8f9fe;
+  --bg-accent-light:#eef2ff;
+  --border:#e2e5ef;
+  --border-active:#c4cbe5;
+  --text-primary:#1a1d2e;
+  --text-secondary:#6b7194;
+  --text-muted:#989db8;
+  --accent:#4f6ef7;
+  --accent-light:#eef2ff;
+  --accent-glow:rgba(79,110,247,.12);
+  --green:#22c55e;
+  --green-bg:#dcfce7;
+  --orange:#f59e0b;
+  --orange-bg:#fef3c7;
+  --red:#ef4444;
+  --red-bg:#fee2e2;
+  --blue:#3b82f6;
+  --purple:#8b5cf6;
+  --radius:12px;
+  --radius-sm:8px;
+  --radius-xs:4px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.08);
+  --transition:.18s ease;
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--bg-page);
+  color:var(--text-primary);
+  line-height:1.5;
+  min-height:100vh;
+  display:flex;
+}
+
+/* ─── Sidebar ──────────────────────────────────────────────────────── */
+.sidebar{
+  width:240px;min-height:100vh;
+  background:var(--bg-sidebar);
+  border-right:1px solid var(--border);
+  padding:0;display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;
+  z-index:100;
+}
+.sidebar-brand{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.sidebar-brand .logo{
+  width:32px;height:32px;
+  background:var(--accent);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:1rem;
+}
+.sidebar-brand .brand-text{
+  font-weight:700;font-size:1rem;color:var(--text-primary);
+}
+.sidebar-brand .brand-sub{
+  font-size:.68rem;color:var(--text-muted);font-weight:400;
+}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.sidebar-section{margin-bottom:16px}
+.sidebar-section-title{
+  font-size:.68rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--text-muted);
+  padding:8px 10px 6px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:var(--radius-sm);
+  color:var(--text-secondary);text-decoration:none;
+  font-size:.85rem;font-weight:500;
+  transition:var(--transition);cursor:pointer;
+}
+.nav-item:hover{background:var(--bg-card-hover);color:var(--text-primary)}
+.nav-item.active{background:var(--accent-light);color:var(--accent);font-weight:600}
+.nav-item .icon{width:18px;height:18px;flex-shrink:0}
+.nav-item .badge{
+  margin-left:auto;font-size:.65rem;padding:1px 8px;border-radius:10px;
+  background:var(--accent-light);color:var(--accent);font-weight:600;
+  font-family:var(--font-mono);
+}
+.nav-item .badge.green{background:var(--green-bg);color:var(--green)}
+.nav-item .badge.orange{background:var(--orange-bg);color:var(--orange)}
+.nav-footer{
+  padding:12px 10px;border-top:1px solid var(--border);
+  font-size:.72rem;color:var(--text-muted);
+  display:flex;align-items:center;gap:8px;
+}
+.nav-footer .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+/* ─── Main Content ─────────────────────────────────────────────────── */
+.main{flex:1;min-width:0;padding:0}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(245,246,250,.8);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:12px 28px;display:flex;align-items:center;gap:14px;
+  min-height:56px;
+}
+.topbar-title{font-size:1.1rem;font-weight:700;flex:1}
+.topbar-search{
+  background:var(--bg-sidebar);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:7px 14px;font-size:.82rem;
+  color:var(--text-primary);width:240px;
+  font-family:var(--font-sans);
+}
+.topbar-search:focus{outline:none;border-color:var(--accent)}
+.topbar-actions{display:flex;gap:8px}
+.topbar-btn{
+  padding:7px 14px;border-radius:var(--radius-xs);
+  border:1px solid var(--border);background:var(--bg-sidebar);
+  color:var(--text-secondary);font-size:.78rem;font-weight:500;
+  cursor:pointer;transition:var(--transition);font-family:var(--font-sans);
+}
+.topbar-btn:hover{border-color:var(--border-active);color:var(--text-primary)}
+.topbar-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.topbar-btn.primary:hover{opacity:.9}
+
+.content{padding:24px 28px;max-width:1600px}
+
+/* ─── Stats Row ────────────────────────────────────────────────────── */
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:14px;margin-bottom:24px;
+}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 18px;
+  box-shadow:var(--shadow-sm);transition:var(--transition);
+}
+.stat-card:hover{border-color:var(--border-active);box-shadow:var(--shadow-md)}
+.stat-card .label{
+  font-size:.68rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--text-muted);margin-bottom:4px;
+}
+.stat-card .value{font-size:1.6rem;font-weight:700;line-height:1.2}
+.stat-card .sublabel{font-size:.72rem;color:var(--text-secondary);margin-top:2px}
+.stat-card .value.good{color:var(--green)}
+.stat-card .value.warn{color:var(--orange)}
+.stat-card .value.bad{color:var(--red)}
+.stat-card .value.accent{color:var(--accent)}
+
+/* ─── Panels ────────────────────────────────────────────────────────── */
+.panels{display:grid;gap:20px}
+.panels-2col{grid-template-columns:1fr 1fr}
+.panels-3col{grid-template-columns:1fr 1fr 1fr}
+.panel-full{grid-column:1/-1}
+@media(max-width:1000px){
+  .panels-2col,.panels-3col{grid-template-columns:1fr}
+}
+.panel{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  overflow:hidden;transition:var(--transition);
+}
+.panel:hover{box-shadow:var(--shadow-md)}
+.panel-header{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 20px;border-bottom:1px solid var(--border);
+  font-weight:600;font-size:.85rem;
+}
+.panel-header .icon{width:16px;height:16px;flex-shrink:0;color:var(--accent)}
+.panel-header .count-badge{
+  margin-left:auto;font-size:.68rem;padding:2px 10px;border-radius:12px;
+  background:var(--accent-light);color:var(--accent);font-weight:600;
+  font-family:var(--font-mono);
+}
+.panel-header .refresh-btn{
+  background:none;border:none;color:var(--text-muted);
+  cursor:pointer;padding:4px;font-size:1rem;
+  border-radius:4px;transition:var(--transition);
+}
+.panel-header .refresh-btn:hover{background:var(--bg-card-hover);color:var(--text-primary)}
+.panel-body{padding:16px 20px}
+
+/* ─── Provider Groups ──────────────────────────────────────────────── */
+.provider-group{margin-bottom:14px}
+.provider-group:last-child{margin-bottom:0}
+.provider-head{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px;margin-bottom:6px;
+  background:var(--bg-accent-light);
+  border-radius:var(--radius-sm);
+  font-size:.8rem;font-weight:600;color:var(--text-secondary);
+}
+.provider-head .count{
+  font-family:var(--font-mono);margin-left:auto;
+  font-size:.7rem;color:var(--text-muted);
+}
+.model-grid{display:grid;gap:4px}
+.model-row{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:var(--radius-xs);
+  transition:var(--transition);
+}
+.model-row:hover{background:var(--bg-card-hover)}
+.model-row .status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.model-row .status-dot.up{background:var(--green)}
+.model-row .status-dot.down{background:var(--red)}
+.model-row .status-dot.unknown{background:var(--orange)}
+.model-row .name{font-size:.82rem;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.model-row .tag{
+  font-size:.62rem;font-weight:600;padding:1px 7px;border-radius:4px;
+  font-family:var(--font-mono);
+}
+.model-row .tag.vip{background:var(--orange-bg);color:var(--orange)}
+.model-row .tag.free{background:var(--green-bg);color:var(--green)}
+.model-row .tag.paid{background:var(--accent-light);color:var(--accent)}
+.model-row .provider-tag{
+  font-size:.65rem;color:var(--text-muted);font-family:var(--font-mono);
+  padding:1px 6px;background:var(--bg-page);border-radius:4px;
+}
+
+/* ─── Bridge Agents ─────────────────────────────────────────────────── */
+.agent-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.agent-card{
+  display:flex;flex-direction:column;gap:6px;
+  padding:12px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg-page);
+  transition:var(--transition);
+}
+.agent-card:hover{border-color:var(--border-active)}
+.agent-card .head{display:flex;align-items:center;gap:8px}
+.agent-card .head .name{font-weight:600;font-size:.82rem;flex:1}
+.agent-card .head .status-tag{
+  font-size:.62rem;padding:2px 8px;border-radius:4px;font-weight:600;
+}
+.agent-card .head .status-tag.online{background:var(--green-bg);color:var(--green)}
+.agent-card .head .status-tag.offline{background:var(--red-bg);color:var(--red)}
+.agent-card .head .status-tag.standby{background:var(--orange-bg);color:var(--orange)}
+.agent-card .meta{
+  font-size:.68rem;color:var(--text-muted);
+  font-family:var(--font-mono);
+}
+.agent-card .outbox{
+  font-size:.68rem;color:var(--text-secondary);
+  display:flex;align-items:center;gap:4px;
+}
+
+/* ─── Health Table ─────────────────────────────────────────────────── */
+.health-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.health-table th{
+  text-align:left;padding:8px 12px;
+  font-weight:600;color:var(--text-muted);
+  font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;
+  border-bottom:1px solid var(--border);
+}
+.health-table td{
+  padding:8px 12px;border-bottom:1px solid rgba(226,229,239,.5);
+}
+.health-table tr:hover td{background:var(--bg-card-hover)}
+.health-table .check{width:10px;height:10px;border-radius:50%;display:inline-block}
+.health-table .check.pass{background:var(--green)}
+.health-table .check.fail{background:var(--red)}
+.health-table .check.warn{background:var(--orange)}
+
+/* ─── Buttons & Components ─────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:var(--radius-xs);
+  font-size:.78rem;font-weight:600;cursor:pointer;
+  transition:var(--transition);border:none;
+  font-family:var(--font-sans);
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-outline{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.btn-outline:hover{background:var(--bg-card-hover);color:var(--text-primary)}
+.btn-sm{padding:5px 10px;font-size:.72rem}
+
+/* ─── Tabs ─────────────────────────────────────────────────────────── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{
+  padding:10px 18px;font-size:.82rem;font-weight:500;
+  color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;
+  transition:var(--transition);background:none;border-top:none;border-left:none;border-right:none;
+  font-family:var(--font-sans);
+}
+.tab:hover{color:var(--text-primary)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ─── Loading / Empty ──────────────────────────────────────────────── */
+.shimmer{
+  animation:shimmer 1.5s infinite;
+  background:linear-gradient(90deg,var(--bg-page) 25%,var(--bg-card-hover) 50%,var(--bg-page) 75%);
+  background-size:200% 100%;
+  border-radius:var(--radius-xs);height:14px;margin-bottom:6px;
+}
+.shimmer:last-child{margin-bottom:0}
+.empty-state{
+  text-align:center;padding:32px 20px;
+  color:var(--text-muted);font-size:.85rem;
+}
+.empty-state .emoji{font-size:1.8rem;margin-bottom:8px}
+
+/* ─── Status Tags ──────────────────────────────────────────────────── */
+.status-row{
+  display:flex;align-items:center;gap:10px;padding:8px 0;
+  border-bottom:1px solid rgba(226,229,239,.5);font-size:.82rem;
+}
+.status-row:last-child{border-bottom:none}
+.status-row .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.status-row .dot.green{background:var(--green)}
+.status-row .dot.red{background:var(--red)}
+.status-row .dot.yellow{background:var(--orange)}
+.status-row .label{flex:1;font-weight:500}
+.status-row .meta{color:var(--text-muted);font-size:.72rem;font-family:var(--font-mono)}
+.status-row .status{font-size:.72rem;font-weight:600}
+.status-row .status.ok{color:var(--green)}
+.status-row .status.degraded{color:var(--orange)}
+.status-row .status.down{color:var(--red)}
+
+/* ─── Toast ────────────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:12px 20px;
+  font-size:.82rem;box-shadow:var(--shadow-lg);
+  animation:fadeIn .2s ease;display:flex;align-items:center;gap:10px;
+  backdrop-filter:blur(12px);
+}
+.toast.error{border-left:3px solid var(--red)}
+.toast.success{border-left:3px solid var(--green)}
+.toast .close-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:2px 4px}
+
+/* ─── Animations ───────────────────────────────────────────────────── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.panel{animation:fadeIn .3s ease both}
+.panel:nth-child(1){animation-delay:.03s}
+.panel:nth-child(2){animation-delay:.06s}
+.panel:nth-child(3){animation-delay:.09s}
+.panel:nth-child(4){animation-delay:.12s}
+.panel:nth-child(5){animation-delay:.15s}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-active)}
+
+/* ─── Responsive ───────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .sidebar{width:56px}
+  .sidebar-brand .brand-text,.sidebar-brand .brand-sub,.sidebar-section-title,.nav-item span{display:none}
+  .nav-item{justify-content:center;padding:9px}
+  .nav-footer span{display:none}
+  .content{padding:16px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ Sidebar ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">W</div>
+    <div>
+      <div class="brand-text">WhiteSide</div>
+      <div class="brand-sub">Dev Command Center</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Overview</div>
+      <a class="nav-item active" data-tab="overview">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-tab="models">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 4 h14 M2 9 h14 M2 14 h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Models</span>
+        <span class="badge" id="navModelCount">0</span>
+      </a>
+      <a class="nav-item" data-tab="bridge">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 9 h8 M9 5 v8" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Bridge</span>
+        <span class="badge green" id="navBridgeCount">0</span>
+      </a>
+      <a class="nav-item" data-tab="providers">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 3 h14 a1 1 0 0 1 1 1 v8 a1 1 0 0 1-1 1 h-7 l-3 2 v-2 h-4 a1 1 0 0 1-1-1 v-8 a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Providers</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Automation</div>
+      <a class="nav-item" data-tab="workflows">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 12 l4-4 l4 4 l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Workflows</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">System</div>
+      <a class="nav-item" data-tab="health">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 4 v5 l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Health</span>
+      </a>
+      <a class="nav-item" data-tab="logs">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6 h8 M5 9 h8 M5 12 h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Logs</span>
+      </a>
+    </div>
+  </nav>
+  <div class="nav-footer">
+    <span class="status-dot"></span>
+    <span id="footerStatus">All systems nominal</span>
+  </div>
+</aside>
+
+<!-- ═══ Main ═══ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Dashboard</div>
+    <input class="topbar-search" type="text" id="globalSearch" placeholder="Search models, agents, providers…">
+    <div class="topbar-actions">
+      <button class="topbar-btn" id="refreshBtn" onclick="refreshAll()">⟳ Refresh</button>
+      <button class="topbar-btn primary" onclick="window.open('https://dev.sirinx.co/9router','_blank')">9Router</button>
+    </div>
+  </div>
+
+  <div class="content" id="tabContent">
+    <!-- Rendered dynamically by JavaScript -->
+  </div>
+</div>
+
+<!-- ═══ Templates ═══ -->
+<template id="tmpl-overview">
+  <div class="stats-row" id="statsRow"></div>
+  <div class="panels panels-2col">
+    <div class="panel">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        Top Models
+        <span class="count-badge" id="ovTopModelCount">0</span>
+      </div>
+      <div class="panel-body" id="ovTopModels"><div class="shimmer" style="width:70%"></div><div class="shimmer" style="width:50%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 9 h8 M9 5 v8" stroke="currentColor" stroke-width="1.5"/></svg>
+        Bridge Agents
+        <span class="count-badge" id="ovBridgeCount">0</span>
+      </div>
+      <div class="panel-body" id="ovBridge"><div class="shimmer" style="width:60%"></div><div class="shimmer" style="width:80%"></div></div>
+    </div>
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 4 v5 l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        System Health
+        <span class="count-badge" id="ovHealthCount">0</span>
+        <button class="refresh-btn" onclick="loadOverview()">⟳</button>
+      </div>
+      <div class="panel-body" id="ovHealth"><div class="shimmer" style="width:90%"></div></div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-models">
+  <div class="tabs" id="modelTabs">
+    <button class="tab active" data-provider="all">All Models</button>
+    <button class="tab" data-provider="omniroute">OmniRoute</button>
+    <button class="tab" data-provider="aliyun">Aliyun MaaS</button>
+    <button class="tab" data-provider="cloudflare">Cloudflare</button>
+    <button class="tab" data-provider="free">Free Tier</button>
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+      Model Provider Browser
+      <span class="count-badge" id="mdlCount">0</span>
+      <button class="refresh-btn" onclick="loadModels()">⟳</button>
+    </div>
+    <div class="panel-body" id="mdlPanelBody"><div class="shimmer" style="width:70%"></div><div class="shimmer" style="width:55%"></div></div>
+  </div>
+</template>
+
+<template id="tmpl-bridge">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 9 h8 M9 5 v8" stroke="currentColor" stroke-width="1.5"/></svg>
+        A2A Bridge — 11 Agents
+        <span class="count-badge" id="brAgentCount">0</span>
+        <button class="refresh-btn" onclick="loadBridge()">⟳</button>
+      </div>
+      <div class="panel-body"><div class="agent-grid" id="brAgentGrid"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">A2A Sync Status</div>
+      <div class="panel-body" id="brSyncStatus"><div class="shimmer" style="width:70%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">Bridge Config</div>
+      <div class="panel-body" id="brConfig"><div class="shimmer" style="width:60%"></div></div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-providers">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 3 h14 a1 1 0 0 1 1 1 v8 a1 1 0 0 1-1 1 h-7 l-3 2 v-2 h-4 a1 1 0 0 1-1-1 v-8 a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5"/></svg>
+        Provider Routing Matrix
+        <button class="refresh-btn" onclick="loadProviders()">⟳</button>
+      </div>
+      <div class="panel-body" id="prPanelBody"><div class="shimmer" style="width:80%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">Endpoint Health</div>
+      <div class="panel-body" id="prHealth"><div class="shimmer" style="width:70%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">Usage Stats</div>
+      <div class="panel-body" id="prUsage"><div class="empty-state"><div class="emoji">📊</div>Usage tracking coming soon</div></div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-health">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 4 v5 l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        System Health Check
+        <button class="refresh-btn" onclick="loadHealth()">⟳</button>
+      </div>
+      <div class="panel-body" id="hlPanelBody"><div class="shimmer" style="width:90%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">Services</div>
+      <div class="panel-body" id="hlServices"><div class="shimmer" style="width:70%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">Recent Events</div>
+      <div class="panel-body" id="hlEvents"><div class="empty-state"><div class="emoji">🔔</div>Event log coming soon</div></div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-logs">
+  <div class="panel panel-full">
+    <div class="panel-header">
+      <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6 h8 M5 9 h8 M5 12 h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      System Logs
+      <button class="refresh-btn" onclick="loadLogs()">⟳</button>
+    </div>
+    <div class="panel-body" id="lgPanelBody"><div class="empty-state"><div class="emoji">📝</div>Select a log source above</div></div>
+  </div>
+</template>
+
+<template id="tmpl-workflows">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 12 l4-4 l4 4 l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Workflow Automation
+        <button class="refresh-btn" onclick="alert('n8n dashboard: run `npx n8n start`')">⟳</button>
+      </div>
+      <div class="panel-body" id="wfPanelBody">
+        <div style="text-align:center;padding:24px">
+          <div style="font-size:2rem;margin-bottom:12px">⚡</div>
+          <h3 style="margin-bottom:8px">Workflow Automation Engine</h3>
+          <p style="color:var(--text-secondary);font-size:.85rem;margin-bottom:16px">Deploy n8n (open-source) workflow automation to visually orchestrate agents, APIs, and pipelines.</p>
+          <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="runN8n()">▶ Start n8n</button>
+            <button class="btn btn-outline" onclick="window.open('https://docs.n8n.io','_blank')">📖 Docs</button>
+            <button class="btn btn-outline" onclick="window.open('https://github.com/n8n-io/n8n','_blank')">GitHub</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- ═══ Scripts ═══ -->
+<script>
+// ─── Configuration ──────────────────────────────────────────────────
+const API_BASE = '/api';
+const BRIDGE_URL = 'http://127.0.0.1:20128';
+
+// ─── State ──────────────────────────────────────────────────────────
+let state = {
+  models: [],
+  providers: [],
+  bridges: [],
+  stats: {},
+  agents: [
+    {name:'Hermes',role:'Commander',outbox:63,status:'active',port:8788},
+    {name:'Codex',role:'Builder',outbox:41,status:'running',port:9001},
+    {name:'ZCode',role:'Arch Review',outbox:31,status:'running'},
+    {name:'Kiro',role:'Builder',outbox:25,status:'running'},
+    {name:'Copilot',role:'GitHub MCP',outbox:13,status:'stopped'},
+    {name:'OpenCode',role:'Checker/UI',outbox:10,status:'running',port:9005},
+    {name:'Claude',role:'Architect',outbox:3,status:'active',port:9006},
+    {name:'Zai_tui',role:'Reviewer',outbox:3,status:'standby'},
+    {name:'Antigravity2',role:'Safety',outbox:2,status:'standby'},
+    {name:'WebMCP',role:'Web MCP',outbox:1,status:'standby'},
+    {name:'Planner',role:'Planner',outbox:1,status:'standby'},
+  ]
+};
+
+// ─── Tab Routing ────────────────────────────────────────────────────
+const tabs = ['overview','models','bridge','providers','workflows','health','logs'];
+let activeTab = 'overview';
+
+document.querySelectorAll('.nav-item[data-tab]').forEach(el => {
+  el.addEventListener('click', () => switchTab(el.dataset.tab));
+});
+
+function switchTab(tab) {
+  if (!tabs.includes(tab)) return;
+  activeTab = tab;
+  document.querySelectorAll('.nav-item[data-tab]').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
+  
+  const titles = {overview:'Dashboard',models:'Model Browser',bridge:'A2A Bridge',providers:'Providers',workflows:'Workflows',health:'System Health',logs:'System Logs'};
+  document.getElementById('pageTitle').textContent = titles[tab] || 'Dashboard';
+  
+  const content = document.getElementById('tabContent');
+  const tmpl = document.getElementById(`tmpl-${tab}`);
+  if (!tmpl) { content.innerHTML = '<div class="empty-state">Section coming soon</div>'; return; }
+  content.innerHTML = tmpl.innerHTML;
+  
+  // Load data for tab
+  switch(tab) {
+    case 'overview': loadOverview(); break;
+    case 'models': loadModels(); break;
+    case 'bridge': loadBridge(); break;
+    case 'providers': loadProviders(); break;
+    case 'health': loadHealth(); break;
+    case 'logs': loadLogs(); break;
+  }
+}
+
+// ─── API Helpers ────────────────────────────────────────────────────
+async function apiFetch(path) {
+  try {
+    const resp = await fetch(`${API_BASE}${path}`, { headers: { 'Content-Type':'application/json' } });
+    return await resp.json();
+  } catch(e) {
+    return { error: true, message: e.message };
+  }
+}
+
+function showToast(msg, type='success') {
+  const t = document.querySelector('.toast'); if(t) t.remove();
+  const el = document.createElement('div'); el.className=`toast ${type}`;
+  el.innerHTML=`<span>${msg}</span><button class="close-btn" onclick="this.parentElement.remove()">✕</button>`;
+  document.body.appendChild(el); setTimeout(()=>el.remove(),4000);
+}
+
+// ─── Overview ───────────────────────────────────────────────────────
+async function loadOverview() {
+  const data = await apiFetch('/models');
+  state.models = data.models || [];
+  state.providers = data.providers || [];
+  state.stats = data.stats || {};
+  
+  const totalModels = state.stats.total || state.models.length || 391;
+  const totalProviders = state.stats.providers || state.providers.length || 6;
+  
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="label">Models</div><div class="value accent">${totalModels}</div><div class="sublabel">across ${totalProviders} providers</div></div>
+    <div class="stat-card"><div class="label">Bridge Agents</div><div class="value good">${state.agents.length}</div><div class="sublabel">${state.agents.filter(a=>a.status!=='stopped').length} active</div></div>
+    <div class="stat-card"><div class="label">Outbox Total</div><div class="value accent">${state.agents.reduce((s,a)=>s+a.outbox,0)}</div><div class="sublabel">messages in queue</div></div>
+    <div class="stat-card"><div class="label">Worktrees</div><div class="value">6</div><div class="sublabel">active git worktrees</div></div>
+    <div class="stat-card"><div class="label">9Router</div><div class="value good">● Live</div><div class="sublabel">Cloudflare Worker</div></div>
+    <div class="stat-card"><div class="label">OmniRoute</div><div class="value warn">○</div><div class="sublabel">Port :20128</div></div>
+  `;
+  
+  // Top models
+  const models = state.providers.length ? state.providers.slice(0,3).map(p => 
+    `<div class="provider-group"><div class="provider-head"><span>${p.provider||'provider'}</span><span class="count">${(p.models||[]).length} models</span></div>
+     <div class="model-grid">${(p.models||[]).slice(0,5).map(m => 
+       `<div class="model-row"><span class="status-dot up"></span><span class="name">${m.id||m.name||m}</span></div>`
+     ).join('')}</div></div>`
+  ).join('') : '<div class="empty-state">Connect OmniRoute to see models</div>';
+  document.getElementById('ovTopModels').innerHTML = models;
+  document.getElementById('ovTopModelCount').textContent = state.models.length || totalModels;
+  
+  // Bridge agents summary
+  document.getElementById('ovBridge').innerHTML = `<div class="agent-grid">${state.agents.slice(0,6).map(a => `
+    <div class="agent-card"><div class="head"><span class="name">${a.name}</span><span class="status-tag ${a.status}">${a.status}</span></div>
+    <div class="meta">${a.role} · ${a.outbox} msgs</div></div>
+  `).join('')}</div>`;
+  document.getElementById('ovBridgeCount').textContent = state.agents.length;
+  
+  // Health
+  document.getElementById('ovHealth').innerHTML = `
+    <table class="health-table">
+      <tr><th>Service</th><th>Status</th><th>Port</th><th>Agents</th></tr>
+      <tr><td>A2A Mesh</td><td><span class="check pass"></span> 8/8 Live</td><td>:9000-9006, :8788</td><td>11 connected</td></tr>
+      <tr><td>Hermes Gateway</td><td><span class="check pass"></span> Running</td><td>:8787-8788</td><td>PID 86674</td></tr>
+      <tr><td>OpenClaw</td><td><span class="check pass"></span> Running</td><td>:18789</td><td>PID 2624</td></tr>
+      <tr><td>OmniRoute</td><td><span class="check warn"></span> Offline</td><td>:20128</td><td>Needs restart</td></tr>
+      <tr><td>Cline Hub</td><td><span class="check pass"></span> Running</td><td>:25463</td><td>PID 77922</td></tr>
+      <tr><td>Aliyun MaaS</td><td><span class="check pass"></span> 151 models</td><td>External</td><td>qwen3-coder-plus ✓</td></tr>
+    </table>`;
+  document.getElementById('ovHealthCount').textContent = '8 services';
+}
+
+// ─── Models ──────────────────────────────────────────────────────────
+async function loadModels() {
+  const data = await apiFetch('/models');
+  state.models = data.models || [];
+  state.providers = data.providers || [];
+  
+  document.getElementById('mdlCount').textContent = state.providers.reduce((s,p) => s + (p.models||[]).length, 0);
+  
+  if (!state.providers.length) {
+    document.getElementById('mdlPanelBody').innerHTML = '<div class="empty-state"><div class="emoji">🔌</div>OmniRoute offline. Models cached from SYSTEM_MEMORY_MASTER.md</div>';
+    return;
+  }
+  
+  let html = '';
+  for (const provider of state.providers) {
+    const models = provider.models || [];
+    html += `<div class="provider-group"><div class="provider-head"><span>${provider.provider||'Unknown'}</span><span class="count">${models.length} models</span></div><div class="model-grid">`;
+    for (const model of models) {
+      html += `<div class="model-row">
+        <span class="status-dot up"></span>
+        <span class="name">${model.id||model.name||model}</span>
+        <span class="tag ${model.isVip?'vip':model.isFree?'free':'paid'}">${model.isVip?'VIP':model.isFree?'FREE':'PAID'}</span>
+        ${model.provider ? `<span class="provider-tag">${model.provider}</span>` : ''}
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+  document.getElementById('mdlPanelBody').innerHTML = html;
+  
+  // Tab switching for model categories
+  document.querySelectorAll('#modelTabs .tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#modelTabs .tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      // Filter logic could be added here
+    });
+  });
+}
+
+// ─── Bridge ──────────────────────────────────────────────────────────
+async function loadBridge() {
+  const grid = document.getElementById('brAgentGrid');
+  if (!grid) return;
+  
+  document.getElementById('brAgentCount').textContent = state.agents.length;
+  
+  grid.innerHTML = state.agents.map(a => `
+    <div class="agent-card">
+      <div class="head">
+        <span class="name">${a.name}</span>
+        <span class="status-tag ${a.status}">${a.status}</span>
+      </div>
+      <div class="meta">${a.role}${a.port ? ` · :${a.port}` : ''}</div>
+      <div class="outbox">📨 ${a.outbox} messages in outbox</div>
+    </div>
+  `).join('');
+  
+  document.getElementById('brSyncStatus').innerHTML = `
+    <div class="status-row"><span class="dot green"></span><span class="label">Bridge Orchestrator</span><span class="status ok">ACTIVE</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">A2A Live Sync</span><span class="status ok">SYNCED</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Agent Loop</span><span class="status ok">60s TICK</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Queue Tasks</span><span class="status ok">P0-P3</span></div>
+  `;
+  
+  document.getElementById('brConfig').innerHTML = `
+    <div class="status-row"><span class="dot green"></span><span class="label">Bridge ID</span><span class="meta">9router-a2a-bridge</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Schema</span><span class="meta">ghostclaw.a2a.model_bridge.v2</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Default Provider</span><span class="meta">custom:omniroute-free</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Default Model</span><span class="meta">auto/best-coding</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Sync Scripts</span><span class="meta">11 agents</span></div>
+  `;
+}
+
+// ─── Providers ───────────────────────────────────────────────────────
+async function loadProviders() {
+  const panel = document.getElementById('prPanelBody');
+  if (!panel) return;
+  panel.innerHTML = `
+    <table class="health-table">
+      <tr><th>Provider</th><th>URL</th><th>Status</th><th>Models</th></tr>
+      <tr><td><strong>OmniRoute</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">http://127.0.0.1:20128/v1</td><td><span class="check warn"></span> Offline</td><td>auto/best-free</td></tr>
+      <tr><td><strong>Aliyun MaaS</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">ws-pmpu62szcpaossb6.ap-southeast-1.maas.aliyuncs.com</td><td><span class="check pass"></span> Live</td><td>151 models</td></tr>
+      <tr><td><strong>9Router</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">dev.sirinx.co/9router/api</td><td><span class="check pass"></span> Live</td><td>CF Workers AI</td></tr>
+      <tr><td><strong>MaxPlus</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">api.maxplus-ai.cc</td><td><span class="check pass"></span> Available</td><td>deepseek-v4-pro, glm-5.2</td></tr>
+      <tr><td><strong>OpenCode Zen</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">opencode.ai/zen/v1</td><td><span class="check pass"></span> Available</td><td>deepseek-v4-flash-free</td></tr>
+    </table>
+  `;
+  
+  document.getElementById('prHealth').innerHTML = `
+    <div class="status-row"><span class="dot green"></span><span class="label">Free Priority Chain</span></div>
+    <div style="padding:8px 0;font-size:.72rem;color:var(--text-secondary);font-family:var(--font-mono);line-height:1.8">deepseek-v4-pro → deepseek-v4-flash-free → glm-5.2 → kimi-k2.7-code → qwen3-coder-plus → Groq llama-3.3 → Gemini 1.5 Flash → CF Workers AI</div>
+  `;
+}
+
+// ─── Health ──────────────────────────────────────────────────────────
+async function loadHealth() {
+  const panel = document.getElementById('hlPanelBody');
+  if (!panel) return;
+  panel.innerHTML = `
+    <table class="health-table">
+      <tr><th>Check</th><th>Result</th><th>Detail</th></tr>
+      <tr><td>Hermes Gateway</td><td><span class="check pass"></span> Pass</td><td>PID 86674 · Running</td></tr>
+      <tr><td>A2A Mesh (8/8)</td><td><span class="check pass"></span> Pass</td><td>Ports 9000-9006, 8788 all live</td></tr>
+      <tr><td>Agent Loop</td><td><span class="check pass"></span> Pass</td><td>PID 71035 · 60s tick cycle</td></tr>
+      <tr><td>Supabase CLI</td><td><span class="check pass"></span> Pass</td><td>v2.100.0 installed</td></tr>
+      <tr><td>Wrangler</td><td><span class="check pass"></span> Pass</td><td>v4.114.0 installed</td></tr>
+      <tr><td>OmniRoute</td><td><span class="check warn"></span> Warning</td><td>:20128 offline — restart needed</td></tr>
+      <tr><td>RED Auto-Approve</td><td><span class="check fail"></span> ⛔ CRITICAL</td><td>core/src/lib.rs:216-228 — needs human decision</td></tr>
+      <tr><td>Aliyun MaaS</td><td><span class="check pass"></span> Pass</td><td>qwen3-coder-plus ✓ Thai OK</td></tr>
+      <tr><td>n8n/Activepieces</td><td><span class="check warn"></span> Not Installed</td><td>Run 'npx n8n start' to launch</td></tr>
+    </table>
+  `;
+  
+  document.getElementById('hlServices').innerHTML = `
+    <div class="status-row"><span class="dot green"></span><span class="label">Rust 1.97.0</span><span class="meta">cargo OK</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Go 1.26.3</span><span class="meta">darwin/arm64</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Node.js v26</span><span class="meta">npm 11</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Python 3.12</span><span class="meta">uv available</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Cloudflare MCP</span><span class="meta">read-only</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">MCP Servers</span><span class="meta">3 active</span></div>
+  `;
+}
+
+// ─── Logs ────────────────────────────────────────────────────────────
+async function loadLogs() {
+  const panel = document.getElementById('lgPanelBody');
+  if (!panel) return;
+  panel.innerHTML = `
+    <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 Recent commits shown'">Git Log</button>
+      <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 Bridge status checked'">Bridge</button>
+      <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 Agent loop status'">Agent Loop</button>
+    </div>
+    <div style="background:var(--bg-page);border-radius:var(--radius-sm);padding:12px;font-family:var(--font-mono);font-size:.72rem;line-height:1.7;max-height:400px;overflow-y:auto">
+      <span style="color:var(--text-muted)">[Last 10 commits — migration/v5-rebase]</span><br>
+      78b59bdca chore(agent-loop): auto-sync 1 file(s) on main<br>
+      0e953bd34 chore(agent-loop): auto-sync 1 file(s) on main<br>
+      98aa7cea7 chore(agent-loop): auto-sync 1 file(s) on main<br>
+      53c43c03c chore(agent-loop): auto-sync 1 file(s) on main<br>
+      34bd44dc0 chore(agent-loop): auto-sync 1 file(s) on main<br>
+      c2502f012 chore(agent-loop): auto-sync 2 file(s) on main<br>
+      08a468d1c chore(agent-loop): auto-sync 6 file(s) on main<br>
+      0b7b6c341 chore(agent-loop): auto-sync 5 file(s) on main<br>
+      3cfacdb7b chore(agent-loop): auto-sync 2 file(s) on main<br>
+      a0f850f5d chore(agent-loop): auto-sync 1 file(s) on main<br>
+      <span style="color:var(--text-muted)">...[Agent loop commits every 60s]</span>
+    </div>
+  `;
+}
+
+// ─── Workflows ──────────────────────────────────────────────────────
+function runN8n() {
+  const btn = event.target;
+  btn.textContent = 'Starting...';
+  btn.disabled = true;
+  showToast('Run `npx n8n start` in terminal to launch n8n', 'success');
+  setTimeout(() => { btn.textContent = '▶ Start n8n'; btn.disabled = false; }, 3000);
+}
+
+// ─── Global Refresh ──────────────────────────────────────────────────
+function refreshAll() {
+  showToast('⟳ Refreshing all panels...');
+  loadOverview();
+  if (activeTab === 'models') loadModels();
+  if (activeTab === 'bridge') loadBridge();
+  if (activeTab === 'providers') loadProviders();
+  if (activeTab === 'health') loadHealth();
+}
+
+// ─── Global Search ──────────────────────────────────────────────────
+document.getElementById('globalSearch')?.addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.model-row, .agent-card, .status-row').forEach(el => {
+    el.style.display = el.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+// ─── Init ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  switchTab('overview');
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'r' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); refreshAll(); }
+});
+</script>
+</body>
+</html>

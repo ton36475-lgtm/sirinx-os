@@ -6,21 +6,12 @@ compatibility_flags = ["nodejs_compat"]
 # Serve the dashboard as static assets alongside the Worker API
 assets = { directory = "dashboard", not_found_handling = "none" }
 
-# Route to domain
-routes = [
-  { pattern = "dev.sirinx.co/9router", zone_id = "{ZONE_ID_PLACEHOLDER}" }
-]
-
 # Environment variables
 [vars]
 OMNIROUTE_BASE_URL = "http://127.0.0.1:20128"
 OMNIROUTE_API_KEY = ""
 DASHBOARD_TITLE = "9Router Dashboard"
 VIP_MODELS = "gpt-4o,gpt-4o-mini,claude-sonnet-4-20250514,claude-haiku-3-20250313,gemini-2.5-pro,gemini-2.5-flash,deepseek-chat,deepseek-reasoner"
-
-# Worker resources
-[limits]
-cpu_ms = 30000
 
 # Logging
 [observability]

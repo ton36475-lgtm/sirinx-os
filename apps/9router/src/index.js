@@ -430,8 +430,12 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
-    // Fallback: redirect to the dashboard's canonical URL
-    const dashboardUrl = `https://dev.sirinx.co/9router/dashboard/`;
-    return Response.redirect(dashboardUrl, 302);
+    // Fallback: serve Whiteside Dev Command Center (inline dashboard)
+    const dashboardUrl = `https://dev.sirinx.co/9router/dashboard/whiteside.html`;
+    // Try whiteside first, then fall back to old dashboard
+    if (pathname === '/' || pathname === '/dashboard') {
+      return Response.redirect(dashboardUrl, 302);
+    }
+    return Response.redirect(`https://dev.sirinx.co/9router/dashboard/`, 302);
   },
 };
