@@ -1,13 +1,23 @@
 # 9Router Bridge Configuration — A2A Model Bridge for all 11 agents
-# Maps every agent to its model, role, transport, and bridge routing rules.
+# v3 — Live sync upgrade: all agents running + WebSocket paths + health checks + Telegram
 # Cloudflare Worker frontend at wrangler.toml -> OMNIROUTE_BASE_URL
 
-schema_version: "ghostclaw.a2a.model_bridge.v2"
+schema_version: "ghostclaw.a2a.model_bridge.v3"
 bridge_id: "9router-a2a-bridge"
 bridge_ts: "2026-07-26T"
 last_sync: ""
 
-# ── 11 AGENTS ────────────────────────────────────────────────────────────
+# ── WebSocket / Live Sync Endpoint ──────────────────────────────────────
+# Unified WebSocket endpoint for real-time agent sync.
+live_sync:
+  enabled: true
+  ws_endpoint: "ws://127.0.0.1:20128/ws/a2a"
+  ws_public: "wss://dev.sirinx.co/9router/ws/a2a"
+  poll_interval_seconds: 5
+  heartbeat_seconds: 30
+  max_retries: 3
+
+# ── 11 AGENTS ───────────────────────────────────────────────────────────
 
 agents:
   - id: hermes
@@ -23,6 +33,26 @@ agents:
     queue_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/queue/hermes"
     skills: [routing, orchestration, tool_capable]
     bridge_tags: [commander, primary]
+    # ── Live sync endpoint (WebSocket) ──
+    live_sync:
+      ws_path: "/ws/a2a/hermes"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/hermes"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/hermes"
+    # ── Health check ──
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'hermes$'"
+      pid_check: true
+      outbox_healthy_threshold: 200
+      heartbeat_path: "/health/hermes"
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    # ── Telegram command mapping ──
+    telegram_commands:
+      - "/hermes"
+      - "/commander"
 
   - id: codex
     display: "OpenAI Codex"
@@ -36,6 +66,22 @@ agents:
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/codex"
     skills: [coding, implementation, repo_patch]
     bridge_tags: [builder, primary]
+    live_sync:
+      ws_path: "/ws/a2a/codex"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/codex"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/codex"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'codex$' || test -S /tmp/codex.sock"
+      pid_check: true
+      outbox_healthy_threshold: 100
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/codex"
+      - "/build"
 
   - id: opencode
     display: "OpenCode Lite"
@@ -49,6 +95,22 @@ agents:
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/opencode"
     skills: [review, verification, testing]
     bridge_tags: [reviewer, primary]
+    live_sync:
+      ws_path: "/ws/a2a/opencode"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/opencode"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/opencode"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'opencode$'"
+      pid_check: true
+      outbox_healthy_threshold: 50
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/opencode"
+      - "/review"
 
   - id: zcode
     display: "ZCode CLI (GLM-5.2)"
@@ -64,6 +126,22 @@ agents:
     skills: [safety_review, architecture, policy_compliance, long_context]
     bridge_tags: [architect, reviewer]
     mcp_servers: [cua-driver, lightpanda]
+    live_sync:
+      ws_path: "/ws/a2a/zcode"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/zcode"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/zcode"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'zcode$'"
+      pid_check: true
+      outbox_healthy_threshold: 30
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/zcode"
+      - "/safety"
 
   - id: kiro
     display: "Kiro CLI"
@@ -83,6 +161,22 @@ agents:
       - TASK-20260724-002  # Create Maker quality gate
       - TASK-20260724-007  # Activate standby agents
       - TASK-20260724-008  # Start OmniRoute service
+    live_sync:
+      ws_path: "/ws/a2a/kiro"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/kiro"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/kiro"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'kiro-cli$'"
+      pid_check: true
+      outbox_healthy_threshold: 30
+      interval_seconds: 10
+      timeout_seconds: 5
+      retries: 3
+    telegram_commands:
+      - "/kiro"
+      - "/builder"
 
   - id: copilot
     display: "GitHub Copilot CLI"
@@ -100,6 +194,22 @@ agents:
     owned_task_ids:
       - TASK-20260724-005  # Clean 51 unstaged files
       - TASK-20260724-006  # Setup git remote staging
+    live_sync:
+      ws_path: "/ws/a2a/copilot"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/copilot"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/copilot"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'copilot$'"
+      pid_check: true
+      outbox_healthy_threshold: 30
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/copilot"
+      - "/git"
 
   - id: claude
     display: "Claude (Claude Code CLI)"
@@ -107,14 +217,29 @@ agents:
     model: claude-sonnet-4-20250514
     provider: anthropic
     type: cloud
-    status: standby
+    status: running
     outbox: 2
     transport: a2a_outbox
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/claude"
     skills: [architecture, heavy_debug, system_design, docs]
-    bridge_tags: [architect, standby]
-    standby_trigger: architecture_task_in_outbox
+    bridge_tags: [architect, primary]
     tier: T3
+    live_sync:
+      ws_path: "/ws/a2a/claude"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/claude"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/claude"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'claude$'"
+      pid_check: true
+      outbox_healthy_threshold: 20
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/claude"
+      - "/architect"
 
   - id: antigravity2
     display: "Antigravity 2"
@@ -122,13 +247,29 @@ agents:
     model: default
     provider: local
     type: local
-    status: standby
+    status: running
     outbox: 2
     transport: a2a_outbox
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/antigravity2"
     skills: [support, help]
-    bridge_tags: [support, standby]
-    standby_trigger: with_hermes
+    bridge_tags: [support, primary]
+    live_sync:
+      ws_path: "/ws/a2a/antigravity2"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/antigravity2"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/antigravity2"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'hermes.*antigravity2'"
+      pid_check: true
+      outbox_healthy_threshold: 20
+      interval_seconds: 30
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/antigravity2"
+      - "/support"
+      - "/help"
 
   - id: webmcp
     display: "WebMCP"
@@ -136,13 +277,28 @@ agents:
     model: default
     provider: local
     type: local
-    status: standby
+    status: running
     outbox: 1
     transport: a2a_outbox
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/webmcp"
     skills: [web_tasks, browser, mcp]
-    bridge_tags: [web, standby]
-    standby_trigger: web_task_in_outbox
+    bridge_tags: [web, primary]
+    live_sync:
+      ws_path: "/ws/a2a/webmcp"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/webmcp"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/webmcp"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'hermes.*webmcp'"
+      pid_check: true
+      outbox_healthy_threshold: 20
+      interval_seconds: 30
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/webmcp"
+      - "/web"
 
   - id: planner
     display: "Planner"
@@ -150,13 +306,28 @@ agents:
     model: default
     provider: local
     type: local
-    status: standby
+    status: running
     outbox: 1
     transport: a2a_outbox
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/planner"
     skills: [planning, strategy, roadmap]
-    bridge_tags: [planner, standby]
-    standby_trigger: planning_task_in_outbox
+    bridge_tags: [planner, primary]
+    live_sync:
+      ws_path: "/ws/a2a/planner"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/planner"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/planner"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'planner$'"
+      pid_check: true
+      outbox_healthy_threshold: 20
+      interval_seconds: 30
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/planner"
+      - "/plan"
 
   - id: zai_tui
     display: "ZAI TUI"
@@ -170,8 +341,24 @@ agents:
     a2a_path: "/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/outbox/zai_tui"
     skills: [terminal, clickup, interface]
     bridge_tags: [interface, primary]
+    live_sync:
+      ws_path: "/ws/a2a/zai_tui"
+      ws_url: "ws://127.0.0.1:20128/ws/a2a/zai_tui"
+      ws_public: "wss://dev.sirinx.co/9router/ws/a2a/zai_tui"
+    health_check:
+      enabled: true
+      type: process
+      check_command: "pgrep -f 'zai$'"
+      pid_check: true
+      outbox_healthy_threshold: 20
+      interval_seconds: 15
+      timeout_seconds: 5
+      retries: 2
+    telegram_commands:
+      - "/zai"
+      - "/tui"
 
-# ── ROUTING RULES ─────────────────────────────────────────────────────────
+# ── ROUTING RULES ───────────────────────────────────────────────────────
 
 routing:
   default: hermes
@@ -185,31 +372,118 @@ routing:
   interface: [zai_tui, hermes]
   omni_route: [kiro, hermes]
 
-# ── BRIDGE PEER SYNC ──────────────────────────────────────────────────────
+# ── BRIDGE PEER SYNC ────────────────────────────────────────────────────
 
 sync_groups:
   - name: "build-team"
     members: [codex, kiro, copilot, opencode]
     sync_mode: bidirectional
     interval_seconds: 30
+    ws_sync: true
 
   - name: "architect-team"
     members: [claude, zcode, hermes]
     sync_mode: bidirectional
     interval_seconds: 60
+    ws_sync: true
 
   - name: "standby-pool"
     members: [antigravity2, webmcp, planner, kiro]
     sync_mode: unidirectional
     direction: kiro->standbys
     interval_seconds: 120
+    ws_sync: true
 
   - name: "full-mesh"
     members: [hermes, codex, opencode, zcode, kiro, copilot, claude, antigravity2, webmcp, planner, zai_tui]
     sync_mode: bidirectional
     interval_seconds: 300
+    ws_sync: true
 
-# ── OMNIROUTE ─────────────────────────────────────────────────────────────
+# ── TELEGRAM COMMAND INDEX ─────────────────────────────────────────────
+
+telegram:
+  enabled: true
+  default_target: hermes
+  command_prefix: "/"
+  commands:
+    - command: "/hermes"
+      target: hermes
+      description: "Talk to Hermes Commander (orchestrator)"
+    - command: "/commander"
+      target: hermes
+      description: "Alias for /hermes"
+    - command: "/codex"
+      target: codex
+      description: "Talk to OpenAI Codex (build captain)"
+    - command: "/build"
+      target: codex
+      description: "Alias for /codex"
+    - command: "/opencode"
+      target: opencode
+      description: "Talk to OpenCode (reviewer)"
+    - command: "/review"
+      target: opencode
+      description: "Alias for /opencode (request code review)"
+    - command: "/zcode"
+      target: zcode
+      description: "Talk to ZCode CLI (safety architect)"
+    - command: "/safety"
+      target: zcode
+      description: "Alias for /zcode (safety review)"
+    - command: "/kiro"
+      target: kiro
+      description: "Talk to Kiro CLI (default builder)"
+    - command: "/builder"
+      target: kiro
+      description: "Alias for /kiro"
+    - command: "/copilot"
+      target: copilot
+      description: "Talk to GitHub Copilot (git assistant)"
+    - command: "/git"
+      target: copilot
+      description: "Alias for /copilot (git operations)"
+    - command: "/claude"
+      target: claude
+      description: "Talk to Claude (chief architect)"
+    - command: "/architect"
+      target: claude
+      description: "Alias for /claude (architecture help)"
+    - command: "/antigravity2"
+      target: antigravity2
+      description: "Talk to Antigravity 2 (support)"
+    - command: "/support"
+      target: antigravity2
+      description: "Alias for /antigravity2"
+    - command: "/help"
+      target: antigravity2
+      description: "Get help from Antigravity 2"
+    - command: "/webmcp"
+      target: webmcp
+      description: "Talk to WebMCP (web automation)"
+    - command: "/web"
+      target: webmcp
+      description: "Alias for /webmcp (browser tasks)"
+    - command: "/planner"
+      target: planner
+      description: "Talk to Planner (strategic planning)"
+    - command: "/plan"
+      target: planner
+      description: "Alias for /planner"
+    - command: "/zai"
+      target: zai_tui
+      description: "Talk to ZAI TUI (terminal interface)"
+    - command: "/tui"
+      target: zai_tui
+      description: "Alias for /zai (terminal interface)"
+    - command: "/agents"
+      target: hermes
+      description: "List all agents and their status"
+    - command: "/status"
+      target: hermes
+      description: "Show bridge and sync status"
+
+# ── OMNIROUTE ───────────────────────────────────────────────────────────
 
 omni_route:
   enabled: true
@@ -218,12 +492,20 @@ omni_route:
   webhook_sync: true
   bridge_mode: "hybrid"
   fallback: "jsonl"
+  live_sync:
+    enabled: true
+    ws_endpoint: "/ws/a2a"
+    health_endpoint: "/health"
+    health_check_interval: 30
 
-# ── CLOUDFLARE WORKER ─────────────────────────────────────────────────────
+# ── CLOUDFLARE WORKER ───────────────────────────────────────────────────
 
 cloudflare_worker:
   enabled: true
   worker_name: "9router-api"
   routes:
     - pattern: "dev.sirinx.co/9router"
-  observability: false
+  observability: true
+  websocket_routes:
+    - pattern: "dev.sirinx.co/9router/ws/a2a"
+    - pattern: "dev.sirinx.co/9router/ws/a2a/*"

@@ -1,0 +1,104 @@
+{
+  "schema_version": "ghostclaw.telegram.commands.v1",
+  "bridge_id": "9router-a2a-bridge",
+  "description": "GhostClaw Telegram Bot inline keyboard commands for agent management",
+  "button_layout": {
+    "row1": [
+      { "id": "gc_status",     "label": "🔍 Status",      "callback_data": "gc_status" },
+      { "id": "gc_sync",       "label": "🔄 Sync",        "callback_data": "gc_sync" },
+      { "id": "gc_activate",   "label": "▶ Activate",      "callback_data": "gc_activate" }
+    ],
+    "row2": [
+      { "id": "gc_start",      "label": "▶ Start Agent",   "callback_data": "gc_start" },
+      { "id": "gc_stop",       "label": "⏹ Stop Agent",    "callback_data": "gc_stop" },
+      { "id": "gc_dashboard",  "label": "📊 Dashboard",    "callback_data": "gc_dashboard" }
+    ],
+    "row3": [
+      { "id": "gc_reset",      "label": "🔁 Reset Bridge", "callback_data": "gc_reset" },
+      { "id": "gc_logs",       "label": "📋 Logs",         "callback_data": "gc_logs" },
+      { "id": "gc_help",       "label": "❓ Help",          "callback_data": "gc_help" }
+    ]
+  },
+  "commands": {
+    "gc_status": {
+      "label": "🔍 Status",
+      "description": "Show all 11 agents health, queue status, and bridge state",
+      "action": "status",
+      "handler": "bash scripts/gc-bridge-orchestrator.sh status"
+    },
+    "gc_sync": {
+      "label": "🔄 Sync",
+      "description": "Trigger full A2A bridge sync cycle across all agents",
+      "action": "sync",
+      "handler": "bash scripts/gc-bridge-orchestrator.sh sync"
+    },
+    "gc_activate": {
+      "label": "▶ Activate",
+      "description": "Activate all pending queue tasks for processing",
+      "action": "activate_queue",
+      "handler": "bash scripts/gc-bridge-orchestrator.sh activate-queue"
+    },
+    "gc_start": {
+      "label": "▶ Start Agent",
+      "description": "Start a specific agent by name (prompt for agent ID)",
+      "action": "start_agent",
+      "handler": "bash scripts/gc-agent-control.sh start",
+      "requires_input": true,
+      "input_prompt": "Which agent to start? (hermes, codex, opencode, zcode, kiro, copilot, claude, antigravity2, webmcp, planner, zai_tui)"
+    },
+    "gc_stop": {
+      "label": "⏹ Stop Agent",
+      "description": "Stop a specific agent by name (prompt for agent ID)",
+      "action": "stop_agent",
+      "handler": "bash scripts/gc-agent-control.sh stop",
+      "requires_input": true,
+      "input_prompt": "Which agent to stop? (hermes, codex, opencode, zcode, kiro, copilot, claude, antigravity2, webmcp, planner, zai_tui)"
+    },
+    "gc_dashboard": {
+      "label": "📊 Dashboard",
+      "description": "Return the GhostClaw dashboard URL and status links",
+      "action": "show_dashboard",
+      "handler": "echo",
+      "response": "📊 GhostClaw Dashboard\n━━━━━━━━━━━━━━━━━━━━━\nLocal Bridge: http://127.0.0.1:20128\nOmniRoute:    dev.sirinx.co/9router\nA2A Runtime:  .ghostclaw_runtime/a2a2a/"
+    },
+    "gc_reset": {
+      "label": "🔁 Reset Bridge",
+      "description": "Reset bridge state to clean running state",
+      "action": "reset_bridge",
+      "handler": "bash scripts/gc-bridge-orchestrator.sh start",
+      "confirm": true,
+      "confirm_text": "Are you sure you want to reset the bridge state? This will clear all agent connection states."
+    },
+    "gc_logs": {
+      "label": "📋 Logs",
+      "description": "Show recent bridge logs and outbox counts",
+      "action": "show_logs",
+      "handler": "ls -lt .ghostclaw_runtime/a2a2a/logs/ 2>/dev/null | head -10"
+    },
+    "gc_help": {
+      "label": "❓ Help",
+      "description": "Show the Telegram command menu with all available buttons",
+      "action": "show_help",
+      "handler": "echo",
+      "response": "🤖 GhostClaw Telegram Commands\n━━━━━━━━━━━━━━━━━━━━━━━━━\n\n🔍 Status — Show all 11 agents health + queue + bridge\n🔄 Sync — Trigger A2A sync cycle across all agents\n▶ Activate — Activate all pending queue tasks\n▶ Start Agent <name> — Mark a specific agent as running\n⏹ Stop Agent <name> — Mark a specific agent as stopped\n📊 Dashboard — Show dashboard URL and links\n🔁 Reset Bridge — Reset bridge to clean state\n📋 Logs — Show recent bridge logs\n❓ Help — Show this menu\n\nType the callback_data to execute a command, e.g.: gc_status"
+    }
+  },
+  "telegram_inline_keyboard": [
+    [
+      { "text": "🔍 Status", "callback_data": "gc_status" },
+      { "text": "🔄 Sync", "callback_data": "gc_sync" },
+      { "text": "▶ Activate", "callback_data": "gc_activate" }
+    ],
+    [
+      { "text": "▶ Start Agent", "callback_data": "gc_start" },
+      { "text": "⏹ Stop Agent", "callback_data": "gc_stop" },
+      { "text": "📊 Dashboard", "callback_data": "gc_dashboard" }
+    ],
+    [
+      { "text": "🔁 Reset Bridge", "callback_data": "gc_reset" },
+      { "text": "📋 Logs", "callback_data": "gc_logs" },
+      { "text": "❓ Help", "callback_data": "gc_help" }
+    ]
+  ],
+  "updated_at": "2026-07-26T05:00:00Z"
+}
