@@ -204,8 +204,7 @@ impl Task {
     /// - Its risk tier is `Green` (auto-executable), or
     /// - It has been explicitly approved.
     pub fn can_advance(&self) -> bool {
-        !self.stage.is_terminal()
-            && (self.risk_tier.is_auto_executable() || self.approved)
+        !self.stage.is_terminal() && (self.risk_tier.is_auto_executable() || self.approved)
     }
 }
 

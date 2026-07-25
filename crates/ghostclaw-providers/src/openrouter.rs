@@ -23,9 +23,9 @@ impl LlmProvider for OpenRouterProvider {
     }
 
     fn complete(&self, system: Option<&str>, prompt: &str) -> String {
-        format!("OPENROUTER_ENDPOINT: {}/chat/completions | MODEL: {}", 
-            self.base_url,
-            self.model
+        format!(
+            "OPENROUTER_ENDPOINT: {}/chat/completions | MODEL: {}",
+            self.base_url, self.model
         )
     }
 }

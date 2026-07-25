@@ -2,10 +2,10 @@
 // Routes tasks to different AI agents
 
 pub enum AgentType {
-    ClaudeCode,  // High-quality architecture
-    Codex,       // Security review
-    OpenCode,    // Autonomous dispatch
-    Cursor,      // UI/UX edits
+    ClaudeCode, // High-quality architecture
+    Codex,      // Security review
+    OpenCode,   // Autonomous dispatch
+    Cursor,     // UI/UX edits
 }
 
 pub struct AgentRouter;

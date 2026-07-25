@@ -1,10 +1,17 @@
 //! GHOSTCLAW Telegram Bot — command center with inline-keyboard approvals.
 //! Posts to Hermes /api/tasks/:id/approve|reject on callback.
+//!
+//! The `mp*` commands for the maxplus lane live in [`maxplus_commands`] and are
+//! dispatched before the existing surface, so `/task` and `/status` are untouched.
 
+use std::sync::Arc;
+
+use ghostclaw_providers::breaker::CircuitBreaker;
+use ghostclaw_telegram::maxplus_commands::{self, is_whitelisted, LaneState, MpCommand, Registry};
 use serde::Deserialize;
 use serde_json::json;
 use std::env;
-use tracing::info;
+use tracing::{info, warn};
 
 #[derive(Deserialize)]
 struct TaskResponse {
@@ -18,10 +25,27 @@ async fn main() -> anyhow::Result<()> {
 
     let bot_token = env::var("TELEGRAM_BOT_TOKEN")
         .expect("TELEGRAM_BOT_TOKEN required");
+    // The deployed config uses TELEGRAM_HOME_CHANNEL / TELEGRAM_ALLOWED_USERS.
+    // TELEGRAM_ADMIN_CHAT_ID is accepted as an alias so either naming works.
     let chat_id = env::var("TELEGRAM_ADMIN_CHAT_ID")
-        .expect("TELEGRAM_ADMIN_CHAT_ID required");
+        .or_else(|_| env::var("TELEGRAM_HOME_CHANNEL"))
+        .expect("TELEGRAM_ADMIN_CHAT_ID or TELEGRAM_HOME_CHANNEL required");
+    let allowed_users = env::var("TELEGRAM_ALLOWED_USERS").unwrap_or_default();
     let hermes_url = env::var("HERMES_URL")
         .unwrap_or_else(|_| "http://127.0.0.1:8787".into());
+
+    let registry_path = env::var("GHOSTCLAW_MODELS_MAXPLUS")
+        .unwrap_or_else(|_| "config/models.maxplus.json".into());
+    let lane = match Registry::load(&registry_path) {
+        Ok(reg) => {
+            info!(models = reg.models.len(), path = %registry_path, "maxplus registry loaded");
+            Some(Arc::new(LaneState::new(reg, Arc::new(CircuitBreaker::new()))))
+        }
+        Err(e) => {
+            warn!(error = %e, path = %registry_path, "maxplus registry unavailable — mp* commands disabled");
+            None
+        }
+    };
 
     info!("GHOSTCLAW Telegram Bot starting");
     info!("Hermes URL: {}", hermes_url);
@@ -104,7 +128,24 @@ async fn main() -> anyhow::Result<()> {
                 let text = msg["text"].as_str().unwrap_or("");
                 let msg_chat_id = msg["chat"]["id"].as_i64().unwrap_or(0);
 
-                if msg_chat_id.to_string() != chat_id {
+                if !is_whitelisted(msg_chat_id, &allowed_users, &chat_id) {
+                    warn!(chat = msg_chat_id, "ignoring message from non-whitelisted chat");
+                    continue;
+                }
+
+                // maxplus lane commands run first; they never shadow /task or /status.
+                if let Some(cmd) = MpCommand::parse(text) {
+                    let reply = match &lane {
+                        Some(state) => maxplus_commands::dispatch(cmd, msg_chat_id, state).await,
+                        None => format!(
+                            "maxplus registry not loaded ({registry_path}). Run the M2 probe first."
+                        ),
+                    };
+                    let _ = client
+                        .post(format!("https://api.telegram.org/bot{bot_token}/sendMessage"))
+                        .json(&json!({"chat_id": chat_id, "text": reply}))
+                        .send()
+                        .await;
                     continue;
                 }
 

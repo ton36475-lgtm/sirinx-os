@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev-dashboard",
+      "port": 8710,
+      "url": "http://127.0.0.1:8710"
+    },
+    {
+      "name": "dev-control-api",
+      "port": 8711,
+      "url": "http://127.0.0.1:8711"
+    }
+  ]
+}

@@ -6,6 +6,7 @@
 mod hash_chain;
 mod idempotency;
 mod outbox;
+mod outbox_store;
 mod resource_allocation;
 mod state_machine;
 
@@ -21,7 +22,12 @@ pub use idempotency::{
     IdempotencyDecision, IdempotencyError, IdempotencyLedger, IdempotencyRecord, IdempotencyStatus,
 };
 pub use outbox::{
-    EnqueueDecision, Outbox, OutboxError, OutboxMessage, OutboxMessageId, OutboxStatus,
+    EnqueueDecision, Outbox, OutboxError, OutboxFailureClass, OutboxMessage, OutboxMessageId,
+    OutboxStatus, OutboxTransaction,
+};
+pub use outbox_store::{
+    FileOutboxEvidenceKind, FileOutboxSnapshot, FileOutboxStore, FileOutboxStoreError,
+    FileOutboxStoreStatus, FILE_OUTBOX_STORE_MAX_SNAPSHOT_BYTES, FILE_OUTBOX_STORE_SCHEMA_VERSION,
 };
 pub use resource_allocation::{
     HardwareProfile, PerformanceTelemetry, ResourceAllocation, ResourceProfileError,

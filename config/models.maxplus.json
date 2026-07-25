@@ -1,0 +1,162 @@
+{
+  "lane": "maxplus",
+  "decision": "P098 Rev D (APPROVED 2026-07-25)",
+  "tier": "LEAF",
+  "risk_ceiling": "yellow",
+  "base_url": "https://api.maxplus-ai.cc",
+  "pool": "root",
+  "pool_declared": "Chinese Model Specials Pool",
+  "pool_note": "RESOLVED 2026-07-25. A pool is a PATH SEGMENT on the gateway, and each API key is bound to a subset of pools. This file covers the root pool only — https://api.maxplus-ai.cc/v1. Verified with the current key: root/v1 → 200 (13 models, this file); /maxpools/v1 → 200 (12 models, Claude family, NOT probed here); /deepseek/v1 and /glm/v1 → 403 permission_error (key not bound); /kimi/v1 and /free/v1 → 503 service_unavailable (pool down). No endpoint lists the pools — /v1/pools and friends still return 403 — so the set is discoverable only by trying paths. The opaque-routing classification in P098 Rev D section 2 stands: which pools exist, which the key reaches, and which are alive are three different unknowns, each answerable only by probing.",
+  "pool_addressing": "https://api.maxplus-ai.cc/<pool>/v1 — omit <pool> for root",
+  "source_endpoint": "GET /v1/models",
+  "source_note": "13 ids returned, has_more=false. Response shape is Anthropic-style (type/display_name/created_at/first_id/last_id).",
+  "verified_at": "2026-07-24T23:32:53Z",
+  "probe_prompt": "Say OK",
+  "schemas_probed": [
+    "anthropic_messages (/v1/messages + anthropic-version: 2023-06-01)",
+    "openai_chat (/v1/chat/completions)",
+    "openai_responses (/v1/responses)"
+  ],
+  "models": [
+    {
+      "id": "deepseek-v4-pro",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 3708,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 3112,
+      "needs_big_budget": true,
+      "budget_note": "openai_chat returned HTTP 200 with empty content at max_tokens=64; recovered on the single M2.4 retry at max_tokens=4096.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "glm-5.2",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 3610,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "glm-5.1",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 2909,
+      "needs_big_budget": true,
+      "budget_note": "openai_chat returned HTTP 200 with empty content at max_tokens=64; recovered on the single M2.4 retry at max_tokens=4096.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "hy3",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 4361,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "kimi-k2.6",
+      "status": "ERR",
+      "schema": [],
+      "http_code": 400,
+      "latency_ms": 1767,
+      "needs_big_budget": false,
+      "error_code": "model_not_found",
+      "error_message": "Requested resource or model is not available.",
+      "error_note": "Listed by GET /v1/models but not routable on any of the three schemas. Pool-side absence, not a client error.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "kimi-k2.7-code",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 2096,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "kimi-k3",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 5056,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "minimax-m3",
+      "status": "ERR",
+      "schema": [],
+      "http_code": 400,
+      "latency_ms": 1377,
+      "needs_big_budget": false,
+      "error_code": "model_not_found",
+      "error_message": "Requested resource or model is not available.",
+      "error_note": "Listed by GET /v1/models but not routable on any of the three schemas. Pool-side absence, not a client error.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "mimo-v2.5-pro",
+      "status": "ERR",
+      "schema": [],
+      "http_code": 400,
+      "latency_ms": 1411,
+      "needs_big_budget": false,
+      "error_code": "model_not_found",
+      "error_message": "Requested resource or model is not available.",
+      "error_note": "Listed by GET /v1/models but not routable on any of the three schemas. Pool-side absence, not a client error.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "mimo-v2.5",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 3551,
+      "needs_big_budget": true,
+      "budget_note": "openai_chat returned HTTP 200 with empty content at max_tokens=64; recovered on the single M2.4 retry at max_tokens=4096.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "qwen3.7-max",
+      "status": "OK",
+      "schema": ["openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 5357,
+      "needs_big_budget": false,
+      "schema_note": "anthropic_messages returned HTTP 503 service_unavailable ('MaxPlus AI is temporarily unavailable') at probe time — transient, not a schema rejection. Re-probe before relying on it.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    },
+    {
+      "id": "qwen3.7-plus",
+      "status": "OK",
+      "schema": ["openai_chat", "openai_responses"],
+      "http_code": 200,
+      "latency_ms": 5611,
+      "needs_big_budget": false,
+      "schema_note": "anthropic_messages returned HTTP 400 invalid_request ('The request is invalid for this endpoint') — this model does not accept the Anthropic schema.",
+      "verified_at": "2026-07-24T23:32:53Z"
+    }
+  ],
+  "summary": {
+    "total": 13,
+    "ok": 10,
+    "err": 3,
+    "empty": 0,
+    "absent": 0,
+    "needs_big_budget": 3,
+    "usable_on_all_three_schemas": 8
+  }
+}

@@ -2,9 +2,9 @@
 // Omnigent Policy Engine for Agent Control
 
 pub struct PolicyEngine {
-    pub max_cost_per_session: f64,        // USD limit
+    pub max_cost_per_session: f64,                // USD limit
     pub approval_required_for: Vec<&'static str>, // destructive actions
-    pub rate_limit_rpm: u32,              // requests per minute
+    pub rate_limit_rpm: u32,                      // requests per minute
 }
 
 impl PolicyEngine {

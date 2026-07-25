@@ -1,6 +1,18 @@
 //! GHOSTCLAW Providers — LLM provider trait + Ollama/OpenRouter/GLM/MaxPlus impls.
 //!
-//! Tiered routing: sovereign local (Ollama) → free tier → paid frontier (GLM/MaxPlus/Claude Fable5).
+//! Tiered routing per **P098 Rev E** (APPROVED 2026-07-25):
+//! OpenRouter free → paid frontier (GLM) → maxplus (LEAF).
+//!
+//! The sovereign local tier (Ollama) was removed by Rev E. `OllamaProvider` is
+//! kept compiling so Rev E can be reverted without a rewrite; it is simply no
+//! longer part of [`TieredRouter::standard`].
+
+pub mod breaker;
+pub mod cointh;
+pub mod maxplus;
+pub mod receipt;
+
+use std::sync::Arc;
 
 use async_trait::async_trait;
 use ghostclaw_core::Task;
@@ -31,6 +43,17 @@ pub enum ProviderError {
     Unavailable(String),
     #[error("http error: {0}")]
     Http(#[from] reqwest::Error),
+    /// Blocked by the egress redaction gate before leaving the host.
+    /// Never retried — the payload itself is the problem.
+    #[error("DENIED by egress redaction gate: matched {0}")]
+    DeniedRedaction(String),
+    /// The provider's credential is out of quota (P098 Rev F).
+    ///
+    /// Distinct from [`Self::Unavailable`] on purpose: this is the only condition
+    /// that is *supposed* to move traffic to a paid fallback. A timeout or a 5xx
+    /// must never be reported as this.
+    #[error("{provider} quota exhausted (HTTP {status})")]
+    Exhausted { provider: &'static str, status: u16 },
 }
 
 // ─── Trait ───────────────────────────────────────────────────────────────────
@@ -177,22 +200,16 @@ pub fn glm_paid(model: &str) -> OpenAiCompatProvider {
     )
 }
 
-/// Create the MaxPlus API provider for Claude Fable 5.
-/// MaxPlus is an OpenAI-compatible relay that provides access to Claude models.
-pub fn maxplus_claude_fable5() -> OpenAiCompatProvider {
-    OpenAiCompatProvider::new(
-        "maxplus-claude-fable5",
-        "https://api.maxplus.chat/v1",
-        "MAXPLUS_API_KEY",
-        "claude-fable-5",
-    )
-}
-
-/// Create a MaxPlus provider with custom model.
-pub fn maxplus(model: &str) -> OpenAiCompatProvider {
+/// Create a MaxPlus provider over the OpenAI-chat schema.
+///
+/// Origin verified by live probe on 2026-07-25 (M2.1). The previous
+/// `https://api.maxplus.chat/v1` in this file does not resolve, and the model it
+/// pinned (`claude-fable-5`) is not in the gateway's live list — both were removed.
+/// Model ids must come from `config/models.maxplus.json`, never from a screenshot.
+pub fn maxplus_openai_chat(model: &str) -> OpenAiCompatProvider {
     OpenAiCompatProvider::new(
         "maxplus",
-        "https://api.maxplus.chat/v1",
+        concat!("https://api.maxplus-ai.cc", "/v1"),
         "MAXPLUS_API_KEY",
         model,
     )
@@ -220,25 +237,52 @@ impl TieredRouter {
         Self { tiers }
     }
 
-    /// Build the standard GHOSTCLAW routing chain:
-    /// Ollama → OpenRouter free → GLM paid → MaxPlus Claude Fable5
+    /// Build the standard GHOSTCLAW routing chain, per **P098 Rev F**:
+    /// cointh (PRIMARY for GLM) → maxplus (LEAF) → OpenRouter free → GLM paid.
+    ///
+    /// Ollama is absent — Rev E removed the sovereign local tier.
+    ///
+    /// Every tier past the first is added only when its key is present, so the
+    /// chain stays usable with any subset configured. That is the property Rev D §3
+    /// requires of a leaf: losing maxplus must not break routing.
     pub fn standard() -> Self {
-        let mut tiers: Vec<Box<dyn LlmProvider>> = vec![
-            Box::new(OllamaProvider::new(
-                std::env::var("OLLAMA_HOST").unwrap_or_else(|_| "http://localhost:11434".into()),
-                "qwen2.5-coder",
-            )),
-            Box::new(openrouter_free("deepseek/deepseek-v4-pro:free")),
-        ];
+        let receipts = Arc::new(receipt::ReceiptLog::new(
+            maxplus::env_nonempty("GHOSTCLAW_RECEIPTS")
+                .unwrap_or_else(|| ".ghostclaw_runtime/receipts/providers.jsonl".into()),
+        ));
+        let breaker = Arc::new(breaker::CircuitBreaker::new());
 
-        // Add GLM if key is available
-        if std::env::var("GLM_API_KEY").is_ok() {
-            tiers.push(Box::new(glm_paid("glm-5.2")));
+        let mut tiers: Vec<Box<dyn LlmProvider>> = Vec::new();
+
+        // PRIMARY — GLM goes to its own vendor first. Verified 2026-07-25:
+        // 8/8 ids OK, glm-5.2 at 1265 ms against 3610 ms on the leaf lane.
+        if maxplus::env_nonempty("COINTH_API_KEY").is_some() {
+            tiers.push(Box::new(cointh::CointhProvider::new(
+                // Present and OK in config/models.cointh.json.
+                maxplus::env_nonempty("COINTH_MODEL").unwrap_or_else(|| "glm-5.2".into()),
+                Arc::clone(&breaker),
+                Arc::clone(&receipts),
+            )));
         }
 
-        // Add MaxPlus Claude Fable5 if key is available
-        if std::env::var("MAXPLUS_API_KEY").is_ok() {
-            tiers.push(Box::new(maxplus_claude_fable5()));
+        // LEAF — reached on quota exhaustion above, or when nothing above is configured.
+        if maxplus::env_nonempty("MAXPLUS_API_KEY").is_some() {
+            tiers.push(Box::new(maxplus::MaxPlusProvider::new(
+                // Present and OK in config/models.maxplus.json.
+                maxplus::env_nonempty("MAXPLUS_MODEL").unwrap_or_else(|| "glm-5.2".into()),
+                maxplus::env_nonempty("MAXPLUS_POOL")
+                    .unwrap_or_else(|| "VERIFY AT RUN TIME".into()),
+                maxplus::Schema::AnthropicMessages,
+                false,
+                Arc::clone(&breaker),
+                Arc::clone(&receipts),
+            )));
+        }
+
+        // P098 Rev E remainder.
+        tiers.push(Box::new(openrouter_free("deepseek/deepseek-v4-pro:free")));
+        if maxplus::env_nonempty("GLM_API_KEY").is_some() {
+            tiers.push(Box::new(glm_paid("glm-5.2")));
         }
 
         Self::new(tiers)
@@ -259,6 +303,23 @@ impl TieredRouter {
                 Ok(r) => {
                     tracing::info!(provider = provider.name(), model = %r.model, "completion ok");
                     return Ok(r);
+                }
+                // Exhaustion is an expected, budgeted transition — the whole point
+                // of the leaf lane. It is logged distinctly from a fault so the two
+                // are never conflated in telemetry (P098 Rev F §6).
+                Err(e @ ProviderError::Exhausted { .. }) => {
+                    tracing::info!(
+                        provider = provider.name(),
+                        reason = %e,
+                        "tier exhausted, falling through to the next lane"
+                    );
+                    last_err = Some(e);
+                }
+                // A redaction denial is about the payload, not the tier. Trying the
+                // next provider would send the same blocked content somewhere else.
+                Err(e @ ProviderError::DeniedRedaction(_)) => {
+                    tracing::error!(provider = provider.name(), error = %e, "aborting chain");
+                    return Err(e);
                 }
                 Err(e) => {
                     warn!(provider = provider.name(), error = %e, "tier failed, falling through");

@@ -5,8 +5,9 @@
 //! Approval modes:
 //! - Green:  auto-approve at GUARD
 //! - Yellow: auto-approve after abort window
-//! - Red:   auto-approve IF policy conditions met (evidence passed + safety checks + audit recorded)
-//!          Manual override still available via HumanApprove/HumanReject.
+//! - Red:    HumanApprove / HumanReject only. There is no policy that satisfies
+//!           the Red gate, because a gate a machine can satisfy is not a gate.
+//!           See docs/decisions/P100-RED-AUTO-APPROVE-FINDING.md.
 
 use serde::{Deserialize, Serialize};
 
@@ -60,58 +61,6 @@ pub enum ApprovalState {
     Rejected(String),
 }
 
-// ─── Auto-Approve Policy ────────────────────────────────────────────────────
-
-/// Conditions that must ALL be true for automated Red-tier approval.
-/// If any is false, the task stays Pending and requires human override.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct AutoPolicy {
-    /// CHECKER evidence passed (exit_code == 0)
-    pub evidence_passed: bool,
-    /// Secret scan found no secrets in output
-    pub secrets_clean: bool,
-    /// Cost guard: spend within budget
-    pub cost_within_budget: bool,
-    /// Policy version tag (for audit trail)
-    pub policy_version: String,
-}
-
-impl Default for AutoPolicy {
-    fn default() -> Self {
-        Self {
-            evidence_passed: true,
-            secrets_clean: true,
-            cost_within_budget: true,
-            policy_version: "auto-v1".into(),
-        }
-    }
-}
-
-impl AutoPolicy {
-    /// ALL conditions must be true for auto-approval.
-    pub fn all_conditions_met(&self) -> bool {
-        self.evidence_passed && self.secrets_clean && self.cost_within_budget
-    }
-
-    /// Human-readable reason if auto-approval is blocked.
-    pub fn block_reason(&self) -> Option<String> {
-        let mut reasons = vec![];
-        if !self.evidence_passed {
-            reasons.push("CHECKER evidence failed");
-        }
-        if !self.secrets_clean {
-            reasons.push("secrets detected in output");
-        }
-        if !self.cost_within_budget {
-            reasons.push("cost budget exceeded");
-        }
-        if reasons.is_empty() {
-            None
-        } else {
-            Some(reasons.join("; "))
-        }
-    }
-}
 
 // ─── Task ─────────────────────────────────────────────────────────────────────
 
@@ -139,16 +88,12 @@ pub enum Event {
     HumanApprove(String),
     HumanReject(String),
     AbortWindowElapsed,
-    /// Automated approval attempt — carries policy for audit
-    AutoApproveAttempt(AutoPolicy),
 }
 
 // ─── Errors ───────────────────────────────────────────────────────────────────
 
 #[derive(Debug, thiserror::Error)]
 pub enum GovError {
-    #[error("auto-approve blocked: {0}")]
-    AutoBlocked(String),
     #[error("CHECKER evidence failed: exit code {0}")]
     EvidenceFailed(i32),
     #[error("illegal transition from {0:?}")]
@@ -212,25 +157,10 @@ fn guard_transition(mut task: Task, event: Event) -> Result<Task, GovError> {
             }
             _ => Ok(task),
         },
+        // Red advances on a human decision and nothing else. There is deliberately
+        // no policy-satisfied branch here: see docs/decisions/P100-RED-AUTO-APPROVE-FINDING.md.
+        // A machine that can satisfy the gate is not gated.
         RiskTier::Red => match event {
-            // ── Automated approval: policy checks ALL pass → auto-approve with audit ──
-            Event::AutoApproveAttempt(policy) => {
-                if policy.all_conditions_met() {
-                    let approver = format!("auto:red:{}", policy.policy_version);
-                    task.approval = ApprovalState::ApprovedBy(approver.clone());
-                    task.audit.push(format!(
-                        "auto-approved: red tier | policy={} | evidence+secrets+cost all passed",
-                        policy.policy_version
-                    ));
-                    task.stage = Stage::Done;
-                    Ok(task)
-                } else {
-                    let reason = policy.block_reason().unwrap_or_default();
-                    task.audit.push(format!("auto-approve blocked: {reason}"));
-                    Err(GovError::AutoBlocked(reason))
-                }
-            }
-            // ── Manual override still available ──
             Event::HumanApprove(who) => {
                 task.approval = ApprovalState::ApprovedBy(who.clone());
                 task.audit.push(format!("manual-approved by {who}"));
@@ -285,56 +215,55 @@ mod tests {
         }
     }
 
-    // ── Red auto-approve tests ──
+    // ── The Red gate: nothing but a human moves it ──
+    //
+    // These replace four tests that asserted Red could auto-approve when a policy
+    // of three self-reported booleans came back true. See
+    // docs/decisions/P100-RED-AUTO-APPROVE-FINDING.md.
 
     #[test]
-    fn red_auto_approves_when_policy_passes() {
+    fn red_does_not_advance_on_the_yellow_abort_window() {
+        // The abort window is what makes Yellow automatic. On Red it must do nothing.
         let t = red_task();
-        let policy = AutoPolicy::default(); // all true
-        let result = advance(t, Event::AutoApproveAttempt(policy));
-        assert!(result.is_ok());
-        let done = result.unwrap();
-        assert_eq!(done.stage, Stage::Done);
-        assert!(done.audit.iter().any(|a| a.contains("auto-approved")));
+        let out = advance(t, Event::AbortWindowElapsed).unwrap();
+        assert_eq!(out.stage, Stage::Guard, "Red must still be waiting");
+        assert!(matches!(out.approval, ApprovalState::Pending));
+        assert!(out.audit.is_empty(), "nothing happened, so nothing to record");
     }
 
     #[test]
-    fn red_auto_blocked_when_evidence_failed() {
-        let t = red_task();
-        let policy = AutoPolicy {
-            evidence_passed: false,
-            secrets_clean: true,
-            cost_within_budget: true,
-            policy_version: "auto-v1".into(),
-        };
-        let result = advance(t, Event::AutoApproveAttempt(policy));
-        assert!(matches!(result, Err(GovError::AutoBlocked(_))));
+    fn red_does_not_advance_on_pipeline_events() {
+        // No event that a worker can raise on its own may move Red.
+        for ev in [
+            Event::MakerProduced,
+            Event::CheckerRan(passing_evidence()),
+            Event::Triaged(RiskTier::Green),
+        ] {
+            let out = advance(red_task(), ev).unwrap();
+            assert_eq!(out.stage, Stage::Guard);
+            assert!(matches!(out.approval, ApprovalState::Pending));
+        }
     }
 
     #[test]
-    fn red_auto_blocked_when_secrets_detected() {
-        let t = red_task();
-        let policy = AutoPolicy {
-            evidence_passed: true,
-            secrets_clean: false,
-            cost_within_budget: true,
-            policy_version: "auto-v1".into(),
-        };
-        let result = advance(t, Event::AutoApproveAttempt(policy));
-        assert!(matches!(result, Err(GovError::AutoBlocked(_))));
+    fn passing_evidence_alone_does_not_approve_red() {
+        // Evidence is necessary for the Checker gate and insufficient for the Red one.
+        let mut t = red_task();
+        t.evidence.push(passing_evidence());
+        let out = advance(t, Event::AbortWindowElapsed).unwrap();
+        assert!(matches!(out.approval, ApprovalState::Pending));
     }
 
     #[test]
-    fn red_auto_blocked_when_cost_exceeded() {
-        let t = red_task();
-        let policy = AutoPolicy {
-            evidence_passed: true,
-            secrets_clean: true,
-            cost_within_budget: false,
-            policy_version: "auto-v1".into(),
-        };
-        let result = advance(t, Event::AutoApproveAttempt(policy));
-        assert!(matches!(result, Err(GovError::AutoBlocked(_))));
+    fn an_approved_red_task_names_a_person() {
+        let out = advance(red_task(), Event::HumanApprove("tony".into())).unwrap();
+        match out.approval {
+            ApprovalState::ApprovedBy(who) => {
+                assert_eq!(who, "tony");
+                assert!(!who.starts_with("auto:"), "an approver must be a person, not a policy tag");
+            }
+            other => panic!("expected ApprovedBy, got {other:?}"),
+        }
     }
 
     // ── Manual override still works ──

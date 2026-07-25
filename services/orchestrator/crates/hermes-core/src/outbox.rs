@@ -77,7 +77,24 @@ pub enum OutboxStatus {
     Delivered,
     /// Retry limit was exhausted.
     DeadLetter,
+    /// The provider may have applied the effect, so automatic retry is unsafe.
+    EffectUnknown,
 }
+
+/// Closed failure classes used to decide whether delivery may be retried.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum OutboxFailureClass {
+    /// The failure is known not to have applied the effect and may be retried.
+    Transient,
+    /// The failure is terminal and must be inspected in the dead-letter queue.
+    Fatal,
+    /// The effect outcome cannot be proven; automatic retry is forbidden.
+    EffectUnknown,
+}
+
+const FIRST_RETRY_DELAY_MS: u64 = 5_000;
+const LATER_RETRY_DELAY_MS: u64 = 30_000;
 
 /// Serializable outbox entry. Persistence adapters must compare-and-swap the
 /// `version` field when claiming or completing a delivery.
@@ -85,37 +102,43 @@ pub enum OutboxStatus {
 #[serde(deny_unknown_fields)]
 pub struct OutboxMessage {
     /// Stable message identity.
-    pub id: OutboxMessageId,
+    id: OutboxMessageId,
     /// Task responsible for the event.
-    pub task_id: TaskId,
+    task_id: TaskId,
     /// Key used to suppress duplicate enqueue requests.
-    pub idempotency_key: IdempotencyKey,
+    idempotency_key: IdempotencyKey,
     /// Closed event name admitted by the consumer contract.
-    pub event_type: String,
+    event_type: String,
     /// Complete message body.
-    pub payload: serde_json::Value,
+    payload: serde_json::Value,
     /// Digest of the canonical payload.
-    pub payload_hash: EvidenceHash,
+    payload_hash: EvidenceHash,
     /// Delivery lifecycle.
-    pub status: OutboxStatus,
+    status: OutboxStatus,
     /// Number of completed failed delivery attempts.
-    pub attempts: u16,
+    attempts: u16,
     /// Maximum failed attempts before dead-lettering.
-    pub max_attempts: u16,
+    max_attempts: u16,
     /// Optimistic-concurrency version.
-    pub version: u64,
+    version: u64,
     /// Creation time in Unix epoch milliseconds.
-    pub created_at_ms: u64,
+    created_at_ms: u64,
     /// Last mutation time in Unix epoch milliseconds.
-    pub updated_at_ms: u64,
+    updated_at_ms: u64,
     /// Current claimant, when leased.
-    pub claimed_by: Option<ActorId>,
+    claimed_by: Option<ActorId>,
     /// Exclusive claim expiry in Unix epoch milliseconds.
-    pub claim_expires_at_ms: Option<u64>,
+    claim_expires_at_ms: Option<u64>,
     /// Delivery result hash, never raw provider output.
-    pub result_hash: Option<EvidenceHash>,
+    result_hash: Option<EvidenceHash>,
     /// Sanitized error code from the last failed attempt.
-    pub last_error_code: Option<String>,
+    last_error_code: Option<String>,
+    /// Closed classification of the last failure.
+    #[serde(default)]
+    last_failure_class: Option<OutboxFailureClass>,
+    /// Earliest time a transiently failed message may be claimed again.
+    #[serde(default)]
+    retry_not_before_ms: Option<u64>,
 }
 
 impl OutboxMessage {
@@ -155,95 +178,297 @@ impl OutboxMessage {
             claim_expires_at_ms: None,
             result_hash: None,
             last_error_code: None,
+            last_failure_class: None,
+            retry_not_before_ms: None,
         })
     }
 
-    /// Claims pending work, or reclaims an expired lease.
-    pub fn claim(
-        &mut self,
-        worker: ActorId,
-        now_ms: u64,
-        lease_ms: u64,
-    ) -> Result<(), OutboxError> {
-        self.verify_payload_hash()?;
+    /// Returns the immutable message identity.
+    #[must_use]
+    pub const fn id(&self) -> &OutboxMessageId {
+        &self.id
+    }
+
+    /// Returns the task responsible for this event.
+    #[must_use]
+    pub const fn task_id(&self) -> &TaskId {
+        &self.task_id
+    }
+
+    /// Returns the duplicate-suppression key.
+    #[must_use]
+    pub const fn idempotency_key(&self) -> &IdempotencyKey {
+        &self.idempotency_key
+    }
+
+    /// Returns the admitted event type.
+    #[must_use]
+    pub fn event_type(&self) -> &str {
+        &self.event_type
+    }
+
+    /// Returns the immutable message body.
+    #[must_use]
+    pub const fn payload(&self) -> &serde_json::Value {
+        &self.payload
+    }
+
+    /// Returns the digest of the canonical message body.
+    #[must_use]
+    pub const fn payload_hash(&self) -> &EvidenceHash {
+        &self.payload_hash
+    }
+
+    /// Returns the current delivery lifecycle.
+    #[must_use]
+    pub const fn status(&self) -> OutboxStatus {
+        self.status
+    }
+
+    /// Returns the number of completed failed attempts.
+    #[must_use]
+    pub const fn attempts(&self) -> u16 {
+        self.attempts
+    }
+
+    /// Returns the configured failed-attempt bound.
+    #[must_use]
+    pub const fn max_attempts(&self) -> u16 {
+        self.max_attempts
+    }
+
+    /// Returns the optimistic-concurrency version.
+    #[must_use]
+    pub const fn version(&self) -> u64 {
+        self.version
+    }
+
+    /// Returns the creation time in Unix epoch milliseconds.
+    #[must_use]
+    pub const fn created_at_ms(&self) -> u64 {
+        self.created_at_ms
+    }
+
+    /// Returns the last mutation time in Unix epoch milliseconds.
+    #[must_use]
+    pub const fn updated_at_ms(&self) -> u64 {
+        self.updated_at_ms
+    }
+
+    /// Returns the current claimant, if any.
+    #[must_use]
+    pub const fn claimed_by(&self) -> Option<&ActorId> {
+        self.claimed_by.as_ref()
+    }
+
+    /// Returns the current exclusive claim expiry.
+    #[must_use]
+    pub const fn claim_expires_at_ms(&self) -> Option<u64> {
+        self.claim_expires_at_ms
+    }
+
+    /// Returns the delivery result digest, if delivered.
+    #[must_use]
+    pub const fn result_hash(&self) -> Option<&EvidenceHash> {
+        self.result_hash.as_ref()
+    }
+
+    /// Returns the sanitized last error code.
+    #[must_use]
+    pub fn last_error_code(&self) -> Option<&str> {
+        self.last_error_code.as_deref()
+    }
+
+    /// Returns the closed last-failure classification.
+    #[must_use]
+    pub const fn last_failure_class(&self) -> Option<OutboxFailureClass> {
+        self.last_failure_class
+    }
+
+    /// Returns the earliest allowed retry time.
+    #[must_use]
+    pub const fn retry_not_before_ms(&self) -> Option<u64> {
+        self.retry_not_before_ms
+    }
+
+    /// Claims pending work.
+    ///
+    /// An expired claim is never reclaimed automatically because the provider
+    /// effect may already have happened. It must first be quarantined for
+    /// explicit reconciliation with [`Self::quarantine_expired_claim`].
+    fn claim(&mut self, worker: ActorId, now_ms: u64, lease_ms: u64) -> Result<(), OutboxError> {
+        self.verify_state_invariants()?;
+        self.validate_transition_time(now_ms)?;
         if lease_ms == 0 {
             return Err(OutboxError::InvalidLease);
         }
-        let claim_expired = self
-            .claim_expires_at_ms
-            .is_some_and(|expires_at| now_ms >= expires_at);
-        if self.status != OutboxStatus::Pending
-            && !(self.status == OutboxStatus::Claimed && claim_expired)
+        if self.status == OutboxStatus::Claimed
+            && self
+                .claim_expires_at_ms
+                .is_some_and(|expires_at| now_ms >= expires_at)
         {
+            return Err(OutboxError::ClaimReconciliationRequired);
+        }
+        if self.status != OutboxStatus::Pending {
             return Err(OutboxError::InvalidStatus {
                 status: self.status,
             });
         }
-        self.status = OutboxStatus::Claimed;
-        self.claimed_by = Some(worker);
-        self.claim_expires_at_ms = Some(
-            now_ms
-                .checked_add(lease_ms)
-                .ok_or(OutboxError::TimestampOverflow)?,
-        );
-        self.updated_at_ms = now_ms;
-        self.version = self
+        if let Some(retry_at) = self.retry_not_before_ms {
+            if now_ms < retry_at {
+                return Err(OutboxError::RetryNotReady {
+                    retry_not_before_ms: retry_at,
+                });
+            }
+        }
+        let claim_expires_at_ms = now_ms
+            .checked_add(lease_ms)
+            .ok_or(OutboxError::TimestampOverflow)?;
+        let next_version = self
             .version
             .checked_add(1)
             .ok_or(OutboxError::VersionOverflow)?;
+        self.status = OutboxStatus::Claimed;
+        self.claimed_by = Some(worker);
+        self.claim_expires_at_ms = Some(claim_expires_at_ms);
+        self.retry_not_before_ms = None;
+        self.updated_at_ms = now_ms;
+        self.version = next_version;
+        Ok(())
+    }
+
+    /// Quarantines an expired claim whose provider effect cannot be proven.
+    ///
+    /// This is terminal and intentionally has no redrive transition. A future
+    /// human reconciliation workflow must create a new, independently approved
+    /// action rather than rewriting this record.
+    fn quarantine_expired_claim(
+        &mut self,
+        error_code: impl Into<String>,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.verify_state_invariants()?;
+        self.validate_transition_time(now_ms)?;
+        if self.status != OutboxStatus::Claimed {
+            return Err(OutboxError::InvalidStatus {
+                status: self.status,
+            });
+        }
+        let expires_at = self
+            .claim_expires_at_ms
+            .ok_or(OutboxError::InvalidStateInvariant)?;
+        if now_ms < expires_at {
+            return Err(OutboxError::ClaimStillActive {
+                claim_expires_at_ms: expires_at,
+            });
+        }
+        let error_code = error_code.into();
+        validate_error_code(&error_code)?;
+        let next_attempts = self
+            .attempts
+            .checked_add(1)
+            .ok_or(OutboxError::AttemptOverflow)?;
+        if next_attempts > self.max_attempts {
+            return Err(OutboxError::InvalidStateInvariant);
+        }
+        let next_version = self
+            .version
+            .checked_add(1)
+            .ok_or(OutboxError::VersionOverflow)?;
+
+        self.attempts = next_attempts;
+        self.status = OutboxStatus::EffectUnknown;
+        self.claimed_by = None;
+        self.claim_expires_at_ms = None;
+        self.last_error_code = Some(error_code);
+        self.last_failure_class = Some(OutboxFailureClass::EffectUnknown);
+        self.retry_not_before_ms = None;
+        self.updated_at_ms = now_ms;
+        self.version = next_version;
         Ok(())
     }
 
     /// Marks a claimed message delivered by the current owner.
-    pub fn mark_delivered(
+    fn mark_delivered(
         &mut self,
         worker: &ActorId,
         result_hash: EvidenceHash,
         now_ms: u64,
     ) -> Result<(), OutboxError> {
-        self.verify_payload_hash()?;
+        self.verify_state_invariants()?;
+        self.validate_transition_time(now_ms)?;
         self.validate_active_claim(worker, now_ms)?;
+        let next_version = self
+            .version
+            .checked_add(1)
+            .ok_or(OutboxError::VersionOverflow)?;
         self.status = OutboxStatus::Delivered;
         self.result_hash = Some(result_hash);
         self.claimed_by = None;
         self.claim_expires_at_ms = None;
         self.last_error_code = None;
+        self.last_failure_class = None;
+        self.retry_not_before_ms = None;
         self.updated_at_ms = now_ms;
-        self.version = self
-            .version
-            .checked_add(1)
-            .ok_or(OutboxError::VersionOverflow)?;
+        self.version = next_version;
         Ok(())
     }
 
-    /// Records a failed claimed attempt and either requeues or dead-letters it.
-    pub fn mark_failed(
+    /// Records a classified delivery failure with bounded retry behavior.
+    ///
+    /// Transient failures are delayed before another claim. Fatal failures are
+    /// dead-lettered immediately. An unknown effect outcome enters a terminal
+    /// state that deliberately has no automatic redrive operation.
+    fn record_failure(
         &mut self,
         worker: &ActorId,
+        failure_class: OutboxFailureClass,
         error_code: impl Into<String>,
         now_ms: u64,
     ) -> Result<(), OutboxError> {
-        self.verify_payload_hash()?;
+        self.verify_state_invariants()?;
+        self.validate_transition_time(now_ms)?;
         self.validate_active_claim(worker, now_ms)?;
         let error_code = error_code.into();
         validate_error_code(&error_code)?;
-        self.attempts = self
+        let next_attempts = self
             .attempts
             .checked_add(1)
             .ok_or(OutboxError::AttemptOverflow)?;
-        self.status = if self.attempts >= self.max_attempts {
-            OutboxStatus::DeadLetter
-        } else {
-            OutboxStatus::Pending
+        let (status, retry_not_before_ms) = match failure_class {
+            OutboxFailureClass::Transient if next_attempts < self.max_attempts => {
+                let delay_ms = if next_attempts == 1 {
+                    FIRST_RETRY_DELAY_MS
+                } else {
+                    LATER_RETRY_DELAY_MS
+                };
+                (
+                    OutboxStatus::Pending,
+                    Some(
+                        now_ms
+                            .checked_add(delay_ms)
+                            .ok_or(OutboxError::TimestampOverflow)?,
+                    ),
+                )
+            }
+            OutboxFailureClass::Transient | OutboxFailureClass::Fatal => {
+                (OutboxStatus::DeadLetter, None)
+            }
+            OutboxFailureClass::EffectUnknown => (OutboxStatus::EffectUnknown, None),
         };
-        self.claimed_by = None;
-        self.claim_expires_at_ms = None;
-        self.last_error_code = Some(error_code);
-        self.updated_at_ms = now_ms;
-        self.version = self
+        let next_version = self
             .version
             .checked_add(1)
             .ok_or(OutboxError::VersionOverflow)?;
+        self.attempts = next_attempts;
+        self.status = status;
+        self.claimed_by = None;
+        self.claim_expires_at_ms = None;
+        self.last_error_code = Some(error_code);
+        self.last_failure_class = Some(failure_class);
+        self.retry_not_before_ms = retry_not_before_ms;
+        self.updated_at_ms = now_ms;
+        self.version = next_version;
         Ok(())
     }
 
@@ -257,6 +482,99 @@ impl OutboxMessage {
             return Err(OutboxError::PayloadHashMismatch);
         }
         Ok(())
+    }
+
+    fn verify_state_invariants(&self) -> Result<(), OutboxError> {
+        self.verify_payload_hash()?;
+        validate_event_type(&self.event_type)?;
+        if let Some(error_code) = &self.last_error_code {
+            validate_error_code(error_code)?;
+        }
+        if self.max_attempts == 0
+            || self.attempts > self.max_attempts
+            || self.version == 0
+            || self.updated_at_ms < self.created_at_ms
+            || self
+                .retry_not_before_ms
+                .is_some_and(|retry_at| retry_at < self.updated_at_ms)
+        {
+            return Err(OutboxError::InvalidStateInvariant);
+        }
+
+        let has_claim = self.claimed_by.is_some() && self.claim_expires_at_ms.is_some();
+        let has_partial_claim = self.claimed_by.is_some() != self.claim_expires_at_ms.is_some();
+        if has_partial_claim {
+            return Err(OutboxError::InvalidStateInvariant);
+        }
+
+        let failure_fields_match =
+            self.last_error_code.is_some() == self.last_failure_class.is_some();
+        let valid = match self.status {
+            OutboxStatus::Pending => {
+                !has_claim
+                    && self.result_hash.is_none()
+                    && failure_fields_match
+                    && match self.last_failure_class {
+                        None => self.attempts == 0 && self.retry_not_before_ms.is_none(),
+                        Some(OutboxFailureClass::Transient) => {
+                            self.attempts > 0
+                                && self.attempts < self.max_attempts
+                                && self.retry_not_before_ms.is_some()
+                        }
+                        Some(OutboxFailureClass::Fatal | OutboxFailureClass::EffectUnknown) => {
+                            false
+                        }
+                    }
+            }
+            OutboxStatus::Claimed => {
+                has_claim
+                    && self.attempts < self.max_attempts
+                    && self
+                        .claim_expires_at_ms
+                        .is_some_and(|expires_at| expires_at > self.updated_at_ms)
+                    && self.result_hash.is_none()
+                    && failure_fields_match
+                    && match self.last_failure_class {
+                        None => self.attempts == 0,
+                        Some(OutboxFailureClass::Transient) => self.attempts > 0,
+                        Some(OutboxFailureClass::Fatal | OutboxFailureClass::EffectUnknown) => {
+                            false
+                        }
+                    }
+                    && self.retry_not_before_ms.is_none()
+            }
+            OutboxStatus::Delivered => {
+                !has_claim
+                    && self.result_hash.is_some()
+                    && self.last_error_code.is_none()
+                    && self.last_failure_class.is_none()
+                    && self.retry_not_before_ms.is_none()
+            }
+            OutboxStatus::DeadLetter => {
+                !has_claim
+                    && self.attempts > 0
+                    && self.result_hash.is_none()
+                    && self.last_error_code.is_some()
+                    && matches!(
+                        self.last_failure_class,
+                        Some(OutboxFailureClass::Transient | OutboxFailureClass::Fatal)
+                    )
+                    && self.retry_not_before_ms.is_none()
+            }
+            OutboxStatus::EffectUnknown => {
+                !has_claim
+                    && self.attempts > 0
+                    && self.result_hash.is_none()
+                    && self.last_error_code.is_some()
+                    && self.last_failure_class == Some(OutboxFailureClass::EffectUnknown)
+                    && self.retry_not_before_ms.is_none()
+            }
+        };
+        if valid {
+            Ok(())
+        } else {
+            Err(OutboxError::InvalidStateInvariant)
+        }
     }
 
     fn validate_active_claim(&self, worker: &ActorId, now_ms: u64) -> Result<(), OutboxError> {
@@ -275,6 +593,14 @@ impl OutboxMessage {
             return Err(OutboxError::ClaimExpired);
         }
         Ok(())
+    }
+
+    fn validate_transition_time(&self, now_ms: u64) -> Result<(), OutboxError> {
+        if now_ms < self.updated_at_ms {
+            Err(OutboxError::NonMonotonicTimestamp)
+        } else {
+            Ok(())
+        }
     }
 }
 
@@ -310,7 +636,15 @@ impl Outbox {
 
     /// Stores one logical event or returns its existing identity.
     pub fn enqueue(&mut self, message: OutboxMessage) -> Result<EnqueueDecision, OutboxError> {
-        message.verify_payload_hash()?;
+        self.verify_integrity()?;
+        message.verify_state_invariants()?;
+        if message.status != OutboxStatus::Pending
+            || message.attempts != 0
+            || message.last_failure_class.is_some()
+            || message.retry_not_before_ms.is_some()
+        {
+            return Err(OutboxError::InvalidEnqueueState);
+        }
         if let Some(existing_id) = self.idempotency_index.get(&message.idempotency_key) {
             let existing = self
                 .messages
@@ -341,9 +675,87 @@ impl Outbox {
         self.messages.get(id)
     }
 
-    /// Mutably looks up a message for persistence-adapter operations.
-    pub fn get_mut(&mut self, id: &OutboxMessageId) -> Option<&mut OutboxMessage> {
-        self.messages.get_mut(id)
+    /// Claims a pending message through the closed lifecycle API.
+    pub fn claim(
+        &mut self,
+        id: &OutboxMessageId,
+        worker: ActorId,
+        now_ms: u64,
+        lease_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.verify_integrity()?;
+        self.message_mut(id)?.claim(worker, now_ms, lease_ms)
+    }
+
+    /// Completes a claimed message through the closed lifecycle API.
+    pub fn mark_delivered(
+        &mut self,
+        id: &OutboxMessageId,
+        worker: &ActorId,
+        result_hash: EvidenceHash,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.verify_integrity()?;
+        self.message_mut(id)?
+            .mark_delivered(worker, result_hash, now_ms)
+    }
+
+    /// Records a classified delivery failure through the closed lifecycle API.
+    pub fn record_failure(
+        &mut self,
+        id: &OutboxMessageId,
+        worker: &ActorId,
+        failure_class: OutboxFailureClass,
+        error_code: impl Into<String>,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.verify_integrity()?;
+        self.message_mut(id)?
+            .record_failure(worker, failure_class, error_code, now_ms)
+    }
+
+    /// Quarantines an expired, outcome-ambiguous claim.
+    pub fn quarantine_expired_claim(
+        &mut self,
+        id: &OutboxMessageId,
+        error_code: impl Into<String>,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.verify_integrity()?;
+        self.message_mut(id)?
+            .quarantine_expired_claim(error_code, now_ms)
+    }
+
+    fn message_mut(&mut self, id: &OutboxMessageId) -> Result<&mut OutboxMessage, OutboxError> {
+        self.messages
+            .get_mut(id)
+            .ok_or(OutboxError::MessageNotFound)
+    }
+
+    /// Verifies every message and the complete idempotency secondary index.
+    pub fn verify_integrity(&self) -> Result<(), OutboxError> {
+        if self.messages.len() != self.idempotency_index.len() {
+            return Err(OutboxError::CorruptIndex);
+        }
+        for (message_id, message) in &self.messages {
+            if message_id != &message.id {
+                return Err(OutboxError::CorruptMessageKey);
+            }
+            message.verify_state_invariants()?;
+            if self.idempotency_index.get(&message.idempotency_key) != Some(message_id) {
+                return Err(OutboxError::CorruptIndex);
+            }
+        }
+        for (key, message_id) in &self.idempotency_index {
+            let message = self
+                .messages
+                .get(message_id)
+                .ok_or(OutboxError::CorruptIndex)?;
+            if &message.idempotency_key != key {
+                return Err(OutboxError::CorruptIndex);
+            }
+        }
+        Ok(())
     }
 
     /// Iterates pending messages in stable identifier order.
@@ -351,6 +763,81 @@ impl Outbox {
         self.messages
             .values()
             .filter(|message| message.status == OutboxStatus::Pending)
+    }
+
+    /// Iterates pending messages whose retry delay has elapsed.
+    pub fn pending_ready(&self, now_ms: u64) -> impl Iterator<Item = &OutboxMessage> {
+        self.messages.values().filter(move |message| {
+            message.status == OutboxStatus::Pending
+                && message
+                    .retry_not_before_ms
+                    .is_none_or(|retry_at| now_ms >= retry_at)
+        })
+    }
+}
+
+/// Restricted mutation surface used by durable persistence adapters.
+///
+/// The wrapped [`Outbox`] is deliberately private: callers cannot replace it,
+/// deserialize an arbitrary lifecycle, or obtain a mutable message reference.
+/// Only closed transitions that preserve terminal states are exposed.
+pub struct OutboxTransaction<'a> {
+    outbox: &'a mut Outbox,
+}
+
+impl<'a> OutboxTransaction<'a> {
+    pub(crate) const fn new(outbox: &'a mut Outbox) -> Self {
+        Self { outbox }
+    }
+
+    /// Enqueues one new logical event or returns its existing identity.
+    pub fn enqueue(&mut self, message: OutboxMessage) -> Result<EnqueueDecision, OutboxError> {
+        self.outbox.enqueue(message)
+    }
+
+    /// Claims a pending message.
+    pub fn claim(
+        &mut self,
+        id: &OutboxMessageId,
+        worker: ActorId,
+        now_ms: u64,
+        lease_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.outbox.claim(id, worker, now_ms, lease_ms)
+    }
+
+    /// Marks an active claim delivered.
+    pub fn mark_delivered(
+        &mut self,
+        id: &OutboxMessageId,
+        worker: &ActorId,
+        result_hash: EvidenceHash,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.outbox.mark_delivered(id, worker, result_hash, now_ms)
+    }
+
+    /// Records one classified delivery failure.
+    pub fn record_failure(
+        &mut self,
+        id: &OutboxMessageId,
+        worker: &ActorId,
+        failure_class: OutboxFailureClass,
+        error_code: impl Into<String>,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.outbox
+            .record_failure(id, worker, failure_class, error_code, now_ms)
+    }
+
+    /// Quarantines an expired claim rather than redriving it.
+    pub fn quarantine_expired_claim(
+        &mut self,
+        id: &OutboxMessageId,
+        error_code: impl Into<String>,
+        now_ms: u64,
+    ) -> Result<(), OutboxError> {
+        self.outbox.quarantine_expired_claim(id, error_code, now_ms)
     }
 }
 
@@ -398,6 +885,9 @@ pub enum OutboxError {
     /// Time arithmetic overflowed.
     #[error("outbox timestamp overflow")]
     TimestampOverflow,
+    /// Lifecycle mutations may not move the durable clock backwards.
+    #[error("outbox mutation timestamp precedes the current record timestamp")]
+    NonMonotonicTimestamp,
     /// Optimistic version arithmetic overflowed.
     #[error("outbox version overflow")]
     VersionOverflow,
@@ -416,15 +906,43 @@ pub enum OutboxError {
     /// The active claim is no longer valid.
     #[error("outbox claim expired")]
     ClaimExpired,
+    /// Expired claims may have applied their provider effect and require
+    /// explicit quarantine/reconciliation instead of automatic redrive.
+    #[error("outbox expired claim requires effect reconciliation")]
+    ClaimReconciliationRequired,
+    /// A claim cannot be quarantined before its exclusive lease expires.
+    #[error("outbox claim remains active until {claim_expires_at_ms}")]
+    ClaimStillActive {
+        /// Exclusive lease expiry in Unix epoch milliseconds.
+        claim_expires_at_ms: u64,
+    },
+    /// A transient failure is still inside its retry delay.
+    #[error("outbox retry is not ready before {retry_not_before_ms}")]
+    RetryNotReady {
+        /// Earliest claim time in Unix epoch milliseconds.
+        retry_not_before_ms: u64,
+    },
     /// One idempotency key cannot identify different logical events.
     #[error("outbox idempotency key conflicts with an existing message")]
     IdempotencyConflict,
     /// Message identities are immutable and unique.
     #[error("outbox message id already exists")]
     MessageIdConflict,
+    /// Enqueue only admits a newly constructed pristine pending record.
+    #[error("outbox enqueue requires a pristine pending message")]
+    InvalidEnqueueState,
+    /// A closed lifecycle operation referenced an absent message.
+    #[error("outbox message was not found")]
+    MessageNotFound,
     /// The secondary index points to an absent message.
     #[error("outbox idempotency index is corrupt")]
     CorruptIndex,
+    /// The primary map key differs from the stored immutable message id.
+    #[error("outbox primary message key is corrupt")]
+    CorruptMessageKey,
+    /// Serialized lifecycle fields do not form an admitted state.
+    #[error("outbox message state invariant is invalid")]
+    InvalidStateInvariant,
     /// Stored payload bytes no longer match the immutable digest.
     #[error("outbox payload hash mismatch")]
     PayloadHashMismatch,
@@ -490,6 +1008,24 @@ mod tests {
     }
 
     #[test]
+    fn enqueue_should_reject_a_preclaimed_or_rewritten_lifecycle() {
+        let mut preclaimed = message("outbox-1", "request-0001", json!({}));
+        preclaimed
+            .claim(worker(), 11, 10)
+            .expect("fixture claim should pass");
+        let mut outbox = Outbox::new();
+
+        let error = outbox
+            .enqueue(preclaimed)
+            .expect_err("enqueue must only admit a pristine pending record");
+
+        assert!(matches!(error, OutboxError::InvalidEnqueueState));
+        assert!(outbox
+            .get(&OutboxMessageId::new("outbox-1").expect("valid id"))
+            .is_none());
+    }
+
+    #[test]
     fn wrong_worker_should_not_complete_claim() {
         let mut message = message("outbox-1", "request-0001", json!({}));
         message.claim(worker(), 11, 10).expect("claim should pass");
@@ -512,28 +1048,281 @@ mod tests {
             .claim(worker(), 11, 10)
             .expect("first claim should pass");
         message
-            .mark_failed(&worker(), "UPSTREAM_TIMEOUT", 12)
+            .record_failure(
+                &worker(),
+                OutboxFailureClass::Transient,
+                "UPSTREAM_TIMEOUT",
+                12,
+            )
             .expect("first failure should requeue");
+        let early_error = message
+            .claim(worker(), 5_011, 10)
+            .expect_err("retry must wait for the bounded delay");
+        assert!(matches!(early_error, OutboxError::RetryNotReady { .. }));
         message
-            .claim(worker(), 13, 10)
+            .claim(worker(), 5_012, 10)
             .expect("second claim should pass");
         message
-            .mark_failed(&worker(), "UPSTREAM_TIMEOUT", 14)
+            .record_failure(
+                &worker(),
+                OutboxFailureClass::Transient,
+                "UPSTREAM_TIMEOUT",
+                5_013,
+            )
             .expect("second failure should dead-letter");
 
         assert_eq!(message.status, OutboxStatus::DeadLetter);
+        assert_eq!(
+            message.last_failure_class,
+            Some(OutboxFailureClass::Transient)
+        );
+        assert_eq!(message.retry_not_before_ms, None);
     }
 
     #[test]
-    fn expired_claim_should_be_reclaimable() {
+    fn later_transient_retry_should_wait_thirty_seconds() {
+        let mut message = OutboxMessage::new(
+            OutboxMessageId::new("outbox-later-retry").expect("valid message id"),
+            TaskId::new("gc-outbox-test").expect("valid task id"),
+            IdempotencyKey::new("request-later-retry").expect("valid idempotency key"),
+            "TASK_READY",
+            json!({}),
+            3,
+            10,
+        )
+        .expect("valid outbox message");
+        message.claim(worker(), 11, 10).expect("claim should pass");
+        message
+            .record_failure(
+                &worker(),
+                OutboxFailureClass::Transient,
+                "UPSTREAM_TIMEOUT",
+                12,
+            )
+            .expect("first failure should requeue");
+        message
+            .claim(worker(), 5_012, 10)
+            .expect("first retry should pass after five seconds");
+        message
+            .record_failure(
+                &worker(),
+                OutboxFailureClass::Transient,
+                "UPSTREAM_TIMEOUT",
+                5_013,
+            )
+            .expect("second failure should requeue");
+
+        assert!(matches!(
+            message.claim(worker(), 35_012, 10),
+            Err(OutboxError::RetryNotReady { .. })
+        ));
+        message
+            .claim(worker(), 35_013, 10)
+            .expect("later retry should pass after thirty seconds");
+    }
+
+    #[test]
+    fn fatal_failure_should_dead_letter_without_retry() {
+        let mut message = message("outbox-1", "request-0001", json!({}));
+        message.claim(worker(), 11, 10).expect("claim should pass");
+
+        message
+            .record_failure(&worker(), OutboxFailureClass::Fatal, "POLICY_REJECTED", 12)
+            .expect("fatal failure should be recorded");
+
+        assert_eq!(message.status, OutboxStatus::DeadLetter);
+        assert_eq!(message.attempts, 1);
+        assert_eq!(message.retry_not_before_ms, None);
+        assert!(matches!(
+            message.claim(worker(), 13, 10),
+            Err(OutboxError::InvalidStatus {
+                status: OutboxStatus::DeadLetter
+            })
+        ));
+    }
+
+    #[test]
+    fn effect_unknown_should_never_retry_automatically() {
+        let mut message = message("outbox-1", "request-0001", json!({}));
+        message.claim(worker(), 11, 10).expect("claim should pass");
+
+        message
+            .record_failure(
+                &worker(),
+                OutboxFailureClass::EffectUnknown,
+                "ACK_TIMEOUT",
+                12,
+            )
+            .expect("unknown effect should be recorded");
+
+        assert_eq!(message.status, OutboxStatus::EffectUnknown);
+        assert_eq!(message.retry_not_before_ms, None);
+        assert!(matches!(
+            message.claim(worker(), u64::MAX - 1, 1),
+            Err(OutboxError::InvalidStatus {
+                status: OutboxStatus::EffectUnknown
+            })
+        ));
+    }
+
+    #[test]
+    fn pending_ready_should_hide_delayed_retries() {
+        let mut outbox = Outbox::new();
+        let id = OutboxMessageId::new("outbox-1").expect("valid id");
+        outbox
+            .enqueue(message("outbox-1", "request-0001", json!({})))
+            .expect("enqueue should pass");
+        outbox
+            .claim(&id, worker(), 11, 10)
+            .expect("claim should pass");
+        outbox
+            .record_failure(
+                &id,
+                &worker(),
+                OutboxFailureClass::Transient,
+                "UPSTREAM_TIMEOUT",
+                12,
+            )
+            .expect("transient failure should requeue");
+
+        assert_eq!(outbox.pending().count(), 1);
+        assert_eq!(outbox.pending_ready(5_011).count(), 0);
+        assert_eq!(outbox.pending_ready(5_012).count(), 1);
+    }
+
+    #[test]
+    fn integrity_check_should_reject_corrupt_secondary_index() {
+        let mut outbox = Outbox::new();
+        outbox
+            .enqueue(message("outbox-1", "request-0001", json!({})))
+            .expect("enqueue should pass");
+        outbox.idempotency_index.clear();
+
+        let error = outbox
+            .verify_integrity()
+            .expect_err("missing index entry must fail closed");
+
+        assert!(matches!(error, OutboxError::CorruptIndex));
+    }
+
+    #[test]
+    fn expired_claim_should_require_terminal_effect_reconciliation() {
         let mut message = message("outbox-1", "request-0001", json!({}));
         message
             .claim(worker(), 10, 5)
             .expect("first claim should pass");
 
-        let result = message.claim(ActorId::new("worker-2").expect("valid worker"), 15, 5);
+        let early_error = message
+            .quarantine_expired_claim("LEASE_EXPIRED_UNKNOWN_EFFECT", 14)
+            .expect_err("an active claim must not be quarantined");
+        assert!(matches!(early_error, OutboxError::ClaimStillActive { .. }));
+        let reclaim_error = message
+            .claim(ActorId::new("worker-2").expect("valid worker"), 15, 5)
+            .expect_err("an expired claim must not be redriven");
+        assert!(matches!(
+            reclaim_error,
+            OutboxError::ClaimReconciliationRequired
+        ));
 
-        assert!(result.is_ok());
+        message
+            .quarantine_expired_claim("LEASE_EXPIRED_UNKNOWN_EFFECT", 15)
+            .expect("expired claim should enter terminal quarantine");
+
+        assert_eq!(message.status, OutboxStatus::EffectUnknown);
+        assert_eq!(message.attempts, 1);
+        assert!(matches!(
+            message.claim(worker(), 16, 5),
+            Err(OutboxError::InvalidStatus {
+                status: OutboxStatus::EffectUnknown
+            })
+        ));
+    }
+
+    #[test]
+    fn restricted_transaction_should_preserve_terminal_effect_unknown() {
+        let id = OutboxMessageId::new("outbox-terminal").expect("valid id");
+        let mut outbox = Outbox::new();
+        outbox
+            .enqueue(message("outbox-terminal", "request-terminal", json!({})))
+            .expect("enqueue should pass");
+        outbox
+            .claim(&id, worker(), 11, 10)
+            .expect("claim should pass");
+        outbox
+            .record_failure(
+                &id,
+                &worker(),
+                OutboxFailureClass::EffectUnknown,
+                "ACK_TIMEOUT",
+                12,
+            )
+            .expect("unknown effect should be recorded");
+
+        let mut transaction = OutboxTransaction::new(&mut outbox);
+        let error = transaction
+            .claim(&id, worker(), 13, 10)
+            .expect_err("terminal state must have no redrive transition");
+
+        assert!(matches!(
+            error,
+            OutboxError::InvalidStatus {
+                status: OutboxStatus::EffectUnknown
+            }
+        ));
+        assert_eq!(
+            outbox.get(&id).expect("message should remain").status(),
+            OutboxStatus::EffectUnknown
+        );
+    }
+
+    #[test]
+    fn duplicate_enqueue_should_not_replace_terminal_effect_unknown() {
+        let id = OutboxMessageId::new("outbox-terminal").expect("valid id");
+        let mut outbox = Outbox::new();
+        outbox
+            .enqueue(message(
+                "outbox-terminal",
+                "request-terminal",
+                json!({"effect": "one"}),
+            ))
+            .expect("enqueue should pass");
+        outbox
+            .claim(&id, worker(), 11, 10)
+            .expect("claim should pass");
+        outbox
+            .record_failure(
+                &id,
+                &worker(),
+                OutboxFailureClass::EffectUnknown,
+                "ACK_TIMEOUT",
+                12,
+            )
+            .expect("unknown effect should be recorded");
+
+        let decision = outbox
+            .enqueue(message(
+                "outbox-replacement",
+                "request-terminal",
+                json!({"effect": "one"}),
+            ))
+            .expect("same logical event should deduplicate");
+
+        assert_eq!(
+            decision,
+            EnqueueDecision::Duplicate {
+                message_id: id.clone()
+            }
+        );
+        assert_eq!(
+            outbox
+                .get(&id)
+                .expect("terminal message should remain")
+                .status(),
+            OutboxStatus::EffectUnknown
+        );
+        assert!(outbox
+            .get(&OutboxMessageId::new("outbox-replacement").expect("valid id"))
+            .is_none());
     }
 
     #[test]
@@ -546,5 +1335,54 @@ mod tests {
             .expect_err("tampered payload must fail");
 
         assert!(matches!(error, OutboxError::PayloadHashMismatch));
+    }
+
+    #[test]
+    fn claim_overflow_should_not_partially_mutate_message() {
+        let mut message = message("outbox-1", "request-0001", json!({}));
+        let before = message.clone();
+
+        let error = message
+            .claim(worker(), u64::MAX, 1)
+            .expect_err("overflowing lease must fail");
+
+        assert!(matches!(error, OutboxError::TimestampOverflow));
+        assert_eq!(message, before);
+    }
+
+    #[test]
+    fn retry_overflow_should_not_partially_mutate_message() {
+        let mut message = message("outbox-1", "request-0001", json!({}));
+        message
+            .claim(worker(), u64::MAX - 3, 3)
+            .expect("bounded claim should pass");
+        let before = message.clone();
+
+        let error = message
+            .record_failure(
+                &worker(),
+                OutboxFailureClass::Transient,
+                "UPSTREAM_TIMEOUT",
+                u64::MAX - 2,
+            )
+            .expect_err("overflowing retry delay must fail");
+
+        assert!(matches!(error, OutboxError::TimestampOverflow));
+        assert_eq!(message, before);
+    }
+
+    #[test]
+    fn version_overflow_should_not_partially_complete_message() {
+        let mut message = message("outbox-1", "request-0001", json!({}));
+        message.claim(worker(), 11, 10).expect("claim should pass");
+        message.version = u64::MAX;
+        let before = message.clone();
+
+        let error = message
+            .mark_delivered(&worker(), EvidenceHash::genesis(), 12)
+            .expect_err("overflowing version must fail");
+
+        assert!(matches!(error, OutboxError::VersionOverflow));
+        assert_eq!(message, before);
     }
 }

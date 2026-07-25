@@ -1,9 +1,11 @@
 //! GHOSTCLAW Hermes — router binary: queue, state machine driver, axum HTTP+WS API.
 //!
 //! Approval modes:
-//! - /auto-approve: automated policy-gated approval (evidence + secrets + cost)
-//! - /approve:      manual human override (still available as fallback)
-//! - /reject:       manual human rejection
+//! - /approve: human approval. For RED this is the only thing that advances a task.
+//! - /reject:  human rejection.
+//!
+//! There is no /auto-approve. It existed and was removed — see
+//! docs/decisions/P100-RED-AUTO-APPROVE-FINDING.md.
 
 use axum::{
     extract::{Path, State},
@@ -12,7 +14,7 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use ghostclaw_core::{advance, AutoPolicy, Event, RiskTier, Stage, Task, ApprovalState};
+use ghostclaw_core::{advance, Event, RiskTier, Stage, Task, ApprovalState};
 use ghostclaw_providers::{TieredRouter};
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -37,17 +39,6 @@ struct ApprovalRequest {
     who: String,
 }
 
-#[derive(Deserialize)]
-struct AutoApproveRequest {
-    /// Override policy conditions (all default to true)
-    #[serde(default)]
-    evidence_passed: Option<bool>,
-    #[serde(default)]
-    secrets_clean: Option<bool>,
-    #[serde(default)]
-    cost_within_budget: Option<bool>,
-}
-
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
@@ -68,7 +59,6 @@ async fn main() -> anyhow::Result<()> {
         .route("/health", get(health))
         .route("/api/tasks", get(list_tasks).post(submit_task))
         .route("/api/tasks/{id}", get(get_task))
-        .route("/api/tasks/{id}/auto-approve", post(auto_approve))
         .route("/api/tasks/{id}/approve", post(approve))
         .route("/api/tasks/{id}/reject", post(reject))
         .route("/api/providers", get(list_providers))
@@ -123,7 +113,7 @@ async fn submit_task(
 
     Json(serde_json::json!({
         "id": id,
-        "message": "Task queued. GREEN/YELLOW auto-approve. RED auto-approves if policy passes (evidence+secrets+cost) — fallback: /approve for manual.",
+        "message": "Task queued. GREEN/YELLOW auto-approve. RED waits for a human at /approve or /reject.",
     }))
 }
 
@@ -135,49 +125,6 @@ async fn get_task(
     match tasks.get(&id) {
         Some(t) => Json(serde_json::to_value(t.clone()).unwrap()).into_response(),
         None => (StatusCode::NOT_FOUND, Json(serde_json::json!({"error": "not found"}))).into_response(),
-    }
-}
-
-/// Automated approval — policy-gated. All conditions must pass.
-/// If any condition fails, task stays Pending and returns the block reason.
-async fn auto_approve(
-    State(st): State<AppState>,
-    Path(id): Path<String>,
-    Json(body): Json<AutoApproveRequest>,
-) -> impl IntoResponse {
-    let mut tasks = st.tasks.write().await;
-    match tasks.remove(&id) {
-        Some(t) => {
-            let policy = AutoPolicy {
-                evidence_passed: body.evidence_passed.unwrap_or(true),
-                secrets_clean: body.secrets_clean.unwrap_or(true),
-                cost_within_budget: body.cost_within_budget.unwrap_or(true),
-                policy_version: "auto-v1".into(),
-            };
-
-            let t_clone = t.clone();
-            match advance(t, Event::AutoApproveAttempt(policy)) {
-                Ok(updated) => {
-                    let is_done = updated.stage == Stage::Done;
-                    tasks.insert(id.clone(), updated.clone());
-                    Json(serde_json::json!({
-                        "status": if is_done { "auto-approved" } else { "pending" },
-                        "task": updated,
-                    }))
-                }
-                Err(e) => {
-                    // Put task back without advancing — still pending
-                    tasks.insert(id.clone(), t_clone.clone());
-                    Json(serde_json::json!({
-                        "status": "blocked",
-                        "error": e.to_string(),
-                        "task": t_clone,
-                        "hint": "Auto-approve blocked. Use /approve for manual override.",
-                    }))
-                }
-            }
-        }
-        None => Json(serde_json::json!({"error": "not found"})),
     }
 }
 

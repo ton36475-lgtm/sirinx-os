@@ -1,7 +1,7 @@
 // services/command-center/src/evidence_chain.rs
 // SHA256 Evidence Chain for GHOSTCLAW
 
-use sha2::{Sha256, Digest};
+use sha2::{Digest, Sha256};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub struct EvidenceEntry {
@@ -20,11 +20,11 @@ impl EvidenceChain {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_secs();
-            
+
         let mut hasher = Sha256::new();
         hasher.update(format!("{}{}", task_id, action).as_bytes());
         let hash = format!("{:x}", hasher.finalize());
-        
+
         EvidenceEntry {
             task_id: task_id.to_string(),
             action: action.to_string(),

@@ -1,0 +1,179 @@
+diff --git a/NEXT_ACTIONS.md b/NEXT_ACTIONS.md
+index 8bfe4d3..ec892e0 100644
+--- a/NEXT_ACTIONS.md
++++ b/NEXT_ACTIONS.md
+@@ -1,5 +1,101 @@
+ # NEXT_ACTIONS.md - GHOSTCLAW_LOOP_ENGINEERING V1.1
+ 
++## Current Ordered Queue Override — 2026-07-19T06:59:57Z
++
++This queue supersedes all “done,” status, and next-action claims below until a
++fresh current-state audit replaces it. Older sections are historical context.
++
++### P0 — STOP build and swarm work while disk is below threshold
++
++- Current observed free space is approximately 4.2 GiB, below the 5 GiB stop
++  rule in `PROJECT_STATE.md`.
++- Do not rerun Kimi swarms, full Rust/JavaScript builds, installs, clones, or
++  cache-generating test matrices until at least 5 GiB is available.
++- Main has 1,357 dirty/untracked paths and must not be used for focused edits.
++- Continue only in isolated worktrees with explicit file scope.
++
++### P0 — do not run destructive auto-repair paths
++
++The following scripts are `DO_NOT_RUN` pending a separate fail-closed cleanup
++and resource-admission redesign:
++
++- `scripts/cron-disk-check.mjs` automatically removes npm caches, runs Brew/Go
++  cleanup, and deletes temporary files.
++- `scripts/self-evolution-core.py` can remove build caches, A2A history, Codex
++  sessions, old tool versions, and Trash contents.
++- `scripts/self-evolution-engine.py` can delete sessions/caches and
++  automatically restart local services.
++
++The current low-disk event does not authorize those broad targets. Only exact,
++reproducible build targets already validated by Codex were cleaned.
++
++### P1 — repair PR #1 deploy-pipeline contract after exact gate
++
++Status: `BLOCKED_CHANGES_REQUIRED`.
++
++- Local scope and 25/25 focused tests are verified.
++- Evidence preflight must occur before any subprocess.
++- Approval and receipt must be atomically single-use.
++- Authority and producer independence require authenticated trust.
++- Read-only Git must use a sterile environment/configuration.
++- Evidence owner/mode/link-count checks and staged-diff-bound review are
++  required.
++- The old Kimi packet has no complete self-integrity digest and must not be
++  dispatched.
++- Source repair requires an independent task-bound `APPROVE_IMPLEMENTATION`
++  artifact; after repair, regenerate every digest and derive a new Kimi gate.
++
++Evidence:
++`/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/evidence/SIRINX-PR1-DEPLOY-PIPELINE-SAFE-20260719.QA-RECHECK.md`.
++
++### P1 — redesign Telegram delivery durability and authorization
++
++Status: `STATIC_QA_FAILED`; the observed UI error loop remains unverified.
++
++- Offset read errors can reset to zero; batch outcome is persisted only once.
++- One approval can be reused across a batch.
++- Approval is consumed before recipient/network/delivery outcome is known.
++- HTTP success is insufficient without Telegram `ok=true`; ambiguous sends
++  need terminal `EffectUnknown` reconciliation.
++- Operator `user_id` is recorded but not enforced.
++- Polling-disabled configuration is not enforced by `--poll-once`.
++- Local subprocess/log-writing preview commands need an exact gate or removal.
++
++Required packet: per-update durable state, exclusive polling, one receipt per
++update, timeout/error classification, operator allowlist, config enforcement,
++and current-source/test-bound readiness evidence. No live Telegram call is
++authorized.
++
++### P1 — durable outbox V2 production hardening
++
++Status: `VERIFIED_LOCAL_LIBRARY_SLICE`; production and runtime wiring are
++`CHANGES_REQUIRED`/`UNVERIFIED`.
++
++Required packets:
++
++1. Immutable snapshots plus independently authoritative monotonic head.
++2. Unix descriptor-relative filesystem hardening and explicit cooperative
++   same-UID threat model.
++3. Persisted/API migration compatibility and bounded payload hashing.
++
++Evidence:
++`/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/evidence/GHOSTCLAW-DURABLE-OUTBOX-LOCAL-SLICE-20260719.md`.
++
++### P2 — refresh current system evidence
++
++After disk recovery, run the smallest current-state matrix and replace stale
++claims rather than reusing the 2026-07-17 snapshot:
++
++1. Verify disk remains above the stop threshold.
++2. Verify source/worktree scope and current HEAD.
++3. Probe service health/readiness without starting or restarting services.
++4. Run current focused tests with exact coverage receipts.
++5. Recount queues and approvals from the canonical active store.
++6. Update `PROJECT_STATE.md` only from the new evidence.
++
++No commit, push, deployment, provider call, external message, secret read,
++service restart, install, or cloud mutation is authorized by this queue.
++
+ ## งานที่ทำแล้ว ✅
+ 
+ ### Phase 1A - Agent Registration SQL ✅
+diff --git a/PROJECT_STATE.md b/PROJECT_STATE.md
+index 4e44945..4f357e1 100644
+--- a/PROJECT_STATE.md
++++ b/PROJECT_STATE.md
+@@ -1,13 +1,65 @@
+ # PROJECT_STATE
+ 
+-Date: 2026-07-17
+-Last Update: POST-AUDIT-UNIFIED-SKILLS-20260717
++Date: 2026-07-19
++Last Update: QA-TRUTH-OVERRIDE-20260719T065731Z
+ Repo: `/Users/sirinx/sirinx-os`
+ Branch: `migration/v5-rebase`
+-HEAD: `1b2f3aa`
++HEAD: `b55f81ecd372ff23a34fcf33c2744706447e14ca`
+ Runtime mode: local control plane, dry-run only
+ Canonical protocol: `AGENTS.md`
+ 
++## Current QA Truth Override (2026-07-19T06:57:31Z)
++
++This section supersedes the older 2026-07-17 “Current Verified State” below.
++That snapshot remains historical context only and must not be used as current
++runtime, release, queue, test, or capacity evidence.
++
++### Directly verified now
++
++- Main checkout HEAD: `b55f81ecd372ff23a34fcf33c2744706447e14ca`.
++- Main checkout has 1,357 dirty/untracked paths; 1,293 are under
++  `a2a-sync-omniroute/`. Main is not an admissible focused-change worktree.
++- Disk free at probe time: 4,401,240 KiB (approximately 4.2 GiB), still below
++  the project’s 5 GiB stop threshold.
++- Codex removed only reproducible Rust target artifacts from three exact
++  workspaces, recovering approximately 3.1 GiB. No source or user data was
++  removed.
++- Loopback TCP observation only: ports 8711, 8643, 8644, and 9000 were
++  listening; port 3800 was not listening. A listening socket is not an
++  application-health or readiness proof.
++- No current full Rust, JavaScript, dashboard, provider, Telegram, MCP, A2A,
++  deployment, or production smoke suite was run for this override.
++
++### Focused candidate dispositions
++
++- PR #1 deploy-pipeline candidate: exact two-file staged scope and 25/25
++  focused tests are locally verified, but independent QA verdict is
++  `CHANGES_REQUIRED`. Kimi dispatch and local commit are blocked. Evidence:
++  `/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/evidence/SIRINX-PR1-DEPLOY-PIPELINE-SAFE-20260719.QA-RECHECK.md`.
++- Durable outbox candidate: `VERIFIED_LOCAL_LIBRARY_SLICE`, but production
++  verdict is `CHANGES_REQUIRED_FOR_PRODUCTION`; runtime wiring is unverified.
++  Evidence:
++  `/Users/sirinx/sirinx-os/.ghostclaw_runtime/a2a2a/evidence/GHOSTCLAW-DURABLE-OUTBOX-LOCAL-SLICE-20260719.md`.
++
++### Claims explicitly withdrawn until refreshed
++
++- “GhostClaw Tests: 84/84 PASS” and “Rust Compile: 0 errors” are last-known
++  claims, not current proof.
++- “Skills API :3800 RUNNING” is contradicted by the current TCP observation.
++- Queue counts, cron counts, service PIDs, versions, load, uptime, skills
++  totals, bridge status, and 11 GiB free-space figures below are stale.
++- No production, provider inference, customer-message, deploy, push, or cloud
++  mutation readiness is established.
++
++### Next safe action
++
++1. Keep build/test swarms stopped while disk remains below 5 GiB.
++2. Preserve the dirty main checkout and use isolated worktrees only.
++3. Repair PR #1 only after an independent task-bound
++   `APPROVE_IMPLEMENTATION` artifact; regenerate all digests afterward.
++4. Re-run the minimum current-state health/test matrix before replacing this
++   override with a new verified snapshot.
++
+ ## Current Verified State (2026-07-17T07:45+07:00)
+ 
+ ### System Health

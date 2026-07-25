@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/sirinx/sirinx-os"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="$ROOT/ops/logs"
 PID_DIR="$ROOT/ops/pids"
 API_URL="${DEV_CONTROL_API_URL:-http://127.0.0.1:8711/health}"

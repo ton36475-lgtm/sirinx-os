@@ -1,0 +1,105 @@
+{
+  "lane": "cointh",
+  "decision": "P098 Rev F (PROPOSED)",
+  "tier": "PRIMARY",
+  "risk_ceiling": "yellow",
+  "base_url": "https://cointh.com/glm/anthropic",
+  "pool": "n/a",
+  "pool_declared": "Cointh GLM",
+  "pool_note": "Single-vendor GLM gateway, not an aggregator pool. Unlike maxplus, the model catalogue and the routable set matched exactly: every listed id answered.",
+  "source_endpoint": "GET /v1/models",
+  "source_note": "8 ids returned, hasMore=false. Response shape is Anthropic-style but camelCase (firstId/hasMore/lastId) where maxplus uses snake_case (first_id/has_more/last_id) — same family, different dialect.",
+  "verified_at": "2026-07-25T05:54:06Z",
+  "probe_prompt": "Say OK",
+  "schemas_probed": [
+    "anthropic_messages (/v1/messages + anthropic-version: 2023-06-01)",
+    "openai_chat (/v1/chat/completions) — NOT SERVED, endpoint returns 404 {\"detail\":\"Not Found\"} for every id"
+  ],
+  "auth_note": "Both Authorization: Bearer and x-api-key were accepted (both HTTP 200 on GET /v1/models).",
+  "models": [
+    {
+      "id": "glm-4.5",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 874,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-4.5-air",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 800,
+      "needs_big_budget": false,
+      "schema_note": "Declared as 'GLM-4.5-Air' in ~/.config/zcode/glm-5.2-config.json. The live id is lowercase — the declared casing would not resolve.",
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-4.6",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 1184,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-4.7",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 821,
+      "needs_big_budget": false,
+      "schema_note": "Declared as 'GLM-4.7' in ~/.config/zcode/glm-5.2-config.json. The live id is lowercase — the declared casing would not resolve.",
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-5",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 1843,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-5-turbo",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 798,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-5.1",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 1194,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T05:54:06Z"
+    },
+    {
+      "id": "glm-5.2",
+      "status": "OK",
+      "schema": ["anthropic_messages"],
+      "http_code": 200,
+      "latency_ms": 1265,
+      "needs_big_budget": false,
+      "schema_note": "zcode's configured default_model. Also present on the maxplus lane, where it measured 3610ms against 1265ms here.",
+      "verified_at": "2026-07-25T05:54:06Z"
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "ok": 8,
+    "err": 0,
+    "empty": 0,
+    "absent": 0,
+    "needs_big_budget": 0,
+    "usable_on_all_three_schemas": 0
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/models.provider.schema.json",
+  "title": "GhostClaw provider model registry",
+  "description": "Shape of config/models.<lane>.json for every provider lane (maxplus, cointh, …).\n\nEvery record must come from a live probe. An id transcribed from a config file, a screenshot, or a vendor page is not admissible — the cointh probe found two of four declared ids had the wrong casing, and the maxplus probe found three listed ids that were not routable at all.\n\nDecision records: docs/decisions/P098-RevD.md (maxplus), P098-RevF.md (cointh).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "lane",
+    "decision",
+    "tier",
+    "risk_ceiling",
+    "base_url",
+    "source_endpoint",
+    "verified_at",
+    "models"
+  ],
+  "properties": {
+    "lane": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Lane name. Must match the filename: config/models.<lane>.json"
+    },
+    "decision": {
+      "type": "string",
+      "description": "Governing decision record and its status, e.g. 'P098 Rev D (APPROVED 2026-07-25)'."
+    },
+    "tier": {
+      "enum": ["PRIMARY", "LEAF"],
+      "description": "PRIMARY = first choice for its model family. LEAF = fallback only; the system must keep working without it."
+    },
+    "risk_ceiling": {
+      "enum": ["green", "yellow"],
+      "description": "Highest risk tier this lane may execute. No lane may be 'red' — RED advances only through the structural HIGH gate."
+    },
+    "base_url": {
+      "type": "string",
+      "pattern": "^https://[^/]+(/[^/]+)*$",
+      "description": "HTTPS origin, optionally with a path prefix (cointh serves at /glm/anthropic). Must NOT end in a slash or in /v1: clients append /v1/messages themselves, and a /v1 suffix produces /v1/v1/messages."
+    },
+    "pool": {
+      "type": "string",
+      "description": "Live pool identifier, 'n/a' for single-vendor gateways, or 'VERIFY AT RUN TIME' when the provider exposes none."
+    },
+    "pool_declared": { "type": "string" },
+    "pool_note": { "type": "string" },
+    "auth_note": { "type": "string" },
+    "source_endpoint": { "type": "string" },
+    "source_note": { "type": "string" },
+    "verified_at": { "type": "string", "format": "date-time" },
+    "probe_prompt": { "type": "string" },
+    "schemas_probed": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/modelRecord" }
+    },
+    "summary": { "$ref": "#/$defs/summary" }
+  },
+  "$defs": {
+    "schemaName": {
+      "enum": ["anthropic_messages", "openai_chat", "openai_responses"],
+      "description": "anthropic_messages = /v1/messages + anthropic-version header; openai_chat = /v1/chat/completions; openai_responses = /v1/responses."
+    },
+    "modelRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "schema",
+        "http_code",
+        "latency_ms",
+        "needs_big_budget",
+        "verified_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Model id byte-for-byte as returned by the live list. Casing is significant."
+        },
+        "status": {
+          "enum": ["OK", "EMPTY", "ERR", "ABSENT"],
+          "description": "OK = 200 with non-empty content. EMPTY = 200 but still empty after the single retry at 4096 tokens. ERR = non-2xx on every schema probed. ABSENT = advertised somewhere but not in the live list."
+        },
+        "schema": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/schemaName" },
+          "uniqueItems": true
+        },
+        "http_code": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "latency_ms": { "type": "integer", "minimum": 0 },
+        "needs_big_budget": {
+          "type": "boolean",
+          "description": "True when the model returned 200 with empty content at a small max_tokens and recovered at 4096."
+        },
+        "budget_note": { "type": "string" },
+        "schema_note": { "type": "string" },
+        "error_code": { "type": "string" },
+        "error_message": { "type": "string" },
+        "error_note": { "type": "string" },
+        "verified_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "OK" } }, "required": ["status"] },
+          "then": { "properties": { "schema": { "minItems": 1 } }, "required": ["schema"] }
+        },
+        {
+          "if": { "properties": { "status": { "const": "ERR" } }, "required": ["status"] },
+          "then": { "required": ["error_code", "error_message"] }
+        }
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "ok", "err", "empty", "absent"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "ok": { "type": "integer", "minimum": 0 },
+        "err": { "type": "integer", "minimum": 0 },
+        "empty": { "type": "integer", "minimum": 0 },
+        "absent": { "type": "integer", "minimum": 0 },
+        "needs_big_budget": { "type": "integer", "minimum": 0 },
+        "usable_on_all_three_schemas": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

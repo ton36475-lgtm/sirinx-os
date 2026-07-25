@@ -28,10 +28,7 @@ impl LlmProvider for GlmProvider {
 
     fn complete(&self, system: Option<&str>, prompt: &str) -> String {
         // Return endpoint info for verification
-        format!("GLM_ENDPOINT: {} | MODEL: {}", 
-            self.endpoint(), 
-            self.model
-        )
+        format!("GLM_ENDPOINT: {} | MODEL: {}", self.endpoint(), self.model)
     }
 }
 
@@ -48,6 +45,9 @@ mod tests {
     #[test]
     fn test_glm_endpoint() {
         let provider = GlmProvider::new();
-        assert_eq!(provider.endpoint(), "https://api.z.ai/api/paas/v4/chat/completions");
+        assert_eq!(
+            provider.endpoint(),
+            "https://api.z.ai/api/paas/v4/chat/completions"
+        );
     }
 }

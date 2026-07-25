@@ -158,16 +158,8 @@ impl IntoResponse for HandlerError {
                 format!("Task not found: {id}"),
             ),
             Self::BadRequest(msg) => (StatusCode::BAD_REQUEST, "bad_request", msg),
-            Self::PolicyBlocked(reason) => (
-                StatusCode::FORBIDDEN,
-                "policy_blocked",
-                reason,
-            ),
-            Self::Internal(msg) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                "internal_error",
-                msg,
-            ),
+            Self::PolicyBlocked(reason) => (StatusCode::FORBIDDEN, "policy_blocked", reason),
+            Self::Internal(msg) => (StatusCode::INTERNAL_SERVER_ERROR, "internal_error", msg),
         };
         let body = Json(ApiError {
             code: code.to_string(),
@@ -197,7 +189,12 @@ pub async fn submit_task(
     State(_state): State<AppState>,
     Json(_body): Json<SubmitTaskRequest>,
 ) -> HandlerResult<(StatusCode, Json<SubmitTaskResponse>)> {
-    Ok((StatusCode::CREATED, Json(SubmitTaskResponse { task: Task::default() })))
+    Ok((
+        StatusCode::CREATED,
+        Json(SubmitTaskResponse {
+            task: Task::default(),
+        }),
+    ))
 }
 
 /// `GET /api/tasks/:id` — get a single task by ID.
@@ -214,7 +211,11 @@ pub async fn approve_task(
     Path(_id): Path<String>,
     Json(_body): Json<ApproveTaskRequest>,
 ) -> HandlerResult<Json<AdvanceResponse>> {
-    Ok(Json(AdvanceResponse { task_id: String::new(), outcome: AdvanceOutcome::ApprovalRequired, task: None }))
+    Ok(Json(AdvanceResponse {
+        task_id: String::new(),
+        outcome: AdvanceOutcome::ApprovalRequired,
+        task: None,
+    }))
 }
 
 /// `POST /api/tasks/:id/reject` — reject a task.
@@ -223,7 +224,10 @@ pub async fn reject_task(
     Path(_id): Path<String>,
     Json(_body): Json<RejectTaskRequest>,
 ) -> HandlerResult<Json<ApiError>> {
-    Ok(Json(ApiError { code: String::new(), message: String::new() }))
+    Ok(Json(ApiError {
+        code: String::new(),
+        message: String::new(),
+    }))
 }
 
 /// `GET /api/events` — recent domain events for audit.
@@ -252,14 +256,10 @@ pub async fn run_mission(
 }
 
 /// `GET /ws` — WebSocket upgrade for real-time event stream.
-pub async fn ws_handler(
-    ws_upgrade: WebSocketUpgrade,
-    State(_state): State<AppState>,
-) -> Response {
-    ws_upgrade
-        .on_upgrade(|socket| async move {
-            ws_connection(socket).await;
-        })
+pub async fn ws_handler(ws_upgrade: WebSocketUpgrade, State(_state): State<AppState>) -> Response {
+    ws_upgrade.on_upgrade(|socket| async move {
+        ws_connection(socket).await;
+    })
 }
 
 /// Background task for an active WebSocket connection.

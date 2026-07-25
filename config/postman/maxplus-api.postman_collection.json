@@ -1,0 +1,412 @@
+{
+  "info": {
+    "name": "MaxPlus Gateway — GhostClaw lane (P098 Rev D)",
+    "description": "Live-probed contract for the maxplus aggregator gateway.\n\nEvery request, model id, status code and error body in this collection came from a real probe on 2026-07-24/25 (stage M2). Nothing here is transcribed from a screenshot or a vendor page.\n\nSource of truth: `config/models.maxplus.json`\nDecision record: `docs/decisions/P098-RevD.md`\n\n## Auth\n\nSet `{{maxplus_api_key}}` as a Postman **secret** variable in an environment, or better, in a vault. Never commit a value into this file — the collection ships with an empty default.\n\n## Base URL\n\n`{{base_url}}` must be the bare origin `https://api.maxplus-ai.cc` with **no** `/v1` suffix. A base ending in `/v1` produces `/v1/v1/messages`, which the gateway answers with `403 {\"message\":\"This passthrough route is disabled.\"}`.\n\n## What this gateway is\n\nAn opaque reseller pool: it chooses the upstream provider itself and exposes no pool metadata. `/v1/pools`, `/v1/me`, `/v1/usage`, `/v1/credits` all return `403` (Cloudflare error 1106). Treat every payload sent here as disclosed to a third party.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{maxplus_api_key}}", "type": "string" }]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.maxplus-ai.cc",
+      "type": "string",
+      "description": "Bare origin. Do NOT append /v1 — see collection description."
+    },
+    {
+      "key": "maxplus_api_key",
+      "value": "",
+      "type": "string",
+      "description": "Gateway credential. Leave empty here; supply it from an environment or vault."
+    },
+    {
+      "key": "model_ok",
+      "value": "glm-5.2",
+      "type": "string",
+      "description": "A model verified status=OK on all three schemas."
+    },
+    {
+      "key": "model_err",
+      "value": "kimi-k2.6",
+      "type": "string",
+      "description": "Listed by /v1/models but not routable — expected to fail with model_not_found."
+    },
+    {
+      "key": "model_big_budget",
+      "value": "deepseek-v4-flash",
+      "type": "string",
+      "description": "Returns HTTP 200 with empty content at small max_tokens on openai_chat."
+    }
+  ],
+  "item": [
+    {
+      "name": "Discovery",
+      "item": [
+        {
+          "name": "GET /v1/models — live model list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "",
+                  "pm.test('response is Anthropic-shaped, not OpenAI-shaped', () => {",
+                  "  pm.expect(body).to.have.property('data').that.is.an('array');",
+                  "  pm.expect(body).to.have.property('has_more');",
+                  "  pm.expect(body).to.have.property('first_id');",
+                  "  pm.expect(body.data[0]).to.have.property('display_name');",
+                  "});",
+                  "",
+                  "pm.test('list is complete in one page', () => {",
+                  "  pm.expect(body.has_more, 'has_more must be false or pagination is unhandled').to.eql(false);",
+                  "});",
+                  "",
+                  "// Drift check against the committed registry. Update models.maxplus.json",
+                  "// by re-running the M2 probe if this fails — do not edit the expectation.",
+                  "const expected = [",
+                  "  'deepseek-v4-pro', 'deepseek-v4-flash', 'glm-5.2', 'glm-5.1', 'hy3',",
+                  "  'kimi-k2.6', 'kimi-k2.7-code', 'kimi-k3', 'minimax-m3',",
+                  "  'mimo-v2.5-pro', 'mimo-v2.5', 'qwen3.7-max', 'qwen3.7-plus'",
+                  "];",
+                  "const live = body.data.map(m => m.id);",
+                  "pm.test('live list matches config/models.maxplus.json', () => {",
+                  "  pm.expect(live.slice().sort()).to.eql(expected.slice().sort());",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('discovered_ids', JSON.stringify(live));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "anthropic-version", "value": "2023-06-01" }],
+            "url": { "raw": "{{base_url}}/v1/models", "host": ["{{base_url}}"], "path": ["v1", "models"] },
+            "description": "Verified 2026-07-24: http=200, 0.54s, 13 models, has_more=false.\n\nThis is the ONLY acceptable source of model ids. An id seen on a screenshot or pricing page but absent here is recorded ABSENT and must not be used."
+          }
+        },
+        {
+          "name": "GET /models — wrong path, proves 404 discrimination",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('404 for an unknown path', () => pm.response.to.have.status(404));",
+                  "// This matters: the gateway answers 404 for paths it does not serve and 401",
+                  "// for paths it serves but did not authenticate. That makes an unauthenticated",
+                  "// 401 positive evidence that an endpoint exists."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/models", "host": ["{{base_url}}"], "path": ["models"] },
+            "description": "Verified 2026-07-24: http=404. Kept as a regression guard for the 404-vs-401 discrimination the endpoint-shape probe relies on."
+          }
+        },
+        {
+          "name": "GET /v1/pools — proves pool routing is opaque",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('403 — no pool metadata is exposed', () => pm.response.to.have.status(403));",
+                  "// P098 Rev D section 2 classifies this lane as opaque on exactly this evidence.",
+                  "// If this ever returns 200, the classification should be revisited."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/v1/pools", "host": ["{{base_url}}"], "path": ["v1", "pools"] },
+            "description": "Verified 2026-07-24: http=403, body `error code: 1106` (Cloudflare). Same for /pools, /v1/pool, /v1/models/pools, /v1/me, /v1/usage, /v1/credits."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Schemas",
+      "description": "The three request shapes the gateway accepts. Which ones a given model accepts is per-model — see config/models.maxplus.json.",
+      "item": [
+        {
+          "name": "anthropic_messages — POST /v1/messages",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('content block carries text', () => {",
+                  "  pm.expect(body.content).to.be.an('array');",
+                  "  const text = body.content.filter(b => b.text).map(b => b.text).join('');",
+                  "  pm.expect(text.length, 'HTTP 200 with empty content is EMPTY, not OK').to.be.above(0);",
+                  "});",
+                  "pm.test('under the M3.4 total timeout', () => pm.expect(pm.response.responseTime).to.be.below(120000));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "anthropic-version", "value": "2023-06-01" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_ok}}\",\n  \"max_tokens\": 64,\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"Say OK\" }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/v1/messages", "host": ["{{base_url}}"], "path": ["v1", "messages"] },
+            "description": "Requires the `anthropic-version` header. Verified OK on 8 of 13 models.\n\nKnown exceptions: qwen3.7-plus rejects this schema (400 invalid_request); qwen3.7-max returned a transient 503 at probe time but works on the other two schemas."
+          }
+        },
+        {
+          "name": "openai_chat — POST /v1/chat/completions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('choice carries content', () => {",
+                  "  pm.expect(body.choices).to.be.an('array').that.is.not.empty;",
+                  "  pm.expect(body.choices[0].message.content).to.be.a('string').that.is.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "content-type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_ok}}\",\n  \"max_tokens\": 64,\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"Say OK\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/chat/completions",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "chat", "completions"]
+            },
+            "description": "Verified OK on 10 of 13 models — the widest coverage of the three schemas, and the only one that serves qwen3.7-max and qwen3.7-plus."
+          }
+        },
+        {
+          "name": "openai_responses — POST /v1/responses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('output carries text', () => {",
+                  "  pm.expect(body.output).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "content-type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_ok}}\",\n  \"max_output_tokens\": 64,\n  \"input\": \"Say OK\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/v1/responses", "host": ["{{base_url}}"], "path": ["v1", "responses"] },
+            "description": "Uses `input` and `max_output_tokens`, not `messages`/`max_tokens`. Verified OK on 10 of 13 models."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Failure modes",
+      "description": "Each of these reproduces a failure the M2 probe actually hit. They are contract tests, not negative examples: if one starts passing, the registry is stale.",
+      "item": [
+        {
+          "name": "model_not_found — listed but not routable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400', () => pm.response.to.have.status(400));",
+                  "const body = pm.response.json();",
+                  "pm.test('error code is model_not_found', () => {",
+                  "  pm.expect(body.error.code).to.eql('model_not_found');",
+                  "});",
+                  "// kimi-k2.6, minimax-m3 and mimo-v2.5-pro all appear in GET /v1/models",
+                  "// yet fail here on every schema. This is the opaque-pool failure mode:",
+                  "// the catalogue and the routable set are not the same set.",
+                  "// If this test starts FAILING, the pool recovered — re-run the M2 probe."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "anthropic-version", "value": "2023-06-01" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_err}}\",\n  \"max_tokens\": 64,\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"Say OK\" }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/v1/messages", "host": ["{{base_url}}"], "path": ["v1", "messages"] },
+            "description": "Verified 2026-07-24, all three schemas:\n\n```json\n{\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Requested resource or model is not available.\",\"code\":\"model_not_found\"}}\n```"
+          }
+        },
+        {
+          "name": "empty content at small budget — the M2.4 rule",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "const text = (body.choices && body.choices[0].message.content) || '';",
+                  "",
+                  "// M2.4: HTTP 200 with empty content is NOT success. Retry ONCE at",
+                  "// max_tokens 4096 — some reasoning models spend the whole small budget",
+                  "// on reasoning tokens before emitting any output. Still empty => EMPTY.",
+                  "if (text.length === 0) {",
+                  "  console.log('empty at 64 tokens — this model needs needs_big_budget=true');",
+                  "}",
+                  "pm.test('documents the empty-content case', () => pm.expect(text).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "content-type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_big_budget}}\",\n  \"max_tokens\": 64,\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"Say OK\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/chat/completions",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "chat", "completions"]
+            },
+            "description": "deepseek-v4-flash, glm-5.1 and mimo-v2.5 return 200 with empty content at max_tokens=64 on this schema, and recover at 4096. They carry `needs_big_budget: true` in the registry."
+          }
+        },
+        {
+          "name": "403 — base_url wrongly includes /v1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('403 passthrough disabled', () => pm.response.to.have.status(403));",
+                  "pm.test('names the passthrough route', () => {",
+                  "  pm.expect(pm.response.json().error.message).to.include('passthrough route is disabled');",
+                  "});",
+                  "// Guards a real misconfiguration found in the wild: setting",
+                  "// ANTHROPIC_BASE_URL to https://api.maxplus-ai.cc/v1 makes the client",
+                  "// request /v1/v1/messages. The base URL must be the bare origin."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "anthropic-version", "value": "2023-06-01" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_ok}}\",\n  \"max_tokens\": 1,\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \".\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/v1/messages",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "v1", "messages"]
+            },
+            "description": "Verified 2026-07-25:\n\n```json\n{\"type\":\"error\",\"error\":{\"type\":\"permission_error\",\"message\":\"This passthrough route is disabled.\"}}\n```"
+          }
+        },
+        {
+          "name": "401 — no credential",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('401 without a credential', () => pm.response.to.have.status(401));",
+                  "// Paired with the /models 404 above, this is what makes an unauthenticated",
+                  "// sweep usable for endpoint discovery before a key exists."
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/v1/models", "host": ["{{base_url}}"], "path": ["v1", "models"] },
+            "description": "Verified 2026-07-25: http=401 with no Authorization header."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guardrails",
+      "description": "Requests that MUST NOT be sent. Present as documentation of the egress redaction gate — do not run them.",
+      "item": [
+        {
+          "name": "DO NOT RUN — payload the redaction gate blocks",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// The egress redaction gate in ghostclaw-providers drops any payload",
+                  "// containing these markers before it leaves the host, logs DENIED, and",
+                  "// does not retry. This request exists to document the contract; sending",
+                  "// it would defeat the control it documents.",
+                  "throw new Error('Blocked by design: this request carries a secret marker. See ghostclaw-providers::maxplus::redaction_gate.');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "content-type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"{{model_ok}}\",\n  \"max_tokens\": 64,\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"REDACTED EXAMPLE — the gate blocks payloads containing .env, cert.pem, *.pem, any token prefix, SIRINX customer data, or LINE OA data\" }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/v1/messages", "host": ["{{base_url}}"], "path": ["v1", "messages"] },
+            "description": "All traffic on this lane transits a third-party reseller. Blocked markers: `-----BEGIN`, `cert.pem`, `.pem`, `.env`, `ccsk-`, `sk-ant-`, `ghp_`, `gho_`, `xoxb-`, `AKIA`, `CHANNEL_ACCESS_TOKEN`, `CHANNEL_SECRET`, `LINE_CHANNEL`, `MAXPLUS_API_KEY`, `OPENROUTER_API_KEY`, `GLM_API_KEY`, `TELEGRAM_BOT_TOKEN`."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,8 +2,8 @@
 // Hermes Command Center - Omnigent Integration
 
 mod agent_router;
-mod policy_engine;
 mod evidence_chain;
+mod policy_engine;
 
 #[tokio::main]
 async fn main() {
