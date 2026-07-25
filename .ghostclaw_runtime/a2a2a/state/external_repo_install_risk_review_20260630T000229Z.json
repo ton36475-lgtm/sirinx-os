@@ -1,0 +1,76 @@
+{
+  "schema": "ghostclaw.external_repo_install_risk_review.v1",
+  "created_at": "2026-06-30T00:02:29Z",
+  "local_created_at": "2026-06-30T07:02:29+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "mode": "local_only_quarantine_review",
+  "status": "install_blocked_pending_gate",
+  "review_doc": "docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_RISK_REVIEW_20260630.md",
+  "repos": [
+    {
+      "name": "oh-my-opencode-lite",
+      "source": "https://github.com/Yeachan-Heo/oh-my-opencode-lite",
+      "quarantine_path": ".ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite",
+      "branch": "dev",
+      "head": "35797ff",
+      "package_name": "oh-my-opencode",
+      "package_version": "4.3.1",
+      "license": "SUL-1.0",
+      "postinstall_present": true,
+      "install_scripts_executed": false,
+      "dependency_install_executed": false,
+      "global_config_write_executed": false,
+      "risk_flags": [
+        "bunx_install_guidance",
+        "opencode_plugin_config_write_possible",
+        "anonymous_telemetry_default_documented",
+        "postinstall_shells_out_to_opencode_version",
+        "provider_auth_planning_surface",
+        "mcp_runtime_injection_surface",
+        "nonstandard_license_for_business_use_review"
+      ],
+      "required_gate": "APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE",
+      "decision": "blocked_until_gate"
+    },
+    {
+      "name": "Agent-Blackbox",
+      "source": "https://github.com/Yeachan-Heo/Agent-Blackbox",
+      "quarantine_path": ".ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox",
+      "branch": "main",
+      "head": "d1eb1d0",
+      "package_name": "agent-blackbox-monorepo",
+      "package_version": "0.0.0",
+      "license": null,
+      "postinstall_present": false,
+      "install_scripts_executed": false,
+      "dependency_install_executed": false,
+      "global_config_write_executed": false,
+      "risk_flags": [
+        "npx_up_quickstart",
+        "local_daemon_dashboard_start",
+        "opencode_global_plugin_write_possible",
+        "claude_transcript_tail_surface",
+        "memory_write_optimize_surface",
+        "local_trace_and_baseline_artifacts",
+        "license_metadata_missing"
+      ],
+      "required_gate": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE",
+      "decision": "blocked_until_gate"
+    }
+  ],
+  "blocked_actions_preserved": [
+    "package_install",
+    "bunx",
+    "npx",
+    "postinstall_execution",
+    "global_plugin_write",
+    "provider_model_call",
+    "secret_read",
+    "daemon_dashboard_launch",
+    "browser_automation",
+    "telegram_customer_live_send",
+    "deploy",
+    "git_push"
+  ],
+  "next_safe_action": "Create one gate-specific approval packet per repo with exact command, isolated working directory, telemetry setting, expected writes, rollback plan, and stop conditions."
+}

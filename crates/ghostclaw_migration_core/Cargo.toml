@@ -1,0 +1,20 @@
+[package]
+name = "ghostclaw_migration_core"
+version = "0.1.0"
+edition = "2021"
+description = "Local-safe Rust core for GhostClaw command parsing, policy gating, routing intent, and receipts."
+license = "UNLICENSED"
+publish = false
+
+[features]
+default = []
+python = []
+
+[lints.rust]
+unsafe_code = "forbid"
+future-incompatible = "warn"
+nonstandard_style = { level = "deny", priority = -1 }
+
+[lints.clippy]
+all = { level = "deny", priority = 10 }
+redundant_clone = { level = "deny", priority = 9 }

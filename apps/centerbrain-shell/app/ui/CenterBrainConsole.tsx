@@ -67,6 +67,12 @@ export function CenterBrainConsole() {
               JSON-only consumer surface. No command execution, MCP start, connector activation,
               device control, deploy, or paid API call.
             </p>
+            <a
+              href="/god-mode"
+              className="mt-4 inline-flex border border-amber-100/25 bg-amber-950/25 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-amber-100"
+            >
+              Open God Mode
+            </a>
           </div>
         </header>
 

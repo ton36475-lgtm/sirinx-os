@@ -1,0 +1,43 @@
+{
+  "schema": "sirinx.full-stack-godmode.receipt/v1",
+  "receipt_id": "RECEIPT-SAFE-001",
+  "task_id": "TASK-SAFE-001",
+  "status": "verified",
+  "claim": "The local bundle schema test passed without external actions.",
+  "scope": ["configs/hermes/skill-bundles/full-stack-godmode.yaml"],
+  "observed_at": "2026-07-14T08:05:00Z",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "requirement": "Bundle schema is valid.",
+      "verdict": "VERIFIED",
+      "evidence": "tests/skills/full-stack-godmode/bundle-schema.test.mjs"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "test_result",
+      "path": "tests/skills/full-stack-godmode/bundle-schema.test.mjs",
+      "sha256": null,
+      "observed_at": "2026-07-14T08:05:00Z"
+    }
+  ],
+  "validation": [
+    {
+      "command": "node --test tests/skills/full-stack-godmode/bundle-schema.test.mjs",
+      "exit_code": 0,
+      "coverage": "Checks restricted Hermes bundle fields, ordered members, and bundle policy instruction."
+    }
+  ],
+  "gates": [],
+  "external_actions": {
+    "secret_read": {"executed": false, "gate_id": null},
+    "install": {"executed": false, "gate_id": null},
+    "provider_call": {"executed": false, "gate_id": null},
+    "live_send": {"executed": false, "gate_id": null},
+    "push": {"executed": false, "gate_id": null},
+    "deploy": {"executed": false, "gate_id": null}
+  },
+  "limitations": [],
+  "next_safe_action": "Run the remaining local bundle tests."
+}

@@ -1,0 +1,59 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.494775,
+  "message_id": "msg-packet_012_ghostclaw_lane1_hermes_draft_review",
+  "mission_id": "M-packet_012_ghostclaw_lane1_hermes_draft_review",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'id': 'packet_012', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes review request for L",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_012_ghostclaw_lane1_hermes_draft_review"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_012_ghostclaw_lane1_hermes_draft_review",
+    "mission_id": "M-packet_012_ghostclaw_lane1_hermes_draft_review",
+    "timestamp": "2026-07-17T01:20:15.652689+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'id': 'packet_012', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes review request for L",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_012_ghostclaw_lane1_hermes_draft_review"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.652701+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

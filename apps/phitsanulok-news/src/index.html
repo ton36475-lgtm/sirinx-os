@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phitsanulok United News</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="shell hero">
+      <nav class="topbar" aria-label="Main navigation">
+        <a class="wordmark" href="#top">Phitsanulok United News</a>
+        <div class="navlinks">
+          <a href="#today">Today</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#admin">Admin</a>
+          <a href="#partners">Partners</a>
+        </div>
+      </nav>
+      <section id="top" class="hero-grid" data-section="local_news_site">
+        <div>
+          <p class="eyebrow">Local-first civic media</p>
+          <h1>ข่าวพิษณุโลกรายวัน แบบมีระบบและตรวจสอบก่อนเผยแพร่</h1>
+          <p class="lead">
+            รวมข่าวเมือง กีฬา วัฒนธรรม ท่องเที่ยว และธุรกิจท้องถิ่นไว้ใน workflow เดียว
+            พร้อม draft สำหรับ Facebook โดยยังไม่โพสต์จริงจนกว่าเจ้าของงานจะอนุมัติ
+          </p>
+          <div class="status-strip">
+            <span>DRAFT ONLY / OWNER REVIEW REQUIRED</span>
+            <span>No live Facebook posting without gate</span>
+          </div>
+        </div>
+        <aside class="hero-card" aria-label="Automation status">
+          <span class="pulse"></span>
+          <strong>Automation mode</strong>
+          <p>Local dry-run. No customer data ingestion. No deploy. No paid API calls.</p>
+        </aside>
+      </section>
+    </header>
+
+    <main class="shell">
+      <section id="today" class="panel" data-section="daily_content_pipeline">
+        <div class="section-head">
+          <p class="eyebrow">Daily content pipeline</p>
+          <h2>รอบข่าววันนี้</h2>
+        </div>
+        <div id="newsGrid" class="news-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="pipeline" class="split">
+        <article class="panel" data-section="facebook_auto_post_draft_only">
+          <div class="section-head">
+            <p class="eyebrow">Facebook draft generator</p>
+            <h2>โพสต์ฉบับร่าง</h2>
+          </div>
+          <div id="facebookDraft" class="draft-box"></div>
+          <button id="copyDraftButton" type="button">Prepare copy draft</button>
+        </article>
+        <article class="panel" data-section="draft_only_gate_check">
+          <div class="section-head">
+            <p class="eyebrow">Gate check</p>
+            <h2>Live publish lock</h2>
+          </div>
+          <p class="gate-copy">
+            ระบบนี้สร้างได้เฉพาะ draft และ preview เท่านั้น การโพสต์จริงต้องผ่าน owner approval gate
+            แยกต่างหาก
+          </p>
+          <pre id="gateResult" class="code-card"></pre>
+        </article>
+      </section>
+
+      <section id="admin" class="panel" data-section="admin_dashboard">
+        <div class="section-head">
+          <p class="eyebrow">Admin dashboard</p>
+          <h2>สถานะกองบรรณาธิการ</h2>
+        </div>
+        <div id="adminCards" class="metric-grid"></div>
+      </section>
+
+      <section id="partners" class="panel" data-section="partner_panel">
+        <div class="section-head">
+          <p class="eyebrow">Partner panel</p>
+          <h2>พื้นที่พาร์ตเนอร์ท้องถิ่น</h2>
+        </div>
+        <div id="partnerList" class="partner-list"></div>
+      </section>
+    </main>
+
+    <footer class="shell footer">
+      <span>Phitsanulok United News</span>
+      <span>Local-safe MVP. External publishing gated.</span>
+    </footer>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

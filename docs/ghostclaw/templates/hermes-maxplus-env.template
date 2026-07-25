@@ -1,0 +1,12 @@
+# Copy to ~/.hermes/.env only after owner review.
+# chmod 600 ~/.hermes/.env
+# Do not commit the copied file.
+
+MAXPLUS_CODEX_API_KEY=REPLACE_WITH_PRIVATE_MAXPLUS_CODEX_KEY
+MAXPLUS_HERMES_CODEX_API_KEY=REPLACE_WITH_PRIVATE_MAXPLUS_CODEX_KEY
+MAXPLUS_HERMES_CODEX_MODEL=deepseek-v4-flash
+CUSTOM_BASE_URL=https://api.maxplus-ai.cc/deepseek/v1
+HERMES_INFERENCE_PROVIDER=custom:maxplus-codex
+
+# Keep unrelated Anthropic OAuth/token variables unset unless explicitly needed.
+

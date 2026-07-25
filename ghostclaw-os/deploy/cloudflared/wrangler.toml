@@ -1,0 +1,21 @@
+name = "ghostclaw-hermes"
+main = "../target/release/ghostclaw-hermes"
+compatibility_date = "2025-07-01"
+
+[build]
+command = "cargo build --release -p ghostclaw-hermes"
+
+[vars]
+HERMES_HOST = "0.0.0.0"
+HERMES_PORT = "8787"
+
+# KV namespace for task state (create with: npx wrangler kv namespace create TASKS)
+[[kv_namespaces]]
+binding = "TASKS"
+id = "change-me"
+
+# Never expose secrets in wrangler.toml — use:
+# npx wrangler secret put GLM_API_KEY
+# npx wrangler secret put MAXPLUS_API_KEY
+# npx wrangler secret put OPENROUTER_API_KEY
+# npx wrangler secret put TELEGRAM_BOT_TOKEN

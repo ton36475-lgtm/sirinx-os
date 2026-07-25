@@ -1,0 +1,38 @@
+{
+  "schema": "ghostclaw.review.receipt.v1",
+  "receipt_id": "p101-strict-persistence-reads-20260714",
+  "timestamp": "2026-07-14T05:05:49+07:00",
+  "baseline_commit": "c6308ef8ec1b501af3acfff3415379fd88aa305c",
+  "mode": "local_safe",
+  "status": "validated",
+  "contract": {
+    "strict_reads_fail_closed": true,
+    "typed_error": "MigrationError::CorruptStore",
+    "inspection_reports_preserved": true,
+    "append_only_evidence_preserved": true
+  },
+  "stores": [
+    "receipt",
+    "pending_queue",
+    "bundle",
+    "orchestrator_status",
+    "review_packet"
+  ],
+  "validation": {
+    "format": "passed",
+    "clippy_deny_warnings": "passed",
+    "focused_corruption_tests": 5,
+    "full_tests_passed": 189,
+    "full_tests_failed": 0,
+    "offline_locked_build": "passed"
+  },
+  "blocked_actions_preserved": [
+    "provider_call",
+    "telegram_send",
+    "secret_read",
+    "dependency_install",
+    "push",
+    "deploy",
+    "production_mutation"
+  ]
+}

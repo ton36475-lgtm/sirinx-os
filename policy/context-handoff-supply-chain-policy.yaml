@@ -1,0 +1,24 @@
+policy_id: context-handoff-supply-chain-policy-v1
+target_tools:
+  - mattpocock/skills/productivity/handoff
+classification:
+  lane: CONTEXT_CONTINUATION
+  default_gate: YELLOW
+allowed:
+  - create_handoff_summary
+  - record_current_packet_state
+  - include_changed_files
+  - include_validation_evidence
+  - include_next_gate
+blocked:
+  - blind_skill_install
+  - secret_in_handoff
+  - env_value_in_handoff
+  - browser_cookie_in_handoff
+  - private_customer_data_in_handoff
+  - full_chat_history_dump
+required_controls:
+  - source_review_before_install
+  - redaction_check
+  - temporary_file_policy
+  - receipt_if_imported

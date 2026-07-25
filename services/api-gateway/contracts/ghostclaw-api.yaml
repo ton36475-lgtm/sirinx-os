@@ -1,0 +1,671 @@
+openapi: 3.0.3
+info:
+  title: GHOSTCLAW API Gateway
+  version: 1.1.0
+  description: |
+    GHOSTCLAW_LOOP_ENGINEERING_FULLSTACK_BLUEPRINT_V1.1
+    API contracts for agent orchestration and approval workflows.
+    Safety Mode: Receipt-Gated / No Push / No Deploy / No Install / No Secrets
+  contact:
+    name: GHOSTCLAW Engineering Team
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
+components:
+  schemas:
+    # Agent schemas
+    Agent:
+      type: object
+      required:
+        - agent_name
+        - agent_type
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        agent_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Unique identifier name for the agent
+        agent_type:
+          type: string
+          enum:
+            - orchestrator
+            - worker
+            - validator
+            - monitor
+            - executor
+        capabilities:
+          type: object
+          additionalProperties:
+            type: boolean
+          description: Map of capability names to enabled status
+        configuration:
+          type: object
+          additionalProperties: true
+          description: Agent-specific configuration parameters
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - error
+            - maintenance
+          default: inactive
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_seen:
+          type: string
+          format: date-time
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+
+    AgentRun:
+      type: object
+      required:
+        - agent_id
+        - run_type
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        agent_id:
+          type: string
+          format: uuid
+          description: Reference to the executing agent
+        run_type:
+          type: string
+          description: Type/category of the agent run
+        run_status:
+          type: string
+          enum:
+            - pending
+            - running
+            - completed
+            - failed
+            - cancelled
+          default: pending
+        input_parameters:
+          type: object
+          additionalProperties: true
+          description: Input data for the agent run
+        output_result:
+          type: object
+          additionalProperties: true
+          nullable: true
+        error_message:
+          type: string
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        execution_time_ms:
+          type: integer
+          nullable: true
+        receipt_token:
+          type: string
+          nullable: true
+          description: Token required for receipt-gated operations
+        approval_required:
+          type: boolean
+          default: false
+        approved_by:
+          type: string
+          format: uuid
+          nullable: true
+        approved_at:
+          type: string
+          format: date-time
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ApprovalQueueItem:
+      type: object
+      required:
+        - run_id
+        - request_type
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        run_id:
+          type: string
+          format: uuid
+          description: Reference to the agent run requiring approval
+        request_type:
+          type: string
+          enum:
+            - deployment
+            - configuration_change
+            - data_access
+            - system_operation
+        request_payload:
+          type: object
+          additionalProperties: true
+          description: Full payload of the approval request
+        approver_id:
+          type: string
+          format: uuid
+          nullable: true
+        approver_notes:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+            - pending
+            - approved
+            - rejected
+            - expired
+          default: pending
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 5
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+
+    # Request/Response schemas
+    CreateAgentRequest:
+      type: object
+      required:
+        - agent_name
+        - agent_type
+      properties:
+        agent_name:
+          type: string
+        agent_type:
+          type: string
+        capabilities:
+          type: object
+          additionalProperties:
+            type: boolean
+        configuration:
+          type: object
+          additionalProperties: true
+        metadata:
+          type: object
+          additionalProperties: true
+
+    CreateRunRequest:
+      type: object
+      required:
+        - agent_id
+        - run_type
+      properties:
+        agent_id:
+          type: string
+          format: uuid
+        run_type:
+          type: string
+        input_parameters:
+          type: object
+          additionalProperties: true
+        approval_required:
+          type: boolean
+          default: false
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 5
+        expires_in_hours:
+          type: integer
+          minimum: 1
+          maximum: 168
+
+    ApproveRequest:
+      type: object
+      required:
+        - approval_id
+      properties:
+        approval_id:
+          type: string
+          format: uuid
+        approver_id:
+          type: string
+          format: uuid
+        approver_notes:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+
+  parameters:
+    receipt_token:
+      name: X-Receipt-Token
+      in: header
+      required: false
+      schema:
+        type: string
+        description: Token for receipt-gated operations
+
+paths:
+  /agents:
+    get:
+      summary: List all agents
+      operationId: listAgents
+      tags:
+        - Agents
+      security: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Agent'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create a new agent
+      operationId: createAgent
+      tags:
+        - Agents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAgentRequest'
+      responses:
+        '201':
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /agents/{agentId}:
+    get:
+      summary: Get agent by ID
+      operationId: getAgent
+      tags:
+        - Agents
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Agent found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '404':
+          description: Agent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /agents/{agentId}/status:
+    patch:
+      summary: Update agent status
+      operationId: updateAgentStatus
+      tags:
+        - Agents
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - active
+                    - inactive
+                    - error
+                    - maintenance
+      responses:
+        '200':
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+
+  /runs:
+    get:
+      summary: List all agent runs
+      operationId: listRuns
+      tags:
+        - AgentRuns
+      parameters:
+        - $ref: '#/components/parameters/receipt_token'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentRun'
+        '401':
+          description: Missing or invalid receipt token
+
+  /runs:
+    post:
+      summary: Create a new agent run
+      operationId: createRun
+      tags:
+        - AgentRuns
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRunRequest'
+      responses:
+        '202':
+          description: Run created (may require approval)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  run:
+                    $ref: '#/components/schemas/AgentRun'
+                  approval_required:
+                    type: boolean
+                  approval:
+                    $ref: '#/components/schemas/ApprovalQueueItem'
+
+  /runs/{runId}:
+    get:
+      summary: Get run by ID
+      operationId: getRun
+      tags:
+        - AgentRuns
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/receipt_token'
+      responses:
+        '200':
+          description: Run found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRun'
+
+  /runs/{runId}/complete:
+    post:
+      summary: Complete an agent run with results
+      operationId: completeRun
+      tags:
+        - AgentRuns
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/receipt_token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                output_result:
+                  type: object
+                error_message:
+                  type: string
+                run_status:
+                  type: string
+                  enum:
+                    - completed
+                    - failed
+                    - cancelled
+      responses:
+        '200':
+          description: Run completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRun'
+
+  /approvals:
+    get:
+      summary: List pending approvals
+      operationId: listApprovals
+      tags:
+        - Approvals
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - approved
+              - rejected
+            default: pending
+      responses:
+        '200':
+          description: List of approvals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalQueueItem'
+
+  /approvals:
+    post:
+      summary: Create approval request
+      operationId: createApproval
+      tags:
+        - Approvals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - run_id
+                - request_type
+              properties:
+                run_id:
+                  type: string
+                  format: uuid
+                request_type:
+                  type: string
+                request_payload:
+                  type: object
+                priority:
+                  type: integer
+                expires_in_hours:
+                  type: integer
+      responses:
+        '201':
+          description: Approval created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalQueueItem'
+
+  /approvals/{approvalId}/approve:
+    post:
+      summary: Approve an approval request
+      operationId: approveRequest
+      tags:
+        - Approvals
+      parameters:
+        - name: approvalId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/receipt_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveRequest'
+      responses:
+        '200':
+          description: Approval approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalQueueItem'
+        '400':
+          description: Approval already processed
+
+  /approvals/{approvalId}/reject:
+    post:
+      summary: Reject an approval request
+      operationId: rejectRequest
+      tags:
+        - Approvals
+      parameters:
+        - name: approvalId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/receipt_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                approver_notes:
+                  type: string
+      responses:
+        '200':
+          description: Approval rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalQueueItem'
+
+  /health:
+    get:
+      summary: Health check endpoint
+      operationId: healthCheck
+      tags:
+        - System
+      security: []
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, degraded]
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /metrics:
+    get:
+      summary: System metrics endpoint
+      operationId: getMetrics
+      tags:
+        - System
+      responses:
+        '200':
+          description: Metrics data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active_agents:
+                    type: integer
+                  pending_runs:
+                    type: integer
+                  pending_approvals:
+                    type: integer
+                  completed_runs_today:
+                    type: integer

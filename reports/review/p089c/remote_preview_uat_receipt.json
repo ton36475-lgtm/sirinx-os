@@ -1,0 +1,389 @@
+{
+  "packet_id": "P089C_SIRINX_REMOTE_PREVIEW_UAT_VERIFICATION_RERUN_AFTER_P089E",
+  "parent_packet": "P089E_SCOPED_COMMIT_PUSH_PREVIEW_REDEPLOY_APPROVAL_PACKET",
+  "run_at": "2026-07-06T18:05:39.642Z",
+  "mode": "READ_ONLY_REMOTE_PREVIEW_VERIFICATION",
+  "source_commit": "f1cec05d89d82d35f9cf5616c91a13d6d2870962",
+  "deployment_url": "https://49d66d7f.sirinx-co.pages.dev",
+  "alias_url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+  "targets": [
+    "https://49d66d7f.sirinx-co.pages.dev",
+    "https://staging-godmode-master-os-v2.sirinx-co.pages.dev"
+  ],
+  "routes": [
+    "/",
+    "/line/",
+    "/contact/",
+    "/trust-center/",
+    "/projects/",
+    "/quote/",
+    "/roi-calculator/"
+  ],
+  "route_results": [
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy",
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/line/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/line/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger",
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/contact/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/contact/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ติดต่อ SIRINX | ทีมประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร",
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/trust-center/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/trust-center/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "Trust Center | หลักฐาน ความปลอดภัย และขอบเขตระบบอัตโนมัติของ SIRINX Solar",
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/projects/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/projects/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ผลงาน SIRINX และมาตรฐานหลักฐานโครงการ | Solar Carport, Rooftop Solar, BESS, EV Charger",
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/quote/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/quote/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ขอประเมินโครงการ SIRINX | Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร",
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "route": "/roi-calculator/",
+      "url": "https://49d66d7f.sirinx-co.pages.dev/roi-calculator/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "เตรียมประเมิน ROI โซลาร์ | SIRINX Solar Carport, Rooftop Solar, BESS และ EV Charger",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/line/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/line/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/contact/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/contact/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ติดต่อ SIRINX | ทีมประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/trust-center/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/trust-center/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "Trust Center | หลักฐาน ความปลอดภัย และขอบเขตระบบอัตโนมัติของ SIRINX Solar",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/projects/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/projects/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ผลงาน SIRINX และมาตรฐานหลักฐานโครงการ | Solar Carport, Rooftop Solar, BESS, EV Charger",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/quote/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/quote/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "ขอประเมินโครงการ SIRINX | Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร",
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "route": "/roi-calculator/",
+      "url": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev/roi-calculator/",
+      "status": 200,
+      "mainCount": 1,
+      "h1Count": 1,
+      "title": "เตรียมประเมิน ROI โซลาร์ | SIRINX Solar Carport, Rooftop Solar, BESS และ EV Charger",
+      "passed": true
+    }
+  ],
+  "focus_results": [
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "panel": "line",
+      "initial": {
+        "panelSelector": "#line-panel",
+        "triggerSelector": ".line-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BODY",
+        "activeId": "",
+        "activeClass": "production-home",
+        "activeInsidePanel": false,
+        "triggerFocused": false
+      },
+      "opened": {
+        "panelSelector": "#line-panel",
+        "triggerSelector": ".line-button",
+        "ariaHidden": "false",
+        "inert": false,
+        "classOpen": true,
+        "triggerExpanded": "true",
+        "activeTag": "BUTTON",
+        "activeId": "line-trigger",
+        "activeClass": "line-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "closed": {
+        "panelSelector": "#line-panel",
+        "triggerSelector": ".line-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BUTTON",
+        "activeId": "line-trigger",
+        "activeClass": "line-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "passed": true
+    },
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "panel": "inquiry",
+      "initial": {
+        "panelSelector": "#inquiry-panel",
+        "triggerSelector": ".inquiry-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BUTTON",
+        "activeId": "line-trigger",
+        "activeClass": "line-button",
+        "activeInsidePanel": false,
+        "triggerFocused": false
+      },
+      "opened": {
+        "panelSelector": "#inquiry-panel",
+        "triggerSelector": ".inquiry-button",
+        "ariaHidden": "false",
+        "inert": false,
+        "classOpen": true,
+        "triggerExpanded": "true",
+        "activeTag": "BUTTON",
+        "activeId": "inquiry-trigger",
+        "activeClass": "inquiry-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "closed": {
+        "panelSelector": "#inquiry-panel",
+        "triggerSelector": ".inquiry-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BUTTON",
+        "activeId": "inquiry-trigger",
+        "activeClass": "inquiry-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "panel": "line",
+      "initial": {
+        "panelSelector": "#line-panel",
+        "triggerSelector": ".line-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BODY",
+        "activeId": "",
+        "activeClass": "production-home",
+        "activeInsidePanel": false,
+        "triggerFocused": false
+      },
+      "opened": {
+        "panelSelector": "#line-panel",
+        "triggerSelector": ".line-button",
+        "ariaHidden": "false",
+        "inert": false,
+        "classOpen": true,
+        "triggerExpanded": "true",
+        "activeTag": "BUTTON",
+        "activeId": "line-trigger",
+        "activeClass": "line-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "closed": {
+        "panelSelector": "#line-panel",
+        "triggerSelector": ".line-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BUTTON",
+        "activeId": "line-trigger",
+        "activeClass": "line-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "panel": "inquiry",
+      "initial": {
+        "panelSelector": "#inquiry-panel",
+        "triggerSelector": ".inquiry-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BUTTON",
+        "activeId": "line-trigger",
+        "activeClass": "line-button",
+        "activeInsidePanel": false,
+        "triggerFocused": false
+      },
+      "opened": {
+        "panelSelector": "#inquiry-panel",
+        "triggerSelector": ".inquiry-button",
+        "ariaHidden": "false",
+        "inert": false,
+        "classOpen": true,
+        "triggerExpanded": "true",
+        "activeTag": "BUTTON",
+        "activeId": "inquiry-trigger",
+        "activeClass": "inquiry-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "closed": {
+        "panelSelector": "#inquiry-panel",
+        "triggerSelector": ".inquiry-button",
+        "ariaHidden": "true",
+        "inert": true,
+        "classOpen": false,
+        "triggerExpanded": "false",
+        "activeTag": "BUTTON",
+        "activeId": "inquiry-trigger",
+        "activeClass": "inquiry-button",
+        "activeInsidePanel": false,
+        "triggerFocused": true
+      },
+      "passed": true
+    }
+  ],
+  "mobile_results": [
+    {
+      "target": "https://49d66d7f.sirinx-co.pages.dev",
+      "opened": {
+        "sheetHidden": "false",
+        "triggerExpanded": "true",
+        "qrVisible": true
+      },
+      "closed": {
+        "sheetHidden": "true",
+        "triggerExpanded": "false"
+      },
+      "passed": true
+    },
+    {
+      "target": "https://staging-godmode-master-os-v2.sirinx-co.pages.dev",
+      "opened": {
+        "sheetHidden": "false",
+        "triggerExpanded": "true",
+        "qrVisible": true
+      },
+      "closed": {
+        "sheetHidden": "true",
+        "triggerExpanded": "false"
+      },
+      "passed": true
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "blocked_network_writes": [],
+  "blocked_actions_confirmed": {
+    "production_deploy": true,
+    "dns_mutation": true,
+    "r2_d1_kv_mutation": true,
+    "line_webhook_activation": true,
+    "crm_customer_storage_write": true,
+    "live_send": true,
+    "provider_model_call": true,
+    "secret_read_print": true,
+    "git_push_after_p089e_push": true,
+    "non_get_network_write": true
+  },
+  "findings": [],
+  "status": "P089C_REMOTE_PREVIEW_UAT_PASS_READY_FOR_P090_DISCUSSION_PACKET",
+  "verdict": "P089C_REMOTE_PREVIEW_UAT_PASS_READY_FOR_P090_DISCUSSION_PACKET",
+  "next_gate": "P090_PRODUCTION_DEPLOY_APPROVAL_PACKET_DISCUSSION_ONLY"
+}

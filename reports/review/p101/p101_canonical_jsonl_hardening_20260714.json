@@ -1,0 +1,34 @@
+{
+  "schema": "ghostclaw.review.receipt.v1",
+  "receipt_id": "p101-canonical-jsonl-hardening-20260714",
+  "timestamp": "2026-07-14T06:28:45+07:00",
+  "baseline_commit": "d7b68047daed9e1c328f5a9eee1e55b08f43877c",
+  "mode": "local_safe",
+  "status": "validated",
+  "contract": {
+    "persisted_route_jobs_require_canonical_jsonl": true,
+    "persisted_receipts_require_canonical_jsonl": true,
+    "duplicate_keys_rejected": true,
+    "trailing_content_rejected": true,
+    "zero_timestamps_rejected": true,
+    "strict_store_reads_fail_closed": true,
+    "production_expect_removed": true
+  },
+  "validation": {
+    "format": "passed",
+    "clippy_deny_warnings": "passed",
+    "focused_noncanonical_store_tests": 2,
+    "full_tests_passed": 194,
+    "full_tests_failed": 0,
+    "offline_build_all_targets_all_features": "passed"
+  },
+  "blocked_actions_preserved": [
+    "provider_call",
+    "telegram_send",
+    "secret_read",
+    "dependency_install",
+    "push",
+    "deploy",
+    "production_mutation"
+  ]
+}

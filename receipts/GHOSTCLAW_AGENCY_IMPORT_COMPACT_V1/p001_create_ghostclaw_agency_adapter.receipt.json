@@ -1,0 +1,76 @@
+{
+  "receipt_id": "GHOSTCLAW-AGENCY-IMPORT-20260630-001-P001",
+  "mission_id": "GHOSTCLAW-AGENCY-IMPORT-20260630-001",
+  "mission_name": "GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1",
+  "packet_id": "P001_CREATE_GHOSTCLAW_AGENCY_ADAPTER",
+  "project": "GhostClaw Agency Adapter",
+  "agent": "Codex",
+  "role": "builder",
+  "mode": "mutation_after_lease",
+  "layer": "01_adapter_docs",
+  "status": "PASS",
+  "repo": "/Users/sirinx/sirinx-os",
+  "file_lease": {
+    "granted": true,
+    "leased_files": [
+      "agents/external/agency-agents/**",
+      "agents/subagents/agency-adapter.agent.md",
+      "agents/subagents/agency-curator.agent.md",
+      "receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1/**",
+      "reports/mission/GHOSTCLAW_AGENCY_IMPORT_REPORT.md"
+    ],
+    "changed_files": [
+      "agents/external/agency-agents/README.md",
+      "agents/external/agency-agents/curated-import-manifest.yaml",
+      "agents/external/agency-agents/ghostclaw-role-map.yaml",
+      "agents/external/agency-agents/context-budget-policy.md",
+      "agents/external/agency-agents/opencode-agent-limit-policy.md",
+      "agents/subagents/agency-adapter.agent.md",
+      "agents/subagents/agency-curator.agent.md",
+      "receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1/README.md",
+      "receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1/p000_agency_catalog_intake.receipt.json",
+      "receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1/p001_create_ghostclaw_agency_adapter.receipt.json",
+      "reports/mission/GHOSTCLAW_AGENCY_IMPORT_REPORT.md"
+    ],
+    "lease_match": true
+  },
+  "actions_taken": [
+    "created reference-only agency adapter docs",
+    "created curated import manifest",
+    "created GhostClaw role map",
+    "created context budget and OpenCode limit policies",
+    "created local-safe adapter and curator subagent wrappers",
+    "created receipt folder and mission report"
+  ],
+  "commands_run": [
+    "mkdir -p agents/external/agency-agents agents/subagents receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1 reports/mission",
+    "apply_patch",
+    "python3 -m json.tool receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1/p000_agency_catalog_intake.receipt.json",
+    "python3 -m json.tool receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1/p001_create_ghostclaw_agency_adapter.receipt.json",
+    "ruby -e 'require \"yaml\"; YAML.load_file(...)'",
+    "git diff --check -- agents/external/agency-agents agents/subagents receipts/GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1 reports/mission/GHOSTCLAW_AGENCY_IMPORT_REPORT.md",
+    "rg secret-pattern scan on leased paths",
+    "leased path compliance check"
+  ],
+  "validation": {
+    "ran": true,
+    "result": "pass",
+    "details": "JSON receipts parsed, YAML manifests parsed, git diff whitespace check passed, secret-pattern scan returned no matches, and changed files matched the P001 allowed paths."
+  },
+  "security": {
+    "secret_read": false,
+    "env_read": false,
+    "provider_call": false,
+    "paid_call": false,
+    "push": false,
+    "deploy": false,
+    "cloud_mutation": false,
+    "customer_send": false
+  },
+  "findings": [
+    "All created files are within the P001 allowed paths.",
+    "No upstream repo clone, install script, conversion script, provider call, or secret read was performed.",
+    "The adapter stores routing metadata only, not the full upstream roster."
+  ],
+  "next_action": "Review the adapter artifacts, then open a Tier C gate only if cloning, conversion, install, commit, or runtime execution is required."
+}

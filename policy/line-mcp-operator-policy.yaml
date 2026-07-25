@@ -1,0 +1,62 @@
+policy_id: line-mcp-operator-policy-v1
+target_tools:
+  - "@line/line-bot-mcp-server"
+classification:
+  lane: LINE_OPERATOR_MCP
+  default_gate: RED_DISABLED
+  production_path: SIRINX_WEBHOOK_ONLY
+  production_webhook: https://www.sirinx.co/api/line/webhook
+
+allowed:
+  - read_repository_docs
+  - create_operator_runbook
+  - create_local_config_template_without_secrets
+  - design_flex_message_payloads
+  - design_rich_menu_payloads
+  - validate_payload_shape_locally
+  - prepare_manual_operator_test_plan
+  - draft_review_packet
+
+blocked:
+  - enable_line_mcp_by_default
+  - install_or_run_line_mcp_without_gate
+  - line_broadcast
+  - line_push
+  - line_multicast
+  - line_narrowcast
+  - line_reply_to_real_user
+  - line_webhook_activation
+  - production_customer_routing
+  - customer_data_storage
+  - print_channel_access_token
+  - read_or_print_secrets
+  - store_line_credentials_in_repo
+  - automatic_live_send
+  - bypass_sirinx_webhook_guard
+
+required_controls:
+  - line_mcp_enabled_false_by_default
+  - env_only_credentials
+  - no_secret_logging
+  - no_customer_data_in_receipts
+  - dry_run_default
+  - explicit_human_gate_for_live_line
+  - explicit_human_gate_for_webhook_activation
+  - explicit_human_gate_for_deploy
+  - receipt_per_config_change
+  - opencode_template_only_until_install_gate
+
+required_environment_defaults:
+  SIRINX_LINE_MODE: dry-run
+  SIRINX_LINE_AUTO_REPLY_APPROVED: "false"
+
+approved_production_line_path:
+  type: sirinx_webhook
+  url: https://www.sirinx.co/api/line/webhook
+  note: LINE MCP is operator/admin tooling only and must not replace the production webhook path.
+
+receipts_required:
+  - line_mcp_operator_policy_receipt
+  - opencode_mcp_template_review_receipt
+  - line_webhook_dry_run_receipt
+  - prelive_human_approval_receipt

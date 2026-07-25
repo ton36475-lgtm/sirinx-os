@@ -1,0 +1,39 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rustwc@v2
+      - name: Check
+        run: cargo check --target wasm32-unknown-unknown --workspace
+      - name: Clippy
+        run: cargo clippy --target wasm32-unknown-unknown --workspace -- -D warnings
+      - name: Test P6
+        run: cargo test --package hermes-core --lib p6_hardening
+
+  deploy-preview:
+    needs: test
+    if: github.ref == 'refs/heads/migration/v5-rebase'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install -g wrangler
+      - run: |
+          cd services/orchestrator
+          cargo install -q worker-build
+          worker-build --release
+      - uses: wrangler-deploy@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}

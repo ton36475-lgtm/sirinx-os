@@ -1,0 +1,21 @@
+{
+  "schema": "ghostclaw.queue.quarantine.v1",
+  "timestamp": "2026-07-14T07:40:31+07:00",
+  "last_updated": "2026-07-14T07:44:00+07:00",
+  "reason": "Sender-side completion and operator-approved claims were emitted without evidence of the exact Tony /approve command",
+  "gate_state": "P1_P11_BLOCKED",
+  "source_packets": [
+    "packet_p1_workspace_bootstrap_complete.json",
+    "packet_p3_p6_complete.json",
+    "codex_opencode_dispatch_p2.json",
+    "opencode_auto_review_final_dispatch.json"
+  ],
+  "actions": {
+    "moved_out_of_active_outbox": true,
+    "deleted": false,
+    "staged": false,
+    "executed": false,
+    "approved": false
+  },
+  "required_to_release": "Exact Tony /approve command followed by a new scoped execution packet"
+}

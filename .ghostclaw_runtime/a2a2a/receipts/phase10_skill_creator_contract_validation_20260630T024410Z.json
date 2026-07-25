@@ -1,0 +1,64 @@
+{
+  "schema": "ghostclaw.phase10.skill_creator_contract.validation.v1",
+  "task_id": "ghostclaw_full_a2a_worker_build",
+  "correlation_id": "sirinx-a2a2a-fullbuild",
+  "phase": "phase_10_skill_creator_zero_prompting",
+  "timestamp": "2026-06-30T02:44:10Z",
+  "local_timestamp": "2026-06-30T09:44:10+0700",
+  "mode": "local_only_no_install_no_external_execution",
+  "files_validated": [
+    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+    "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+    "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+  ],
+  "validation_commands": [
+    {
+      "command": "node --check GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs && node --check GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs && node --check GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_3_files_12_tests"
+    },
+    {
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "result": "passed_ok_true_phase10_skill_creator_test_case_count_4"
+    }
+  ],
+  "contract_markers": {
+    "phase_coverage": "1-10",
+    "zero_prompting_workflow": true,
+    "hermes_codex_mutual_approval": true,
+    "worker_build_runtime": true,
+    "browser_use_worker": true,
+    "vibe_coding_agent": true,
+    "a2a_sync_team": true,
+    "moa_gated_brainstorm": true,
+    "latentmas_dual_plane_architecture": true,
+    "model_auto_swap_router": true,
+    "kimi_worker_lane": true,
+    "edgeone_deployment_readiness": true,
+    "github_toptrend_public_read_only_research": true,
+    "validation_receipt_archive": true
+  },
+  "blocked_actions_confirmed": [
+    "secret_access",
+    "push",
+    "deploy",
+    "live_provider_model_call",
+    "gpu_inference",
+    "model_download",
+    "external_repo_clone_install_execute"
+  ],
+  "safety_flags": {
+    "no_secret_access": true,
+    "no_push": true,
+    "no_deploy": true,
+    "no_live_provider_model_call": true,
+    "no_gpu_live_inference": true,
+    "no_model_download": true,
+    "no_external_repo_install": true
+  }
+}

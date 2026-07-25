@@ -142,3 +142,77 @@ cat GHOSTCLAW/protocols/a2a2a-message-schema.json | python3 -m json.tool > /dev/
 # Check routing matrix
 grep -c "✅" GHOSTCLAW/protocols/A2A2A_PROTOCOL.md
 ```
+
+---
+
+## 8. GhostClaw Runtime Compatibility Fields
+
+The JSON control plane is the source of truth. Latent-plane or MoA outputs may
+accelerate reasoning, but they cannot approve actions, bypass policy gates, or
+replace receipts.
+
+The v2 schema preserves backward-compatible optional fields used by worker bus
+templates and receipt artifacts:
+
+- `task_id`
+- `correlation_id`
+- `decision_id`
+- `brainstorm_id`
+- `phase`
+- `from_agent`
+- `to_agent`
+- `worker_id`
+- `action_class`
+- `evidence_pack`
+- `autonomous_approval`
+- `requester_agent`
+- `approver_agent`
+- `human_approval_required`
+- `receipt_required`
+- `latent_plane`
+- `control_plane_required`
+- `moa_summary`
+- `moa_gated_brainstorm`
+- `browser_use`
+- `edgeone`
+
+Terminology is locked:
+
+- `brainstorm` is canonical for all new outbound artifacts.
+- `beststorm` is accepted only as a legacy inbound alias and must normalize to
+  `brainstorm`.
+- `beststrom` is an invalid typo and must be rejected.
+
+The protocol forbids KV-only execution. Any latent or KV compatibility layer
+must still produce JSON control-plane artifacts and local receipts.
+
+---
+
+## 9. MoA-Gated Brainstorm Contract
+
+MoA-gated brainstorm is a review gate, not an execution authority. It can raise
+or lower confidence, but it cannot approve a blocked action or bypass
+`action_tier_cap`.
+
+Required reference lanes:
+
+- `ref_A_safety_risk`
+- `ref_B_speed_cost`
+- `ref_C_correctness_proof`
+
+Hermes is the aggregator. The aggregator records consensus, aggregator
+certainty, and the evidence pack in the JSON control plane. A safety disagreement from `ref_A_safety_risk` is a hard veto even if consensus and
+aggregator certainty are high.
+
+Phase 8 invariants:
+
+- `moa_summary.moa_score_is_confidence_signal_only` must be `true`.
+- `moa_summary.policy_gate_override_allowed` must be `false`.
+- `moa_summary.recursive_moa_launch_allowed` must be `false`.
+- `moa_gated_brainstorm.safety_disagreement_hard_veto` must be `true`.
+- `moa_gated_brainstorm.policy_gate_final_authority` must be `true`.
+- `moa_gated_brainstorm.moa_score_authorizes_action` must be `false`.
+
+No recursive MoA launch is allowed. If a brainstorm request attempts to start
+another MoA loop, the policy gate treats it as Tier X and writes a blocked
+receipt.

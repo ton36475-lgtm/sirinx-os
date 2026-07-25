@@ -1,0 +1,44 @@
+{
+  "version": "0.1.0",
+  "creatures": [
+    {
+      "id": "plakod_egg",
+      "name": "Plakod Egg",
+      "family": "aqua",
+      "rarity": "common",
+      "stage": "egg",
+      "deterministic": true,
+      "evolves_to": "plakod_hatchling",
+      "evolve_conditions": [
+        { "type": "time_held_days", "value": 1 }
+      ],
+      "metadata_uri": "ipfs://QmPocketHatchery/plakod_egg.json"
+    },
+    {
+      "id": "plakod_hatchling",
+      "name": "Plakod Hatchling",
+      "family": "aqua",
+      "rarity": "common",
+      "stage": "hatchling",
+      "deterministic": true,
+      "evolves_to": "plakod_juvenile",
+      "evolve_conditions": [
+        { "type": "bond_points", "value": 100 }
+      ],
+      "metadata_uri": "ipfs://QmPocketHatchery/plakod_hatchling.json"
+    },
+    {
+      "id": "rambutan_whelp",
+      "name": "Rambutan Whelp",
+      "family": "terra",
+      "rarity": "uncommon",
+      "stage": "hatchling",
+      "deterministic": true,
+      "evolves_to": "rambutan_guard",
+      "evolve_conditions": [
+        { "type": "completion_tasks", "value": 3 }
+      ],
+      "metadata_uri": "ipfs://QmPocketHatchery/rambutan_whelp.json"
+    }
+  ]
+}

@@ -46,9 +46,24 @@ import { createCenterBrainSyncDryRun, getCenterBrainHubStatus } from "./src/cent
 import { createRepoIntakeReviewDryRun, getRepoIntakeGateStatus } from "./src/repo-intake-gate.mjs";
 import { createTeamRuntimeBridgeDryRun, getTeamRuntimeBridgeStatus } from "./src/team-runtime-bridge.mjs";
 import {
+  getCloudflareDeployStatus,
+  createCloudflareDeployDryRun,
+  simulateCloudflareDeploy
+} from "./src/cloudflare-deploy-approval.mjs";
+import {
   createOpenRouterQwenAdapterDryRun,
   getOpenRouterQwenAdapterStatus
 } from "./src/openrouter-qwen-adapter.mjs";
+import {
+  createGhostClawDispatchPreview,
+  loadGhostClawControlPlane
+} from "./src/ghostclaw-control-plane.mjs";
+import { getGhostClawControlPlaneStatus } from "./src/ghostclaw-control-plane-status.mjs";
+import {
+  createOpenRouterFable5AdapterDryRun,
+  getOpenRouterFable5AdapterStatus,
+  runOpenRouterFable5LiveSmoke
+} from "./src/openrouter-fable5-adapter.mjs";
 import {
   createOpenRouterFusionRouterDryRun,
   getOpenRouterFusionRouterStatus,
@@ -75,6 +90,10 @@ import {
   createHermesImageEditDryRun,
   getHermesImageEditStatus
 } from "./src/hermes-image-edit.mjs";
+import { getHermesAllJobsReadiness } from "./src/hermes-all-jobs-readiness.mjs";
+import { createLatentmasBenchDryRun, getLatentmasStatus } from "./src/latentmas-status.mjs";
+import { getGodmodeV5IntegrationStatus } from "./src/godmode-v5-integration-status.mjs";
+import { createA2aHandshakeDryRun } from "./src/a2a-handshake.mjs";
 
 const execFileAsync = promisify(execFile);
 const host = process.env.DEV_CONTROL_API_HOST || "127.0.0.1";
@@ -82,6 +101,14 @@ const port = Number(process.env.DEV_CONTROL_API_PORT || 8711);
 const hermesDashboardUrl = process.env.HERMES_DASHBOARD_URL || "http://127.0.0.1:9119";
 const hermesKanbanBoard = process.env.HERMES_KANBAN_BOARD || "sirinx-os";
 const projectRoot = process.env.SIRINX_PROJECT_ROOT || "/Users/sirinx/sirinx-os";
+
+function queryFlag(url, name) {
+  return ["1", "true", "yes", "on"].includes(String(url.searchParams.get(name) || "").toLowerCase());
+}
+
+function queryObject(url) {
+  return Object.fromEntries(url.searchParams.entries());
+}
 const hermesAgentDir = `${projectRoot}/.claude/agents`;
 const thClawsAgentDir = `${projectRoot}/.thclaws/agents`;
 const hermesSkillDir = `${projectRoot}/.claude/skills`;
@@ -495,6 +522,47 @@ export async function handleRequest(request, response) {
       dryRunOnly: true,
       externalWrites: false
     });
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/handshake/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createA2aHandshakeDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_a2a_handshake",
+        error: error.code || "invalid_a2a_handshake",
+        issues: Array.isArray(error.issues) ? error.issues : [],
+        dryRunOnly: true,
+        authenticatedSessionCreated: false,
+        providerCalled: false,
+        externalWrites: false,
+        queueMutated: false
+      });
+    }
+    return;
+  }
+
+  // ===== Skills API proxy =====
+  if (request.method === "GET" && url.pathname === "/api/skills/status") {
+    const skillsApiPort = process.env.SKILLS_API_PORT || 3800;
+    try {
+      const res = await fetch(`http://127.0.0.1:${skillsApiPort}/health`);
+      const data = await res.json();
+      sendJson(request, response, 200, {
+        skillsApiOnline: true,
+        skillsApiData: data,
+        proxyPort: skillsApiPort
+      });
+    } catch {
+      sendJson(request, response, 200, {
+        skillsApiOnline: false,
+        message: `Skills API not reachable on port ${skillsApiPort}`,
+        skillsDir: hermesSkillDir,
+        localSkillsCount: hermesSkills.length
+      });
+    }
     return;
   }
 
@@ -939,6 +1007,26 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/openrouter-fable5-adapter") {
+    sendJson(request, response, 200, getOpenRouterFable5AdapterStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/ghostclaw/control-plane") {
+    sendJson(request, response, 200, await loadGhostClawControlPlane(projectRoot));
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/ghostclaw/control-plane/status") {
+    const payload = await getGhostClawControlPlaneStatus({
+      root: projectRoot,
+      query: queryObject(url)
+    });
+    const statusCode = payload.error ? (payload.error.code === "INVALID_QUERY" ? 400 : 503) : 200;
+    sendJson(request, response, statusCode, payload);
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/openrouter-fusion-router") {
     sendJson(request, response, 200, getOpenRouterFusionRouterStatus());
     return;
@@ -964,6 +1052,50 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/hermes/all-jobs-ready") {
+    sendJson(
+      request,
+      response,
+      200,
+      await getHermesAllJobsReadiness({
+        root: projectRoot,
+        liveSendRequested: queryFlag(url, "liveSend"),
+        providerCallRequested: queryFlag(url, "providerCall"),
+        cloudflareR2WriteRequested: queryFlag(url, "cloudflareR2Write"),
+        pushRequested: queryFlag(url, "push"),
+        deployRequested: queryFlag(url, "deploy"),
+        installRequested: queryFlag(url, "install")
+      })
+    );
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/godmode-v5/integration-status") {
+    try {
+      const payload = await getGodmodeV5IntegrationStatus({
+        repoRoot: projectRoot,
+        Requests: {
+          TelegramLiveSend: queryFlag(url, "telegramLiveSend"),
+          ProviderCall: queryFlag(url, "providerCall"),
+          CloudflareWrite: queryFlag(url, "cloudflareWrite"),
+          CloudflareDeploy: queryFlag(url, "cloudflareDeploy"),
+          GitPush: queryFlag(url, "gitPush"),
+          Install: queryFlag(url, "install")
+        }
+      });
+      sendJson(request, response, 200, payload);
+    } catch (error) {
+      sendJson(request, response, 503, {
+        Schema: "ghostclaw.godmode-v5.integration-status-error.v1",
+        Status: "Unavailable",
+        Error: "integration_status_unavailable",
+        Message: String(error?.message || error).slice(0, 300),
+        NoExternalSideEffects: true
+      });
+    }
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/model-routing-approval/openrouter-qwen") {
     sendJson(request, response, 200, getOpenRouterQwenModelRoutingApproval());
     return;
@@ -976,6 +1108,11 @@ export async function handleRequest(request, response) {
 
   if (request.method === "GET" && url.pathname === "/api/local-rag") {
     sendJson(request, response, 200, await getLocalRagStatus());
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/latentmas") {
+    sendJson(request, response, 200, await getLatentmasStatus());
     return;
   }
 
@@ -1066,6 +1203,28 @@ export async function handleRequest(request, response) {
         canActivateConnector: false,
         canRunMcp: false,
         canReadSecrets: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/latentmas/bench/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createLatentmasBenchDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_latentmas_bench_dry_run_request",
+        error: "latentmas_bench_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        commandExecuted: false,
+        canRunGpuInference: false,
+        canReadSecrets: false,
+        canDeploy: false,
         requiresHumanApproval: true
       });
     }
@@ -1245,6 +1404,72 @@ export async function handleRequest(request, response) {
         secretsRead: false,
         commandExecuted: false,
         requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-fable5-adapter/plan/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, createOpenRouterFable5AdapterDryRun(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_fable5_adapter_dry_run_request",
+        error: "openrouter_fable5_adapter_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        canCallPaidApi: false,
+        canRunMcp: false,
+        canReadSecrets: false,
+        providerCalled: false,
+        secretsRead: false,
+        keyValuePrinted: false,
+        commandExecuted: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/ghostclaw/control-plane/dispatch/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await createGhostClawDispatchPreview(body, { root: projectRoot }));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_ghostclaw_control_plane_dispatch_request",
+        error: "ghostclaw_control_plane_dispatch_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        workerExecution: false,
+        providerCalled: false,
+        keyValuePrinted: false
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/openrouter-fable5-adapter/smoke") {
+    try {
+      const body = await readJson(request);
+      sendJson(request, response, 200, await runOpenRouterFable5LiveSmoke(body));
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_openrouter_fable5_smoke_request",
+        error: "openrouter_fable5_smoke_failed",
+        message: error.message,
+        externalWrites: false,
+        productionWrites: false,
+        customerVisible: false,
+        canExecuteExternally: false,
+        providerCalled: false,
+        commandExecuted: false,
+        keyValuePrinted: false
       });
     }
     return;
@@ -1496,6 +1721,42 @@ export async function handleRequest(request, response) {
       recordDryRunAuditEvent("invalid-json", body, 400);
       sendJson(request, response, 400, body);
     }
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/cloudflare/deploy/status") {
+    sendJson(request, response, 200, await getCloudflareDeployStatus({ repoRoot: projectRoot }));
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/cloudflare/deploy/dry-run") {
+    try {
+      const body = await readJson(request);
+      sendJson(
+        request,
+        response,
+        200,
+        await createCloudflareDeployDryRun(body.gate || "user", { repoRoot: projectRoot })
+      );
+    } catch (error) {
+      sendJson(request, response, 400, {
+        status: "invalid_request",
+        error: "cloudflare_deploy_dry_run_failed",
+        message: error.message,
+        externalWrites: false,
+        requiresHumanApproval: true
+      });
+    }
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/cloudflare/deploy/simulate") {
+    sendJson(
+      request,
+      response,
+      200,
+      await simulateCloudflareDeploy({ repoRoot: projectRoot })
+    );
     return;
   }
 

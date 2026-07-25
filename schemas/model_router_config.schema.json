@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/model_router_config.schema.json",
+  "title": "GhostClaw Model Router Config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "router_id",
+    "gate",
+    "bind",
+    "provider_allowlist",
+    "model_allowlist",
+    "cost_ceiling",
+    "credentials"
+  ],
+  "properties": {
+    "router_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gate": {
+      "enum": ["YELLOW", "RED"]
+    },
+    "bind": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "public_exposure_allowed"],
+      "properties": {
+        "host": {
+          "enum": ["127.0.0.1", "localhost"]
+        },
+        "public_exposure_allowed": {
+          "const": false
+        }
+      }
+    },
+    "provider_allowlist": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "model_allowlist": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "cost_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "daily_limit", "paid_calls_default"],
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "daily_limit": {
+          "type": "number",
+          "minimum": 0
+        },
+        "paid_calls_default": {
+          "const": false
+        }
+      }
+    },
+    "credentials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["storage", "print_allowed"],
+      "properties": {
+        "storage": {
+          "enum": ["env_only"]
+        },
+        "print_allowed": {
+          "const": false
+        }
+      }
+    }
+  }
+}

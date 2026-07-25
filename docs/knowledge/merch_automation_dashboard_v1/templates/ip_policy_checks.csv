@@ -1,0 +1,4 @@
+check_id,design_id,phrase_checked,trademark_risk,copyright_risk,celebrity_likeness_risk,brand_confusion_risk,sports_team_risk,sensitive_content_risk,keyword_spam_risk,risk_level,required_edits,final_decision,reviewer_notes
+IP-001,DES-001,Weekend Pickleball Auntie,LOW,LOW,NONE,NONE,NONE,LOW,LOW,GREEN,none,ALLOW_DRAFT,Manual trademark search still required before owner publish action.
+IP-002,DES-002,Solar Engineer Weekend Mode,LOW,LOW,NONE,NONE,NONE,LOW,LOW,GREEN,none,ALLOW_DRAFT,Keep company and certifying body names out.
+IP-003,DES-999,Famous Space Wizard Parody,HIGH,HIGH,NONE,HIGH,NONE,LOW,MEDIUM,RED,replace concept entirely,BLOCK,Blocked due to protected-reference dependency.

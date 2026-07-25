@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BUNDLE="$ROOT/integrations/omnigent/ghostclaw-command-center"
+OMNI_PY="/Users/sirinx/.local/share/uv/tools/omnigent/bin/python"
+
+validate_bundle() {
+  if [[ ! -x "$OMNI_PY" ]]; then
+    printf 'Omnigent runtime missing: %s\n' "$OMNI_PY" >&2
+    return 1
+  fi
+  "$OMNI_PY" - "$BUNDLE" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+from omnigent.spec import load, validate
+from omnigent.policies.builtins.github import github_policy
+from omnigent.policies.builtins.orchestration import read_only_os, worktree_guard
+
+bundle = Path(sys.argv[1])
+spec = load(bundle, expand_env=False)
+result = validate(spec)
+if not result.valid:
+    for error in result.errors:
+        print(f"{error.path}: {error.message}", file=sys.stderr)
+    raise SystemExit(1)
+
+workers = {agent.name: agent for agent in spec.sub_agents}
+expected = {
+    "claude_architect": "claude-native",
+    "codex_builder": "codex-native",
+    "opencode_reviewer": "opencode-native",
+    "hermes_validator": "hermes-native",
+}
+if set(workers) != set(expected):
+    raise SystemExit(f"worker roster mismatch: {sorted(workers)}")
+for name, harness in expected.items():
+    if workers[name].executor.config.get("harness") != harness:
+        raise SystemExit(f"{name} harness mismatch")
+if spec.spawn:
+    raise SystemExit("unbounded agent spawning must remain disabled")
+
+builder = workers["codex_builder"]
+write_paths = set(builder.os_env.sandbox.write_paths or [])
+if "." in write_paths or ".git" in write_paths:
+    raise SystemExit("codex_builder must not receive repository-root or .git write access")
+
+for name in ("claude_architect", "opencode_reviewer", "hermes_validator"):
+    policies = {policy.name for policy in workers[name].guardrails.policies or []}
+    if "read_only_worker" not in policies:
+        raise SystemExit(f"{name} must retain read_only_worker policy")
+
+write_event = {
+    "type": "tool_call",
+    "data": {"name": "Write", "arguments": {"file_path": "docs/unsafe.md"}},
+}
+if read_only_os()(write_event, {})["result"] != "DENY":
+    raise SystemExit("read_only_os policy did not deny a write")
+if worktree_guard()( {
+    "type": "tool_call",
+    "data": {"name": "Write", "arguments": {"file_path": "/tmp/escape"}},
+}, {})["result"] != "DENY":
+    raise SystemExit("worktree_guard policy did not deny an absolute write")
+git_guard = github_policy(
+    read_all=True,
+    write_repos=[],
+    shell_tools=["Bash"],
+)
+git_decision = git_guard({
+    "type": "tool_call",
+    "data": {
+        "name": "Bash",
+        "arguments": {"command": "git push https://github.com/example/repo main"},
+    },
+})
+if not git_decision or git_decision["result"] != "DENY":
+    raise SystemExit("GitHub policy did not deny a remote write")
+
+print(json.dumps({
+    "agent": spec.name,
+    "executor": spec.executor.config.get("harness"),
+    "sub_agents": [agent.name for agent in spec.sub_agents],
+    "single_writer": "codex_builder",
+    "git_metadata_writable": False,
+    "remote_git_writes_allowed": False,
+    "valid": True,
+}, indent=2, sort_keys=True))
+PY
+}
+
+case "${1:-status}" in
+  validate)
+    validate_bundle
+    ;;
+  status)
+    command -v omni >/dev/null
+    omni --version
+    validate_bundle
+    omni server status || true
+    printf 'Harnesses:\n'
+    for command in claude codex opencode hermes agy; do
+      if command -v "$command" >/dev/null 2>&1; then
+        printf '  %-10s available\n' "$command"
+      else
+        printf '  %-10s unavailable\n' "$command"
+      fi
+    done
+    ;;
+  server-start)
+    validate_bundle >/dev/null
+    omni server start
+    ;;
+  server-stop)
+    omni server stop
+    ;;
+  run)
+    if [[ "${APPROVE_OMNIGENT_GHOSTCLAW_PROVIDER_SESSION:-0}" != "1" ]]; then
+      printf 'Blocked: set APPROVE_OMNIGENT_GHOSTCLAW_PROVIDER_SESSION=1 for this provider session.\n' >&2
+      exit 2
+    fi
+    validate_bundle >/dev/null
+    exec omni run "$BUNDLE"
+    ;;
+  antigravity)
+    if [[ "${APPROVE_OMNIGENT_ANTIGRAVITY_SESSION:-0}" != "1" ]]; then
+      printf 'Blocked: set APPROVE_OMNIGENT_ANTIGRAVITY_SESSION=1 for this attended session.\n' >&2
+      exit 2
+    fi
+    exec omni antigravity
+    ;;
+  *)
+    printf 'Usage: %s {validate|status|server-start|server-stop|run|antigravity}\n' "$0" >&2
+    exit 2
+    ;;
+esac

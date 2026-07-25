@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/ghostclaw/telegram-ui-lockspec.v1.schema.json",
+  "title": "SIRINX Telegram and Command Center UI Lockspec V1",
+  "description": "Read-only product and safety lock for the private operator surface.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractId",
+    "version",
+    "status",
+    "scope",
+    "productThesis",
+    "designSystem",
+    "evidenceLabels",
+    "requiredStates",
+    "safety",
+    "schemaRef"
+  ],
+  "properties": {
+    "contractId": { "const": "sirinx-command-center-ui-lock-v1" },
+    "version": { "const": "1.0.0" },
+    "status": { "const": "LOCKED_LOCAL_READ_ONLY" },
+    "scope": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "string", "enum": ["telegram_command_center", "private_dev_command_center"] },
+      "uniqueItems": true
+    },
+    "productThesis": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "designSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["brand", "layout", "dominantRegion", "rawJsonDefault", "mobileStrategy"],
+      "properties": {
+        "brand": { "const": "SIRINX dark premium" },
+        "layout": { "const": "quiet rational grid" },
+        "dominantRegion": { "const": "Now / Needs Attention" },
+        "rawJsonDefault": { "const": "collapsed_debug_only" },
+        "mobileStrategy": { "const": "recompose_not_shrink" }
+      }
+    },
+    "evidenceLabels": {
+      "type": "array",
+      "const": ["OBSERVED", "INFERRED", "UNVERIFIED", "BLOCKED"]
+    },
+    "requiredStates": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string",
+        "enum": ["default", "hover", "focus_visible", "active", "disabled", "loading", "empty", "error", "blocked", "unverified", "success", "stale"]
+      },
+      "uniqueItems": true
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["readOnly", "dryRun", "externalWrites", "liveSend", "providerCalls", "secretAccess", "publicExposure"],
+      "properties": {
+        "readOnly": { "const": true },
+        "dryRun": { "const": true },
+        "externalWrites": { "const": false },
+        "liveSend": { "const": false },
+        "providerCalls": { "const": false },
+        "secretAccess": { "const": false },
+        "publicExposure": { "const": false }
+      }
+    },
+    "schemaRef": {
+      "const": "schemas/ghostclaw/telegram-ui-lockspec.v1.schema.json"
+    }
+  }
+}

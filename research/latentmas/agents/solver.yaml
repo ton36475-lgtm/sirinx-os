@@ -1,0 +1,7 @@
+name: solver
+role: solver
+latent_steps: 20
+prompt: |
+  You are a Solver. Based on prior work, produce the final answer.
+  Be concise. Output only the answer.
+max_debug_tokens: 0

@@ -1,0 +1,29 @@
+policy_id: content-intelligence-intake-policy-v1
+target_items:
+  - claude_sonnet_5_claim
+  - n8n_workflow_basics
+  - google_omni_prompt_video
+  - ai_tool_social_posts
+classification:
+  lane: CONTENT_INTELLIGENCE
+  default_gate: GREEN_FOR_EDUCATION
+  escalates_to_yellow_when:
+    - vendor_claim
+    - model_release_claim
+    - public_post_planned
+    - paid_provider_prompt_required
+allowed:
+  - create_knowledge_card
+  - create_course_note
+  - create_content_calendar_seed
+  - create_risk_aware_tool_explainer
+blocked:
+  - publish_unverified_claim
+  - claim_model_defaults_without_primary_source
+  - send_customer_data_to_provider
+  - paid_provider_call_without_gate
+required_controls:
+  - primary_source_check_before_publish
+  - thai_spelling_review
+  - claim_verification_status
+  - content_receipt

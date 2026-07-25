@@ -1,0 +1,16 @@
+{
+  "checklist_id": "merch-qc-local-v1",
+  "status": "manual_review_required",
+  "checks": [
+    "Original artwork only",
+    "No known brand layout or protected character style",
+    "No celebrity likeness",
+    "No sports team or league reference",
+    "No song lyric, movie, game, or anime reference",
+    "Transparent background where product requires it",
+    "Correct DPI and export dimensions",
+    "Spelling and phrase readability checked",
+    "Thumbnail readability and contrast checked",
+    "Owner action required before marketplace publishing"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sirinx.co/schemas/pocket-hatchery/metadata-manifest.json",
+  "title": "Pocket Hatchery Metadata Manifest",
+  "description": "Off-chain metadata schema for creature NFTs. No hidden attributes or random loot tables.",
+  "type": "object",
+  "required": ["name", "description", "image", "attributes"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "image": { "type": "string", "format": "uri" },
+    "external_url": { "type": "string", "format": "uri" },
+    "attributes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/attribute" }
+    }
+  },
+  "definitions": {
+    "attribute": {
+      "type": "object",
+      "required": ["trait_type", "value"],
+      "properties": {
+        "trait_type": { "type": "string" },
+        "value": { "type": ["string", "number", "boolean"] },
+        "display_type": { "type": "string", "enum": ["number", "boost_number", "boost_percentage", "date", "string"] }
+      }
+    }
+  }
+}

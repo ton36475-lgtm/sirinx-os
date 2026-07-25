@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.co/schemas/ghostclaw/vibe-execution-plan.template.json",
+  "title": "GHOSTCLAW Vibe Execution Plan Template",
+  "description": "Template for creating an execution plan from a Vibe Task Graph. Fill in the placeholders and use with vibe-agent-router.mjs.",
+  "type": "object",
+  "required": [
+    "plan_id",
+    "task_graph_id",
+    "timestamp",
+    "requester",
+    "approver",
+    "decision_id",
+    "approval_status",
+    "receipt_required",
+    "status",
+    "tasks",
+    "evidence_pack"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "description": "Unique plan identifier",
+      "example": "plan-lx1234abc"
+    },
+    "task_graph_id": {
+      "type": "string",
+      "description": "Reference to the parent VibeTaskGraph ID"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requester": {
+      "type": "string",
+      "description": "Agent requesting execution (must not equal approver)",
+      "example": "vibe-agent"
+    },
+    "approver": {
+      "type": "string",
+      "description": "Agent approving execution (must not equal requester)",
+      "example": "hermes-commander"
+    },
+    "requester_agent": {
+      "type": "string",
+      "description": "A2A requester agent mirror of requester"
+    },
+    "approver_agent": {
+      "type": "string",
+      "description": "A2A approver agent mirror of approver"
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Mutual approval decision identifier required before execution"
+    },
+    "human_approval_required": {
+      "type": "boolean",
+      "const": false,
+      "description": "Phase 5 local-safe tasks use mutual agent approval, not human wait"
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "const": true,
+      "description": "Execution must create receipts"
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected"],
+      "description": "Mutual approval status"
+    },
+    "approval_reason": {
+      "type": "string",
+      "description": "Reason for approval decision"
+    },
+    "router_id": {
+      "type": "string",
+      "const": "vibe-agent-router",
+      "description": "Router that created this plan"
+    },
+    "router_version": {
+      "type": "string"
+    },
+    "mutual_approval": {
+      "type": "object",
+      "required": [
+        "decision_id",
+        "requested",
+        "status",
+        "requester_agent",
+        "approver_agent",
+        "self_approval_allowed",
+        "human_approval_required",
+        "receipt_required"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string"
+        },
+        "requested": {
+          "type": "boolean",
+          "const": true
+        },
+        "status": {
+          "type": "string",
+          "enum": ["approved", "rejected"]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "requester_agent": {
+          "type": "string"
+        },
+        "approver_agent": {
+          "type": "string"
+        },
+        "self_approval_allowed": {
+          "type": "boolean",
+          "const": false
+        },
+        "human_approval_required": {
+          "type": "boolean",
+          "const": false
+        },
+        "receipt_required": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "description": "Tasks to execute, in dependency order",
+      "items": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "task_type",
+          "worker",
+          "status"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "task_type": {
+            "type": "string",
+            "enum": [
+              "file_operation",
+              "code_generation",
+              "browser_smoke",
+              "dashboard_verify",
+              "test_run",
+              "git_operation",
+              "docs_update",
+              "research",
+              "policy_check",
+              "setup",
+              "unknown"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "worker": {
+            "type": "string",
+            "enum": [
+              "codex-worker",
+              "browser-use-worker",
+              "glm-worker",
+              "deepseek-worker",
+              "kob-validator",
+              "manual"
+            ]
+          },
+          "command": {
+            "type": "string"
+          },
+          "validation": {
+            "type": "boolean",
+            "description": "Whether the task passed validation"
+          },
+          "validation_reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending_execution",
+              "blocked",
+              "executing",
+              "completed",
+              "failed",
+              "skipped",
+              "manual_required"
+            ]
+          },
+          "autonomy_level": {
+            "type": "string",
+            "enum": ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "X"]
+          },
+          "evidence_required": {
+            "type": "boolean"
+          },
+          "safe_replacement": {
+            "type": ["string", "null"]
+          },
+          "blocked_reason": {
+            "type": ["string", "null"]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "evidence_pack": {
+      "type": "object",
+      "description": "Evidence pack requirements",
+      "required": ["id", "required", "receipt_required", "decision_id", "artifacts"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean",
+          "const": true
+        },
+        "receipt_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "requester_agent": {
+          "type": "string"
+        },
+        "approver_agent": {
+          "type": "string"
+        },
+        "decision_id": {
+          "type": "string"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["task_id", "type", "format"],
+            "properties": {
+              "task_id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["execution_plan", "decision_artifact", "receipt", "screenshot", "log", "diff", "checksum", "other"]
+              },
+              "format": {
+                "type": "string",
+                "enum": ["json", "png", "txt", "md", "yaml"],
+                "description": "Expected artifact format"
+              },
+              "path": {
+                "type": ["string", "null"],
+                "description": "Path where artifact will be stored"
+              }
+            }
+          }
+        }
+      }
+    },
+    "archive_path": {
+      "type": ["string", "null"],
+      "description": "Directory where plan and receipt are archived"
+    },
+    "receipts_dir": {
+      "type": ["string", "null"],
+      "description": "Optional receipt directory override for tests"
+    },
+    "archive_dir": {
+      "type": ["string", "null"],
+      "description": "Optional archive base directory override for tests"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_approval",
+        "approved",
+        "executing",
+        "completed",
+        "all_blocked",
+        "rejected",
+        "failed"
+      ],
+      "description": "Overall plan status"
+    }
+  },
+  "examples": [
+    {
+      "plan_id": "plan-example001",
+      "task_graph_id": "vibe-example001-t1",
+      "timestamp": "2026-06-30T00:00:00Z",
+      "requester": "vibe-agent",
+      "approver": "hermes-commander",
+      "requester_agent": "vibe-agent",
+      "approver_agent": "hermes-commander",
+      "decision_id": "decision-plan-example001",
+      "human_approval_required": false,
+      "receipt_required": true,
+      "approval_status": "approved",
+      "approval_reason": "Mutual approval constraint satisfied",
+      "router_id": "vibe-agent-router",
+      "router_version": "1.0.0",
+      "mutual_approval": {
+        "decision_id": "decision-plan-example001",
+        "requested": true,
+        "status": "approved",
+        "reason": "Mutual approval constraint satisfied",
+        "requester_agent": "vibe-agent",
+        "approver_agent": "hermes-commander",
+        "self_approval_allowed": false,
+        "human_approval_required": false,
+        "receipt_required": true
+      },
+      "tasks": [
+        {
+          "task_id": "vibe-example001-t1",
+          "task_type": "browser_smoke",
+          "description": "Browser dashboard smoke test",
+          "worker": "browser-use-worker",
+          "command": "open dashboard and check if it is running",
+          "validation": true,
+          "validation_reason": "Task is valid",
+          "status": "pending_execution",
+          "autonomy_level": "A4",
+          "evidence_required": true,
+          "safe_replacement": null,
+          "blocked_reason": null,
+          "dependencies": []
+        }
+      ],
+      "evidence_pack": {
+        "id": "evidence-plan-example001",
+        "required": true,
+        "receipt_required": true,
+        "requester_agent": "vibe-agent",
+        "approver_agent": "hermes-commander",
+        "decision_id": "decision-plan-example001",
+        "artifacts": [
+          {
+            "task_id": "vibe-example001-t1",
+            "type": "execution_plan",
+            "format": "json",
+            "path": "GHOSTCLAW/vibe/archive/plan-example001/plan.json"
+          },
+          {
+            "task_id": "vibe-example001-t1",
+            "type": "decision_artifact",
+            "format": "json",
+            "path": "GHOSTCLAW/vibe/archive/plan-example001/receipt.json"
+          },
+          {
+            "task_id": "vibe-example001-t1",
+            "type": "receipt",
+            "format": "json",
+            "path": "GHOSTCLAW/vibe/receipts/plan-example001.json"
+          }
+        ]
+      },
+      "archive_path": "GHOSTCLAW/vibe/archive/plan-example001",
+      "receipts_dir": null,
+      "archive_dir": null,
+      "status": "approved"
+    }
+  ]
+}

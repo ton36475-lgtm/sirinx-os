@@ -1,0 +1,57 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-20260717-011",
+  "correlation_id": "a2a-kimi-k3-1721214004-01105",
+  "phase": "dispatch",
+  "from": {
+    "agent": "frontier-generator",
+    "role": "task-orchestrator"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "build_captain"
+  },
+  "action_requested": "Create orchestrator dead-file identification and cleanup script",
+  "context": {
+    "goal": "services/orchestrator/ currently has 7083 files (verified via find). The previous audit task (task_001) identified the problem but no cleanup script was produced. Create a Python script at scripts/orchestrator-cleanup.py that: (1) scans services/orchestrator/ and categorizes files into: build artifacts (target/, node_modules/, __pycache__/, dist/, .next/), test stubs (<1KB .test.* files), duplicate patterns (files with identical content hashes), and potentially-dead files (not imported by any other file in the directory), (2) outputs a JSON report to scripts/orchestrator-cleanup-report.json with categories and file counts, (3) includes a --dry-run flag (DEFAULT) that only generates the report, and a --execute flag that moves dead files to .trash/orchestrator-cleanup/ (never deletes — always moves to trash for rollback). The script must NOT delete or move anything in dry-run mode. Run it in dry-run mode to generate the initial report. Do NOT run with --execute.",
+    "constraints": [
+      "no deploy",
+      "no git push",
+      "no cloud mutation",
+      "no secret read or print",
+      "no external send",
+      "dry-run mode ONLY — do not use --execute flag",
+      "never delete files — move to .trash/ for rollback",
+      "dry-run first"
+    ],
+    "lane": "scripts",
+    "files": [
+      "orchestrator-cleanup.py",
+      "orchestrator-cleanup-report.json"
+    ],
+    "deliverables": [
+      "scripts/orchestrator-cleanup.py with categorization logic",
+      "Dry-run report at scripts/orchestrator-cleanup-report.json",
+      "Script defaults to --dry-run, requires explicit --execute to move files"
+    ],
+    "command_source": "frontier-generator"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "max_turns": 5
+  },
+  "human_approval_required": false,
+  "timestamp": "2026-07-17T17:40:04.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "auto_block_and_continue"
+  },
+  "frontier_model": {
+    "model": "kimi-k3-moonshot-v1-256k",
+    "role": "analysis_and_large_context_processing",
+    "tier": "B",
+    "auto_approved": true
+  }
+}

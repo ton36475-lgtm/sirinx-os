@@ -1,0 +1,69 @@
+[
+  {
+    "id": "broad-deploy-token",
+    "requested_action": "deploy",
+    "task_id": "TASK-DEPLOY-001",
+    "gate": {
+      "action": "deploy",
+      "target": "all"
+    },
+    "expected": "BLOCKED"
+  },
+  {
+    "id": "generic-approve-skill",
+    "requested_action": "push",
+    "task_id": "TASK-PUSH-001",
+    "gate": {
+      "exact_operation": "/approveskill=full-stack-godmode"
+    },
+    "expected": "BLOCKED"
+  },
+  {
+    "id": "secret-read-even-with-fields",
+    "requested_action": "secret_read",
+    "task_id": "TASK-SECRET-001",
+    "gate": {
+      "task_id": "TASK-SECRET-001",
+      "action": "secret_read",
+      "target": ".env",
+      "scope": "production credentials",
+      "exact_operation": "read .env",
+      "approved_by": "operator",
+      "approved_at": "2026-07-14T08:00:00Z",
+      "expires_at": "2026-07-14T08:15:00Z"
+    },
+    "expected": "PROHIBITED"
+  },
+  {
+    "id": "exact-preview-deploy-gate",
+    "requested_action": "deploy",
+    "task_id": "TASK-PREVIEW-001",
+    "gate": {
+      "task_id": "TASK-PREVIEW-001",
+      "action": "deploy",
+      "target": "hermes-v5-worker preview",
+      "scope": "Cloudflare account acct-example, environment preview",
+      "exact_operation": "pnpm exec wrangler deploy --env preview --config services/orchestrator/wrangler.preview.toml",
+      "approved_by": "operator:sirinx",
+      "approved_at": "2026-07-14T08:00:00Z",
+      "expires_at": "2026-07-14T08:15:00Z"
+    },
+    "expected": "ELIGIBLE_FOR_SEPARATE_ACTION_REVIEW"
+  },
+  {
+    "id": "wrong-task-install-gate",
+    "requested_action": "install",
+    "task_id": "TASK-INSTALL-002",
+    "gate": {
+      "task_id": "TASK-INSTALL-OTHER",
+      "action": "install",
+      "target": "package-x@1.2.3",
+      "scope": "quarantine worktree only",
+      "exact_operation": "pnpm add package-x@1.2.3",
+      "approved_by": "operator:sirinx",
+      "approved_at": "2026-07-14T08:00:00Z",
+      "expires_at": "2026-07-14T08:15:00Z"
+    },
+    "expected": "BLOCKED"
+  }
+]

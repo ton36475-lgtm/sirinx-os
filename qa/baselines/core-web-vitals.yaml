@@ -1,0 +1,18 @@
+schema_version: "sirinx.qa.cwv-profile.v1"
+status: "CANDIDATE_NOT_MEASURED"
+percentile: 75
+segments:
+  - "mobile"
+  - "desktop"
+thresholds:
+  lcp_ms:
+    good_max: 2500
+  inp_ms:
+    good_max: 200
+  cls:
+    good_max: 0.1
+rules:
+  insufficient_field_data: "UNVERIFIED"
+  insufficient_field_data_reason: "DATA_UNAVAILABLE"
+  missing_lab_measurement: "NOT_RUN"
+  no_data_is_pass: false

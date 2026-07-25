@@ -1,0 +1,31 @@
+{
+  "schema": "sirinx.review-receipt.v1",
+  "receipt_id": "p101-phase-5bc-hardening-20260714",
+  "status": "local_validation_passed",
+  "base_commit": "c0cda27615955784736d6877ec847cc3bfc1f91d",
+  "scope": "phase_5b_5c_local_preparation",
+  "validation": {
+    "python_tests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "bun_tests": {
+      "passed": 9,
+      "failed": 0
+    },
+    "python_compile": "pass",
+    "shell_syntax": "pass",
+    "json_parse": "pass"
+  },
+  "live_actions": {
+    "telegram_send": false,
+    "tmux_dispatch": false,
+    "redis_mutation": false,
+    "network_request": false,
+    "provider_call": false,
+    "deploy": false,
+    "push": false,
+    "secret_read": false
+  },
+  "next_gate": "target_specific_execution_packet_and_explicit_approval"
+}

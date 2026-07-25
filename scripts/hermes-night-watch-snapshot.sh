@@ -8,6 +8,18 @@ LOG_FILE="$VAULT/06_OPERATIONS/Hermes Night Watch Log.md"
 LEGACY_LOG_FILE="$VAULT/Hermes Night Watch Log.md"
 LOCAL_LOG_DIR="$ROOT/.hermes/logs"
 
+for path_candidate in \
+  "/Users/sirinx/.local/bin" \
+  "/Users/sirinx/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin" \
+  "/opt/homebrew/bin" \
+  "/usr/local/bin"
+do
+  if [ -d "$path_candidate" ]; then
+    PATH="$path_candidate:$PATH"
+  fi
+done
+export PATH
+
 now="$(TZ=Asia/Bangkok date '+%Y-%m-%d %H:%M:%S %Z')"
 local_stamp="$(TZ=Asia/Bangkok date '+%Y%m%d-%H%M%S')"
 LOCAL_LATEST_LOG="$LOCAL_LOG_DIR/night-watch-latest.md"

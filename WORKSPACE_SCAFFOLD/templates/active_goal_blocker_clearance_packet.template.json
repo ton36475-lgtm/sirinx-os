@@ -1,0 +1,24 @@
+{
+  "schema": "sirinx.active_goal.blocker_clearance_packet.v1",
+  "status": "template_not_clearance",
+  "clearance_packet_record": false,
+  "blocker_id": "BLOCK-CHAT-EXPORT",
+  "clearance_scope": "single_blocker_only",
+  "claims_goal_complete": false,
+  "claims_all_chats_read": false,
+  "operator_review_complete": false,
+  "evidence_paths": [],
+  "blocked_actions": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "customer_send": false,
+    "secret_read": false,
+    "paid_provider_call": false,
+    "runtime_queue_execution": false,
+    "merge_script_execution": false,
+    "install": false,
+    "migration": false
+  },
+  "notes": "Template only. Change status to proposed_clearance and clearance_packet_record to true only for one blocker with reviewed local evidence."
+}

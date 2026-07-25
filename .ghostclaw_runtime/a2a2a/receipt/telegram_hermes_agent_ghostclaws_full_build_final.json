@@ -1,0 +1,1009 @@
+{
+  "schema": "ghostclaw.receipt.v3",
+  "task_id": "ghostclaw_full_a2a_worker_build",
+  "correlation_id": "sirinx-a2a2a-fullbuild",
+  "approval_mode": "autonomous_mutual_approval_local",
+  "requester_agent": "codex",
+  "approver_agent": "hermes",
+  "self_approval_allowed": false,
+  "timestamp": "2026-06-30T01:19:14Z",
+  "local_timestamp": "2026-06-30T08:19:14+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "status": "not_complete_current_dirty_tree_acceptance_queue_recorded",
+  "no_push": true,
+  "no_deploy": true,
+  "no_secret_access": true,
+  "no_model_download": true,
+  "no_gpu_live_inference": true,
+  "no_telegram_live_send": true,
+  "no_customer_send": true,
+  "phases": {
+    "phase_0_inspection": "completed_current_turn",
+    "phase_1_worker_build_runtime": "completed_validated_current_turn_runtime_contract",
+    "phase_2_auto_approval": "completed_validated_current_turn_matrix_hardened_20_tests",
+    "phase_3_a2a_sync_team": "completed_validated_current_turn_protocol_contract_fields",
+    "phase_4_browser_use": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
+    "phase_5_vibe_coding": "completed_validated_current_turn_mutual_approval_evidence_receipt_archive_contract",
+    "phase_6_model_swap_router": "completed_validated_current_turn_policy_gate_provider_fallback_receipt_contract",
+    "phase_7_kimi_worker_lane": "completed_validated_current_turn_policy_schema_registry_skill_contract",
+    "phase_8_moa_brainstorm": "completed_validated_current_turn_schema_policy_protocol_skill_contract",
+    "phase_9_latentmas_dual_plane": "completed_validated_current_turn_dual_plane_manifest_contract",
+    "phase_10_skill_creator": "completed_validated_current_turn_zero_prompting_skill_contract",
+    "phase_11_github_toptrend": "completed_validated_current_turn_public_metadata_only_15_topics_committed_fbbf067",
+    "phase_12_edgeone_readiness": "completed_validated_current_turn_r3_not_ready_no_deploy_committed_d81f4e1",
+    "phase_13_autonomous_run_log": "updated_current_turn",
+    "phase_14_validation": "completed_current_turn",
+    "phase_15_latentmas_validation": "completed_current_turn",
+    "phase_16_gateway_l6": "completed_direct_test_current_turn_no_package_filter",
+    "phase_17_final_receipt": "refreshed_current_turn_dirty_tree_acceptance_queue_recorded",
+    "phase_18_stage_commit": "not_ready_for_broad_stage_current_dirty_tree_has_62_observed_only_paths"
+  },
+  "core_system_commit": {
+    "commit_hash": "f789441",
+    "commit_message": "feat(ghostclaw): build agent ghostclaws a2a worker system",
+    "status": "existing_local_commit_observed"
+  },
+  "current_turn_files_created": [
+    "docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_APPROVAL_PACKET_TEMPLATES_20260630.md",
+    ".ghostclaw_runtime/a2a2a/templates/install-oh-my-opencode-lite-approval.template.json",
+    ".ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json",
+    ".ghostclaw_runtime/a2a2a/receipts/external_repo_install_approval_templates_20260630T001415Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+    "GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json",
+    "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-1782779510569.png",
+    "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png",
+    ".ghostclaw_runtime/a2a2a/receipts/auto_approve_phase2_matrix_validation_20260630T011914Z.json",
+    ".ghostclaw_runtime/a2a2a/receipts/phase3_protocol_contract_validation_20260630T013100Z.json",
+    "GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json",
+    "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json",
+    ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json",
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json",
+    "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json",
+    "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json",
+    "GHOSTCLAW/research/github-toptrend-worker.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase11-github-toptrend-20260630-001.json",
+    "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase12_edgeone_readiness_contract_validation_20260630T030900Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json",
+    ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase12-edgeone-readiness-20260630-001.json"
+  ],
+  "current_turn_files_modified": [
+    "AUTONOMOUS_RUN_LOG.md",
+    "NEXT_ACTIONS.md",
+    "GHOSTCLAW/agents/auto-approve-engine.mjs",
+    "GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+    "GHOSTCLAW/policies/action-tier-cap.yaml",
+    "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+    "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+    ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json",
+    "GHOSTCLAW/workers/registry/worker-registry.json",
+    "GHOSTCLAW/workers/core/worker-runtime.mjs",
+    "GHOSTCLAW/workers/core/worker-receipt.mjs",
+    "GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs",
+    ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+    "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+    "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+    "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+    "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
+    "GHOSTCLAW/models/model-router.mjs",
+    "GHOSTCLAW/models/model-router.test.mjs",
+    "GHOSTCLAW/models/model-swap-policy.yaml",
+    "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md",
+    "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
+    "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+    "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+    "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+    "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml",
+    "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
+    "docs/knowledge/MOA_GATED_BRAINSTORM.md",
+    "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
+    ".ghostclaw_runtime/latent/latent-manifest.json",
+    ".ghostclaw_runtime/latent/control-plane-manifest.json",
+    ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
+    "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+    "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+    "GHOSTCLAW/research/github-toptrend-worker.mjs",
+    "GHOSTCLAW/research/github-toptrend-scan.mjs",
+    "GHOSTCLAW/research/github-toptrend-map.yaml",
+    "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md",
+    "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
+    "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs",
+    "docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md",
+    "docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md"
+  ],
+  "files_created": {
+    "source_field": "current_turn_files_created",
+    "count": 37
+  },
+  "files_modified": {
+    "source_field": "current_turn_files_modified",
+    "count": 43
+  },
+  "files_changed": {
+    "created_count": 37,
+    "modified_count": 43,
+    "source_fields": [
+      "current_turn_files_created",
+      "current_turn_files_modified"
+    ]
+  },
+  "workers_created_or_present": [
+    "Hermes Commander",
+    "Codex Builder",
+    "Worker Build Runtime",
+    "A2A Sync Team",
+    "Browser Use Worker",
+    "Vibe Coding Agent",
+    "Auto Approval Engine",
+    "Model Auto Swap Router",
+    "MoA-gated Brainstorm",
+    "LatentMAS shadow/control-plane architecture",
+    "Skill Creator / Zero Prompting System",
+    "GitHub Toptrend Research Worker",
+    "EdgeOne Makers Readiness Worker",
+    "Kimi Worker Lane",
+    "Receipt / Memory Worker"
+  ],
+  "status_summary": {
+    "worker_runtime_status": "validated_current_turn_runtime_contract_7_tests",
+    "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
+    "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
+    "a2a_sync_status": "probe_only_local_mailbox_workers_present",
+    "auto_approval_engine_status": "validated_current_turn_matrix_hardened_20_tests_model_gpu_tier_x",
+    "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
+    "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
+    "moa_brainstorm_status": "validated_current_turn_schema_policy_protocol_skill_contract_4_tests",
+    "latentmas_status": "validated_current_turn_dual_plane_manifest_contract_4_tests_live_disabled",
+    "skill_creator_status": "validated_current_turn_zero_prompting_skill_contract_4_tests",
+    "github_toptrend_worker_status": "validated_and_committed_public_metadata_only_15_topics_no_clone_no_install_no_execute",
+    "edgeone_readiness_status": "validated_current_turn_r3_not_ready_no_deploy_no_cloud_mutation_no_live_api"
+  },
+  "workers_created": "see workers_created_or_present",
+  "browser_use_status": "smoke_passed_current_turn_http_200_r0_active_goal_packet_013_blocker_no_errors",
+  "vibe_agent_status": "validated_current_turn_mutual_approval_evidence_receipt_archive_contract_5_tests",
+  "a2a_sync_status": "probe_only_local_mailbox_workers_present",
+  "model_swap_status": "validated_current_turn_policy_gate_provider_fallback_receipt_contract_26_tests",
+  "kimi_worker_status": "validated_current_turn_policy_schema_registry_skill_contract_5_tests",
+  "skill_created": "validated_current_turn_phase10_zero_prompting_skill_contract",
+  "edgeone_readiness_status": "validated_current_turn_r3_not_ready_no_deploy_no_cloud_mutation_no_live_api",
+  "validations_run_current_turn": [
+    {
+      "name": "a2a2a_schema_json",
+      "command": "python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "result": "passed"
+    },
+    {
+      "name": "a2a2a_template_json",
+      "command": "find .ghostclaw_runtime/a2a2a/templates -maxdepth 3 -name \"*.json\" -type f -print -exec python3 -m json.tool {} \\;",
+      "result": "passed"
+    },
+    {
+      "name": "worker_runtime_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+      "result": "passed_1_file_7_tests"
+    },
+    {
+      "name": "auto_approve_engine",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+      "result": "passed_1_file_20_tests"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-browser-smoke-20260630-001.json"
+    },
+    {
+      "name": "model_router",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs",
+      "result": "passed_1_file_26_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json"
+    },
+    {
+      "name": "latentmas_cargo_offline",
+      "command": "LATENTMAS_LIVE_ENABLED=false HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 cargo check --manifest-path research/latentmas/Cargo.toml --workspace --locked --offline",
+      "result": "passed"
+    },
+    {
+      "name": "latentmas_python_compile",
+      "command": "python3 -m py_compile $(find research/latentmas/python -name \"*.py\" -type f | sort)",
+      "result": "passed"
+    },
+    {
+      "name": "latentmas_gateway_direct_test",
+      "command": "pnpm vitest run services/latentmas-gateway/cors-policy.test.mjs",
+      "result": "passed_1_file_3_tests"
+    },
+    {
+      "name": "dashboard_smoke_probe",
+      "command": "curl -sS -o /tmp/ghostclaw-god-mode.html -w 'http_code=%{http_code}\\n' http://127.0.0.1:8721/god-mode",
+      "result": "initially_blocked_http_code_000_then_dashboard_started_for_local_smoke"
+    },
+    {
+      "name": "browser_use_smoke",
+      "command": "GHOSTCLAW_DASHBOARD_URL=http://127.0.0.1:8721/god-mode node GHOSTCLAW/workers/browser-use/browser-use-smoke.mjs",
+      "result": "passed_http_200_r0_tab_click_active_goal_packet_013_blocker_no_console_or_page_errors",
+      "receipt": "GHOSTCLAW/workers/browser-use/receipts/smoke-smoke-mqzww15i-qgmqki.json",
+      "screenshot": "GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782779511112.png"
+    },
+    {
+      "name": "vibe_agent_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+      "result": "passed_1_file_5_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json"
+    },
+    {
+      "name": "diff_check",
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "name": "final_receipt_validator",
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "result": "passed_ok_true_phase12_edgeone_test_case_count_4"
+    },
+    {
+      "name": "kimi_worker_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      "result": "passed_1_file_5_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase7_kimi",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase7 kimi)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json"
+    },
+    {
+      "name": "moa_brainstorm_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      "result": "passed_1_file_4_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase8_moa",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase8 moa)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json"
+    },
+    {
+      "name": "latentmas_dual_plane_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_1_file_4_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase9_latentmas",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase9 latentmas)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json"
+    },
+    {
+      "name": "skill_creator_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_3_files_12_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase10_skill_creator",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase10 skill creator)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json"
+    },
+    {
+      "name": "github_toptrend_worker_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_4_files_16_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json"
+    },
+    {
+      "name": "github_toptrend_public_metadata_scan",
+      "command": "node --input-type=module runGithubToptrendResearch({ limit: 3 })",
+      "result": "completed_public_metadata_only_15_topics_15_written_0_skipped",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json"
+    },
+    {
+      "name": "github_toptrend_runtime_json_validation",
+      "command": "find .ghostclaw_runtime/research/github_trending -maxdepth 1 -name '*20260630030023*.json' -type f -print -exec python3 -m json.tool {} \\;",
+      "result": "passed_16_json_files"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase11_github_toptrend",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase11 github toptrend)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase11-github-toptrend-20260630-001.json"
+    },
+    {
+      "name": "edgeone_readiness_contract",
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "result": "passed_5_files_20_tests",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase12_edgeone_readiness_contract_validation_20260630T030900Z.json"
+    },
+    {
+      "name": "edgeone_r3_readiness_receipt",
+      "command": "node --input-type=module checkEdgeOneReadiness(R3 readiness only)",
+      "result": "not_ready_r3_only_r4_false_r5_false",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json"
+    },
+    {
+      "name": "local_commit_allowed_scope_decision_phase12_edgeone_readiness",
+      "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase12 edgeone readiness)",
+      "result": "approved_tier_B_non_self_approval",
+      "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase12-edgeone-readiness-20260630-001.json"
+    }
+  ],
+  "validations_run": "see validations_run_current_turn",
+  "validation_results": {
+    "a2a2a_schema_json": "passed",
+    "a2a2a_template_json": "passed",
+    "worker_runtime_contract": "passed_1_file_7_tests",
+    "auto_approve_engine": "passed_1_file_20_tests",
+    "local_commit_allowed_scope_decision": "approved_tier_B_non_self_approval",
+    "model_router": "passed_1_file_26_tests_policy_gate_provider_fallback_receipt_contract",
+    "latentmas_cargo_offline": "passed",
+    "latentmas_python_compile": "passed",
+    "latentmas_gateway_direct_test": "passed_1_file_3_tests",
+    "browser_use_smoke": "passed_http_200_r0_tab_click_active_goal_packet_013_blocker_no_console_or_page_errors",
+    "vibe_agent_contract": "passed_1_file_5_tests_mutual_approval_evidence_receipt_archive_contract",
+    "diff_check": "passed",
+    "final_receipt_validator": "passed_ok_true_phase12_edgeone_test_case_count_4",
+    "kimi_worker_contract": "passed_1_file_5_tests_policy_schema_registry_skill_contract",
+    "local_commit_allowed_scope_decision_phase7_kimi": "approved_tier_B_non_self_approval",
+    "moa_brainstorm_contract": "passed_1_file_4_tests_schema_policy_protocol_skill_contract",
+    "local_commit_allowed_scope_decision_phase8_moa": "approved_tier_B_non_self_approval",
+    "latentmas_dual_plane_contract": "passed_1_file_4_tests_dual_plane_manifest_contract",
+    "local_commit_allowed_scope_decision_phase9_latentmas": "approved_tier_B_non_self_approval",
+    "skill_creator_contract": "passed_3_files_12_tests_zero_prompting_skill_contract",
+    "local_commit_allowed_scope_decision_phase10_skill_creator": "approved_tier_B_non_self_approval",
+    "github_toptrend_worker_contract": "passed_4_files_16_tests_public_metadata_only",
+    "github_toptrend_public_metadata_scan": "completed_public_metadata_only_15_topics_15_written_0_skipped",
+    "github_toptrend_runtime_json_validation": "passed_16_json_files",
+    "local_commit_allowed_scope_decision_phase11_github_toptrend": "approved_tier_B_non_self_approval",
+    "edgeone_readiness_contract": "passed_5_files_20_tests_r3_readiness_only",
+    "edgeone_r3_readiness_receipt": "not_ready_r3_only_r4_false_r5_false",
+    "local_commit_allowed_scope_decision_phase12_edgeone_readiness": "approved_tier_B_non_self_approval"
+  },
+  "blocked_actions": [
+    "push",
+    "deploy",
+    "production_action",
+    "customer_send",
+    "telegram_live_send",
+    "secret_access",
+    "api_key_read",
+    "model_download",
+    "huggingface_download",
+    "gpu_live_inference",
+    "provider_model_call",
+    "curl_pipe_bash",
+    "global_install",
+    "external_repo_install_without_gate",
+    "browser_automation_for_login_payment_security_or_private_data"
+  ],
+  "skipped_actions": [
+    {
+      "action": "broad_stage_and_commit_current_turn",
+      "reason": "broad objective-level git add is not safe because the worktree includes parallel or out-of-scope files; scoped allowlist staging is required"
+    },
+    {
+      "action": "external_repo_install",
+      "reason": "only non-executable approval templates exist; matching install approval phrase was not provided"
+    }
+  ],
+  "observed_out_of_scope_or_parallel_files": [
+    "pnpm-workspace.yaml",
+    "scripts/hermes-night-watch-snapshot.sh",
+    "WORKSPACE_SCAFFOLD/tests/test_codex_no_mcp_sidebar_runbook.py",
+    "WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_bus_watcher.py",
+    "WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_entrypoint_verifier.py",
+    "WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_role_worker.py",
+    "WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_probe.py",
+    "WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_start_completion_audit.py",
+    "docs/knowledge/SIRINX_CODEX_NO_MCP_A2A_SIDEBAR_RUNBOOK_2026-06-30.md",
+    "scripts/codex_no_mcp_a2a_sidebar.sh",
+    "scripts/ghostclaw_a2a_bus_watcher.py",
+    "scripts/ghostclaw_a2a_entrypoint_verifier.py",
+    "scripts/ghostclaw_a2a_role_worker.py",
+    "scripts/ghostclaw_a2a_sync_probe.py",
+    "_A2A_QUEUE/approvals/GATE-PUSH-004-20260630-001.json",
+    "_A2A_QUEUE/outbox/outbox_61547c54.json",
+    "_A2A_QUEUE/outbox/outbox_90f8193e.json",
+    "_A2A_QUEUE/outbox/outbox_e499b98e.json",
+    "docs/a2a-sync-completion-20260630.md"
+  ],
+  "safety_flags": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_secret_access": true,
+    "no_model_download": true,
+    "no_gpu_live_inference": true,
+    "no_telegram_live_send": true,
+    "no_customer_send": true,
+    "no_external_repo_install": true,
+    "no_provider_call": true,
+    "no_airtable_write": true
+  },
+  "latest_phase1_worker_runtime_contract": {
+    "status": "validated_and_committed_local_scope",
+    "validated_at": "2026-06-30T01:38:19Z",
+    "local_validated_at": "2026-06-30T08:38:19+0700",
+    "commit_hash": "0cd9fdb",
+    "commit_message": "test(ghostclaw): validate worker runtime contract",
+    "commit_hash_scope": "validated scoped local source commit for Phase 1 Worker Build Runtime contract hardening; later receipt-finalization commits may differ",
+    "files_created": [
+      "GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase1_worker_runtime_contract_validation_20260630T014000Z.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/workers/registry/worker-registry.json",
+      "GHOSTCLAW/workers/core/worker-runtime.mjs",
+      "GHOSTCLAW/workers/core/worker-receipt.mjs",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "worker registry loads concrete worker IDs",
+      "registry workers expose capability contract fields",
+      "heartbeat_required and receipt_required are true",
+      "self_approval_allowed is false",
+      "runtime rejects missing decision_id",
+      "runtime rejects missing evidence_pack",
+      "runtime rejects receipt_required=false",
+      "runtime rejects missing requester or approver",
+      "receipt writer requires decisionId, evidencePack, receiptRequired=true, and non-self approval"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --input-type=module runtime/router load probe",
+        "result": "passed_worker_ids_kimi_coding_worker_model_swap_worker_code_patch_routes_kimi_coding_worker"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/workers/core/worker-runtime.test.mjs",
+        "result": "passed_1_file_7_tests"
+      }
+    ]
+  },
+  "latest_phase2_matrix_hardening": {
+    "status": "validated_and_committed_local_scope",
+    "validated_at": "2026-06-30T01:19:14Z",
+    "local_validated_at": "2026-06-30T08:19:14+0700",
+    "commit_hash": "4468696",
+    "commit_message": "test(ghostclaw): harden auto-approval matrix",
+    "commit_hash_scope": "validated scoped local source commit for Phase 2 auto-approval matrix hardening; later receipt-finalization commits may differ",
+    "files_modified": [
+      "GHOSTCLAW/agents/auto-approve-engine.mjs",
+      "GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+      "GHOSTCLAW/policies/action-tier-cap.yaml"
+    ],
+    "requirements_covered": [
+      "Tier B auto approve",
+      "Tier C quorum required",
+      "unknown action_class defaults to Tier D and auto-blocks",
+      "missing evidence_pack rejects even when decision_id exists",
+      "missing decision_id rejects even when evidence_pack exists",
+      "push deploy secret_access model_download and gpu_inference classify as Tier X",
+      "model_download and gpu_inference are hard blocked in embedded policy and YAML policy"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --check GHOSTCLAW/agents/auto-approve-engine.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/agents/auto-approve-engine.test.mjs",
+        "result": "passed_1_file_20_tests"
+      }
+    ],
+    "blocked_actions_preserved": [
+      "push",
+      "deploy",
+      "secret_access",
+      "model_download",
+      "gpu_live_inference",
+      "provider_model_call",
+      "package_install",
+      "telegram_live_send"
+    ]
+  },
+  "latest_phase3_protocol_contract": {
+    "status": "validated_and_committed_local_scope",
+    "validated_at": "2026-06-30T01:30:12Z",
+    "local_validated_at": "2026-06-30T08:30:12+0700",
+    "commit_hash": "8e4bfa8",
+    "commit_message": "test(ghostclaw): validate a2a protocol contract",
+    "commit_hash_scope": "validated scoped local source commit for Phase 3 A2A protocol contract hardening; later receipt-finalization commits may differ",
+    "files_modified": [
+      "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      ".ghostclaw_runtime/a2a2a/templates/worker-receipt.json"
+    ],
+    "requirements_covered": [
+      "top-level optional compatibility fields in A2A schema",
+      "worker receipt template includes from_agent and to_agent",
+      "JSON control plane source of truth documented",
+      "KV-only protocol forbidden",
+      "brainstorm canonical terminology validated",
+      "beststorm documented as legacy alias only",
+      "beststrom documented as invalid typo"
+    ],
+    "validation_commands": [
+      {
+        "command": "python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json",
+        "result": "passed"
+      },
+      {
+        "command": "find .ghostclaw_runtime/a2a2a/templates -maxdepth 3 -name '*.json' -type f -print -exec python3 -m json.tool {} \\;",
+        "result": "passed"
+      },
+      {
+        "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+        "result": "passed_ok_true_phase3_schema_field_count_21_phase3_template_count_5"
+      }
+    ]
+  },
+  "latest_phase5_vibe_agent_contract": {
+    "status": "validated_and_committed_local_scope",
+    "validated_at": "2026-06-30T01:49:12Z",
+    "local_validated_at": "2026-06-30T08:49:12+0700",
+    "commit_hash": "dd4903c",
+    "commit_message": "test(ghostclaw): validate vibe agent contract",
+    "commit_hash_scope": "validated scoped local source commit for Phase 5 Vibe Coding Agent contract hardening; later receipt-finalization commits may differ",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
+    "files_created": [
+      "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json",
+      ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+      "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+      "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "requirements_covered": [
+      "natural language command parsing",
+      "task graph creation",
+      "worker selection",
+      "decision_id creation",
+      "required evidence pack creation",
+      "mutual approval request with requester_agent != approver_agent",
+      "self-approval rejection",
+      "safe execution gate before task execution",
+      "receipt write with decision/evidence metadata",
+      "plan and receipt archive",
+      "blocked command receipt archive without executing blocked action"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --check GHOSTCLAW/vibe/vibe-task-parser.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "node --check GHOSTCLAW/vibe/vibe-agent-router.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool GHOSTCLAW/vibe/vibe-task-graph.schema.json",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+        "result": "passed"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+        "result": "passed_1_file_5_tests"
+      },
+      {
+        "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs",
+        "result": "passed_ok_true_phase5_vibe_test_case_count_5"
+      },
+      {
+        "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope)",
+        "result": "approved_tier_B_non_self_approval",
+        "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase5-vibe-20260630-001.json"
+      }
+    ]
+  },
+  "latest_phase6_model_router_contract": {
+    "status": "validated_and_committed_local_scope",
+    "validated_at": "2026-06-30T02:00:07Z",
+    "local_validated_at": "2026-06-30T09:00:07+0700",
+    "commit_hash": "1dcc709",
+    "commit_message": "test(ghostclaw): validate model router contract",
+    "commit_hash_scope": "validated scoped local source commit for Phase 6 Model Auto Swap Router contract hardening; later receipt-finalization commits may differ",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
+    "files_created": [
+      ".ghostclaw_runtime/a2a2a/receipts/phase6_model_router_contract_validation_20260630T020007Z.json",
+      ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/models/model-router.mjs",
+      "GHOSTCLAW/models/model-router.test.mjs",
+      "GHOSTCLAW/models/model-swap-policy.yaml",
+      "docs/knowledge/GHOSTCLAWS_AUTO_MODEL_SWAP.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      ".ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "requirements_covered": [
+      "default model lanes route to Kimi, GLM, DeepSeek, GPT-5.5, and Claude Opus",
+      "action_tier_cap is consulted as final authority for known action classes",
+      "D/X action classes block routing regardless of lane",
+      "unknown task lane falls back safely to GLM",
+      "provider unavailable falls back via metadata-only provider health stub",
+      "model swap worker writes safe and blocked receipts",
+      "no live provider call, API key read, .env read, model download, or GPU inference"
+    ],
+    "validation_commands": [
+      {
+        "command": "node --check GHOSTCLAW/models/model-router.mjs && node --check GHOSTCLAW/models/provider-health.mjs && node --check GHOSTCLAW/workers/model-swap/model-swap-worker.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool .ghostclaw_runtime/a2a2a/templates/model-swap-receipt.json",
+        "result": "passed"
+      },
+      {
+        "command": "./node_modules/.bin/vitest run GHOSTCLAW/models/model-router.test.mjs",
+        "result": "passed_1_file_26_tests"
+      },
+      {
+        "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+        "result": "passed_ok_true_phase6_model_router_test_case_count_6"
+      },
+      {
+        "command": "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope)",
+        "result": "approved_tier_B_non_self_approval",
+        "receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase6-model-router-20260630-001.json"
+      }
+    ]
+  },
+  "external_repo_install_gates": {
+    "oh_my_opencode_lite": {
+      "status": "blocked_template_only",
+      "approval_phrase_required": "APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE"
+    },
+    "agent_blackbox": {
+      "status": "blocked_template_only",
+      "approval_phrase_required": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE"
+    }
+  },
+  "commit_status": "latest_committed_evidence_before_receipt_refresh_is_scoped_audit_commit",
+  "commit_hash": "5fcb03a",
+  "commit_message": "docs(ghostclaw): audit triple mission dispatch",
+  "commit_reason": "Latest committed evidence before this receipt refresh is the scoped Triple Mission Dispatch audit commit. The working tree remains dirty with concurrent artifacts, so broad Phase 18 objective commit is not complete.",
+  "commit_hash_resolution": {
+    "hash_scope": "validated_scoped_local_commit_reported_by_this_receipt",
+    "reported_commit_hash": "20bfef7",
+    "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
+    "self_reference_policy": "Do not chase the hash of a later receipt-finalization commit; that would create an endless self-referential receipt update loop.",
+    "latest_head_can_differ_after_receipt_finalization": true
+  },
+  "latest_truthful_state_refresh": {
+    "status": "not_complete_current_dirty_tree",
+    "refreshed_at": "2026-06-30T05:44:14Z",
+    "local_refreshed_at": "2026-06-30T12:44:14+0700",
+    "latest_commit_before_refresh": "5fcb03a",
+    "latest_commit_subject_before_refresh": "docs(ghostclaw): audit triple mission dispatch",
+    "branch_ahead": 30,
+    "modified_or_staged_paths": 34,
+    "untracked_path_entries": 49,
+    "staged_files_before_refresh": 0,
+    "receipt_refresh_scope": "truthful status metadata only",
+    "remaining_blocker": "remaining concurrent dirty artifacts require explicit scope decision before broad final commit",
+    "push_gate_status": "not_approved_for_current_dirty_tree",
+    "deploy_gate_status": "blocked"
+  },
+  "next_safe_actions": [
+    "Review one external repo install approval template at a time if installation is desired.",
+    "Start the local dashboard before rerunning Browser Use smoke for /god-mode.",
+    "Stage only the allowlisted current-turn GhostClaw files before any local commit.",
+    "Keep deploy, push, provider calls, model downloads, GPU inference, secret reads, and live sends blocked until exact gates exist."
+  ],
+  "latest_phase7_kimi_worker_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:08:30Z",
+    "local_timestamp": "2026-06-30T09:08:30+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json",
+    "files_created": [
+      "GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase7_kimi_worker_contract_validation_20260630T020830Z.json"
+    ],
+    "files_modified": [
+      "docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md",
+      "GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "GHOSTCLAW/workers/kimi/kimi-worker.policy.yaml",
+      "GHOSTCLAW/workers/registry/worker-registry.json",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "coding_tool_use_reference role",
+      "coding worker, patch planner, test planner, and MoA reference vote worker roles",
+      "decision_id, requester_agent, approver_agent, receipt_required, and evidence_pack required in reference votes",
+      "evidence_pack.no_secrets=true required",
+      "live provider call, model download, and GPU inference flags locked false",
+      "model download, GPU live inference, secret access, deploy, push, production action, live provider call, shell execution, cross-lane write, and self-approval blocked",
+      "worker registry and GhostClaw skill document the Phase 7 contract"
+    ],
+    "validation_commands": [
+      "python3 -m json.tool GHOSTCLAW/workers/kimi/kimi-reference-vote.schema.json",
+      "python3 -m json.tool GHOSTCLAW/workers/registry/worker-registry.json",
+      "node --check GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/workers/kimi/kimi-reference-vote.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase7 kimi)"
+    ],
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase7-kimi-worker-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "source_commit_hash": "516c8ff",
+    "source_commit_subject": "test(ghostclaw): validate kimi worker contract",
+    "commit_status": "committed_current_turn"
+  },
+  "latest_phase8_moa_brainstorm_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:22:41Z",
+    "local_timestamp": "2026-06-30T09:22:41+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json",
+    "files_created": [
+      "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase8_moa_brainstorm_contract_validation_20260630T022241Z.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "GHOSTCLAW/protocols/brainstorm-terminology-policy.yaml",
+      "GHOSTCLAW/protocols/A2A2A_PROTOCOL.md",
+      "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md",
+      "docs/knowledge/MOA_GATED_BRAINSTORM.md",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "ref_A_safety_risk, ref_B_speed_cost, and ref_C_correctness_proof required",
+      "Hermes aggregator metadata includes consensus threshold and aggregator certainty",
+      "safety disagreement hard veto is locked",
+      "MoA score is confidence signal only",
+      "policy gate override is false",
+      "recursive MoA launch is false"
+    ],
+    "validation_commands": [
+      "python3 -m json.tool GHOSTCLAW/protocols/a2a2a-message-schema.json",
+      "node --check GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase8 moa)"
+    ],
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase8-moa-brainstorm-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "source_commit_hash": "a843530",
+    "source_commit_subject": "test(ghostclaw): validate moa brainstorm contract",
+    "commit_status": "committed_current_turn"
+  },
+  "latest_phase9_latentmas_dual_plane_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:33:57Z",
+    "local_timestamp": "2026-06-30T09:33:57+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json",
+    "files_created": [
+      "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase9_latentmas_dual_plane_contract_validation_20260630T023357Z.json"
+    ],
+    "files_modified": [
+      "docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md",
+      ".ghostclaw_runtime/latent/latent-manifest.json",
+      ".ghostclaw_runtime/latent/control-plane-manifest.json",
+      ".ghostclaw_runtime/latent/kv-compatibility-gate.json",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs"
+    ],
+    "requirements_covered": [
+      "JSON control plane source of truth",
+      "latent plane shadow-only",
+      "safety policy plane final authority",
+      "KV-only protocol forbidden",
+      "exact KV compatibility gate with 12 required fields and past_key_values",
+      "parallel_text_probe with decode_from_kv=false",
+      "benchmark claim lock for 4.3x, 83.7%, and +13.3%",
+      "LATENTMAS_LIVE_ENABLED=false",
+      "model download and GPU live inference blocked"
+    ],
+    "validation_commands": [
+      "python3 -m json.tool .ghostclaw_runtime/latent/latent-manifest.json && python3 -m json.tool .ghostclaw_runtime/latent/control-plane-manifest.json && python3 -m json.tool .ghostclaw_runtime/latent/kv-compatibility-gate.json",
+      "node --check GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "node --input-type=module evaluateAutonomousApproval(local_commit_allowed_scope phase9 latentmas)"
+    ],
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase9-latentmas-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "source_commit_hash": "20bfef7",
+    "source_commit_subject": "test(ghostclaw): validate latentmas dual-plane contract",
+    "commit_status": "committed_current_turn"
+  },
+  "last_updated_at": "2026-06-30T05:44:14Z",
+  "last_local_updated_at": "2026-06-30T12:44:14+0700",
+  "latest_phase10_skill_creator_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T02:44:10Z",
+    "local_timestamp": "2026-06-30T09:44:10+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json",
+    "files_created": [
+      "GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase10_skill_creator_contract_validation_20260630T024410Z.json"
+    ],
+    "files_modified": [
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs",
+      "GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "Zero Prompting workflow preserved as Mission Card contract",
+      "Hermes/Codex mutual approval documented",
+      "Worker Build Runtime documented",
+      "Browser Use Worker documented",
+      "Vibe Coding Agent documented",
+      "A2A Sync Team documented",
+      "MoA-gated Brainstorm documented",
+      "LatentMAS dual-plane architecture documented",
+      "Model Auto Swap Router documented",
+      "Kimi Worker lane documented",
+      "EdgeOne deployment readiness documented",
+      "GitHub Toptrend public read-only research documented",
+      "validation/receipt/archive documented",
+      "hard stops for secrets, push/deploy, live provider/model calls, GPU inference, and model download documented"
+    ],
+    "validation_commands": [
+      "node --check GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs && node --check GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs && node --check GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "source_commit_hash": "6f4250f",
+    "source_commit_subject": "test(ghostclaw): validate skill creator contract",
+    "commit_status": "committed_current_turn",
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase10-skill-creator-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "commit_hash_scope": "validated scoped local source commit for Phase 10 Skill Creator / Zero Prompting contract hardening; later receipt-finalization commits may differ"
+  },
+  "latest_phase11_github_toptrend_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T03:02:04Z",
+    "local_timestamp": "2026-06-30T10:02:04+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json",
+    "files_created": [
+      "GHOSTCLAW/research/github-toptrend-worker.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase11_github_toptrend_contract_validation_20260630T030204Z.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/research/github-toptrend-worker.mjs",
+      "GHOSTCLAW/research/github-toptrend-scan.mjs",
+      "GHOSTCLAW/research/github-toptrend-map.yaml",
+      "docs/knowledge/GITHUB_TOPTREND_AGENT_RESEARCH_WORKFLOW.md",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "runtime_evidence": {
+      "snapshot": "20260630030023",
+      "snapshot_path": ".ghostclaw_runtime/research/github_trending/toptrend_20260630030023.json",
+      "runtime_output_dir": ".ghostclaw_runtime/research/github_trending/",
+      "topic_count": 15,
+      "topic_files_written": 15,
+      "topic_files_skipped": 0,
+      "json_file_count": 16,
+      "raw_result_files_committed": false
+    },
+    "requirements_covered": [
+      "public metadata only",
+      "gh --version readiness check",
+      "gh auth status check without raw secret recording",
+      "gh search repos with --visibility public",
+      "output under .ghostclaw_runtime/research/github_trending/",
+      "no shell execSync",
+      "no clone trending repo",
+      "no install trending repo packages",
+      "no execute unknown code",
+      "no read or print raw tokens",
+      "no rate-limit bypass"
+    ],
+    "validation_commands": [
+      "node --check GHOSTCLAW/research/github-toptrend-worker.mjs && node --check GHOSTCLAW/research/github-toptrend-scan.mjs && node --check GHOSTCLAW/research/github-toptrend-worker.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "node --input-type=module runGithubToptrendResearch({ limit: 3 })",
+      "find .ghostclaw_runtime/research/github_trending -maxdepth 1 -name '*20260630030023*.json' -type f -print -exec python3 -m json.tool {} \\;",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "source_commit_hash": "fbbf067",
+    "source_commit_subject": "test(ghostclaw): validate github toptrend worker",
+    "commit_status": "committed_current_turn",
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase11-github-toptrend-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "commit_hash_scope": "validated scoped local source commit for Phase 11 GitHub Toptrend public metadata worker; later receipt-finalization commits may differ"
+  },
+  "latest_phase12_edgeone_readiness_contract": {
+    "status": "validated_current_turn",
+    "validated_at": "2026-06-30T03:09:00Z",
+    "local_timestamp": "2026-06-30T10:09:00+0700",
+    "receipt": ".ghostclaw_runtime/a2a2a/receipts/phase12_edgeone_readiness_contract_validation_20260630T030900Z.json",
+    "runtime_readiness_receipt": ".ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json",
+    "files_created": [
+      "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs",
+      ".ghostclaw_runtime/a2a2a/receipts/phase12_edgeone_readiness_contract_validation_20260630T030900Z.json",
+      ".ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json"
+    ],
+    "files_modified": [
+      "GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs",
+      "docs/knowledge/EDGEONE_MAKERS_DEPLOYMENT_STRATEGY.md",
+      "docs/knowledge/EDGEONE_AGENT_RUNTIME_CHECKLIST.md",
+      "skills/ghostclaw-agent-ghostclaws-thai-jarvis/SKILL.md",
+      "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+    ],
+    "requirements_covered": [
+      "R3 readiness only",
+      "R4 preview deploy requires separate gate",
+      "R5 production deploy requires explicit production gate",
+      "deploy packet template remains closed",
+      "smoke test receipt template remains not passed",
+      "do_not_deploy true",
+      "do_not_push true",
+      "do_not_mutate_cloud true",
+      "do_not_call_live_api true",
+      "do_not_read_secrets true"
+    ],
+    "validation_commands": [
+      "node --check GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.mjs && node --check GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs && node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "./node_modules/.bin/vitest run GHOSTCLAW/workers/edgeone/edgeone-readiness-worker.test.mjs GHOSTCLAW/research/github-toptrend-worker.test.mjs GHOSTCLAW/protocols/zero-prompting-skill-contract.test.mjs GHOSTCLAW/protocols/moa-gated-brainstorm.test.mjs GHOSTCLAW/protocols/latentmas-dual-plane.test.mjs",
+      "node --input-type=module checkEdgeOneReadiness(R3 readiness only)",
+      "python3 -m json.tool .ghostclaw_runtime/a2a2a/receipt/edgeone_readiness_phase12_20260630T030900Z.json",
+      "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json"
+    ],
+    "source_commit_hash": "d81f4e1",
+    "source_commit_subject": "test(ghostclaw): validate edgeone readiness contract",
+    "commit_status": "committed_current_turn",
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-phase12-edgeone-readiness-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "commit_hash_scope": "validated scoped local source commit for Phase 12 EdgeOne readiness contract hardening; later receipt-finalization commits may differ"
+  },
+  "latest_dirty_tree_acceptance_queue": {
+    "timestamp": "2026-06-30T06:25:10Z",
+    "local_timestamp": "2026-06-30T13:25:10+0700",
+    "observed_head": "aa66f26",
+    "ahead_of_origin": 33,
+    "total_changed_paths": 85,
+    "modified_or_staged_paths": 34,
+    "untracked_paths": 51,
+    "approved_scope_paths": 22,
+    "conditional_scope_paths": 1,
+    "observed_only_outside_approved_scope_paths": 62,
+    "staged_paths_at_inspection": 0,
+    "report_path": "docs/knowledge/GHOSTCLAW_DIRTY_TREE_ACCEPTANCE_QUEUE_20260630.md",
+    "receipt_path": ".ghostclaw_runtime/a2a2a/receipt/dirty_tree_acceptance_queue_20260630T132510_0700.json",
+    "local_commit_approval_receipt": ".ghostclaw_runtime/a2a2a/receipt_decision-local-commit-dirty-tree-acceptance-queue-20260630-001.json",
+    "local_commit_approval_status": "approved_tier_B_non_self_approval",
+    "broad_stage_status": "blocked_until_observed_only_groups_are_separately_gated",
+    "no_push": true,
+    "no_deploy": true,
+    "no_secret_access": true
+  },
+  "last_updated": "2026-06-30T06:25:10Z",
+  "last_updated_local": "2026-06-30T13:25:10+0700"
+}

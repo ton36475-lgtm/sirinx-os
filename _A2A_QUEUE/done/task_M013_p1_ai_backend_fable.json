@@ -1,0 +1,78 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-013",
+    "correlation_id": "a2a-fable-v5-1784286763-m013",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator-moa",
+      "role": "task-orchestrator",
+      "model_chain": "kimi-k3→fable-v5→solar-1-preview",
+      "authoring_model": "fable-v5-codestral"
+    },
+    "to": {
+      "agent": "claude-architect",
+      "role": "chief_architect"
+    },
+    "action_requested": "Create AI Backend Service (services/ai-backend/) — FastAPI from Scratch",
+    "context": {
+      "goal": "services/ai-backend/ DOES NOT EXIST (verified). Create a complete FastAPI backend service with the following structure:\n\nservices/ai-backend/\n  app/\n    __init__.py\n    main.py              — FastAPI app entry, CORS, router registration, lifespan startup/shutdown\n    config.py            — Pydantic Settings (OMNIROUTE_URL, DATABASE_URL, GUARDRAIL_ENABLED)\n    security.py          — API key auth dependency\n    routers/\n      __init__.py\n      chat.py            — POST /api/chat → proxied to OmniRoute at localhost:20128 (with graceful fallback when OmniRoute is down)\n      retrieval.py       — POST /api/retrieval → RAG retrieval stub with pluggable backend interface\n    core/\n      __init__.py\n      guardrails.py      — Input/output safety filters (PII redaction, prompt injection detection, max token enforcement)\n      omniroute_client.py — Async httpx client wrapper for OmniRoute API\n  requirements.txt       — fastapi, uvicorn, httpx, pydantic, pydantic-settings\n  Dockerfile             — python:3.12-slim base\n  README.md              — Setup + run instructions",
+      "verified_state": {
+        "directory_exists": false,
+        "previous_task_moved_to_done_without_execution": true,
+        "note": "task_002_p1_ai_backend_service.json was placed in done/ but the service was never created. This is a REBIRTH task."
+      },
+      "constraints": [
+        "No deploy",
+        "No git push",
+        "OmniRoute is currently DOWN — the chat router must handle connection gracefully (timeout + fallback message)",
+        "Use Python 3.12",
+        "All endpoints must be async",
+        "Include type hints and Pydantic models for all request/response schemas"
+      ],
+      "lane": "services/ai-backend",
+      "files": [
+        "app/__init__.py",
+        "app/main.py",
+        "app/config.py",
+        "app/security.py",
+        "app/routers/__init__.py",
+        "app/routers/chat.py",
+        "app/routers/retrieval.py",
+        "app/core/__init__.py",
+        "app/core/guardrails.py",
+        "app/core/omniroute_client.py",
+        "requirements.txt",
+        "Dockerfile",
+        "README.md"
+      ],
+      "deliverables": [
+        "Full FastAPI service structure (13 files)",
+        "Working /api/chat endpoint with OmniRoute proxy + graceful fallback",
+        "Working /api/retrieval endpoint with pluggable interface",
+        "Guardrails module with PII redaction + prompt injection detection",
+        "requirements.txt with pinned versions",
+        "Dockerfile for containerization",
+        "README with setup + run instructions (uvicorn app.main:app --port 8100)"
+      ],
+      "command_source": "frontier-generator-moa",
+      "refactor_plan_ref": "docs/FULL_SYSTEM_REFACTOR_PLAN.md §P1-3"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 6
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T11:12:43.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P1",
+  "tier": "A",
+  "auto_approved": true,
+  "tier_rationale": "Tier A: New directory creation only (services/ai-backend/ doesn't exist). No modification of existing code, no deploy, no push. Creates greenfield service."
+}

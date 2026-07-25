@@ -1,0 +1,16 @@
+name: unknowcoding-coding-team
+description: Governed local Unknowcoding coding-team workflow for Hermes tasks with OBRA Superpowers integration.
+skills:
+  - unknowcoding-coding-team
+  - obra-superpowers-workflow
+instruction: |
+  Use the canonical local source under packages/skills-kit/skills. Select only
+  the stages needed by the task and preserve their dependency order. Keep
+  architecture before implementation and evidence verification after build.
+  
+  For complex feature development requiring 5-phase methodology, use
+  obra-superpowers-workflow: Brainstorming → Planning → Subagent Delegation
+  → TDD → Systematic Debugging.
+  
+  Do not infer install, provider_call, live_send, push, deploy, Cloudflare
+  mutation, or secret access authority from this bundle.

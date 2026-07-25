@@ -1,0 +1,60 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.4940438,
+  "message_id": "msg-packet_013_ghostclaw_lane1_codex_recorder_gate_request",
+  "mission_id": "M-packet_013_ghostclaw_lane1_codex_recorder_gate_request",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'id': 'packet_013', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes gate request to open",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_013_ghostclaw_lane1_codex_recorder_gate_request"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_013_ghostclaw_lane1_codex_recorder_gate_request",
+    "mission_id": "M-packet_013_ghostclaw_lane1_codex_recorder_gate_request",
+    "timestamp": "2026-07-17T01:20:15.652092+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'id': 'packet_013', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes gate request to open",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_013_ghostclaw_lane1_codex_recorder_gate_request"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.652108+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  },
+  "dispatch_error": "error: unexpected argument '--no-stream' found\n\n  tip: a similar argument exists: '--no-alt-screen'\n\nUsage: codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]\n\nFor more information, try "
+}

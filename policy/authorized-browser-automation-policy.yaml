@@ -1,0 +1,33 @@
+policy_id: authorized-browser-automation-policy-v1
+target_tools:
+  - vibheksoni/stealth-browser-mcp
+classification:
+  lane: AUTHORIZED_BROWSER_QA
+  default_gate: RED
+  execution_default: disabled
+allowed:
+  - read_repo_docs
+  - classify_capabilities
+  - create_authorized_testing_policy
+  - create_local_browser_qa_runbook
+  - draft_target_allowlist_template
+blocked:
+  - cloudflare_bypass_execution
+  - captcha_evasion
+  - antibot_evasion_against_third_party_sites
+  - credential_stuffing
+  - scraping_non_public_content
+  - customer_data_routing
+  - live_browser_execution_without_authorization
+required_controls:
+  - written_authorization
+  - owned_or_contract_target_only
+  - target_allowlist
+  - no_secrets_in_prompts
+  - local_dry_run_first
+  - red_gate_approval
+  - receipt_per_run
+receipts_required:
+  - browser_authorization_receipt
+  - target_allowlist_receipt
+  - local_dry_run_receipt

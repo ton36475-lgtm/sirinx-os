@@ -1,0 +1,97 @@
+# Validation Report
+
+- Mission: MERCH-DASH-V1-AUTO-20260630-001
+- Status: passed
+- Pass count: 86
+- Failure count: 0
+
+## Failures
+- none
+
+## Passed Checks
+- exists README.md
+- exists MERCH_AUTOMATION_DASHBOARD_V1.md
+- exists ARCHITECTURE.md
+- exists OPERATING_RULES.md
+- exists RELEASE_GATE_LOCAL.md
+- exists schema/google_sheets_schema.csv
+- exists schema/airtable_base_schema.json
+- exists schema/database_schema.json
+- exists schema/status_taxonomy.json
+- exists templates/niche_candidates.csv
+- exists templates/design_pipeline.csv
+- exists templates/ip_policy_checks.csv
+- exists templates/listing_drafts.csv
+- exists templates/qc_reviews.csv
+- exists templates/traffic_content.csv
+- exists templates/sales_analytics.csv
+- exists templates/production_calendar_30_day.csv
+- exists prompts/PROMPT_PACK.md
+- exists prompts/NICHE_RESEARCH_PROMPTS.md
+- exists prompts/DESIGN_BRIEF_PROMPTS.md
+- exists prompts/IP_GUARDIAN_PROMPTS.md
+- exists prompts/LISTING_SEO_PROMPTS.md
+- exists prompts/TRAFFIC_CONTENT_PROMPTS.md
+- exists qc/QC_CHECKLIST.md
+- exists qc/IP_POLICY_CHECKLIST.md
+- exists qc/REJECTION_REASON_TAXONOMY.md
+- exists calendar/30_DAY_PRODUCTION_CALENDAR.md
+- exists n8n/merch_automation_dashboard_v1.workflow.json
+- exists dashboard/index.html
+- exists dashboard/assets/app.js
+- exists dashboard/assets/style.css
+- exists scripts/validate_merch_dashboard_v1.mjs
+- exists reports/VALIDATION_REPORT.md
+- exists receipts/MERCH_AUTOMATION_DASHBOARD_V1_RECEIPT.json
+- json parses schema/airtable_base_schema.json
+- json parses schema/database_schema.json
+- json parses schema/status_taxonomy.json
+- json parses n8n/merch_automation_dashboard_v1.workflow.json
+- json parses receipts/MERCH_AUTOMATION_DASHBOARD_V1_RECEIPT.json
+- csv header schema/google_sheets_schema.csv
+- csv header templates/niche_candidates.csv
+- csv header templates/design_pipeline.csv
+- csv header templates/ip_policy_checks.csv
+- csv header templates/listing_drafts.csv
+- csv header templates/qc_reviews.csv
+- csv header templates/traffic_content.csv
+- csv header templates/sales_analytics.csv
+- csv header templates/production_calendar_30_day.csv
+- n8n inactive
+- n8n node Manual Trigger
+- n8n node Load Config
+- n8n node Generate Niche Candidates Mock
+- n8n node Score Niches
+- n8n node IP Guardian Gate
+- n8n node Design Brief Generator
+- n8n node Listing Draft Generator
+- n8n node QC Checklist Builder
+- n8n node Traffic Content Planner
+- n8n node 30-Day Calendar Builder
+- n8n node Analytics Decision Rules
+- n8n node Write Local Export Summary
+- n8n node Write A2A Receipt
+- prompt section Niche Research Analyst
+- prompt section Buyer Intent Classifier
+- prompt section IP Guardian Strict Reviewer
+- prompt section Design Brief Generator
+- prompt section Typography Design Prompt
+- prompt section Mascot Design Prompt
+- prompt section Listing SEO Writer
+- prompt section QC Reviewer
+- prompt section Traffic Content Planner
+- prompt section Sales Analytics Interpreter
+- prompt section Collection Expansion Planner
+- prompt section Rejection Reason Fixer
+- qc section Visual Quality
+- qc section Print Readiness
+- qc section Text Accuracy
+- qc section Readability
+- qc section Color Contrast
+- qc section Product Placement
+- qc section IP/Policy Risk
+- qc section Listing SEO
+- qc section Traffic Content Safety
+- qc section Analytics Logging
+- calendar 30 day entries
+- dashboard static assets present

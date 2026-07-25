@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-07-17T05:09:12.653693+00:00",
+  "node": "local_mac_m2_core",
+  "total_packets": 4,
+  "dispatched": 0,
+  "tier_c_held": 4,
+  "remaining": 4,
+  "collected_done": 0,
+  "collected_errors": 0,
+  "by_lane": {
+    "infra": 2,
+    "frontend": 1,
+    "review": 1
+  },
+  "by_worktree": {
+    "codex": 3,
+    "opencode": 1
+  },
+  "recommendations": [
+    "⚠️ 4 Tier C packets need human approval before dispatch",
+    "✅ 0 Tier A/B packets ready for auto-dispatch"
+  ]
+}

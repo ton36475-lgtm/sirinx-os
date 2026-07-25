@@ -1,0 +1,29 @@
+spec_id: P091S_G_MONITORING_READONLY
+mission_id: P091S_G
+mode: scheduled_read_only_monitoring
+interval_minutes: 180
+allowed_actions:
+  - read_http
+  - diff_summary
+checks:
+  - route_200
+  - production_content_present
+  - line_cta_present
+  - cloudflare_status_readonly
+  - evidence_chain_verify
+  - governance_db_backup_verify
+blocked_actions:
+  - deploy
+  - git_push
+  - dns_mutation
+  - cloudflare_mutation
+  - r2_write
+  - d1_write
+  - kv_write
+  - webhook_activation
+  - live_send_line
+  - live_send_telegram
+  - live_send_email
+  - secret_read
+  - secret_print
+

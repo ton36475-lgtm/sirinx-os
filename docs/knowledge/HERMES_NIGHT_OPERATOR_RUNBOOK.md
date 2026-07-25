@@ -35,30 +35,33 @@ Observe -> record -> classify risk -> continue dry-run work or stop for approval
 
 ## Overnight Command
 
-Run a snapshot manually:
+For a no-config/no-write snapshot, run the direct stdout-only probe in a
+sterile environment:
 
 ```bash
 cd /Users/sirinx/sirinx-os
-pnpm night-watch
+/usr/bin/env -i PATH=/opt/homebrew/bin:/usr/bin:/bin TZ=Asia/Bangkok \
+  node scripts/hermes-night-watch-config-free.mjs
 ```
 
-The command appends a safe local status snapshot to:
+This mode does not invoke the package manager or Hermes CLI, does not load
+protected configuration, and does not create a report, log, temporary file, or
+Obsidian entry. It emits one JSON result to stdout. `WARN` exits with status 1
+and requires human approval; it never restarts, repairs, installs, or sends.
 
-```text
-/Users/sirinx/Documents/Obsidian Vault/SIRINX/Hermes Night Watch Log.md
-```
+`pnpm night-watch` and `scripts/hermes-night-watch-summary.sh` remain legacy
+logging paths and are not valid substitutes for this no-config/no-write mode.
 
 ## What The Snapshot Checks
 
-- Local SIRINX stack status.
-- Hermes Desktop status.
-- Hermes gateway status.
-- Hermes kanban stats and ready tasks.
+- Direct local HTTP probes for the four SIRINX stack services.
+- Direct local HTTP probe for Hermes Desktop.
+- Direct loopback health probe for the default Hermes gateway endpoint. If an
+  override is configured, this mode reports it as unverifiable rather than
+  reading configuration to discover it.
 - Live public website status.
-- Sitemap count.
-- Province route count.
-- Public website git branch, commit, and dirty state.
-- SIRINX OS git branch, commit, and dirty state.
+- Sitemap and province route counts.
+- Public website and SIRINX OS git dirty states only.
 
 ## Hard Stops
 

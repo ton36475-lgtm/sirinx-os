@@ -9,13 +9,13 @@ const DEFAULT_RUNTIME_REPORT = ".hermes/runtime/runtime-foundation-status.json";
 const SECRET_LIKE_PATTERN =
   /(sk-[A-Za-z0-9_-]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|[A-Za-z0-9_-]{24,}\.[A-Za-z0-9_-]{12,}\.[A-Za-z0-9_-]{24,}|AIza[0-9A-Za-z_-]{20,})/;
 
-const REQUIRED_KEYS = [
-  "OPENROUTER_API_KEY",
-  "TELEGRAM_BOT_TOKEN",
-  "TELEGRAM_HOME_CHANNEL",
-  "TELEGRAM_CHAT_ID",
-  "CLOUDFLARE_ACCOUNT_ID",
-  "CLOUDFLARE_API_TOKEN"
+const REQUIRED_KEY_GROUPS = [
+  ["OpenRouterApiKey", "OPENROUTER_API_KEY"],
+  ["TelegramBotToken", "TELEGRAM_BOT_TOKEN"],
+  ["TelegramHomeChannel", "TELEGRAM_HOME_CHANNEL"],
+  ["TelegramChatId", "TELEGRAM_CHAT_ID"],
+  ["CloudflareAccountId", "CLOUDFLARE_ACCOUNT_ID"],
+  ["CloudflareApiToken", "CLOUDFLARE_API_TOKEN"]
 ];
 
 function nowIso(options = {}) {
@@ -152,6 +152,31 @@ export async function readRuntimeSecret(key, options = {}) {
   }
 }
 
+export async function readRuntimeSecretCompat(canonicalKey, legacyKeys = [], options = {}) {
+  const keys = [canonicalKey, ...legacyKeys].filter(Boolean);
+  for (const key of keys) {
+    const result = await readRuntimeSecret(key, options);
+    if (result.ok) {
+      return {
+        ...result,
+        sourceKey: key,
+        canonicalKey,
+        legacyFallbackUsed: key !== canonicalKey
+      };
+    }
+  }
+  return {
+    ok: false,
+    present: false,
+    value: "",
+    envPath: await getHermesEnvPath(options),
+    error: "missing_compatible_key",
+    sourceKey: null,
+    canonicalKey,
+    legacyFallbackUsed: false
+  };
+}
+
 function summarizeKey(parsed, key) {
   const entry = parsed.keys[key] || {
     present: false,
@@ -167,16 +192,51 @@ function summarizeKey(parsed, key) {
   };
 }
 
+function summarizeCompatibleKey(parsed, canonicalKey, legacyKey) {
+  const canonical = summarizeKey(parsed, canonicalKey);
+  const legacy = summarizeKey(parsed, legacyKey);
+  const selected = canonical.nonempty ? canonical : legacy.nonempty ? legacy : canonical.present ? canonical : legacy;
+  const sourceKey = canonical.nonempty
+    ? canonicalKey
+    : legacy.nonempty
+      ? legacyKey
+      : canonical.present
+        ? canonicalKey
+        : legacy.present
+          ? legacyKey
+          : null;
+  return {
+    ...selected,
+    sourceKey,
+    canonicalKey,
+    legacyFallbackUsed: sourceKey === legacyKey
+  };
+}
+
 export async function getRuntimeFoundationStatus(options = {}) {
   const env = await readRuntimeEnv(options);
-  const keys = Object.fromEntries(REQUIRED_KEYS.map((key) => [key, summarizeKey(env.parsed, key)]));
+  const canonicalKeys = Object.fromEntries(
+    REQUIRED_KEY_GROUPS.map(([canonicalKey, legacyKey]) => [
+      canonicalKey,
+      summarizeCompatibleKey(env.parsed, canonicalKey, legacyKey)
+    ])
+  );
+  const keys = {
+    ...canonicalKeys,
+    OPENROUTER_API_KEY: canonicalKeys.OpenRouterApiKey,
+    TELEGRAM_BOT_TOKEN: canonicalKeys.TelegramBotToken,
+    TELEGRAM_HOME_CHANNEL: canonicalKeys.TelegramHomeChannel,
+    TELEGRAM_CHAT_ID: canonicalKeys.TelegramChatId,
+    CLOUDFLARE_ACCOUNT_ID: canonicalKeys.CloudflareAccountId,
+    CLOUDFLARE_API_TOKEN: canonicalKeys.CloudflareApiToken
+  };
   const malformedSecretLikeCount = env.parsed.malformed.filter((entry) => entry.secretLike).length;
-  const openRouterReady = keys.OPENROUTER_API_KEY.nonempty;
+  const openRouterReady = canonicalKeys.OpenRouterApiKey.nonempty;
   const telegramReady =
-    keys.TELEGRAM_BOT_TOKEN.nonempty &&
-    (keys.TELEGRAM_HOME_CHANNEL.nonempty || keys.TELEGRAM_CHAT_ID.nonempty);
+    canonicalKeys.TelegramBotToken.nonempty &&
+    (canonicalKeys.TelegramHomeChannel.nonempty || canonicalKeys.TelegramChatId.nonempty);
   const cloudflareReady =
-    keys.CLOUDFLARE_ACCOUNT_ID.nonempty && keys.CLOUDFLARE_API_TOKEN.nonempty;
+    canonicalKeys.CloudflareAccountId.nonempty && canonicalKeys.CloudflareApiToken.nonempty;
 
   const warnings = [];
   if (!openRouterReady) warnings.push("openrouter_api_key_missing_or_empty");
@@ -193,6 +253,7 @@ export async function getRuntimeFoundationStatus(options = {}) {
     envFileReadable: env.ok,
     envReadError: env.error,
     keys,
+    canonicalKeys,
     readiness: {
       openRouter: openRouterReady,
       telegram: telegramReady,

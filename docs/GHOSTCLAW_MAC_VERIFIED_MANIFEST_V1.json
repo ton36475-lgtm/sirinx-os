@@ -1,0 +1,187 @@
+{
+  "schema": "ghostclaw.mac-handoff-result/v1",
+  "run_id": "run-20260716-0415-solis",
+  "generated_at": "2026-07-16T04:15:00+07:00",
+  "authority_profile": "MAX_SAFE_AUTO",
+  "host": {
+    "architecture": "arm64",
+    "os_version": "macOS 26.5.2",
+    "machine": "Mac mini M2"
+  },
+  "repo": {
+    "path": "/Users/sirinx/sirinx-os",
+    "branch": "migration/v5-rebase",
+    "head": "93db999",
+    "dirty_files": 208,
+    "remote": "origin"
+  },
+  "coverage": "PARTIAL_TO_COMPLETE",
+  "verified_reported_states": [
+    {
+      "claim": "tmux GhostClaw layout",
+      "reported": "13 windows",
+      "verified": "18 windows (0-17)",
+      "status": "VERIFIED_EXCEEDED"
+    },
+    {
+      "claim": "GhostClaw governance tests",
+      "reported": "14 unit tests pass",
+      "verified": "84/84 tests pass",
+      "status": "VERIFIED_EXCEEDED"
+    },
+    {
+      "claim": "Dev Control API health",
+      "reported": "running",
+      "verified": "ok on :8711",
+      "status": "VERIFIED"
+    },
+    {
+      "claim": "Skills API health",
+      "reported": "running",
+      "verified": "ok on :3800",
+      "status": "VERIFIED"
+    },
+    {
+      "claim": "Rust workspace compiles",
+      "reported": "compiles",
+      "verified": "cargo check Finished, 0 errors",
+      "status": "VERIFIED"
+    },
+    {
+      "claim": "Auto-loop operational",
+      "reported": "every 5m via cron",
+      "verified": "3 tasks/cycle, chainValid=true",
+      "status": "VERIFIED"
+    },
+    {
+      "claim": "ThaiMart adapter disabled",
+      "reported": "disabled_pending_contract",
+      "verified": "disabled_pending_contract",
+      "status": "VERIFIED"
+    },
+    {
+      "claim": "Cynative integration",
+      "reported": "binary downloaded",
+      "verified": "89,315,922 bytes, v1.5.1, darwin/arm64",
+      "status": "VERIFIED"
+    },
+    {
+      "claim": "Repo test failures",
+      "reported": "7 Dev Control API test failures",
+      "verified": "12 failed | 1061 passed (1073) — legacy tests, 84/84 GhostClaw core pass",
+      "status": "VERIFIED_WITH_CONTEXT"
+    }
+  ],
+  "completed_packets": [
+    { "id": "P000A", "description": "Repo intake read-only", "status": "COMPLETED" },
+    { "id": "P001", "description": "Upstream source/license/security audit", "status": "COMPLETED" },
+    { "id": "P002", "description": "Schema & governance foundation (25 tests)", "status": "COMPLETED" },
+    { "id": "P003", "description": "Threat model (21 threats mapped)", "status": "COMPLETED" },
+    { "id": "P004", "description": "Interface scaffold + mocks (9 tests)", "status": "COMPLETED" },
+    { "id": "P005", "description": "Synthetic browser canary (11 tests)", "status": "COMPLETED" },
+    { "id": "P006", "description": "Schedule/cloud mock canary (9 tests)", "status": "COMPLETED" },
+    { "id": "P007", "description": "Small-corpus research canary (7 tests)", "status": "COMPLETED" },
+    { "id": "P008", "description": "Mobile approval mock (10 tests)", "status": "COMPLETED" },
+    { "id": "P009", "description": "Integrated read-only business report canary (5 tests)", "status": "COMPLETED" },
+    { "id": "P010", "description": "Review & commit proposal", "status": "COMPLETED" },
+    { "id": "AUTO-LOOP", "description": "Loop engineering workflow (8 tests + cron)", "status": "COMPLETED" },
+    { "id": "CYNATIVE", "description": "Cynative infrastructure research integration", "status": "COMPLETED" },
+    { "id": "OMNIROUTE", "description": "OmniRoute free AI gateway integration", "status": "COMPLETED" },
+    { "id": "THAIMART-K15", "description": "ThaiMart K01-K15 workflow engine", "status": "COMPLETED" },
+    { "id": "SKILLS", "description": "7 reusable skills created", "status": "COMPLETED" },
+    { "id": "DELEGATION", "description": "Parallel agent delegation pattern", "status": "COMPLETED" }
+  ],
+  "failed_packets": [
+    {
+      "id": "LEGACY-TESTS",
+      "description": "12 legacy repo tests still failing (from 16 original)",
+      "agent_attempted": "Agent 2 (deleg_62df6141) — timed out at 600s after fixing 4/16",
+      "impact": "low — GhostClaw core 84/84 pass, legacy pre-existing"
+    }
+  ],
+  "quarantined_packets": [
+    {
+      "id": "Q900-PUSH",
+      "description": "Git push/merge/deploy",
+      "reason": "Tier X — requires explicit human gate"
+    },
+    {
+      "id": "Q900-THAIMART-API",
+      "description": "ThaiMart network integration",
+      "reason": "disabled_pending_contract — no official API"
+    },
+    {
+      "id": "Q900-OPENRESEARCHER",
+      "description": "OpenResearcher vendoring/deployment",
+      "reason": "LICENSE_GATE BLOCKED"
+    },
+    {
+      "id": "Q900-OMNIROUTE-PROVIDER",
+      "description": "OmniRoute live provider calls",
+      "reason": "needs npm deps + API key + human approval"
+    }
+  ],
+  "skills_installed": [
+    "ghostclaw-master-orchestrator",
+    "autonomous-loop-engineering",
+    "ghostclaw-engineering-loop",
+    "ghostclaw-governance-contracts",
+    "ghostclaw-agent-delegation",
+    "ghostclaw-integration-onboarding",
+    "thaimart-k15-workflow"
+  ],
+  "tmux_windows": {
+    "count": 18,
+    "list": [
+      "overview", "skills-api", "dev-api", "codex", "claude", "opencode",
+      "hermes", "tests", "cloudflare", "infra", "gridguist", "watcher",
+      "live-extractor", "thaimart-workflow", "cynative", "cynative-",
+      "auto-loop", "omniroute"
+    ]
+  },
+  "integrations": {
+    "cynative": { "version": "1.5.1", "binary_bytes": 89315922, "status": "READY" },
+    "omniroute": { "version": "3.8.48", "status": "CLI_READY_SERVER_PENDING_NPM" },
+    "thaimart": { "status": "disabled_pending_contract" },
+    "openresearcher": { "status": "LICENSE_GATE_BLOCKED" }
+  },
+  "checks": {
+    "ghostclaw_tests": "84/84 PASS",
+    "rust_compile": "PASS (0 errors)",
+    "skills_api": "ok :3800",
+    "dev_control_api": "ok :8711",
+    "auto_loop": "3 tasks, chainValid=true",
+    "server_syntax": "PASS",
+    "key_modules": "7/7 syntax OK"
+  },
+  "delivery_state": [
+    "SKILL_INSTALLED",
+    "SKILL_LOCALLY_VALIDATED",
+    "MAC_HANDOFF_READY",
+    "MAC_LIVE_VERIFIED",
+    "AUTO_LOOP_OPERATIONAL",
+    "7_SKILLS_CREATED_AND_VERIFIED",
+    "OMNIROUTE_INTEGRATED",
+    "CYNATIVE_INTEGRATED",
+    "THAIMART_K15_ENGINE_ACTIVE",
+    "LIVE_REPOSITORY_INTEGRATION_EXECUTED_AND_VERIFIED",
+    "PRODUCTION_MUTATION_NOT_PERFORMED",
+    "GIT_PUSH_NOT_PERFORMED"
+  ],
+  "receipt_chain": {
+    "valid": true,
+    "head": "f39661f9bcae1220",
+    "total_receipts": 3
+  },
+  "rollback": {
+    "ready": true,
+    "evidence": [
+      "208 dirty files on branch migration/v5-rebase (uncommitted, revertible)",
+      "No production mutations performed",
+      "No git push performed",
+      "ThaiMart adapter disabled",
+      "OmniRoute provider calls not enabled"
+    ]
+  },
+  "next_safe_action": "Run npm install in integrations/omniroute to enable full OmniRoute server, or dispatch agent to fix remaining 12 legacy tests"
+}

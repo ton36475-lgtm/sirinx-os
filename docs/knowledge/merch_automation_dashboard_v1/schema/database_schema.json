@@ -1,0 +1,527 @@
+{
+  "schema_version": "1.0.0",
+  "mission_id": "MERCH-DASH-V1-AUTO-20260630-001",
+  "local_only": true,
+  "tables": {
+    "niches": {
+      "primary_key": "niche_id",
+      "columns": [
+        {
+          "name": "niche_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "niche_name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "audience",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "buyer_intent",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "gift_occasion",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "seasonality",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "demand_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "competition_gap_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "ip_safety_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "reusable_asset_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "total_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "design_pipeline": {
+      "primary_key": "design_id",
+      "columns": [
+        {
+          "name": "design_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "niche_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "design_family",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "design_phrase",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "visual_style",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "product_fit",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "color_strategy",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "prompt_version",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "asset_path",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "ip_policy_checks": {
+      "primary_key": "check_id",
+      "columns": [
+        {
+          "name": "check_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "design_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "phrase_checked",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "trademark_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "copyright_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "celebrity_likeness_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "brand_confusion_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sports_team_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sensitive_content_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "keyword_spam_risk",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "risk_level",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "required_edits",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "final_decision",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "reviewer_notes",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "listing_drafts": {
+      "primary_key": "listing_id",
+      "columns": [
+        {
+          "name": "listing_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "design_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "product_type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "brand",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "bullet_1",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "bullet_2",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "keyword_cluster",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "seo_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "policy_score",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "qc_reviews": {
+      "primary_key": "qc_id",
+      "columns": [
+        {
+          "name": "qc_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "design_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "spelling_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "readability_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "contrast_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "transparent_background_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "dpi_size_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "placement_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "duplicate_pattern_pass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "final_qc_status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "reject_reason",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "fix_notes",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "traffic_content": {
+      "primary_key": "content_id",
+      "columns": [
+        {
+          "name": "content_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "design_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "channel",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "language",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "content_angle",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "caption",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "short_video_hook",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "cta",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "publish_status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "traffic_source_tag",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "sales_analytics": {
+      "primary_key": "analytics_id",
+      "columns": [
+        {
+          "name": "analytics_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "design_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "upload_date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "product_type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "units_sold",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "royalty",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "external_traffic_flag",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ad_spend",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "net_profit_estimate",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "iteration_decision",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "next_action",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "production_calendar": {
+      "primary_key": "day",
+      "columns": [
+        {
+          "name": "day",
+          "type": "number",
+          "nullable": false
+        },
+        {
+          "name": "date_placeholder",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "focus",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "niche_research_target",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "design_target",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "qc_target",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "listing_target",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "content_target",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "analytics_task",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "completion_status",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "ghostclaw.rust_migration_validation.v1",
+  "packet_id": "RUST_MIGRATION_CURRENT_VALIDATION_20260714",
+  "status": "P101_ADAPTER_EXTRACTION_COMMITTED_VALIDATED_LOCAL",
+  "run_at": "2026-07-14T03:31:14+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "feat/sirinx-web-line-trust-v1",
+  "head": "ad148cdc2c02a535eb340472e0d652a549241d52",
+  "source_commits": {
+    "p100_core": "125a15e",
+    "p101_adapter_extraction": "bd8cbf2"
+  },
+  "validation": {
+    "cargo_fmt_check": "passed",
+    "cargo_clippy_offline_locked_deny_warnings": "passed",
+    "cargo_test_offline_locked": {
+      "status": "passed",
+      "tests": 167,
+      "failures": 0
+    },
+    "cargo_build_offline_locked": "passed"
+  },
+  "scope": {
+    "rust_migration_paths_clean_before_evidence_update": true,
+    "unrelated_dirty_lanes_present": true,
+    "unrelated_dirty_lanes_touched": false
+  },
+  "blocked_actions_confirmed": {
+    "secret_access": true,
+    "provider_call": true,
+    "live_worker_execution": true,
+    "live_message_send": true,
+    "dependency_install": true,
+    "git_push": true,
+    "deploy": true,
+    "cloud_mutation": true
+  },
+  "next_gate": "P101_OPENCODE_REVIEW_RUST_ADAPTER_EXTRACTION"
+}

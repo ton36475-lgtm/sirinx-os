@@ -1,0 +1,44 @@
+/ghostclaw-run
+
+MISSION_NAME: GHOSTCLAW_CODING_MODEL_ROUTER_V2_1_INSTALL
+MISSION_ID: GHOSTCLAW-MODEL-ROUTER-V2-1-INSTALL-001
+COMMANDER: Hermes
+REPO: /Users/sirinx/sirinx-os
+MODE: local_safe_receipt_gated
+CONTROL_PLANE: OpenClaw_Android_Primary_Telegram_Fallback
+
+OBJECTIVE:
+  Install the multi-coding-model router across all GhostClaw/SIRINX projects.
+  Add OpenRouter free coding lanes, local model lane, Codex peer lane,
+  Claude Code subagent lanes, and budget-gated architecture lanes.
+
+READ_FIRST:
+  - AGENTS.md
+  - CLAUDE.md
+  - docs/architecture/CONTEXT_MAP.md
+  - docs/model-routing/MODEL_REGISTRY.md
+  - docs/model-routing/ROUTING_MATRIX.md
+  - docs/model-routing/PROVIDER_POLICY.md
+
+ALLOW:
+  - add model router docs
+  - add config examples
+  - add Claude subagent definitions
+  - add Codex config example
+  - add skill definition
+  - run dry-run router validation
+  - write receipt
+
+BLOCK:
+  - real paid calls
+  - provider limit bypass
+  - account rotation
+  - secret read/print
+  - production deploy
+  - git push
+  - customer send
+  - broad code rewrite
+
+VALIDATION:
+  python scripts/validate_model_router_pack.py
+  python scripts/model_router_dry_run.py --tier T1 --project sirinx-public --task "add route test draft"

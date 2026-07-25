@@ -1,0 +1,60 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.499079,
+  "message_id": "msg-mcp_line_send_message_3143c46c",
+  "mission_id": "mcp-line_send_message",
+  "from": {
+    "agent": "manus-agent",
+    "role": "external_mcp_client"
+  },
+  "to": {
+    "agent": "line-operator-send_message",
+    "role": "mcp_operator"
+  },
+  "context": {
+    "goal": "MCP tool call: line_send_message",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "mcp-8ed3fd893bb0"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-mcp_line_send_message_3143c46c",
+    "mission_id": "mcp-line_send_message",
+    "timestamp": "2026-07-16T23:50:47.971680+00:00",
+    "from": {
+      "agent": "manus-agent",
+      "role": "external_mcp_client"
+    },
+    "to": {
+      "agent": "line-operator-send_message",
+      "role": "mcp_operator"
+    },
+    "context": {
+      "goal": "MCP tool call: line_send_message",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "mcp-8ed3fd893bb0"
+    },
+    "payload": {
+      "type": "task",
+      "action": "MCP tool call: line_send_message",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.657333+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  },
+  "dispatch_error": "error: unexpected argument '--no-stream' found\n\n  tip: a similar argument exists: '--no-alt-screen'\n\nUsage: codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]\n\nFor more information, try "
+}

@@ -1,0 +1,19 @@
+{
+  "channel": "facebook",
+  "allowed_status": "draft_only",
+  "live_send_default": false,
+  "owner_approval_required": true,
+  "blocked_actions": [
+    "facebook_live_post",
+    "graph_api_call",
+    "customer_data_ingestion",
+    "partner_outreach_send"
+  ],
+  "required_fields": [
+    "channel",
+    "status",
+    "liveSend",
+    "ownerApprovalRequired",
+    "text"
+  ]
+}

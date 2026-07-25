@@ -1,0 +1,288 @@
+policy_id: GHOSTCLAW-A2A-SAFE-AUTONOMOUS-EXECUTION-20260630
+version: 1
+status: ready_for_repo
+created_at: "2026-06-30T02:30:28+07:00"
+mode: safe_no_ask_local_autonomy
+
+purpose: >
+  Continue GhostClaw/Hermes/Codex A2A local automation to completion while blocking
+  blanket approvals and routing push/deploy/cloud/customer/provider/install/migration/
+  merge/license mutations through explicit gate packets.
+
+blanket_approval:
+  valid: false
+  action: record_as_blocked_audit_event
+  reason: "Requested permissions cross local, release, cloud, customer, paid-provider, and secret boundaries."
+
+agents:
+  commander: hermes
+  executor: codex-local
+  architect: opus
+  reviewer: design-partner
+  rules:
+    no_self_approval: true
+    requester_agent_must_not_equal_approver_agent: true
+    preserve_task_id: true
+    preserve_correlation_id: true
+    preserve_decision_id: true
+    receipt_required: true
+
+worktree_safety:
+  multi_project_worktree: true
+  preserve_unrelated_local_changes: true
+  require_git_status_before_any_write: true
+  require_diff_review_before_stage: true
+  stage_only_explicit_file_list: true
+  never_use_git_add_dot: true
+  forbidden_cleanup:
+    - "git reset --hard"
+    - "git clean -fdx"
+    - "git checkout -- ."
+    - "rm -rf"
+
+protected_paths:
+  - ".env"
+  - ".env.*"
+  - "**/.env"
+  - "**/.env.*"
+  - "**/*secret*"
+  - "**/*credential*"
+  - "**/*token*"
+  - "**/*key*"
+  - "node_modules/**"
+  - "dist/**"
+  - "build/**"
+  - ".next/**"
+  - "coverage/**"
+
+protected_branches:
+  - main
+  - master
+  - production
+  - prod
+  - "release/*"
+
+approval_tiers:
+  A_read_only:
+    decision: auto_allow
+    examples:
+      - git_status
+      - git_diff
+      - git_log
+      - inspect_docs_source_tests_without_secrets
+
+  B_local_safe:
+    decision: auto_allow_after_validation
+    examples:
+      - local_file_edit_in_scope
+      - local_hermes_queue_execution
+      - lint_test_build
+      - explicit_path_stage
+      - local_commit
+    requirements:
+      - no_protected_paths
+      - no_external_mutation
+      - validation_passed_or_documented_no_test_path
+      - evidence_pack_created
+
+  C_gate_required:
+    decision: stop_and_require_gate_packet
+    examples:
+      - git_push_non_production
+      - staging_deploy
+      - non_production_cloud_mutation
+      - telegram_live_send
+      - customer_send
+      - provider_model_paid_call
+      - dependency_install
+      - database_migration
+      - merge_script
+      - license_file_mutation
+    required_packet_fields:
+      - gate_id
+      - action
+      - target
+      - exact_files_or_commits
+      - risk_summary
+      - validation_results
+      - rollback_plan
+      - expiry
+      - approval_phrase
+
+  X_hard_block:
+    decision: hard_block
+    examples:
+      - blanket_approve_all
+      - secret_value_read
+      - secret_value_print
+      - production_deploy
+      - force_push
+      - push_to_protected_branch
+      - destructive_provider_action
+      - disabling_audit_or_auth
+      - hiding_logs_or_receipts
+
+permission_matrix:
+  hermes_runtime_queue_execution:
+    decision: auto_allow
+    scope: local_queue_only
+    receipt: required
+
+  push:
+    decision: gate_required
+    allowed_scope: non_production_branch_only
+    force_push: false
+    fresh_gate_template:
+      gate_id: GATE-PUSH-002-20260630-001
+      phrase: "APPROVE GATE-PUSH-002-20260630-001"
+      remote: origin
+      target_branch: staging/godmode-master-os-v2
+      forbidden:
+        - deploy
+        - customer_send
+        - cloud_mutation
+        - secrets
+        - force_push
+
+  deploy:
+    staging:
+      decision: gate_required
+      rollback_required: true
+      smoke_test_required: true
+    production:
+      decision: hard_block
+
+  cloud_mutation:
+    decision: gate_required
+    allowed_scope: non_production_only
+    rollback_required: true
+
+  customer_send:
+    decision: gate_required
+    requirements:
+      - final_content_preview
+      - recipient_manifest_hash
+      - send_window
+      - rollback_or_correction_plan
+
+  telegram_live_send:
+    decision: gate_required
+    owner_only_dry_run:
+      decision: auto_allow
+      secrets_redacted: true
+      customer_broadcast: false
+
+  secret_read:
+    value_read:
+      decision: hard_block
+    presence_check:
+      decision: auto_allow
+      print_values: false
+
+  provider_model_paid_call:
+    decision: gate_required
+    requirements:
+      - provider
+      - model
+      - budget_cap_usd
+      - prompt_classification
+      - max_calls
+      - receipt
+
+  install:
+    decision: gate_required
+    requirements:
+      - package_manager
+      - package_list
+      - lockfile_diff_expected
+      - rollback_plan
+
+  migration:
+    decision: gate_required
+    requirements:
+      - database_target
+      - backup_plan
+      - up_migration
+      - down_migration
+      - staging_validation
+
+  merge_script:
+    decision: gate_required
+    requirements:
+      - source_branch
+      - target_branch
+      - conflict_plan
+      - test_plan
+
+  license_file_mutation:
+    decision: gate_required
+    requirements:
+      - affected_license_files
+      - owner_review
+      - legal_risk_note
+
+runtime_pipeline:
+  - id: P1_preflight
+    class: A_read_only
+    commands:
+      - "git status --short --branch"
+      - "git branch --show-current"
+      - "git diff --stat"
+      - "git diff --name-only"
+      - "git diff --check"
+      - "git log --oneline -5"
+
+  - id: P2_change_manifest
+    class: A_read_only
+    output: ".ghostclaw_runtime/evidence/change_manifest.json"
+
+  - id: P3_secret_path_guard
+    class: A_read_only
+    rule: "Check filenames only; never print secret values."
+
+  - id: P4_validate
+    class: B_local_safe
+    run_if_present:
+      - "pnpm lint"
+      - "pnpm test"
+      - "pnpm build"
+      - "npm run lint"
+      - "npm test"
+      - "npm run build"
+      - "pytest"
+      - "cargo test"
+
+  - id: P5_local_commit
+    class: B_local_safe
+    requirements:
+      - gate_include_paths_txt
+      - explicit_file_list
+      - no_forbidden_paths
+      - staged_diff_check
+    commit_message_template: "chore(a2a): add safe autonomous execution gate"
+
+  - id: P6_prepare_release_gates
+    class: C_gate_required
+    outputs:
+      - push_approval_packet
+      - staging_deploy_approval_packet
+      - cloud_mutation_approval_packet
+
+  - id: P7_stop_before_external_mutation
+    class: C_gate_required
+    stop: true
+
+evidence:
+  directory: ".ghostclaw_runtime/evidence"
+  audit_directory: ".ghostclaw_runtime/audit"
+  required_files:
+    - status.txt
+    - branch.txt
+    - diff_stat.txt
+    - diff_name_only.txt
+    - diff_check.txt
+    - change_manifest.json
+    - validation_results.txt
+    - risk_summary.md
+    - local_commit_receipt.json
+    - release_gate_packet.md

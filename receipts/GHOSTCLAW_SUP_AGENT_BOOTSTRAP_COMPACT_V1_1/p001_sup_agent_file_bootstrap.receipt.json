@@ -1,0 +1,53 @@
+{
+  "receipt_id": "GHOSTCLAW-SUP-AGENT-BOOTSTRAP-V1-1-P001",
+  "runtime_bootstrap": "GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1.1",
+  "packet_id": "P001_SUP_AGENT_FILE_BOOTSTRAP",
+  "phase": "01_agent_registry_bootstrap",
+  "action_tier": "B",
+  "repo": "/Users/sirinx/sirinx-os",
+  "status": "PASS",
+  "file_lease": {
+    "granted": true,
+    "allowed_paths": [
+      "agents/supervisor/hermes-supervisor.agent.md",
+      "agents/subagents/registry.yaml",
+      "agents/subagents/policy-guardian.agent.md",
+      "agents/subagents/file-lease-manager.agent.md",
+      "agents/subagents/validator-worker.agent.md",
+      "agents/subagents/opencode-review-worker.agent.md",
+      "agents/subagents/codex-builder.agent.md",
+      "receipts/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1_1/**",
+      "reports/mission/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_REPORT.md"
+    ],
+    "changed_files": [
+      "agents/supervisor/hermes-supervisor.agent.md",
+      "agents/subagents/registry.yaml",
+      "agents/subagents/policy-guardian.agent.md",
+      "agents/subagents/file-lease-manager.agent.md",
+      "agents/subagents/validator-worker.agent.md",
+      "agents/subagents/opencode-review-worker.agent.md",
+      "agents/subagents/codex-builder.agent.md",
+      "receipts/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1_1/p001_sup_agent_file_bootstrap.receipt.json",
+      "reports/mission/GHOSTCLAW_SUP_AGENT_BOOTSTRAP_REPORT.md"
+    ],
+    "lease_match": true
+  },
+  "security": {
+    "secret_read": false,
+    "env_read": false,
+    "provider_call": false,
+    "paid_model_call": false,
+    "install": false,
+    "push": false,
+    "deploy": false,
+    "cloud_mutation": false,
+    "dark_web_execution": false,
+    "customer_send": false
+  },
+  "validation": {
+    "ran": true,
+    "result": "pass",
+    "details": "JSON parsed, YAML registry/policies parsed where applicable, git diff whitespace check passed on leased paths, targeted secret-pattern scan returned no matches, and changed files matched the allowed lease."
+  },
+  "next_action": "Review registry and open a Tier C gate only for commit or runtime execution."
+}

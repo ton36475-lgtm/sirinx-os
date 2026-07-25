@@ -1,0 +1,2362 @@
+{
+  "run_id": "p087_auto_review_1783350568668",
+  "task_id": "sirinx-site-auto-review",
+  "packet_id": "P087_COMPUTER_USE_AUTO_REVIEW_GATE",
+  "mode": "local",
+  "target_origin": "http://127.0.0.1:18741",
+  "verdict": "auto_review_pass_needs_human_approval",
+  "human_approval_required": true,
+  "started_at": "2026-07-06T22:09:28+0700",
+  "ended_at": "2026-07-06T22:09:55+0700",
+  "checks": [
+    {
+      "check_id": "static_safety_global_all",
+      "check_type": "static_safety",
+      "status": "passed",
+      "route": null,
+      "viewport": null,
+      "summary": "No live send, deploy, cloud mutation, or secret-like static pattern detected",
+      "details": {
+        "finding_count": 0
+      },
+      "created_at": "2026-07-06T22:09:28+0700"
+    },
+    {
+      "check_id": "route_health___mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-390",
+      "summary": "Route / loaded",
+      "details": {
+        "status": 200,
+        "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy"
+      },
+      "created_at": "2026-07-06T22:09:30+0700"
+    },
+    {
+      "check_id": "mobile_overlap___mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:30+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link___mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:30+0700"
+    },
+    {
+      "check_id": "line_qr_targets___mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:30+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path___mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:30+0700"
+    },
+    {
+      "check_id": "route_health__line__mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-390",
+      "summary": "Route /line/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:31+0700"
+    },
+    {
+      "check_id": "mobile_overlap__line__mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:31+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__line__mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:31+0700"
+    },
+    {
+      "check_id": "line_qr_targets__line__mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:31+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__line__mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:31+0700"
+    },
+    {
+      "check_id": "route_health__contact__mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-390",
+      "summary": "Route /contact/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX | ทีมประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:32+0700"
+    },
+    {
+      "check_id": "mobile_overlap__contact__mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:32+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__contact__mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:32+0700"
+    },
+    {
+      "check_id": "line_qr_targets__contact__mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:32+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__contact__mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:32+0700"
+    },
+    {
+      "check_id": "route_health__projects__mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-390",
+      "summary": "Route /projects/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ผลงาน SIRINX และมาตรฐานหลักฐานโครงการ | Solar Carport, Rooftop Solar, BESS, EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "mobile_overlap__projects__mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__projects__mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "line_qr_targets__projects__mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__projects__mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "route_health__trust-center__mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-390",
+      "summary": "Route /trust-center/ loaded",
+      "details": {
+        "status": 200,
+        "title": "Trust Center | หลักฐาน ความปลอดภัย และขอบเขตระบบอัตโนมัติของ SIRINX Solar"
+      },
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "mobile_overlap__trust-center__mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__trust-center__mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "line_qr_targets__trust-center__mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__trust-center__mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "check_id": "route_health__quote__mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-390",
+      "summary": "Route /quote/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ขอประเมินโครงการ SIRINX | Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:34+0700"
+    },
+    {
+      "check_id": "mobile_overlap__quote__mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:34+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__quote__mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:34+0700"
+    },
+    {
+      "check_id": "line_qr_targets__quote__mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:34+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__quote__mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:34+0700"
+    },
+    {
+      "check_id": "route_health__roi-calculator__mobile-390",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-390",
+      "summary": "Route /roi-calculator/ loaded",
+      "details": {
+        "status": 200,
+        "title": "เตรียมประเมิน ROI โซลาร์ | SIRINX Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "check_id": "mobile_overlap__roi-calculator__mobile-390",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-390",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 390,
+        "inner_width": 390
+      },
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__roi-calculator__mobile-390",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-390",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "check_id": "line_qr_targets__roi-calculator__mobile-390",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-390",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__roi-calculator__mobile-390",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-390",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "check_id": "route_health___mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-430",
+      "summary": "Route / loaded",
+      "details": {
+        "status": 200,
+        "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy"
+      },
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "mobile_overlap___mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link___mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "line_qr_targets___mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path___mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "route_health__line__mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-430",
+      "summary": "Route /line/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "mobile_overlap__line__mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__line__mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "line_qr_targets__line__mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__line__mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "check_id": "route_health__contact__mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-430",
+      "summary": "Route /contact/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX | ทีมประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:38+0700"
+    },
+    {
+      "check_id": "mobile_overlap__contact__mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:38+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__contact__mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:38+0700"
+    },
+    {
+      "check_id": "line_qr_targets__contact__mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:38+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__contact__mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:38+0700"
+    },
+    {
+      "check_id": "route_health__projects__mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-430",
+      "summary": "Route /projects/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ผลงาน SIRINX และมาตรฐานหลักฐานโครงการ | Solar Carport, Rooftop Solar, BESS, EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:39+0700"
+    },
+    {
+      "check_id": "mobile_overlap__projects__mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:39+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__projects__mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:39+0700"
+    },
+    {
+      "check_id": "line_qr_targets__projects__mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:39+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__projects__mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:39+0700"
+    },
+    {
+      "check_id": "route_health__trust-center__mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-430",
+      "summary": "Route /trust-center/ loaded",
+      "details": {
+        "status": 200,
+        "title": "Trust Center | หลักฐาน ความปลอดภัย และขอบเขตระบบอัตโนมัติของ SIRINX Solar"
+      },
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "mobile_overlap__trust-center__mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__trust-center__mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "line_qr_targets__trust-center__mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__trust-center__mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "route_health__quote__mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-430",
+      "summary": "Route /quote/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ขอประเมินโครงการ SIRINX | Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "mobile_overlap__quote__mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__quote__mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "line_qr_targets__quote__mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__quote__mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "check_id": "route_health__roi-calculator__mobile-430",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-430",
+      "summary": "Route /roi-calculator/ loaded",
+      "details": {
+        "status": 200,
+        "title": "เตรียมประเมิน ROI โซลาร์ | SIRINX Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "check_id": "mobile_overlap__roi-calculator__mobile-430",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-430",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 430,
+        "inner_width": 430
+      },
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__roi-calculator__mobile-430",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-430",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "check_id": "line_qr_targets__roi-calculator__mobile-430",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-430",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__roi-calculator__mobile-430",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "mobile-430",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "check_id": "route_health___tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/",
+      "viewport": "tablet-768",
+      "summary": "Route / loaded",
+      "details": {
+        "status": 200,
+        "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy"
+      },
+      "created_at": "2026-07-06T22:09:43+0700"
+    },
+    {
+      "check_id": "mobile_overlap___tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:43+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link___tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:43+0700"
+    },
+    {
+      "check_id": "line_qr_targets___tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:43+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path___tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:43+0700"
+    },
+    {
+      "check_id": "route_health__line__tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "tablet-768",
+      "summary": "Route /line/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "mobile_overlap__line__tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__line__tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "line_qr_targets__line__tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__line__tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "route_health__contact__tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "tablet-768",
+      "summary": "Route /contact/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX | ทีมประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "mobile_overlap__contact__tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__contact__tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "line_qr_targets__contact__tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__contact__tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "check_id": "route_health__projects__tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "tablet-768",
+      "summary": "Route /projects/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ผลงาน SIRINX และมาตรฐานหลักฐานโครงการ | Solar Carport, Rooftop Solar, BESS, EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:45+0700"
+    },
+    {
+      "check_id": "mobile_overlap__projects__tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:45+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__projects__tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:45+0700"
+    },
+    {
+      "check_id": "line_qr_targets__projects__tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:45+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__projects__tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:45+0700"
+    },
+    {
+      "check_id": "route_health__trust-center__tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "tablet-768",
+      "summary": "Route /trust-center/ loaded",
+      "details": {
+        "status": 200,
+        "title": "Trust Center | หลักฐาน ความปลอดภัย และขอบเขตระบบอัตโนมัติของ SIRINX Solar"
+      },
+      "created_at": "2026-07-06T22:09:46+0700"
+    },
+    {
+      "check_id": "mobile_overlap__trust-center__tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:46+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__trust-center__tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:46+0700"
+    },
+    {
+      "check_id": "line_qr_targets__trust-center__tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:46+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__trust-center__tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:46+0700"
+    },
+    {
+      "check_id": "route_health__quote__tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "tablet-768",
+      "summary": "Route /quote/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ขอประเมินโครงการ SIRINX | Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:47+0700"
+    },
+    {
+      "check_id": "mobile_overlap__quote__tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:47+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__quote__tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:47+0700"
+    },
+    {
+      "check_id": "line_qr_targets__quote__tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:47+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__quote__tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:47+0700"
+    },
+    {
+      "check_id": "route_health__roi-calculator__tablet-768",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "tablet-768",
+      "summary": "Route /roi-calculator/ loaded",
+      "details": {
+        "status": 200,
+        "title": "เตรียมประเมิน ROI โซลาร์ | SIRINX Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "check_id": "mobile_overlap__roi-calculator__tablet-768",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "tablet-768",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 768,
+        "inner_width": 768
+      },
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__roi-calculator__tablet-768",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "tablet-768",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "check_id": "line_qr_targets__roi-calculator__tablet-768",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "tablet-768",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__roi-calculator__tablet-768",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "tablet-768",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "check_id": "route_health___desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/",
+      "viewport": "desktop-1440",
+      "summary": "Route / loaded",
+      "details": {
+        "status": 200,
+        "title": "SIRINX | Solar Carport วางแผนลดค่าไฟองค์กร พร้อม EV Charger, BESS & AI Energy"
+      },
+      "created_at": "2026-07-06T22:09:49+0700"
+    },
+    {
+      "check_id": "mobile_overlap___desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:49+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link___desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:49+0700"
+    },
+    {
+      "check_id": "line_qr_targets___desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:49+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path___desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:49+0700"
+    },
+    {
+      "check_id": "route_health__line__desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "desktop-1440",
+      "summary": "Route /line/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX ผ่าน LINE Official | ประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:50+0700"
+    },
+    {
+      "check_id": "mobile_overlap__line__desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:50+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__line__desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:50+0700"
+    },
+    {
+      "check_id": "line_qr_targets__line__desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:50+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__line__desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/line/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:50+0700"
+    },
+    {
+      "check_id": "route_health__contact__desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "desktop-1440",
+      "summary": "Route /contact/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ติดต่อ SIRINX | ทีมประเมิน Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:51+0700"
+    },
+    {
+      "check_id": "mobile_overlap__contact__desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:51+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__contact__desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:51+0700"
+    },
+    {
+      "check_id": "line_qr_targets__contact__desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:51+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__contact__desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/contact/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:51+0700"
+    },
+    {
+      "check_id": "route_health__projects__desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "desktop-1440",
+      "summary": "Route /projects/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ผลงาน SIRINX และมาตรฐานหลักฐานโครงการ | Solar Carport, Rooftop Solar, BESS, EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:52+0700"
+    },
+    {
+      "check_id": "mobile_overlap__projects__desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:52+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__projects__desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:52+0700"
+    },
+    {
+      "check_id": "line_qr_targets__projects__desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:52+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__projects__desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/projects/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:52+0700"
+    },
+    {
+      "check_id": "route_health__trust-center__desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "desktop-1440",
+      "summary": "Route /trust-center/ loaded",
+      "details": {
+        "status": 200,
+        "title": "Trust Center | หลักฐาน ความปลอดภัย และขอบเขตระบบอัตโนมัติของ SIRINX Solar"
+      },
+      "created_at": "2026-07-06T22:09:53+0700"
+    },
+    {
+      "check_id": "mobile_overlap__trust-center__desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:53+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__trust-center__desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:53+0700"
+    },
+    {
+      "check_id": "line_qr_targets__trust-center__desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:53+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__trust-center__desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/trust-center/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:53+0700"
+    },
+    {
+      "check_id": "route_health__quote__desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "desktop-1440",
+      "summary": "Route /quote/ loaded",
+      "details": {
+        "status": 200,
+        "title": "ขอประเมินโครงการ SIRINX | Solar Carport, Rooftop Solar, BESS และ EV Charger สำหรับองค์กร"
+      },
+      "created_at": "2026-07-06T22:09:54+0700"
+    },
+    {
+      "check_id": "mobile_overlap__quote__desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:54+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__quote__desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:54+0700"
+    },
+    {
+      "check_id": "line_qr_targets__quote__desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:54+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__quote__desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/quote/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:54+0700"
+    },
+    {
+      "check_id": "route_health__roi-calculator__desktop-1440",
+      "check_type": "route_health",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "desktop-1440",
+      "summary": "Route /roi-calculator/ loaded",
+      "details": {
+        "status": 200,
+        "title": "เตรียมประเมิน ROI โซลาร์ | SIRINX Solar Carport, Rooftop Solar, BESS และ EV Charger"
+      },
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "check_id": "mobile_overlap__roi-calculator__desktop-1440",
+      "check_type": "mobile_overlap",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "desktop-1440",
+      "summary": "No horizontal overflow detected",
+      "details": {
+        "scroll_width": 1440,
+        "inner_width": 1440
+      },
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "check_id": "keyboard_skip_link__roi-calculator__desktop-1440",
+      "check_type": "keyboard_skip_link",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "desktop-1440",
+      "summary": "Skip link and main target exist",
+      "details": {},
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "check_id": "line_qr_targets__roi-calculator__desktop-1440",
+      "check_type": "line_qr_targets",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "desktop-1440",
+      "summary": "LINE add/chat/QR targets exist without live send",
+      "details": {
+        "check_type": "line_qr_targets",
+        "status": "passed",
+        "add_friend_found": true,
+        "chat_found": true,
+        "qr_found": true,
+        "inquiry_path_found": true,
+        "send_performed": false,
+        "summary": "LINE add/chat/QR targets exist without live send"
+      },
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "check_id": "existing_inquiry_path__roi-calculator__desktop-1440",
+      "check_type": "existing_inquiry_path",
+      "status": "passed",
+      "route": "/roi-calculator/",
+      "viewport": "desktop-1440",
+      "summary": "Existing inquiry/contact path remains present",
+      "details": {},
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "check_id": "console_errors_global_all",
+      "check_type": "console_errors",
+      "status": "passed",
+      "route": null,
+      "viewport": null,
+      "summary": "No browser console errors observed",
+      "details": {
+        "count": 0
+      },
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "check_id": "network_no_live_send_global_all",
+      "check_type": "network_no_live_send",
+      "status": "passed",
+      "route": null,
+      "viewport": null,
+      "summary": "No live send or write network request was performed",
+      "details": {},
+      "created_at": "2026-07-06T22:09:55+0700"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "unexpected_external_request_1783350569512",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569918",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569919",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569919",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569919",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569919",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569919",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350569920",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:29+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350575713",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576105",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576107",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576107",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576107",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576108",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576109",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350576109",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:36+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350581780",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582133",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582134",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582134",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582135",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582135",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582135",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350582135",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:42+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588259",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588550",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMCdYgR8BKUw.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588550",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588550",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588551",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqEsvM1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588551",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgR8BKU4cX.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588551",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1auJHeb0eXg.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "finding_id": "unexpected_external_request_1783350588551",
+      "severity": "warning",
+      "code": "UNEXPECTED_EXTERNAL_REQUEST",
+      "message": "Unexpected external read request observed during local review",
+      "evidence_ref": "https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHeb0eXn9q.woff2",
+      "created_at": "2026-07-06T22:09:48+0700"
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "screenshot_home-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/home-mobile-390.png",
+      "sha256": "50ccc618425fe5510f605a2b3282c0b31f69e45ee9c29c9bb36d411048520252",
+      "created_at": "2026-07-06T22:09:30+0700"
+    },
+    {
+      "artifact_id": "screenshot_line-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/line-mobile-390.png",
+      "sha256": "20bafbde50b2973982835c669a0bdf581751990ebdea1c1ac4c2ece468cd4265",
+      "created_at": "2026-07-06T22:09:31+0700"
+    },
+    {
+      "artifact_id": "screenshot_contact-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/contact-mobile-390.png",
+      "sha256": "fdc5545a954767c5b55058994880f6a9a513e76ebf4239a713f0d322f208f2f5",
+      "created_at": "2026-07-06T22:09:32+0700"
+    },
+    {
+      "artifact_id": "screenshot_projects-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/projects-mobile-390.png",
+      "sha256": "b4dfb1d6c7b369ab690972417b2055a96e3e15a0ac41f08f7ea89e69d9fd315b",
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "artifact_id": "screenshot_trust-center-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/trust-center-mobile-390.png",
+      "sha256": "0b316afe8fd2f7b4b99c83baab9def19c2ef7a642ce1d3cc59d90eeba23f908e",
+      "created_at": "2026-07-06T22:09:33+0700"
+    },
+    {
+      "artifact_id": "screenshot_quote-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/quote-mobile-390.png",
+      "sha256": "76999b1329f458c15aae3a5f640ac99c988a01361810c88f76a7e6cb15271fc2",
+      "created_at": "2026-07-06T22:09:34+0700"
+    },
+    {
+      "artifact_id": "screenshot_roi-calculator-mobile-390.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/roi-calculator-mobile-390.png",
+      "sha256": "636901520c57f56a5d50cbc09bf8bd26f9da024711f226408ba150b3a52822c5",
+      "created_at": "2026-07-06T22:09:35+0700"
+    },
+    {
+      "artifact_id": "screenshot_home-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/home-mobile-430.png",
+      "sha256": "354b963f931896ee729dd808b2677e2560d103866edae7f87cd096d0b6489649",
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "artifact_id": "screenshot_line-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/line-mobile-430.png",
+      "sha256": "db98e583395b094c5a5bf329c4ba5f57624f55104fc4169595844d00cd7c231d",
+      "created_at": "2026-07-06T22:09:37+0700"
+    },
+    {
+      "artifact_id": "screenshot_contact-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/contact-mobile-430.png",
+      "sha256": "a5b090dbbc289e2806a790d1fdf480d673168b8acec5dcc354f2c7da6c6412b8",
+      "created_at": "2026-07-06T22:09:38+0700"
+    },
+    {
+      "artifact_id": "screenshot_projects-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/projects-mobile-430.png",
+      "sha256": "14c3e0da45b028fb0004b5bc1d953626d76f6d79e40460bac1e0a009c18daa0a",
+      "created_at": "2026-07-06T22:09:39+0700"
+    },
+    {
+      "artifact_id": "screenshot_trust-center-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/trust-center-mobile-430.png",
+      "sha256": "ef5fb4d891e9568177810705342253a92f4718909b8f103cbdd71a0d7f67f0ac",
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "artifact_id": "screenshot_quote-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/quote-mobile-430.png",
+      "sha256": "118b29880bf006a70226f0ee14548c478e0aef10c15d9fb5f838dae749e8f9b9",
+      "created_at": "2026-07-06T22:09:40+0700"
+    },
+    {
+      "artifact_id": "screenshot_roi-calculator-mobile-430.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/roi-calculator-mobile-430.png",
+      "sha256": "5fe2a1bc63abc4885935a8220cc861bd32ec5bfd85a7323e80edb0d748e15fa8",
+      "created_at": "2026-07-06T22:09:41+0700"
+    },
+    {
+      "artifact_id": "screenshot_home-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/home-tablet-768.png",
+      "sha256": "b7bfa515cc0a5683793279cb4e07923561c5f2d6c41d28ca4906713937110032",
+      "created_at": "2026-07-06T22:09:43+0700"
+    },
+    {
+      "artifact_id": "screenshot_line-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/line-tablet-768.png",
+      "sha256": "55cf25fdf8fa9edf556cccbfab0b41a9fe7936e845dc726d8ee7e1b391f52aa1",
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "artifact_id": "screenshot_contact-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/contact-tablet-768.png",
+      "sha256": "763672fafc6e6e361f738f5d3c9810480cc98c9d3bc7c622ca73e1f2fd6ff410",
+      "created_at": "2026-07-06T22:09:44+0700"
+    },
+    {
+      "artifact_id": "screenshot_projects-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/projects-tablet-768.png",
+      "sha256": "339c9f10e7bfc059221175545e2d9a1f78f3b5b761c61444d31377770457ef8f",
+      "created_at": "2026-07-06T22:09:45+0700"
+    },
+    {
+      "artifact_id": "screenshot_trust-center-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/trust-center-tablet-768.png",
+      "sha256": "c36355f836bf15a3154cfed7bc38ab3711bcc3088aa068128857454ab5e33d05",
+      "created_at": "2026-07-06T22:09:46+0700"
+    },
+    {
+      "artifact_id": "screenshot_quote-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/quote-tablet-768.png",
+      "sha256": "e92d439497a913e54d57c8838964bea55f007bfcdcea3416353eb9bb6a17fff8",
+      "created_at": "2026-07-06T22:09:47+0700"
+    },
+    {
+      "artifact_id": "screenshot_roi-calculator-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/roi-calculator-tablet-768.png",
+      "sha256": "382885490f95e28321fcd539fefea23e6ca236012061839d1ba67a0944974c68",
+      "created_at": "2026-07-06T22:09:48+0700"
+    },
+    {
+      "artifact_id": "screenshot_home-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/home-desktop-1440.png",
+      "sha256": "8435810eb4e5168f9aae4966207583a3afd3cccf578a080e0631863aa117a61a",
+      "created_at": "2026-07-06T22:09:49+0700"
+    },
+    {
+      "artifact_id": "screenshot_line-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/line-desktop-1440.png",
+      "sha256": "4256dc9c9184600650a76c72836a64c174d443e11c735d92af3c6c458c54d76f",
+      "created_at": "2026-07-06T22:09:50+0700"
+    },
+    {
+      "artifact_id": "screenshot_contact-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/contact-desktop-1440.png",
+      "sha256": "31d7e183901662b9f4f4c9953d42269db3f2da47caa2eda1a51fb0c88030eb0b",
+      "created_at": "2026-07-06T22:09:51+0700"
+    },
+    {
+      "artifact_id": "screenshot_projects-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/projects-desktop-1440.png",
+      "sha256": "03d143b46394ecb2edc1da7dfb282a3ad2c32ba30afd5abefcf5fd390ead7ea2",
+      "created_at": "2026-07-06T22:09:52+0700"
+    },
+    {
+      "artifact_id": "screenshot_trust-center-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/trust-center-desktop-1440.png",
+      "sha256": "1a37ca1334fa1439734eefa1307b1b642d65fafde260a7ae43a57dbf1867666d",
+      "created_at": "2026-07-06T22:09:53+0700"
+    },
+    {
+      "artifact_id": "screenshot_quote-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/quote-desktop-1440.png",
+      "sha256": "0b15bf200b35356fc1bc12d44fdc3223fd4226b605beb35bdc45191b11d7d460",
+      "created_at": "2026-07-06T22:09:54+0700"
+    },
+    {
+      "artifact_id": "screenshot_roi-calculator-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/screenshots/roi-calculator-desktop-1440.png",
+      "sha256": "ff35bf348688c1bdd2ac8b8bfea5601fac98ccb554a9351a0f123075d885c357",
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "artifact_id": "log_console-events.json",
+      "artifact_type": "log",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/console/console-events.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "artifact_id": "network_network-events.json",
+      "artifact_type": "network",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/network/network-events.json",
+      "sha256": "4907fba04b2f25c3cb903edacdbf209484e4047fc81ac787e9526b931fe0a82a",
+      "created_at": "2026-07-06T22:09:55+0700"
+    },
+    {
+      "artifact_id": "json_auto_review_receipt.json",
+      "artifact_type": "json",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087/auto_review_receipt.json",
+      "sha256": "fce5e29703338497b58882c9b48a92a640504a8dfa9dd391d2aae60df6de988a",
+      "created_at": "2026-07-06T22:09:55+0700"
+    }
+  ],
+  "closed_gates": [
+    "deploy",
+    "push",
+    "line_webhook",
+    "production_analytics",
+    "crm_customer_data_storage",
+    "customer_data_collection",
+    "external_message_send",
+    "provider_call",
+    "paid_provider_call",
+    "public_tunnel",
+    "package_install",
+    "production_mutation",
+    "database_write_or_migration",
+    "secret_or_env_read"
+  ],
+  "next_safe_action": "Use a separate exact approval gate before deploy, push, cloud mutation, webhook activation, CRM storage, or live send.",
+  "receipt_path": "/Users/sirinx/sirinx-os/reports/review/p087/auto_review_receipt.json"
+}

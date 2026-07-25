@@ -1,0 +1,91 @@
+{
+  "task_id": "ghostclaw-test-debug-mode-20260630",
+  "correlation_id": "codex-local-safe-test-debug-20260630T103500+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "mode": "local_safe_test_debug",
+  "status": "verified_with_night_watch_warn",
+  "validations_run": [
+    {
+      "command": "python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v",
+      "status": "passed",
+      "evidence": "289 tests OK"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW focused suite",
+      "status": "passed",
+      "evidence": "15 files passed; 126 tests passed"
+    },
+    {
+      "command": "node scripts/verify-workspace.mjs",
+      "status": "passed",
+      "evidence": "ok=true"
+    },
+    {
+      "command": "node scripts/secret-scan.mjs",
+      "status": "passed",
+      "evidence": "ok=true; findings empty"
+    },
+    {
+      "command": "./node_modules/.bin/tsc -p GHOSTCLAW/a2a-hermes-codex-bridge/tsconfig.json --noEmit",
+      "status": "passed",
+      "evidence": "exit 0"
+    },
+    {
+      "command": "pnpm --filter @sirinx/solar-intelligence check",
+      "status": "passed",
+      "evidence": "tsc --noEmit exit 0"
+    },
+    {
+      "command": "pnpm --filter @sirinx/centerbrain-shell check",
+      "status": "passed",
+      "evidence": "Next.js build compiled successfully"
+    },
+    {
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs .ghostclaw_runtime/a2a2a/receipt/telegram_hermes_agent_ghostclaws_full_build_final.json",
+      "status": "passed",
+      "evidence": "ok=true; validation_count=29; required_artifact_count=63"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "evidence": "exit 0"
+    },
+    {
+      "command": "pnpm night-watch",
+      "status": "warn",
+      "evidence": ".hermes/logs/night-watch-latest.md reports Final Status WARN because local stack services are offline"
+    }
+  ],
+  "blocked_actions": [
+    "git_push",
+    "deploy",
+    "cloud_mutation",
+    "airtable_write",
+    "live_telegram_send",
+    "customer_send",
+    "secret_read",
+    "provider_or_model_call",
+    "external_repo_clone_install_execute",
+    "dns_change",
+    "production_action"
+  ],
+  "dirty_tree_reason": "branch is ahead of origin and worktree contains many modified/untracked files from overlapping GhostClaw and A2A lanes",
+  "night_watch_warning": {
+    "final_status": "WARN",
+    "offline_services": [
+      "dev-control-api",
+      "dev-dashboard",
+      "solar-intelligence",
+      "sirinx-site"
+    ],
+    "log_path": ".hermes/logs/night-watch-latest.md"
+  },
+  "report_path": "docs/knowledge/GHOSTCLAW_TEST_DEBUG_MODE_RUN_20260630.md",
+  "no_push": true,
+  "no_deploy": true,
+  "no_secret_access": true,
+  "no_provider_call": true,
+  "no_external_write": true,
+  "next_safe_action": "review dirty tree and approve one exact scoped commit/push/deploy target if needed"
+}

@@ -1,0 +1,58 @@
+# LangGraph Memory Configuration - All Coding Teams
+langgraph_memory:
+  enabled: true
+  vector_db: chroma
+  collection_name: sirinx_os_memory
+  persistence_path: ~/.hermes/profiles/solis/memory/langgraph.db
+
+# Phase 5A: Multi-Platform Environment Variable Mapper Integration
+platform_env_mapper:
+  darwin_arm64:
+    shell: zsh
+    path_style: posix
+    path_prefix: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin
+    gpu_profile: integrated
+    thermal_profile: laptop
+  win32-x64-x64:
+    shell: pwsh
+    path_style: windows
+    path_prefix: C:\Windows\System32;C:\Program Files\nodejs
+    line_endings: crlf
+  linux_x64:
+    shell: bash
+    path_style: posix
+    path_prefix: /usr/local/bin:/usr/bin:/bin
+
+# Telegram Telemetry Integration
+telegram_telemetry:
+  webhook_endpoint: /telegram-webhook
+  state_ingestion_node: telegram-gateway
+  validation:
+    chat_id_whitelist: []
+    tls_signature_required: true
+
+# GhostClaw P101 Baseline State
+project_identity: sirinx-os
+target_directory: /ghostclaw/P101
+active_lifecycle_phase: BASELINE
+system_infrastructure:
+  host_platform: mac_mini_m2_darwin
+  remote_target: pc_windows_nt_pwsh7
+  state_datastore: local_redis_node
+  edge_gateway: cloudflare_worker_v8
+distributed_locking_parameters:
+  project_mutex_key: ghostclaw-p101
+  active_client_identity: mac-m2-worker
+  lock_duration_ms: 60000
+cache_management:
+  last_known_cache_hit_ratio: 94.2%
+  rolling_memory_summary_token_count: 3140
+
+teams_integration:
+  - claude
+  - opencode
+  - codex
+
+github_repos:
+  - langchain-ai/langgraph-memory
+  - langchain-ai/langchain

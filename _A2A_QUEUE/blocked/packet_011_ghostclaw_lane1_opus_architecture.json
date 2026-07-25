@@ -1,0 +1,59 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.50268,
+  "message_id": "msg-packet_011_ghostclaw_lane1_opus_architecture",
+  "mission_id": "M-packet_011_ghostclaw_lane1_opus_architecture",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'id': 'packet_011', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Route LANE_1 Opus architect",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_011_ghostclaw_lane1_opus_architecture"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_011_ghostclaw_lane1_opus_architecture",
+    "mission_id": "M-packet_011_ghostclaw_lane1_opus_architecture",
+    "timestamp": "2026-07-17T01:20:15.661069+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'id': 'packet_011', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Route LANE_1 Opus architect",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_011_ghostclaw_lane1_opus_architecture"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.661075+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

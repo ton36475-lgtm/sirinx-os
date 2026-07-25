@@ -1,0 +1,46 @@
+{
+  "schema": "ghostclaw.latentmas.manifest.v1",
+  "plane": "latent",
+  "authority": "shadow",
+  "control_plane_authority": "json",
+  "json_control_plane_source_of_truth": true,
+  "latent_plane_shadow_only": true,
+  "safety_plane": "always_active",
+  "safety_policy_plane_final_authority": true,
+  "kv_required_fields": [
+    "model_id",
+    "model_revision",
+    "tokenizer_hash",
+    "config_hash",
+    "num_layers",
+    "hidden_size",
+    "num_attention_heads",
+    "num_key_value_heads",
+    "rope_scaling",
+    "dtype",
+    "quantization_mode",
+    "cache_schema_hash"
+  ],
+  "debug_probe_mode": "parallel_text_probe",
+  "decode_from_kv": false,
+  "debug_probe_uses_decode_from_kv": false,
+  "kv_only_protocol": false,
+  "kv_only_protocol_allowed": false,
+  "latent_bonus_default": 0,
+  "fallback_on_mismatch": "json_control_plane",
+  "claims_lock": {
+    "requires_local_benchmark": true,
+    "blocked_unverified_claims": [
+      "4.3x",
+      "83.7%",
+      "+13.3%"
+    ]
+  },
+  "status": "configured_not_live",
+  "LATENTMAS_LIVE_ENABLED": false,
+  "model_download_allowed": false,
+  "gpu_live_inference_allowed": false,
+  "provider_model_call_allowed": false,
+  "secret_access_allowed": false,
+  "timestamp": "2026-06-30T00:00:00Z"
+}

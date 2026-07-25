@@ -1,0 +1,39 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-002",
+    "correlation_id": "a2a-fable-v5-1721172801-12346",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator",
+      "role": "task-orchestrator"
+    },
+    "to": {
+      "agent": "claude-architect",
+      "role": "chief_architect"
+    },
+    "action_requested": "Create AI Backend Service",
+    "context": {
+      "goal": "Create complete FastAPI backend service at services/ai-backend/ with main.py, routers/chat.py, routers/retrieval.py, core/guardrails.py, and SQL schema",
+      "constraints": ["no deploy", "no git push", "dry-run first"],
+      "lane": "services/ai-backend",
+      "files": ["app/main.py", "app/routers/chat.py", "app/routers/retrieval.py", "app/core/guardrails.py"],
+      "deliverables": ["FastAPI service structure", "endpoint scaffolding", "guardrails implementation"],
+      "command_source": "frontier-generator"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T00:00:01.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P1",
+  "tier": "A"
+}

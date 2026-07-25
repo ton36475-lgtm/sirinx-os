@@ -1,0 +1,55 @@
+{
+  "cycle_id": "evo-20260717-172539",
+  "node": "local_mac_m2_core",
+  "timestamp": "2026-07-17T10:25:39.644069+00:00",
+  "levels": {
+    "L3_disk": {
+      "before_gb": 16.45,
+      "after_gb": 16.45,
+      "actions": [],
+      "critical": false
+    },
+    "L2_bridge": {
+      "converted": 0,
+      "skipped": 0,
+      "gateway_status": "DOWN",
+      "gateway_endpoint": "http://127.0.0.1:20128"
+    },
+    "L4_test": {
+      "passed": true,
+      "returncode": 0
+    }
+  },
+  "checkpoint": {
+    "node_identity": "local_mac_m2_core",
+    "timestamp": "2026-07-17T10:26:22.980526+00:00",
+    "epoch": 1784283982,
+    "processes": "node 537 localhost:18789\nnode 537 localhost:18789\npython3.1 942 localhost:9119\npython3.1 63321 localhost:8643\npython3.1 63321 *:8644\npython3.1 63321 *:8644\nnode 80830 localhost:8710\nnode 80848 localhost:8711\nnode 81132 *:3800",
+    "git": {
+      "head": "e81a5ed46670",
+      "branch": "migration/v5-rebase",
+      "dirty_files": 1
+    },
+    "a2a_queue": {
+      "inbox": 0,
+      "outbox": 0,
+      "done": 7,
+      "blocked": 31,
+      "approvals": 0
+    },
+    "disk_free_gb": 16.42,
+    "services": {
+      "skills-api": "up",
+      "dev-control": "up",
+      "omniroute": "down",
+      "hermes-gateway": "up"
+    }
+  },
+  "summary": {
+    "disk_gb": 16.45,
+    "disk_healthy": true,
+    "tests_passed": true,
+    "gateway": "DOWN",
+    "packets_converted": 0
+  }
+}

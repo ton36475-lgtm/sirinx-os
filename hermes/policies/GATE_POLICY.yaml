@@ -1,0 +1,65 @@
+policy_id: GHOSTCLAW_HERMES_COMMANDER_AUTOLOOP_V2_GATE_POLICY
+status: canonical_local_safe
+
+commander_role:
+  hermes_may:
+    - read_spec_queue
+    - dispatch_scoped_a2a_tasks
+    - supervise_child_processes
+    - collect_heartbeats
+    - advance_safe_states
+    - pause_specs_at_gates
+    - write_governance_receipts
+  hermes_must_never:
+    - write_feature_code_directly
+    - push
+    - deploy
+    - mutate_cloudflare_dns_r2_d1_kv_crm_or_prod_db
+    - read_or_print_secrets
+    - send_live_messages_outside_approval_handling
+    - approve_own_gates
+
+safe_actions:
+  - read_repo
+  - read_http
+  - write_reports
+  - plan_only
+  - review_only
+  - test_sandbox
+  - diff_summary
+  - write_leased_paths
+  - commit_local_after_human_decision
+
+block_always:
+  - deploy
+  - git_push
+  - dns_mutation
+  - cloudflare_mutation
+  - r2_write
+  - d1_write
+  - kv_write
+  - webhook_activation
+  - crm_write
+  - live_send_line
+  - live_send_telegram
+  - live_send_email
+  - secret_read
+  - secret_print
+  - rollback_execution
+  - production_db_migration
+  - governance_db_restore
+
+gate_actions:
+  - file_lease_approval
+  - human_decision
+  - push_deploy_manual
+  - governance_db_restore_manual
+
+invariants:
+  - specs_cannot_override_middleware
+  - every_write_requires_active_lease
+  - active_leases_cannot_overlap
+  - stalled_tasks_pause_for_human_review
+  - evidence_is_hash_chained
+  - push_deploy_live_send_secrets_stay_outside_autoloop
+

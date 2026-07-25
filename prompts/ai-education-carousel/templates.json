@@ -1,0 +1,117 @@
+{
+  "pack_id": "ai-education-carousel-clean-editorial-v1",
+  "status": "local_prompt_templates_only",
+  "language": "thai_first_with_english_support",
+  "style": "Clean Editorial AI Academy",
+  "template_count": 5,
+  "templates": [
+    {
+      "id": "carousel-01-ai-basics",
+      "title": "AI Basics Explainer",
+      "format": "square_carousel_1080",
+      "style_token_refs": ["warm_ivory", "deep_ink_navy", "cool_slate", "clean_cyan", "warm_coral", "muted_gold"],
+      "use_case": "Teach one beginner AI concept in 5 slides.",
+      "thai_headline_stub": "เข้าใจ AI ใน 5 สไลด์",
+      "english_headline_stub": "AI Basics in 5 Slides",
+      "prompt": "Design a clean editorial AI Academy carousel with warm ivory background, deep ink navy headline, cool slate body text, clean cyan diagram accents, warm coral emphasis marks, and muted gold slide numbers. Use generous margins, magazine-like hierarchy, clear Thai typography, simple line diagrams, and calm educational pacing. Leave editable text zones for Thai-first content.",
+      "layout_notes": [
+        "Slide 1: strong headline and simple visual metaphor",
+        "Slides 2-4: one idea per slide with diagram or checklist",
+        "Slide 5: recap and next learning action"
+      ],
+      "typography_notes": [
+        "Thai headline must be large and readable",
+        "Body text should use short lines",
+        "Avoid decorative Thai fonts"
+      ]
+    },
+    {
+      "id": "carousel-02-workflow",
+      "title": "AI Workflow Tutorial",
+      "format": "portrait_carousel_1080x1350",
+      "style_token_refs": ["warm_ivory", "deep_ink_navy", "cool_slate", "clean_cyan", "warm_coral", "muted_gold"],
+      "use_case": "Explain a practical AI workflow for operators.",
+      "thai_headline_stub": "Workflow ที่ทำซ้ำได้",
+      "english_headline_stub": "Repeatable AI Workflow",
+      "prompt": "Create a clean editorial tutorial carousel for an AI workflow. Use warm ivory canvas, deep ink navy titles, cool slate captions, clean cyan arrows, warm coral callouts, and muted gold step markers. Present trigger, input, processing, review, and output as a calm process map. Keep hierarchy readable on mobile and reserve safe areas for Thai copy.",
+      "layout_notes": [
+        "Slide 1: workflow promise",
+        "Slide 2: input map",
+        "Slide 3: step-by-step flow",
+        "Slide 4: review gate",
+        "Slide 5: checklist"
+      ],
+      "typography_notes": [
+        "Keep Thai words unbroken",
+        "Use clear contrast between headline and body",
+        "Use numbers for sequence clarity"
+      ]
+    },
+    {
+      "id": "carousel-03-second-brain",
+      "title": "Second Brain Lesson",
+      "format": "square_carousel_1080",
+      "style_token_refs": ["warm_ivory", "deep_ink_navy", "cool_slate", "clean_cyan", "warm_coral", "muted_gold"],
+      "use_case": "Turn research input into structured learning cards.",
+      "thai_headline_stub": "เปลี่ยนไฟล์ให้เป็นสมองที่ถามตอบได้",
+      "english_headline_stub": "Turn Files Into a Questionable Brain",
+      "prompt": "Design a calm education carousel about AI second brain setup. Use warm ivory background, deep ink navy headings, cool slate knowledge cards, clean cyan connector lines, warm coral highlights for warnings, and muted gold labels for modules. Show source, summary, card, SOP, and action as a clear editorial system diagram.",
+      "layout_notes": [
+        "Slide 1: knowledge problem",
+        "Slide 2: source organization",
+        "Slide 3: card extraction",
+        "Slide 4: SOP and course reuse",
+        "Slide 5: next action"
+      ],
+      "typography_notes": [
+        "Thai text must fit inside cards",
+        "Use short labels for diagrams",
+        "Avoid dense paragraphs"
+      ]
+    },
+    {
+      "id": "carousel-04-agent-safety",
+      "title": "Agent Safety Gate",
+      "format": "portrait_carousel_1080x1350",
+      "style_token_refs": ["warm_ivory", "deep_ink_navy", "cool_slate", "clean_cyan", "warm_coral", "muted_gold"],
+      "use_case": "Teach approval gates and safe AI agent operations.",
+      "thai_headline_stub": "Agent ที่ปลอดภัยต้องมี Gate",
+      "english_headline_stub": "Safe Agents Need Gates",
+      "prompt": "Create an editorial AI Academy carousel explaining safe agent approval gates. Use warm ivory pages, deep ink navy section titles, cool slate policy cards, clean cyan routing lines, warm coral warning labels, and muted gold level markers. Show read-only, low-risk write, public-facing, and sensitive actions as a simple tier ladder.",
+      "layout_notes": [
+        "Slide 1: why gates matter",
+        "Slide 2: read-only tier",
+        "Slide 3: low-risk write tier",
+        "Slide 4: public and sensitive tiers",
+        "Slide 5: operator checklist"
+      ],
+      "typography_notes": [
+        "Use consistent Thai labels for each tier",
+        "Keep warnings concise",
+        "Keep icon labels legible"
+      ]
+    },
+    {
+      "id": "carousel-05-business-automation",
+      "title": "Business Automation Offer",
+      "format": "square_carousel_1080",
+      "style_token_refs": ["warm_ivory", "deep_ink_navy", "cool_slate", "clean_cyan", "warm_coral", "muted_gold"],
+      "use_case": "Explain a business automation offer without hype.",
+      "thai_headline_stub": "ระบบงานที่เห็นภาพก่อนลงมือทำ",
+      "english_headline_stub": "Map the System Before Building",
+      "prompt": "Design a professional AI Academy carousel for business automation planning. Use warm ivory base, deep ink navy headlines, cool slate workflow panels, clean cyan connection lines, warm coral risk notes, and muted gold package markers. Present lead, form, CRM, quotation, approval, and follow-up as a clear non-hype system map.",
+      "layout_notes": [
+        "Slide 1: business problem",
+        "Slide 2: system map",
+        "Slide 3: data path",
+        "Slide 4: approval and safety",
+        "Slide 5: implementation checklist"
+      ],
+      "typography_notes": [
+        "No exaggerated claims",
+        "Keep Thai copy business-readable",
+        "Use neutral offer language"
+      ]
+    }
+  ]
+}

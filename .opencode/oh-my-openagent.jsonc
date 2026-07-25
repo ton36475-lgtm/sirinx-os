@@ -1,0 +1,72 @@
+{
+  "$schema": ".ghostclaw_runtime/github_intake/oh-my-opencode-lite/assets/oh-my-opencode.schema.json",
+  "agent_definitions": [],
+  "agent_order": [
+    "hermes-commander",
+    "opus-critic",
+    "codex-build-captain",
+    "glm52-worker",
+    "deepseek-worker",
+    "kimi-worker",
+    "gridguist-designer"
+  ],
+  "agents": {
+    "build": {
+      "fallback_models": [
+        {
+          "model": "kimi-k2.7-code",
+          "reasoningEffort": "high"
+        },
+        {
+          "model": "glm-5.2",
+          "reasoningEffort": "high"
+        },
+        {
+          "model": "deepseek-v4-pro",
+          "reasoningEffort": "high"
+        }
+      ],
+      "model": "codex-local"
+    },
+    "oracle": {
+      "fallback_models": [
+        "claude-opus-4.8",
+        "glm-5.2"
+      ],
+      "model": "gpt-5.5"
+    },
+    "review": {
+      "fallback_models": [
+        "gpt-5.5",
+        "deepseek-v4-pro"
+      ],
+      "model": "claude-opus-4.8"
+    }
+  },
+  "default_run_agent": "codex-build-captain",
+  "disabled_agents": [],
+  "disabled_commands": [
+    "init-deep",
+    "ralph-loop",
+    "ulw-loop",
+    "cancel-ralph",
+    "refactor",
+    "start-work",
+    "stop-continuation",
+    "remove-ai-slops",
+    "hyperplan"
+  ],
+  "disabled_hooks": [],
+  "disabled_mcps": [],
+  "disabled_providers": [],
+  "disabled_skills": [],
+  "disabled_tools": [],
+  "hashline_edit": false,
+  "mcp_env_allowlist": [],
+  "model_fallback": true,
+  "new_task_system_enabled": true,
+  "team_mode": {
+    "enabled": true,
+    "tmux_visualization": false
+  }
+}

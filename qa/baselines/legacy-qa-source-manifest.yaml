@@ -1,0 +1,13 @@
+schema_version: "sirinx.qa.legacy-source-manifest.v1"
+observed_at: "2026-07-23T12:46:59Z"
+observer: "codex-local"
+sources:
+  - path: "apps/sirinx-site/scripts/auto-review/auto-visual-bot-check.mjs"
+    sha256: "101ab7933d3e5692e6f821cabb0da49e7fba6ac6924e4e3b9dea65fd73a3a2f5"
+    observed_fact: "Implementation can emit baseline_initialized_needs_second_run."
+  - path: "schemas/auto_visual_bot_receipt.schema.json"
+    sha256: "3e9dbc32721f794a818d68fe6faf66374ab46839940546ece9ecd43de8f0e55d"
+    observed_fact: "Receipt verdict enum does not include baseline_initialized_needs_second_run."
+execution:
+  visual_bot_run: false
+  schema_runtime_validation: false

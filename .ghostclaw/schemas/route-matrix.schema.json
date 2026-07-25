@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schema.sirinx.io/ghostclaw/route-matrix",
+  "title": "GhostClaw Route Matrix",
+  "description": "Validates the route matrix YAML that defines task routing, agent assignments, and tier access within the SIRINX OS GhostClaw system.",
+  "type": "object",
+  "properties": {
+    "routes": {
+      "type": "array",
+      "description": "Map of task types to responsible agents, reviewers, architects, and validators.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "description": "Unique identifier for the route.",
+            "minLength": 1
+          },
+          "task_type": {
+            "type": "string",
+            "description": "Category of work this route handles.",
+            "enum": [
+              "repo_or_architecture",
+              "public_site_ui",
+              "creative_asset_prompt",
+              "business_automation",
+              "research_reverse_engineering",
+              "security_or_osint",
+              "model_router"
+            ]
+          },
+          "primary_agent": {
+            "type": "string",
+            "description": "Agent ID responsible for executing this task type.",
+            "minLength": 1
+          },
+          "reviewer_agent": {
+            "type": "string",
+            "description": "Agent ID responsible for reviewing output of this task type."
+          },
+          "architect_agent": {
+            "type": "string",
+            "description": "Agent ID responsible for architectural oversight of this task type."
+          },
+          "validator_agent": {
+            "type": "string",
+            "description": "Agent ID responsible for formal validation of this task type."
+          },
+          "smoke_test_agent": {
+            "type": "string",
+            "description": "Agent ID responsible for smoke testing output of this task type."
+          },
+          "tier": {
+            "type": "string",
+            "description": "Sensitivity or access tier required for this route.",
+            "enum": ["A", "B", "C", "D", "X"]
+          },
+          "constraints": {
+            "type": "array",
+            "description": "Operational constraints or conditions that apply to this route.",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "projects": {
+            "type": "array",
+            "description": "Project IDs that this route applies to. Empty means global applicability.",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": ["route_id", "task_type", "primary_agent", "tier"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["routes"],
+  "additionalProperties": false
+}

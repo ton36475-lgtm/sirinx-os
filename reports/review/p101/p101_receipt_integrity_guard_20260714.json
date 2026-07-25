@@ -1,0 +1,44 @@
+{
+  "schema": "ghostclaw.p101_receipt_integrity_guard.v1",
+  "packet_id": "P101_RECEIPT_INTEGRITY_GUARD_20260714",
+  "status": "READY_FOR_SCOPED_LOCAL_COMMIT",
+  "run_at": "2026-07-14T04:47:32+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "feat/sirinx-web-line-trust-v1",
+  "baseline_commit": "8d647e431ffa5e52586dfb8466bf87bc5cda277f",
+  "contract": {
+    "valid_receipts_preserved": true,
+    "malformed_lines_reported": true,
+    "empty_lines_reported": true,
+    "full_file_scanned_before_limit": true,
+    "append_only_source_mutated": false,
+    "engine_fails_closed_on_corruption": true
+  },
+  "validation": {
+    "cargo_fmt_check": "passed",
+    "cargo_clippy_offline_locked_deny_warnings": "passed",
+    "focused_corruption_tests": {
+      "status": "passed",
+      "tests": 2,
+      "failures": 0
+    },
+    "cargo_test_offline_locked": {
+      "status": "passed",
+      "tests": 189,
+      "failures": 0
+    },
+    "cargo_build_offline_locked": "passed",
+    "scoped_diff_check": "passed"
+  },
+  "blocked_actions_confirmed": {
+    "secret_access": true,
+    "provider_call": true,
+    "live_worker_execution": true,
+    "live_message_send": true,
+    "dependency_install": true,
+    "git_push": true,
+    "deploy": true,
+    "cloud_mutation": true
+  },
+  "next_gate": "SCOPED_LOCAL_COMMIT_P101_RECEIPT_INTEGRITY_GUARD"
+}

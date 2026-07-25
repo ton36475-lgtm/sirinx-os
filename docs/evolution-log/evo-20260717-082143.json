@@ -1,0 +1,49 @@
+{
+  "cycle_id": "evo-20260717-082143",
+  "timestamp": "2026-07-17T01:21:43.850180+00:00",
+  "checks": {
+    "disk": {
+      "free_gb": 16.0,
+      "critical": false,
+      "warning": false
+    },
+    "git": {
+      "uncommitted": 39,
+      "warning": true
+    },
+    "services": {
+      "skills-api": "up",
+      "dev-control": "up",
+      "omniroute": "up",
+      "hermes-gateway": "up"
+    },
+    "a2a_queue": {
+      "inbox": 29,
+      "outbox": 103,
+      "done": 0,
+      "blocked": 0,
+      "approvals": 5
+    },
+    "disk_after": {
+      "free_gb": 16.0,
+      "critical": false,
+      "warning": false
+    },
+    "tests": {
+      "passed": false,
+      "returncode": 126,
+      "output_tail": ".sh: /Users/sirinx/.hermes/hermes-agent/venv/bin/hermes: /Users/sirinx/.hermes/hermes-agent/venv/bin/python3: bad interpreter: No such file or directory\n ELIFECYCLE  Command failed with exit code 126."
+    }
+  },
+  "repairs": [],
+  "errors_found": [],
+  "proposals": [
+    {
+      "type": "test_failure",
+      "action": "investigate test failures",
+      "priority": "high",
+      "requires": "codex-captain"
+    }
+  ],
+  "mutations": []
+}

@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  # Data Ingestion (dry-run simulation)
+  firecrawl-sim:
+    image: node:22-alpine
+    command: >
+      sh -c "mkdir -p /data && 
+             echo '{\"status\":\"dry_run\",\"message\":\"Firecrawl simulation\"} > /data/health.json &&
+             npx serve /data -p 3002"
+    ports: ["3002:3002"]
+    labels:
+      - "ghostclaw.module=research"
+      - "ghostclaw.dry_run=true"
+
+  crawl4ai-sim:
+    image: python:3.12-alpine
+    command: >
+      sh -c "pip install --quiet http.server &&
+             mkdir -p /data &&
+             echo '{\"status\":\"dry_run\",\"message\":\"Crawl4AI simulation\"}' > /data/health.json &&
+             cd /data && python -m http.server 8080"
+    ports: ["8080:8080"]
+    labels:
+      - "ghostclaw.module=research"
+      - "ghostclaw.dry_run=true"
+
+  # Analytics & SEO (local simulation)
+  posthog-sim:
+    image: node:22-alpine
+    command: >
+      sh -c "mkdir -p /data &&
+             echo '{\"status\":\"dry_run\",\"feature_flag\":true}' > /data/health.json &&
+             npx serve /data -p 8000"
+    ports: ["8000:8000"]
+    labels:
+      - "ghostclaw.module=analytics"
+      - "ghostclaw.dry_run=true"
+
+  matomo-sim:
+    image: nginx:alpine
+    command: >
+      sh -c "mkdir -p /usr/share/nginx/html &&
+             echo 'matomo-sim dry-run ready' > /usr/share/nginx/html/index.html &&
+             nginx -g 'daemon off;'"
+    ports: ["8081:80"]
+    labels:
+      - "ghostclaw.module=analytics"
+      - "ghostclaw.dry_run=true"
+
+  serpbear-sim:
+    image: node:22-alpine
+    command: >
+      sh -c "mkdir -p /data &&
+             echo '{\"keywords\":[],\"status\":\"dry_run\"}' > /data/health.json &&
+             npx serve /data -p 3003"
+    ports: ["3003:3000"]
+    labels:
+      - "ghostclaw.module=seo"
+      - "ghostclaw.dry_run=true"
+
+networks:
+  default:
+    name: ghostclaw-infra

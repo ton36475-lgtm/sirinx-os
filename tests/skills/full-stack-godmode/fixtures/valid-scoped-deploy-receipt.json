@@ -1,0 +1,61 @@
+{
+  "schema": "sirinx.full-stack-godmode.receipt/v1",
+  "receipt_id": "RECEIPT-PREVIEW-001",
+  "task_id": "TASK-PREVIEW-001",
+  "status": "verified",
+  "claim": "A named preview worker deployment was authorized and observed.",
+  "scope": ["hermes-v5-worker", "preview"],
+  "observed_at": "2026-07-14T08:05:00Z",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "requirement": "Preview deployment maps to an exact unexpired task-specific gate.",
+      "verdict": "VERIFIED",
+      "evidence": "GATE-PREVIEW-001 and target-specific version evidence."
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "preview_version",
+      "path": "evidence/cloudflare/hermes-v5-worker-preview-version.json",
+      "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "observed_at": "2026-07-14T08:05:00Z"
+    }
+  ],
+  "validation": [
+    {
+      "command": "curl --fail https://hermes-v5-worker-preview.example.invalid/health",
+      "exit_code": 0,
+      "coverage": "Example target-specific preview health evidence; it does not prove production deployment."
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "GATE-PREVIEW-001",
+      "task_id": "TASK-PREVIEW-001",
+      "action": "deploy",
+      "target": "hermes-v5-worker preview",
+      "scope": "Cloudflare account acct-example, environment preview",
+      "exact_operation": "pnpm exec wrangler deploy --env preview --config services/orchestrator/wrangler.preview.toml",
+      "approved_by": "operator:sirinx",
+      "approved_at": "2026-07-14T08:00:00Z",
+      "expires_at": "2026-07-14T08:15:00Z"
+    }
+  ],
+  "external_actions": {
+    "secret_read": {"executed": false, "gate_id": null},
+    "install": {"executed": false, "gate_id": null},
+    "provider_call": {"executed": false, "gate_id": null},
+    "live_send": {"executed": false, "gate_id": null},
+    "push": {"executed": false, "gate_id": null},
+    "deploy": {
+      "executed": true,
+      "gate_id": "GATE-PREVIEW-001",
+      "target": "hermes-v5-worker preview",
+      "scope": "Cloudflare account acct-example, environment preview",
+      "exact_operation": "pnpm exec wrangler deploy --env preview --config services/orchestrator/wrangler.preview.toml"
+    }
+  },
+  "limitations": ["This fixture demonstrates schema validation only and is not evidence that a real deployment occurred."],
+  "next_safe_action": "Retain preview evidence separately from any production deployment decision."
+}

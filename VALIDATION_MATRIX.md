@@ -1,8 +1,22 @@
 # VALIDATION_MATRIX
 
-Date: 2026-05-20
+Date: 2026-06-28
 Mode: local validation matrix
 External writes: false
+
+## Pocket Hatchery Validation
+
+| Change type | Required checks |
+| --- | --- |
+| Pocket Hatchery schema/spec | `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_pocket_hatchery_v4` |
+| Pause/unpause | `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_pause_unpause` |
+| Public signer exposure | `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_public_signer_exposure` |
+| Queue packet shape | `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_queue_packet_shape` |
+| Risk classifier | `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_risk_classifier` |
+| Config integrity | `python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_config_integrity` |
+| Full suite | `python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v` |
+| Status report | `python3 WORKSPACE_SCAFFOLD/scripts/status_report.py --root .` |
+| Queue router | `python3 WORKSPACE_SCAFFOLD/scripts/queue_router.py --root .` |
 
 ## Purpose
 
@@ -29,6 +43,9 @@ Use this matrix to pick the minimum correct validation set for each SIRINX OS ta
 pnpm verify
 pnpm dashboard:e2e
 pnpm external-gates:check
+python3 -m unittest discover -s WORKSPACE_SCAFFOLD/tests -v
+python3 WORKSPACE_SCAFFOLD/scripts/status_report.py --root .
+python3 WORKSPACE_SCAFFOLD/scripts/queue_router.py --root .
 git diff --check
 ```
 

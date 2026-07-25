@@ -1,0 +1,9 @@
+{
+  "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "worker_name": "hermes-v5-worker",
+  "kv_bindings": ["HERMES_LEDGER", "IDEMPOTENCY_CACHE"],
+  "dry_run": true,
+  "approval_required": true,
+  "preview_url": "http://localhost:8787/preview",
+  "status": "ready_for_deploy"
+}

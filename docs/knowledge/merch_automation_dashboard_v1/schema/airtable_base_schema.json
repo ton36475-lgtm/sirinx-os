@@ -1,0 +1,535 @@
+{
+  "base_name": "Merch Automation Dashboard v1",
+  "import_mode": "manual_owner_import",
+  "live_sync": false,
+  "tables": [
+    {
+      "name": "niches",
+      "description": "Local planning table for niches",
+      "fields": [
+        {
+          "name": "niche_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "niche_name",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "audience",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "buyer_intent",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "gift_occasion",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "seasonality",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "demand_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "competition_gap_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "ip_safety_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "reusable_asset_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "total_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "design_pipeline",
+      "description": "Local planning table for design_pipeline",
+      "fields": [
+        {
+          "name": "design_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "niche_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "design_family",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "design_phrase",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "visual_style",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "product_fit",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "color_strategy",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "prompt_version",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "asset_path",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "created_at",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "updated_at",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "ip_policy_checks",
+      "description": "Local planning table for ip_policy_checks",
+      "fields": [
+        {
+          "name": "check_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "design_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "phrase_checked",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "trademark_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "copyright_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "celebrity_likeness_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "brand_confusion_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "sports_team_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "sensitive_content_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "keyword_spam_risk",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "risk_level",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "required_edits",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "final_decision",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "reviewer_notes",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "listing_drafts",
+      "description": "Local planning table for listing_drafts",
+      "fields": [
+        {
+          "name": "listing_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "design_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "product_type",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "title",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "brand",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "bullet_1",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "bullet_2",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "description",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "keyword_cluster",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "seo_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "policy_score",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "status",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "qc_reviews",
+      "description": "Local planning table for qc_reviews",
+      "fields": [
+        {
+          "name": "qc_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "design_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "spelling_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "readability_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "contrast_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "transparent_background_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "dpi_size_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "placement_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "duplicate_pattern_pass",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "final_qc_status",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "reject_reason",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "fix_notes",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "traffic_content",
+      "description": "Local planning table for traffic_content",
+      "fields": [
+        {
+          "name": "content_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "design_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "channel",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "language",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "content_angle",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "caption",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "short_video_hook",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "cta",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "publish_status",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "traffic_source_tag",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "sales_analytics",
+      "description": "Local planning table for sales_analytics",
+      "fields": [
+        {
+          "name": "analytics_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "design_id",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "upload_date",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "product_type",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "units_sold",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "royalty",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "external_traffic_flag",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "ad_spend",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "net_profit_estimate",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "iteration_decision",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "next_action",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "production_calendar",
+      "description": "Local planning table for production_calendar",
+      "fields": [
+        {
+          "name": "day",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "date_placeholder",
+          "type": "singleLineText",
+          "required": true
+        },
+        {
+          "name": "focus",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "niche_research_target",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "design_target",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "qc_target",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "listing_target",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "content_target",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "analytics_task",
+          "type": "singleLineText",
+          "required": false
+        },
+        {
+          "name": "completion_status",
+          "type": "singleLineText",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

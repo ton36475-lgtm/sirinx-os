@@ -1,100 +1,99 @@
 # PROJECT_STATE
 
-Date: 2026-05-20
+Date: 2026-07-17
+Last Update: POST-AUDIT-UNIFIED-SKILLS-20260717
 Repo: `/Users/sirinx/sirinx-os`
-Branch: `codex/urgent-backlog-execution`
+Branch: `migration/v5-rebase`
+HEAD: `1b2f3aa`
 Runtime mode: local control plane, dry-run only
 Canonical protocol: `AGENTS.md`
-Last verified baseline before Phase 0/1 file stack: `fc2ec47 feat: add repo extraction workstreams`
 
-## Current Truth
+## Current Verified State (2026-07-17T07:45+07:00)
 
-- `www.sirinx.co` remains the protected public company website.
-- Public website source is `/Users/sirinx/restore-sources/ton36475-lgtm-sirinx`.
-- Command Center source is this repo: `/Users/sirinx/sirinx-os`.
-- GitHub repo integration inventory is local-only through `GET /api/github-integration`.
-- Lead qualification is local-only through `GET /api/lead-health` and model `2026-05-20.lead-qualification.v2`.
-- Lead event audit preview is local-only through `GET /api/lead-event-audit` and `POST /api/lead-event-audit/preview`; it stores no raw contact values and performs no CRM/Supabase/production writes.
-- Lead CRM handoff comparison is local-only through `GET /api/lead-crm-contract`; database/CRM writes remain disabled.
-- Solar ops entity mapping from `sirinx-solar-energy` is local-only through `GET /api/solar-ops-contract`; it does not apply Supabase schema, copy mock PII, or deploy Cloudflare workers.
-- `oz-corp-omega-dual-node` safe-command and continuity-memory ideas are mapped as docs-only policy; no runtime command runner or worker is imported.
-- Policy decision status is local-only through `GET /api/policy-core` and engine `2026-05-20.policy-core.v1`.
-- Hermes inbox dry-run preview is local-only through `POST /api/hermes-inbox/dry-run`.
-- Hermes inbox `approval_required` decisions are queued locally in `GET /api/approval-queue`.
-- Approval queue evidence snapshots are local-only through `GET /api/approval-evidence` and `POST /api/approval-evidence/write`.
-- Pending work ledger is local-only through `GET /api/pending-work` and `pnpm pending-work:check`; it reports `hiddenBacklog=false`, strict gate order, and `externalWrites=false`.
-- Command Center displays Hermes inbox policy dry-run results through the `Policy Dry-Run Preview` panel.
-- Command Center displays lead event audit lane, risk flags, external handoff blocks, and evidence checklist inside the Lead Backend panel.
+### System Health
+- GhostClaw Tests: 84/84 PASS (pending re-verify)
+- Rust Compile: 0 errors
+- Skills API :3800: RUNNING
+- Dev Control API :8711: RUNNING
+- Hermes Gateway :8643-8644: RUNNING (PID 63321)
+- Auto-Loop: cron every 5m (active)
+- Cron Jobs: 9 active (auto-loop, disk-check, health-check, +6 more)
+- Hermes: v0.18.2, 12 profiles, solis active
+
+### Resources
+- Mac mini M2: 8GB RAM, arm64, macOS 26.5.2
+- Disk: 53% used (11GB free) — cleaned from 58%/8.8GB
+- Load avg: 4.14
+- Uptime: 4h+
+
+### CLI Tools
+- Codex: 0.144.5 (Rust) — `/Users/sirinx/.local/bin/codex`
+- Hermes: v0.18.2
+- Claude Code: 2.1.211
+- OpenCode: 1.17.11
+- Node: v26.0.0, pnpm: 9.0.0, Bun: 1.3.14
+
+### Unified Skills Registry
+- Total unique: 188 skills across 5 agents
+- Hermes: 143 (+13 synced from Codex = 156)
+- Codex: 59
+- Claude: 15
+- OpenCode: 7
+- GhostClaw: 7 (core, shared across ALL agents)
+- Shared 4+ agents: 7 (GhostClaw core)
+- Registry: `config/unified-skills-registry.json`
+- New skill: `telegram-approval-workflow` (automation)
+
+### A2A Queue (Post-Fix)
+- Inbox: 22 pending
+- Outbox: 103 sent
+- Done: 8 completed
+- Blocked: 0 (24 archived — bridge FIXED)
+- Approvals: 5 pending
+- Bridge status: FIXED (codex exec, hermes chat -q, correct flags)
+
+### Integrations
+- OmniRoute v3.8.48 — CLI ready, dev server OFFLINE (needs start)
+- Markdownify MCP — venv cleaned (needs reinstall for use)
+- Cynative v1.5.1 — binary ready (112MB)
+- ThaiMart K01-K15 — disabled_pending_contract
+
+### Security
+- No secrets in tracked files
+- .env ignored by git
+- PII masking in all logs
+- Dry-run only mode
+- No push, cloud mutation, or customer messaging without explicit human gate
+- No human gate bypass for any Tier C action
+- A2A bridge fixed (was using wrong CLI paths/flags)
+
+### Pending Work
+- P-101: Fix legacy tests
+- P-102: Wire OmniRoute as AI gateway (server offline)
+- P-103: Wire Markdownify MCP (venv cleaned, needs reinstall)
+- P-104: Cloudflare deploy prep
+- P-105: Dev Control API missing endpoints
+- P-106: Skills API serve skills as JSON
+- P-108: Security audit
+- NEW: Reinstall markdownify-mcp venv
+- NEW: Start OmniRoute dev server
+- NEW: Fix Cline (spawnSync error)
+
+### SRL Status
+- Mac Live Agent Studio: SRL-2
+- SIRINX OS overall: SRL-2
+- GhostClaw OS Core: SRL-2
+- Target: SRL-3 (dry-run integrated)
+
+### Safety Status
 - External writes remain blocked by default.
-- Release/handoff/live-start/known-issues docs are locked locally at root for future operators.
-- Root operating files are subordinate to `AGENTS.md`; if they conflict, the stricter safety rule applies.
+- No customer messaging bypassing the human gate
+- Dry-run only mode active across all integrations.
 
-## Services
-
-| Service | URL/Port | Status | External Writes | Notes |
-| --- | --- | --- | --- | --- |
-| dev-control-api | `http://127.0.0.1:8711` | local when `pnpm dashboard:run` is active | blocked | API reports `dryRunOnly=true` and `externalWrites=false`. |
-| dev-dashboard | `http://127.0.0.1:8710` | local when `pnpm dashboard:run` is active | blocked | Command Center UI for local review. |
-| public website | `https://www.sirinx.co` | production site, protected | approval required | Do not change from this repo without exact public-site task. |
-| Hermes gateway | local runtime | readable through external gate check | approval required for messages | Pairing/send gates remain manual. |
-| Solis telemetry | not active | blocked | blocked | Requires consent, credential storage, and station mapping. |
-
-## Current Gates
-
-| Gate | Status | Evidence | Next Action |
-| --- | --- | --- | --- |
-| Codex Mobile QR/MFA | blocked manual | `docs/knowledge/external-gates/evidence/codex-mobile-qr-mfa.md` expected | Human operator pairs Mac host with phone. |
-| SIRINX OS GitHub publish | blocked remote/PR target | `docs/knowledge/external-gates/evidence/sirinx-os-github-publish.md` expected | Record owner/repo, remote URL, branch, base branch, PR text, and rollback before any push/PR. |
-| Telegram/LINE | blocked credential/recipient | evidence template under `docs/knowledge/external-gates/evidence/` | Confirm recipient/channel and rotate/store token before smoke send. |
-| Solis API | blocked consent/credential | evidence template under `docs/knowledge/external-gates/evidence/` | Confirm consent, read-only credentials, and station mapping. |
-| Cloudflare Bot Management | optional official review | current CSP mitigation documented | Review dashboard/API rule only if replacing CSP mitigation. |
-
-## Current Integration Workstreams
-
-| Workstream | Status | Source |
-| --- | --- | --- |
-| GitHub repo inventory | done local | `services/dev-control-api/src/github-integration.mjs` |
-| Solar ops extraction | contract locked | `SIRINX_SOLAR_OPS_EXTRACTION_PLAN_2026-05-20.md`, `SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md` |
-| Agent runtime extraction | docs locked | `SIRINX_AGENT_RUNTIME_EXTRACTION_PLAN_2026-05-20.md` |
-| Safe command and memory policy | docs locked | `SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md` |
-| Marketing/CRM schema comparison | contract locked | `SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md`, `SIRINX_LEAD_CRM_HANDOFF_CONTRACT_2026-05-20.md` |
-| Lead qualification v2 | done local | `services/dev-control-api/src/lead-qualification.mjs` |
-| Lead event audit preview | done local | `services/dev-control-api/src/lead-event-audit.mjs`, `GET /api/lead-event-audit` |
-| Lead audit Command Center view | done local | `apps/dev-dashboard/src/app.js`, `apps/dev-dashboard/src/index.html` |
-| Lead CRM handoff contract | done local | `services/dev-control-api/src/lead-crm-contract.mjs`, `GET /api/lead-crm-contract` |
-| Solar ops entity contract | done local | `services/dev-control-api/src/solar-ops-contract.mjs`, `GET /api/solar-ops-contract` |
-| policy-core v1 | done local | `packages/policy-core/src/index.mjs`, `GET /api/policy-core` |
-| Hermes inbox contract | design locked | `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md` |
-| Hermes inbox dry-run normalizer | done local | `services/hermes-api/src/inbox.mjs`, `POST /api/hermes-inbox/dry-run` |
-| Approval evidence snapshots | done local | `services/dev-control-api/src/approval-evidence.mjs`, `pnpm approval-evidence:dry-run` |
-| Pending work ledger | done local | `services/dev-control-api/src/pending-work.mjs`, `GET /api/pending-work`, `pnpm pending-work:check` |
-| Hermes external adapters | blocked | connector evidence required before any adapter execution |
-
-## Verification Commands
-
-Use these before commit-ready status:
-
-```bash
-pnpm verify
-pnpm exec vitest run services/dev-control-api/src/lead-qualification.test.mjs
-pnpm lead-event-audit:test
-pnpm lead-crm-contract:test
-pnpm solar-ops-contract:test
-pnpm policy-core:test
-pnpm policy-core:api-test
-pnpm hermes-inbox:test
-pnpm approval-evidence:test
-pnpm pending-work:test
-pnpm pending-work:check
-pnpm dashboard:e2e
-pnpm external-gates:check
-git diff --check
-```
-
-## Stop Rules
-
-- Stop before deploy, DNS route, Cloudflare write, database migration, GitHub push, Telegram/LINE send, Solis API use, or production lead creation unless exact approval exists.
-- Do not read `.env` values.
-- Do not read or copy keystore/signing material.
-- Do not write raw chat logs into memory.
-- Do not treat this file as permission to bypass `AGENTS.md`.
+### Stop Rules
+- STOP on repeated failure (3+ consecutive task failures)
+- STOP on cost budget exceeded ($5/goal default)
+- STOP on safety scan failure (secret/PII detected)
+- STOP on missing approval for Tier C action
+- STOP on disk space <5GB
+- STOP on RAM pressure >90%

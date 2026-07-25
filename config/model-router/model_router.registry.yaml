@@ -1,0 +1,148 @@
+# MaxPlus-AI Dedicated Provider Configuration Matrix
+version: "2026.SIRINX.AUTOLOOP"
+
+providers:
+  maxplus-free:
+    type: "openai_compatible"
+    base_url: "https://api.maxplus-ai.cc/v1"
+    api_key_env: "MAXPLUS_API_KEY_1"
+    api_key_pools:
+      - "MAXPLUS_API_KEY_1"
+      - "MAXPLUS_API_KEY_2"
+    default_headers:
+      X-Sovereign-Node: "Phitsanulok-MacMini-Node1"
+      X-Fleet-Scope: "SIRINX_ALL_PROJECTS"
+
+models:
+  deepseek-v4-pro:
+    provider: "maxplus-free"
+    model: "maxplus-free/deepseek-v4-pro"
+    role: "primary_free_coder"
+    context_length: 1000000
+    capabilities: [reasoning, tool_call, code_generation]
+    free_tier: true
+    priority: 1
+
+  glm-5.2:
+    provider: "maxplus-free"
+    model: "maxplus-free/glm-5.2"
+    role: "planning_assistant"
+    context_length: 1000000
+    capabilities: [reasoning, function_call]
+    free_tier: true
+    priority: 2
+
+  kimi-k2.7-code:
+    provider: "maxplus-free"
+    model: "maxplus-free/kimi-k2.7-code"
+    role: "long_context_processor"
+    context_length: 262144
+    capabilities: [tool_call, code_generation]
+    free_tier: true
+    priority: 3
+
+  moonshot-v1-128k-kimi3:
+    provider: "maxplus-free"
+    model: "maxplus-free/moonshot-v1-128k"
+    role: "chinese_model_pool"
+    context_length: 128000
+    capabilities: [reasoning, tool_call, code_generation, multilingual_chinese]
+    free_tier: true
+    priority: 4
+    tags: [chinese, kimi3, moonshot, cn_model_pool]
+
+  moonshot-kimi-2.7:
+    provider: "maxplus-free"
+    model: "maxplus-free/moonshot-v1-256k"
+    role: "ultra_long_context"
+    context_length: 256000
+    capabilities: [reasoning, function_call, long_context, chinese_optimized]
+    free_tier: true
+    priority: 5
+    tags: [chinese, kimi3, moonshot, cn_model_pool]
+
+escalation_chain:
+  - maxplus-free/deepseek-v4-pro
+  - opencode/deepseek-v4-flash-free
+  - maxplus-free/glm-5.2
+  - openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
+
+budget_guard:
+  mode: "free_first"
+  max_task_budget_usd: 2.00
+  escalation_threshold_usd: 0.50
+  hard_stop_usd: 5.00
+  auto_escalate_on_failure: true
+
+# ============================================================================
+# MaxPlus Claude CoWork — HI-END SPECIAL POOL
+# Added 2026-07-21 (solis) per user request.
+# Rate 7.5x / max discount 6.3x = premium Claude channel for Claude CoWork.
+# NOTE: api_key_env references only — NO secrets written here (AGENTS.md rule).
+# User must supply real MAXPLUS_API_KEY_CLAUDE_* values + real model IDs.
+# ============================================================================
+providers:
+  maxplus-claude-hiend:
+    type: "openai_compatible"
+    base_url: "https://api.maxplus-ai.cc/v1"
+    api_key_env: "MAXPLUS_API_KEY_CLAUDE_1"
+    api_key_pools:
+      - "MAXPLUS_API_KEY_CLAUDE_1"
+      - "MAXPLUS_API_KEY_CLAUDE_2"
+      - "MAXPLUS_API_KEY_CLAUDE_3"
+    default_headers:
+      X-Sovereign-Node: "Phitsanulok-MacMini-Node1"
+      X-Fleet-Scope: "SIRINX_ALL_PROJECTS"
+      X-Pool-Tier: "hiend-claude"
+    # Pricing semantics per user spec:
+    #   rate_multiplier 7.5x  = premium channel cost factor
+    #   discount_max    6.3x  = max achievable discount (i.e. pay as low as 1/6.3)
+    pricing:
+      rate_multiplier: 7.5
+      discount_max: 6.3
+      billing_currency: "USD"
+
+models:
+  claude-opus-hiend:
+    provider: "maxplus-claude-hiend"
+    model: "maxplus-hiend/claude-opus-4-20250514"   # FILL REAL MaxPlus model ID
+    role: "claude_cowork_hiend_primary"
+    context_length: 200000
+    capabilities: [reasoning, tool_call, code_generation, vision, agentic]
+    free_tier: false
+    priority: 6
+    pricing:
+      rate_multiplier: 7.5
+      discount_max: 6.3
+    tags: [claude, coworks, hiend, premium]
+
+  claude-sonnet-hiend:
+    provider: "maxplus-claude-hiend"
+    model: "maxplus-hiend/claude-sonnet-4-20250514" # FILL REAL MaxPlus model ID
+    role: "claude_cowork_hiend_fast"
+    context_length: 200000
+    capabilities: [reasoning, tool_call, code_generation, agentic]
+    free_tier: false
+    priority: 7
+    pricing:
+      rate_multiplier: 7.5
+      discount_max: 6.3
+    tags: [claude, coworks, hiend, fast]
+
+# Claude CoWork special pool registered for routing awareness
+pools:
+  claude_cowork_hiend:
+    provider: "maxplus-claude-hiend"
+    models: [claude-opus-hiend, claude-sonnet-hiend]
+    rate_multiplier: 7.5
+    discount_max: 6.3
+    use_case: "high_stakes_agentic_coding_claude_cowork"
+    human_approval_required: true   # premium paid channel — gate per AGENTS.md A5/A6
+
+# Append hi-end Claude to escalation chain as top-tier fallback (paid, gated)
+escalation_chain:
+  - maxplus-free/deepseek-v4-pro
+  - opencode/deepseek-v4-flash-free
+  - maxplus-free/glm-5.2
+  - openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
+  - maxplus-hiend/claude-opus-4-20250514   # gated premium fallback

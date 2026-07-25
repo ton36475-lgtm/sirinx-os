@@ -1,0 +1,104 @@
+{
+  "packet_id": "P091S_RESTORE_ORIGINAL_SOLAR_CARPORT_PAGE_WITH_LINE_CTA",
+  "status": "P091S_ORIGINAL_SOLAR_CARPORT_RESTORE_READY_FOR_REVIEW",
+  "run_at": "2026-07-07T03:29:24+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "mode": "LOCAL_PATCH_ONLY_NO_DEPLOY",
+  "scope": "apps/sirinx-site",
+  "objective": "Restore the original Solar Carport page and add only LINE entry points without replacing it with the company-facing SIRINX operating-system page.",
+  "source": {
+    "repo": "/Users/sirinx/restore-sources/ton36475-lgtm-sirinx",
+    "commit": "15799844a0ce41ad33717cf0c2f09ce8a725596e",
+    "files": [
+      "/Users/sirinx/restore-sources/ton36475-lgtm-sirinx/client/src/pages/Home.tsx",
+      "/Users/sirinx/restore-sources/ton36475-lgtm-sirinx/client/src/components/HeroSlideshow.tsx",
+      "/Users/sirinx/restore-sources/ton36475-lgtm-sirinx/client/src/i18n/pages/home.ts"
+    ]
+  },
+  "restored_markers": [
+    "Solar Carport",
+    "เปลี่ยนที่จอดรถ",
+    "เป็นโรงไฟฟ้าพลังงานแสงอาทิตย์",
+    "ออกแบบเฉพาะทาง รับน้ำหนักลม-ฝน",
+    "อายุใช้งาน 25+ ปี",
+    "นัดสำรวจหน้างานฟรี",
+    "ดูโซลูชันทั้งหมด",
+    "99.5% System Uptime"
+  ],
+  "line_cta": {
+    "button_copy": "เพิ่มเพื่อน LINE",
+    "support_copy": "ส่งบิลค่าไฟ รูปพื้นที่ หรือคำถามโครงการผ่าน LINE Official: @304zrttj",
+    "route": "/line",
+    "live_send_performed": false,
+    "webhook_activation_performed": false
+  },
+  "changed_files": [
+    "apps/sirinx-site/public/_redirects",
+    "apps/sirinx-site/src/index.html",
+    "apps/sirinx-site/src/styles.css",
+    "apps/sirinx-site/scripts/server.test.mjs",
+    "apps/sirinx-site/tests/line-integration.spec.ts",
+    "reports/review/p087b/auto_visual_bot_receipt.json",
+    "reports/review/p087b/auto_visual_bot_result.json",
+    "reports/review/p087b/lighthouse.json",
+    "reports/review/p087b/network_events.json",
+    "reports/review/p087b/screenshots/home-desktop-1440.png",
+    "reports/review/p087b/screenshots/home-mobile-375.png",
+    "reports/review/p087b/screenshots/home-mobile-414.png",
+    "reports/review/p087b/screenshots/home-tablet-768.png",
+    "reports/mission/A2A2A_P091S_RESTORE_MAIN_PAGE_LINE_CTA_20260707.md",
+    "reports/review/p091s/main_restore_line_cta_receipt.json"
+  ],
+  "validation": {
+    "pnpm_filter_site_test_server": "passed_4_tests",
+    "pnpm_filter_site_test_line": "passed_110_tests",
+    "pnpm_filter_site_build": "passed",
+    "secret_scan": "passed_no_findings",
+    "scoped_git_diff_check": "passed",
+    "full_git_diff_check": "blocked_unrelated_readme_trailing_whitespace"
+  },
+  "p087b_auto_visual_bot": {
+    "verdict": "auto_review_blocked_findings_attached",
+    "visual_regression": {
+      "status": "failed_expected_baseline_decision_needed",
+      "failed_route": "/",
+      "failed_viewports": [
+        "mobile-375",
+        "mobile-414",
+        "tablet-768",
+        "desktop-1440"
+      ],
+      "reason": "intentional full-page restore no longer matches old homepage baseline"
+    },
+    "broken_links": 0,
+    "a11y": "passed",
+    "console_errors": "passed",
+    "mobile_overlap": "passed",
+    "lighthouse_scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "seo": 100,
+      "best_practices": 96
+    },
+    "seo_meta": "passed",
+    "form_dry_run": "passed_no_submit",
+    "cross_browser": "passed",
+    "local_preview_ports_closed": [
+      18741,
+      18742
+    ]
+  },
+  "blocked_actions_confirmed": [
+    "deploy",
+    "git_push",
+    "cloudflare_r2_d1_kv_dns_mutation",
+    "line_webhook_activation",
+    "crm_customer_storage_write",
+    "live_telegram_line_email_customer_send",
+    "provider_model_call",
+    "secret_read_print",
+    "broad_dirty_tree_cleanup",
+    "visual_baseline_update"
+  ],
+  "next_safe_action": "OpenCode or human visual review of restored Solar Carport screenshots and explicit baseline decision; deploy remains a separate exact gate."
+}

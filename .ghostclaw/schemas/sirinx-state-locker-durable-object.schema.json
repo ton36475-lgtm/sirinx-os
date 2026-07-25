@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sirinx-state-locker-durable-object.schema.json",
+  "title": "SIRINX State Locker - Durable Object Schema",
+  "description": "Distributed mutex lock protocol for cross-platform file mutation safety",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["LOCKED", "DENIED", "RELEASED", "AVAILABLE", "ERROR"],
+      "description": "Lock operation result status"
+    },
+    "owner": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128,
+      "description": "Lock owner identifier (e.g., mac-m1-worker, pc-x86-worker)"
+    },
+    "expires_in_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 300000,
+      "description": "Lock TTL remaining"
+    },
+    "message": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Human-readable status message"
+    },
+    "is_locked": {
+      "type": "boolean",
+      "description": "Current lock state"
+    },
+    "current_owner": {
+      "type": ["string", "null"],
+      "maxLength": 128,
+      "description": "Current lock owner or null if unlocked"
+    },
+    "time_left_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 300000,
+      "description": "Time until lock expires (0 if unlocked)"
+    }
+  }
+}

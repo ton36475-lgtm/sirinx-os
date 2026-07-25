@@ -1,10 +1,10 @@
 # GHOSTCLAW Hermes Commander A2A2A OS v2.0
 ## Master Architecture
 
-**Status:** ACTIVE — Phase 1 Boot
+**Status:** ACTIVE - Phase 1 LANE_0 complete locally, LANE_1 ready
 **Repository:** `/Users/sirinx/sirinx-os`
 **Runtime:** `.thclaws/` (GHOSTCLAW core) + Hermes Agent (Mission Commander)
-**Last Updated:** 2026-06-27
+**Last Updated:** 2026-06-29
 
 ---
 
@@ -395,10 +395,10 @@ pnpm ghostclaw:validate
 
 | Gate | Status | Next |
 |---|---|---|
-| Master Architecture | ✅ Created | Agent Cards |
-| Agent Cards | ⏳ Pending | Build |
-| A2A2A Protocol | ⏳ Pending | Build |
-| Fleet Orchestrator | ⏳ Pending | Build |
-| Command Broker | ⏳ Pending | Build |
-| Brain Update | ⏳ Pending | Build |
-| Live Integration Test | ⏳ Pending | After build |
+| Master Architecture | DONE_LOCAL | Agent Cards |
+| Agent Cards | DONE_LOCAL | Architecture packet |
+| A2A2A Protocol | DONE_LOCAL | Architecture packet |
+| Fleet Orchestrator | DONE_LOCAL | Architecture packet |
+| Command Broker | DONE_LOCAL | Architecture packet |
+| Brain Update | DONE_LOCAL_PREFLIGHT | Formal LANE_6 after LANE_5 |
+| Live Integration Test | BLOCKED | Requires later build lane and approval |

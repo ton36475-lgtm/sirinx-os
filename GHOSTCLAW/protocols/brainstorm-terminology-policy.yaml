@@ -1,0 +1,80 @@
+# Brainstorm Terminology Policy
+# Part of: GHOSTCLAW LatentMAS x A2A2A integration
+
+terminology_policy:
+  version: "1.0"
+  status: active
+  owner: hermes
+  correlation_id: corr_codex_latent_r0r1r2_001
+
+  canonical_term: brainstorm
+  deprecated_aliases:
+    - beststorm
+  invalid_typos:
+    - beststrom
+
+  emit_only_canonical: true
+
+  compatibility:
+    inbound:
+      accept_canonical: true
+      accept_deprecated_aliases: true
+      reject_invalid_typos: true
+      normalize_deprecated_aliases_to: brainstorm
+      log_alias_normalization: true
+    outbound:
+      emit_canonical_only: true
+      emit_deprecated_aliases: false
+      emit_invalid_typos: false
+
+  field_policy:
+    canonical_fields:
+      - brainstorm_id
+      - moa_gated_brainstorm
+    deprecated_alias_fields:
+      beststorm_id: brainstorm_id
+      moa_gated_beststorm: moa_gated_brainstorm
+    invalid_fields:
+      - beststrom_id
+      - moa_gated_beststrom
+
+  moa_naming:
+    gated_field: moa_gated_brainstorm
+    summary_field: moa_summary
+    rule: "MoA outputs may summarize consensus, but only moa_gated_brainstorm may carry gated brainstorm approval data."
+
+  moa_gate_contract:
+    reference_votes_required: true
+    references:
+      ref_A_safety_risk:
+        focus: safety_risk
+        safety_disagreement_hard_veto: true
+      ref_B_speed_cost:
+        focus: speed_cost
+      ref_C_correctness_proof:
+        focus: correctness_proof
+    aggregator: hermes
+    consensus_threshold: 0.67
+    aggregator_certainty_required: true
+    moa_score_confidence_signal_only: true
+    policy_gate_override_allowed: false
+    recursive_moa_launch_allowed: false
+
+  enforcement:
+    json_control_plane_authority: true
+    latent_plane_authority: false
+    reject_on_invalid_typo: true
+    block_external_action_on_terminology_error: true
+    safety_disagreement_hard_veto: true
+    action_tier_cap_final_authority: true
+
+  claim_lock:
+    requires_local_benchmark_for_performance_claims: true
+    blocked_unverified_claims:
+      - "4.3x"
+      - "83.7%"
+      - "+13.3%"
+
+  debug_probe:
+    mode: parallel_text_probe
+    decode_from_kv: false

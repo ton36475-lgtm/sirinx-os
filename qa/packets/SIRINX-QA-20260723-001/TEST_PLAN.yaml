@@ -1,0 +1,54 @@
+schema_version: "sirinx.qa.test-plan.v1"
+run_id: "SIRINX-QA-20260723-001"
+mode: "AUDIT_ONLY"
+status: "PLANNED_NOT_AUTHORIZED"
+tests_planned: 0
+tests_executed: 0
+execution_authorized: false
+target:
+  path: "apps/sirinx-site"
+  build_id: null
+safe_test_boundary:
+  form_mode: "UNRESOLVED_DENY"
+  api_mode: "UNRESOLVED_DENY"
+  analytics_mode: "UNRESOLVED_DENY"
+  line_mode: "DENY_LIVE_WRITE"
+  real_recipients: "DENY"
+  external_network: "DENY"
+  local_artifact_output_allowlist: []
+planned_waves:
+  - id: "W0"
+    name: "Scope lock"
+    state: "BLOCKED"
+  - id: "W1"
+    name: "Read-only discovery"
+    state: "NOT_STARTED"
+  - id: "W2"
+    name: "Test planning"
+    state: "NOT_STARTED"
+  - id: "W3"
+    name: "Safe execution"
+    state: "BLOCKED"
+  - id: "W4"
+    name: "Independent review"
+    state: "BLOCKED"
+  - id: "W5"
+    name: "Gate and receipt"
+    state: "BLOCKED"
+future_commands_not_executed:
+  - "pnpm --filter @sirinx/site build"
+  - "pnpm --filter @sirinx/site check"
+  - "pnpm --filter @sirinx/site test:release-readiness"
+  - "pnpm --filter @sirinx/site test:public-guardian"
+  - "pnpm --filter @sirinx/site test:auto-visual-bot"
+  - "pnpm --filter @sirinx/site test:roi-claims"
+  - "pnpm --filter @sirinx/site test:server"
+  - "pnpm --filter @sirinx/site test:line"
+stop_conditions:
+  - "target_identity_drift"
+  - "policy_plan_or_scope_digest_mismatch"
+  - "secret_boundary"
+  - "unapproved_local_artifact_write"
+  - "network_or_external_write_attempt"
+  - "missing_safe_test_adapter"
+  - "unknown_data_class"

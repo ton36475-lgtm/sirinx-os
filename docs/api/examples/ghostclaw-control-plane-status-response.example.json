@@ -1,0 +1,93 @@
+{
+  "contract_id": "ghostclaw-control-plane-status-v1",
+  "status": "ready",
+  "mode": "read_only_control_plane_status",
+  "dry_run": true,
+  "live_execution": false,
+  "projects": [
+    {
+      "project_id": "project-sirinx-core",
+      "name": "SIRINX Core OS",
+      "slug": "sirinx-core",
+      "focus_state": "active",
+      "status": "architecture_ready",
+      "public_domain": null,
+      "private_domain": "dev.sirinx.co"
+    },
+    {
+      "project_id": "project-agm-autoflow",
+      "name": "AGM AutoFlow",
+      "slug": "agm-autoflow",
+      "focus_state": "active",
+      "status": "local_safe_build_lane",
+      "public_domain": null,
+      "private_domain": null
+    }
+  ],
+  "missions": [
+    {
+      "mission_id": "mission-control-plane-contract",
+      "project_slug": "sirinx-core",
+      "title": "Define control-plane status API contract",
+      "action_tier": "A",
+      "status": "contract_ready",
+      "priority": 1,
+      "correlation_id": "P103-20260705"
+    }
+  ],
+  "packets": [
+    {
+      "packet_id": "P103_API_CONTRACT_FOR_CONTROL_PLANE_STATUS",
+      "mission_id": "mission-control-plane-contract",
+      "lane": "api_contract",
+      "status": "ready_for_review",
+      "dry_run": true,
+      "live_execution": false,
+      "next_action": "P104_CONTROL_PLANE_STATUS_HANDLER_LOCAL_FIXTURE_ONLY",
+      "artifact_path": "docs/api/GHOSTCLAW_CONTROL_PLANE_STATUS_API_CONTRACT_20260705.md"
+    }
+  ],
+  "approval_gates": [
+    {
+      "gate_code": "P104_HANDLER_IMPLEMENTATION_LOCAL_FIXTURE_ONLY",
+      "mission_id": "mission-control-plane-contract",
+      "action_type": "local_handler_implementation",
+      "status": "pending",
+      "risk_level": "low",
+      "rollback_plan_path": null
+    }
+  ],
+  "receipts": [
+    {
+      "receipt_id": "receipt-p103-contract",
+      "status": "written",
+      "artifact_path": "reports/mission/A2A2A_P103_CONTROL_PLANE_STATUS_API_CONTRACT_20260705.md",
+      "artifact_sha256": null,
+      "redaction_status": "redacted_or_no_sensitive_data"
+    }
+  ],
+  "dashboard": {
+    "active_project_count": 2,
+    "active_mission_count": 1,
+    "pending_approval_count": 1,
+    "active_packet_id": "P103_API_CONTRACT_FOR_CONTROL_PLANE_STATUS",
+    "next_safe_action": "P104 local fixture-backed handler only",
+    "warnings": [
+      "database_migration_blocked",
+      "live_execution_blocked"
+    ]
+  },
+  "guardrails": {
+    "read_only": true,
+    "worker_execution": false,
+    "live_telegram_send": false,
+    "provider_call": false,
+    "secret_read": false,
+    "install": false,
+    "push": false,
+    "deploy": false,
+    "cloudflare_r2_mutation": false,
+    "database_migration": false
+  },
+  "updated_at": "2026-07-05T16:35:00+07:00"
+}

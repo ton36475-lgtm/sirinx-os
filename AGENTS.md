@@ -980,6 +980,35 @@ Never write secrets.
 Never overwrite baseline without explicit update note.
 ```
 
+### 13.1 SIRINX Obsidian Brain Sync
+
+Use this rule for all substantive SIRINX/GHOSTCLAW work in Codex.
+
+```text
+Canonical vault: /Users/sirinx/Documents/Obsidian Vault/SIRINX
+Digest note: /Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md
+Codex config pointer: /Users/sirinx/.codex/obsidian-brain-sync.json
+Repo sync doc: /Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/OBSIDIAN_BRAIN_SYNC.md
+Repo sync script: /Users/sirinx/SIRINXDev/sirinx-agent-native-os/scripts/a2a/a2a_obsidian_sync.py
+```
+
+Default behavior:
+
+```text
+After meaningful local setup, architecture, runtime, deploy, recovery, or automation work, append one concise memory pulse to the digest note.
+Include what changed, source/evidence path, and next safe action.
+Keep detailed artifacts in repo/runtime folders and link their paths.
+Do not write secrets, .env values, private keys, browser cookies, raw tokens, or large raw logs to Obsidian.
+Do not rewrite Obsidian frontmatter or existing notes unless explicitly asked.
+```
+
+KOB/Codex split:
+
+```text
+KOB plans, routes, compresses context, and proposes memory summaries.
+Codex local worker/session executes repo work and writes approved concise Obsidian pulses.
+```
+
 ---
 
 ## 14. Agent Accountability Model
@@ -2302,3 +2331,45 @@ dev.sirinx.co is the command center.
 Mac live test passed is the baseline.
 
 Everything else must pass gates before production.
+
+---
+
+## Appendix A — Coding Model Router Addendum V2.1
+
+For model selection, coding worker routing, OpenRouter integration, local model integration, Claude Code subagents, Codex peer review, OpenCode review lanes, and Hermes orchestration, see:
+
+- `AGENTS_MODEL_ROUTER_ADDENDUM.md`
+- `CLAUDE_MODEL_ROUTER_ADDENDUM.md`
+- `docs/model-routing/MODEL_REGISTRY.md`
+- `docs/model-routing/ROUTING_MATRIX.md`
+- `docs/model-routing/PROVIDER_POLICY.md`
+- `config/model-router/model_router.registry.yaml`
+
+Core rule: cheapest safe model first; paid models only behind budget gate; T4 (deploy/secret/customer) requires human gate.
+
+---
+
+## Appendix B — Omnigent Hermes Command Center
+
+The project-local Omnigent bundle is:
+
+- `integrations/omnigent/ghostclaw-command-center/`
+- `.omnigent/config.yaml`
+- `scripts/omnigent-ghostclaw-command-center`
+
+Role ownership is fixed: Hermes coordinates, Claude produces read-only
+architecture, Codex is the sole repository writer, and OpenCode plus Hermes
+perform independent read-only review. Never dispatch overlapping write scopes.
+Antigravity is attended-only and is not registered as a headless worker.
+
+Safe local checks:
+
+```text
+scripts/omnigent-ghostclaw-command-center validate
+scripts/omnigent-ghostclaw-command-center status
+```
+
+The loopback server is a local control plane only. Starting a provider session,
+Antigravity session, push, deploy, publish, secret access, or cloud mutation
+requires its own exact gate. Omnigent worker output is evidence, not permission
+to stage or commit.

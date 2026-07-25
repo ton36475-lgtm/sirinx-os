@@ -1,0 +1,15 @@
+schema_version: "sirinx.qa.asvs-applicability.v1"
+standard: "OWASP-ASVS"
+version: "5.0.0"
+surface: "sirinx-public-lead-processing"
+target_level: "L2"
+status: "APPLICABILITY_MAPPING_NOT_STARTED"
+applicable_requirements: []
+not_applicable: []
+not_verified: []
+reporting:
+  allowed_claim: "APPLICABLE_REQUIREMENTS_VERIFIED"
+  forbidden_claim: "ASVS_L2_CERTIFIED"
+rules:
+  empty_applicability_profile: "BLOCKED"
+  rationale_required_for_not_applicable: true

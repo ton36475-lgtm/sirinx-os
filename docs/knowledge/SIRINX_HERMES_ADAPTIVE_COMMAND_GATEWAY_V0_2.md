@@ -28,6 +28,9 @@ Both endpoints return JSON only. The dry-run endpoint previews ACK text, parser 
 - PC node executes only after approval.
 - Mobile node monitors and approves.
 - Telegram reports status only in v0.2.
+- LAN PC marketing worker sync is a dry-run/report lane until a separate pairing and platform approval exists.
+- Gemini Daily Report is a local packet for manual Gemini CLI review; the gateway must not auto-run Gemini.
+- GHOSTCLAW Autoflow and Autocut may prepare briefs, checklists, cut lists, and asset manifests only. Live run, render, export, upload, publish, spend, or customer send remains blocked.
 
 ## Command Registry
 
@@ -150,6 +153,10 @@ One-line equivalent:
 - push
 - publish
 - external connector activation
+- online marketing platform publish/spend
+- autoflow live run
+- autocut live export/upload
+- automatic Gemini CLI execution
 
 ## Verification
 

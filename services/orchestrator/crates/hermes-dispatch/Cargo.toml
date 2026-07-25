@@ -1,0 +1,15 @@
+[package]
+name = "hermes-dispatch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hermes-core = { path = "../hermes-core" }
+hermes-governance = { path = "../hermes-governance" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[lib]
+name = "hermes_dispatch"
+path = "src/lib.rs"

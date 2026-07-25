@@ -1,0 +1,40 @@
+{
+  "$schema": "ghostclaw.hermes.cloudflare_mcp.config.v1",
+  "purpose": "Template only. Cloudflare MCP connection requires explicit approval gate before activation.",
+  "status": "cloudflare-mcp-template-ready",
+  "connection": {
+    "endpoint": "https://api.cloudflare.com/client/v4",
+    "auth": "environment_variables_only",
+    "requiredEnv": ["CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID"]
+  },
+  "capabilities": {
+    "workers": "read_only_dry_run",
+    "r2": "blocked",
+    "d1": "blocked",
+    "kv": "blocked",
+    "dns": "blocked",
+    "pages": "read_only_dry_run"
+  },
+  "gates": {
+    "connect": "APPROVE_CLOUDFLARE_API_CONNECTION_LOCAL_ONLY",
+    "readWorkers": "APPROVE_CLOUDFLARE_WORKERS_READ_APPROVAL",
+    "writeR2": "APPROVE_CLOUDFLARE_R2_WRITE_A2A2A_A019E53EE",
+    "deployPages": "APPROVE_CLOUDFLARE_PAGES_DEPLOY_LIVE"
+  },
+  "gateReference": "sirinx-os/configs/cloudflare_mcp.template.json",
+  "guardrails": {
+    "dryRun": true,
+    "liveSend": false,
+    "providerCall": false,
+    "r2Mutation": false,
+    "d1Mutation": false,
+    "kvMutation": false,
+    "dnsMutation": false,
+    "secretsPrinted": false
+  },
+  "notes": [
+    "This is a template file only.",
+    "Do not activate live connection without approval gate.",
+    "All mutating actions remain blocked in dry-run mode."
+  ]
+}

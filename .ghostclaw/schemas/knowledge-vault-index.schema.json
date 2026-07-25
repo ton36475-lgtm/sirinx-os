@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schema.sirinx.io/ghostclaw/knowledge-vault-index",
+  "title": "GhostClaw Knowledge Vault Index",
+  "description": "Validates the knowledge vault index YAML that catalogs documents, references, and knowledge artifacts across the SIRINX OS ecosystem.",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "description": "Indexed knowledge entries available to agents in the operating system.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the knowledge entry.",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Human-readable title of the knowledge artifact.",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "description": "Broad category grouping the knowledge artifact belongs to.",
+            "enum": [
+              "project_docs",
+              "research",
+              "architecture",
+              "runbooks",
+              "specs",
+              "meeting_notes",
+              "external_refs",
+              "ai_knowledge",
+              "business_strategy",
+              "creative_assets",
+              "operations"
+            ]
+          },
+          "source_path": {
+            "type": "string",
+            "description": "Filesystem path or URI where the source artifact is located.",
+            "minLength": 1
+          },
+          "format": {
+            "type": "string",
+            "description": "File format of the source artifact.",
+            "enum": ["md", "yaml", "json", "pdf", "image", "code", "other"]
+          },
+          "projects": {
+            "type": "array",
+            "description": "Project IDs that this knowledge entry is relevant to.",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "tags": {
+            "type": "array",
+            "description": "Arbitrary tags for search and filtering.",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "freshness": {
+            "type": "string",
+            "description": "Subjective assessment of how up-to-date this entry is.",
+            "enum": ["current", "stale", "unknown"]
+          },
+          "summary": {
+            "type": "string",
+            "description": "Brief description or abstract of the knowledge artifact."
+          }
+        },
+        "required": ["id", "title", "category", "source_path", "format"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["entries"],
+  "additionalProperties": false
+}

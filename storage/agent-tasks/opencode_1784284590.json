@@ -1,0 +1,17 @@
+{
+  "agent": "opencode-reviewer",
+  "worktree": "opencode",
+  "path": "/Users/sirinx/sirinx-os/.worktrees/opencode",
+  "timestamp": "2026-07-17T10:36:30.347608+00:00",
+  "task_count": 1,
+  "tasks": [
+    {
+      "id": "task_001_p0_orchestrator_audit.json",
+      "lane": "review",
+      "tier": "A",
+      "goal": "",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T10:36:30.347610+00:00"
+    }
+  ]
+}

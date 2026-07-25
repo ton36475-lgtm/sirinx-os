@@ -1,0 +1,10 @@
+{
+  "id": "agent_engineering",
+  "type": "agent",
+  "label": "Engineering Agent",
+  "capabilities": ["architecture_review", "code_review", "refactor_planning", "local_validation"],
+  "default_model_route": "glm_or_deepseek",
+  "fable5_allowed": false,
+  "approval_required_for": ["source_mutation", "install", "commit", "push", "deploy"]
+}
+

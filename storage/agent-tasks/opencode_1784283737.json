@@ -1,0 +1,17 @@
+{
+  "agent": "opencode-reviewer",
+  "worktree": "opencode",
+  "path": "/Users/sirinx/sirinx-os/.worktrees/opencode",
+  "timestamp": "2026-07-17T10:22:17.387529+00:00",
+  "task_count": 1,
+  "tasks": [
+    {
+      "id": "frontier-task-0.json",
+      "lane": "review",
+      "tier": "A",
+      "goal": "{'title': 'P0 Orchestrator Audit'}",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T10:22:17.387531+00:00"
+    }
+  ]
+}

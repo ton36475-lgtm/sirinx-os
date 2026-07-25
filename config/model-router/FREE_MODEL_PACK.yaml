@@ -1,0 +1,59 @@
+# SIRINX Autoloop Free Model Priority Pack
+# ควบคุมการเลือกโมเดลฟรีก่อนเสมอ แล้วจึงยกระดับอัตโนมัติเมื่อต้องการรายงานหนัก
+
+model_router:
+  free_priority_chain:
+    - provider: maxplus-free
+      model: deepseek-v4-pro
+      context_length: 1000000
+      max_output_tokens: 16384
+      use_cases: [analysis, code_generation, planning, documentation]
+      budget_usd: 0.00
+      
+    - provider: opencode
+      model: deepseek-v4-flash-free
+      context_length: 1000000
+      max_output_tokens: 16384
+      use_cases: [quick_tasks, chat, small_edits]
+      budget_usd: 0.00
+      
+    - provider: opencode
+      model: glm-5.2-free
+      context_length: 1000000
+      max_output_tokens: 16384
+      use_cases: [reasoning, planning]
+      budget_usd: 0.00
+      
+    - provider: openrouter
+      model: nvidia/nemotron-3-ultra-550b-a55b:free
+      context_length: 1048576
+      max_output_tokens: 16384
+      use_cases: [fallback_analysis]
+      budget_usd: 0.00
+
+  paid_escalation_chain:
+    - provider: openrouter
+      model: deepseek/deepseek-v4-pro
+      context_length: 1000000
+      max_output_tokens: 16384
+      use_cases: [heavy_report, production_deploy, customer_facing]
+      budget_usd: 10.00
+      
+    - provider: openrouter
+      model: xai/grok-code-32b
+      context_length: 1000000
+      max_output_tokens: 16384
+      use_cases: [code_generation_heavy]
+      budget_usd: 8.00
+
+  escalation_rules:
+    task_complexity_threshold: 0.75  # 75% context usage
+    cost_threshold_usd: 5.00           # auto-escalate after $5
+    retry_on_failure: true
+    max_free_retries: 3
+    auto_escalate_on_retry_exhaustion: true
+
+  sirinx_default_free_model: maxplus-free/deepseek-v4-pro
+  sirinx_default_provider: maxplus-free
+  budget_guard_max_task_usd: 2.00
+  budget_guard_stopped_status: "BUDGET_EXCEEDED_WAITING_APPROVAL"

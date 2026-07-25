@@ -1,0 +1,45 @@
+{
+  "mission_id": "MERCH-DASH-V1-AUTO-20260630-001",
+  "job_type": "local_safe_merch_dashboard_build",
+  "status": "complete_local_safe_validation_passed",
+  "dispatch_packet": ".ghostclaw_runtime/a2a2a/inbox/hermes/MERCH-DASH-V1-AUTO-20260630-001.dispatch.json",
+  "receipt_packet": ".ghostclaw_runtime/a2a2a/outbox/codex/MERCH-DASH-V1-AUTO-20260630-001.receipt.json",
+  "dashboard_entry": "docs/knowledge/merch_automation_dashboard_v1/dashboard/index.html",
+  "blocked_live_actions": [
+    {
+      "action": "live_amazon_publish",
+      "status": "blocked",
+      "reason": "marketplace owner action only"
+    },
+    {
+      "action": "amazon_control_bypass_or_scraping",
+      "status": "blocked",
+      "reason": "platform bypass is prohibited"
+    },
+    {
+      "action": "paid_provider_call",
+      "status": "blocked",
+      "reason": "no paid model/provider calls allowed"
+    },
+    {
+      "action": "secret_read_or_print",
+      "status": "blocked",
+      "reason": "secret access prohibited"
+    },
+    {
+      "action": "telegram_live_broadcast",
+      "status": "blocked",
+      "reason": "live external send prohibited"
+    },
+    {
+      "action": "push_or_deploy",
+      "status": "blocked",
+      "reason": "no push/deploy in this mission"
+    },
+    {
+      "action": "launchd_or_cron_activation",
+      "status": "blocked",
+      "reason": "system scheduler activation is outside Merch local artifact build"
+    }
+  ]
+}
