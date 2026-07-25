@@ -1,0 +1,140 @@
+{
+  "lane": "alibaba",
+  "decision": "P098 Rev G (PROPOSED)",
+  "tier": "PRIMARY",
+  "risk_ceiling": "yellow",
+  "base_url": "https://ws-pmpu62szcpaossb6.ap-southeast-1.maas.aliyuncs.com",
+  "pool": "n/a",
+  "pool_declared": "Alibaba Cloud Model Studio — Singapore (ap-southeast-1)",
+  "pool_note": "First-party vendor endpoint on a dedicated workspace domain, not an aggregator. The workspace id is baked into the host, so this base URL is specific to this account.",
+  "source_endpoint": "GET /compatible-mode/v1/models",
+  "source_note": "151 model ids returned. Only the 11 recorded below were smoke-tested: the qwen flagships plus every id that also appears on the maxplus or cointh lanes, which is what makes the latency comparison possible. The other 140 are listed by the endpoint but UNVERIFIED — mostly older qwen3/qwen3.5 sizes, embeddings, and image models.",
+  "verified_at": "2026-07-25T12:06:10Z",
+  "probe_prompt": "Say OK",
+  "schemas_probed": [
+    "openai_chat (/compatible-mode/v1/chat/completions) — 11/11 OK",
+    "anthropic_messages (/apps/anthropic/v1/messages) — verified on qwen3.7-max and glm-5.2, both HTTP 200 with msg_ envelopes",
+    "dashscope (/api/v1) — NOT PROBED"
+  ],
+  "auth_note": "Authorization: Bearer. Free tier is a 70M token plan; a full 151-id sweep was not run against it.",
+  "models": [
+    {
+      "id": "qwen3.7-max",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat"],
+      "http_code": 200,
+      "latency_ms": 2191,
+      "needs_big_budget": false,
+      "schema_note": "Flagship. 2191ms here against 5357ms for the same id on maxplus.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "qwen3.7-max-preview",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 1694,
+      "needs_big_budget": false,
+      "schema_note": "The newest qwen preview on this endpoint. There is no qwen3.8 — see the lane note in P098 Rev G.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "qwen3.7-plus",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 2577,
+      "needs_big_budget": false,
+      "schema_note": "2577ms here against 5611ms on maxplus.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "qwen3.7-flash",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 3721,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "glm-5.2",
+      "status": "OK",
+      "schema": ["anthropic_messages", "openai_chat"],
+      "http_code": 200,
+      "latency_ms": 1676,
+      "needs_big_budget": true,
+      "budget_note": "Returned HTTP 200 with empty content at max_tokens=64; recovered on the single retry at 4096.",
+      "schema_note": "Present on all three lanes. cointh 1265ms, here 1676ms, maxplus 3610ms.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "glm-5.2-fast-preview",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 1201,
+      "needs_big_budget": false,
+      "schema_note": "Fastest of the probed set, but its reply contained literal </think> tags — reasoning markup is leaking into content. Strip before use.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "glm-5.1",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 4109,
+      "needs_big_budget": false,
+      "schema_note": "Slower here than on either other lane: cointh 1194ms, maxplus 2909ms, here 4109ms.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 2032,
+      "needs_big_budget": false,
+      "schema_note": "2032ms here against 3708ms on maxplus.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 870,
+      "needs_big_budget": false,
+      "schema_note": "Fastest overall. 870ms here against 3112ms on maxplus, where it also needed the 4096 retry; here it did not.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "kimi-k2.7-code",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 941,
+      "needs_big_budget": false,
+      "schema_note": "941ms here against 2096ms on maxplus.",
+      "verified_at": "2026-07-25T12:06:10Z"
+    },
+    {
+      "id": "qwen3.6-flash",
+      "status": "OK",
+      "schema": ["openai_chat"],
+      "http_code": 200,
+      "latency_ms": 1266,
+      "needs_big_budget": false,
+      "verified_at": "2026-07-25T12:06:10Z"
+    }
+  ],
+  "summary": {
+    "total": 11,
+    "ok": 11,
+    "err": 0,
+    "empty": 0,
+    "absent": 0,
+    "needs_big_budget": 1,
+    "usable_on_all_three_schemas": 0
+  }
+}

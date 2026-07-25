@@ -7,8 +7,10 @@
 //! kept compiling so Rev E can be reverted without a rewrite; it is simply no
 //! longer part of [`TieredRouter::standard`].
 
+pub mod alibaba;
 pub mod breaker;
 pub mod cointh;
+pub mod family;
 pub mod maxplus;
 pub mod receipt;
 
@@ -246,32 +248,62 @@ impl TieredRouter {
     /// chain stays usable with any subset configured. That is the property Rev D §3
     /// requires of a leaf: losing maxplus must not break routing.
     pub fn standard() -> Self {
+        Self::for_model("glm-5.2")
+    }
+
+    /// Build the chain **P098 Rev G** prefers for one model.
+    ///
+    /// The primary depends on the model's family; the leaf and the Rev E
+    /// remainder are the same for everything. Ollama is absent — Rev E removed
+    /// the sovereign local tier.
+    ///
+    /// Every tier past the first is added only when its key is present, so the
+    /// chain stays usable with any subset configured. That is what Rev D §3
+    /// requires of a leaf: losing maxplus must not break routing.
+    pub fn for_model(model: &str) -> Self {
         let receipts = Arc::new(receipt::ReceiptLog::new(
             maxplus::env_nonempty("GHOSTCLAW_RECEIPTS")
                 .unwrap_or_else(|| ".ghostclaw_runtime/receipts/providers.jsonl".into()),
         ));
         let breaker = Arc::new(breaker::CircuitBreaker::new());
-
         let mut tiers: Vec<Box<dyn LlmProvider>> = Vec::new();
 
-        // PRIMARY — GLM goes to its own vendor first. Verified 2026-07-25:
-        // 8/8 ids OK, glm-5.2 at 1265 ms against 3610 ms on the leaf lane.
-        if maxplus::env_nonempty("COINTH_API_KEY").is_some() {
-            tiers.push(Box::new(cointh::CointhProvider::new(
-                // Present and OK in config/models.cointh.json.
-                maxplus::env_nonempty("COINTH_MODEL").unwrap_or_else(|| "glm-5.2".into()),
-                Arc::clone(&breaker),
-                Arc::clone(&receipts),
-            )));
+        // PRIMARY — whichever lane measured fastest for this family (Rev G §3).
+        for lane in family::preferred_lanes(family::family_of(model)) {
+            match *lane {
+                "cointh" if maxplus::env_nonempty("COINTH_API_KEY").is_some() => {
+                    tiers.push(Box::new(cointh::CointhProvider::new(
+                        model,
+                        Arc::clone(&breaker),
+                        Arc::clone(&receipts),
+                    )));
+                }
+                "alibaba" if maxplus::env_nonempty("ALIBABA_MAAS_API_KEY").is_some() => {
+                    tiers.push(Box::new(alibaba::AlibabaProvider::new(
+                        model,
+                        alibaba::Wire::OpenAiChat,
+                        false,
+                        Arc::clone(&breaker),
+                        Arc::clone(&receipts),
+                    )));
+                }
+                _ => {}
+            }
         }
 
         // LEAF — reached on quota exhaustion above, or when nothing above is configured.
-        if maxplus::env_nonempty("MAXPLUS_API_KEY").is_some() {
+        //
+        // MAXPLUS_KEY_CHINESE, not MAXPLUS_API_KEY: a maxplus pool is bound to the
+        // key, and on 2026-07-25 the key in MAXPLUS_API_KEY was moved to the VIP
+        // pool, which answers model lists but rejects inference (400 at the root,
+        // 503 on /maxpools and /subpools). The Chinese Specials key is the one
+        // that completes requests.
+        if let Some(_key) = maxplus::env_nonempty("MAXPLUS_KEY_CHINESE")
+            .or_else(|| maxplus::env_nonempty("MAXPLUS_API_KEY"))
+        {
             tiers.push(Box::new(maxplus::MaxPlusProvider::new(
-                // Present and OK in config/models.maxplus.json.
-                maxplus::env_nonempty("MAXPLUS_MODEL").unwrap_or_else(|| "glm-5.2".into()),
-                maxplus::env_nonempty("MAXPLUS_POOL")
-                    .unwrap_or_else(|| "VERIFY AT RUN TIME".into()),
+                model,
+                "Chinese Model Specials",
                 maxplus::Schema::AnthropicMessages,
                 false,
                 Arc::clone(&breaker),
@@ -342,4 +374,99 @@ pub fn route_for_task(task: &Task, router: &TieredRouter) {
         stage = ?task.stage,
         "routing task through tiered provider chain"
     );
+}
+
+// ─── Routing tests ───────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod routing_tests {
+    use super::*;
+
+    /// Environment variables are process-global and cargo runs tests in this
+    /// crate on parallel threads, so every test that touches the env has to hold
+    /// this lock. Without it the "no keys" case races the others and they fail
+    /// intermittently — which is exactly what happened the first time.
+    static ENV_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+    /// Set every lane key so the chain is built at full width, then restore.
+    struct AllKeys(std::sync::MutexGuard<'static, ()>);
+
+    impl AllKeys {
+        fn set() -> Self {
+            let guard = ENV_LOCK.lock().unwrap_or_else(|e| e.into_inner());
+            unsafe {
+                std::env::set_var("COINTH_API_KEY", "test-cointh");
+                std::env::set_var("ALIBABA_MAAS_API_KEY", "test-alibaba");
+                std::env::set_var("MAXPLUS_KEY_CHINESE", "test-maxplus");
+                std::env::remove_var("GLM_API_KEY");
+            }
+            Self(guard)
+        }
+    }
+
+    impl Drop for AllKeys {
+        fn drop(&mut self) {
+            unsafe {
+                std::env::remove_var("COINTH_API_KEY");
+                std::env::remove_var("ALIBABA_MAAS_API_KEY");
+                std::env::remove_var("MAXPLUS_KEY_CHINESE");
+            }
+        }
+    }
+
+    #[test]
+    fn glm_goes_to_cointh_first() {
+        let _k = AllKeys::set();
+        let r = TieredRouter::for_model("glm-5.2");
+        let names = r.provider_names();
+        assert_eq!(names.first(), Some(&"cointh"), "got {names:?}");
+    }
+
+    #[test]
+    fn qwen_deepseek_and_kimi_go_to_alibaba_first() {
+        let _k = AllKeys::set();
+        for m in ["qwen3.7-max", "deepseek-v4-flash", "kimi-k2.7-code"] {
+            let r = TieredRouter::for_model(m);
+            let names = r.provider_names();
+            assert_eq!(names.first(), Some(&"alibaba"), "{m} got {names:?}");
+        }
+    }
+
+    #[test]
+    fn claude_starts_at_the_leaf_because_no_primary_serves_it() {
+        let _k = AllKeys::set();
+        let r = TieredRouter::for_model("claude-opus-4-8");
+        let names = r.provider_names();
+        assert_eq!(names.first(), Some(&"maxplus"), "got {names:?}");
+    }
+
+    #[test]
+    fn maxplus_is_never_above_a_primary() {
+        // Rev D §3: maxplus is LEAF. If it ever sorts first for a model a primary
+        // serves, the leaf classification has quietly stopped being true.
+        let _k = AllKeys::set();
+        for m in ["glm-5.2", "qwen3.7-max", "deepseek-v4-pro", "kimi-k3"] {
+            let r = TieredRouter::for_model(m);
+            let names = r.provider_names();
+            let leaf = names.iter().position(|n| *n == "maxplus");
+            assert!(leaf.is_some_and(|i| i > 0), "{m}: maxplus must not lead — {names:?}");
+        }
+    }
+
+    #[test]
+    fn the_chain_still_works_with_every_optional_key_missing() {
+        // Losing maxplus must not break routing (Rev D §3).
+        let _guard = ENV_LOCK.lock().unwrap_or_else(|e| e.into_inner());
+        unsafe {
+            std::env::remove_var("COINTH_API_KEY");
+            std::env::remove_var("ALIBABA_MAAS_API_KEY");
+            std::env::remove_var("MAXPLUS_KEY_CHINESE");
+            std::env::remove_var("MAXPLUS_API_KEY");
+            std::env::remove_var("GLM_API_KEY");
+        }
+        let r = TieredRouter::for_model("glm-5.2");
+        let names = r.provider_names();
+        assert!(!names.is_empty(), "a chain with no keys must still have the free tier");
+        assert_eq!(names, vec!["openrouter-free"]);
+    }
 }
