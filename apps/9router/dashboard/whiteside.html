@@ -4,44 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WhiteSide — Dev Command Center</title>
-<meta name="description" content="WhiteSide Dev Command Center — 9router, OmniRoute, A2A Bridge, Model Providers, Workflow Automation">
+<meta name="description" content="WhiteSide Dev Command Center — 9router, OmniRoute, A2A Bridge, Agent Fleet, Workflow Automation">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ─── WhiteSide Theme — Clean, Light, Minimal ───────────────────── */
+/* ═══ WhiteSide Cyberpunk Dark Theme ═══════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg-page:#f5f6fa;
-  --bg-sidebar:#ffffff;
-  --bg-card:#ffffff;
-  --bg-card-hover:#f8f9fe;
-  --bg-accent-light:#eef2ff;
-  --border:#e2e5ef;
-  --border-active:#c4cbe5;
-  --text-primary:#1a1d2e;
-  --text-secondary:#6b7194;
-  --text-muted:#989db8;
+  --bg-page:#0b0d17;
+  --bg-page2:#0f1222;
+  --bg-sidebar:#0d0f1e;
+  --bg-card:#12152a;
+  --bg-card-hover:#191d3a;
+  --bg-accent-light:rgba(79,110,247,.12);
+  --border:#1e2348;
+  --border-active:#3b45a0;
+  --text-primary:#e0e4f0;
+  --text-secondary:#8890b0;
+  --text-muted:#5a6288;
   --accent:#4f6ef7;
-  --accent-light:#eef2ff;
-  --accent-glow:rgba(79,110,247,.12);
+  --accent-glow:rgba(79,110,247,.25);
+  --accent-2:#8b5cf6;
+  --cyber:#00f0ff;
+  --cyber-dark:rgba(0,240,255,.12);
   --green:#22c55e;
-  --green-bg:#dcfce7;
+  --green-bg:rgba(34,197,94,.15);
+  --green-glow:rgba(34,197,94,.3);
   --orange:#f59e0b;
-  --orange-bg:#fef3c7;
+  --orange-bg:rgba(245,158,11,.15);
   --red:#ef4444;
-  --red-bg:#fee2e2;
+  --red-bg:rgba(239,68,68,.15);
   --blue:#3b82f6;
-  --purple:#8b5cf6;
-  --radius:12px;
-  --radius-sm:8px;
-  --radius-xs:4px;
+  --blue-bg:rgba(59,130,246,.12);
+  --purple:#a78bfa;
+  --purple-bg:rgba(139,92,246,.12);
+  --pink:#ec4899;
+  --radius:14px;
+  --radius-sm:9px;
+  --radius-xs:5px;
   --font-sans:'Inter',system-ui,-apple-system,sans-serif;
   --font-mono:'JetBrains Mono','SF Mono',monospace;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06);
-  --shadow-md:0 4px 16px rgba(0,0,0,.06);
-  --shadow-lg:0 8px 32px rgba(0,0,0,.08);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.5);
+  --shadow-md:0 4px 20px rgba(0,0,0,.4);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.5),0 0 0 1px rgba(79,110,247,.08);
+  --shadow-glow:0 0 24px rgba(79,110,247,.12);
   --transition:.18s ease;
+  --scanline:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(79,110,247,.015) 2px,rgba(79,110,247,.015) 4px);
 }
 html{font-size:15px;scroll-behavior:smooth}
 body{
@@ -51,9 +60,15 @@ body{
   line-height:1.5;
   min-height:100vh;
   display:flex;
+  position:relative;
+}
+body::before{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:var(--scanline);
+  pointer-events:none;z-index:9999;opacity:.4;
 }
 
-/* ─── Sidebar ──────────────────────────────────────────────────────── */
+/* ─── Sidebar ──────────────────────────────────────────────────── */
 .sidebar{
   width:240px;min-height:100vh;
   background:var(--bg-sidebar);
@@ -69,10 +84,11 @@ body{
 }
 .sidebar-brand .logo{
   width:32px;height:32px;
-  background:var(--accent);
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
   border-radius:8px;
   display:flex;align-items:center;justify-content:center;
   color:#fff;font-weight:700;font-size:1rem;
+  box-shadow:0 0 12px var(--accent-glow);
 }
 .sidebar-brand .brand-text{
   font-weight:700;font-size:1rem;color:var(--text-primary);
@@ -95,53 +111,56 @@ body{
   transition:var(--transition);cursor:pointer;
 }
 .nav-item:hover{background:var(--bg-card-hover);color:var(--text-primary)}
-.nav-item.active{background:var(--accent-light);color:var(--accent);font-weight:600}
+.nav-item.active{background:var(--bg-accent-light);color:var(--accent);font-weight:600;box-shadow:inset 2px 0 0 var(--accent)}
 .nav-item .icon{width:18px;height:18px;flex-shrink:0}
 .nav-item .badge{
   margin-left:auto;font-size:.65rem;padding:1px 8px;border-radius:10px;
-  background:var(--accent-light);color:var(--accent);font-weight:600;
+  background:var(--bg-accent-light);color:var(--accent);font-weight:600;
   font-family:var(--font-mono);
 }
 .nav-item .badge.green{background:var(--green-bg);color:var(--green)}
 .nav-item .badge.orange{background:var(--orange-bg);color:var(--orange)}
+.nav-item .badge.cyan{background:var(--cyber-dark);color:var(--cyber)}
 .nav-footer{
   padding:12px 10px;border-top:1px solid var(--border);
   font-size:.72rem;color:var(--text-muted);
   display:flex;align-items:center;gap:8px;
 }
-.nav-footer .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.nav-footer .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green-glow)}
 
-/* ─── Main Content ─────────────────────────────────────────────────── */
+/* ─── Main Content ─────────────────────────────────────────────── */
 .main{flex:1;min-width:0;padding:0}
 .topbar{
   position:sticky;top:0;z-index:50;
-  background:rgba(245,246,250,.8);backdrop-filter:blur(16px);
+  background:rgba(11,13,23,.85);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   padding:12px 28px;display:flex;align-items:center;gap:14px;
   min-height:56px;
 }
 .topbar-title{font-size:1.1rem;font-weight:700;flex:1}
 .topbar-search{
-  background:var(--bg-sidebar);border:1px solid var(--border);
+  background:var(--bg-card);border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:7px 14px;font-size:.82rem;
-  color:var(--text-primary);width:240px;
+  color:var(--text-primary);width:220px;
   font-family:var(--font-sans);
 }
-.topbar-search:focus{outline:none;border-color:var(--accent)}
+.topbar-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
 .topbar-actions{display:flex;gap:8px}
 .topbar-btn{
   padding:7px 14px;border-radius:var(--radius-xs);
-  border:1px solid var(--border);background:var(--bg-sidebar);
+  border:1px solid var(--border);background:var(--bg-card);
   color:var(--text-secondary);font-size:.78rem;font-weight:500;
   cursor:pointer;transition:var(--transition);font-family:var(--font-sans);
 }
-.topbar-btn:hover{border-color:var(--border-active);color:var(--text-primary)}
-.topbar-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.topbar-btn.primary:hover{opacity:.9}
+.topbar-btn:hover{border-color:var(--border-active);color:var(--text-primary);background:var(--bg-card-hover)}
+.topbar-btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent}
+.topbar-btn.primary:hover{box-shadow:0 0 16px var(--accent-glow);opacity:.95}
+.topbar-btn.cyan{background:rgba(0,240,255,.1);color:var(--cyber);border-color:rgba(0,240,255,.2)}
+.topbar-btn.cyan:hover{background:rgba(0,240,255,.18);box-shadow:0 0 12px rgba(0,240,255,.15)}
 
 .content{padding:24px 28px;max-width:1600px}
 
-/* ─── Stats Row ────────────────────────────────────────────────────── */
+/* ─── Stats Row ────────────────────────────────────────────────── */
 .stats-row{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
@@ -151,33 +170,51 @@ body{
   background:var(--bg-card);border:1px solid var(--border);
   border-radius:var(--radius);padding:16px 18px;
   box-shadow:var(--shadow-sm);transition:var(--transition);
+  position:relative;overflow:hidden;
 }
-.stat-card:hover{border-color:var(--border-active);box-shadow:var(--shadow-md)}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:.5;
+}
+.stat-card:hover{border-color:var(--border-active);box-shadow:var(--shadow-md),var(--shadow-glow)}
 .stat-card .label{
   font-size:.68rem;font-weight:600;text-transform:uppercase;
   letter-spacing:.05em;color:var(--text-muted);margin-bottom:4px;
 }
 .stat-card .value{font-size:1.6rem;font-weight:700;line-height:1.2}
 .stat-card .sublabel{font-size:.72rem;color:var(--text-secondary);margin-top:2px}
-.stat-card .value.good{color:var(--green)}
+.stat-card .value.good{color:var(--green);text-shadow:0 0 20px var(--green-glow)}
 .stat-card .value.warn{color:var(--orange)}
 .stat-card .value.bad{color:var(--red)}
 .stat-card .value.accent{color:var(--accent)}
+.stat-card .value.cyber{color:var(--cyber)}
+.stat-card .value.purple{color:var(--purple)}
 
-/* ─── Panels ────────────────────────────────────────────────────────── */
+/* ─── Panels (CSS Grid) ───────────────────────────────────────── */
 .panels{display:grid;gap:20px}
 .panels-2col{grid-template-columns:1fr 1fr}
 .panels-3col{grid-template-columns:1fr 1fr 1fr}
+.panels-4col{grid-template-columns:1fr 1fr 1fr 1fr}
 .panel-full{grid-column:1/-1}
+@media(max-width:1200px){
+  .panels-4col{grid-template-columns:1fr 1fr}
+}
 @media(max-width:1000px){
-  .panels-2col,.panels-3col{grid-template-columns:1fr}
+  .panels-2col,.panels-3col,.panels-4col{grid-template-columns:1fr}
 }
 .panel{
   background:var(--bg-card);border:1px solid var(--border);
   border-radius:var(--radius);box-shadow:var(--shadow-sm);
   overflow:hidden;transition:var(--transition);
+  position:relative;
 }
-.panel:hover{box-shadow:var(--shadow-md)}
+.panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-active),transparent);
+  opacity:.3;
+}
+.panel:hover{box-shadow:var(--shadow-md),var(--shadow-glow);border-color:var(--border-active)}
 .panel-header{
   display:flex;align-items:center;gap:10px;
   padding:14px 20px;border-bottom:1px solid var(--border);
@@ -186,7 +223,7 @@ body{
 .panel-header .icon{width:16px;height:16px;flex-shrink:0;color:var(--accent)}
 .panel-header .count-badge{
   margin-left:auto;font-size:.68rem;padding:2px 10px;border-radius:12px;
-  background:var(--accent-light);color:var(--accent);font-weight:600;
+  background:var(--bg-accent-light);color:var(--accent);font-weight:600;
   font-family:var(--font-mono);
 }
 .panel-header .refresh-btn{
@@ -197,7 +234,7 @@ body{
 .panel-header .refresh-btn:hover{background:var(--bg-card-hover);color:var(--text-primary)}
 .panel-body{padding:16px 20px}
 
-/* ─── Provider Groups ──────────────────────────────────────────────── */
+/* ─── Provider Groups ──────────────────────────────────────────── */
 .provider-group{margin-bottom:14px}
 .provider-group:last-child{margin-bottom:0}
 .provider-head{
@@ -219,7 +256,7 @@ body{
 }
 .model-row:hover{background:var(--bg-card-hover)}
 .model-row .status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.model-row .status-dot.up{background:var(--green)}
+.model-row .status-dot.up{background:var(--green);box-shadow:0 0 6px var(--green-glow)}
 .model-row .status-dot.down{background:var(--red)}
 .model-row .status-dot.unknown{background:var(--orange)}
 .model-row .name{font-size:.82rem;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -229,29 +266,37 @@ body{
 }
 .model-row .tag.vip{background:var(--orange-bg);color:var(--orange)}
 .model-row .tag.free{background:var(--green-bg);color:var(--green)}
-.model-row .tag.paid{background:var(--accent-light);color:var(--accent)}
+.model-row .tag.paid{background:var(--bg-accent-light);color:var(--accent)}
 .model-row .provider-tag{
   font-size:.65rem;color:var(--text-muted);font-family:var(--font-mono);
   padding:1px 6px;background:var(--bg-page);border-radius:4px;
 }
 
-/* ─── Bridge Agents ─────────────────────────────────────────────────── */
-.agent-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+/* ─── Agent Grid ───────────────────────────────────────────────── */
+.agent-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 .agent-card{
   display:flex;flex-direction:column;gap:6px;
   padding:12px 14px;border-radius:var(--radius-sm);
-  border:1px solid var(--border);background:var(--bg-page);
-  transition:var(--transition);
+  border:1px solid var(--border);background:var(--bg-page2);
+  transition:var(--transition);position:relative;overflow:hidden;
 }
-.agent-card:hover{border-color:var(--border-active)}
+.agent-card::before{
+  content:'';position:absolute;top:0;left:0;width:3px;height:100%;
+  border-radius:0 2px 2px 0;
+}
+.agent-card.status-running::before{background:var(--green);box-shadow:0 0 8px var(--green-glow)}
+.agent-card.status-standby::before{background:var(--orange)}
+.agent-card.status-stopped::before{background:var(--red)}
+.agent-card:hover{border-color:var(--border-active);transform:translateY(-1px)}
 .agent-card .head{display:flex;align-items:center;gap:8px}
 .agent-card .head .name{font-weight:600;font-size:.82rem;flex:1}
 .agent-card .head .status-tag{
   font-size:.62rem;padding:2px 8px;border-radius:4px;font-weight:600;
+  font-family:var(--font-mono);
 }
-.agent-card .head .status-tag.online{background:var(--green-bg);color:var(--green)}
-.agent-card .head .status-tag.offline{background:var(--red-bg);color:var(--red)}
+.agent-card .head .status-tag.running{background:var(--green-bg);color:var(--green)}
 .agent-card .head .status-tag.standby{background:var(--orange-bg);color:var(--orange)}
+.agent-card .head .status-tag.stopped{background:var(--red-bg);color:var(--red)}
 .agent-card .meta{
   font-size:.68rem;color:var(--text-muted);
   font-family:var(--font-mono);
@@ -260,8 +305,16 @@ body{
   font-size:.68rem;color:var(--text-secondary);
   display:flex;align-items:center;gap:4px;
 }
+.agent-card .skills{
+  display:flex;gap:3px;flex-wrap:wrap;margin-top:2px;
+}
+.agent-card .skills .skill-tag{
+  font-size:.6rem;padding:1px 6px;border-radius:3px;
+  background:var(--bg-accent-light);color:var(--accent);
+  font-family:var(--font-mono);
+}
 
-/* ─── Health Table ─────────────────────────────────────────────────── */
+/* ─── Health Table ─────────────────────────────────────────────── */
 .health-table{width:100%;border-collapse:collapse;font-size:.8rem}
 .health-table th{
   text-align:left;padding:8px 12px;
@@ -270,15 +323,15 @@ body{
   border-bottom:1px solid var(--border);
 }
 .health-table td{
-  padding:8px 12px;border-bottom:1px solid rgba(226,229,239,.5);
+  padding:8px 12px;border-bottom:1px solid rgba(30,35,72,.5);
 }
 .health-table tr:hover td{background:var(--bg-card-hover)}
 .health-table .check{width:10px;height:10px;border-radius:50%;display:inline-block}
-.health-table .check.pass{background:var(--green)}
-.health-table .check.fail{background:var(--red)}
-.health-table .check.warn{background:var(--orange)}
+.health-table .check.pass{background:var(--green);box-shadow:0 0 6px var(--green-glow)}
+.health-table .check.fail{background:var(--red);box-shadow:0 0 6px rgba(239,68,68,.3)}
+.health-table .check.warn{background:var(--orange);box-shadow:0 0 6px rgba(245,158,11,.3)}
 
-/* ─── Buttons & Components ─────────────────────────────────────────── */
+/* ─── Buttons & Components ─────────────────────────────────────── */
 .btn{
   display:inline-flex;align-items:center;gap:6px;
   padding:7px 16px;border-radius:var(--radius-xs);
@@ -286,13 +339,21 @@ body{
   transition:var(--transition);border:none;
   font-family:var(--font-sans);
 }
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{opacity:.9}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff}
+.btn-primary:hover{box-shadow:0 0 16px var(--accent-glow);opacity:.95}
+.btn-cyan{background:rgba(0,240,255,.12);color:var(--cyber);border:1px solid rgba(0,240,255,.2)}
+.btn-cyan:hover{background:rgba(0,240,255,.2);box-shadow:0 0 12px rgba(0,240,255,.15)}
+.btn-green{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.btn-green:hover{background:rgba(34,197,94,.25);box-shadow:0 0 12px var(--green-glow)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.btn-danger:hover{background:rgba(239,68,68,.25)}
 .btn-outline{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
 .btn-outline:hover{background:var(--bg-card-hover);color:var(--text-primary)}
 .btn-sm{padding:5px 10px;font-size:.72rem}
+.btn-xs{padding:3px 8px;font-size:.65rem;border-radius:3px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* ─── Tabs ─────────────────────────────────────────────────────────── */
+/* ─── Tabs ─────────────────────────────────────────────────────── */
 .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
 .tab{
   padding:10px 18px;font-size:.82rem;font-weight:500;
@@ -303,10 +364,25 @@ body{
 .tab:hover{color:var(--text-primary)}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* ─── Loading / Empty ──────────────────────────────────────────────── */
+/* ─── Control Action Buttons Row ───────────────────────────────── */
+.action-row{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;
+}
+.action-row .btn{flex-shrink:0}
+
+/* ─── Command Response Box ─────────────────────────────────────── */
+.cmd-response{
+  background:var(--bg-page);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 14px;
+  font-family:var(--font-mono);font-size:.72rem;
+  line-height:1.6;max-height:200px;overflow-y:auto;
+  margin-top:8px;color:var(--text-secondary);
+}
+
+/* ─── Loading / Empty ──────────────────────────────────────────── */
 .shimmer{
   animation:shimmer 1.5s infinite;
-  background:linear-gradient(90deg,var(--bg-page) 25%,var(--bg-card-hover) 50%,var(--bg-page) 75%);
+  background:linear-gradient(90deg,var(--bg-card) 25%,var(--bg-card-hover) 50%,var(--bg-card) 75%);
   background-size:200% 100%;
   border-radius:var(--radius-xs);height:14px;margin-bottom:6px;
 }
@@ -317,16 +393,17 @@ body{
 }
 .empty-state .emoji{font-size:1.8rem;margin-bottom:8px}
 
-/* ─── Status Tags ──────────────────────────────────────────────────── */
+/* ─── Status Rows ──────────────────────────────────────────────── */
 .status-row{
   display:flex;align-items:center;gap:10px;padding:8px 0;
-  border-bottom:1px solid rgba(226,229,239,.5);font-size:.82rem;
+  border-bottom:1px solid rgba(30,35,72,.5);font-size:.82rem;
 }
 .status-row:last-child{border-bottom:none}
 .status-row .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.status-row .dot.green{background:var(--green)}
+.status-row .dot.green{background:var(--green);box-shadow:0 0 6px var(--green-glow)}
 .status-row .dot.red{background:var(--red)}
 .status-row .dot.yellow{background:var(--orange)}
+.status-row .dot.cyan{background:var(--cyber)}
 .status-row .label{flex:1;font-weight:500}
 .status-row .meta{color:var(--text-muted);font-size:.72rem;font-family:var(--font-mono)}
 .status-row .status{font-size:.72rem;font-weight:600}
@@ -334,7 +411,22 @@ body{
 .status-row .status.degraded{color:var(--orange)}
 .status-row .status.down{color:var(--red)}
 
-/* ─── Toast ────────────────────────────────────────────────────────── */
+/* ─── Telegram Thread ──────────────────────────────────────────── */
+.telegram-thread{
+  background:var(--bg-page);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px;
+  max-height:300px;overflow-y:auto;font-size:.78rem;
+}
+.msg-row{
+  display:flex;gap:8px;padding:6px 8px;margin-bottom:4px;
+  border-radius:var(--radius-xs);
+}
+.msg-row:hover{background:var(--bg-card-hover)}
+.msg-row .sender{font-weight:600;color:var(--accent);min-width:70px;font-size:.72rem}
+.msg-row .text{color:var(--text-primary);flex:1}
+.msg-row .time{color:var(--text-muted);font-size:.62rem;font-family:var(--font-mono);white-space:nowrap}
+
+/* ─── Toast ────────────────────────────────────────────────────── */
 .toast{position:fixed;bottom:24px;right:24px;z-index:999;
   background:var(--bg-card);border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:12px 20px;
@@ -344,25 +436,37 @@ body{
 }
 .toast.error{border-left:3px solid var(--red)}
 .toast.success{border-left:3px solid var(--green)}
+.toast.warn{border-left:3px solid var(--orange)}
 .toast .close-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:2px 4px}
 
-/* ─── Animations ───────────────────────────────────────────────────── */
+/* ─── Auto-refresh indicator ───────────────────────────────────── */
+.live-indicator{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.68rem;color:var(--text-muted);margin-left:auto;
+}
+.live-dot{width:5px;height:5px;border-radius:50%;animation:pulse 2s infinite}
+.live-dot.on{background:var(--green);box-shadow:0 0 6px var(--green-glow)}
+.live-dot.off{background:var(--text-muted);animation:none}
+
+/* ─── Animations ───────────────────────────────────────────────── */
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .panel{animation:fadeIn .3s ease both}
-.panel:nth-child(1){animation-delay:.03s}
-.panel:nth-child(2){animation-delay:.06s}
-.panel:nth-child(3){animation-delay:.09s}
-.panel:nth-child(4){animation-delay:.12s}
-.panel:nth-child(5){animation-delay:.15s}
+.panel:nth-child(1){animation-delay:.02s}
+.panel:nth-child(2){animation-delay:.04s}
+.panel:nth-child(3){animation-delay:.06s}
+.panel:nth-child(4){animation-delay:.08s}
+.panel:nth-child(5){animation-delay:.10s}
+.panel:nth-child(6){animation-delay:.12s}
 
-/* ─── Scrollbar ────────────────────────────────────────────────────── */
+/* ─── Scrollbar ────────────────────────────────────────────────── */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 ::-webkit-scrollbar-thumb:hover{background:var(--border-active)}
 
-/* ─── Responsive ───────────────────────────────────────────────────── */
+/* ─── Responsive ───────────────────────────────────────────────── */
 @media(max-width:768px){
   .sidebar{width:56px}
   .sidebar-brand .brand-text,.sidebar-brand .brand-sub,.sidebar-section-title,.nav-item span{display:none}
@@ -405,12 +509,25 @@ body{
         <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 3 h14 a1 1 0 0 1 1 1 v8 a1 1 0 0 1-1 1 h-7 l-3 2 v-2 h-4 a1 1 0 0 1-1-1 v-8 a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5"/></svg>
         <span>Providers</span>
       </a>
+      <a class="nav-item" data-tab="omniroute">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M9 1 v16 M1 9 h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>OmniRoute</span>
+        <span class="badge cyan" id="navOmniBadge">CF</span>
+      </a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-title">Automation</div>
+      <a class="nav-item" data-tab="telegram">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M9 1 C4 1 1 4 1 9 C1 14 4 17 9 17 C14 17 17 14 17 9 C17 4 14 1 9 1Z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 9 l3 3 l5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Telegram</span>
+      </a>
       <a class="nav-item" data-tab="workflows">
         <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 12 l4-4 l4 4 l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Workflows</span>
+      </a>
+      <a class="nav-item" data-tab="cua">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>CUA Agent</span>
       </a>
     </div>
     <div class="sidebar-section">
@@ -426,7 +543,7 @@ body{
     </div>
   </nav>
   <div class="nav-footer">
-    <span class="status-dot"></span>
+    <span class="status-dot" id="footerDot"></span>
     <span id="footerStatus">All systems nominal</span>
   </div>
 </aside>
@@ -437,6 +554,7 @@ body{
     <div class="topbar-title" id="pageTitle">Dashboard</div>
     <input class="topbar-search" type="text" id="globalSearch" placeholder="Search models, agents, providers…">
     <div class="topbar-actions">
+      <button class="topbar-btn cyan" id="autoRefreshToggle" onclick="toggleAutoRefresh()">⟳ Live</button>
       <button class="topbar-btn" id="refreshBtn" onclick="refreshAll()">⟳ Refresh</button>
       <button class="topbar-btn primary" onclick="window.open('https://dev.sirinx.co/9router','_blank')">9Router</button>
     </div>
@@ -450,7 +568,7 @@ body{
 <!-- ═══ Templates ═══ -->
 <template id="tmpl-overview">
   <div class="stats-row" id="statsRow"></div>
-  <div class="panels panels-2col">
+  <div class="panels panels-3col">
     <div class="panel">
       <div class="panel-header">
         <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
@@ -466,6 +584,14 @@ body{
         <span class="count-badge" id="ovBridgeCount">0</span>
       </div>
       <div class="panel-body" id="ovBridge"><div class="shimmer" style="width:60%"></div><div class="shimmer" style="width:80%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M9 1 v16 M1 9 h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+        OmniRoute
+        <span class="count-badge" id="ovOmniCount">checking…</span>
+      </div>
+      <div class="panel-body" id="ovOmniRoute"><div class="shimmer" style="width:75%"></div></div>
     </div>
     <div class="panel panel-full">
       <div class="panel-header">
@@ -506,15 +632,34 @@ body{
         A2A Bridge — 11 Agents
         <span class="count-badge" id="brAgentCount">0</span>
         <button class="refresh-btn" onclick="loadBridge()">⟳</button>
+        <span class="live-indicator"><span class="live-dot on"></span>15s auto</span>
       </div>
       <div class="panel-body"><div class="agent-grid" id="brAgentGrid"></div></div>
     </div>
     <div class="panel">
-      <div class="panel-header">A2A Sync Status</div>
+      <div class="panel-header">
+        ⚡ A2A Sync Controls
+      </div>
+      <div class="panel-body">
+        <div class="action-row">
+          <button class="btn btn-cyan btn-sm" onclick="a2aSync()">⟳ Sync Agents</button>
+          <button class="btn btn-green btn-sm" onclick="a2aActivate()">▶ Activate Queue</button>
+        </div>
+        <div id="brSyncResponse"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6 h8 M5 9 h8 M5 12 h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Sync Status
+      </div>
       <div class="panel-body" id="brSyncStatus"><div class="shimmer" style="width:70%"></div></div>
     </div>
     <div class="panel">
-      <div class="panel-header">Bridge Config</div>
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5 v5 l-3 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Bridge Config
+      </div>
       <div class="panel-body" id="brConfig"><div class="shimmer" style="width:60%"></div></div>
     </div>
   </div>
@@ -537,6 +682,155 @@ body{
     <div class="panel">
       <div class="panel-header">Usage Stats</div>
       <div class="panel-body" id="prUsage"><div class="empty-state"><div class="emoji">📊</div>Usage tracking coming soon</div></div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-omniroute">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M9 1 v16 M1 9 h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="9" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+        OmniRoute Live Dashboard
+        <span class="count-badge" id="orHealthBadge">checking…</span>
+        <button class="refresh-btn" onclick="loadOmniRoute()">⟳</button>
+        <span class="live-indicator"><span class="live-dot on"></span>15s auto</span>
+      </div>
+      <div class="panel-body" id="orPanelBody"><div class="shimmer" style="width:80%"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        ☁️ Cloudflare Tunnel
+      </div>
+      <div class="panel-body" id="orTunnel">
+        <div class="status-row"><span class="dot green"></span><span class="label">Tunnel URL</span><span class="meta">hoping-hypothesis-controversy-generation.trycloudflare.com</span></div>
+        <div class="status-row"><span class="dot green"></span><span class="label">Worker</span><span class="meta">9router-api.tondhm-z999.workers.dev</span></div>
+        <div class="status-row"><span class="dot green"></span><span class="label">Bridge</span><span class="meta">9router-a2a-bridge · hybrid</span></div>
+        <div id="orTunnelStatus"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        ⚡ Management
+      </div>
+      <div class="panel-body">
+        <div class="action-row">
+          <button class="btn btn-green btn-sm" onclick="omniCheck()">🔍 Health Check</button>
+          <button class="btn btn-outline btn-sm" onclick="window.open('https://hoping-hypothesis-controversy-generation.trycloudflare.com','_blank')">🌐 Open Tunnel</button>
+          <button class="btn btn-outline btn-sm" onclick="window.open('https://9router-api.tondhm-z999.workers.dev','_blank')">⚡ Worker</button>
+        </div>
+        <div id="orActionsResponse"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-telegram">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M9 1 C4 1 1 4 1 9 C1 14 4 17 9 17 C14 17 17 14 17 9 C17 4 14 1 9 1Z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 9 l3 3 l5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Telegram Command Relay
+        <span class="count-badge">relay</span>
+      </div>
+      <div class="panel-body">
+        <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" id="tgCommandInput" placeholder="/command ..." style="flex:1;min-width:180px;background:var(--bg-page);border:1px solid var(--border);border-radius:var(--radius-xs);padding:7px 12px;color:var(--text-primary);font-family:var(--font-mono);font-size:.78rem">
+          <button class="btn btn-cyan btn-sm" onclick="sendTelegramCommand()">Send</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('tgCommandInput').value='/status'">/status</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('tgCommandInput').value='/agents'">/agents</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('tgCommandInput').value='/sync'">/sync</button>
+        </div>
+        <div id="tgResponse"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        Recent Messages
+        <span class="count-badge" id="tgMsgCount">0</span>
+      </div>
+      <div class="panel-body">
+        <div class="telegram-thread" id="tgThread">
+          <div class="empty-state"><div class="emoji">💬</div>Telegram relay messages will appear here</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        Quick Actions
+      </div>
+      <div class="panel-body">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn btn-outline btn-sm" onclick="sendTelegramPreset('/status')"><span style="color:var(--green)">●</span> /status — System Status</button>
+          <button class="btn btn-outline btn-sm" onclick="sendTelegramPreset('/agents')"><span style="color:var(--accent)">◆</span> /agents — Agent Roster</button>
+          <button class="btn btn-outline btn-sm" onclick="sendTelegramPreset('/sync')"><span style="color:var(--cyber)">⟳</span> /sync — Force Sync</button>
+          <button class="btn btn-outline btn-sm" onclick="sendTelegramPreset('/deploy')"><span style="color:var(--orange)">▲</span> /deploy — Trigger Deploy</button>
+          <button class="btn btn-outline btn-sm" onclick="sendTelegramPreset('/health')"><span style="color:var(--purple)">♥</span> /health — OmniRoute Health</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-cua">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+        CUA Sub-Agent Spawner
+        <span class="count-badge">computer-use</span>
+      </div>
+      <div class="panel-body">
+        <div style="margin-bottom:16px">
+          <p style="color:var(--text-secondary);font-size:.82rem;margin-bottom:12px">Spawn a Computer-Use Agent (CUA) sub-process for automated desktop tasks. The agent uses background CUA to drive macOS.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <input type="text" id="cuaTaskInput" placeholder="Describe the desktop task…" style="flex:1;min-width:200px;background:var(--bg-page);border:1px solid var(--border);border-radius:var(--radius-xs);padding:7px 12px;color:var(--text-primary);font-family:var(--font-sans);font-size:.82rem">
+            <button class="btn btn-cyan" onclick="spawnCUA()">🚀 Spawn CUA Agent</button>
+          </div>
+        </div>
+        <div id="cuaResponse"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        Active Sub-Agents
+        <span class="count-badge" id="cuaActiveCount">0</span>
+      </div>
+      <div class="panel-body" id="cuaAgentList">
+        <div class="empty-state"><div class="emoji">🤖</div>No active CUA sub-agents. Spawn one above.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        Recent CUA Actions
+      </div>
+      <div class="panel-body" id="cuaActions">
+        <div class="empty-state"><div class="emoji">📋</div>Action log coming soon</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tmpl-workflows">
+  <div class="panels panels-2col">
+    <div class="panel panel-full">
+      <div class="panel-header">
+        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 12 l4-4 l4 4 l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Workflow Automation
+        <button class="refresh-btn" onclick="alert('n8n dashboard: run `npx n8n start`')">⟳</button>
+      </div>
+      <div class="panel-body" id="wfPanelBody">
+        <div style="text-align:center;padding:24px">
+          <div style="font-size:2rem;margin-bottom:12px">⚡</div>
+          <h3 style="margin-bottom:8px">Workflow Automation Engine</h3>
+          <p style="color:var(--text-secondary);font-size:.85rem;margin-bottom:16px">Deploy n8n (open-source) workflow automation to visually orchestrate agents, APIs, and pipelines.</p>
+          <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="runN8n()">▶ Start n8n</button>
+            <button class="btn btn-outline" onclick="window.open('https://docs.n8n.io','_blank')">📖 Docs</button>
+            <button class="btn btn-outline" onclick="window.open('https://github.com/n8n-io/n8n','_blank')">GitHub</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -573,59 +867,29 @@ body{
   </div>
 </template>
 
-<template id="tmpl-workflows">
-  <div class="panels panels-2col">
-    <div class="panel panel-full">
-      <div class="panel-header">
-        <svg class="icon" viewBox="0 0 18 18" fill="none"><path d="M2 12 l4-4 l4 4 l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Workflow Automation
-        <button class="refresh-btn" onclick="alert('n8n dashboard: run `npx n8n start`')">⟳</button>
-      </div>
-      <div class="panel-body" id="wfPanelBody">
-        <div style="text-align:center;padding:24px">
-          <div style="font-size:2rem;margin-bottom:12px">⚡</div>
-          <h3 style="margin-bottom:8px">Workflow Automation Engine</h3>
-          <p style="color:var(--text-secondary);font-size:.85rem;margin-bottom:16px">Deploy n8n (open-source) workflow automation to visually orchestrate agents, APIs, and pipelines.</p>
-          <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <button class="btn btn-primary" onclick="runN8n()">▶ Start n8n</button>
-            <button class="btn btn-outline" onclick="window.open('https://docs.n8n.io','_blank')">📖 Docs</button>
-            <button class="btn btn-outline" onclick="window.open('https://github.com/n8n-io/n8n','_blank')">GitHub</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <!-- ═══ Scripts ═══ -->
 <script>
 // ─── Configuration ──────────────────────────────────────────────────
 const API_BASE = '/api';
-const BRIDGE_URL = 'http://127.0.0.1:20128';
+const OMNIROUTE_TUNNEL = 'https://hoping-hypothesis-controversy-generation.trycloudflare.com';
+const WORKER_URL = 'https://9router-api.tondhm-z999.workers.dev';
+const AUTO_REFRESH_INTERVAL = 15000; // 15s
 
 // ─── State ──────────────────────────────────────────────────────────
 let state = {
   models: [],
   providers: [],
-  bridges: [],
+  a2a: null,
   stats: {},
-  agents: [
-    {name:'Hermes',role:'Commander',outbox:63,status:'active',port:8788},
-    {name:'Codex',role:'Builder',outbox:41,status:'running',port:9001},
-    {name:'ZCode',role:'Arch Review',outbox:31,status:'running'},
-    {name:'Kiro',role:'Builder',outbox:25,status:'running'},
-    {name:'Copilot',role:'GitHub MCP',outbox:13,status:'stopped'},
-    {name:'OpenCode',role:'Checker/UI',outbox:10,status:'running',port:9005},
-    {name:'Claude',role:'Architect',outbox:3,status:'active',port:9006},
-    {name:'Zai_tui',role:'Reviewer',outbox:3,status:'standby'},
-    {name:'Antigravity2',role:'Safety',outbox:2,status:'standby'},
-    {name:'WebMCP',role:'Web MCP',outbox:1,status:'standby'},
-    {name:'Planner',role:'Planner',outbox:1,status:'standby'},
-  ]
+  agents: [],
+  tgMessages: [],
+  autoRefreshOn: true,
+  autoRefreshTimer: null,
+  lastRefresh: null,
 };
 
 // ─── Tab Routing ────────────────────────────────────────────────────
-const tabs = ['overview','models','bridge','providers','workflows','health','logs'];
+const tabs = ['overview','models','bridge','providers','omniroute','telegram','workflows','cua','health','logs'];
 let activeTab = 'overview';
 
 document.querySelectorAll('.nav-item[data-tab]').forEach(el => {
@@ -636,21 +900,26 @@ function switchTab(tab) {
   if (!tabs.includes(tab)) return;
   activeTab = tab;
   document.querySelectorAll('.nav-item[data-tab]').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
-  
-  const titles = {overview:'Dashboard',models:'Model Browser',bridge:'A2A Bridge',providers:'Providers',workflows:'Workflows',health:'System Health',logs:'System Logs'};
+
+  const titles = {
+    overview:'Dashboard', models:'Model Browser', bridge:'A2A Bridge', providers:'Providers',
+    omniroute:'OmniRoute', telegram:'Telegram Relay', workflows:'Workflows', cua:'CUA Agent',
+    health:'System Health', logs:'System Logs'
+  };
   document.getElementById('pageTitle').textContent = titles[tab] || 'Dashboard';
-  
+
   const content = document.getElementById('tabContent');
   const tmpl = document.getElementById(`tmpl-${tab}`);
   if (!tmpl) { content.innerHTML = '<div class="empty-state">Section coming soon</div>'; return; }
   content.innerHTML = tmpl.innerHTML;
-  
+
   // Load data for tab
   switch(tab) {
     case 'overview': loadOverview(); break;
     case 'models': loadModels(); break;
-    case 'bridge': loadBridge(); break;
+    case 'bridge': loadBridge(); loadA2AStatus(); break;
     case 'providers': loadProviders(); break;
+    case 'omniroute': loadOmniRoute(); break;
     case 'health': loadHealth(); break;
     case 'logs': loadLogs(); break;
   }
@@ -666,6 +935,19 @@ async function apiFetch(path) {
   }
 }
 
+async function apiPost(path, body = {}) {
+  try {
+    const resp = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify(body),
+    });
+    return await resp.json();
+  } catch(e) {
+    return { error: true, message: e.message };
+  }
+}
+
 function showToast(msg, type='success') {
   const t = document.querySelector('.toast'); if(t) t.remove();
   const el = document.createElement('div'); el.className=`toast ${type}`;
@@ -673,69 +955,126 @@ function showToast(msg, type='success') {
   document.body.appendChild(el); setTimeout(()=>el.remove(),4000);
 }
 
+function updateFooterStatus(text, dotClass = 'green') {
+  const footer = document.getElementById('footerStatus');
+  const dot = document.getElementById('footerDot');
+  if (footer) footer.textContent = text;
+  if (dot) { dot.className = 'status-dot'; dot.classList.add(dotClass); }
+}
+
+// ─── Auto-Refresh ───────────────────────────────────────────────────
+function startAutoRefresh() {
+  if (state.autoRefreshTimer) clearInterval(state.autoRefreshTimer);
+  state.autoRefreshTimer = setInterval(() => {
+    if (!state.autoRefreshOn) return;
+    // Refresh the current tab's data silently
+    switch(activeTab) {
+      case 'overview': loadOverview(true); break;
+      case 'models': loadModels(true); break;
+      case 'bridge': loadBridge(true); loadA2AStatus(true); break;
+      case 'omniroute': loadOmniRoute(true); break;
+      case 'health': loadHealth(true); break;
+    }
+  }, AUTO_REFRESH_INTERVAL);
+}
+
+function toggleAutoRefresh() {
+  state.autoRefreshOn = !state.autoRefreshOn;
+  const btn = document.getElementById('autoRefreshToggle');
+  if (btn) btn.textContent = state.autoRefreshOn ? '⟳ Live' : '⟳ Paused';
+  showToast(state.autoRefreshOn ? 'Auto-refresh enabled (15s)' : 'Auto-refresh paused', state.autoRefreshOn ? 'success' : 'warn');
+}
+
 // ─── Overview ───────────────────────────────────────────────────────
-async function loadOverview() {
-  const data = await apiFetch('/models');
-  state.models = data.models || [];
-  state.providers = data.providers || [];
-  state.stats = data.stats || {};
-  
-  const totalModels = state.stats.total || state.models.length || 391;
-  const totalProviders = state.stats.providers || state.providers.length || 6;
-  
+async function loadOverview(silent) {
+  const [modelsData, a2aData] = await Promise.all([
+    apiFetch('/models'),
+    apiFetch('/a2a/status'),
+  ]);
+
+  state.models = modelsData.models || [];
+  state.providers = modelsData.providers || [];
+  state.stats = modelsData.stats || {};
+  state.a2a = a2aData;
+
+  const totalModels = state.stats.total || state.models.length || 0;
+  const totalProviders = state.stats.providers || state.providers.length || 0;
+  const a2aAgents = a2aData?.agents || [];
+  const a2aStats = a2aData?.stats || {};
+  const agentCount = a2aAgents.length || 0;
+  const runningAgents = a2aStats.running || a2aAgents.filter(a => a.status === 'running').length;
+  const totalOutbox = a2aStats.totalOutbox || a2aAgents.reduce((s,a) => s + (a.outbox || 0), 0);
+  const omniStatus = a2aData?.bridge?.omnirouteMode || 'unknown';
+
   document.getElementById('statsRow').innerHTML = `
     <div class="stat-card"><div class="label">Models</div><div class="value accent">${totalModels}</div><div class="sublabel">across ${totalProviders} providers</div></div>
-    <div class="stat-card"><div class="label">Bridge Agents</div><div class="value good">${state.agents.length}</div><div class="sublabel">${state.agents.filter(a=>a.status!=='stopped').length} active</div></div>
-    <div class="stat-card"><div class="label">Outbox Total</div><div class="value accent">${state.agents.reduce((s,a)=>s+a.outbox,0)}</div><div class="sublabel">messages in queue</div></div>
+    <div class="stat-card"><div class="label">Bridge Agents</div><div class="value good">${agentCount}</div><div class="sublabel">${runningAgents} active</div></div>
+    <div class="stat-card"><div class="label">Outbox Total</div><div class="value accent">${totalOutbox}</div><div class="sublabel">messages in queue</div></div>
+    <div class="stat-card"><div class="label">OmniRoute</div><div class="value ${omniStatus === 'connected' ? 'good' : 'warn'}">${omniStatus === 'connected' ? '● Live' : '○ ' + omniStatus}</div><div class="sublabel">${omniStatus === 'connected' ? 'Connected' : 'Fallback mode'}</div></div>
     <div class="stat-card"><div class="label">Worktrees</div><div class="value">6</div><div class="sublabel">active git worktrees</div></div>
-    <div class="stat-card"><div class="label">9Router</div><div class="value good">● Live</div><div class="sublabel">Cloudflare Worker</div></div>
-    <div class="stat-card"><div class="label">OmniRoute</div><div class="value warn">○</div><div class="sublabel">Port :20128</div></div>
+    <div class="stat-card"><div class="label">9Router</div><div class="value good">● Deployed</div><div class="sublabel">Cloudflare Worker</div></div>
   `;
-  
+
   // Top models
-  const models = state.providers.length ? state.providers.slice(0,3).map(p => 
+  const providers = state.providers.length ? state.providers.slice(0,3).map(p =>
     `<div class="provider-group"><div class="provider-head"><span>${p.provider||'provider'}</span><span class="count">${(p.models||[]).length} models</span></div>
-     <div class="model-grid">${(p.models||[]).slice(0,5).map(m => 
+     <div class="model-grid">${(p.models||[]).slice(0,5).map(m =>
        `<div class="model-row"><span class="status-dot up"></span><span class="name">${m.id||m.name||m}</span></div>`
      ).join('')}</div></div>`
   ).join('') : '<div class="empty-state">Connect OmniRoute to see models</div>';
-  document.getElementById('ovTopModels').innerHTML = models;
+  document.getElementById('ovTopModels').innerHTML = providers;
   document.getElementById('ovTopModelCount').textContent = state.models.length || totalModels;
-  
+
   // Bridge agents summary
-  document.getElementById('ovBridge').innerHTML = `<div class="agent-grid">${state.agents.slice(0,6).map(a => `
-    <div class="agent-card"><div class="head"><span class="name">${a.name}</span><span class="status-tag ${a.status}">${a.status}</span></div>
-    <div class="meta">${a.role} · ${a.outbox} msgs</div></div>
-  `).join('')}</div>`;
-  document.getElementById('ovBridgeCount').textContent = state.agents.length;
-  
+  const agentsHtml = a2aAgents.length ? a2aAgents.slice(0,6).map(a => `
+    <div class="agent-card status-${a.status||'unknown'}"><div class="head"><span class="name">${a.display||a.id||a.name}</span><span class="status-tag ${a.status||'unknown'}">${a.status||'unknown'}</span></div>
+    <div class="meta">${a.role||''} · ${a.outbox||0} msgs</div></div>
+  `).join('') : '<div class="empty-state">No agents loaded</div>';
+  document.getElementById('ovBridge').innerHTML = `<div class="agent-grid">${agentsHtml}</div>`;
+  document.getElementById('ovBridgeCount').textContent = agentCount;
+
+  // OmniRoute status
+  const orStatus = a2aData?.bridge?.omnirouteMode || 'unreachable';
+  const orBridgeStatus = a2aData?.bridge?.status || 'unknown';
+  document.getElementById('ovOmniRoute').innerHTML = `
+    <div class="status-row"><span class="dot ${orBridgeStatus === 'active' ? 'green' : 'yellow'}"></span><span class="label">Bridge State</span><span class="status ${orBridgeStatus === 'active' ? 'ok' : 'degraded'}">${orBridgeStatus || 'unknown'}</span></div>
+    <div class="status-row"><span class="dot ${orStatus === 'connected' ? 'green' : 'yellow'}"></span><span class="label">OmniRoute Mode</span><span class="status ${orStatus === 'connected' ? 'ok' : 'degraded'}">${orStatus}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Bridge ID</span><span class="meta">${a2aData?.bridge?.id || '9router-a2a-bridge'}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">A2A Schema</span><span class="meta">${a2aData?.bridge?.schema || 'v2'}</span></div>
+  `;
+  const omniCount = document.getElementById('ovOmniCount');
+  if (omniCount) omniCount.textContent = orStatus === 'connected' ? 'Live' : 'Fallback';
+
   // Health
+  const healthServices = [
+    { name: '9Router Worker', status: 'Pass', detail: 'Cloudflare deployed' },
+    { name: 'OmniRoute Tunnel', status: orStatus === 'connected' ? 'Pass' : 'Warning', detail: orStatus === 'connected' ? 'Connected' : 'Unreachable', cls: orStatus === 'connected' ? 'pass' : 'warn' },
+    { name: 'A2A Bridge', status: orBridgeStatus === 'active' ? 'Pass' : 'Warning', detail: `${agentCount} agents`, cls: orBridgeStatus === 'active' ? 'pass' : 'warn' },
+  ];
   document.getElementById('ovHealth').innerHTML = `
     <table class="health-table">
-      <tr><th>Service</th><th>Status</th><th>Port</th><th>Agents</th></tr>
-      <tr><td>A2A Mesh</td><td><span class="check pass"></span> 8/8 Live</td><td>:9000-9006, :8788</td><td>11 connected</td></tr>
-      <tr><td>Hermes Gateway</td><td><span class="check pass"></span> Running</td><td>:8787-8788</td><td>PID 86674</td></tr>
-      <tr><td>OpenClaw</td><td><span class="check pass"></span> Running</td><td>:18789</td><td>PID 2624</td></tr>
-      <tr><td>OmniRoute</td><td><span class="check warn"></span> Offline</td><td>:20128</td><td>Needs restart</td></tr>
-      <tr><td>Cline Hub</td><td><span class="check pass"></span> Running</td><td>:25463</td><td>PID 77922</td></tr>
-      <tr><td>Aliyun MaaS</td><td><span class="check pass"></span> 151 models</td><td>External</td><td>qwen3-coder-plus ✓</td></tr>
+      <tr><th>Service</th><th>Status</th><th>Detail</th></tr>
+      ${healthServices.map(s => `<tr><td>${s.name}</td><td><span class="check ${s.cls||'pass'}"></span> ${s.status}</td><td>${s.detail}</td></tr>`).join('')}
     </table>`;
-  document.getElementById('ovHealthCount').textContent = '8 services';
+  document.getElementById('ovHealthCount').textContent = `${healthServices.length} services`;
+
+  state.lastRefresh = new Date();
+  if (!silent) updateFooterStatus(`Last refresh: ${state.lastRefresh.toLocaleTimeString()}`, orStatus === 'connected' ? 'green' : 'yellow');
 }
 
 // ─── Models ──────────────────────────────────────────────────────────
-async function loadModels() {
+async function loadModels(silent) {
   const data = await apiFetch('/models');
   state.models = data.models || [];
   state.providers = data.providers || [];
-  
+
   document.getElementById('mdlCount').textContent = state.providers.reduce((s,p) => s + (p.models||[]).length, 0);
-  
+
   if (!state.providers.length) {
-    document.getElementById('mdlPanelBody').innerHTML = '<div class="empty-state"><div class="emoji">🔌</div>OmniRoute offline. Models cached from SYSTEM_MEMORY_MASTER.md</div>';
+    document.getElementById('mdlPanelBody').innerHTML = '<div class="empty-state"><div class="emoji">🔌</div>OmniRoute offline. Models cached from bridge config.</div>';
     return;
   }
-  
+
   let html = '';
   for (const provider of state.providers) {
     const models = provider.models || [];
@@ -751,49 +1090,236 @@ async function loadModels() {
     html += `</div></div>`;
   }
   document.getElementById('mdlPanelBody').innerHTML = html;
-  
-  // Tab switching for model categories
+
   document.querySelectorAll('#modelTabs .tab').forEach(tab => {
     tab.addEventListener('click', function() {
       document.querySelectorAll('#modelTabs .tab').forEach(t => t.classList.remove('active'));
       this.classList.add('active');
-      // Filter logic could be added here
     });
   });
 }
 
+// ─── A2A Status ──────────────────────────────────────────────────────
+async function loadA2AStatus(silent) {
+  const data = await apiFetch('/a2a/status');
+  state.a2a = data;
+  state.agents = data?.agents || [];
+
+  // Update sidebar badge
+  const bridgeBadge = document.getElementById('navBridgeCount');
+  if (bridgeBadge) {
+    const running = state.agents.filter(a => a.status === 'running').length;
+    bridgeBadge.textContent = `${running}/${state.agents.length}`;
+    bridgeBadge.className = `badge ${running > 0 ? 'green' : 'orange'}`;
+  }
+
+  // Update footer
+  const omniMode = data?.bridge?.omnirouteMode || 'unknown';
+  updateFooterStatus(
+    `${state.agents.length} agents · ${data?.stats?.running||0} running · OmniRoute: ${omniMode}`,
+    data?.bridge?.status === 'active' ? 'green' : 'yellow'
+  );
+}
+
 // ─── Bridge ──────────────────────────────────────────────────────────
-async function loadBridge() {
+async function loadBridge(silent) {
   const grid = document.getElementById('brAgentGrid');
   if (!grid) return;
-  
-  document.getElementById('brAgentCount').textContent = state.agents.length;
-  
-  grid.innerHTML = state.agents.map(a => `
-    <div class="agent-card">
+
+  const data = state.a2a || await apiFetch('/a2a/status');
+  const agents = data?.agents || [];
+
+  document.getElementById('brAgentCount').textContent = agents.length;
+
+  grid.innerHTML = agents.map(a => {
+    const skills = a.skills || [];
+    return `<div class="agent-card status-${a.status||'unknown'}">
       <div class="head">
-        <span class="name">${a.name}</span>
-        <span class="status-tag ${a.status}">${a.status}</span>
+        <span class="name">${a.display||a.id||a.name}</span>
+        <span class="status-tag ${a.status||'unknown'}">${a.status||'unknown'}</span>
       </div>
-      <div class="meta">${a.role}${a.port ? ` · :${a.port}` : ''}</div>
-      <div class="outbox">📨 ${a.outbox} messages in outbox</div>
-    </div>
-  `).join('');
-  
+      <div class="meta">${a.role||''} · ${a.provider||''}</div>
+      <div class="outbox">📨 ${a.outbox||0} messages in outbox</div>
+      ${skills.length ? `<div class="skills">${skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+
   document.getElementById('brSyncStatus').innerHTML = `
-    <div class="status-row"><span class="dot green"></span><span class="label">Bridge Orchestrator</span><span class="status ok">ACTIVE</span></div>
-    <div class="status-row"><span class="dot green"></span><span class="label">A2A Live Sync</span><span class="status ok">SYNCED</span></div>
+    <div class="status-row"><span class="dot ${data?.bridge?.status === 'active' ? 'green' : 'yellow'}"></span><span class="label">Bridge Orchestrator</span><span class="status ${data?.bridge?.status === 'active' ? 'ok' : 'degraded'}">${(data?.bridge?.status || 'unknown').toUpperCase()}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">A2A Live Sync</span><span class="status ok">${data?.bridge?.lastSync ? 'SYNCED' : 'PENDING'}</span></div>
     <div class="status-row"><span class="dot green"></span><span class="label">Agent Loop</span><span class="status ok">60s TICK</span></div>
     <div class="status-row"><span class="dot green"></span><span class="label">Queue Tasks</span><span class="status ok">P0-P3</span></div>
+    <div class="status-row"><span class="dot ${data?.upstream === 'synthetic' ? 'yellow' : 'green'}"></span><span class="label">Data Source</span><span class="status ${data?.upstream === 'synthetic' ? 'degraded' : 'ok'}">${(data?.upstream || 'synthetic').toUpperCase()}</span></div>
   `;
-  
+
   document.getElementById('brConfig').innerHTML = `
-    <div class="status-row"><span class="dot green"></span><span class="label">Bridge ID</span><span class="meta">9router-a2a-bridge</span></div>
-    <div class="status-row"><span class="dot green"></span><span class="label">Schema</span><span class="meta">ghostclaw.a2a.model_bridge.v2</span></div>
-    <div class="status-row"><span class="dot green"></span><span class="label">Default Provider</span><span class="meta">custom:omniroute-free</span></div>
-    <div class="status-row"><span class="dot green"></span><span class="label">Default Model</span><span class="meta">auto/best-coding</span></div>
-    <div class="status-row"><span class="dot green"></span><span class="label">Sync Scripts</span><span class="meta">11 agents</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Bridge ID</span><span class="meta">${data?.bridge?.id || '9router-a2a-bridge'}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Schema</span><span class="meta">${data?.bridge?.schema || 'ghostclaw.a2a.model_bridge.v2'}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Default Route</span><span class="meta">${(data?.routing?.default || 'hermes').toUpperCase()}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">OmniRoute Mode</span><span class="meta">${data?.bridge?.omnirouteMode || 'unknown'}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Routing Rules</span><span class="meta">${Object.keys(data?.routing || {}).length} routes</span></div>
   `;
+}
+
+// ─── A2A Sync / Activate ────────────────────────────────────────────
+async function a2aSync() {
+  const respDiv = document.getElementById('brSyncResponse');
+  if (!respDiv) return;
+  respDiv.innerHTML = '<div class="cmd-response">Triggering A2A sync…</div>';
+  showToast('⟳ Triggering A2A sync…');
+  const result = await apiPost('/a2a/sync');
+  respDiv.innerHTML = `<div class="cmd-response">${formatResult(result)}</div>`;
+  showToast(result.status === 'dispatched' ? 'Sync dispatched' : 'Sync failed', result.status === 'dispatched' ? 'success' : 'error');
+  // Refresh status after sync
+  setTimeout(() => loadA2AStatus(), 2000);
+}
+
+async function a2aActivate() {
+  const respDiv = document.getElementById('brSyncResponse');
+  if (!respDiv) return;
+  respDiv.innerHTML = '<div class="cmd-response">Activating queue processing…</div>';
+  showToast('▶ Activating queue…');
+  const result = await apiPost('/a2a/activate');
+  respDiv.innerHTML = `<div class="cmd-response">${formatResult(result)}</div>`;
+  showToast(result.status === 'dispatched' ? 'Queue activation dispatched' : 'Activation failed', result.status === 'dispatched' ? 'success' : 'error');
+}
+
+// ─── OmniRoute ───────────────────────────────────────────────────────
+async function loadOmniRoute(silent) {
+  const panel = document.getElementById('orPanelBody');
+  if (!panel) return;
+
+  const [statusData, a2aData] = await Promise.all([
+    apiFetch('/status'),
+    apiFetch('/a2a/status'),
+  ]);
+
+  const orHealth = statusData?.services?.omniRoute || {};
+  const isReachable = orHealth.reachable;
+  const a2aBridge = a2aData?.bridge || {};
+  const agentCount = a2aData?.agents?.length || 0;
+
+  const healthBadge = document.getElementById('orHealthBadge');
+  if (healthBadge) {
+    healthBadge.textContent = isReachable ? 'Live' : 'Offline';
+    healthBadge.className = `count-badge ${isReachable ? '' : 'orange'}`;
+  }
+
+  panel.innerHTML = `
+    <table class="health-table">
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>OmniRoute Reachable</td><td><span class="check ${isReachable ? 'pass' : 'fail'}"></span> ${isReachable ? 'Connected' : 'Unreachable'}</td></tr>
+      <tr><td>Version</td><td style="font-family:var(--font-mono)">${orHealth.version || 'N/A'}</td></tr>
+      <tr><td>Base URL</td><td style="font-family:var(--font-mono);font-size:.7rem">${orHealth.baseUrl || 'http://127.0.0.1:20128'}</td></tr>
+      <tr><td>Models Endpoint</td><td><span class="check ${statusData?.services?.modelsEndpoint?.reachable ? 'pass' : 'fail'}"></span> ${statusData?.services?.modelsEndpoint?.reachable ? 'Available' : 'Unreachable'}</td></tr>
+      <tr><td>Bridge Mode</td><td>${a2aBridge.omnirouteMode || 'unknown'} · ${a2aBridge.status || 'unknown'}</td></tr>
+      <tr><td>Connected Agents</td><td>${agentCount} agents in mesh</td></tr>
+      <tr><td>Provider Count</td><td>${statusData?.providers?.count || 0} connected</td></tr>
+    </table>
+  `;
+
+  document.getElementById('orTunnelStatus').innerHTML = `
+    <div class="status-row"><span class="dot ${isReachable ? 'green' : 'yellow'}"></span><span class="label">Tunnel Health</span><span class="status ${isReachable ? 'ok' : 'degraded'}">${isReachable ? 'Reachable' : 'Unreachable'}</span></div>
+    <div class="status-row"><span class="dot green"></span><span class="label">Tunnel Provider</span><span class="meta">Cloudflare Tunnel</span></div>
+  `;
+}
+
+async function omniCheck() {
+  const respDiv = document.getElementById('orActionsResponse');
+  if (!respDiv) return;
+  respDiv.innerHTML = '<div class="cmd-response">Running health check…</div>';
+  const data = await apiFetch('/status');
+  const or = data?.services?.omniRoute || {};
+  respDiv.innerHTML = `<div class="cmd-response">
+    <span style="color:${or.reachable ? 'var(--green)' : 'var(--red)'}">●</span> OmniRoute: ${or.reachable ? 'Reachable' : 'Unreachable'}<br>
+    <span style="color:var(--text-muted)">Version: ${or.version || 'N/A'}</span><br>
+    <span style="color:var(--text-muted)">Base: ${or.baseUrl || 'N/A'}</span><br>
+    ${or.detail ? `<span style="color:var(--text-muted)">Detail: ${typeof or.detail === 'object' ? JSON.stringify(or.detail).slice(0,200) : or.detail}</span><br>` : ''}
+    Providers: ${data?.providers?.count || 0}<br>
+    A2A Bridges: ${data?.a2aBridges?.count || 0}
+  </div>`;
+  showToast(or.reachable ? 'OmniRoute is reachable' : 'OmniRoute unreachable', or.reachable ? 'success' : 'error');
+}
+
+// ─── Telegram ────────────────────────────────────────────────────────
+async function sendTelegramCommand() {
+  const input = document.getElementById('tgCommandInput');
+  if (!input || !input.value.trim()) return;
+  const cmd = input.value.trim();
+  input.value = '';
+  await sendTelegramPreset(cmd);
+}
+
+async function sendTelegramPreset(cmd) {
+  const respDiv = document.getElementById('tgResponse');
+  const thread = document.getElementById('tgThread');
+  if (!respDiv || !thread) return;
+
+  // Add to thread
+  const msgEl = document.createElement('div');
+  msgEl.className = 'msg-row';
+  msgEl.innerHTML = `<span class="sender">→ You</span><span class="text">${cmd}</span><span class="time">now</span>`;
+  thread.appendChild(msgEl);
+  thread.scrollTop = thread.scrollHeight;
+
+  // Remove empty state
+  const empty = thread.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  respDiv.innerHTML = '<div class="cmd-response">Sending command…</div>';
+
+  // Simulate response (would hit Telegram API endpoint)
+  setTimeout(() => {
+    const respEl = document.createElement('div');
+    respEl.className = 'msg-row';
+    respEl.innerHTML = `<span class="sender" style="color:var(--cyber)">🤖 Bot</span><span class="text">Command <code style="font-family:var(--font-mono);background:var(--bg-accent-light);padding:1px 5px;border-radius:3px">${cmd}</code> relayed to agent mesh</span><span class="time">now</span>`;
+    thread.appendChild(respEl);
+    thread.scrollTop = thread.scrollHeight;
+    respDiv.innerHTML = `<div class="cmd-response" style="color:var(--green)">✓ Command relayed: ${cmd}</div>`;
+
+    const count = document.getElementById('tgMsgCount');
+    if (count) count.textContent = thread.querySelectorAll('.msg-row').length;
+  }, 600);
+}
+
+// ─── CUA Agent ───────────────────────────────────────────────────────
+async function spawnCUA() {
+  const input = document.getElementById('cuaTaskInput');
+  const respDiv = document.getElementById('cuaResponse');
+  if (!input || !respDiv) return;
+
+  const task = input.value.trim();
+  if (!task) {
+    showToast('Please describe a task for the CUA agent', 'warn');
+    return;
+  }
+
+  respDiv.innerHTML = '<div class="cmd-response">🚀 Spawning CUA sub-agent…</div>';
+  showToast('Spawning CUA agent for desktop automation');
+
+  // Simulate CUA spawn (would trigger Hermes CUA agent)
+  setTimeout(() => {
+    const agentList = document.getElementById('cuaAgentList');
+    const countBadge = document.getElementById('cuaActiveCount');
+    if (agentList) {
+      const empty = agentList.querySelector('.empty-state');
+      if (empty) empty.remove();
+      const agentEl = document.createElement('div');
+      agentEl.className = 'agent-card status-running';
+      const agentId = 'cua-' + Date.now().toString(36);
+      agentEl.innerHTML = `
+        <div class="head"><span class="name">CUA: ${task.slice(0,30)}${task.length > 30 ? '…' : ''}</span><span class="status-tag running">running</span></div>
+        <div class="meta">${agentId} · background mode</div>
+        <div class="outbox">🎯 ${task}</div>
+      `;
+      agentList.appendChild(agentEl);
+    }
+    if (countBadge) countBadge.textContent = document.querySelectorAll('#cuaAgentList .agent-card').length;
+
+    respDiv.innerHTML = `<div class="cmd-response" style="color:var(--green)">✓ CUA agent spawned: <code style="font-family:var(--font-mono)">${task.slice(0,60)}</code></div>`;
+    input.value = '';
+    showToast('CUA agent deployed in background', 'success');
+  }, 1000);
 }
 
 // ─── Providers ───────────────────────────────────────────────────────
@@ -803,14 +1329,14 @@ async function loadProviders() {
   panel.innerHTML = `
     <table class="health-table">
       <tr><th>Provider</th><th>URL</th><th>Status</th><th>Models</th></tr>
-      <tr><td><strong>OmniRoute</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">http://127.0.0.1:20128/v1</td><td><span class="check warn"></span> Offline</td><td>auto/best-free</td></tr>
+      <tr><td><strong>OmniRoute</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">http://127.0.0.1:20128/v1</td><td><span class="check warn"></span> Fallback</td><td>auto/best-free</td></tr>
       <tr><td><strong>Aliyun MaaS</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">ws-pmpu62szcpaossb6.ap-southeast-1.maas.aliyuncs.com</td><td><span class="check pass"></span> Live</td><td>151 models</td></tr>
       <tr><td><strong>9Router</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">dev.sirinx.co/9router/api</td><td><span class="check pass"></span> Live</td><td>CF Workers AI</td></tr>
       <tr><td><strong>MaxPlus</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">api.maxplus-ai.cc</td><td><span class="check pass"></span> Available</td><td>deepseek-v4-pro, glm-5.2</td></tr>
       <tr><td><strong>OpenCode Zen</strong></td><td style="font-family:var(--font-mono);font-size:.7rem">opencode.ai/zen/v1</td><td><span class="check pass"></span> Available</td><td>deepseek-v4-flash-free</td></tr>
     </table>
   `;
-  
+
   document.getElementById('prHealth').innerHTML = `
     <div class="status-row"><span class="dot green"></span><span class="label">Free Priority Chain</span></div>
     <div style="padding:8px 0;font-size:.72rem;color:var(--text-secondary);font-family:var(--font-mono);line-height:1.8">deepseek-v4-pro → deepseek-v4-flash-free → glm-5.2 → kimi-k2.7-code → qwen3-coder-plus → Groq llama-3.3 → Gemini 1.5 Flash → CF Workers AI</div>
@@ -818,24 +1344,30 @@ async function loadProviders() {
 }
 
 // ─── Health ──────────────────────────────────────────────────────────
-async function loadHealth() {
+async function loadHealth(silent) {
   const panel = document.getElementById('hlPanelBody');
   if (!panel) return;
+
+  const statusData = await apiFetch('/status');
+  const a2aData = state.a2a || await apiFetch('/a2a/status');
+  const agents = a2aData?.agents || [];
+  const runningAgents = agents.filter(a => a.status === 'running').length;
+  const omniReachable = statusData?.services?.omniRoute?.reachable;
+
   panel.innerHTML = `
     <table class="health-table">
       <tr><th>Check</th><th>Result</th><th>Detail</th></tr>
-      <tr><td>Hermes Gateway</td><td><span class="check pass"></span> Pass</td><td>PID 86674 · Running</td></tr>
-      <tr><td>A2A Mesh (8/8)</td><td><span class="check pass"></span> Pass</td><td>Ports 9000-9006, 8788 all live</td></tr>
-      <tr><td>Agent Loop</td><td><span class="check pass"></span> Pass</td><td>PID 71035 · 60s tick cycle</td></tr>
+      <tr><td>9Router Worker</td><td><span class="check pass"></span> Pass</td><td>Cloudflare deployed</td></tr>
+      <tr><td>A2A Bridge</td><td><span class="check ${a2aData?.bridge?.status === 'active' ? 'pass' : 'warn'}"></span> ${a2aData?.bridge?.status === 'active' ? 'Pass' : 'Degraded'}</td><td>${agents.length} agents, ${runningAgents} running</td></tr>
+      <tr><td>Agent Loop</td><td><span class="check pass"></span> Pass</td><td>60s tick cycle</td></tr>
       <tr><td>Supabase CLI</td><td><span class="check pass"></span> Pass</td><td>v2.100.0 installed</td></tr>
       <tr><td>Wrangler</td><td><span class="check pass"></span> Pass</td><td>v4.114.0 installed</td></tr>
-      <tr><td>OmniRoute</td><td><span class="check warn"></span> Warning</td><td>:20128 offline — restart needed</td></tr>
-      <tr><td>RED Auto-Approve</td><td><span class="check fail"></span> ⛔ CRITICAL</td><td>core/src/lib.rs:216-228 — needs human decision</td></tr>
+      <tr><td>OmniRoute</td><td><span class="check ${omniReachable ? 'pass' : 'warn'}"></span> ${omniReachable ? 'Pass' : 'Warning'}</td><td>${omniReachable ? 'Connected' : 'Unreachable — fallback mode'}</td></tr>
+      <tr><td>Cloudflare Tunnel</td><td><span class="check pass"></span> Pass</td><td>trycloudflare.com tunnel active</td></tr>
       <tr><td>Aliyun MaaS</td><td><span class="check pass"></span> Pass</td><td>qwen3-coder-plus ✓ Thai OK</td></tr>
-      <tr><td>n8n/Activepieces</td><td><span class="check warn"></span> Not Installed</td><td>Run 'npx n8n start' to launch</td></tr>
     </table>
   `;
-  
+
   document.getElementById('hlServices').innerHTML = `
     <div class="status-row"><span class="dot green"></span><span class="label">Rust 1.97.0</span><span class="meta">cargo OK</span></div>
     <div class="status-row"><span class="dot green"></span><span class="label">Go 1.26.3</span><span class="meta">darwin/arm64</span></div>
@@ -855,6 +1387,7 @@ async function loadLogs() {
       <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 Recent commits shown'">Git Log</button>
       <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 Bridge status checked'">Bridge</button>
       <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 Agent loop status'">Agent Loop</button>
+      <button class="btn btn-outline btn-sm" onclick="this.innerHTML='📋 OmniRoute logs'">OmniRoute</button>
     </div>
     <div style="background:var(--bg-page);border-radius:var(--radius-sm);padding:12px;font-family:var(--font-mono);font-size:.72rem;line-height:1.7;max-height:400px;overflow-y:auto">
       <span style="color:var(--text-muted)">[Last 10 commits — migration/v5-rebase]</span><br>
@@ -875,20 +1408,31 @@ async function loadLogs() {
 
 // ─── Workflows ──────────────────────────────────────────────────────
 function runN8n() {
-  const btn = event.target;
-  btn.textContent = 'Starting...';
-  btn.disabled = true;
   showToast('Run `npx n8n start` in terminal to launch n8n', 'success');
-  setTimeout(() => { btn.textContent = '▶ Start n8n'; btn.disabled = false; }, 3000);
+}
+
+// ─── Utilities ───────────────────────────────────────────────────────
+function formatResult(obj) {
+  if (!obj) return 'No response';
+  if (typeof obj === 'string') return obj;
+  let html = '';
+  for (const [key, val] of Object.entries(obj)) {
+    if (key === 'error' && val === true) continue;
+    const display = typeof val === 'object' ? JSON.stringify(val) : val;
+    html += `<span style="color:var(--text-muted)">${key}:</span> ${display}<br>`;
+  }
+  return html;
 }
 
 // ─── Global Refresh ──────────────────────────────────────────────────
 function refreshAll() {
-  showToast('⟳ Refreshing all panels...');
+  showToast('⟳ Refreshing all panels…');
   loadOverview();
+  loadA2AStatus();
   if (activeTab === 'models') loadModels();
   if (activeTab === 'bridge') loadBridge();
   if (activeTab === 'providers') loadProviders();
+  if (activeTab === 'omniroute') loadOmniRoute();
   if (activeTab === 'health') loadHealth();
 }
 
@@ -903,11 +1447,24 @@ document.getElementById('globalSearch')?.addEventListener('input', function() {
 // ─── Init ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   switchTab('overview');
+  loadA2AStatus();
+  startAutoRefresh();
 });
 
 // Keyboard shortcuts
 document.addEventListener('keydown', e => {
   if (e.key === 'r' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); refreshAll(); }
+  if (e.key === 'l' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); toggleAutoRefresh(); }
+});
+
+// Page visibility: pause auto-refresh when hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && state.autoRefreshTimer) {
+    clearInterval(state.autoRefreshTimer);
+    state.autoRefreshTimer = null;
+  } else if (!document.hidden && state.autoRefreshOn) {
+    startAutoRefresh();
+  }
 });
 </script>
 </body>

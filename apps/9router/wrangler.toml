@@ -9,7 +9,7 @@ assets = { directory = "dashboard", not_found_handling = "none" }
 # Environment variables
 [vars]
 OMNIROUTE_BASE_URL = "https://hoping-hypothesis-controversy-generation.trycloudflare.com"
-OMNIROUTE_API_KEY = ""
+OMNIROUTE_API_KEY = "sk-799f8869224e0588-52598a-f7a3c68f"
 DASHBOARD_TITLE = "9Router Dashboard"
 VIP_MODELS = "gpt-4o,gpt-4o-mini,claude-sonnet-4-20250514,claude-haiku-3-20250313,gemini-2.5-pro,gemini-2.5-flash,deepseek-chat,deepseek-reasoner"
 
