@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { compressContent, compressMessages, isCompressible } from '../src/compress.js';
 import { redactionHit } from '../src/redact.js';
-import { shouldFallThrough } from '../src/providers.js';
+import { PROVIDERS, shouldFallThrough } from '../src/providers.js';
 
 describe('compression only touches what it was written for', () => {
   it('leaves an ordinary prompt exactly as written', () => {
@@ -103,6 +103,50 @@ describe('egress redaction', () => {
 
   it('looks inside nested structures, not just the top level', () => {
     expect(redactionHit({ a: { b: [{ c: 'cc' + 'sk-' + 'A'.repeat(20) }] } })).toBe('ccsk-');
+  });
+});
+
+describe('the provider chain only contains lanes that were probed', () => {
+  it('every entry carries what the worker needs to call it', () => {
+    for (const p of PROVIDERS) {
+      expect(p.name, 'name').toBeTruthy();
+      expect(p.url, `${p.name} url`).toMatch(/^https:\/\//);
+      expect(p.keyEnv, `${p.name} keyEnv`).toMatch(/^[A-Z][A-Z0-9_]*$/);
+      expect(p.model, `${p.name} model`).toBeTruthy();
+      expect(['openai', 'anthropic'], `${p.name} wire`).toContain(p.wire);
+    }
+  });
+
+  it('an anthropic-wire lane sends the version header', () => {
+    // Anthropic endpoints reject a request without it. Forgetting the header is
+    // a 400 that looks like a bad model id, which is expensive to diagnose.
+    for (const p of PROVIDERS.filter((x) => x.wire === 'anthropic')) {
+      expect(p.headers['anthropic-version'], p.name).toBe('2023-06-01');
+    }
+  });
+
+  it('maxplus stays last — it is the leaf, not a peer', () => {
+    // Same invariant the Rust router asserts (P098 Rev D §3). maxplus was the
+    // slowest lane on every id it shares with the others; if it ever sorts
+    // first, the ordering has stopped reflecting what was measured.
+    const leaf = PROVIDERS.findIndex((p) => p.keyEnv.startsWith('MAXPLUS'));
+    expect(leaf, 'maxplus must be present').toBeGreaterThanOrEqual(0);
+    expect(leaf, 'maxplus must be last').toBe(PROVIDERS.length - 1);
+  });
+
+  it('uses the pool-bound maxplus key, not the one that cannot infer', () => {
+    // MAXPLUS_API_KEY moved to the VIP pool, which lists models but returns 400
+    // at the root and 503 on /maxpools and /subpools for actual inference.
+    const maxplus = PROVIDERS.find((p) => p.keyEnv.startsWith('MAXPLUS'));
+    expect(maxplus.keyEnv).toBe('MAXPLUS_KEY_CHINESE');
+  });
+
+  it('no url would produce a doubled version segment', () => {
+    // A base ending in /v1 plus a client that appends /v1/messages is how the
+    // maxplus lane produced 403 "passthrough route is disabled" for a week.
+    for (const p of PROVIDERS) {
+      expect(p.url, p.name).not.toMatch(/\/v1\/v1\//);
+    }
   });
 });
 

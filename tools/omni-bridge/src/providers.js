@@ -1,59 +1,65 @@
 // The fallback matrix.
 //
-// Order is speed first, then free quota. Every entry is skipped when its secret
-// is not bound, so the worker runs with any subset configured.
+// Every lane here was probed live against its own endpoint on 2026-07-25/26 and
+// re-verified immediately before this file was written. Order is by measured
+// latency, not by price — the point of a fallback chain is to reach a working
+// model quickly, and the cheapest lane on this list is also the slowest.
 //
-// ⚠️ The model ids below came from the original draft and have NOT been probed
-// against each provider's live model list. On this project a declared id has
-// failed against a live list four times — maxplus listed three ids that were not
-// routable, cointh's config misspelled two of four, a requested qwen3.8 did not
-// exist, and a dashboard claimed schema support that returned 400. Run
-// `npm run verify:models` before trusting them.
+// The original draft of this worker listed DeepSeek, Groq, OpenRouter,
+// dashscope-intl and Gemini. Those were carried over unverified and no
+// credential for any of them exists on this host, so every one of them would
+// have been skipped at runtime, leaving a worker that could not answer at all.
+// They were replaced rather than kept as dead entries.
+//
+// Two wire formats appear below. `anthropic` sends `messages` + `max_tokens`
+// with an `anthropic-version` header; `openai` sends the same body to a
+// chat-completions path. The worker forwards the caller's body either way, so
+// an OpenAI-shaped request works against both — `max_tokens` is the only field
+// Anthropic requires that OpenAI treats as optional, and callers already send it.
 
 export const PROVIDERS = [
   {
-    name: 'DeepSeek-V4-Flash',
-    url: 'https://api.deepseek.com/v1/chat/completions',
-    keyEnv: 'DEEPSEEK_API_KEY',
-    model: 'deepseek-chat',
-    modelsUrl: 'https://api.deepseek.com/v1/models',
+    // Fastest measured lane. deepseek-v4-flash answered in 870 ms here against
+    // 3112 ms for the same id on maxplus; qwen3.7-max 2191 ms against 5357 ms.
+    name: 'Alibaba-MaaS',
+    url: 'https://ws-pmpu62szcpaossb6.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions',
+    keyEnv: 'ALIBABA_MAAS_API_KEY',
+    model: 'qwen3.7-max',
+    modelsUrl: 'https://ws-pmpu62szcpaossb6.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/models',
+    wire: 'openai',
     headers: {},
+    // The hostname carries the workspace id. A different Model Studio workspace
+    // is a different host — this URL is a fact about this account, not the service.
+    note: '11/11 probed ids answered. 151 listed. Free tier is 10k neurons/day.',
   },
   {
-    name: 'Groq-Speed-Llama',
-    url: 'https://api.groq.com/openai/v1/chat/completions',
-    keyEnv: 'GROQ_API_KEY',
-    model: 'llama-3.3-70b-versatile',
-    modelsUrl: 'https://api.groq.com/openai/v1/models',
-    headers: {},
+    // Beats Alibaba on GLM specifically: glm-5.2 at 1265 ms against 1676 ms.
+    // That asymmetry is why the in-process router (P098 Rev G) routes per family
+    // rather than picking one provider for everything.
+    name: 'Cointh-GLM',
+    url: 'https://cointh.com/glm/anthropic/v1/messages',
+    keyEnv: 'COINTH_API_KEY',
+    model: 'glm-5.2',
+    modelsUrl: 'https://cointh.com/glm/anthropic/v1/models',
+    wire: 'anthropic',
+    headers: { 'anthropic-version': '2023-06-01' },
+    note: '8/8 listed ids answered. anthropic_messages only — /v1/chat/completions 404s.',
   },
   {
-    name: 'OpenRouter-Zero-Cost',
-    url: 'https://openrouter.ai/api/v1/chat/completions',
-    keyEnv: 'OPENROUTER_API_KEY',
-    model: 'meta-llama/llama-3-8b-instruct:free',
-    modelsUrl: 'https://openrouter.ai/api/v1/models',
-    // OpenRouter attributes free-tier usage by referer and title.
-    headers: {
-      'HTTP-Referer': 'https://omni-bridge.cloud',
-      'X-Title': 'GhostClaw-OmniBridge-Edge',
-    },
-  },
-  {
-    name: 'Alibaba-Qwen-Free',
-    url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions',
-    keyEnv: 'ALIBABA_API_KEY',
-    model: 'qwen-long',
-    modelsUrl: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models',
-    headers: {},
-  },
-  {
-    name: 'Google-Gemini-Flash',
-    url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-    keyEnv: 'GEMINI_API_KEY',
-    model: 'gemini-1.5-flash',
-    modelsUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/models',
-    headers: {},
+    // LEAF. Slowest of the three on every id they share, so it sits last — the
+    // classification in P098 Rev D is about latency, not about it being free.
+    //
+    // MAXPLUS_KEY_CHINESE, not MAXPLUS_API_KEY: a maxplus pool is bound to the
+    // key, and the key held in MAXPLUS_API_KEY was moved to the VIP pool, which
+    // lists models but rejects inference (400 at the root, 503 on /maxpools).
+    name: 'MaxPlus-Chinese',
+    url: 'https://api.maxplus-ai.cc/v1/messages',
+    keyEnv: 'MAXPLUS_KEY_CHINESE',
+    model: 'glm-5.2',
+    modelsUrl: 'https://api.maxplus-ai.cc/v1/models',
+    wire: 'anthropic',
+    headers: { 'anthropic-version': '2023-06-01' },
+    note: '10/13 listed ids answered. 3 are listed but not routable on any schema.',
   },
 ];
 

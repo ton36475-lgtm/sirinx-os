@@ -12,7 +12,29 @@
 
 ---
 
-## 1. ข้อเท็จจริงของเว็บปัจจุบัน (VERIFIED จากโค้ดจริง)
+> **แก้ไข 2026-07-25 — พบ source ของเว็บจริงแล้ว**
+>
+> แผนนี้เขียนบนสมมติฐานว่า `apps/sirinx-site` คือสิ่งที่ deploy อยู่ **ผิดครับ**
+>
+> Cloudflare Worker `sirinx-main-router` เฉลยว่า:
+> ```js
+> var PRIMARY_HOST = "www.sirinx.co";
+> var PAGES_HOST   = "sirinx-co.pages.dev";
+> // www.sirinx.co → proxyToPages() → sirinx-co.pages.dev
+> ```
+> **เว็บ production เสิร์ฟจาก Cloudflare Pages ไม่ใช่จาก repo ใด ๆ ในเครื่องนี้**
+> จึงเป็นเหตุผลที่คำว่า "เรือนแพ" ไม่มีใน `apps/sirinx-site/src/projects/index.html`
+> ของทั้ง 5 worktree — คนละแหล่งกัน
+>
+> **ผลต่อแผนนี้:** ทั้ง §1 และ §3 ต้องเขียนใหม่หลังรู้ว่า Pages project
+> `sirinx-co` build มาจากไหน · และ **ห้าม deploy `apps/sirinx-site` ทับ**
+> เพราะจะเขียนทับเนื้อหาโรงแรมที่อยู่บนเว็บแล้ว
+>
+> Worker ตัวนี้ยังรับ lead ที่ `/api/trpc/lead.submit` เขียนลง D1 `contact_leads`
+> พร้อม PII (ชื่อ อีเมล เบอร์ LINE user id) — schema ระบุ review gate ไว้เองว่า
+> *"customer-facing CRM or messaging writes require separate approval"*
+
+## 1. ข้อเท็จจริงของเว็บปัจจุบัน (เขียนก่อนพบข้อมูลข้างบน — ดูคำเตือน)
 
 - `apps/sirinx-site` เป็น **static HTML ล้วน** — `package.json` มี `dependencies: []` ไม่มี framework
 - หน้าที่มีอยู่: `src/index.html` (573 บรรทัด), `src/projects/index.html` (193), `contact/`, `quote/`, `roi-calculator/`, `line/`, `trust-center/`
