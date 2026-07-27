@@ -1,0 +1,30 @@
+[package]
+name = "ghostclaw-a2a-dispatch"
+version.workspace = true
+edition = "2021"
+
+[dependencies]
+ghostclaw-providers = { workspace = true }
+tokio = { workspace = true, features = ["process", "io-std", "io-util", "rt-multi-thread", "macros", "time"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+chrono = { workspace = true }
+sha2 = "0.10"
+
+[[bin]]
+name = "a2a-dispatch-mcp"
+path = "src/bin/mcp_server.rs"
+
+[[bin]]
+name = "a2a-dispatch-cli"
+path = "src/bin/cli.rs"
+
+[[bin]]
+name = "a2a-lease-issue"
+path = "src/bin/lease_issue.rs"
+
+[dev-dependencies]
+tempfile = "3"
