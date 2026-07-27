@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = [
+    "crates/a2a-dispatch",
     "crates/core",
     "crates/permission",
     "crates/providers",
@@ -32,6 +33,7 @@ schemars = "1"
 secrecy = "0.10"
 chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "1", features = ["v4", "serde"] }
+ghostclaw-a2a-dispatch = { path = "crates/a2a-dispatch" }
 ghostclaw-core = { path = "crates/core" }
 ghostclaw-providers = { path = "crates/providers" }
 ghostclaw-worker = { path = "crates/worker" }

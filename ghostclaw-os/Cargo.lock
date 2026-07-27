@@ -417,6 +417,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "ghostclaw-a2a-dispatch"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "ghostclaw-providers",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "ghostclaw-core"
 version = "0.1.0"
 dependencies = [
