@@ -1,0 +1,10 @@
+[package]
+name = "ghostclaw-worker"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Runs child processes and captures RAW stdout/stderr + real exit codes as Evidence."
+
+[dependencies]
+ghostclaw-core = { path = "../core" }
