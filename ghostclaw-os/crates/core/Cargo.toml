@@ -1,0 +1,13 @@
+[package]
+name = "ghostclaw-core"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "GHOSTCLAW governance core: risk tiers, pipeline stages, evidence, state machine. ZERO I/O."
+
+# S1 intentionally has NO dependencies.
+# `core` is declared ZERO I/O in the canonical layout, so it needs nothing from
+# outside std. serde derives are added at S2, when serialization first has a
+# consumer — not before, so that no crate version is guessed at S1 time.
+[dependencies]
