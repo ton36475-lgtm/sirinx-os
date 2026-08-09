@@ -1,0 +1,23 @@
+## Copy to terraform.tfvars and fill in. terraform.tfvars is git-ignored.
+## These are identifiers, not secrets — but the API private key they point at
+## very much is, so keep it outside the repo.
+
+tenancy_ocid     = "ocid1.tenancy.oc1..aaaaaaaa_REPLACE_ME"
+user_ocid        = "ocid1.user.oc1..aaaaaaaa_REPLACE_ME"
+fingerprint      = "aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99"
+private_key_path = "~/.oci/oci_api_key.pem"
+compartment_ocid = "ocid1.tenancy.oc1..aaaaaaaa_REPLACE_ME" # tenancy OCID = root compartment
+
+region = "ap-singapore-1"
+
+## Generate a keypair specifically for this host:
+##   ssh-keygen -t ed25519 -C "ghostclaw-oci" -f ~/.ssh/oracle_key
+ssh_public_key_path = "~/.ssh/oracle_key.pub"
+
+## Your own address only. Find it with: curl -s ifconfig.me
+## A validation rule rejects 0.0.0.0/0 on purpose.
+ssh_allowed_cidr = "203.0.113.42/32"
+
+## Try 1 or 2 if apply fails with "Out of host capacity" — free A1 capacity
+## is exhausted per availability domain, not per region.
+availability_domain_index = 0

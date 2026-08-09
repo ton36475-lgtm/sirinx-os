@@ -1,0 +1,98 @@
+#cloud-config
+##
+## First-boot provisioning for the GHOSTCLAW control-plane host.
+##
+## Scope is deliberately narrow: base hardening, container runtime, and the
+## cloudflared binary. It installs no models, starts no tunnel, and writes no
+## credentials — every one of those needs a secret or a decision, and burying
+## them in cloud-init would put them in instance metadata, which is readable
+## by anything that can reach the metadata endpoint from the host.
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - ca-certificates
+  - curl
+  - git
+  - gnupg
+  - jq
+  - tmux
+  - ufw
+  - unattended-upgrades
+
+write_files:
+  # OCI Ubuntu images ship iptables rules that drop most inbound traffic
+  # independently of the cloud security list. Two firewalls disagreeing is a
+  # reliable way to lose an afternoon, so record which one is authoritative.
+  - path: /etc/ghostclaw/NETWORK-POLICY.md
+    permissions: "0644"
+    content: |
+      # Network policy for this host
+
+      Inbound is governed by the OCI security list (see infra/oci/main.tf),
+      which permits SSH from the operator CIDR and nothing else.
+
+      Services are published through a Cloudflare Tunnel, which dials
+      outbound. No inbound port is opened for them, and none should be.
+
+      Never route these through the tunnel:
+        - 11434  Ollama — unauthenticated model pull/delete endpoints
+        - 22     SSH    — already reachable from the operator CIDR
+
+      Any hostname that can approve a Red-tier action must sit behind
+      Cloudflare Access. Reaching that URL is equivalent to approving.
+
+  - path: /etc/ghostclaw/README.md
+    permissions: "0644"
+    content: |
+      # GHOSTCLAW host
+
+      Provisioned by Terraform (infra/oci). cloud-init installed base tooling
+      only; application deployment is a separate, human-driven step.
+
+      Not installed here, and why:
+        - Ollama and model weights — a size and licensing decision
+        - cloudflared tunnel + cert — requires interactive browser login
+        - .env / API keys — secrets never belong in instance metadata
+
+runcmd:
+  # Docker from the official repository. Ubuntu's docker.io package lags far
+  # enough behind to matter for compose v2 behaviour.
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - chmod a+r /etc/apt/keyrings/docker.asc
+  - >-
+    echo "deb [arch=arm64 signed-by=/etc/apt/keyrings/docker.asc]
+    https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable"
+    > /etc/apt/sources.list.d/docker.list
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  - usermod -aG docker ubuntu
+
+  # cloudflared, ARM64 build. Installed but not configured — `tunnel login`
+  # is interactive and writes a credential that must not be baked into an image.
+  - curl -fsSL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb -o /tmp/cloudflared.deb
+  - dpkg -i /tmp/cloudflared.deb || apt-get install -f -y
+  - rm -f /tmp/cloudflared.deb
+
+  # Host firewall, mirroring the security list so the two agree.
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow 22/tcp
+  - ufw --force enable
+
+  # Harden SSH: keys only. The Terraform config injects an authorized key, so
+  # password auth is pure attack surface.
+  - sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+  - systemctl restart ssh
+
+  # Unattended security updates, since this host is meant to run unattended.
+  - echo 'Unattended-Upgrade::Automatic-Reboot "false";' > /etc/apt/apt.conf.d/51unattended-upgrades-local
+  - systemctl enable --now unattended-upgrades
+
+final_message: |
+  GHOSTCLAW host ready after $UPTIME seconds.
+  Base tooling only — no tunnel, no models, no secrets.
+  See /etc/ghostclaw/README.md and NETWORK-POLICY.md.
