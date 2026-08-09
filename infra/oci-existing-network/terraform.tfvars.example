@@ -1,0 +1,61 @@
+## Copy to terraform.tfvars and fill in. terraform.tfvars is git-ignored.
+##
+## These are account identifiers, not secrets in themselves — but the API
+## private key they reference IS a secret, so keep that key file outside the
+## repo. Every value below must come from YOUR OCI console; the placeholders
+## are shapes, not real OCIDs.
+##
+## Where each value lives in the console (matches what your screenshots show:
+## tenancy "tondhmz99", region "Singapore West", compartment "tondhmz99 (root)"):
+
+## Profile menu (top-right avatar) > Tenancy  →  copy "OCID"
+tenancy_ocid = "ocid1.tenancy.oc1..aaaaaaaaREPLACE"
+
+## Profile menu > My profile (or User settings)  →  copy the user's "OCID"
+user_ocid = "ocid1.user.oc1..aaaaaaaaREPLACE"
+
+## User settings > Tokens and keys > API keys.
+## Add an API key first (upload the .pub of the pair below), then the console
+## shows this fingerprint. Format is 16 hex byte-pairs.
+fingerprint = "aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99"
+
+## Path on THIS machine to the OCI API private key (the one whose .pub you
+## uploaded above). Not the SSH key — this is the API signing key.
+## Generate with:
+##   openssl genrsa -out ~/.oci/oci_api_key.pem 2048
+##   openssl rsa -pubout -in ~/.oci/oci_api_key.pem -out ~/.oci/oci_api_key_public.pem
+private_key_path = "~/.oci/oci_api_key.pem"
+
+## The compartment that holds ghostclaw-vcn. Your console filter read
+## "tondhmz99 (root)", so the root compartment = the tenancy OCID. Paste the
+## SAME value as tenancy_ocid unless you later move the VCN into a sub-compartment.
+compartment_ocid = "ocid1.tenancy.oc1..aaaaaaaaREPLACE"
+
+## Region slug. VERIFY before apply — the console label "Singapore West
+## (Singapore)" is almost certainly ap-singapore-2 (Singapore West), NOT
+## ap-singapore-1 (the older Singapore region). Confirm in the region menu
+## (it lists the slug), because an image lookup in the wrong region finds
+## nothing and apply fails with an empty images list.
+region = "ap-singapore-2"
+
+## ── Existing network (already built by hand — do not change unless you
+##    renamed them in the console) ──────────────────────────────────────────
+existing_vcn_name    = "ghostclaw-vcn"
+existing_subnet_name = "ghostclaw-public-subnet"
+
+## ── The host ───────────────────────────────────────────────────────────────
+
+## PUBLIC half of a FRESH SSH keypair for this host. Do NOT reuse the leaked
+## tab-named key from oz-corp-omega-dual-node. Generate:
+##   ssh-keygen -t ed25519 -C "ghostclaw-oci" -f ~/.ssh/oracle_key
+ssh_public_key_path = "~/.ssh/oracle_key.pub"
+
+## Always Free A1 budget is 4 OCPU / 24 GB total — these use all of it in one VM.
+instance_ocpus     = 4
+instance_memory_gb = 24
+boot_volume_gb     = 100
+
+## If apply fails with "Out of host capacity", try 1 then 2. Free A1 capacity
+## is exhausted per availability domain; Singapore regions may expose only one
+## AD, in which case 0 is the only valid value.
+availability_domain_index = 0
