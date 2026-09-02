@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "sirinx.openclaude-client-profile/v1",
+  "releaseState": "REFERENCE_ONLY_LEGAL_HOLD",
+  "enabled": false,
+  "source": {
+    "repository": "Gitlawb/openclaude",
+    "observedVersion": "0.30.0",
+    "licenseState": "NOASSERTION_DERIVED_PROPRIETARY_CODE",
+    "installAllowed": false
+  },
+  "provider": {
+    "mode": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:4000/v1",
+    "apiKeyRef": "env:SIRINX_LITELLM_VIRTUAL_KEY",
+    "model": "sirinx-code",
+    "directTokenRouterKeyAllowed": false,
+    "clientOwnsRouting": false,
+    "clientOwnsRetries": false,
+    "agentRoutingEnabled": false
+  },
+  "execution": {
+    "workspaceRootRef": "approval:explicit-workspace-root",
+    "backgroundSessions": false,
+    "headlessGrpc": false,
+    "webTools": false,
+    "mcpWrite": false,
+    "bash": false,
+    "write": false,
+    "readOnlyPilot": true
+  },
+  "note": "Documentation-only profile. Do not install or load until legal provenance and source-security gates pass."
+}

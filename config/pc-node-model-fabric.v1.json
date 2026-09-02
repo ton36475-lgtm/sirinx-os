@@ -1,0 +1,611 @@
+{
+  "schemaVersion": "sirinx.pc-node-model-fabric/v1",
+  "snapshotDate": "2026-09-02",
+  "releaseState": "HOLD_LOCAL_ONLY",
+  "truthState": "REGISTRY_ONLY_DISABLED",
+  "node": {
+    "id": "pc-node",
+    "platform": "windows",
+    "role": "governed-compute-worker",
+    "authority": "worker-only",
+    "controlPlane": "mac-mini-hermes-commander",
+    "requiresHardwareBoundPairing": true,
+    "requiresSignedHeartbeat": true
+  },
+  "invariants": {
+    "exactlyOneRetryOwnerPerRequest": true,
+    "modelAliasesOnlyInClients": true,
+    "runtimeClaimsRequireEvidence": true,
+    "freeQuotaCountsAsSla": false,
+    "secretValuesInRepository": false,
+    "automaticBrowserAuthentication": false,
+    "consequentialActionsRequireActionBoundApproval": true,
+    "memoryNeverOutranksRuntimeEvidence": true,
+    "oneWriterPerLeasedPath": true
+  },
+  "dataClasses": [
+    "public",
+    "internal",
+    "sensitive",
+    "restricted"
+  ],
+  "lanes": [
+    {
+      "id": "local-developer",
+      "owner": "OMNIROUTE",
+      "endpointRef": "http://127.0.0.1:20128/v1",
+      "networkScope": "loopback",
+      "ownsRetries": true,
+      "maxRetryOwners": 1,
+      "downstreamRoutersAllowFallbacks": false,
+      "allowedDataClasses": [
+        "public",
+        "internal",
+        "sensitive"
+      ],
+      "state": "UNVERIFIED"
+    },
+    {
+      "id": "cloud-governed",
+      "owner": "LITELLM",
+      "endpointRef": "http://127.0.0.1:4000/v1",
+      "networkScope": "loopback-gateway",
+      "ownsRetries": true,
+      "maxRetryOwners": 1,
+      "downstreamRoutersAllowFallbacks": false,
+      "allowedDataClasses": [
+        "public",
+        "internal"
+      ],
+      "state": "UNVERIFIED"
+    },
+    {
+      "id": "emergency-broker",
+      "owner": "OPENROUTER",
+      "endpointRef": "env:OPENROUTER_BASE_URL",
+      "networkScope": "remote",
+      "ownsRetries": true,
+      "maxRetryOwners": 1,
+      "downstreamRoutersAllowFallbacks": true,
+      "nestedBehindAnotherRouter": false,
+      "defaultProviderPolicy": {
+        "allowFallbacks": true,
+        "requireParameters": true,
+        "dataCollection": "deny",
+        "zdr": true
+      },
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "UNCONFIGURED"
+    },
+    {
+      "id": "direct-local",
+      "owner": "DIRECT_CLIENT",
+      "endpointRef": "env:SIRINX_LOCAL_OPENAI_BASE_URL",
+      "networkScope": "loopback-or-private-lan",
+      "ownsRetries": true,
+      "maxRetryOwners": 1,
+      "maxRetries": 0,
+      "downstreamRoutersAllowFallbacks": false,
+      "allowedDataClasses": [
+        "public",
+        "internal",
+        "sensitive"
+      ],
+      "state": "UNVERIFIED"
+    }
+  ],
+  "forbiddenChains": [
+    [
+      "OMNIROUTE",
+      "LITELLM"
+    ],
+    [
+      "LITELLM",
+      "OMNIROUTE"
+    ],
+    [
+      "OMNIROUTE",
+      "OPENROUTER"
+    ],
+    [
+      "LITELLM",
+      "OPENROUTER_WITH_FALLBACKS"
+    ],
+    [
+      "PRODUCTION",
+      "9ROUTER"
+    ]
+  ],
+  "compatibilityRouters": [
+    {
+      "id": "9router",
+      "productionAllowed": false,
+      "state": "SANDBOX_ONLY"
+    }
+  ],
+  "aliases": [
+    {
+      "id": "sirinx-free-general",
+      "lane": "cloud-governed",
+      "purpose": [
+        "public-research",
+        "drafting",
+        "classification"
+      ],
+      "capabilities": [
+        "text",
+        "structured-output"
+      ],
+      "allowedDataClasses": [
+        "public"
+      ],
+      "providerSelectors": [
+        "free-verified",
+        "openrouter-free-explicit"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": true
+    },
+    {
+      "id": "sirinx-code",
+      "lane": "cloud-governed",
+      "purpose": [
+        "implementation",
+        "refactor",
+        "test-generation"
+      ],
+      "capabilities": [
+        "code",
+        "tool-calling",
+        "structured-output"
+      ],
+      "allowedDataClasses": [
+        "public",
+        "internal"
+      ],
+      "providerSelectors": [
+        "deepseek",
+        "alibaba-qwen",
+        "zai-glm",
+        "anthropic-claude",
+        "openai"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": true
+    },
+    {
+      "id": "sirinx-review",
+      "lane": "cloud-governed",
+      "purpose": [
+        "independent-review",
+        "security-review",
+        "architecture-review"
+      ],
+      "capabilities": [
+        "reasoning",
+        "code",
+        "structured-output"
+      ],
+      "allowedDataClasses": [
+        "public",
+        "internal"
+      ],
+      "providerSelectors": [
+        "anthropic-claude",
+        "openai",
+        "zai-glm",
+        "gemini"
+      ],
+      "automaticFallback": false,
+      "independentFromMaker": true,
+      "requiresAccountVisibleModelDiscovery": true
+    },
+    {
+      "id": "sirinx-vision",
+      "lane": "cloud-governed",
+      "purpose": [
+        "image-understanding",
+        "visual-qa",
+        "ui-review"
+      ],
+      "capabilities": [
+        "text",
+        "image",
+        "structured-output"
+      ],
+      "allowedDataClasses": [
+        "public",
+        "internal"
+      ],
+      "providerSelectors": [
+        "gemini",
+        "alibaba-qwen",
+        "zai-glm",
+        "openai"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": true
+    },
+    {
+      "id": "sirinx-local-private",
+      "lane": "direct-local",
+      "purpose": [
+        "private-code",
+        "private-documents",
+        "offline-work"
+      ],
+      "capabilities": [
+        "text",
+        "code",
+        "structured-output"
+      ],
+      "allowedDataClasses": [
+        "public",
+        "internal",
+        "sensitive"
+      ],
+      "providerSelectors": [
+        "local-openai-compatible"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": false
+    },
+    {
+      "id": "sirinx-long-context",
+      "lane": "local-developer",
+      "purpose": [
+        "repository-synthesis",
+        "large-document-analysis"
+      ],
+      "capabilities": [
+        "text",
+        "code",
+        "long-context"
+      ],
+      "allowedDataClasses": [
+        "public",
+        "internal",
+        "sensitive"
+      ],
+      "providerSelectors": [
+        "local-openai-compatible"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": false
+    },
+    {
+      "id": "sirinx-emergency-free",
+      "lane": "emergency-broker",
+      "purpose": [
+        "public-low-risk-overflow",
+        "public-prototyping"
+      ],
+      "capabilities": [
+        "text"
+      ],
+      "allowedDataClasses": [
+        "public"
+      ],
+      "providerSelectors": [
+        "openrouter-free-router"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": true
+    },
+    {
+      "id": "sirinx-aipass-public",
+      "lane": "cloud-governed",
+      "purpose": [
+        "public-educational-research"
+      ],
+      "capabilities": [
+        "text"
+      ],
+      "allowedDataClasses": [
+        "public"
+      ],
+      "providerSelectors": [
+        "aipass-experimental"
+      ],
+      "automaticFallback": false,
+      "requiresAccountVisibleModelDiscovery": true,
+      "experimental": true
+    }
+  ],
+  "providerPools": [
+    {
+      "id": "free-verified",
+      "selection": "account-visible-and-canary-passed",
+      "freeQuotaCountsAsSla": false,
+      "allowedDataClasses": [
+        "public"
+      ],
+      "automaticAdmission": false
+    }
+  ],
+  "providerFamilies": [
+    {
+      "id": "deepseek",
+      "protocols": [
+        "native",
+        "openai-compatible"
+      ],
+      "credentialRef": "env:DEEPSEEK_API_KEY",
+      "baseUrlRef": "env:DEEPSEEK_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "gemini",
+      "protocols": [
+        "native",
+        "openai-compatible"
+      ],
+      "credentialRef": "env:GEMINI_API_KEY",
+      "baseUrlRef": "env:GEMINI_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "anthropic-claude",
+      "protocols": [
+        "anthropic-messages"
+      ],
+      "credentialRef": "env:ANTHROPIC_API_KEY",
+      "baseUrlRef": "env:ANTHROPIC_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "openai",
+      "protocols": [
+        "openai-responses",
+        "openai-compatible"
+      ],
+      "credentialRef": "env:OPENAI_API_KEY",
+      "baseUrlRef": "env:OPENAI_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "zai-glm",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:ZAI_API_KEY",
+      "baseUrlRef": "env:ZAI_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "alibaba-qwen",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:DASHSCOPE_API_KEY",
+      "baseUrlRef": "env:QWEN_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "xai-grok",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:XAI_API_KEY",
+      "baseUrlRef": "env:XAI_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "nvidia-nim",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:NVIDIA_API_KEY",
+      "baseUrlRef": "env:NVIDIA_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "huggingface",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:HF_TOKEN",
+      "baseUrlRef": "env:HF_INFERENCE_BASE_URL",
+      "modelDiscovery": "account-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "cloudflare-workers-ai",
+      "protocols": [
+        "provider-native"
+      ],
+      "credentialRef": "secret:cloudflare-workers-ai",
+      "baseUrlRef": "binding:AI",
+      "modelDiscovery": "deployment-visible",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "openrouter-free-explicit",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:OPENROUTER_API_KEY",
+      "baseUrlRef": "env:OPENROUTER_BASE_URL",
+      "modelDiscovery": "account-visible-free-variants",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "openrouter-free-router",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:OPENROUTER_API_KEY",
+      "baseUrlRef": "env:OPENROUTER_BASE_URL",
+      "modelDiscovery": "router-managed",
+      "initialState": "UNCONFIGURED"
+    },
+    {
+      "id": "local-openai-compatible",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "env:SIRINX_LOCAL_OPENAI_API_KEY",
+      "baseUrlRef": "env:SIRINX_LOCAL_OPENAI_BASE_URL",
+      "modelDiscovery": "node-local",
+      "initialState": "UNVERIFIED"
+    },
+    {
+      "id": "custom-openai-compatible",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "secret:provider-specific",
+      "baseUrlRef": "registry:provider-endpoint",
+      "modelDiscovery": "account-visible",
+      "initialState": "DISABLED"
+    },
+    {
+      "id": "custom-anthropic-compatible",
+      "protocols": [
+        "anthropic-messages"
+      ],
+      "credentialRef": "secret:provider-specific",
+      "baseUrlRef": "registry:provider-endpoint",
+      "modelDiscovery": "account-visible",
+      "initialState": "DISABLED"
+    },
+    {
+      "id": "aipass-experimental",
+      "protocols": [
+        "openai-compatible"
+      ],
+      "credentialRef": "sidecar-owned-browser-session",
+      "baseUrlRef": "http://127.0.0.1:8787/v1",
+      "modelDiscovery": "interactive-session-only",
+      "initialState": "DISABLED"
+    }
+  ],
+  "clients": [
+    {
+      "id": "deepseek-harness-web",
+      "role": "agent-client",
+      "listenRef": "http://127.0.0.1:3080",
+      "providerRoute": "sirinx-governed",
+      "defaultModelAlias": "sirinx-code",
+      "routingAuthority": false,
+      "state": "NOT_INSTALLED_OR_UNVERIFIED"
+    },
+    {
+      "id": "jcode",
+      "role": "terminal-agent-client",
+      "providerRoute": "sirinx-governed",
+      "defaultModelAlias": "sirinx-code",
+      "routingAuthority": false,
+      "state": "PINNED_SOURCE_RUNTIME_DISABLED"
+    },
+    {
+      "id": "autoclaw-openclaw",
+      "role": "desktop-agent-client",
+      "providerRoute": "sirinx-governed",
+      "defaultModelAlias": "sirinx-code",
+      "routingAuthority": false,
+      "state": "UNVERIFIED"
+    },
+    {
+      "id": "freebuff-patterns",
+      "role": "public-source-agent-architecture-reference",
+      "providerRoute": null,
+      "defaultModelAlias": null,
+      "routingAuthority": false,
+      "liveActivation": false,
+      "state": "REFERENCE_ONLY"
+    },
+    {
+      "id": "serena-secure-tunnel",
+      "role": "read-only-semantic-mcp-client",
+      "providerRoute": null,
+      "defaultModelAlias": null,
+      "routingAuthority": false,
+      "state": "PINNED_READ_ONLY_PILOT"
+    }
+  ],
+  "experimentalAdapters": [
+    {
+      "id": "aipass-experimental",
+      "enabled": false,
+      "loopbackOnly": true,
+      "endpointRef": "http://127.0.0.1:8787/v1",
+      "requiresInteractiveAuth": true,
+      "automaticBrowserAuthentication": false,
+      "automaticFallback": false,
+      "maxRetries": 0,
+      "retryOwner": "LITELLM",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "consequentialActionsAllowed": false,
+      "backgroundAutomationAllowed": false,
+      "sessionFileReadableBySirinx": false,
+      "state": "DISABLED_BY_DEFAULT"
+    }
+  ],
+  "mcp": {
+    "serena": {
+      "transport": "openai-secure-mcp-tunnel",
+      "tunnelProfile": "community-starter-derived-pinned-copy",
+      "workspaceSelection": "explicit-single-project",
+      "mode": "read-only-pilot",
+      "toolAllowlist": [
+        "symbols",
+        "references",
+        "diagnostics",
+        "semantic_search"
+      ],
+      "toolDenylist": [
+        "execute_shell_command",
+        "write",
+        "memory_write",
+        "delete",
+        "git_push"
+      ],
+      "runtimeApiKeyStorage": "windows-dpapi",
+      "adminApiKeyAllowed": false,
+      "state": "NOT_PAIRED"
+    }
+  },
+  "activationGates": [
+    "pinned-artifact-and-checksum",
+    "node-runtime-path-inventory",
+    "secret-scan-pass",
+    "negative-auth-test",
+    "account-visible-model-discovery",
+    "per-provider-bounded-canary",
+    "forced-primary-failure-test",
+    "actual-provider-and-model-receipt",
+    "signed-pc-node-pairing",
+    "three-signed-heartbeats",
+    "rollback-rehearsal",
+    "independent-checker-verdict"
+  ],
+  "receiptRequirements": [
+    "request-id",
+    "goal-spec-hash",
+    "selected-alias",
+    "lane",
+    "retry-owner",
+    "actual-provider",
+    "actual-model",
+    "data-class",
+    "cost",
+    "latency",
+    "attempt-count",
+    "policy-verdict",
+    "checker-verdict",
+    "artifact-digests"
+  ]
+}

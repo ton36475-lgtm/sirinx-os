@@ -1,0 +1,33 @@
+# Merge only after the local gateways have passed their activation gates.
+# Store real keys through DSH Settings -> Models or the approved secret facility.
+# Never commit populated credentials.
+
+agent-default-model:
+  provider: sirinx-governed
+  model: sirinx-code
+
+llm-pi-ai:
+  providers:
+    sirinx-governed:
+      displayName: SIRINX Governed Gateway
+      apiKeyEnv: SIRINX_LITELLM_VIRTUAL_KEY
+      api: openai-completions
+      baseURL: http://127.0.0.1:4000/v1
+      models:
+        - id: sirinx-free-general
+        - id: sirinx-code
+        - id: sirinx-review
+        - id: sirinx-vision
+          input: [text, image]
+
+    sirinx-local:
+      displayName: SIRINX Local Developer Gateway
+      apiKeyEnv: SIRINX_OMNIROUTE_LOCAL_KEY
+      api: openai-completions
+      baseURL: http://127.0.0.1:20128/v1
+      models:
+        - id: sirinx-local-private
+        - id: sirinx-long-context
+
+# The emergency OpenRouter broker and AIPass experimental sidecar are intentionally
+# not exposed as default DSH routes. They require separate, action-bound activation.

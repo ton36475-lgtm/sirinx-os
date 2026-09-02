@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "sirinx.artifact-receipt/v1",
+  "missionId": "SIRINX-PCNODE-TOKENROUTER-BAI-MCP-A2A-20260902",
+  "generatedAt": "2026-09-02T00:00:00Z",
+  "truthState": "CONFIG_AND_RESEARCH_ARTIFACTS_VALIDATED_RUNTIME_DISABLED",
+  "parentCommit": "204598cd1001ae89fea466aaec41596fdf239a83",
+  "reconciliation": {
+    "baseTokenRouterPackRetained": true,
+    "baiExternalClaimSupersededByOfficialDocumentationOverlay": true,
+    "credentialIssuerKnown": false,
+    "providerActivationsBlockedPendingRotation": true
+  },
+  "validations": {
+    "jsonParse": "PASS",
+    "yamlParse": "PASS",
+    "secretLiteralScan": {
+      "result": "PASS",
+      "findings": 0
+    },
+    "externalProviderCalls": 0,
+    "modelOrDatasetDownloads": 0,
+    "packageInstalls": 0,
+    "mcpTunnelStarts": 0,
+    "a2aPairings": 0,
+    "telegramSends": 0,
+    "trainingRuns": 0,
+    "networkMutations": 0
+  },
+  "artifacts": [
+    {
+      "path": "config/providers/tokenrouter-bai-provider-overlay.v1.json",
+      "sha256": "7358a503865d6419c1183d8198f031b6a2e843ebbaa916767656530e258da899",
+      "bytes": 7919
+    },
+    {
+      "path": "config/openclaude/openclaude-quarantine-intake.v1.json",
+      "sha256": "d5615434e6ce825b48cfb1631b5efebba855f299720d5341d7c9b2a184926ea9",
+      "bytes": 2163
+    },
+    {
+      "path": "config/a2a/hermes-hub-spoke-a2a-plan.v1.yaml",
+      "sha256": "7afe45c9d996653ee0517858426f6292fdaf3163e3194aba89cf258cbc504057",
+      "bytes": 3704
+    },
+    {
+      "path": "config/mcp/pc-node-multi-tunnel-v2.plan.yaml",
+      "sha256": "609669715333aa8f1d7a042b44d7b15753506af3993cb93068b094eb1c5611e8",
+      "bytes": 2467
+    },
+    {
+      "path": "governance/approvals/m6-m7-m8-action-packets.v1.json",
+      "sha256": "25efaf3b71b312544775cdd9548755fc078c906bc725426d2c7f320c59c8cb47",
+      "bytes": 5653
+    },
+    {
+      "path": "docs/TOKENROUTER_BAI_OPENCLAUDE_MCP_A2A_RESEARCH_20260902.md",
+      "sha256": "36e59ebe66f2d409f13f84e8922c6e1bf6e6b485af5dcc1db4697e82ce2ecb3e",
+      "bytes": 6818
+    },
+    {
+      "path": "docs/SECURITY_INCIDENT_PROVIDER_KEY_20260902_02.md",
+      "sha256": "03a9dc5ff1ad0a85a77d47efe7afc795617cadf904d58d937f5c7812252616f6",
+      "bytes": 2158
+    },
+    {
+      "path": "prompts/HERMES_AUTOCLAW_ONE_SHOT_MASTERPROMPTPACK_20260902.txt",
+      "sha256": "6925b51287a137e01aab777e2b6b6ec1c7fbdf432af0edb74b0c2dd076fa78a9",
+      "bytes": 14223
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+version: "2026.09.02"
+schema: "sirinx.mcp.multi-tunnel-plan.v1"
+state: "DESIGNED_DISABLED"
+
+global:
+  transport: "OPENAI_SECURE_MCP_TUNNEL"
+  public_inbound: false
+  runtime_key_type: "OPENAI_RUNTIME_API_KEY"
+  admin_key_for_daemon: false
+  secret_values_in_config: false
+  doctor_required: true
+  health_required:
+    - "/healthz"
+    - "/readyz"
+    - "/metrics"
+    - "/ui"
+  tool_diff_review_required: true
+  exact_project_activation_required: true
+  one_profile_one_trust_domain: true
+
+profiles:
+  - id: "pc-serena-source-readonly"
+    node: "PC_GPU"
+    state: "DISABLED"
+    project_root_ref: "env:SIRINX_SERENA_PROJECT_ROOT"
+    mcp:
+      command: "serena"
+      args: ["start-mcp-server", "--context", "chatgpt"]
+    allow_tools:
+      - "symbol_search"
+      - "find_references"
+      - "diagnostics"
+      - "semantic_search"
+      - "read_file"
+    deny_tools:
+      - "execute_shell_command"
+      - "write_file"
+      - "delete_file"
+      - "memory_write"
+      - "git_push"
+      - "credential_read"
+      - "arbitrary_project_activation"
+    activation_gate:
+      - "PINNED_SERENA_ARTIFACT"
+      - "PINNED_TUNNEL_CLIENT"
+      - "PROJECT_PATH_REVIEWED"
+      - "TOOL_LIST_REVIEWED"
+      - "DOCTOR_PASS"
+      - "ACTION_BOUND_APPROVAL"
+
+  - id: "pc-model-ops-readonly"
+    node: "PC_GPU"
+    state: "PLANNED_ADAPTER_NOT_IMPLEMENTED"
+    purpose:
+      - "model_catalog"
+      - "endpoint_status"
+      - "hash_manifest"
+      - "training_job_status"
+    allow_tools:
+      - "list_models"
+      - "read_model_manifest"
+      - "read_endpoint_health"
+      - "read_training_status"
+      - "read_receipt"
+    deny_tools:
+      - "download_model"
+      - "delete_model"
+      - "start_training"
+      - "stop_process"
+      - "load_secret"
+      - "change_route"
+      - "publish_model"
+
+  - id: "pc-evidence-readonly"
+    node: "PC_GPU"
+    state: "PLANNED_ADAPTER_NOT_IMPLEMENTED"
+    purpose:
+      - "receipts"
+      - "logs_redacted"
+      - "artifact_hashes"
+    allow_tools:
+      - "search_receipts"
+      - "read_receipt"
+      - "read_redacted_log"
+      - "verify_artifact_hash"
+    deny_tools:
+      - "write_receipt"
+      - "delete_evidence"
+      - "read_raw_secret_log"
+
+  - id: "pc-browser-cua"
+    node: "PC_GPU"
+    state: "DISABLED_HIGH_RISK"
+    environment: "DISPOSABLE_NON_ADMIN_DESKTOP"
+    allow_tools_initial:
+      - "screenshot"
+      - "navigate_allowlisted"
+      - "scroll"
+      - "read_page"
+    deny_tools_initial:
+      - "type_credentials"
+      - "submit_form"
+      - "upload_file"
+      - "download_unreviewed"
+      - "send_message"
+      - "purchase"
+      - "publish"
+      - "change_permissions"
+      - "install_extension"
+      - "captcha_bypass"
+    activation_gate:
+      - "DOMAIN_ALLOWLIST"
+      - "DOWNLOAD_QUARANTINE"
+      - "PROMPT_INJECTION_MONITOR"
+      - "MAX_ACTIONS"
+      - "MAX_WALL_TIME"
+      - "SIDE_EFFECT_CONFIRMATION"
+      - "ACTION_BOUND_APPROVAL"
+
+  - id: "mac-hermes-status"
+    node: "MAC_MINI_M2"
+    state: "EXISTING_RUNTIME_REVERIFY"
+    purpose:
+      - "mission_status"
+      - "queue"
+      - "nodes"
+      - "approvals"
+      - "receipts"
+    mutation_tools: "SEPARATE_CONTROL_PLANE_APPROVAL_ONLY"
+
+chatgpt_plan_constraints:
+  pro:
+    initial_scope:
+      - "READ"
+      - "FETCH"
+    write_modify_assumed_available: false
+  business_enterprise_edu:
+    full_mcp_possible_after_workspace_admin_review: true
+  custom_app_tool_changes:
+    new_tools_default_disabled: true
+    changed_tools_require_diff_review: true
+
+codex:
+  tunnel_client_native_path: true
+  plugin_install: "SEPARATE_LOCAL_INSTALL_APPROVAL"
+  runtime_profile_selection_required: true
+  no_universal_all_project_profile: true

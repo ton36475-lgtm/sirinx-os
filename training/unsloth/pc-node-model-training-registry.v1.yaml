@@ -1,0 +1,219 @@
+version: "2026.09.02"
+schema: "sirinx.unsloth.pc-node-training-registry.v1"
+state: "METADATA_ONLY_NO_DOWNLOAD_NO_TRAINING"
+
+defaults:
+  framework: "UNSLOTH"
+  technique: "QLORA_4BIT"
+  quantization: "NF4"
+  double_quantization: true
+  lora_rank_candidates: [16, 32]
+  lora_alpha_rule: "R_OR_2R"
+  lora_dropout: 0
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  gradient_checkpointing: true
+  first_canary_max_steps: 300
+  frozen_eval_split_required: true
+  network_after_staging: "DENY"
+  trust_remote_code: false
+  GGUF_as_training_source: false
+  auto_merge_adapter: false
+  auto_export: false
+  auto_promote: false
+
+hardware_gate:
+  state: "PENDING_PC_NODE_SNAPSHOT"
+  required:
+    - "GPU_MODEL"
+    - "VRAM_TOTAL_AND_FREE"
+    - "NVIDIA_DRIVER"
+    - "CUDA_COMPUTE_CAPABILITY"
+    - "CUDA_TOOLKIT"
+    - "SYSTEM_RAM"
+    - "DISK_FREE"
+    - "THERMAL_TELEMETRY"
+  policy:
+    insufficient_vram: "BLOCK_TRAINING"
+    unsupported_gpu: "INFERENCE_OR_CPU_EVAL_ONLY"
+    unknown_hardware: "BLOCK_TRAINING"
+
+models:
+  - id: "local-fable-preview-4b-observed"
+    family: "FABLE_PREVIEW"
+    parameters: "4B_REPORTED"
+    source: "LOCAL_EXISTING_ARTIFACT"
+    state: "INFERENCE_REVERIFY"
+    observed_format: "GGUF_Q4_K_M"
+    training_allowed: false
+    next_gate:
+      - "EXECUTABLE_AND_MODEL_SHA256"
+      - "CHAT_TEMPLATE_FIX"
+      - "NO_TOOL_EVAL"
+
+  - id: "hotdogs-agents-a1-4b-fable-preview"
+    source: "hotdogs/Agents-A1-4B-Fable-Preview"
+    parameters: "4B"
+    state: "RESEARCH_ONLY"
+    training_allowed: false
+    next_gate:
+      - "EXACT_REVISION"
+      - "LICENSE"
+      - "TOKENIZER_AND_TEMPLATE"
+      - "STATIC_SCAN"
+      - "BASE_MODEL_PROVENANCE"
+
+  - id: "hotdogs-agents-a1-4b-fable-preview-heretic"
+    source: "hotdogs/Agents-A1-4B-Fable-Preview-heretic"
+    parameters: "4B"
+    state: "QUARANTINED"
+    training_allowed: false
+    trust_remote_code: false
+    tools_allowed: false
+    network_allowed: false
+
+  - id: "hotdogs-huihui-qwen35-4b-abliterated-gguf"
+    source: "hotdogs/Huihui-Qwen3.5-4B-Claude-4.6-Opus-abliterated-GGUF"
+    parameters: "4B"
+    state: "QUARANTINED_INFERENCE_ONLY"
+    training_allowed: false
+    reason: "GGUF plus abliterated provenance; evaluate only in isolation"
+
+  - id: "hotdogs-qwen35-4b-mole"
+    source: "hotdogs/Qwen3.5-4B-MoLE"
+    parameters: "4B"
+    state: "RESEARCH_CANDIDATE"
+    training_allowed: false
+    architecture: "QWEN35_MIXTURE_OF_LORA_EXPERTS"
+    publisher_reported_training:
+      technique: "UNSLOTH_QLORA_4BIT"
+      rank: 32
+      alpha: 64
+      steps_per_expert: 300
+      hardware: "RTX_4060_TI_16GB"
+    next_gate:
+      - "AUDIT_ALL_EXPERT_ADAPTERS"
+      - "BASE_AND_ADAPTER_LICENSE_CHAIN"
+      - "REPRODUCE_EVAL"
+      - "CHECK_4B_CHAT_TEMPLATE"
+
+  - id: "hotdogs-frankenmoe"
+    source: "hotdogs/frankenmoe"
+    state: "REJECTED_FOR_PRODUCTION"
+    training_allowed: false
+    route_allowed: false
+
+  - id: "ornith-1.5-9b"
+    source: "ornith-ai/Ornith-1.5-9B"
+    parameters: "9B"
+    state: "SEPARATE_RESEARCH_LANE"
+    training_allowed: false
+    possible_methods:
+      - "QLORA_AFTER_HARDWARE_GATE"
+    inference_variants:
+      - "OFFICIAL_GGUF_Q4_K_M"
+      - "OFFICIAL_MLX_4BIT_FOR_MAC_RESEARCH"
+    blocker:
+      - "NOT_A_4B_MODEL"
+      - "PC_VRAM_UNKNOWN"
+      - "PUBLISHER_BENCHMARKS_NOT_REPRODUCED"
+      - "TOOLS_DISABLED_UNTIL_EVAL"
+
+  - id: "hy4-preview"
+    source: "TENCENT_HY4_PREVIEW"
+    parameters: "770B_TOTAL_49B_ACTIVE_REPORTED"
+    state: "CLOUD_API_CATALOG_ONLY"
+    training_allowed: false
+    local_download_allowed: false
+    local_inference_allowed: false
+    lanes:
+      - "CLOUD_GOVERNED"
+      - "EMERGENCY_BROKER_PUBLIC_ONLY"
+
+methods:
+  QLORA:
+    state: "APPROVED_METHOD_AFTER_GATES"
+    first_use: "4B_TEXT_MODEL"
+  FULL_LORA:
+    state: "OPTIONAL_AFTER_VRAM_GATE"
+    reason: "higher memory requirement"
+  TURBO_LORA:
+    state: "UNRESOLVED_DISABLED"
+    reason:
+      - "ambiguous term"
+      - "not a generic Unsloth switch"
+      - "architecture-specific adapter compatibility required"
+    required_clarification:
+      - "EXACT_PAPER_OR_REPOSITORY"
+      - "TEXT_LLM_OR_DIFFUSION_VIDEO"
+      - "BASE_ARCHITECTURE"
+      - "LICENSE"
+      - "TARGET_METRIC"
+
+datasets:
+  - id: "hotdogs-sme-sft-docdata-qwen38"
+    source: "hotdogs/sme-sft-docdata-qwen38"
+    state: "SCHEMA_AND_TEMPLATE_REVIEW"
+    allowed_use: "DOCUMENT_TOOL_GROUNDING_RESEARCH"
+    train_allowed: false
+
+  - id: "hotdogs-cyber-sft-agent-qwen38"
+    source: "hotdogs/cyber-sft-agent-qwen38"
+    state: "DEFENSIVE_SANDBOX_ONLY"
+    train_allowed: false
+    live_shell_tools: false
+    external_targets: false
+
+  - id: "hotdogs-uka-cyber-dataset"
+    source: "hotdogs/uka-cyber-dataset"
+    state: "DEFENSIVE_SANDBOX_ONLY"
+    train_allowed: false
+    live_shell_tools: false
+    external_targets: false
+
+  - id: "hotdogs-cyber-sft-qa-qwen38"
+    source: "hotdogs/cyber-sft-qa-qwen38"
+    state: "DEFENSIVE_QA_REVIEW"
+    train_allowed: false
+
+  - id: "hotdogs-uka-glm-5.2"
+    source: "hotdogs/uka-glm-5.2"
+    state: "PROVENANCE_AND_REASONING_TRACE_REVIEW"
+    train_allowed: false
+
+  - id: "hotdogs-claude46-filtered"
+    source: "hotdogs/claude46_filtered"
+    state: "QUARANTINED_TERMS_AND_PROVENANCE"
+    train_allowed: false
+
+  - id: "hotdogs-thai-speech-20k"
+    source: "hotdogs/thai-speech-20k"
+    state: "SEPARATE_TTS_PROJECT"
+    train_allowed_for_text_llm: false
+
+  - id: "sirinx-governed-domain-v1"
+    source: "INTERNAL_REVIEWED_EXPORT"
+    state: "PREFERRED_BUT_NOT_YET_BUILT"
+    train_allowed: false
+    required_content:
+      - "GOALSPEC"
+      - "TASKSPEC"
+      - "POLICY_DECISIONS"
+      - "APPROVAL_EXAMPLES"
+      - "TESTED_PATCHES"
+      - "CHECKER_FEEDBACK"
+      - "REDACTED_INCIDENTS"
+      - "RECEIPTS"
+      - "VALIDATED_SOLAR_AND_BESS_EXAMPLES"
+
+promotion_forbidden:
+  - "TRAIN_COMPLETE_TO_PRODUCTION"
+  - "MODEL_CARD_CLAIM_TO_APPROVED_ROUTE"
+  - "DOWNLOAD_COMPLETE_TO_HEALTHY"
+  - "SELF_REPORTED_TOOL_USE_TO_TOOL_AUTHORITY"

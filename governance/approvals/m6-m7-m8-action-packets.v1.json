@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "sirinx.action-packet-set/v1",
+  "snapshotDate": "2026-09-02",
+  "authorityRule": "Natural-language approval is not an unrestricted side-effect grant. Packets require exact binding, operator identity, issue time, future expiry, and one-use consumption.",
+  "packets": [
+    {
+      "packet_id": "M6A-PC-MCP-CONFIG-20260902",
+      "action": "STAGE_MULTI_MCP_PROFILE_CONFIG",
+      "resource": "repo://ton36475-lgtm/sirinx-os/config/mcp",
+      "risk": "R1_LOCAL_REPO_MUTATION",
+      "mode": "DRAFT_PR_ONLY",
+      "external_effects": "NONE",
+      "max_uses": 1,
+      "prerequisites": [
+        "draft_pr_open",
+        "no_secret_values",
+        "tool_allowlists_reviewed"
+      ],
+      "payload_sha256": "sha256:0b2f646b5593c397f5875daa85a8beb3f936bfb8037de3da45d993841bd79808",
+      "state": "EXECUTED_AS_REPO_STAGING_NOT_RUNTIME",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    },
+    {
+      "packet_id": "M6B-PC-MCP-TUNNEL-START",
+      "action": "START_SECURE_MCP_TUNNEL_PROFILE",
+      "resource": "node://pc-node-windows/profile/pc-serena-source-readonly",
+      "risk": "R3_NETWORK_RUNTIME_MUTATION",
+      "mode": "ONE_PROFILE_ONE_PROJECT",
+      "external_effects": "OUTBOUND_TUNNEL_AND_LOCAL_PROCESS",
+      "max_uses": 1,
+      "prerequisites": [
+        "secret_rotation_complete",
+        "tunnel_id_bound",
+        "runtime_key_bound",
+        "project_root_bound",
+        "doctor_pass",
+        "expiry_set"
+      ],
+      "payload_sha256": "sha256:fe44e39d4353c6a5248a0ca72f1b44a7a5ed36c41103ee5a122108ccef16e59a",
+      "state": "PENDING_EXACT_BINDING_AND_HUMAN_APPROVAL",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    },
+    {
+      "packet_id": "M7A-A2A-CONFIG-20260902",
+      "action": "STAGE_HERMES_HUB_SPOKE_A2A_CONFIG",
+      "resource": "repo://ton36475-lgtm/sirinx-os/config/a2a",
+      "risk": "R1_LOCAL_REPO_MUTATION",
+      "mode": "DRAFT_PR_ONLY",
+      "external_effects": "NONE",
+      "max_uses": 1,
+      "prerequisites": [
+        "hub_spoke_only",
+        "full_mesh_false",
+        "no_node_pairing"
+      ],
+      "payload_sha256": "sha256:b027b028e0fbf2dfc57f0aacd6e840ce5714d8150dbc397b4c9ec76de24b55d2",
+      "state": "EXECUTED_AS_REPO_STAGING_NOT_LIVE_MESH",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    },
+    {
+      "packet_id": "M7B-A2A-PAIR-PC",
+      "action": "PAIR_PC_NODE_AND_ENABLE_A2A_TRANSPORT",
+      "resource": "fleet://sirinx/pc-node-windows",
+      "risk": "R4_IDENTITY_NETWORK_AND_EXECUTION_MUTATION",
+      "mode": "SIGNED_NODE_ONE_USE",
+      "external_effects": "PAIRING_CERTIFICATE_NETWORK_LISTENER_AND_FLEET_REGISTRATION",
+      "max_uses": 1,
+      "prerequisites": [
+        "signed_node_identity",
+        "pinned_jwks",
+        "mtls_or_private_overlay",
+        "lease_store_ready",
+        "rollback_packet",
+        "expiry_set"
+      ],
+      "payload_sha256": "sha256:3163cfbaba2b1476ec2a91ff28cddb85b0b22183e596c5a766e91c6aa1da2ab4",
+      "state": "PENDING_EXACT_NODE_IDENTITY_AND_HUMAN_APPROVAL",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    },
+    {
+      "packet_id": "M8A-PROVIDER-CANARY-TOKENROUTER",
+      "action": "RUN_SINGLE_PUBLIC_SYNTHETIC_PROVIDER_CANARY",
+      "resource": "provider://tokenrouter/model/z-ai/glm-5.3-free",
+      "risk": "R3_EXTERNAL_API_AND_BILLING",
+      "mode": "ONE_REQUEST_ZERO_OUTER_RETRY",
+      "external_effects": "ONE_PROVIDER_REQUEST_AND_METADATA_RECEIPT",
+      "max_uses": 1,
+      "prerequisites": [
+        "exposed_key_revoked",
+        "new_scoped_key_loaded",
+        "old_key_negative_test",
+        "budget_cap",
+        "zdr_account_check",
+        "synthetic_prompt_hash",
+        "expiry_set"
+      ],
+      "payload_sha256": "sha256:bace5eb4cefa1346066d84d985e2429ea92a2c40a9450858381c0b34672b9791",
+      "state": "BLOCKED_SECRET_ROTATION_REQUIRED",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    },
+    {
+      "packet_id": "M8B-PROVIDER-CANARY-BAI",
+      "action": "RUN_SINGLE_PUBLIC_SYNTHETIC_PROVIDER_CANARY",
+      "resource": "provider://bai/model/qwen3.8-flash",
+      "risk": "R3_EXTERNAL_API_AND_BILLING",
+      "mode": "ONE_REQUEST_ZERO_OUTER_RETRY",
+      "external_effects": "ONE_PROVIDER_REQUEST_AND_METADATA_RECEIPT",
+      "max_uses": 1,
+      "prerequisites": [
+        "exposed_key_revoked",
+        "new_scoped_key_loaded",
+        "old_key_negative_test",
+        "budget_cap",
+        "authenticated_model_discovery",
+        "synthetic_prompt_hash",
+        "expiry_set"
+      ],
+      "payload_sha256": "sha256:c51ea39efdc7d26f6593b505b7ae08ca87639cdf90e5c9c509941b7ec30bc099",
+      "state": "BLOCKED_SECRET_ROTATION_REQUIRED",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    },
+    {
+      "packet_id": "M9-OPENCLAUDE-INSTALL",
+      "action": "INSTALL_OPENCLAUDE",
+      "resource": "node://pc-node-windows/tool/openclaude",
+      "risk": "R4_CODE_EXECUTION_AND_LEGAL",
+      "mode": "QUARANTINE_ONLY",
+      "external_effects": "PACKAGE_INSTALL_AND_CODE_EXECUTION",
+      "max_uses": 1,
+      "prerequisites": [
+        "legal_clearance",
+        "exact_release_pin",
+        "integrity_receipt",
+        "isolated_non_admin_sandbox",
+        "secret_storage_design",
+        "permission_mode_plan",
+        "expiry_set"
+      ],
+      "payload_sha256": "sha256:ce0fcdab25c4d9107c5e0ebde32e83f760935f6f7e6fc60a4fd48536f4cf73bc",
+      "state": "BLOCKED_LEGAL_HOLD",
+      "issued_at": null,
+      "expires_at": null,
+      "operator_id": null
+    }
+  ]
+}

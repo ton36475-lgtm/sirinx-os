@@ -1,0 +1,261 @@
+{
+  "schemaVersion": "sirinx.provider-broker-overlay/v1",
+  "snapshotDate": "2026-09-02",
+  "releaseState": "HOLD_SECRET_ROTATION_AND_RUNTIME_CANARY_REQUIRED",
+  "truthState": "SOURCE_VERIFIED_CONFIG_ONLY_RUNTIME_DISABLED",
+  "credentialIncident": {
+    "id": "SEC-PROVIDER-KEY-EXPOSED-20260902-02",
+    "literalStored": false,
+    "issuer": "UNKNOWN_TOKENROUTER_OR_BAI",
+    "state": "ROTATION_REQUIRED",
+    "blocks": [
+      "tokenrouter_provider_activation",
+      "bai_provider_activation",
+      "provider_canaries",
+      "client_profile_generation"
+    ]
+  },
+  "invariants": {
+    "oneRequestOneRetryOwner": true,
+    "brokerNeverNestedBehindAutonomousFallbackRouter": true,
+    "clientRetriesDuringCanary": 0,
+    "freePricingIsNotSla": true,
+    "catalogPresenceIsNotRouteAuthority": true,
+    "accountVisibleDiscoveryRequired": true,
+    "publicDataOnlyUntilRetentionAndUpstreamPoliciesVerified": true,
+    "secretValuesInRepository": false,
+    "actualProviderModelAndCostReceiptRequired": true
+  },
+  "lanes": [
+    {
+      "id": "tokenrouter-broker",
+      "owner": "TOKENROUTER",
+      "outerRetryOwner": null,
+      "outerRetries": 0,
+      "providerInternalFailover": "SUPPORTED_BY_PROVIDER",
+      "networkScope": "remote",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "BLOCKED_SECRET_ROTATION_AND_CANARY"
+    },
+    {
+      "id": "bai-broker",
+      "owner": "BAI_ADAPTER",
+      "outerRetryOwner": null,
+      "outerRetries": 0,
+      "providerInternalFailover": "UNVERIFIED",
+      "networkScope": "remote",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "BLOCKED_SECRET_ROTATION_AND_CANARY"
+    }
+  ],
+  "providers": [
+    {
+      "id": "tokenrouter",
+      "role": "isolated_multi_provider_broker",
+      "baseUrl": "https://api.tokenrouter.com/v1",
+      "credentialRef": "env:TOKENROUTER_API_KEY_ROTATED",
+      "protocols": [
+        "openai-chat-completions",
+        "openai-responses-model-dependent"
+      ],
+      "lane": "tokenrouter-broker",
+      "state": "BLOCKED_SECRET_ROTATION_AND_CANARY",
+      "retention": {
+        "zdrRequired": true,
+        "zdrAccountConfigurationVerified": false,
+        "upstreamProviderRetentionVerified": false,
+        "metadataRetentionExpected": true
+      },
+      "models": [
+        {
+          "id": "z-ai/glm-5.3-free",
+          "alias": "sirinx-tokenrouter-glm-free",
+          "formats": [
+            "openai-chat-completions"
+          ],
+          "declaredCapabilitiesAtGateway": [
+            "text"
+          ],
+          "pricingSnapshot": "zero_input_and_output_observed_2026-09-02",
+          "freeIsNotSla": true,
+          "promotionState": "CANARY_ONLY"
+        },
+        {
+          "id": "z-ai/glm-5.3-flash",
+          "alias": "sirinx-tokenrouter-glm-flash",
+          "formats": [
+            "openai-chat-completions",
+            "openai-responses"
+          ],
+          "declaredCapabilitiesAtGateway": [
+            "text"
+          ],
+          "pricingSnapshot": "paid_snapshot_2026-09-02",
+          "promotionState": "CANARY_ONLY"
+        },
+        {
+          "id": "qwen/qwen3.8-flash",
+          "alias": "sirinx-tokenrouter-qwen-flash",
+          "formats": [
+            "openai-chat-completions"
+          ],
+          "declaredCapabilitiesAtGateway": [
+            "text"
+          ],
+          "pricingSnapshot": "paid_snapshot_2026-09-02",
+          "promotionState": "CANARY_ONLY"
+        },
+        {
+          "id": "qwen/qwen3.8-max-free",
+          "alias": "sirinx-tokenrouter-qwen-max-free",
+          "formats": [
+            "openai-chat-completions"
+          ],
+          "declaredCapabilitiesAtGateway": [
+            "text"
+          ],
+          "pricingSnapshot": "zero_input_and_output_observed_2026-09-02",
+          "freeIsNotSla": true,
+          "promotionState": "CANARY_ONLY"
+        }
+      ]
+    },
+    {
+      "id": "bai",
+      "role": "isolated_openai_compatible_gateway",
+      "baseUrl": "https://api.b.ai/v1",
+      "credentialRef": "env:BAI_API_KEY_ROTATED",
+      "protocols": [
+        "openai-chat-completions",
+        "openai-responses",
+        "anthropic-messages"
+      ],
+      "lane": "bai-broker",
+      "state": "BLOCKED_SECRET_ROTATION_AND_CANARY",
+      "modelDiscovery": "authenticated_get_models",
+      "retryPolicy": {
+        "owner": "BAI_ADAPTER",
+        "maxAttemptsDuringFirstCanary": 1,
+        "doNotRetryHttp": [
+          400,
+          401,
+          403,
+          404
+        ],
+        "retryableAfterPromotionOnly": [
+          429,
+          500,
+          502,
+          503
+        ]
+      },
+      "models": [
+        {
+          "id": "qwen3.8-flash",
+          "alias": "sirinx-bai-qwen-flash",
+          "formats": [
+            "openai-chat-completions",
+            "openai-responses"
+          ],
+          "providerDeclaredCapabilities": [
+            "text",
+            "image",
+            "video",
+            "function-calling",
+            "structured-output",
+            "long-context"
+          ],
+          "capabilitiesRequireCanary": true,
+          "pricingSnapshot": "zero_credits_promotion_observed_2026-09-02",
+          "freeIsNotSla": true,
+          "promotionState": "CANARY_ONLY"
+        },
+        {
+          "id": "glm-5.3-flash",
+          "alias": "sirinx-bai-glm-flash",
+          "formats": [
+            "openai-chat-completions",
+            "openai-responses"
+          ],
+          "providerDeclaredCapabilities": [
+            "text",
+            "image",
+            "video",
+            "file",
+            "function-calling",
+            "structured-output",
+            "long-context"
+          ],
+          "capabilitiesRequireCanary": true,
+          "reasoningEffort": [
+            "low",
+            "high",
+            "max"
+          ],
+          "pricingSnapshot": "zero_credits_promotion_observed_2026-09-02",
+          "freeIsNotSla": true,
+          "promotionState": "CANARY_ONLY"
+        }
+      ]
+    }
+  ],
+  "clientBindings": [
+    {
+      "client": "deepseek-harness-web",
+      "allowedAliases": [
+        "sirinx-tokenrouter-glm-free",
+        "sirinx-tokenrouter-qwen-max-free",
+        "sirinx-bai-qwen-flash",
+        "sirinx-bai-glm-flash"
+      ],
+      "credentialOwnership": "gateway_or_process_environment_only",
+      "routingAuthority": false,
+      "state": "CONFIG_TEMPLATE_ONLY"
+    },
+    {
+      "client": "jcode",
+      "allowedAliases": [
+        "sirinx-tokenrouter-glm-free",
+        "sirinx-bai-qwen-flash"
+      ],
+      "credentialOwnership": "gateway_or_process_environment_only",
+      "routingAuthority": false,
+      "state": "CONFIG_TEMPLATE_ONLY"
+    },
+    {
+      "client": "autoclaw-openclaw",
+      "allowedAliases": [
+        "sirinx-tokenrouter-glm-free",
+        "sirinx-bai-qwen-flash",
+        "sirinx-bai-glm-flash"
+      ],
+      "credentialOwnership": "gateway_or_process_environment_only",
+      "routingAuthority": false,
+      "state": "RUNTIME_UNVERIFIED"
+    }
+  ],
+  "activationSequence": [
+    "revoke_exposed_credential",
+    "create_new_scoped_key_with_low_budget",
+    "inject_key_from_secret_facility",
+    "negative_test_old_key_rejected",
+    "authenticated_model_discovery_without_logging_secret",
+    "print_action_digest_without_provider_call",
+    "consume_one_use_action_bound_approval",
+    "single_request_public_synthetic_canary",
+    "verify_actual_model_provider_latency_tokens_and_cost_receipt",
+    "independent_checker_verdict",
+    "hold_or_promote_to_bounded_public_route"
+  ],
+  "overlayFor": {
+    "baseConfig": "config/providers/tokenrouter-pc-node.v1.json",
+    "supersedesJsonPointers": [
+      "/externalClaims/b-ai-qwen38-free"
+    ],
+    "scopeCorrection": "The credential issuer cannot be inferred from the pasted prefix; TokenRouter and B.AI activation both remain blocked until the owner identifies and revokes the issuing credential."
+  }
+}
