@@ -210,7 +210,7 @@
         "sirinx-tokenrouter-glm-free",
         "sirinx-tokenrouter-qwen-max-free",
         "sirinx-bai-qwen-flash",
-      "sirinx-bai-glm-flash"
+        "sirinx-bai-glm-flash"
       ],
       "credentialOwnership": "gateway_or_process_environment_only",
       "routingAuthority": false,

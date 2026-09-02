@@ -38,7 +38,7 @@ cancellation, and retry-ownership failure modes.
   on the snapshot date.
 - `qwen/qwen3.8-flash` supports Chat Completions and was not free on the
   snapshot date.
-- `qwen/qwen3.8-max-fre` was shown at zero input/output price on the snapshot
+- `qwen/qwen3.8-max-free` was shown at zero input/output price on the snapshot
   date.
 - The platform advertises multi-channel failover. Therefore TokenRouter itself
   owns retries/fallbacks in its lane; SIRINX outer retries are zero.
