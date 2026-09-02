@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "sirinx.openclaude-intake/v1",
+  "snapshotDate": "2026-09-02",
+  "source": {
+    "repository": "Gitlawb/openclaude",
+    "resolvedCommit": "aceacf0e590a7d84447a8c44f3aa61eba781a542",
+    "packageName": "@gitlawb/openclaude",
+    "packageVersionObserved": "0.30.0",
+    "nodeRequirementObserved": ">=22.0.0"
+  },
+  "decision": {
+    "state": "LEGAL_HOLD_SOURCE_REFERENCE_ONLY",
+    "cloneIntoActiveFleet": false,
+    "installPackage": false,
+    "executeSource": false,
+    "vendorOrRedistributeSource": false,
+    "cleanRoomAdapterUsingDocumentedProtocols": true
+  },
+  "legalBasisForHold": [
+    "repository_license_states_underlying_code_is_derived_from_anthropic_proprietary_source",
+    "repository_license_states_project_lacks_anthropic_authorization_to_distribute_underlying_source",
+    "modifications_only_are_offered_under_mit_where_legally_permissible"
+  ],
+  "securityFindings": [
+    "provider_profiles_can_contain_credentials",
+    "agentModels_api_keys_are_documented_as_plaintext_in_settings",
+    "dangerous_permission_modes_include_bypassPermissions_and_fullAccess",
+    "omitted_or_invalid_maxSteps_can_leave_subagents_unbounded",
+    "background_sessions_create_child_processes_and_can_become_stale_after_unobservable_failure"
+  ],
+  "sirinxBoundary": {
+    "allowedNow": [
+      "metadata_and_source_review",
+      "documented_openai_compatible_interface_mapping",
+      "clean_room_client_adapter_design",
+      "test_case_extraction_without_copying_proprietary_code"
+    ],
+    "deniedNow": [
+      "npm_global_install",
+      "source_clone_to_active_toolchain",
+      "fullAccess",
+      "bypassPermissions",
+      "background_agents",
+      "bash_or_write_tools",
+      "mcp_tool_execution",
+      "provider_key_persistence",
+      "fleet_registration"
+    ],
+    "futurePilotRequirements": [
+      "legal_clearance",
+      "pinned_release_and_integrity_verification",
+      "isolated_non_admin_sandbox",
+      "plan_mode",
+      "explicit_tool_allowlist",
+      "positive_maxSteps",
+      "process_environment_secret_injection",
+      "no_project_profile_credentials",
+      "independent_security_review"
+    ]
+  }
+}

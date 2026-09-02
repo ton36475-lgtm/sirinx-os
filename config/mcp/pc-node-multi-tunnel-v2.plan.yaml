@@ -1,0 +1,111 @@
+schema: sirinx.mcp-multi-tunnel-plan/v2
+snapshot_date: '2026-09-02'
+release_state: HOLD_CONFIG_ONLY
+workspace_entitlement:
+  observed_plan: CHATGPT_PRO
+  chatgpt_custom_mcp_write: false
+  chatgpt_custom_mcp_read_fetch: true
+  agent_mode_uses_custom_apps: false
+  deep_research_custom_app_actions:
+  - read
+  - fetch
+  full_write_requires:
+  - CHATGPT_BUSINESS
+  - CHATGPT_ENTERPRISE
+  - CHATGPT_EDU
+invariants:
+- one_tunnel_profile_per_trust_domain
+- one_explicit_project_root_per_serena_profile
+- runtime_api_key_not_admin_key
+- no_secret_in_repository_logs_or_receipts
+- new_or_changed_tools_disabled_until_review
+- no_public_inbound_mcp_port
+- write_shell_browser_and_network_tools_need_separate_action_bound_approval
+profiles:
+- id: pc-serena-source-readonly
+  host: pc-node-windows
+  server: serena
+  project_root_ref: env:SIRINX_ACTIVE_PROJECT_ROOT
+  tools_allow:
+  - symbols
+  - references
+  - diagnostics
+  - semantic_search
+  - bounded_read
+  tools_deny:
+  - shell
+  - write
+  - delete
+  - memory_write
+  - git_push
+  - credential_read
+  - project_switch
+  state: CONFIG_READY_RUNTIME_DISABLED
+- id: pc-model-ops-readonly
+  host: pc-node-windows
+  server: sirinx-model-ops-mcp
+  tools_allow:
+  - model_catalog
+  - process_status
+  - port_status
+  - artifact_hash
+  - gpu_status
+  - queue_status
+  tools_deny:
+  - download
+  - train
+  - kill
+  - start
+  - provider_call
+  - firewall_change
+  state: DESIGN_ONLY
+- id: pc-evidence-readonly
+  host: pc-node-windows
+  server: sirinx-evidence-mcp
+  tools_allow:
+  - receipt_search
+  - receipt_read
+  - manifest_read
+  - test_result_read
+  tools_deny:
+  - receipt_rewrite
+  - delete
+  - secret_read
+  state: DESIGN_ONLY
+- id: pc-browser-cua
+  host: pc-node-windows
+  server: sirinx-browser-worker
+  tools_allow: []
+  tools_deny:
+  - all
+  state: DISABLED_SEPARATE_THREAT_MODEL_REQUIRED
+- id: mac-hermes-status
+  host: mac-mini-m2
+  server: hermes-status-mcp
+  tools_allow:
+  - health
+  - ready
+  - version
+  - queue_read
+  - lease_read
+  - node_read
+  - receipt_read
+  tools_deny:
+  - dispatch
+  - approve
+  - send
+  - deploy
+  - restart
+  - secret_read
+  state: DESIGN_ONLY
+m6_split:
+  M6A_REPOSITORY_CONFIG:
+    risk: LOCAL_REPO_MUTATION
+    state: STAGED_IN_DRAFT_PR
+    external_effects: NONE
+  M6B_TUNNEL_RUNTIME_START:
+    risk: NETWORK_AND_RUNTIME_MUTATION
+    state: PENDING_EXACT_ACTION_BOUND_APPROVAL
+  M6C_WRITE_TOOL_PUBLICATION:
+    risk: HIGH_CONSEQUENCE
+    state: BLOCKED_BY_PLAN_AND_SECURITY_REVIEW

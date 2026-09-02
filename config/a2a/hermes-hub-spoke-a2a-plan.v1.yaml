@@ -1,0 +1,161 @@
+schema: sirinx.a2a-hermes-topology/v1
+snapshot_date: '2026-09-02'
+release_state: HOLD_CONFIG_ONLY
+topology:
+  mode: HERMES_HUB_AND_SPOKE
+  full_mesh_allowed: false
+  reason: Avoid split brain, N-squared trust, duplicate side effects, and unbounded
+    retry ownership.
+  authority_path:
+  - HUMAN_OPERATOR
+  - HERMES_COMMANDER
+  - GHOSTCLAW_POLICY
+  - GOALSPEC
+  - GRAPHFLEET_DAG
+  - CAPABILITY_ROUTER
+  - LEASED_EXECUTOR
+  - MAKER
+  - TEST
+  - INDEPENDENT_CHECKER
+  - GUARD
+  - ACTION_BOUND_APPROVAL
+  - SIDE_EFFECT_ADAPTER
+  - POST_ACTION_VERIFY
+  - RECEIPT
+  - EVIDENCE_GRAPH
+telegram:
+  role: single_human_command_ingress
+  consumer_count: 1
+  transport_mode: ONE_OF_POLLING_OR_WEBHOOK
+  getMe_required: true
+  webhook_secret_token_required_if_webhook: true
+  update_id_idempotency_required: true
+  live_send_state: DISABLED_PENDING_SCOPED_CANARY
+nodes:
+- id: mac-mini-m2
+  role: authoritative_control_plane
+  allowed:
+  - commander
+  - policy
+  - queue
+  - lease
+  - approval
+  - receipt
+  - telegram_single_consumer
+  - status_projection
+  denied:
+  - bulk_model_download
+  - gpu_training
+  - unbounded_browser_cua
+  - large_batch_evaluation
+  concurrency:
+    general: 2
+    source_writers: 1
+    training: 0
+  state: PENDING_SIGNED_IDENTITY_AND_E2E
+- id: pc-node-windows
+  role: governed_compute_worker
+  allowed:
+  - model_serving
+  - bounded_coding
+  - dataset_preprocess
+  - evaluation
+  - approved_training
+  - disposable_browser_worker
+  denied:
+  - control_plane_authority
+  - telegram_consumer
+  - approval_issuance
+  - self_pairing
+  - self_promotion
+  concurrency:
+    general: 4
+    source_writers: 2
+    gpu_training: 1
+    browser_cua: 1
+  admission: reduce_from_observed_resources_and_thermal_pressure
+  state: PENDING_READ_ONLY_INVENTORY_AND_PAIRING
+- id: hermes-one-mobile
+  role: edge_control_and_approval_client
+  allowed:
+  - view
+  - intent
+  - approve_or_reject_bound_packet
+  - receipt_read
+  denied:
+  - direct_shell
+  - direct_provider_key
+  - direct_deploy
+  - direct_physical_control
+  concurrency:
+    active_intents: 1
+  state: PENDING_REAL_DEVICE_E2E
+- id: kimi-page-prototype
+  role: prototype_ui_and_sanitized_projection
+  allowed:
+  - public_demo
+  - sanitized_status_projection
+  denied:
+  - node_authority
+  - provider_secrets
+  - private_queue
+  - write_approval
+  - direct_a2a_dispatch
+  state: REFERENCE_ONLY_PENDING_CODE_PROVENANCE
+agent_cards:
+  discovery: /.well-known/agent-card.json
+  signed: true
+  signature: JWS
+  key_distribution: PINNED_JWKS
+  allowlist: true
+  required_fields:
+  - agent_id
+  - node_id
+  - version
+  - capabilities
+  - data_classes
+  - tool_allowlist
+  - max_concurrency
+  - lease_required
+  - receipt_schema
+  - supported_transports
+  - public_key_fingerprint
+  card_change_requires_review: true
+transport:
+  preferred:
+  - private_lan_mtls
+  - authenticated_private_overlay
+  public_inbound: false
+  protocols:
+  - A2A_JSON_RPC
+  - A2A_HTTP_JSON
+  - SSE_OPTIONAL
+  - PUSH_OPTIONAL
+  timeouts_bounded: true
+  polling_fallback: true
+  cancellation_required: true
+execution:
+  one_task_one_lease: true
+  one_writer_per_path: true
+  fencing_token_required: true
+  idempotency_key_required: true
+  unknown_result_disables_auto_retry: true
+  maker_checker_separation: true
+  ronin_pool:
+    logical_roles: 47
+    pre_spawn_all: false
+    spawn_on_demand: true
+    task_scoped_authority: true
+    global_concurrency_initial: 6
+activation_gates:
+- signed_node_identity
+- signed_agent_card
+- mutual_authentication
+- capability_and_data_class_policy
+- lease_and_fencing_test
+- duplicate_delivery_test
+- cancellation_test
+- unknown_result_reconciliation_test
+- telegram_single_consumer_proof
+- bounded_end_to_end_canary
+- rollback_rehearsal
