@@ -1,0 +1,177 @@
+version: "2026.09.02"
+schema: "sirinx.pc-node.autoclaw-goalspec.v1"
+mission_id: "SIRINX-PCNODE-MODEL-LAB-20260902"
+state: "HANDOFF_READY_RUNTIME_UNVERIFIED"
+
+authority:
+  commander: "MAC_MINI_HERMES_COMMANDER"
+  policy: "GHOSTCLAW"
+  scheduler: "GRAPHFLEET"
+  pc_role: "LEASED_COMPUTE_WORKER"
+  duplicate_control_plane_allowed: false
+
+truth:
+  configured_is_not_running: true
+  downloaded_is_not_verified: true
+  loaded_is_not_healthy: true
+  healthy_is_not_integrated: true
+  integrated_is_not_production: true
+
+security_incidents:
+  - id: "SEC-OPENROUTER-KEY-EXPOSED-20260902"
+    state: "ROTATION_REQUIRED"
+    secret_value_recorded: false
+    blocks:
+      - "OPENROUTER_PROVIDER_CALL"
+      - "OPENROUTER_FREE_POOL_ACTIVATION"
+      - "OPENROUTER_BYOK_ENROLLMENT"
+
+routing:
+  invariant: "ONE_REQUEST_ONE_RETRY_OWNER"
+  lanes:
+    CLOUD_GOVERNED:
+      retry_owner: "LITELLM"
+      nested_router_allowed: false
+    LOCAL_DEVELOPER:
+      retry_owner: "OMNIROUTE"
+      nested_router_allowed: false
+    EMERGENCY_BROKER:
+      retry_owner: "OPENROUTER"
+      data_classes: ["PUBLIC"]
+      nested_router_allowed: false
+    GOVERNED_DIRECT_LOCAL:
+      retry_owner: "DIRECT_CLIENT"
+      retries: 0
+      fallbacks: 0
+  sandbox_only:
+    - "9ROUTER"
+  forbidden_chains:
+    - ["OMNIROUTE", "LITELLM"]
+    - ["LITELLM", "OMNIROUTE"]
+    - ["OMNIROUTE", "OPENROUTER"]
+    - ["LITELLM", "OPENROUTER_WITH_FALLBACKS"]
+    - ["PRODUCTION", "9ROUTER"]
+
+services:
+  dsh:
+    role: "CLIENT"
+    routing_authority: false
+    retry_owner: false
+    bind: "127.0.0.1:3080"
+  jcode:
+    role: "CLIENT"
+    routing_authority: false
+    retry_owner: false
+  autoclaw:
+    role: "WORKER_SURFACE"
+    routing_authority: false
+    retry_owner: false
+  litellm:
+    role: "CLOUD_GOVERNED_GATEWAY"
+    bind: "127.0.0.1:4000"
+    active_instance_requires_singleton_lease: true
+  omniroute:
+    role: "LOCAL_DEVELOPER_ROUTER"
+    bind: "127.0.0.1:20128"
+  llama_cpp:
+    role: "LOCAL_INFERENCE"
+    observed_bind: "127.0.0.1:8081"
+    state: "REVERIFY_CHAT_TEMPLATE"
+  serena:
+    role: "READ_ONLY_CODE_INTELLIGENCE"
+    activation: "ACTION_BOUND_TUNNEL_APPROVAL"
+  computer_use:
+    role: "DISPOSABLE_DESKTOP_WORKER"
+    state: "DISABLED"
+    unattended_external_side_effects: false
+
+model_policy:
+  auto_download: false
+  auto_train: false
+  auto_promote: false
+  trust_remote_code_default: false
+  GGUF_training_source_allowed: false
+  publisher_claim_is_evidence: false
+  promotion:
+    - "EXPERIMENTAL"
+    - "DATA_VALIDATED"
+    - "TRAINING_CANARY_COMPLETE"
+    - "EVAL_PASSED"
+    - "LOCAL_CANARY"
+    - "LOCAL_AVAILABLE"
+    - "FLEET_CANARY"
+    - "FLEET_AVAILABLE"
+
+dataset_policy:
+  bulk_clone_allowed: false
+  raw_chat_dump_allowed: false
+  required_gates:
+    - "EXACT_REVISION"
+    - "FILE_SHA256"
+    - "LICENSE_AND_UPSTREAM_TERMS"
+    - "PII_SCAN"
+    - "SECRET_SCAN"
+    - "MALWARE_SCAN"
+    - "DUPLICATE_RATE"
+    - "CONTAMINATION_CHECK"
+    - "PROMPT_INJECTION_SCAN"
+    - "FROZEN_EVAL_SPLIT"
+    - "HUMAN_REVIEW"
+    - "TRAIN_ALLOWED_TRUE"
+
+network:
+  public_inbound_allowed: false
+  router_port_forward_allowed: false
+  loopback_default: true
+  remote_transport:
+    - "OPENAI_SECURE_MCP_TUNNEL"
+    - "PRIVATE_OVERLAY_OR_LAN_MTLS"
+  arbitrary_subnet_discovery: false
+  every_connection_requires:
+    - "NODE_IDENTITY"
+    - "CERTIFICATE_OR_RUNTIME_IDENTITY"
+    - "ALLOWLIST"
+    - "LEASE"
+    - "RECEIPT"
+
+waves:
+  - id: "W0"
+    name: "SECRET_AND_AUTHORITY_CONTAINMENT"
+    mode: "HUMAN_PLUS_READ_ONLY"
+  - id: "W1"
+    name: "PC_NODE_INVENTORY"
+    mode: "READ_ONLY"
+  - id: "W2"
+    name: "LOCAL_ENDPOINT_REPAIR"
+    mode: "BOUNDED_LOCAL"
+  - id: "W3"
+    name: "DSH_JCODE_CLIENT_ADAPTERS"
+    mode: "BOUNDED_LOCAL"
+  - id: "W4"
+    name: "SERENA_READ_ONLY_TUNNEL"
+    mode: "ACTION_BOUND_APPROVAL"
+  - id: "W5"
+    name: "MODEL_EVALUATION"
+    mode: "ONE_MODEL_AT_A_TIME"
+  - id: "W6"
+    name: "DATASET_CANARY"
+    mode: "ONE_DATASET_AT_A_TIME"
+  - id: "W7"
+    name: "QLORA_CANARY"
+    mode: "ACTION_BOUND_TRAINING_APPROVAL"
+  - id: "W8"
+    name: "MODEL_PROMOTION"
+    mode: "CHECKER_AND_HUMAN_GATE"
+  - id: "W9"
+    name: "BROWSER_CUA"
+    mode: "DISPOSABLE_DESKTOP_ACTION_BOUND"
+  - id: "W10"
+    name: "FLEET_INTEGRATION"
+    mode: "SIGNED_LEASE_AND_RECEIPTS"
+
+broad_approval_semantics:
+  phrase: "approve all"
+  normalized_meaning:
+    - "CONTINUE_POLICY_ALLOWED_READ_ONLY_AND_LOCAL_VALIDATION"
+    - "REQUEST_EXACT_APPROVAL_FOR_EACH_CONSEQUENTIAL_ACTION"
+  unrestricted_authority: false
