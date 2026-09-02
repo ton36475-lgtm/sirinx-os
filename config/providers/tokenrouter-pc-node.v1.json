@@ -1,0 +1,219 @@
+{
+  "schemaVersion": "sirinx.tokenrouter-provider-pack/v1",
+  "snapshotDate": "2026-09-02",
+  "releaseState": "HOLD_ROTATION_REQUIRED",
+  "truthState": "PUBLIC_CATALOG_METADATA_ONLY",
+  "securityIncident": {
+    "id": "SEC-TOKENROUTER-KEY-EXPOSED-20260902",
+    "credentialState": "ROTATION_REQUIRED",
+    "exposedCredentialAcceptedForUse": false,
+    "credentialRef": "env:TOKENROUTER_API_KEY_ROTATED",
+    "requiredActions": [
+      "revoke-exposed-key",
+      "review-usage-and-billing",
+      "issue-new-scoped-key",
+      "store-in-approved-secret-facility",
+      "prove-old-key-rejected",
+      "run-bounded-public-data-canary"
+    ]
+  },
+  "gateway": {
+    "id": "tokenrouter",
+    "kind": "multi-provider-broker",
+    "baseUrl": "https://api.tokenrouter.com/v1",
+    "protocols": [
+      "openai-chat-completions"
+    ],
+    "credentialRef": "env:TOKENROUTER_API_KEY_ROTATED",
+    "credentialValueInRepository": false,
+    "modelDiscovery": "account-visible-and-catalog-reconciled",
+    "routingLane": {
+      "id": "tokenrouter-broker",
+      "retryOwner": "TOKENROUTER",
+      "outerRetries": 0,
+      "nestedBehindLiteLLM": false,
+      "nestedBehindOmniRoute": false,
+      "nestedBehindOpenRouter": false,
+      "automaticFallbackAssumedPossible": true,
+      "allowedDataClasses": [
+        "public"
+      ],
+      "productionAllowed": false
+    },
+    "dataPolicy": {
+      "initialAllowedDataClasses": [
+        "public"
+      ],
+      "zdrState": "ACCOUNT_AND_UPSTREAM_PROVIDER_VERIFICATION_REQUIRED",
+      "providerRetentionInherited": true,
+      "sensitiveDataAllowed": false
+    }
+  },
+  "models": [
+    {
+      "requestedInput": "z-ai/glm-5.3-free",
+      "canonicalId": "z-ai/glm-5.3-free",
+      "billingClass": "FREE_CATALOG_SNAPSHOT",
+      "capabilities": [
+        "text"
+      ],
+      "apiFormats": [
+        "openai"
+      ],
+      "endpoint": "/chat/completions",
+      "routeAlias": "sirinx-tokenrouter-glm-free",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "BLOCKED_ROTATION_AND_CANARY"
+    },
+    {
+      "requestedInput": "glm-5.3-flash",
+      "canonicalId": "z-ai/glm-5.3-flash",
+      "billingClass": "PAID_CATALOG_SNAPSHOT",
+      "catalogPriceUsdPerMillionTokens": {
+        "input": 0.075,
+        "output": 0.25
+      },
+      "capabilities": [
+        "text"
+      ],
+      "apiFormats": [
+        "openai",
+        "openai-response"
+      ],
+      "endpoint": "/chat/completions",
+      "routeAlias": "sirinx-tokenrouter-glm-flash",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "BLOCKED_ROTATION_BUDGET_AND_CANARY"
+    },
+    {
+      "requestedInput": "qwen3.8-flash",
+      "canonicalId": "qwen/qwen3.8-flash",
+      "billingClass": "PAID_CATALOG_SNAPSHOT",
+      "catalogPriceUsdPerMillionTokens": {
+        "input": 0.1177,
+        "output": 0.3971
+      },
+      "capabilities": [
+        "text"
+      ],
+      "apiFormats": [
+        "openai"
+      ],
+      "endpoint": "/chat/completions",
+      "routeAlias": "sirinx-tokenrouter-qwen-flash",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "BLOCKED_ROTATION_BUDGET_AND_CANARY",
+      "normalizationNote": "The TokenRouter catalog ID includes the qwen/ namespace."
+    },
+    {
+      "requestedInput": "qwen3.8-max-free",
+      "canonicalId": "qwen/qwen3.8-max-free",
+      "billingClass": "FREE_CATALOG_SNAPSHOT",
+      "capabilities": [
+        "text"
+      ],
+      "apiFormats": [
+        "openai"
+      ],
+      "endpoint": "/chat/completions",
+      "routeAlias": "sirinx-tokenrouter-qwen-max-free",
+      "allowedDataClasses": [
+        "public"
+      ],
+      "state": "BLOCKED_ROTATION_AND_CANARY"
+    }
+  ],
+  "externalClaims": [
+    {
+      "id": "b-ai-qwen38-free",
+      "provider": "B.AI",
+      "claim": "Qwen 3.8 Flash may be offered free to an API community or promotion.",
+      "state": "UNVERIFIED_SECONDARY_ONLY",
+      "endpoint": null,
+      "credentialRef": null,
+      "routeAllowed": false,
+      "requirements": [
+        "official-api-documentation",
+        "exact-base-url",
+        "exact-model-id",
+        "terms-and-data-policy",
+        "rate-and-expiry-limits",
+        "account-visible-canary"
+      ]
+    }
+  ],
+  "clientCandidates": [
+    {
+      "id": "openclaude",
+      "repository": "Gitlawb/openclaude",
+      "observedPackageVersion": "0.30.0",
+      "routingAuthority": false,
+      "sourceState": "QUARANTINED_LEGAL_PROVENANCE_REVIEW",
+      "installationAllowed": false,
+      "backgroundSessionsAllowed": false,
+      "headlessGrpcAllowed": false,
+      "directProviderCredentialsAllowed": false,
+      "perAgentProviderRoutingAllowed": false,
+      "requiredRoute": "sirinx-governed-local-gateway",
+      "defaultAlias": "sirinx-code",
+      "toolPolicy": {
+        "default": "deny",
+        "readOnlyPilotAllowlist": [
+          "read",
+          "grep",
+          "glob",
+          "git-status",
+          "git-diff"
+        ],
+        "denied": [
+          "bash",
+          "write",
+          "edit",
+          "delete",
+          "background-session",
+          "grpc-server",
+          "web-search",
+          "web-fetch",
+          "mcp-write",
+          "credential-export",
+          "git-push"
+        ]
+      },
+      "blockers": [
+        "repository-license-says-derived-proprietary-code-remains-subject-to-anthropic-copyright",
+        "repository-license-says-project-lacks-anthropic-authorization-to-distribute-underlying-code",
+        "source-and-package-integrity-not-reviewed",
+        "tool-and-network-surfaces-not-sandboxed"
+      ]
+    }
+  ],
+  "activationGates": [
+    "credential-rotation-receipt",
+    "old-key-negative-auth-test",
+    "new-key-secret-facility-reference",
+    "catalog-model-id-reconciliation",
+    "public-data-only-canary",
+    "tool-calling-compatibility-test",
+    "streaming-compatibility-test",
+    "actual-model-provider-cost-receipt",
+    "retry-owner-verification",
+    "budget-cap",
+    "rollback-rehearsal"
+  ],
+  "forbidden": [
+    "commit-or-log-secret-values",
+    "use-exposed-key",
+    "nest-tokenrouter-behind-another-retrying-router",
+    "treat-free-catalog-entry-as-sla",
+    "send-internal-sensitive-or-restricted-data-before-data-policy-review",
+    "install-openclaude-before-legal-and-source-provenance-review",
+    "enable-openclaude-background-grpc-or-unrestricted-tools",
+    "promote-b-ai-from-secondary-claim-without-official-evidence"
+  ]
+}
