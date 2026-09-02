@@ -1,0 +1,43 @@
+# Merge into ~/.jcode/config.toml only after the SIRINX gateway canary passes.
+# This client profile does not own retries or provider fallback.
+
+[providers.sirinx-governed]
+type = "openai-compatible"
+base_url = "http://127.0.0.1:4000/v1"
+auth = "bearer"
+api_key_env = "SIRINX_LITELLM_VIRTUAL_KEY"
+default_model = "sirinx-code"
+requires_api_key = true
+provider_routing = false
+model_catalog = true
+allow_provider_pinning = false
+
+[[providers.sirinx-governed.models]]
+id = "sirinx-free-general"
+
+[[providers.sirinx-governed.models]]
+id = "sirinx-code"
+
+[[providers.sirinx-governed.models]]
+id = "sirinx-review"
+
+[[providers.sirinx-governed.models]]
+id = "sirinx-vision"
+input = ["text", "image"]
+
+[providers.sirinx-local]
+type = "openai-compatible"
+base_url = "http://127.0.0.1:20128/v1"
+auth = "bearer"
+api_key_env = "SIRINX_OMNIROUTE_LOCAL_KEY"
+default_model = "sirinx-local-private"
+requires_api_key = true
+provider_routing = false
+model_catalog = true
+allow_provider_pinning = false
+
+[[providers.sirinx-local.models]]
+id = "sirinx-local-private"
+
+[[providers.sirinx-local.models]]
+id = "sirinx-long-context"
