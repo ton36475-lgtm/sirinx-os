@@ -1,0 +1,21 @@
+{
+  "id": "task_config_gate_runner_hardening_20260703",
+  "type": "task",
+  "label": "Config gate runner hardening",
+  "status": "completed_local_safe",
+  "risk_level": "medium",
+  "files_touched": [
+    "hermes/config_gate_run.sh",
+    "agents/README.md",
+    "agents/product-agent.md",
+    "agents/technical-writer.md"
+  ],
+  "guardrails": {
+    "install": false,
+    "provider_call": false,
+    "secret_read": false,
+    "push": false,
+    "deploy": false
+  }
+}
+

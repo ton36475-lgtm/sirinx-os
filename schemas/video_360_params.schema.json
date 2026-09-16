@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GhostClawMedia360ParameterSchema",
+  "description": "Parameter schema for 360-degree video production in Ghost Claw OS",
+  "type": "object",
+  "required": ["project_id", "render_timeline", "sharding_configuration", "timestamp"],
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+$",
+      "description": "Unique project identifier"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp for parameter versioning"
+    },
+    "render_timeline": {
+      "type": "object",
+      "required": ["resolution_target", "frame_rate", "video_codec", "duration_ms"],
+      "properties": {
+        "resolution_target": {
+          "enum": ["4K", "5.7K", "8K", "12K"],
+          "description": "Target resolution for 360 video"
+        },
+        "frame_rate": {
+          "type": "integer",
+          "enum": [24, 30, 60, 120],
+          "description": "Frame rate selection"
+        },
+        "video_codec": {
+          "enum": ["h264", "h265", "av1"],
+          "description": "Video codec for encoding"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "description": "Total duration in milliseconds"
+        },
+        "stereo_mode": {
+          "enum": ["mono", "top-bottom", "side-by-side"],
+          "default": "top-bottom"
+        }
+      }
+    },
+    "sharding_configuration": {
+      "type": "object",
+      "required": ["segments_count", "overlap_degrees", "stitching_algorithm"],
+      "properties": {
+        "segments_count": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 24,
+          "description": "Number of video segments for 360 projection"
+        },
+        "overlap_degrees": {
+          "type": "number",
+          "minimum": 10.0,
+          "maximum": 60.0,
+          "default": 30.0,
+          "description": "Overlap degree between segments for seamless stitching"
+        },
+        "stitching_algorithm": {
+          "enum": ["optical_flow", "depth_based"],
+          "description": "Algorithm for segment stitching"
+        },
+        "blend_curve": {
+          "enum": ["linear", "ease-in-out", "sigmoid"],
+          "default": "ease-in-out"
+        }
+      }
+    },
+    "autoloop_evidence": {
+      "type": "object",
+      "properties": {
+        "loop_count": {"type": "integer"},
+        "mission_id": {"type": "string"},
+        "chain_hash": {"type": "string"},
+        "verification_status": {"enum": ["pending", "verified", "failed"]}
+      }
+    }
+  }
+}

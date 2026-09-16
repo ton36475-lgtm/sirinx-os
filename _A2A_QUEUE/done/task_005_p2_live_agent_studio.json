@@ -1,0 +1,39 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-005",
+    "correlation_id": "a2a-solar-1-preview-1721172804-12349",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator",
+      "role": "task-orchestrator"
+    },
+    "to": {
+      "agent": "opencode-reviewer",
+      "role": "independent_reviewer"
+    },
+    "action_requested": "Live Agent Studio Implementation",
+    "context": {
+      "goal": "Build apps/live-agent-studio from 4 stub files to full implementation with ChatPanel.tsx, ApprovalQueue.tsx, TTSButton.tsx, AvatarDisplay.tsx components and ChatGateway.ts, AvatarService.ts, TTSService.ts services",
+      "constraints": ["no deploy", "no git push", "dry-run first"],
+      "lane": "apps/live-agent-studio",
+      "files": ["components/ChatPanel.tsx", "components/ApprovalQueue.tsx", "components/TTSButton.tsx", "components/AvatarDisplay.tsx", "services/ChatGateway.ts", "services/AvatarService.ts", "services/TTSService.ts"],
+      "deliverables": ["TSX component structure", "TypeScript services", "OBS overlay integration"],
+      "command_source": "frontier-generator"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T00:00:04.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P2",
+  "tier": "B"
+}

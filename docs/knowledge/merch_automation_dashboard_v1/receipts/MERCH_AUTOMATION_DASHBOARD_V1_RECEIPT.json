@@ -1,0 +1,176 @@
+{
+  "mission_id": "MERCH-DASH-V1-AUTO-20260630-001",
+  "status": "complete_local_safe_validation_passed",
+  "started_at": "2026-06-30T12:00:00+07:00",
+  "completed_at": "2026-06-30T12:15:00+07:00",
+  "git_branch": "staging/godmode-master-os-v2",
+  "git_status_before": "branch staging/godmode-master-os-v2 ahead 28 with pre-existing modified/untracked files",
+  "git_status_after": "M AUTONOMOUS_RUN_LOG.md\n M GHOSTCLAW/workers/registry/worker-registry.json\n M NEXT_ACTIONS.md\n M PROJECT_STATE.md\n M WORKSPACE_SCAFFOLD/tests/test_active_goal_current_blocker_refresh.py\n M WORKSPACE_SCAFFOLD/tests/test_active_goal_local_evidence_durability_manifest.py\n M WORKSPACE_SCAFFOLD/tests/test_active_goal_systematic_work_index.py\n M WORKSPACE_SCAFFOLD/tests/test_codex_hermes_a2a_queue_status.py\n M WORKSPACE_SCAFFOLD/tests/test_codex_hermes_execution_queue.py\n M WORKSPACE_SCAFFOLD/tests/test_codex_hermes_work_report_packet.py\n M WORKSPACE_SCAFFOLD/tests/test_hermes_gateway_recheck.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_codex_recorder_gate_request.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_handoff_packet.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_inbox_index.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_intake_handoff.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_preflight_audit.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_transition_guard.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_decision_validator.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_hermes_model_choice_boundary.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_opus_architecture_packet_gate.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_opus_authoring_bundle.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_draft.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_readiness.py\n M WORKSPACE_SCAFFOLD/tests/test_lane1_packet013_decision_workbench.py\n M _A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json\n M _A2A_QUEUE/outbox/packet_026_ghostclaw_lane1_hermes_decision_route_to_opus.json\n M docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md\n M docs/knowledge/KIMI_K2_7_CODE_GHOSTCLAW_WORKER.md\n M docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_2026-06-29.md\n M docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md\n M docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md\n M docs/knowledge/SIRINX_LATENTMAS_GHOSTCLAW_INTEGRATION.md\n M pnpm-workspace.yaml\n M scripts/hermes-night-watch-snapshot.sh\n?? GHOSTCLAW/KANBAN.md\n?? GHOSTCLAW/merch_automation_dashboard_v1/\n?? WORKSPACE_SCAFFOLD/tests/test_codex_no_mcp_sidebar_runbook.py\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_bus_watcher.py\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_entrypoint_verifier.py\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_queue_coordinator.py\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_role_worker.py\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_probe.py\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_start_completion_audit.py\n?? _A2A_QUEUE/approvals/GATE-PUSH-004-20260630-001.json\n?? _A2A_QUEUE/outbox/outbox_61547c54.json\n?? _A2A_QUEUE/outbox/outbox_90f8193e.json\n?? _A2A_QUEUE/outbox/outbox_e499b98e.json\n?? _OBSIDIAN_GHOSTCLAW_BRAIN/HERMES_DAILY_MEMORY.md\n?? _OBSIDIAN_GHOSTCLAW_BRAIN/HERMES_KANBAN_SYNC.md\n?? _OBSIDIAN_GHOSTCLAW_BRAIN/HERMES_RECEIPTS_INDEX.md\n?? docs/a2a-sync-completion-20260630.md\n?? docs/knowledge/GHOSTCLAW_A2A_QUEUE_COORDINATION_RUN_20260630.md\n?? docs/knowledge/GHOSTCLAW_A2A_SYNC_START_COMPLETION_AUDIT_20260630.md\n?? docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_A2A_SYNC_RUN_20260630.md\n?? docs/knowledge/SIRINX_CODEX_NO_MCP_A2A_SIDEBAR_RUNBOOK_2026-06-30.md\n?? docs/knowledge/merch_automation_dashboard_v1/\n?? scripts/codex_no_mcp_a2a_sidebar.sh\n?? scripts/ghostclaw/\n?? scripts/ghostclaw_a2a_bus_watcher.py\n?? scripts/ghostclaw_a2a_entrypoint_verifier.py\n?? scripts/ghostclaw_a2a_heartbeat_monitor.sh\n?? scripts/ghostclaw_a2a_queue_coordinator.py\n?? scripts/ghostclaw_a2a_role_worker.py\n?? scripts/ghostclaw_a2a_sync_probe.py",
+  "files_created": [
+    "docs/knowledge/merch_automation_dashboard_v1/ARCHITECTURE.md",
+    "docs/knowledge/merch_automation_dashboard_v1/MERCH_AUTOMATION_DASHBOARD_V1.md",
+    "docs/knowledge/merch_automation_dashboard_v1/OPERATING_RULES.md",
+    "docs/knowledge/merch_automation_dashboard_v1/README.md",
+    "docs/knowledge/merch_automation_dashboard_v1/RELEASE_GATE_LOCAL.md",
+    "docs/knowledge/merch_automation_dashboard_v1/calendar/30_DAY_PRODUCTION_CALENDAR.md",
+    "docs/knowledge/merch_automation_dashboard_v1/dashboard/assets/app.js",
+    "docs/knowledge/merch_automation_dashboard_v1/dashboard/assets/style.css",
+    "docs/knowledge/merch_automation_dashboard_v1/dashboard/index.html",
+    "docs/knowledge/merch_automation_dashboard_v1/n8n/merch_automation_dashboard_v1.workflow.json",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/DESIGN_BRIEF_PROMPTS.md",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/IP_GUARDIAN_PROMPTS.md",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/LISTING_SEO_PROMPTS.md",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/NICHE_RESEARCH_PROMPTS.md",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/PROMPT_PACK.md",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/TRAFFIC_CONTENT_PROMPTS.md",
+    "docs/knowledge/merch_automation_dashboard_v1/qc/IP_POLICY_CHECKLIST.md",
+    "docs/knowledge/merch_automation_dashboard_v1/qc/QC_CHECKLIST.md",
+    "docs/knowledge/merch_automation_dashboard_v1/qc/REJECTION_REASON_TAXONOMY.md",
+    "docs/knowledge/merch_automation_dashboard_v1/receipts/MERCH_AUTOMATION_DASHBOARD_V1_RECEIPT.json",
+    "docs/knowledge/merch_automation_dashboard_v1/reports/FINAL_REPORT.md",
+    "docs/knowledge/merch_automation_dashboard_v1/reports/VALIDATION_REPORT.md",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/airtable_base_schema.json",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/database_schema.json",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/google_sheets_schema.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/status_taxonomy.json",
+    "docs/knowledge/merch_automation_dashboard_v1/scripts/validate_merch_dashboard_v1.mjs",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/design_pipeline.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/ip_policy_checks.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/listing_drafts.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/niche_candidates.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/production_calendar_30_day.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/qc_reviews.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/sales_analytics.csv",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/traffic_content.csv",
+    "GHOSTCLAW/merch_automation_dashboard_v1/README.md",
+    "GHOSTCLAW/merch_automation_dashboard_v1/MERCH-DASH-V1-AUTO-20260630-001.job.json",
+    ".ghostclaw_runtime/a2a2a/inbox/hermes/MERCH-DASH-V1-AUTO-20260630-001.dispatch.json",
+    ".ghostclaw_runtime/a2a2a/leases/MERCH-DASH-V1-AUTO-20260630-001.lease.json",
+    ".ghostclaw_runtime/a2a2a/receipts/MERCH-DASH-V1-AUTO-20260630-001.build_receipt.json",
+    ".ghostclaw_runtime/a2a2a/evidence/MERCH-DASH-V1-AUTO-20260630-001.validation.json",
+    ".ghostclaw_runtime/a2a2a/blocked/MERCH-DASH-V1-AUTO-20260630-001.blocked_actions.json"
+  ],
+  "files_modified": [
+    "AUTONOMOUS_RUN_LOG.md",
+    "NEXT_ACTIONS.md",
+    "PROJECT_STATE.md",
+    "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
+  ],
+  "validation_commands": [
+    "node --check docs/knowledge/merch_automation_dashboard_v1/scripts/validate_merch_dashboard_v1.mjs",
+    "node --check docs/knowledge/merch_automation_dashboard_v1/dashboard/assets/app.js",
+    "node docs/knowledge/merch_automation_dashboard_v1/scripts/validate_merch_dashboard_v1.mjs",
+    "git diff --check -- <mission-scoped paths>"
+  ],
+  "validation_results": {
+    "validator": {
+      "ok": true,
+      "pass_count": 86
+    },
+    "dashboard_js_syntax": {
+      "ok": true
+    },
+    "validator_syntax": {
+      "ok": true
+    },
+    "diff_check_scoped": {
+      "ok": true
+    }
+  },
+  "blocked_actions": [
+    {
+      "action": "live_amazon_publish",
+      "status": "blocked",
+      "reason": "marketplace owner action only"
+    },
+    {
+      "action": "amazon_control_bypass_or_scraping",
+      "status": "blocked",
+      "reason": "platform bypass is prohibited"
+    },
+    {
+      "action": "paid_provider_call",
+      "status": "blocked",
+      "reason": "no paid model/provider calls allowed"
+    },
+    {
+      "action": "secret_read_or_print",
+      "status": "blocked",
+      "reason": "secret access prohibited"
+    },
+    {
+      "action": "telegram_live_broadcast",
+      "status": "blocked",
+      "reason": "live external send prohibited"
+    },
+    {
+      "action": "push_or_deploy",
+      "status": "blocked",
+      "reason": "no push/deploy in this mission"
+    },
+    {
+      "action": "launchd_or_cron_activation",
+      "status": "blocked",
+      "reason": "not needed for Merch local artifact build"
+    }
+  ],
+  "next_actions": [
+    "Open docs/knowledge/merch_automation_dashboard_v1/dashboard/index.html locally for operator review.",
+    "Manually review IP/policy status before any marketplace action.",
+    "Import CSV/Airtable/n8n templates only after owner review.",
+    "Isolate worktree before creating a scoped local commit."
+  ],
+  "checksum_manifest": {
+    "docs/knowledge/merch_automation_dashboard_v1/ARCHITECTURE.md": "e8a4c5579d4f0af8cc26dd5c54c90a4281db2209a729a2bca3bdc74a16bb2862",
+    "docs/knowledge/merch_automation_dashboard_v1/MERCH_AUTOMATION_DASHBOARD_V1.md": "46ba1e4be8744b398d5e3bc9a70c76a1e1aea88bfa8bc5ce6a4917883e232e00",
+    "docs/knowledge/merch_automation_dashboard_v1/OPERATING_RULES.md": "09e02d9c98f0a60592ead1c6fe4fabe23c6d6d7ffd47e52443d50497383c3701",
+    "docs/knowledge/merch_automation_dashboard_v1/README.md": "e3ecf587660762874f70fe265506a1e27b9c2a71c99b10858a750f7d3cb3db4f",
+    "docs/knowledge/merch_automation_dashboard_v1/RELEASE_GATE_LOCAL.md": "40fb8e567db00269bbd04f1595ab02dd8ca237b723d40af0dce54ebe71ddfa23",
+    "docs/knowledge/merch_automation_dashboard_v1/calendar/30_DAY_PRODUCTION_CALENDAR.md": "b2d39260e096bc9d42630de6b3ea11596d4a3c4edf1faeafbd19f0477262dd6c",
+    "docs/knowledge/merch_automation_dashboard_v1/dashboard/assets/app.js": "0e45c632b1cca8f3779c4897d6f8a52a9b73dd792ec736c79b3b38f88b715f43",
+    "docs/knowledge/merch_automation_dashboard_v1/dashboard/assets/style.css": "d63b9197dba43d1a4ba3f1aac94d8ac054d556a2bfc63e1261282eacaf0230cd",
+    "docs/knowledge/merch_automation_dashboard_v1/dashboard/index.html": "63a43b03fd15a0dd1f4752f4254b8dc058ddb4a3d7daad08da6903253d959e70",
+    "docs/knowledge/merch_automation_dashboard_v1/n8n/merch_automation_dashboard_v1.workflow.json": "43662abd9e67e793d845e515c7640b41bb070161fc052cb3d386253ad798d8fa",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/DESIGN_BRIEF_PROMPTS.md": "21e610440b2270e08b55f75f1314c9fb11e623c7a3432c8c118aa0922dee0465",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/IP_GUARDIAN_PROMPTS.md": "453749b16d8a30c693c357ace0b4578128f882d2be177088ddf734f94a8696cc",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/LISTING_SEO_PROMPTS.md": "454223f5966e69a2d5edf4a14d7b8de42712de4e204114cdce558296e9964ac3",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/NICHE_RESEARCH_PROMPTS.md": "01b2cb963c2bfbf9254c0fab49040034652e4da848614d07c3915d2bf9bae88b",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/PROMPT_PACK.md": "c3d7dad8c9eb13a4fc27ed3ac867590534d5b312cea2029d46d773d669dec696",
+    "docs/knowledge/merch_automation_dashboard_v1/prompts/TRAFFIC_CONTENT_PROMPTS.md": "b02936504337e558af54660bbbe8f154d3f7bd15327aa2897c5d8a6a86fc5a75",
+    "docs/knowledge/merch_automation_dashboard_v1/qc/IP_POLICY_CHECKLIST.md": "248d8501641b0198ff15dc5deefd1d955ed9fc8c8bcc9f7f7e07b15d1608927d",
+    "docs/knowledge/merch_automation_dashboard_v1/qc/QC_CHECKLIST.md": "5d17d0d19752da8d6b42cadef505e31cf00e48c82a1653aa61fbd59aa9ea3ab4",
+    "docs/knowledge/merch_automation_dashboard_v1/qc/REJECTION_REASON_TAXONOMY.md": "7cd964e1deaf95c4c206739f4ec315efb74c977bb7d1980a4e4a1a82389a9fe7",
+    "docs/knowledge/merch_automation_dashboard_v1/reports/FINAL_REPORT.md": "b33c773a611ebe54e255993f61aa6d5661a2a945388ce3de8796d2fc2fef0d56",
+    "docs/knowledge/merch_automation_dashboard_v1/reports/VALIDATION_REPORT.md": "3c00ae730af92898b9be648f9bbe64a889da825eced2bbd74c2747098ccf40aa",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/airtable_base_schema.json": "9e9fdd3cba83cda75df0f9c32789bbd6db4965684e0fa660e327168e8243da03",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/database_schema.json": "45cf96adc2504a0b89bb4902c18d74419d2714b6ddc7e8332ab1672b8160a02b",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/google_sheets_schema.csv": "56a315c9af35023897c93b7685d89145ea36e6836cc2f643878e4e616a043791",
+    "docs/knowledge/merch_automation_dashboard_v1/schema/status_taxonomy.json": "8f0c9bbcdd30342bec76fb31fdc8953f98554e0c59dbf80563cde1bb0a764197",
+    "docs/knowledge/merch_automation_dashboard_v1/scripts/validate_merch_dashboard_v1.mjs": "f115fe6616759d6cae9eddb991023c655404a320339760019cee158776183879",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/design_pipeline.csv": "82d91af1fe5af2e0ca5bf575f0c6fa0627569d6519a36c588d4e075316487350",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/ip_policy_checks.csv": "b8cc68bf3436d0c78380e1f51d9b08dcc468c5f11debd2b43b3b54d35144ac0d",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/listing_drafts.csv": "43bcddfcb9eeafb0ae8c8ea68bee84f2e646c3654e50ffc25c1677140eb4759a",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/niche_candidates.csv": "461c5a88c8f04537ee40f1312d04ad93cb2640ba5dba7436039143685dc52f9a",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/production_calendar_30_day.csv": "89e93d5aa62ddee6a675f469f0b4b63262a5a6f61065c1a487556505562808f5",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/qc_reviews.csv": "368ea05c6767b4661abf5b729243f71c686484598c9e253a4402f256cfce45b0",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/sales_analytics.csv": "0a7b74729e679e944e6768985bc5cd0fb43fd158b3eaf1d286448d3be8cd5661",
+    "docs/knowledge/merch_automation_dashboard_v1/templates/traffic_content.csv": "7adcd484f1f6b6bd366efd0df5eea162847f143d6b01076b5274dc4d8218c9d9",
+    "GHOSTCLAW/merch_automation_dashboard_v1/README.md": "0305f12b239fd85487af9b48adfae44b88c7330904c88690908959ab3a255c5a",
+    "GHOSTCLAW/merch_automation_dashboard_v1/MERCH-DASH-V1-AUTO-20260630-001.job.json": "8b5eb8d0a4940fd77ee34f97da699c8676f12002b617169fe6a83d316f9aeb3f",
+    ".ghostclaw_runtime/a2a2a/inbox/hermes/MERCH-DASH-V1-AUTO-20260630-001.dispatch.json": "ea0e051b5da8ddf4e7061807c5b528d1f346ba2158957126d667ebd0e77601de",
+    ".ghostclaw_runtime/a2a2a/leases/MERCH-DASH-V1-AUTO-20260630-001.lease.json": "4135a647834a3841ee7959c2791eb73e34f6854f6776d7232bde7705e8abd92a",
+    ".ghostclaw_runtime/a2a2a/receipts/MERCH-DASH-V1-AUTO-20260630-001.build_receipt.json": "441e7f4ea2adbad5f4424c7d0aa684e6f72f553dd6d5c60c9764e63673e74e74",
+    ".ghostclaw_runtime/a2a2a/evidence/MERCH-DASH-V1-AUTO-20260630-001.validation.json": "aaf8ad3165d3de91432bc0fc66cf0bfa6783b20ec09d46e9625d95d9df42817f",
+    ".ghostclaw_runtime/a2a2a/blocked/MERCH-DASH-V1-AUTO-20260630-001.blocked_actions.json": "467c8ecf767710ad647322d7cf794d391c102fb6012f5bca964ed0d6947e7e5b",
+    "AUTONOMOUS_RUN_LOG.md": "4c06b977d90e797ba85dab197e7d89c114192b4503f7555376a23b412e06d4b8",
+    "NEXT_ACTIONS.md": "c868c79ebfb0a88b0e04b1b4b6eead17586d48750a1799dda64e967c7ce1045a",
+    "PROJECT_STATE.md": "eacff0b436a245de329efe0f29e78ad96e189f65b00de4878dfda7562a345b72"
+  },
+  "checksum_policy": "receipt files excluded from checksum_manifest to avoid self-referential hash drift",
+  "local_commit_hash_if_created": null,
+  "local_commit": {
+    "created": false,
+    "reason": "pre-existing unrelated dirty worktree; scoped commit skipped"
+  },
+  "obsidian_digest_updated": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md"
+}

@@ -1,0 +1,5 @@
+{"packet_id":"packet-p091-blocked","bundle_kind":"adapter_response_bundle","status":"blocked_or_failed","dry_run":true,"live_execution":false}
+{"packet_id":"packet-p091-live","bundle_kind":"adapter_response_bundle","status":"ready_for_review","dry_run":true,"live_execution":true}
+not json
+
+{"packet_id":"packet-p091-ready","bundle_kind":"adapter_response_bundle","status":"ready_for_review","dry_run":true,"live_execution":false}

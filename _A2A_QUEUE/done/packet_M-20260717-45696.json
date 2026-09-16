@@ -1,0 +1,59 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.4934778,
+  "message_id": "msg-packet_M-20260717-45696",
+  "mission_id": "M-20260717-45696",
+  "from": {
+    "agent": "human-operator",
+    "role": "operator"
+  },
+  "to": {
+    "agent": "opencode-reviewer",
+    "role": "independent_reviewer"
+  },
+  "context": {
+    "goal": "Test A2A bridge - list files",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "a2a-opencode-1784234317-20003"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_M-20260717-45696",
+    "mission_id": "M-20260717-45696",
+    "timestamp": "2026-07-16T20:38:37.000Z",
+    "from": {
+      "agent": "human-operator",
+      "role": "operator"
+    },
+    "to": {
+      "agent": "opencode-reviewer",
+      "role": "independent_reviewer"
+    },
+    "context": {
+      "goal": "Test A2A bridge - list files",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "a2a-opencode-1784234317-20003"
+    },
+    "payload": {
+      "type": "task",
+      "action": "Test A2A bridge - list files",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.651575+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

@@ -1,0 +1,135 @@
+version: GHOSTCLAW_SUP_AGENT_BOOTSTRAP_COMPACT_V1_1
+mode: bootstrap_registry_retrieval
+
+global_rules:
+  context_strategy: retrieval_on_demand
+  no_full_memory_dump: true
+  backend_to_frontend_sequence: true
+  file_lease_required_for_mutation: true
+  receipt_required: true
+  no_self_approval: true
+  stop_on_first_failed_gate: true
+
+context_budget:
+  max_model_context: 524288
+  hard_prompt_limit: 350000
+  recommended_prompt_limit: "8000_to_30000"
+  current_packet_limit: 12000
+  repo_snippet_limit: 30000
+  validation_log_limit: 10000
+  receipt_limit: 5000
+  reserved_output_budget: 20000
+
+retrieval_rule:
+  never_paste:
+    - full_ghostclaw_memory
+    - full_chat_history
+    - all_project_docs
+    - all_agent_prompts
+    - all_repo_files
+    - all_232_agents
+  paste_only:
+    - bootstrap
+    - current_packet
+    - relevant_file_snippets
+    - latest_receipt
+    - failed_validation_output
+
+sequence:
+  - 00_repo_intake
+  - 01_backend_core
+  - 02_database_domain_schema
+  - 03_service_logic
+  - 04_api_contract_freeze
+  - 05_api_route_handler
+  - 06_api_client_wiring
+  - 07_frontend_state_hooks
+  - 08_components
+  - 09_pages_one_by_one
+  - 10_local_uat
+  - 11_review_validation
+  - 12_receipt_audit
+  - 13_commit_gate_review_only
+
+action_tiers:
+  A:
+    name: read_only
+    autonomous: true
+  B:
+    name: local_safe_mutation
+    autonomous: true
+    requires:
+      - file_lease
+      - validation
+      - receipt
+  C:
+    name: gated_local_high_impact
+    autonomous: false
+    requires:
+      - quorum
+      - rollback_plan
+      - explicit_gate
+  D:
+    name: blocked_external_high_impact
+    blocked: true
+  X:
+    name: blocked_unsafe
+    blocked: true
+
+agents:
+  Hermes:
+    lane: control
+    mutate_repo: false
+    duties:
+      - decompose_mission
+      - enforce_sequence
+      - enforce_policy
+      - approve_next_packet_after_receipt
+  Codex:
+    lane: build
+    mutate_repo: true
+    requires:
+      - active_file_lease
+      - current_packet
+    cannot:
+      - self_approve
+      - push
+      - deploy
+      - install
+      - read_secrets
+      - call_paid_provider
+  OpenCode:
+    lane: review
+    mutate_repo: false
+    duties:
+      - review_packet_n_minus_1
+      - detect_layer_skip
+      - detect_file_lease_violation
+  Policy_Guardian:
+    lane: gate
+    mutate_repo: false
+    duties:
+      - classify_action_tier
+      - block_D_X
+      - prevent_self_approval
+  File_Lease_Manager:
+    lane: control
+    mutate_repo: false
+    duties:
+      - assign_allowed_paths
+      - assign_blocked_paths
+      - prevent_path_collision
+  Validator:
+    lane: validation
+    mutate_repo: false
+    duties:
+      - run_existing_local_checks
+      - verify_changed_files_match_lease
+      - verify_receipt_exists
+  Receipt_Auditor:
+    lane: audit
+    mutate_repo: true
+    allowed_paths:
+      - receipts/**
+      - reports/**
+      - runtime/a2a/**

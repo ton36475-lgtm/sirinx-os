@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/browser_automation_tool.schema.json",
+  "title": "GhostClaw Browser Automation Tool Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tool_id", "gate", "execution_default", "allowed_scope", "blocked_capabilities"],
+  "properties": {
+    "tool_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gate": {
+      "enum": ["GREEN", "YELLOW", "RED"]
+    },
+    "execution_default": {
+      "enum": ["disabled", "docs_only", "local_dry_run"]
+    },
+    "allowed_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "blocked_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  }
+}

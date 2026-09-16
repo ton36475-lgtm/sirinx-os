@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merch Automation Dashboard v1</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Local Factory</p>
+      <h1>Merch Automation Dashboard v1</h1>
+    </div>
+    <div class="run-meta">
+      <span>Local only</span>
+      <span>No live publish</span>
+      <span>No external calls</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="filters" aria-label="Dashboard filters">
+      <label>Status
+        <select id="statusFilter"><option value="all">All statuses</option></select>
+      </label>
+      <label>Risk
+        <select id="riskFilter"><option value="all">All risk levels</option></select>
+      </label>
+      <label>Niche
+        <select id="nicheFilter"><option value="all">All niches</option></select>
+      </label>
+      <label>Channel
+        <select id="channelFilter"><option value="all">All channels</option></select>
+      </label>
+      <button id="exportVisible" type="button">Export visible CSV</button>
+    </section>
+
+    <section id="kpis" class="kpi-grid" aria-label="KPI cards"></section>
+
+    <section class="board-grid">
+      <article class="panel wide"><div class="panel-title"><h2>Niche Score Table</h2></div><div id="nicheTable" class="table-wrap"></div></article>
+      <article class="panel"><div class="panel-title"><h2>Design Pipeline Board</h2></div><div id="pipelineBoard" class="lane-board"></div></article>
+      <article class="panel"><div class="panel-title"><h2>IP Risk Queue</h2></div><div id="ipQueue" class="queue-list"></div></article>
+      <article class="panel"><div class="panel-title"><h2>QC Queue</h2></div><div id="qcQueue" class="queue-list"></div></article>
+      <article class="panel"><div class="panel-title"><h2>Listing Draft Status</h2></div><div id="listingStatus" class="table-wrap"></div></article>
+      <article class="panel"><div class="panel-title"><h2>30-Day Calendar</h2></div><div id="calendar" class="calendar-grid"></div></article>
+      <article class="panel wide"><div class="panel-title"><h2>Analytics Decision Board</h2></div><div id="analyticsBoard" class="table-wrap"></div></article>
+    </section>
+  </main>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{"id":"route-p087-001","lane":"review","task":"inspect packet locally","status":"queued_local_safe_no_execution","created_at_ms":1780000000000}
+{"id":"route-p087-bad","lane":"unknown_lane","task":"should fail","status":"queued_local_safe_no_execution","created_at_ms":1780000000001}
+
+not json
+{"id":"route-p087-002","lane":"backend_core","task":"scan safely","status":"queued_local_safe_no_execution","created_at_ms":1780000000002}

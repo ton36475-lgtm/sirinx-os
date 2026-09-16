@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIRINX Website Human Review Board</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #06110f;
+        color: #edf8f3;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(circle at 20% 0%, rgba(21, 128, 61, 0.16), transparent 28%),
+          linear-gradient(180deg, #071512 0%, #0b1815 44%, #07110f 100%);
+      }
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 48px 24px 64px;
+      }
+      header {
+        display: grid;
+        gap: 16px;
+        padding: 32px 0;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        max-width: 920px;
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+      h2 {
+        font-size: 1.15rem;
+      }
+      .eyebrow,
+      .meta {
+        color: #8bd8b8;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+      .lede {
+        max-width: 760px;
+        color: #c5d9d0;
+        font-size: 1.08rem;
+        line-height: 1.7;
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin: 24px 0 32px;
+      }
+      .tile,
+      .panel,
+      .shot {
+        background: rgba(15, 23, 42, 0.54);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(12px);
+      }
+      .tile {
+        padding: 20px;
+      }
+      .tile strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 1.4rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 24px;
+        margin-bottom: 32px;
+      }
+      .panel {
+        padding: 24px;
+      }
+      .panel ul {
+        display: grid;
+        gap: 12px;
+        margin: 16px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .panel li {
+        display: grid;
+        gap: 4px;
+        padding: 12px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .panel span,
+      .shot p {
+        color: #b9cec5;
+        line-height: 1.55;
+      }
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+      .shot {
+        display: grid;
+        gap: 16px;
+        overflow: hidden;
+        padding: 16px;
+      }
+      .shot img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0f172a;
+      }
+      .warning {
+        color: #f8d581;
+      }
+      @media (max-width: 820px) {
+        main {
+          padding: 32px 16px 48px;
+        }
+        .summary,
+        .grid,
+        .shots {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Local-only review artifact</p>
+        <h1>SIRINX Website Human Review Board</h1>
+        <p class="lede">
+          ใช้บอร์ดนี้สำหรับตรวจภาพหน้าเว็บ, LINE QR, mobile layout, inquiry/bot path และสถานะ gate ก่อนอนุมัติ push หรือ deploy.
+          บอร์ดนี้ไม่ใช่ deploy approval และไม่เชื่อม production analytics, webhook หรือ CRM.
+        </p>
+      </header>
+
+      <section class="summary" aria-label="Review summary">
+        <div class="tile"><span class="meta">Screenshots</span><strong>14</strong></div>
+        <div class="tile"><span class="meta">Routes</span><strong>7</strong></div>
+        <div class="tile"><span class="meta">Local status</span><strong>LOCAL_EVIDENCE_READY_FOR_HUMAN_REVIEW_NOT_COMPLETE</strong></div>
+        <div class="tile"><span class="meta">Completion claim</span><strong>Blocked</strong></div>
+      </section>
+
+      <section class="grid" aria-label="Review gates">
+        <div class="panel">
+          <p class="eyebrow">Pending human checks</p>
+          <ul>
+        <li>
+          <strong>Human visual acceptance after rejected design direction</strong>
+          <span>Human review of local preview and screenshot set</span>
+        </li>
+
+        <li>
+          <strong>LINE QR is scannable on a real device</strong>
+          <span>Real phone scan confirming the QR opens the SIRINX LINE Official account</span>
+        </li>
+
+        <li>
+          <strong>Existing bot/inquiry behavior is preserved exactly</strong>
+          <span>Manual browser check of the website inquiry path and expected bot behavior</span>
+        </li>
+
+        <li>
+          <strong>Mobile overlap and spacing are acceptable on a real device or trusted viewport</strong>
+          <span>Human mobile review evidence</span>
+        </li>
+
+        <li>
+          <strong>Push or deploy can proceed only after a separate exact approval</strong>
+          <span>Fresh explicit approval naming target, branch, and deploy action</span>
+        </li></ul>
+        </div>
+        <div class="panel">
+          <p class="eyebrow">Local evidence map</p>
+          <ul><li><strong>phase_0_read_only_audit</strong><span>proven_locally</span></li>
+<li><strong>phase_1_quality_upgrade</strong><span>proven_locally</span></li>
+<li><strong>phase_2_central_line_config</strong><span>proven_locally</span></li>
+<li><strong>phase_3_floating_contact_cluster</strong><span>proven_locally</span></li>
+<li><strong>phase_4_line_page</strong><span>proven_locally</span></li>
+<li><strong>phase_5_line_cta_distribution</strong><span>proven_locally</span></li>
+<li><strong>phase_6_existing_bot_preservation</strong><span>proven_locally</span></li>
+<li><strong>phase_7_tracking_placeholders</strong><span>proven_locally</span></li>
+<li><strong>phase_8_seo_aeo_trust</strong><span>proven_locally</span></li>
+<li><strong>phase_9_spec_packs</strong><span>proven_locally</span></li>
+<li><strong>phase_10_implementation_order_evidence</strong><span>proven_locally</span></li>
+<li><strong>phase_11_component_equivalents</strong><span>proven_locally</span></li>
+<li><strong>phase_12_local_acceptance_tests</strong><span>proven_locally</span></li>
+<li><strong>phase_13_future_ready_closed_gates</strong><span>proven_locally</span></li>
+<li><strong>phase_14_verification_commands</strong><span>proven_locally</span></li>
+<li><strong>github_current_recheck</strong><span>proven_locally</span></li>
+<li><strong>github_live_local_automated_recheck</strong><span>proven_locally</span></li>
+<li><strong>line_qr_link_asset_recheck</strong><span>proven_locally</span></li>
+<li><strong>manual_review_intake_readiness</strong><span>proven_locally</span></li>
+<li><strong>manual_review_evidence_contract</strong><span>proven_locally</span></li>
+<li><strong>local_preview_health_readiness</strong><span>proven_locally</span></li>
+<li><strong>manual_review_receipt_readiness</strong><span>proven_locally</span></li></ul>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="Review instructions">
+        <p class="eyebrow">Manual review steps</p>
+        <ul>
+          <li><strong>1. Visual pass</strong><span>เปิด screenshot desktop/mobile ทุก route แล้วดูความสวย, spacing, CTA, header/footer และเนื้อหา.</span></li>
+          <li><strong>2. QR scan</strong><span>สแกน QR จากหน้า /line หรือ contact ด้วยมือถือจริง และยืนยันว่าเปิดบัญชี SIRINX โซล่าเซลล์.</span></li>
+          <li><strong>3. Inquiry/bot path</strong><span>เปิด floating contact, LINE panel, inquiry panel และ mobile sheet ใน local preview.</span></li>
+          <li><strong>4. Gate decision</strong><span class="warning">อย่า push/deploy จนกว่าจะมี approval แยกชัดเจนหลังตรวจครบ.</span></li>
+        </ul>
+        <p class="warning">This board is not push approval and not deploy approval.</p>
+      </section>
+
+      <section class="shots" aria-label="Screenshots">
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>Homepage</h2>
+            <p>/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/home-desktop.png" alt="SIRINX review screenshot / desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>line</h2>
+            <p>/line/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/line-desktop.png" alt="SIRINX review screenshot /line/ desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>contact</h2>
+            <p>/contact/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/contact-desktop.png" alt="SIRINX review screenshot /contact/ desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>projects</h2>
+            <p>/projects/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/projects-desktop.png" alt="SIRINX review screenshot /projects/ desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>trust-center</h2>
+            <p>/trust-center/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/trust-center-desktop.png" alt="SIRINX review screenshot /trust-center/ desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>quote</h2>
+            <p>/quote/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/quote-desktop.png" alt="SIRINX review screenshot /quote/ desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">desktop</p>
+            <h2>roi-calculator</h2>
+            <p>/roi-calculator/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/roi-calculator-desktop.png" alt="SIRINX review screenshot /roi-calculator/ desktop" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>Homepage</h2>
+            <p>/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/home-mobile.png" alt="SIRINX review screenshot / mobile" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>line</h2>
+            <p>/line/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/line-mobile.png" alt="SIRINX review screenshot /line/ mobile" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>contact</h2>
+            <p>/contact/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/contact-mobile.png" alt="SIRINX review screenshot /contact/ mobile" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>projects</h2>
+            <p>/projects/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/projects-mobile.png" alt="SIRINX review screenshot /projects/ mobile" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>trust-center</h2>
+            <p>/trust-center/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/trust-center-mobile.png" alt="SIRINX review screenshot /trust-center/ mobile" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>quote</h2>
+            <p>/quote/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/quote-mobile.png" alt="SIRINX review screenshot /quote/ mobile" loading="lazy" />
+        </article>
+
+        <article class="shot">
+          <div>
+            <p class="eyebrow">mobile</p>
+            <h2>roi-calculator</h2>
+            <p>/roi-calculator/ · file found</p>
+          </div>
+          <img src="file:///tmp/sirinx-site-review-screenshots-1783018931992/roi-calculator-mobile.png" alt="SIRINX review screenshot /roi-calculator/ mobile" loading="lazy" />
+        </article></section>
+    </main>
+  </body>
+</html>

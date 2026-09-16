@@ -1,0 +1,63 @@
+{
+  "$schema": "ghostclaw.godmode.v5.baseline-scope.v1",
+  "Version": "1.0.0",
+  "TaskId": "GODMODE-V5-LOCAL-CONTROL-PLANE",
+  "CorrelationId": "GODMODE-V5-LOCAL-CONTROL-PLANE",
+  "LaneId": "LANE_GODMODE_V5_LOCAL_CONTROL_PLANE",
+  "Objective": "Build and verify the local GODMODE V5 coordination, A2A2A status, Telegram command, model-routing, and Cloudflare readiness control plane before any external execution.",
+  "InScope": [
+    "Deterministic five-phase state and receipt chain",
+    "Hermes command and policy coordination",
+    "Claude architecture ownership",
+    "Codex single-writer implementation ownership",
+    "OpenCode and GLM-5.2 read-only review routing",
+    "A2A2A local packet and receipt status",
+    "Telegram command preview and exact-gate reporting",
+    "Cloudflare R3 readiness and future R4/R5 packet contracts",
+    "Local tests, evidence, documentation, and Obsidian memory pulses"
+  ],
+  "OutOfScope": [
+    "Secret or credential value reads",
+    "Live Telegram messages",
+    "Paid provider calls",
+    "Dependency installation",
+    "Git push",
+    "Cloudflare mutation or deployment",
+    "Production traffic or customer data processing"
+  ],
+  "AllowedPaths": [
+    "configs/godmode_v5_*.json",
+    "configs/ghostclaw_agent_coordination.config.json",
+    "configs/hermes_telegram_gateway.config.json",
+    "configs/cloudflare_deployment_targets.config.json",
+    "services/dev-control-api/configs/",
+    "services/dev-control-api/src/godmode-v5-*.mjs",
+    "services/dev-control-api/server.mjs",
+    "scripts/ghostclaw-godmode-v5-*.mjs",
+    "docs/knowledge/GODMODE_V5_*.md",
+    ".ghostclaw_runtime/a2a2a/evidence/"
+  ],
+  "Owners": {
+    "MissionCommander": "hermes_commander",
+    "ArchitectureOwner": "claude_architect",
+    "SingleRepoWriter": "codex_build_captain",
+    "ReviewOwner": "opencode_glm52_reviewer",
+    "ValidationOwner": "kob_validator"
+  },
+  "ExternalActions": {
+    "SecretRead": false,
+    "LiveTelegramSend": false,
+    "ProviderCall": false,
+    "Install": false,
+    "GitPush": false,
+    "CloudflareWrite": false,
+    "CloudflareDeploy": false
+  },
+  "Acceptance": [
+    "All four Baseline criteria have deterministic local evidence",
+    "Canonical and mirrored control-plane configs are byte-identical",
+    "Dirty worktree paths and statuses are recorded without reading their contents",
+    "Risk classes and exact-gate boundaries are explicit",
+    "The transition to Architecture preserves the prior state digest"
+  ]
+}

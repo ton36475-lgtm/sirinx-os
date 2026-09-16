@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/content_intelligence_card.schema.json",
+  "title": "GhostClaw Content Intelligence Card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "card_id",
+    "source_type",
+    "topic",
+    "verification_status",
+    "allowed_outputs",
+    "blocked_outputs"
+  ],
+  "properties": {
+    "card_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "enum": ["social_post", "repo", "official_doc", "video", "article", "note"]
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verification_status": {
+      "enum": ["unverified", "primary_source_checked", "stale", "blocked"]
+    },
+    "allowed_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

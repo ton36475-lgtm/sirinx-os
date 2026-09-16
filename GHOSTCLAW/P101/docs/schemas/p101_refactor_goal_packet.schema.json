@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ghostclaw.local/schemas/p101_refactor_goal_packet.schema.json",
+  "title": "GhostClaw P101 Full-Stack Refactor and Rust Migration Goal Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "goal_id",
+    "project_id",
+    "repo_path",
+    "mode",
+    "objective",
+    "file_lease",
+    "loop",
+    "acceptance_criteria",
+    "risk_envelope"
+  ],
+  "properties": {
+    "goal_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "project_id": {
+      "type": "string",
+      "enum": ["GHO", "SRX", "AGM", "KUS", "PUN", "ADS", "AIC", "LVC", "RAM", "HAY", "PET", "LOC", "TRV", "STP"]
+    },
+    "repo_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["AUDIT_ONLY", "LOCAL_REFACTOR", "RUST_MIGRATION", "FULL_LOCAL_LOOP"]
+    },
+    "objective": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {"type": "string", "minLength": 3, "maxLength": 1000}
+    },
+    "file_lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include", "exclude", "owner", "expires_after_minutes"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "exclude": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "owner": {"type": "string", "minLength": 2},
+        "expires_after_minutes": {"type": "integer", "minimum": 5, "maximum": 240}
+      }
+    },
+    "loop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_iterations", "max_safe_fix_rounds", "halt_on_exception"],
+      "properties": {
+        "max_iterations": {"type": "integer", "minimum": 1, "maximum": 5},
+        "max_safe_fix_rounds": {"type": "integer", "minimum": 0, "maximum": 2},
+        "halt_on_exception": {"type": "boolean", "const": true}
+      }
+    },
+    "rust_migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_module", "compatibility_boundary", "preserve_public_api", "differential_tests_required"],
+      "properties": {
+        "source_module": {"type": "string", "minLength": 1},
+        "compatibility_boundary": {"type": "string", "enum": ["CLI_JSON", "PYTHON_EXTENSION", "HTTP_LOCAL", "FFI_C_ABI"]},
+        "preserve_public_api": {"type": "boolean", "const": true},
+        "differential_tests_required": {"type": "boolean", "const": true}
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "verification"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 3},
+          "verification": {"type": "string", "minLength": 3}
+        }
+      }
+    },
+    "risk_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allow_network", "allow_paid", "allow_secrets", "allow_production", "allow_push", "allow_deploy"],
+      "properties": {
+        "allow_network": {"type": "boolean", "const": false},
+        "allow_paid": {"type": "boolean", "const": false},
+        "allow_secrets": {"type": "boolean", "const": false},
+        "allow_production": {"type": "boolean", "const": false},
+        "allow_push": {"type": "boolean", "const": false},
+        "allow_deploy": {"type": "boolean", "const": false}
+      }
+    },
+    "expected_outputs": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"mode": {"const": "RUST_MIGRATION"}},
+        "required": ["mode"]
+      },
+      "then": {"required": ["rust_migration"]}
+    }
+  ]
+}

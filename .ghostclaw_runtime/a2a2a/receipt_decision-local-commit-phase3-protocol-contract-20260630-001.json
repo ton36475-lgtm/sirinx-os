@@ -1,0 +1,20 @@
+{
+  "schema": "ghostclaw.receipt.v2",
+  "receipt_id": "rcp_1782783109094_e1cao2",
+  "decision_id": "decision-local-commit-phase3-protocol-contract-20260630-001",
+  "timestamp": "2026-06-30T01:31:49.094Z",
+  "evaluation": {
+    "status": "approved",
+    "final_tier": "B",
+    "effective_score": 86,
+    "display_score": 86,
+    "confidence_label": "B",
+    "human_approval_required": false,
+    "reason": "autonomous_mutual_approval_passed"
+  },
+  "context": {
+    "requester": "codex",
+    "approver": "hermes",
+    "action": "local_commit_allowed_scope"
+  }
+}

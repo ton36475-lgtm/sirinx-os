@@ -1,0 +1,62 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-20260717-008",
+  "correlation_id": "a2a-kimi-k3-1721214001-00802",
+  "phase": "dispatch",
+  "from": {
+    "agent": "frontier-generator",
+    "role": "task-orchestrator"
+  },
+  "to": {
+    "agent": "claude-architect",
+    "role": "chief_architect"
+  },
+  "action_requested": "Create GLM-5.2 Red-Team Critic service scaffold",
+  "context": {
+    "goal": "Create a red-team critic microservice scaffold at services/redteam-critic/ that accepts an evidence pack (JSON) and routes it to GLM-5.2 via the local OmniRoute proxy (http://localhost:20128/api/chat) for adversarial critique. The service must: (1) expose a POST /critique endpoint accepting {evidence_pack, context} JSON, (2) format the prompt as a red-team adversarial review instruction, (3) call OmniRoute with model='glm-5.2' in a try/catch with graceful fallback if OmniRoute is offline (return a 'deferred' status), (4) return {verdict, risks, recommendations, confidence}. Create app/main.py (FastAPI), app/routers/critique.py, app/core/prompt_builder.py, app/models/schemas.py (Pydantic), and requirements.txt. NO external API calls during scaffold — OmniRoute URL must be configurable via env var REDTEAM_OMNIROUTE_URL with localhost default. All calls must be read-only (POST to local proxy only).",
+    "constraints": [
+      "no deploy",
+      "no git push",
+      "no cloud mutation",
+      "no secret read or print",
+      "no external send",
+      "no external API calls — local OmniRoute proxy only",
+      "dry-run first",
+      "no package install — scaffold files only"
+    ],
+    "lane": "services/redteam-critic",
+    "files": [
+      "app/main.py",
+      "app/routers/critique.py",
+      "app/core/prompt_builder.py",
+      "app/models/schemas.py",
+      "requirements.txt"
+    ],
+    "deliverables": [
+      "FastAPI service structure with critique endpoint",
+      "Prompt builder for adversarial red-team review",
+      "Pydantic schemas for request/response",
+      "Graceful OmniRoute-offline fallback",
+      "requirements.txt with fastapi, uvicorn, httpx, pydantic"
+    ],
+    "command_source": "frontier-generator"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "max_turns": 5
+  },
+  "human_approval_required": false,
+  "timestamp": "2026-07-17T17:40:01.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "auto_block_and_continue"
+  },
+  "frontier_model": {
+    "model": "kimi-k3-moonshot-v1-256k",
+    "role": "architecture_and_scaffold",
+    "tier": "A",
+    "auto_approved": true
+  }
+}

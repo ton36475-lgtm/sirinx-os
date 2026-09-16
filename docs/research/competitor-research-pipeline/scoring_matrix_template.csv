@@ -1,0 +1,3 @@
+competitor,source_url_or_note,capture_date,source_type,reliability,feature_depth_score,pricing_clarity_score,positioning_score,trust_signal_score,content_engine_score,integration_depth_score,total_score,notes,next_action
+ExampleCo,https://example.com/pricing,2026-07-03,public_pricing_page,high,4,5,3,3,2,2,19,Clear pricing but weak integrations,Compare offer packaging
+StudioX,Public website observation,2026-07-03,public_website,medium,3,2,4,4,4,3,20,Strong positioning but pricing unclear,Build trust-signal checklist

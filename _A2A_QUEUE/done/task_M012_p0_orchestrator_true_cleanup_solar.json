@@ -1,0 +1,79 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-012",
+    "correlation_id": "a2a-solar1-1784286763-m012",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator-moa",
+      "role": "task-orchestrator",
+      "model_chain": "kimi-k3→fable-v5→solar-1-preview",
+      "authoring_model": "solar-1-preview"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build_captain"
+    },
+    "action_requested": "Orchestrator True Cleanup — Build Artifact Removal + .gitignore Hardening",
+    "context": {
+      "goal": "The '7083 files' panic from the refactor plan is MISDIAGNOSED. Verified findings: services/orchestrator has 7083 files total, but 7025 are Rust target/ build artifacts (1.3GB). Only 41 actual source files exist (7 Rust crates + TS/Python bridge files). The source is already lean. The real task is: (1) Add/verify .gitignore entries for target/, build/, node_modules/ in services/orchestrator/ so build artifacts never get committed. (2) Delete the 1.3GB target/ directory to reclaim disk. (3) Verify the 41 source files are coherent Rust workspace code (crates: hermes-core, hermes-router, hermes-dispatch, hermes-worker, hermes-feed, hermes-lock, hermes-governance). (4) Produce a file-count before/after report.",
+      "verified_state": {
+        "total_files": 7083,
+        "build_artifacts_target": 7025,
+        "actual_source_files": 41,
+        "target_dir_size": "1.3G",
+        "source_crates": [
+          "hermes-core (state_machine, idempotency, resource_allocation, outbox, hash_chain)",
+          "hermes-router (routing_vectors)",
+          "hermes-dispatch",
+          "hermes-worker",
+          "hermes-feed",
+          "hermes-lock",
+          "hermes-governance"
+        ],
+        "bridge_files": [
+          "index.ts",
+          "ghostclaw-controller.ts",
+          "local_bridge_policy.py",
+          "telegram-telemetry-gateway.test.ts"
+        ]
+      },
+      "constraints": [
+        "DO NOT delete source .rs/.ts/.py files without verification",
+        "DO NOT git push",
+        "DO NOT deploy",
+        "Run cargo clean or rm -rf target/ to reclaim disk",
+        "Verify .gitignore covers target/ build/ node_modules/",
+        "Report file count before and after"
+      ],
+      "lane": "services/orchestrator",
+      "files_to_touch": [
+        "services/orchestrator/.gitignore (verify/create)"
+      ],
+      "deliverables": [
+        "Cleaned target/ directory (1.3GB reclaimed)",
+        "Verified .gitignore with build artifact exclusions",
+        "File-count report: before (7083) → after (expect ~41 + node_modules)",
+        "Confirmation that 41 source files are intact and cargo workspace compiles (dry-run: cargo check)"
+      ],
+      "command_source": "frontier-generator-moa",
+      "refactor_plan_ref": "docs/FULL_SYSTEM_REFACTOR_PLAN.md §P0-1"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 4
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T11:12:43.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P0",
+  "tier": "A",
+  "auto_approved": true,
+  "tier_rationale": "Tier A: Read-only analysis + build-artifact cleanup only. No source modification, no deploy, no push. Fully reversible (target/ regenerates via cargo build)."
+}

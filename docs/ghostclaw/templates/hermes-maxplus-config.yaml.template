@@ -1,0 +1,97 @@
+# Copy to ~/.hermes/config.yaml only after owner review.
+# This template intentionally contains no live API key.
+
+custom_providers:
+  - name: maxplus-codex
+    base_url: https://api.maxplus-ai.cc/deepseek/v1
+    key_env: MAXPLUS_CODEX_API_KEY
+    api_key_env: MAXPLUS_CODEX_API_KEY
+    api_mode: openai_chat
+    transport: openai_chat
+    discover_models: false
+    model: deepseek-v4-flash
+    models:
+      deepseek-v4-flash:
+        context_length: 1000000
+      deepseek-v4-pro:
+        context_length: 1000000
+      kimi-k2.6:
+        context_length: 262144
+      minimax-m3:
+        context_length: 1000000
+      glm-5.2:
+        context_length: 1000000
+      glm-5.1:
+        context_length: 200000
+
+providers:
+  maxplus-codex:
+    name: maxplus-codex
+    base_url: https://api.maxplus-ai.cc/deepseek/v1
+    api: https://api.maxplus-ai.cc/deepseek/v1
+    url: https://api.maxplus-ai.cc/deepseek/v1
+    key_env: MAXPLUS_CODEX_API_KEY
+    api_key_env: MAXPLUS_CODEX_API_KEY
+    default_model: deepseek-v4-flash
+    api_mode: openai_chat
+    transport: openai_chat
+    discover_models: false
+    models:
+      deepseek-v4-flash:
+        context_length: 1000000
+      deepseek-v4-pro:
+        context_length: 1000000
+      kimi-k2.6:
+        context_length: 262144
+      minimax-m3:
+        context_length: 1000000
+      glm-5.2:
+        context_length: 1000000
+      glm-5.1:
+        context_length: 200000
+
+model:
+  default: deepseek-v4-flash
+  model: deepseek-v4-flash
+  provider: custom:maxplus-codex
+  base_url: https://api.maxplus-ai.cc/deepseek/v1
+  key_env: MAXPLUS_CODEX_API_KEY
+  api_key_env: MAXPLUS_CODEX_API_KEY
+  api_mode: openai_chat
+  transport: openai_chat
+
+model_aliases:
+  codex:
+    model: deepseek-v4-flash
+    provider: custom:maxplus-codex
+  deepseek:
+    model: deepseek-v4-flash
+    provider: custom:maxplus-codex
+  deepseekpro:
+    model: deepseek-v4-pro
+    provider: custom:maxplus-codex
+  kimi:
+    model: kimi-k2.6
+    provider: custom:maxplus-codex
+  minimax:
+    model: minimax-m3
+    provider: custom:maxplus-codex
+  glm52:
+    model: glm-5.2
+    provider: custom:maxplus-codex
+  glm:
+    model: glm-5.2
+    provider: custom:maxplus-codex
+  glm51:
+    model: glm-5.1
+    provider: custom:maxplus-codex
+
+agent:
+  max_turns: 60
+  reasoning_effort: medium
+
+terminal:
+  backend: local
+  cwd: "."
+  timeout: 180
+

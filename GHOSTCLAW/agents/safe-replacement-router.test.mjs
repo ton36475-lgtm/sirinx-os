@@ -1,0 +1,315 @@
+import { describe, expect, it } from "vitest";
+
+import {
+  buildBlockedActionArtifacts,
+  buildFullAutoReceipt,
+  evaluateWithReplacement,
+  getSafeReplacement,
+  getYoloTeamContract,
+  routeBlockedAction
+} from "./safe-replacement-router.mjs";
+import { AutoApproveEngine } from "./auto-approve-engine.mjs";
+
+describe("Safe Replacement Router", () => {
+  const engine = new AutoApproveEngine();
+
+  it("returns safe replacements for forbidden actions", () => {
+    const result = getSafeReplacement("jailbreak_execution");
+    expect(result.blocked).toBe(true);
+    expect(result.replacement_actions).toContain("jailbreak_resilience_test_design");
+    expect(result.replacement_actions).toContain("safety_policy_regression_tests");
+  });
+
+  it("returns safe replacements for secret access", () => {
+    const result = getSafeReplacement("secret_access");
+    expect(result.replacement_actions).toContain("secret_reference_presence_check");
+    expect(result.replacement_actions).toContain("redacted_env_schema_validation");
+  });
+
+  it("routes blocked decisions to safe replacements without human prompt", () => {
+    const decision = { status: "auto_blocked", final_tier: "X" };
+    const routing = routeBlockedAction(decision, { action_class: "production_action" });
+
+    expect(routing.blocked).toBe(true);
+    expect(routing.replacement_required).toBe(true);
+    expect(routing.human_prompt_required).toBe(false);
+    expect(routing.continue_pipeline).toBe(true);
+    expect(routing.replacement_actions).toContain("staging_dry_run");
+    expect(routing.replacement_actions).toContain("rollback_plan_generation");
+  });
+
+  it("allows approved decisions to continue without replacement", () => {
+    const decision = { status: "approved", final_tier: "A", receipt_written: true };
+    const routing = routeBlockedAction(decision, { action_class: "read_only" });
+
+    expect(routing.blocked).toBe(false);
+    expect(routing.replacement_required).toBe(false);
+    expect(routing.continue_pipeline).toBe(true);
+  });
+
+  it("holds an approval claim without a persisted receipt or safe tier", () => {
+    for (const decision of [
+      { status: "approved", final_tier: "A", receipt_written: false },
+      { status: "approved", final_tier: "D", receipt_written: true }
+    ]) {
+      const routing = routeBlockedAction(decision, { action_class: "read_only" });
+      expect(routing.blocked).toBe(true);
+      expect(routing.continue_pipeline).toBe(false);
+      expect(routing.hold_reason).toBe("approval_missing_safe_tier_or_receipt");
+    }
+  });
+
+  it("holds checker and quorum states instead of treating them as executable", () => {
+    for (const status of ["checker_required", "quorum_required", "unknown_status"]) {
+      const routing = routeBlockedAction(
+        { status, final_tier: "B", human_approval_required: false },
+        { action_class: "code_patch_allowed_path" }
+      );
+      expect(routing.blocked).toBe(true);
+      expect(routing.replacement_required).toBe(false);
+      expect(routing.continue_pipeline).toBe(false);
+      expect(routing.hold_reason).toBe(status);
+    }
+  });
+
+  it("evaluates push as blocked and replaces with safe actions", () => {
+    const result = evaluateWithReplacement({
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "push",
+      display_score: 99,
+      decision_id: "decision_push_replace_001",
+      evidence_pack: {}
+    }, engine);
+
+    expect(result.status).toBe("auto_blocked");
+    expect(result.routing.blocked).toBe(true);
+    expect(result.routing.human_prompt_required).toBe(false);
+    expect(result.routing.continue_pipeline).toBe(true);
+  });
+
+  it("evaluates dependency install as blocked and provides replacement", () => {
+    const result = evaluateWithReplacement({
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "dependency_install",
+      display_score: 99,
+      decision_id: "decision_dep_replace_001",
+      evidence_pack: {}
+    }, engine);
+
+    expect(result.status).toBe("auto_blocked");
+    expect(result.routing.replacement_actions).toContain("lockfile_analysis");
+  });
+
+  it("provides replacements for every blocked forever action without prompting humans", () => {
+    const blockedForever = [
+      "jailbreak_execution",
+      "bypass_safety_policy",
+      "secret_access",
+      "production_action",
+      "credential_dump",
+      "malware_or_evasion_logic",
+      "external_network_write_without_scope",
+      "destructive_filesystem_action",
+      "recursive_agent_launch",
+      "dependency_install_without_lock_scope",
+      "model_download_or_gpu_runtime_without_budget_gate"
+    ];
+
+    for (const actionClass of blockedForever) {
+      const routing = routeBlockedAction(
+        { status: "hard_blocked", final_tier: "X" },
+        { action_class: actionClass }
+      );
+
+      expect(routing.blocked).toBe(true);
+      expect(routing.replacement_required).toBe(true);
+      expect(routing.human_prompt_required).toBe(false);
+      expect(routing.continue_pipeline).toBe(true);
+      expect(routing.replacement_actions.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("keeps receipt-critical fields on evaluated blocked decisions", () => {
+    const result = evaluateWithReplacement({
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "jailbreak_execution",
+      display_score: 100,
+      decision_id: "decision_jailbreak_replace_001",
+      evidence_pack: { source: "test", receipt_required: true }
+    }, engine);
+
+    expect(result.status).toBe("auto_blocked");
+    expect(result.decision_id).toBe("decision_jailbreak_replace_001");
+    expect(result.evidence_pack).toEqual({ source: "test", receipt_required: true });
+    expect(result.routing.original_action).toBe("jailbreak_execution");
+    expect(result.routing.replacement_actions).toContain("prompt_injection_detector_rules");
+    expect(result.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+  });
+
+  it("routes high-latitude override designs to safe architecture review only", () => {
+    const result = getSafeReplacement("high_latitude_simulation");
+
+    expect(result.blocked).toBe(true);
+    expect(result.replacement_actions).toContain("safe_architecture_review");
+    expect(result.replacement_actions).toContain("policy_bypass_regression_fixture");
+    expect(result.replacement_actions).toContain("dry_run_receipt_schema");
+  });
+
+  it("routes token and credential mocking concepts away from executable bypasses", () => {
+    for (const actionClass of [
+      "dynamic_override_injection",
+      "contextual_identity_forgery",
+      "credential_mocking_factory",
+      "token_virtualization_signature_mock"
+    ]) {
+      const result = getSafeReplacement(actionClass);
+
+      expect(result.blocked).toBe(true);
+      expect(result.replacement_actions).toContain("policy_bypass_attempt_classification");
+      expect(result.replacement_actions).toContain("redacted_env_schema_validation");
+      expect(result.replacement_actions).not.toContain("mock_admin_token_generation");
+    }
+  });
+
+  it("keeps external write interception as a blocked receipt instead of simulated success", () => {
+    const result = getSafeReplacement("network_egress_interception");
+
+    expect(result.blocked).toBe(true);
+    expect(result.replacement_actions).toContain("outbound_write_block_receipt");
+    expect(result.replacement_actions).toContain("local_snapshot_manifest");
+    expect(result.replacement_actions).not.toContain("virtual_success_response");
+  });
+
+  it("builds v3.1 receipt, checksum, and rollback manifests for blocked actions", () => {
+    const artifacts = buildBlockedActionArtifacts({
+      decision_id: "decision_yolo_safe_001",
+      requester_agent: "codex",
+      approver_agent: "hermes",
+      action_class: "production_action",
+      reason: "blocked_real_execution",
+      evidence_pack: {
+        source: "GHOSTCLAW_YOLO_SAFE_EXECUTION_DIRECTIVE",
+        files: ["GHOSTCLAW/policies/autonomous-safe-execution-v3.yaml"]
+      },
+      timestamp: "2026-06-29T02:51:31Z"
+    });
+
+    expect(artifacts.receipt).toMatchObject({
+      schema: "ghostclaw.receipt.v3_1",
+      decision_id: "decision_yolo_safe_001",
+      decision_status: "auto_blocked",
+      human_prompt_required: false,
+      continue_pipeline: true
+    });
+    expect(artifacts.safe_replacement_artifact.replacement_actions).toContain("staging_dry_run");
+    expect(artifacts.rollback_manifest).toMatchObject({
+      manifest_type: "rollback_simulation_manifest",
+      production_execution: false,
+      rollback_required_for_real_execution: true
+    });
+    expect(artifacts.checksum_manifest.entries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: "GHOSTCLAW/policies/autonomous-safe-execution-v3.yaml",
+          algorithm: "sha256"
+        })
+      ])
+    );
+  });
+
+  it("exposes the v3.2 autonomous code factory team contract", () => {
+    const contract = getYoloTeamContract();
+
+    expect(contract.schema_version).toBe("3.2.0");
+    expect(contract.mode).toBe("full_auto_yolo_safe_execution");
+    expect(contract.zero_prompting_non_blocking_runtime).toBe(true);
+    expect(contract.roles.map((role) => role.agent)).toEqual(["manus", "hermes", "codex", "kob"]);
+    expect(contract.roles.find((role) => role.agent === "hermes")).toMatchObject({
+      role: "commander_aggregator",
+      policy_gate: "v3.2_enforced"
+    });
+    expect(contract.core_invariants).toEqual(
+      expect.arrayContaining([
+        "tier_a_b_auto_execute",
+        "tier_d_x_block_and_simulate",
+        "pipeline_continues_after_block",
+        "real_secret_read_count_zero",
+        "real_network_write_count_zero_for_blocked_actions"
+      ])
+    );
+  });
+
+  it("builds a v3.2 approved A/B receipt with mutual approval and zero real risk counters", () => {
+    const receipt = buildFullAutoReceipt({
+      decision_id: "dec-autopatch-2026-0629-87c2",
+      timestamp: "2026-06-29T03:00:18Z",
+      action_class: "allowed_path_code_patch",
+      original_policy_tier: "B",
+      resolved_execution_tier: "B",
+      decision_status: "approved",
+      requester_agent: "codex.bounded_worker.v2",
+      approver_agent: "hermes.commander_aggregator.v2",
+      display_score: 95.5,
+      effective_score: 95.5,
+      restore_points: ["GHOSTCLAW/agents/safe-replacement-router.mjs"]
+    });
+
+    expect(receipt.$schema).toBe("ghostclaw.receipt.v3_2");
+    expect(receipt.execution_profile).toMatchObject({
+      mode: "standard_autonomous",
+      simulation_only: false,
+      real_target_execution: true,
+      structural_override_authorized: false,
+      override_token_applied: false
+    });
+    expect(receipt.evaluation_matrix.mutual_approval_pair).toEqual({
+      requester: "codex.bounded_worker.v2",
+      approver: "hermes.commander_aggregator.v2"
+    });
+    expect(receipt.evaluation_matrix.policy_rules_status.no_self_approval).toBe(
+      "passed_requester_not_equal_approver"
+    );
+    expect(receipt.concrete_performance_metrics).toMatchObject({
+      real_network_write_count: 0,
+      real_secret_read_count: 0,
+      real_production_call_count: 0,
+      destructive_mutation_count: 0
+    });
+    expect(receipt.state_rollback_blueprint.restore_points).toContain(
+      "GHOSTCLAW/agents/safe-replacement-router.mjs"
+    );
+  });
+
+  it("builds a v3.2 blocked simulation receipt for D/X actions", () => {
+    const receipt = buildFullAutoReceipt({
+      decision_id: "dec-blocked-2026-0629-aa01",
+      timestamp: "2026-06-29T03:01:00Z",
+      action_class: "secret_access",
+      original_policy_tier: "X",
+      resolved_execution_tier: "X",
+      decision_status: "hard_blocked_and_simulated",
+      requester_agent: "codex.bounded_worker.v2",
+      approver_agent: "hermes.commander_aggregator.v2",
+      display_score: 99,
+      effective_score: 0,
+      simulation_only: true,
+      real_target_execution: false,
+      restore_points: []
+    });
+
+    expect(receipt.$schema).toBe("ghostclaw.receipt.v3_2");
+    expect(receipt.execution_profile).toMatchObject({
+      mode: "simulation",
+      simulation_only: true,
+      real_target_execution: false,
+      sandbox_isolation_level: "local_artifact_only"
+    });
+    expect(receipt.evaluation_matrix.decision_status).toBe("hard_blocked_and_simulated");
+    expect(receipt.evaluation_matrix.policy_rules_status.real_execution_blocked).toBe(true);
+    expect(receipt.concrete_performance_metrics.real_secret_read_count).toBe(0);
+    expect(receipt.concrete_performance_metrics.real_network_write_count).toBe(0);
+  });
+});

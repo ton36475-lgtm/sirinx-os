@@ -1,0 +1,28 @@
+# SIRINX Edge Orchestrator - Cloudflare Worker Configuration
+# Phase 5B-C Integration Preparation
+# Generated: 2026-07-14
+
+name = "sirinx-edge-orchestrator-preview"
+main = "cloudflare/index.ts"
+compatibility_date = "2026-07-01"
+
+# [1] Runtime compatibility flags
+compatibility_flags = [ "nodejs_compat" ]
+workers_dev = false
+
+# [2] Global environment variables (non-sensitive)
+[vars]
+DEPLOY_MODE = "preview"
+NODE_ENV = "staging"
+
+# [4] Durable Objects for distributed mutex (Phase 5C)
+[[durable_objects.bindings]]
+name = "THE_STATE_LOCKER"
+class_name = "StateLockerDo"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["StateLockerDo"]
+
+# Required at a future R4 gate; never place the value in this file:
+#   wrangler secret put LOCK_AUTH_TOKEN

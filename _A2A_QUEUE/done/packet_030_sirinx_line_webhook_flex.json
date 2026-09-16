@@ -1,0 +1,59 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.492088,
+  "message_id": "msg-packet_030_sirinx_line_webhook_flex",
+  "mission_id": "M-packet_030_sirinx_line_webhook_flex",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'project': 'sirinx-line-bot', 'priority': 'P0', 'title': 'Codex: LINE Webhook Handler + Flex Messag",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_030_sirinx_line_webhook_flex"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_030_sirinx_line_webhook_flex",
+    "mission_id": "M-packet_030_sirinx_line_webhook_flex",
+    "timestamp": "2026-07-17T01:20:15.648653+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'project': 'sirinx-line-bot', 'priority': 'P0', 'title': 'Codex: LINE Webhook Handler + Flex Messag",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_030_sirinx_line_webhook_flex"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.648918+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

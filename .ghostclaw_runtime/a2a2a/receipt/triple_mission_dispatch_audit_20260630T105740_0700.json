@@ -1,0 +1,115 @@
+{
+  "schema": "ghostclaw.a2a2a.audit_receipt.v1",
+  "receipt_id": "triple_mission_dispatch_audit_20260630T105740_0700",
+  "task_id": "ghostclaw-triple-mission-dispatch-audit",
+  "correlation_id": "GC-TRIPLE-MISSION-DISPATCH-2026-06-30",
+  "status": "audit_only_validation_passed_with_warnings",
+  "created_at": "2026-06-30T10:57:40+07:00",
+  "created_by": "codex",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "latest_commit_before_audit": "c92b5a8",
+  "git_state_before_audit": {
+    "staged_files": 0,
+    "modified_tracked_files": 34,
+    "untracked_files": 94
+  },
+  "evidence_paths": [
+    "docs/knowledge/GHOSTCLAW_TRIPLE_MISSION_DISPATCH_AUDIT_20260630.md",
+    ".ghostclaw_runtime/a2a2a/receipts/triple_mission_dispatch_2026-06-30T034446_020549+0000.json",
+    ".ghostclaw_runtime/a2a2a/receipts/MERCH-DASH-V1-AUTO-20260630-001.build_receipt.json",
+    ".ghostclaw_runtime/a2a2a/status/current_mission.json",
+    ".ghostclaw_runtime/scheduler/SCHEDULER_RECEIPT.md",
+    "GHOSTCLAW/KANBAN.md",
+    "docs/knowledge/merch_automation_dashboard_v1/reports/VALIDATION_REPORT.md"
+  ],
+  "runtime_observations": {
+    "a2a_server_127_0_0_1_9000": "listening",
+    "hermes_dashboard_127_0_0_1_9119": "listening",
+    "tmux_sessions": [
+      "ghostclaw-a2a-sync",
+      "ghostclaw-hermes",
+      "ghostclaw-kob"
+    ],
+    "current_mission_claim": "three_missions_complete",
+    "dispatch_receipt_status": "partial",
+    "completion_interpretation": "claimed_by_runtime_not_committed"
+  },
+  "validation_results": {
+    "merch_dashboard_validator": {
+      "command": "node docs/knowledge/merch_automation_dashboard_v1/scripts/validate_merch_dashboard_v1.mjs",
+      "exit_status": 0,
+      "ok": true,
+      "pass_count": 86
+    },
+    "a2a2a_runtime_validator": {
+      "command": "python3 scripts/ghostclaw/validate_a2a2a_runtime.py --runtime-dir .ghostclaw_runtime/a2a2a",
+      "exit_status": 0,
+      "result": "PASS",
+      "errors": 0,
+      "warnings": 234,
+      "total_receipts": 228,
+      "checksum_ok": 0,
+      "checksum_failed": 228,
+      "x_tier_approved": 0
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "exit_status": 0,
+      "result": "passed"
+    }
+  },
+  "scheduler_status": {
+    "scheduler_receipt": ".ghostclaw_runtime/scheduler/SCHEDULER_RECEIPT.md",
+    "claimed_job_id": "2195036d7ed5",
+    "codex_automation_match_found": false,
+    "codex_automation_store_observed": [
+      "/Users/sirinx/.codex/automations/sirinx-hermes-night-watch/automation.toml"
+    ],
+    "launchd_template_activated": false,
+    "cron_fallback_template_activated": false
+  },
+  "push_deploy_status": {
+    "push_gate_path": "_A2A_QUEUE/approvals/GATE-PUSH-004-20260630-001.json",
+    "push_gate_approved_by": null,
+    "push_gate_scope_matches_current_dirty_tree": false,
+    "no_push": true,
+    "no_deploy": true
+  },
+  "blocked_actions": [
+    "git_push",
+    "deploy",
+    "secret_read",
+    "paid_provider_call",
+    "model_download",
+    "gpu_inference",
+    "live_customer_send",
+    "airtable_write"
+  ],
+  "observed_out_of_scope_paths": [
+    "AGENT_ROUTING_TABLE.md",
+    "BRAINSTORM_GHOSTCLAW_FULLAUTO_HERMES_SWARM.md",
+    "BRAINSTORM_HERMES_FULL_AUTO_MAC_MINI_M2.md",
+    "FINAL_REPORT_GHOSTCLAW_FULLAUTO_HERMES_SWARM.md",
+    "HERMES_CRONJOB_SYSTEM.md",
+    "HERMES_KANBAN_SYSTEM.md",
+    "HERMES_OBSIDIAN_BRAIN_SYNC.md",
+    "LOCAL_MODEL_POLICY.md",
+    "MODEL_ROUTER.md",
+    "PLAN_GHOSTCLAW_FULLAUTO_HERMES_SWARM.md",
+    "PLAN_HERMES_FULL_AUTO_MAC_MINI_M2.md",
+    "SUP_AGENTS.md",
+    "VALIDATION_REPORT_GHOSTCLAW_FULLAUTO_HERMES_SWARM.md",
+    "docs/ghostclaw/**",
+    "scripts/ghostclaw/**",
+    "scripts/ghostclaw_a2a_*",
+    "WORKSPACE_SCAFFOLD/tests/**",
+    "_A2A_QUEUE/**",
+    "_OBSIDIAN_GHOSTCLAW_BRAIN/**"
+  ],
+  "next_safe_actions": [
+    "Decide allowed scope for concurrent Triple Mission artifacts.",
+    "Create a scoped local commit only for approved paths after validation.",
+    "Do not push or deploy until an explicit fresh gate covers exact branch, exact commit, exact file scope, and rollback path."
+  ]
+}

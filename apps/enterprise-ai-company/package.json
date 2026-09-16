@@ -1,0 +1,33 @@
+{
+  "name": "@sirinx/enterprise-ai-company",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "VoltAgent scaffold for a public-company-style enterprise AI organization.",
+  "scripts": {
+    "dev": "node scripts/runtime-gate.mjs && tsx watch --env-file=.env ./src/index.ts",
+    "build": "tsdown",
+    "start": "node scripts/runtime-gate.mjs && node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "verify:scaffold": "node scripts/verify-scaffold.mjs",
+    "runtime:gate": "node scripts/runtime-gate.mjs",
+    "volt": "volt"
+  },
+  "dependencies": {
+    "@voltagent/cli": "latest",
+    "@voltagent/core": "latest",
+    "@voltagent/libsql": "latest",
+    "@voltagent/logger": "latest",
+    "@voltagent/server-hono": "latest",
+    "ai": "latest",
+    "dotenv": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "latest",
+    "@types/node": "latest",
+    "tsdown": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}

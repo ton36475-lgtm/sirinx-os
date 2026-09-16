@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GHOSTCLAW Kimi K2.7 Code MoA Reference Vote",
+  "description": "Schema for the reference vote produced by the Kimi coding worker during Mixture-of-Agents (MoA) voting.",
+  "type": "object",
+  "required": [
+    "vote_id",
+    "voter",
+    "proposal_id",
+    "decision_id",
+    "requester_agent",
+    "approver_agent",
+    "receipt_required",
+    "evidence_pack",
+    "vote",
+    "confidence",
+    "rationale",
+    "code_quality_score",
+    "safety_check",
+    "live_provider_call_performed",
+    "model_download_performed",
+    "gpu_inference_performed",
+    "timestamp",
+    "receipt_hash"
+  ],
+  "properties": {
+    "vote_id": {
+      "type": "string",
+      "description": "Unique identifier for this MoA reference vote",
+      "pattern": "^VOTE-"
+    },
+    "voter": {
+      "type": "string",
+      "const": "kimi_coding_worker",
+      "description": "Fixed voter identity for Kimi worker"
+    },
+    "proposal_id": {
+      "type": "string",
+      "description": "ID of the proposal being voted on"
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Mutual approval decision authorizing this advisory vote artifact"
+    },
+    "requester_agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Agent requesting the Kimi reference vote"
+    },
+    "approver_agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Agent approving the Kimi reference vote; must not equal requester_agent"
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "const": true,
+      "description": "Kimi advisory votes must produce receipts"
+    },
+    "evidence_pack": {
+      "type": "object",
+      "description": "Structured source evidence used by the Kimi worker. Raw secrets and .env values are forbidden.",
+      "required": [
+        "sources",
+        "scope",
+        "no_secrets"
+      ],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_secrets": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "vote": {
+      "type": "string",
+      "enum": [
+        "approve",
+        "reject",
+        "abstain"
+      ],
+      "description": "The vote decision"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score from 0.0 to 1.0"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Reasoning behind the vote"
+    },
+    "code_quality_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Assessment of code quality for coding proposals (0.0 to 1.0)"
+    },
+    "safety_check": {
+      "type": "boolean",
+      "description": "Whether the proposal passes safety constraints (true = passes)"
+    },
+    "blocked_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "model_download",
+          "gpu_live_inference",
+          "gpu_inference",
+          "secret_access",
+          "env_read",
+          "api_key_read",
+          "deploy",
+          "push",
+          "production_action",
+          "live_provider_call",
+          "install_dependencies",
+          "run_shell_command",
+          "cross_lane_write",
+          "self_approval"
+        ]
+      },
+      "description": "Blocked action classes detected by the Kimi worker"
+    },
+    "live_provider_call_performed": {
+      "type": "boolean",
+      "const": false,
+      "description": "Must remain false. Kimi lane is metadata/draft only in this MVP."
+    },
+    "model_download_performed": {
+      "type": "boolean",
+      "const": false,
+      "description": "Must remain false. Model downloads are blocked."
+    },
+    "gpu_inference_performed": {
+      "type": "boolean",
+      "const": false,
+      "description": "Must remain false. GPU inference is blocked."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp"
+    },
+    "receipt_hash": {
+      "type": "string",
+      "description": "Deterministic integrity hash over vote_id|proposal_id|vote|timestamp"
+    },
+    "suggestions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional improvement suggestions"
+    }
+  },
+  "additionalProperties": false
+}

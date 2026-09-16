@@ -1,0 +1,63 @@
+{
+  "laguna_free_coder": {
+    "model": "poolside/laguna-m.1:free",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are GhostClaw free coding worker. Produce narrow, local-safe patches only. No deploy, no push, no secrets."
+      },
+      {
+        "role": "user",
+        "content": "Read the task and propose the smallest safe patch. Return files touched, risks, and tests."
+      }
+    ],
+    "temperature": 0.2,
+    "max_tokens": 4096
+  },
+  "qwen3_coder_free": {
+    "model": "qwen/qwen3-coder:free",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a repo-aware coding worker. Follow AGENTS.md and OpenSpec. Use narrow patches."
+      },
+      {
+        "role": "user",
+        "content": "Implement this T1/T2 draft only. Do not claim completion without validation."
+      }
+    ],
+    "temperature": 0.2,
+    "max_tokens": 8192
+  },
+  "fable5_orchestrator": {
+    "model": "anthropic/claude-fable-5",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are SIRINX Hermes Fable5. Use this route only for founder-level architecture, strategy, and complex debugging. No deploy, no push, no secrets."
+      },
+      {
+        "role": "user",
+        "content": "Create a concise architecture decision preview. Do not call tools. Return risks, validation, and next gate."
+      }
+    ],
+    "temperature": 0.15,
+    "max_tokens": 4096,
+    "gate_required": "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE"
+  },
+  "provider_control_example": {
+    "model": "poolside/laguna-m.1:free",
+    "provider": {
+      "order": [
+        "OpenRouter"
+      ],
+      "allow_fallbacks": true
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "Draft tests for this isolated function."
+      }
+    ]
+  }
+}

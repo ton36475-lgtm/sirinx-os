@@ -1,0 +1,59 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.499475,
+  "message_id": "msg-packet_024_sirinx_hermes_a2a_codex_sync_all_jobs",
+  "mission_id": "M-packet_024_sirinx_hermes_a2a_codex_sync_all_jobs",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'project': 'sirinx-hermes-a2a-codex-sync', 'priority': 'P0', 'title': 'Hermes A2A Codex goal comman",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_024_sirinx_hermes_a2a_codex_sync_all_jobs"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_024_sirinx_hermes_a2a_codex_sync_all_jobs",
+    "mission_id": "M-packet_024_sirinx_hermes_a2a_codex_sync_all_jobs",
+    "timestamp": "2026-07-17T01:20:15.657601+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'project': 'sirinx-hermes-a2a-codex-sync', 'priority': 'P0', 'title': 'Hermes A2A Codex goal comman",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_024_sirinx_hermes_a2a_codex_sync_all_jobs"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.657616+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

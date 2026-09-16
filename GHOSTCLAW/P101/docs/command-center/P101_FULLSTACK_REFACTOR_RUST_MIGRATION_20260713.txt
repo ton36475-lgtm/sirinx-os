@@ -1,0 +1,47 @@
+MISSION: P101-D22354812-FULLSTACK-REFACTOR-RUST-MIGRATION-20260713
+MODE: MAX_LOCAL_AUTONOMY_WITH_HARD_BLOCKS
+STATUS: READY_FOR_LOCAL_INTAKE
+
+GOAL
+Inventory, diagnose, refactor, validate, and prepare behavior-preserving Rust
+migrations across GhostClaw project repositories. Work one repository and one
+file lease at a time. Preserve public contracts and stop before commit.
+
+CANONICAL FLOW
+GOAL -> REPO_INTAKE -> BASELINE -> CONTRACT -> PLAN -> FILE_LEASE -> IMPLEMENT
+-> VALIDATE -> FRESH_REVIEW -> RECEIPT -> COMMIT_GATE_STOP
+
+FIRST COMMAND
+RUN_P101_LOCAL_REPO_INTAKE_AND_BASELINE
+
+KNOWN REPO CANDIDATES
+/Users/sirinx/sirinx-os
+/Users/sirinx/sirinx-agent-native-os
+/Users/sirinx/sirinx-co
+
+ALLOWED
+Read repositories and git metadata; write scoped local reports; run offline
+lint/typecheck/compile/test/build; write leased local source changes; extract
+Python API contracts; create Rust compatibility boundaries; run differential
+parity tests; generate patches, summaries, receipts, and A2A packets.
+
+REQUIRED
+- requester_agent != approver_agent
+- one active file lease per worker
+- max 2 safe fix rounds
+- exact changed-file summary
+- behavior parity evidence before replacing Python code
+- fail closed on unknown risk
+- no dependency install or update without a named gate
+
+HARD BLOCKS
+Git push, production deploy, DNS or Cloudflare mutation, R2/D1/KV writes,
+webhook activation, secret read/print, model download, GPU live work, live
+LINE/Telegram/email send, CRM/customer writes, payment mutation, production DB
+migration, rollback, anti-bot bypass, unauthorized interception, credential
+attack, logged-in social scraping, PII harvesting, third-party pixel cloning,
+destructive delete, chmod 777, and git add all.
+
+STOP CONDITION
+Write the evidence pack and stop at COMMIT_GATE. Do not infer that broad
+permission authorizes external or production mutation.

@@ -1,0 +1,44 @@
+policy_id: defensive-osint-robin-policy-v1
+target_tools:
+  - apurvsinghgautam/robin
+classification:
+  lane: DEFENSIVE_OSINT_THREAT_INTEL
+  default_gate: RED
+  execution_default: disabled
+  allowed_scope: lawful_defensive_research_only
+allowed:
+  - read_repo_docs
+  - classify_capabilities
+  - create_lawful_osint_runbook
+  - create_report_template
+  - create_risk_matrix
+  - create_synthetic_demo_schema
+  - create_incident_report_format
+  - map_to_threat_intel_dashboard
+blocked:
+  - dark_web_crawling_execution
+  - tor_search_execution
+  - credential_collection
+  - leaked_database_handling
+  - marketplace_search
+  - illicit_goods_search
+  - de_anonymization
+  - private_person_data_collection
+  - scraping_non_public_content
+  - sharing_sensitive_investigation_queries_with_external_llms
+  - storing_raw_dark_web_content_in_ghostclaw_memory
+required_controls:
+  - lawful_authorization_record
+  - case_id_required
+  - scope_statement_required
+  - no_raw_sensitive_content_storage
+  - redacted_report_only
+  - provider_data_policy_review
+  - analyst_manual_gate
+  - evidence_chain_metadata
+  - retention_policy
+receipts_required:
+  - osint_scope_receipt
+  - lawful_authorization_receipt
+  - redaction_receipt
+  - analyst_review_receipt

@@ -1,0 +1,20 @@
+{
+  "base_name": "Merch Automation Dashboard Local",
+  "import_mode": "manual_owner_import",
+  "live_sync": false,
+  "tables": [
+    { "name": "niches", "required_fields": ["niche_id", "niche_name"] },
+    { "name": "design_pipeline", "required_fields": ["design_id", "niche_id"] },
+    { "name": "ip_policy_checks", "required_fields": ["check_id", "design_id"] },
+    { "name": "listing_drafts", "required_fields": ["listing_id", "design_id"] },
+    { "name": "qc_reviews", "required_fields": ["qc_id", "design_id"] },
+    { "name": "traffic_content", "required_fields": ["content_id", "design_id"] },
+    { "name": "sales_analytics", "required_fields": ["analytics_id", "design_id"] }
+  ],
+  "blocked": {
+    "live_amazon_publishing": true,
+    "customer_broadcast": true,
+    "tos_bypass": true,
+    "paid_provider_call": true
+  }
+}

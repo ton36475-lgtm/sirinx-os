@@ -1,0 +1,140 @@
+# GHOSTCLAW Tooling Registry V1.4
+# Policy-gated metadata only - no runtime execution
+
+registry_id: GHOSTCLAW-TOOLING-REGISTRY-20260701-001
+created_at: "2026-07-01T04:00:00Z"
+parent_blueprint: GHOSTCLAW_LOOP_ENGINEERING_FULLSTACK_BLUEPRINT_V1.1
+
+tools:
+  - id: OPENCLAW
+    name: "OpenClaw Mobile Companion"
+    category: "mobile_companion_node"
+    source: "external_open_source_app"
+    source_url: "https://github.com/openclaw/app"
+    tier: "C"
+    mode: "local_gateway_with_receipt"
+    roles:
+      - "mobile_status_surface"
+      - "manual_device_capture"
+      - "voice_talk_node"
+    blocked:
+      - "background_camera_without_gate"
+      - "background_mic_without_gate"
+      - "autonomous_device_control"
+
+  - id: NINE_ROUTER
+    name: "9Router Model Gateway"
+    category: "model_gateway"
+    source: "external_open_source_proxy"
+    source_url: "https://github.com/decolua/9router"
+    tier: "B"
+    mode: "local_proxy_after_review"
+    roles:
+      - "model_routing"
+      - "quota_tracker"
+      - "token_saver"
+      - "combo_model_experiment"
+    blocked:
+      - "secret_read"
+      - "oauth_extraction"
+      - "paid_provider_call_without_gate"
+
+  - id: OPENSPEC
+    name: "OpenSpec Spec-Driven Development"
+    category: "spec_driven_development"
+    source: "external_open_source_framework"
+    source_url: "https://github.com/Fission-AI/OpenSpec"
+    tier: "A"
+    mode: "docs_and_metadata_first"
+    roles:
+      - "proposal_generation"
+      - "design_artifact"
+      - "task_breakdown"
+    blocked:
+      - "direct_code_mutation_without_approved_tasks"
+
+  - id: LOGTO
+    name: "Logto Auth Layer"
+    category: "identity_auth_rbac"
+    source: "external_open_source_auth"
+    source_url: "https://github.com/logto-io/logto"
+    tier: "A"
+    mode: "schema_design_only_initially"
+    roles:
+      - "auth_model_design"
+      - "rbac_matrix"
+      - "sso_planning"
+    blocked:
+      - "production_auth_migration"
+      - "real_user_import"
+
+  - id: VIDEO_USE
+    name: "video-use Content Worker"
+    category: "content_factory_worker"
+    source: "external_open_source_video_tool"
+    source_url: "https://github.com/video-use/core"
+    tier: "B"
+    mode: "storyboard_and_edit_plan"
+    roles:
+      - "video_edit_plan"
+      - "subtitle_plan"
+      - "render_plan"
+    blocked:
+      - "auto_publish"
+      - "copyrighted_source_import"
+
+  - id: N8N
+    name: "n8n Workflow Automation"
+    category: "workflow_automation"
+    source: "local_or_self_hosted"
+    source_url: "https://github.com/n8n-io/n8n"
+    tier: "B"
+    mode: "template_export_only"
+    roles:
+      - "workflow_template"
+      - "webhook_draft"
+      - "daily_summary_plan"
+    blocked:
+      - "live_customer_send"
+      - "credential_export"
+
+  - id: HANDOFF_SKILL
+    name: "Matt Pocock Handoff Skill"
+    category: "context_management"
+    source: "productivity_skill"
+    source_url: "https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff"
+    tier: "A"
+    mode: "markdown_handoff_only"
+    roles:
+      - "compact_context"
+      - "session_transfer"
+      - "artifact_pointer"
+
+  - id: FLOAT16_H100
+    name: "Float16 H100 GPU Compute"
+    category: "optional_gpu_compute"
+    source: "cloud_gpu_provider"
+    source_url: "https://float16.cloud"
+    tier: "C"
+    mode: "disabled_until_cost_gate"
+    roles:
+      - "gpu_benchmark"
+      - "local_model_test"
+    blocked:
+      - "paid_launch_without_gate"
+      - "customer_data_upload"
+
+  - id: STEALTH_BROWSER_MCP
+    name: "Stealth Browser MCP"
+    category: "quarantine_risk_reference"
+    source: "user_submitted_external_tool"
+    source_url: "unknown"
+    tier: "X"
+    mode: "risk_reference_only"
+    roles:
+      - "threat_model_note"
+    blocked:
+      - "install"
+      - "run"
+      - "antibot_bypass"
+      - "cloudflare_bypass"

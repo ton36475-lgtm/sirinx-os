@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/qa/schemas/qa-run-packet.schema.json",
+  "title": "SIRINX QA Run Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "mode",
+    "status",
+    "policy",
+    "target",
+    "scope",
+    "authority",
+    "evidence_policy",
+    "release_gate"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "sirinx.qa.run-packet.v1"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^SIRINX-QA-[0-9]{8}-[0-9]{3}$"
+    },
+    "mode": {
+      "enum": ["AUDIT_ONLY", "SAFE_TEST", "RELEASE_GATE"]
+    },
+    "status": {
+      "enum": ["DRAFT", "PARTIAL", "LOCKED", "BLOCKED", "COMPLETE"]
+    },
+    "policy": {
+      "$ref": "#/$defs/digestBinding"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_root",
+        "branch",
+        "commit_sha",
+        "source_tree",
+        "environment",
+        "build_status",
+        "deployment_status"
+      ],
+      "properties": {
+        "repository_root": {"type": "string", "minLength": 1},
+        "branch": {"type": "string", "minLength": 1},
+        "commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "environment": {"type": "string", "minLength": 1},
+        "build_status": {"enum": ["AVAILABLE", "NOT_AVAILABLE", "UNVERIFIED"]},
+        "deployment_status": {"enum": ["AVAILABLE", "NOT_AVAILABLE", "UNVERIFIED"]},
+        "build_id": {"type": ["string", "null"]},
+        "artifact_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "deployment_id": {"type": ["string", "null"]},
+        "global_worktree_dirty": {"type": "boolean"},
+        "scoped_target_dirty": {"type": "boolean"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inclusions", "exclusions", "requirements", "plan", "scope"],
+      "properties": {
+        "inclusions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "exclusions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "requirements": {"$ref": "#/$defs/digestBinding"},
+        "plan": {"$ref": "#/$defs/digestBinding"},
+        "scope": {"$ref": "#/$defs/digestBinding"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "issuer", "allowed_actions", "denied_actions"],
+      "properties": {
+        "phase": {"const": "POST_CREATION_RUN_AUTHORITY"},
+        "issuer": {"type": "string", "minLength": 1},
+        "allowed_actions": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "denied_actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "evidence_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_states", "manifest_required"],
+      "properties": {
+        "allowed_states": {
+          "type": "array",
+          "contains": {"const": "UNVERIFIED"},
+          "items": {
+            "enum": ["PASS", "FAIL", "BLOCKED", "UNVERIFIED", "NOT_RUN", "NOT_APPLICABLE"]
+          },
+          "uniqueItems": true
+        },
+        "manifest_required": {"const": true}
+      }
+    },
+    "release_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "human_approval_required"],
+      "properties": {
+        "decision": {
+          "enum": ["GO", "CONDITIONAL_GO", "NO_GO", "NOT_APPLICABLE"]
+        },
+        "human_approval_required": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "digestBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

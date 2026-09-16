@@ -81,6 +81,7 @@ const roots = [
   "services/hermes-api/src/adaptive-command-gateway.test.mjs",
   "apps/centerbrain-shell",
   "scripts",
+  "_A2A_QUEUE",
   "examples/clawforge"
 ];
 
@@ -88,8 +89,14 @@ const secretPatterns = [
   /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
   /sk-[A-Za-z0-9_-]{20,}/,
   /xox[baprs]-[A-Za-z0-9-]{20,}/,
+  /gh[opu]_[A-Za-z0-9_]{20,}/,
+  /hf_[A-Za-z0-9_]{20,}/,
+  /maxplus_[A-Za-z0-9_]{20,}/i,
+  /openrouter_[A-Za-z0-9_]{20,}/i,
+  /(?<![A-Z0-9_])(api|secret|token|password|service_role|bearer)_?(key)?\s*=\s*["']?[^"'\s]{12,}/i,
+  /(?<![A-Z0-9_])(maxplus_api_key|openai_api_key|anthropic_api_key|stripe_api_key|linear_api_key|notion_api_key|supabase_key|airtable_key|github_token|gitlab_token|digitalocean_token|aws_secret_access_key|google_api_key|mapbox_token|sendgrid_key|twilio_auth_token|datadog_api_key|cloudflare_api_token|vercel_token|netlify_token)_?=.*$/im,
   /postgres(?:ql)?:\/\/[^ \n]+:[^ \n]+@/i,
-  /(?<![A-Z0-9_])(api|secret|token|password|service_role)_?(key)?\s*=\s*["']?[^"'\s]{12,}/i
+  /redis:\/\/:[^ \n]+@/i,
 ];
 
 const findings = [];

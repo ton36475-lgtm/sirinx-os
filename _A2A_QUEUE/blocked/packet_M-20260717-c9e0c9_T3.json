@@ -1,0 +1,44 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.501844,
+  "message_id": "msg-packet_M-20260717-c9e0c9_T3",
+  "mission_id": "M-20260717-c9e0c9",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain"
+  },
+  "context": {
+    "goal": "Run pnpm hq:test to verify fix",
+    "tier": "A",
+    "mission": "fix failing tests in the repo"
+  },
+  "payload": {
+    "mission_id": "M-20260717-c9e0c9",
+    "task_id": "T3",
+    "to": {
+      "agent": "codex-captain"
+    },
+    "context": {
+      "goal": "Run pnpm hq:test to verify fix",
+      "tier": "A",
+      "mission": "fix failing tests in the repo"
+    },
+    "depends_on": [
+      "T2"
+    ],
+    "timeout": 120,
+    "timestamp": "2026-07-17T01:21:28.086348+00:00"
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "B",
+    "reason": "safe"
+  },
+  "dispatch_error": "\u2800                                \u2584     \n\u2588\u2580\u2580\u2588 \u2588\u2580\u2580\u2588 \u2588\u2580\u2580\u2588 \u2588\u2580\u2580\u2584 \u2588\u2580\u2580\u2580 \u2588\u2580\u2580\u2588 \u2588\u2580\u2580\u2588 \u2588\u2580\u2580\u2588\n\u2588  \u2588 \u2588  \u2588 \u2588\u2580\u2580\u2580 \u2588  \u2588 \u2588    \u2588  \u2588 \u2588  \u2588 \u2588\u2580\u2580\u2580\n\u2580\u2580\u2580\u2580 \u2588\u2580\u2580\u2580 \u2580\u2580\u2580\u2580 \u2580  \u2580 \u2580\u2580\u2580\u2580 \u2580\u2580\u2580\u2580 \u2580\u2580\u2580\u2580 \u2580\u2580\u2580\u2580\n\nCommands:\n  opencode completion        "
+}

@@ -1,0 +1,29 @@
+[package]
+name = "gc-runtime-core"
+version = "0.1.0"
+edition = "2024"
+description = "GC Neural Core — Rust runtime for embedding, vector store, search, and harness training. Zero-heavy-deps, memory-mapped storage."
+
+[lib]
+name = "gc_runtime_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "gc-neural"
+path = "src/bin/gc-neural.rs"
+
+[dependencies]
+# Minimal deps — keep footprint tiny
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+memmap2 = "0.9"
+# No heavy ML frameworks — we use local lightweight embeddings
+# No tokio — we keep it sync/simple for core
+# No reqwest — orchestration is Go's job
+
+[features]
+default = ["vector-store", "harness"]
+vector-store = []
+harness = []
+rag = ["vector-store"]
+training = ["harness"]

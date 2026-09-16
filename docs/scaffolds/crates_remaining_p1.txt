@@ -1,0 +1,50 @@
+# crates remaining for P1
+# These files exist to make workspace compile
+
+[package]
+name = "hermes-lock"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hermes-core = { path = "../hermes-core" }
+
+[lib]
+name = "hermes_lock"
+path = "src/lib.rs"
+---
+[package]
+name = "hermes-router"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hermes-core = { path = "../hermes-core" }
+
+[lib]
+name = "hermes_router"
+path = "src/lib.rs"
+---
+[package]
+name = "hermes-dispatch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hermes-core = { path = "../hermes-core" }
+
+[lib]
+name = "hermes_dispatch"
+path = "src/lib.rs"
+---
+[package]
+name = "hermes-feed"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hermes-core = { path = "../hermes-core" }
+
+[lib]
+name = "hermes_feed"
+path = "src/lib.rs"

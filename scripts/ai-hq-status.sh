@@ -9,7 +9,7 @@ thclaws --version | sed -n '1,3p'
 echo "[ai-hq] Hermes:"
 hermes --version
 echo "[ai-hq] Kimi:"
-kimi info | sed -n '1,4p'
+kimi --version || true
 echo "[ai-hq] Ollama models:"
 ollama list | sed -n '1,12p'
 echo "[ai-hq] Hermes MCP:"

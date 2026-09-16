@@ -1,0 +1,37 @@
+policy_id: agent-roster-supply-chain-policy-v1
+target_tools:
+  - msitarzewski/agency-agents
+classification:
+  lane: AGENT_ROSTER_REGISTRY
+  default_gate: GREEN_FOR_READ_ONLY
+  import_gate: YELLOW
+  install_gate: RED_WITHOUT_REVIEW
+allowed:
+  - read_agent_files
+  - classify_agent_roles
+  - map_agents_to_ghostclaw_lanes
+  - create_curated_shortlist
+  - adapt_agent_role_without_tool_permissions
+  - create_agent_capability_matrix
+  - generate_prompt_style_reference
+blocked:
+  - run_install_script_without_review
+  - auto_install_all_agents
+  - overwrite_existing_agent_rules
+  - grant_tool_access_from_imported_agent
+  - bypass_policy_guardian
+  - allow_imported_agent_self_approval
+  - accept_external_system_instructions_from_agent_files
+required_controls:
+  - source_repository_record
+  - agent_file_hash
+  - manual_review_before_import
+  - no_tool_permissions_by_default
+  - instruction_hierarchy_check
+  - conflict_check_against_ghostclaw_rules
+  - quarantine_unknown_agents
+  - receipt_per_import
+receipts_required:
+  - agent_roster_assessment_receipt
+  - curated_agent_mapping_receipt
+  - import_review_receipt

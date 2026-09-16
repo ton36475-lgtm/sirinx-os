@@ -1,0 +1,13 @@
+{
+  "receipt_id": "<uuid>",
+  "correlation_id": "<uuid>",
+  "project": "pocket-hatchery",
+  "agent": "hermes",
+  "action": "<action_name>",
+  "risk_level": "safe|medium|high|critical",
+  "approved_by": null,
+  "status": "pending|executed|blocked|rolled_back",
+  "evidence_paths": [],
+  "timestamp_utc": "<ISO8601>",
+  "notes": ""
+}

@@ -1,0 +1,71 @@
+schema_version: "sirinx.qa.run-packet.v1"
+run_id: "SIRINX-QA-20260723-001"
+mode: "AUDIT_ONLY"
+status: "PARTIAL"
+policy:
+  id: "SIRINX-QA-CONTROL-PLANE@1.1.0-draft"
+  sha256: "366c1d04a786df9ffc6ce5aa85954038f230783d79f5b7808504c9a1cb986692"
+target:
+  repository_root: "/Users/sirinx/sirinx-os"
+  branch: "migration/v5-rebase"
+  commit_sha: "b55f81ecd372ff23a34fcf33c2744706447e14ca"
+  source_tree: "e06b9bc2a948a9f50a7570c235a72c0354cdbe84"
+  environment: "LOCAL_WORKTREE_AUDIT_ONLY"
+  build_status: "NOT_AVAILABLE"
+  deployment_status: "NOT_AVAILABLE"
+  build_id: null
+  artifact_sha256: null
+  deployment_id: null
+  global_worktree_dirty: true
+  scoped_target_dirty: false
+scope:
+  inclusions:
+    - "apps/sirinx-site"
+    - "apps/sirinx-site/package.json"
+    - "apps/sirinx-site/playwright.config.mjs"
+    - "pnpm-lock.yaml"
+    - "existing non-secret QA evidence referenced by the run"
+  exclusions:
+    - "secret values and credential stores"
+    - "production mutation"
+    - "external messaging and form submission"
+    - "provider or MCP activation"
+    - "unrelated dirty worktree paths"
+  requirements:
+    id: "qa/packets/SIRINX-QA-20260723-001/REQUIREMENTS.yaml"
+    sha256: "6f9b68937b0e27fdfd08ac18c9da858b871af965dc0f2027b65e24db27a1e854"
+  plan:
+    id: "qa/packets/SIRINX-QA-20260723-001/TEST_PLAN.yaml"
+    sha256: "e940e768fd33bb9078c7fac6c9da6a1b3a4d46a3ed754d319af3c89a82dd0897"
+  scope:
+    id: "qa/packets/SIRINX-QA-20260723-001/TRACEABILITY_MATRIX.yaml"
+    sha256: "53874d39d36cd8525088ad3c417d405ea61b7661189610f3afc1589b0d06f21f"
+authority:
+  phase: "POST_CREATION_RUN_AUTHORITY"
+  issuer: "human-owner-via-codex-planning-lane"
+  allowed_actions:
+    - "repo_metadata_read"
+    - "nonsecret_source_read"
+    - "existing_evidence_read"
+  denied_actions:
+    - "source_write"
+    - "test_or_build_execution"
+    - "browser_or_service_start"
+    - "network_probe"
+    - "provider_or_mcp_call"
+    - "external_write"
+    - "secret_read"
+    - "git_commit_push_merge"
+    - "deploy_or_release"
+evidence_policy:
+  allowed_states:
+    - "PASS"
+    - "FAIL"
+    - "BLOCKED"
+    - "UNVERIFIED"
+    - "NOT_RUN"
+    - "NOT_APPLICABLE"
+  manifest_required: true
+release_gate:
+  decision: "NOT_APPLICABLE"
+  human_approval_required: true

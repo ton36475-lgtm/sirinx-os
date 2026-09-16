@@ -1,0 +1,11 @@
+{
+  "source": "task_config_gate_runner_hardening_20260703",
+  "target": "agent_engineering",
+  "type": "executed_by",
+  "properties": {
+    "executor": "codex_local",
+    "confidence": "high",
+    "approval": "safe_local_only"
+  }
+}
+

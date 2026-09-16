@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/osint_case_report.schema.json",
+  "title": "GhostClaw Defensive OSINT Case Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case_id",
+    "authorization_record",
+    "scope_statement",
+    "analyst",
+    "status",
+    "findings",
+    "redaction"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorization_record": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope_statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "analyst": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": ["draft", "review_ready", "approved", "rejected", "blocked"]
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["summary", "source_type", "risk_level"],
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "source_type": {
+            "enum": ["public", "internal", "synthetic", "redacted"]
+          },
+          "risk_level": {
+            "enum": ["low", "medium", "high", "critical"]
+          }
+        }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_sensitive_content_stored", "redaction_reviewed"],
+      "properties": {
+        "raw_sensitive_content_stored": {
+          "const": false
+        },
+        "redaction_reviewed": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

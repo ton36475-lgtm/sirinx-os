@@ -1,0 +1,863 @@
+projects:
+  - id: ghostclaw-os
+    name: GhostClaw OS
+    canonical_role: root_operating_system
+    priority: highest
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "All A2A operations must route through gate policy"
+      - "No production deploy without 14-gate release approval"
+      - "Secrets never written to disk"
+      - "Receipt required for every autonomous action"
+    known_routes:
+      - path: repo_or_architecture
+        description: "Monorepo bootstrap, governance files, schemas, registry entries"
+        tier: A
+      - path: model_router
+        description: "Route model requests through GhostClaw gate"
+        tier: B
+    build_order:
+      - bootstrap_governance
+      - register_schemas
+      - build_registry
+      - deploy_gate_policy
+      - verify_integrity
+    agent_lanes:
+      - control_plane
+      - architecture
+      - final_gatekeeper
+    retrieval_keys:
+      - ghostclaw
+      - ghostclaw-os
+      - root_os
+      - a2a
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: sirinxdev-os
+    name: SIRINXDev OS
+    canonical_role: full_stack_agentic_platform
+    priority: high
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Tracked under sirinx-os monorepo"
+      - "Must pass all release gates before staging"
+    known_routes:
+      - path: repo_or_architecture
+        description: "Full-stack platform architecture and monorepo management"
+        tier: A
+    build_order:
+      - governance_bootstrap
+      - monorepo_setup
+      - core_packages
+      - service_scaffolding
+      - app_dashboard
+    agent_lanes:
+      - primary_builder
+      - architecture
+    retrieval_keys:
+      - sirinxdev
+      - sirinx-os
+      - platform
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: hermes-codex-a2a2a
+    name: Hermes Codex A2A2A Control Plane
+    canonical_role: control_plane
+    priority: high
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Must preserve task_id and correlation_id across all hops"
+      - "No self-approval allowed"
+      - "Receipt required for every agent action"
+    known_routes:
+      - path: repo_or_architecture
+        description: "Agent-to-agent routing, queue orchestration, gate packets"
+        tier: A
+    build_order:
+      - define_agent_roles
+      - build_route_matrix
+      - implement_queue
+      - wire_gate_policy
+      - test_a2a_flow
+    agent_lanes:
+      - control_plane
+      - coordination
+    retrieval_keys:
+      - hermes
+      - codex
+      - a2a2a
+      - control-plane
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: thai-jarvis
+    name: Thai JARVIS Full Worker System
+    canonical_role: regional_ai_worker
+    priority: medium
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Thai language preferred for output"
+      - "Must comply with Thai AI governance guidelines"
+    known_routes:
+      - path: business_automation
+        description: "Worker tasks, Thai-language automation, regional scheduling"
+        tier: B
+    build_order:
+      - define_worker_role
+      - build_intent_classifier_th
+      - wire_automation_handlers
+      - test_regional_flows
+    agent_lanes:
+      - primary_builder
+      - validation
+    retrieval_keys:
+      - thai-jarvis
+      - jarvis
+      - thai-worker
+      - regional-ai
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: ai-second-brain
+    name: AI Second Brain Knowledge Vault
+    canonical_role: knowledge_management
+    priority: medium
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "No secrets or credentials stored in knowledge vault"
+      - "Source attribution required for every entry"
+    known_routes:
+      - path: repo_or_architecture
+        description: "Knowledge vault indexing, retrieval pipeline, memory management"
+        tier: B
+    build_order:
+      - design_vault_schema
+      - index_existing_knowledge
+      - build_retrieval_pipeline
+      - wire_rag_adapters
+    agent_lanes:
+      - validation
+      - readonly_intake
+    retrieval_keys:
+      - second-brain
+      - knowledge-vault
+      - brain
+      - memory
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: openspec
+    name: OpenSpec Spec Driven Development
+    canonical_role: development_methodology
+    priority: medium
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Spec must be written before implementation"
+      - "All specs stored in specs/ directory"
+    known_routes:
+      - path: repo_or_architecture
+        description: "Spec-driven development workflow and templates"
+        tier: A
+    build_order:
+      - define_spec_templates
+      - create_spec_pipeline
+      - wire_review_gates
+      - document_methodology
+    agent_lanes:
+      - architecture
+      - validation
+    retrieval_keys:
+      - openspec
+      - spec-driven
+      - spec-development
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: sup-agent-sub-agent-team
+    name: Sup Agent Sub Agent Team
+    canonical_role: agent_team_framework
+    priority: medium
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Sup agent must approve sub-agent outputs before delivery"
+      - "No agent may self-approve"
+    known_routes:
+      - path: repo_or_architecture
+        description: "Hierarchical agent team orchestration pattern"
+        tier: A
+    build_order:
+      - define_team_structure
+      - implement_sup_sub_protocol
+      - build_approval_chain
+      - test_team_routing
+    agent_lanes:
+      - coordination
+      - control_plane
+    retrieval_keys:
+      - sup-agent
+      - sub-agent
+      - agent-team
+      - team-framework
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: model-router
+    name: Model Router Local Safe Gateway
+    canonical_role: ai_gateway
+    priority: medium
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Local models only unless gate-approved"
+      - "Cost guard must be active"
+      - "No paid API calls without explicit approval"
+    known_routes:
+      - path: model_router
+        description: "Route AI model requests through local gateway with cost guard"
+        tier: B
+    build_order:
+      - build_gateway_proxy
+      - wire_cost_guard
+      - add_local_providers
+      - add_remote_providers_gated
+      - test_routing_matrix
+    agent_lanes:
+      - primary_builder
+      - final_gatekeeper
+    retrieval_keys:
+      - model-router
+      - ai-gateway
+      - model-gateway
+      - cost-guard
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: defensive-security-lab
+    name: Defensive Security Lab Report Only
+    canonical_role: security_ops
+    priority: medium
+    status: active
+    domain_category: engineering_core
+    constraints:
+      - "Scan own assets only"
+      - "No exploitation or brute force"
+      - "Findings must be masked before sharing"
+    known_routes:
+      - path: security_or_osint
+        description: "Defensive security scanning, dependency auditing, compliance checks"
+        tier: B
+    build_order:
+      - define_scan_policy
+      - automate_npm_audit
+      - wire_owasp_zap
+      - build_report_dashboard
+      - schedule_regular_scans
+    agent_lanes:
+      - qa_review_only
+      - final_gatekeeper
+    retrieval_keys:
+      - security-lab
+      - defensive-security
+      - security-scan
+      - compliance
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: sirinx-solar-carport
+    name: SIRINX Solar Carport Website
+    canonical_role: public_site_guardian
+    priority: high
+    status: active
+    domain_category: public_business_sites
+    constraints:
+      - "No guaranteed ROI or savings claims"
+      - "All marketing copy must pass solar claim guard"
+      - "Lead capture data must be PII-masked in logs"
+    known_routes:
+      - path: public_site_ui
+        description: "Solar carport marketing site, ROI calculator, lead capture"
+        tier: A
+    build_order:
+      - design_landing
+      - build_roi_calculator
+      - wire_lead_capture
+      - add_claim_guard
+      - deploy_staging
+    agent_lanes:
+      - primary_builder
+      - qa_review_only
+    retrieval_keys:
+      - solar
+      - carport
+      - sirinx-solar
+      - opal
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: kusala-final-farewell
+    name: Kusala Final Farewell Funeral Platform
+    canonical_role: funeral_platform_planner
+    priority: medium
+    status: active
+    domain_category: public_business_sites
+    constraints:
+      - "Thai-language content required"
+      - "Must handle sensitive personal data with care"
+      - "PII masking mandatory in all logs"
+    known_routes:
+      - path: public_site_ui
+        description: "Funeral planning platform, obituary management, memorial scheduling"
+        tier: B
+    build_order:
+      - design_ux_th
+      - build_obituary_flow
+      - wire_memorial_scheduling
+      - add_pii_guard
+      - test_sensitive_data_handling
+    agent_lanes:
+      - primary_builder
+      - validation
+    retrieval_keys:
+      - kusala
+      - funeral
+      - farewell
+      - thai-platform
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: phitsanulok-united-news
+    name: Phitsanulok United News
+    canonical_role: local_news_automation
+    priority: medium
+    status: active
+    domain_category: public_business_sites
+    constraints:
+      - "News must be sourced and attributed"
+      - "No automated defamation or misinformation"
+    known_routes:
+      - path: public_site_ui
+        description: "Local news aggregation, match reports, community announcements"
+        tier: B
+    build_order:
+      - design_news_layout
+      - build_article_pipeline
+      - wire_rss_sources
+      - add_content_moderation
+      - deploy_public
+    agent_lanes:
+      - primary_builder
+      - readonly_intake
+    retrieval_keys:
+      - phitsanulok-united
+      - local-news
+      - football
+      - news-automation
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: local-business-promo
+    name: Local Business Promo Sites
+    canonical_role: reusable_promo_asset_factory
+    priority: low
+    status: planned
+    domain_category: public_business_sites
+    constraints:
+      - "Template-based generation only"
+      - "No paid ad spend without gate approval"
+    known_routes:
+      - path: public_site_ui
+        description: "Reusable promo page templates for local businesses"
+        tier: C
+    build_order:
+      - design_template_system
+      - build_asset_factory
+      - wire_content_injection
+      - test_render_pipeline
+    agent_lanes:
+      - primary_builder
+    retrieval_keys:
+      - local-business
+      - promo-factory
+      - promo-sites
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: agm-alpha-gene-record
+    name: AGM Alpha Gene Record Media
+    canonical_role: creative_media_platform
+    priority: medium
+    status: active
+    domain_category: creative_media_systems
+    constraints:
+      - "Creative assets must pass brand review"
+      - "No unapproved external distribution"
+    known_routes:
+      - path: creative_asset_prompt
+        description: "Creative media generation, brand assets, multimedia content"
+        tier: B
+    build_order:
+      - define_asset_pipeline
+      - build_prompt_templates
+      - wire_media_generation
+      - add_brand_review_gate
+      - catalog_assets
+    agent_lanes:
+      - primary_builder
+      - qa_review_only
+    retrieval_keys:
+      - agm
+      - alpha-gene
+      - creative-media
+      - brand-assets
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: ads-andromeda-ads-queen
+    name: Ads Andromeda / ADS Queen
+    canonical_role: campaign_asset_factory
+    priority: medium
+    status: active
+    domain_category: creative_media_systems
+    constraints:
+      - "All ad creative must pass compliance filter"
+      - "No misleading advertising claims"
+    known_routes:
+      - path: creative_asset_prompt
+        description: "Ad campaign asset generation, A/B creative variants, ad copy"
+        tier: B
+    build_order:
+      - build_ad_template_library
+      - wire_compliance_filter
+      - implement_ab_variant_generator
+      - test_asset_output
+    agent_lanes:
+      - primary_builder
+      - validation
+    retrieval_keys:
+      - andromeda
+      - ads-queen
+      - ad-campaign
+      - ad-assets
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: storypro-marketing
+    name: StoryPro Marketing
+    canonical_role: customer_facing_marketing
+    priority: medium
+    status: active
+    domain_category: creative_media_systems
+    constraints:
+      - "Customer-facing content must be reviewed"
+      - "Brand voice consistency required"
+    known_routes:
+      - path: creative_asset_prompt
+        description: "Marketing storytelling, customer-facing copy, brand narratives"
+        tier: B
+    build_order:
+      - define_brand_voice
+      - build_story_templates
+      - wire_marketing_pipeline
+      - add_review_gate
+    agent_lanes:
+      - primary_builder
+      - qa_review_only
+    retrieval_keys:
+      - storypro
+      - marketing
+      - brand-story
+      - customer-facing
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: ai-image-education-carousel
+    name: AI Image Education Carousel
+    canonical_role: education_content_pack
+    priority: low
+    status: active
+    domain_category: creative_media_systems
+    constraints:
+      - "Educational content only — no misleading visuals"
+      - "Thai language support required"
+    known_routes:
+      - path: creative_asset_prompt
+        description: "AI-generated educational carousel images and infographics"
+        tier: C
+    build_order:
+      - design_carousel_templates
+      - build_prompt_engine
+      - wire_image_generation
+      - add_content_review
+    agent_lanes:
+      - primary_builder
+    retrieval_keys:
+      - education-carousel
+      - ai-image
+      - carousel
+      - education-content
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: rambutan-shop-campaign
+    name: Rambutan Shop Campaign
+    canonical_role: local_campaign_asset_pack
+    priority: low
+    status: active
+    domain_category: creative_media_systems
+    constraints:
+      - "Local campaign scope only"
+      - "Assets tied to Rambutan Shop brand guidelines"
+    known_routes:
+      - path: creative_asset_prompt
+        description: "Local e-commerce campaign visuals and promotional assets"
+        tier: C
+    build_order:
+      - collect_brand_assets
+      - design_campaign_creatives
+      - build_variant_set
+      - deliver_asset_pack
+    agent_lanes:
+      - primary_builder
+    retrieval_keys:
+      - rambutan
+      - shop-campaign
+      - local-campaign
+      - ecommerce-assets
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: tiktok-live-compliance
+    name: TikTok Live Compliance Study
+    canonical_role: compliant_video_pipeline_research
+    priority: low
+    status: active
+    domain_category: creative_media_systems
+    constraints:
+      - "Research only — no production deployment"
+      - "No automated posting to TikTok"
+    known_routes:
+      - path: research_reverse_engineering
+        description: "TikTok live compliance requirements research and pipeline design"
+        tier: C
+    build_order:
+      - study_compliance_rules
+      - research_pipeline_patterns
+      - document_findings
+      - propose_compliant_flow
+    agent_lanes:
+      - readonly_intake
+      - validation
+    retrieval_keys:
+      - tiktok
+      - live-compliance
+      - video-pipeline
+      - compliance-research
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: amazon-merch-automation
+    name: Amazon Merch Automation Dashboard
+    canonical_role: local_first_merch_operations_system
+    priority: medium
+    status: active
+    domain_category: automation_business_systems
+    constraints:
+      - "No automated submission to Amazon without approval"
+      - "Dashboard must be read-only by default"
+    known_routes:
+      - path: business_automation
+        description: "Merch by Amazon design pipeline, listing automation, dashboard"
+        tier: B
+    build_order:
+      - design_dashboard_layout
+      - build_merch_pipeline
+      - wire_mock_submission
+      - add_approval_gate
+      - test_dry_run
+    agent_lanes:
+      - primary_builder
+      - final_gatekeeper
+    retrieval_keys:
+      - amazon-merch
+      - merch-automation
+      - merch-dashboard
+      - print-on-demand
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: google-sheet-airtable-schema
+    name: Google Sheet Airtable Schema
+    canonical_role: data_schema_registry
+    priority: medium
+    status: active
+    domain_category: automation_business_systems
+    constraints:
+      - "Read-only data access pattern"
+      - "Schema changes must be versioned"
+    known_routes:
+      - path: business_automation
+        description: "Data schema management between Google Sheets and Airtable"
+        tier: B
+    build_order:
+      - audit_sources
+      - define_unified_schema
+      - build_sync_pipeline
+      - test_data_integrity
+      - document_mappings
+    agent_lanes:
+      - validation
+      - readonly_intake
+    retrieval_keys:
+      - google-sheet
+      - airtable
+      - data-schema
+      - schema-registry
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: n8n-workflow-pack
+    name: n8n Workflow Pack
+    canonical_role: workflow_automation_pack
+    priority: medium
+    status: active
+    domain_category: automation_business_systems
+    constraints:
+      - "All workflows must have dry-run mode"
+      - "No external send by default"
+    known_routes:
+      - path: business_automation
+        description: "n8n workflow templates, integrations, and automation recipes"
+        tier: B
+    build_order:
+      - audit_existing_workflows
+      - create_template_library
+      - add_dry_run_layer
+      - document_workflow_catalog
+    agent_lanes:
+      - primary_builder
+      - validation
+    retrieval_keys:
+      - n8n
+      - workflow
+      - automation
+      - workflow-pack
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: prompt-pack
+    name: Prompt Pack
+    canonical_role: prompt_asset_library
+    priority: medium
+    status: active
+    domain_category: automation_business_systems
+    constraints:
+      - "Prompts must not leak system instructions"
+      - "Version-controlled in prompts/ directory"
+    known_routes:
+      - path: business_automation
+        description: "Curated prompt collection for repeatable AI operations"
+        tier: B
+    build_order:
+      - catalog_existing_prompts
+      - build_micro_site
+      - add_versioning
+      - document_usage_guide
+    agent_lanes:
+      - readonly_intake
+      - validation
+    retrieval_keys:
+      - prompt-pack
+      - prompts
+      - prompt-library
+      - asset-library
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: qc-checklist
+    name: QC Checklist
+    canonical_role: quality_control
+    priority: low
+    status: active
+    domain_category: automation_business_systems
+    constraints:
+      - "Checklist must be reviewed quarterly"
+      - "Automated validation where possible"
+    known_routes:
+      - path: business_automation
+        description: "Quality control checklists and automated validation rules"
+        tier: C
+    build_order:
+      - define_qc_categories
+      - build_checklist_templates
+      - wire_automated_checks
+      - integrate_with_release_gates
+    agent_lanes:
+      - validation
+      - qa_review_only
+    retrieval_keys:
+      - qc
+      - checklist
+      - quality-control
+      - validation
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: reverse-engineering-workflows
+    name: Reverse Engineering Workflows
+    canonical_role: research_re_workflow
+    priority: low
+    status: active
+    domain_category: research_and_strategy
+    constraints:
+      - "Research only — no exploitation"
+      - "Findings must be documented and attributed"
+    known_routes:
+      - path: research_reverse_engineering
+        description: "Reverse engineering workflows, protocol analysis, system research"
+        tier: C
+    build_order:
+      - define_research_methodology
+      - build_workflow_templates
+      - document_protocols
+      - catalog_findings
+    agent_lanes:
+      - readonly_intake
+      - validation
+    retrieval_keys:
+      - reverse-engineering
+      - re-workflows
+      - research
+      - protocol-analysis
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: competitor-research
+    name: Competitor Research
+    canonical_role: market_intelligence
+    priority: low
+    status: active
+    domain_category: research_and_strategy
+    constraints:
+      - "Public sources only — no unauthorized access"
+      - "No competitive intelligence that violates ethics policy"
+    known_routes:
+      - path: research_reverse_engineering
+        description: "Competitor analysis, market positioning, feature comparison"
+        tier: C
+    build_order:
+      - define_research_scope
+      - collect_public_data
+      - analyze_findings
+      - produce_report
+    agent_lanes:
+      - readonly_intake
+    retrieval_keys:
+      - competitor-research
+      - market-intelligence
+      - competitive-analysis
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: swot
+    name: SWOT Analysis
+    canonical_role: strategic_planning
+    priority: low
+    status: active
+    domain_category: research_and_strategy
+    constraints:
+      - "Analysis must be data-backed"
+      - "No unsubstantiated claims"
+    known_routes:
+      - path: research_reverse_engineering
+        description: "SWOT analysis framework for strategic planning sessions"
+        tier: C
+    build_order:
+      - gather_data
+      - run_swot_framework
+      - document_findings
+      - propose_strategies
+    agent_lanes:
+      - readonly_intake
+    retrieval_keys:
+      - swot
+      - strategic-planning
+      - analysis
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: performance-marketing
+    name: Performance Marketing
+    canonical_role: marketing_strategy
+    priority: low
+    status: active
+    domain_category: research_and_strategy
+    constraints:
+      - "No paid ad spend without gate approval"
+      - "Tracking must be privacy-compliant"
+    known_routes:
+      - path: research_reverse_engineering
+        description: "Performance marketing analysis, campaign strategy, channel optimization"
+        tier: C
+    build_order:
+      - audit_channels
+      - analyze_performance_data
+      - propose_optimizations
+      - document_strategy
+    agent_lanes:
+      - readonly_intake
+      - validation
+    retrieval_keys:
+      - performance-marketing
+      - marketing-strategy
+      - campaign-optimization
+    created_at: "2026-06-30T00:00:00+07:00"
+
+  - id: north-train-budget-trip
+    name: North Train Budget Trip 4D3N
+    canonical_role: travel_itinerary_planner
+    priority: low
+    status: planned
+    domain_category: travel_and_misc
+    constraints:
+      - "budget travel planning only"
+      - "no booking or payment integration"
+    known_routes:
+      - path: /travel/north-train-4d3n
+        description: Northern Thailand train budget trip 4 days 3 nights
+        tier: B
+    build_order:
+      - research_routes
+      - estimate_budget
+      - plan_itinerary
+    agent_lanes:
+      - readonly_intake
+    retrieval_keys:
+      - north-train-trip
+    created_at: "2026-07-02T00:00:00+07:00"
+
+  - id: galyani-vadhana-trip
+    name: Galyani Vadhana Trip 3D2N
+    canonical_role: travel_itinerary_planner
+    priority: low
+    status: planned
+    domain_category: travel_and_misc
+    constraints:
+      - "budget travel planning only"
+      - "no booking or payment integration"
+    known_routes:
+      - path: /travel/galyani-vadhana-3d2n
+        description: Galyani Vadhana district trip 3 days 2 nights
+        tier: B
+    build_order:
+      - research_routes
+      - estimate_budget
+      - plan_itinerary
+    agent_lanes:
+      - readonly_intake
+    retrieval_keys:
+      - galyani-vadhana-trip
+    created_at: "2026-07-02T00:00:00+07:00"
+
+  - id: local-print-vinyl-sign
+    name: Local Print Vinyl Sign Workflows
+    canonical_role: production_workflow_guide
+    priority: low
+    status: planned
+    domain_category: travel_and_misc
+    constraints:
+      - "local print shop workflows only"
+      - "how-to guide only"
+    known_routes:
+      - path: /misc/vinyl-sign-print
+        description: Local vinyl sign printing workflow guide
+        tier: B
+    build_order:
+      - research_print_shops
+      - document_workflow
+    agent_lanes:
+      - readonly_intake
+    retrieval_keys:
+      - vinyl-sign-print
+    created_at: "2026-07-02T00:00:00+07:00"

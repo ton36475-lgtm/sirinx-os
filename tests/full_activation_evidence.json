@@ -1,0 +1,30 @@
+{
+  "activation_id": "activation-1783463257",
+  "status": "SUCCESS",
+  "phases_completed": 3,
+  "phase_1": {
+    "total_files": 32477,
+    "potential_issues": 34,
+    "issue_types": [
+      "bracket_mismatch"
+    ],
+    "scan_complete": true
+  },
+  "phase_2": {
+    "model": "opencode-go/deepseek-v4-pro",
+    "provider": "maxplus-free",
+    "config_files": true,
+    "fallback": "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "budget_guard": "FREE-FIRST mode active"
+  },
+  "phase_3": {
+    "mission_id": "activation-1783463257",
+    "status": "ACTIVATED",
+    "chain_hash": "a8c6650f1f05cef35dc89dd07c20d0da",
+    "timestamp": "2026-07-08T05:27:42.916016",
+    "next_action": "Awaiting agent dispatch for code debt refactor"
+  },
+  "model_selected": "maxplus-free/deepseek-v4-pro",
+  "state_persistence": "SQLite (fallback from PostgreSQL)",
+  "ready_for_agent_dispatch": true
+}

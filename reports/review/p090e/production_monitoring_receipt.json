@@ -1,0 +1,115 @@
+{
+  "packet_id": "P090E_POST_PRODUCTION_MONITORING",
+  "status": "P090E_POST_PRODUCTION_MONITORING_PASS",
+  "mode": "read_only_http_and_deployment_evidence_monitoring",
+  "run_at": "2026-07-07T02:26:42+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "head": "93f2a1965c3531c1ac5c626f198060df023876b7",
+  "origin_sync": {
+    "ahead": 0,
+    "behind": 0
+  },
+  "production": {
+    "url": "https://www.sirinx.co/",
+    "project_name": "sirinx-co",
+    "deployment_id": "a5215017-b89d-451c-b1f2-8c290beb1d55",
+    "source": "f1cec05",
+    "branch": "main"
+  },
+  "rollback": {
+    "recorded": true,
+    "executed": false,
+    "target_deployment_id": "6bdf4746-2c34-429b-b0d5-88f6dfed3f66",
+    "target_source": "9d2e081",
+    "target_url": "https://6bdf4746.sirinx-co.pages.dev",
+    "requires_separate_gate": true
+  },
+  "route_checks": [
+    {
+      "route": "/",
+      "url": "https://www.sirinx.co/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    },
+    {
+      "route": "/line/",
+      "url": "https://www.sirinx.co/line/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/line/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    },
+    {
+      "route": "/contact/",
+      "url": "https://www.sirinx.co/contact/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/contact/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    },
+    {
+      "route": "/trust-center/",
+      "url": "https://www.sirinx.co/trust-center/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/trust-center/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    },
+    {
+      "route": "/projects/",
+      "url": "https://www.sirinx.co/projects/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/projects/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    },
+    {
+      "route": "/quote/",
+      "url": "https://www.sirinx.co/quote/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/quote/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    },
+    {
+      "route": "/roi-calculator/",
+      "url": "https://www.sirinx.co/roi-calculator/",
+      "status": 200,
+      "final_url": "https://www.sirinx.co/roi-calculator/",
+      "content_type": "text/html; charset=utf-8",
+      "has_line_text": true,
+      "has_contact_text": true
+    }
+  ],
+  "p090c_receipt": {
+    "path": "_A2A_QUEUE/outbox/packet_090c_sirinx_site_production_deploy_execution_receipt.json",
+    "parseable": true,
+    "status": "P090C_PRODUCTION_DEPLOY_EXECUTED_AND_VERIFIED"
+  },
+  "blocked_actions_confirmed": {
+    "production_deploy_rerun": true,
+    "rollback_execution": true,
+    "dns_mutation": true,
+    "r2_d1_kv_mutation": true,
+    "line_webhook_activation": true,
+    "crm_customer_storage_write": true,
+    "live_telegram_line_email_customer_send": true,
+    "provider_model_api_call_from_scripts": true,
+    "secret_read_or_print": true,
+    "git_add_all": true
+  },
+  "artifacts": {
+    "report": "reports/mission/A2A2A_P090E_POST_PRODUCTION_MONITORING_20260707.md",
+    "receipt": "reports/review/p090e/production_monitoring_receipt.json"
+  },
+  "next_safe_gate": "P090E_REVIEW_ONLY_OR_P100_RUST_MIGRATION_SCOPED_GATE"
+}

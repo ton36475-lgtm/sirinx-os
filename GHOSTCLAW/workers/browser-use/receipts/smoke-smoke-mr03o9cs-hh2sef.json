@@ -1,0 +1,75 @@
+{
+  "smoke_id": "smoke-mr03o9cs-hh2sef",
+  "timestamp": "2026-06-30T03:41:43.900Z",
+  "url": "http://127.0.0.1:8721/god-mode",
+  "status": "completed",
+  "overall": "pass",
+  "steps": [
+    {
+      "step": "open_url",
+      "status": "pass",
+      "url": "http://127.0.0.1:8721/god-mode",
+      "http_status": 200
+    },
+    {
+      "step": "capture_page",
+      "status": "pass",
+      "screenshot": "/Users/sirinx/sirinx-os/GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-1782790905357.png"
+    },
+    {
+      "step": "safe_click",
+      "status": "pass",
+      "target": "body"
+    },
+    {
+      "step": "r0_tab_click",
+      "status": "pass",
+      "target": "R0 Gates"
+    },
+    {
+      "step": "capture_r0_page",
+      "status": "pass",
+      "screenshot": "/Users/sirinx/sirinx-os/GHOSTCLAW/workers/browser-use/receipts/screenshots/smoke-r0-1782790905911.png"
+    },
+    {
+      "step": "visible_text_check",
+      "status": "pass",
+      "text_length": 30459,
+      "text_preview": "SIRINX x GHOSTCLAWSGOD MODE MASTER OS v2.0A2A Adaptive Sync - LatentMAS Transport - Oracle Memory - Rust Orchestrator - 2026-06-28 - PhitsanulokNight Watch: BLOCKEDHermes Stack: UNKNOWNR0 Gates: 8 PEN"
+    },
+    {
+      "step": "active_goal_panel_found",
+      "status": "pass",
+      "needle": "Active Goal"
+    },
+    {
+      "step": "packet_013_found",
+      "status": "pass",
+      "needle": "packet_013"
+    },
+    {
+      "step": "blocker_found",
+      "status": "pass",
+      "needle": "BLOCK-"
+    },
+    {
+      "step": "console_error_capture",
+      "status": "pass",
+      "error_count": 0,
+      "page_error_count": 0
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "dependencies": {
+    "playwright": {
+      "available": true,
+      "runtime": "node",
+      "version": "@playwright/test"
+    },
+    "browser_use": {
+      "available": false,
+      "version": null
+    }
+  }
+}

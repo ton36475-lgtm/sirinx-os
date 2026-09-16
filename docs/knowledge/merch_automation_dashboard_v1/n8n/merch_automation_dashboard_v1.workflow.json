@@ -1,0 +1,341 @@
+{
+  "name": "Merch Automation Dashboard v1 Local Factory",
+  "active": false,
+  "notes": [
+    "Import-ready only",
+    "Do not activate with live credentials until owner configures safely",
+    "No Amazon auto-publish",
+    "No platform bypass",
+    "No paid API calls by default"
+  ],
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "node-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        120,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "mission_id",
+              "value": "MERCH-DASH-V1-AUTO-20260630-001"
+            },
+            {
+              "name": "mode",
+              "value": "local_import_ready_disabled"
+            },
+            {
+              "name": "safety_notes",
+              "value": "Import-ready only; do not activate with live credentials until owner configures safely; No Amazon auto-publish; No platform bypass; No paid API calls by default"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-2",
+      "name": "Load Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        340,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Generate Niche Candidates Mock\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-3",
+      "name": "Generate Niche Candidates Mock",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Score Niches\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-4",
+      "name": "Score Niches",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"IP Guardian Gate\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-5",
+      "name": "IP Guardian Gate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Design Brief Generator\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-6",
+      "name": "Design Brief Generator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Listing Draft Generator\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-7",
+      "name": "Listing Draft Generator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"QC Checklist Builder\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-8",
+      "name": "QC Checklist Builder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1660,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Traffic Content Planner\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-9",
+      "name": "Traffic Content Planner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1880,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"30-Day Calendar Builder\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-10",
+      "name": "30-Day Calendar Builder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2100,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Analytics Decision Rules\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-11",
+      "name": "Analytics Decision Rules",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Write Local Export Summary\", localOnly: true, externalApiCalls: false, ownerActionRequired: true } }));"
+      },
+      "id": "node-12",
+      "name": "Write Local Export Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2540,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({ json: { ...item.json, step: \"Write A2A Receipt\", localOnly: true, externalApiCalls: false, ownerActionRequired: false } }));"
+      },
+      "id": "node-13",
+      "name": "Write A2A Receipt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2760,
+        260
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Load Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Config": {
+      "main": [
+        [
+          {
+            "node": "Generate Niche Candidates Mock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Niche Candidates Mock": {
+      "main": [
+        [
+          {
+            "node": "Score Niches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Niches": {
+      "main": [
+        [
+          {
+            "node": "IP Guardian Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IP Guardian Gate": {
+      "main": [
+        [
+          {
+            "node": "Design Brief Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Design Brief Generator": {
+      "main": [
+        [
+          {
+            "node": "Listing Draft Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listing Draft Generator": {
+      "main": [
+        [
+          {
+            "node": "QC Checklist Builder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QC Checklist Builder": {
+      "main": [
+        [
+          {
+            "node": "Traffic Content Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Traffic Content Planner": {
+      "main": [
+        [
+          {
+            "node": "30-Day Calendar Builder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "30-Day Calendar Builder": {
+      "main": [
+        [
+          {
+            "node": "Analytics Decision Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analytics Decision Rules": {
+      "main": [
+        [
+          {
+            "node": "Write Local Export Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Local Export Summary": {
+      "main": [
+        [
+          {
+            "node": "Write A2A Receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveExecutionProgress": true
+  },
+  "staticData": null,
+  "meta": {
+    "mission_id": "MERCH-DASH-V1-AUTO-20260630-001",
+    "local_first": true,
+    "external_api_calls": "none_by_default"
+  },
+  "pinData": {}
+}

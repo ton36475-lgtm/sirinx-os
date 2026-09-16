@@ -1,0 +1,39 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-004",
+    "correlation_id": "a2a-kimi-k3-1721172803-12348",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator",
+      "role": "task-orchestrator"
+    },
+    "to": {
+      "agent": "opencode-reviewer",
+      "role": "independent_reviewer"
+    },
+    "action_requested": "Dev Dashboard MVP Implementation",
+    "context": {
+      "goal": "Expand apps/dev-dashboard from 2 stub files to full implementation with pages: ReleaseGates.tsx, KillSwitches.tsx, AgentQueue.tsx, ApprovalQueue.tsx, ServiceHealth.tsx, Logs.tsx and components: GateCard.tsx, StopButton.tsx, StatusBadge.tsx, ServiceIndicator.tsx",
+      "constraints": ["no deploy", "no git push", "dry-run first"],
+      "lane": "apps/dev-dashboard",
+      "files": ["src/pages/ReleaseGates.tsx", "src/pages/KillSwitches.tsx", "src/pages/AgentQueue.tsx", "src/pages/ApprovalQueue.tsx", "src/pages/ServiceHealth.tsx", "src/pages/Logs.tsx", "src/components/GateCard.tsx", "src/components/StopButton.tsx", "src/components/StatusBadge.tsx", "src/components/ServiceIndicator.tsx"],
+      "deliverables": ["TypeScript component structure", "page scaffolding", "basic component implementations"],
+      "command_source": "frontier-generator"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T00:00:03.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P2",
+  "tier": "B"
+}

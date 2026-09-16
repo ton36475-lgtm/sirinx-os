@@ -1,9 +1,39 @@
-# Approval Matrix
-# Part of: GHOSTCLAW Hermes Commander A2A2A OS v2.0
+schema: ghostclaw.approval_matrix.v2
+metadata:
+  last_modified: 2026-06-29
+  policy_version: "2.1.0"
+  description: "Approval matrix for autonomous mutual approval mode v2"
 
-matrix:
-  version: "2.0"
+approval_matrix:
+  default_approval_mode: agent_mutual_approval
+  human_approval_required: false
 
+  scopes:
+    local_scope:
+      approval: agent_mutual_approval
+      human_approval_required: false
+      allowed_actions:
+        - read_only
+        - runtime_artifact_write
+        - code_patch_allowed_path
+        - allowed_path_staging
+        - source_mutation_allowed_path
+        - local_commit_allowed_scope
+
+    staging_scope:
+      approval: agent_quorum_approval
+      human_approval_required: false
+      required_quorum_count: 2
+      validators:
+        - manus
+        - kob
+
+    production_scope:
+      approval: auto_block
+      human_approval_required: false
+      rejection_behavior: fail_silent_on_runtime
+
+  # Backwards compatibility: legacy tier definitions
   tiers:
     T0_auto:
       description: "Always allowed, no approval"
@@ -21,13 +51,13 @@ matrix:
       description: "Allowed within assigned lane"
       approver: none
       actions:
-        - file_write            # lane only
-        - file_delete           # lane only
-        - git_add               # lane only
+        - file_write
+        - file_delete
+        - git_add
         - test_run
         - lint_run
         - typecheck_run
-        - build_run             # lane only
+        - build_run
 
     T2_hermes_approval:
       description: "Requires Hermes Commander approval"

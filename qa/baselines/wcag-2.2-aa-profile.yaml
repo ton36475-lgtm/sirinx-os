@@ -1,0 +1,19 @@
+schema_version: "sirinx.qa.wcag-profile.v1"
+standard: "WCAG"
+version: "2.2"
+target_level: "AA"
+status: "CANDIDATE_NOT_EXECUTED"
+required_levels:
+  - "A"
+  - "AA"
+evidence_required:
+  - "criterion_id"
+  - "route_or_component"
+  - "method"
+  - "result"
+  - "artifact_digest"
+  - "reviewer_identity"
+rules:
+  automated_scan_only_is_sufficient: false
+  criterion_level_reporting_required: true
+  broad_conformance_claim_without_complete_evidence: "FORBIDDEN"

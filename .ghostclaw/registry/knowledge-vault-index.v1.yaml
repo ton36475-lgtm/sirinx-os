@@ -1,0 +1,329 @@
+entries:
+
+  # ── POLICY & REGISTRY ──
+
+  - id: kv-ghostclaw-001
+    title: A2A Gate Policy
+    category: policy
+    source_path: .ghostclaw/policies/a2a-gate-policy.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os]
+    tags: [a2a, gate, policy, ghostclaw]
+    freshness: current
+    summary: Entry/exit gate policy for all agent-to-agent operations.
+
+  - id: kv-ghostclaw-002
+    title: Project Registry
+    category: registry
+    source_path: .ghostclaw/registry/project-registry.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os, sirinxdev-os, hermes-codex-a2a2a, thai-jarvis, ai-second-brain, openspec, sup-agent-sub-agent-team, model-router, defensive-security-lab, sirinx-solar-carport, kusala-final-farewell, phitsanulok-united-news, local-business-promo, agm-alpha-gene-record, ads-andromeda-ads-queen, storypro-marketing, ai-image-education-carousel, rambutan-shop-campaign, tiktok-live-compliance, amazon-merch-automation, google-sheet-airtable-schema, n8n-workflow-pack, prompt-pack, qc-checklist, reverse-engineering-workflows, competitor-research, swot, performance-marketing]
+    tags: [registry, projects, index]
+    freshness: current
+    summary: Master registry of all projects with roles, routes, and retrieval keys.
+
+  - id: kv-ghostclaw-003
+    title: Agent Registry
+    category: registry
+    source_path: .ghostclaw/registry/agent-registry.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os]
+    tags: [registry, agents, lanes]
+    freshness: current
+    summary: Agent roster with roles, lane assignments, tool permissions, and access tiers.
+
+  - id: kv-ghostclaw-004
+    title: Domain Pack Index
+    category: registry
+    source_path: .ghostclaw/registry/domain-pack-index.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os, sirinxdev-os, hermes-codex-a2a2a, thai-jarvis, ai-second-brain, openspec, sup-agent-sub-agent-team, model-router, defensive-security-lab, sirinx-solar-carport, kusala-final-farewell, phitsanulok-united-news, local-business-promo, agm-alpha-gene-record, ads-andromeda-ads-queen, storypro-marketing, ai-image-education-carousel, rambutan-shop-campaign, tiktok-live-compliance, amazon-merch-automation, google-sheet-airtable-schema, n8n-workflow-pack, prompt-pack, qc-checklist, reverse-engineering-workflows, competitor-research, swot, performance-marketing]
+    tags: [registry, domains, packs]
+    freshness: current
+    summary: Index of domain pack definitions for project categorization.
+
+  - id: kv-ghostclaw-005
+    title: Knowledge Vault Index
+    category: registry
+    source_path: .ghostclaw/registry/knowledge-vault-index.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os]
+    tags: [registry, knowledge, index, vault]
+    freshness: current
+    summary: Pointer registry mapping knowledge artifacts to their physical locations.
+
+  - id: kv-ghostclaw-006
+    title: Route Matrix
+    category: registry
+    source_path: .ghostclaw/registry/route-matrix.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os]
+    tags: [registry, routing, matrix]
+    freshness: current
+    summary: Route matrix for A2A traffic between agents and services.
+
+  # ── KNOWLEDGE DOCS ──
+
+  - id: kv-ghostclaw-007
+    title: GhostClaw Sub Agent Team
+    category: project_docs
+    source_path: docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [sub-agent, team, ghostclaw, agents]
+    freshness: current
+    summary: Sub-agent team roles, responsibilities, and coordination patterns.
+
+  - id: kv-ghostclaw-008
+    title: OpenSpec Spec Driven Workflow
+    category: specs
+    source_path: docs/knowledge/OPENSPEC_SPEC_DRIVEN_WORKFLOW_ASSESSMENT.md
+    format: md
+    projects: [openspec]
+    tags: [openspec, spec-driven, workflow, methodology]
+    freshness: current
+    summary: Assessment of the spec-driven development workflow and tooling.
+
+  - id: kv-ghostclaw-009
+    title: 9Router Model Router Assessment
+    category: architecture
+    source_path: docs/knowledge/9ROUTER_MODEL_ROUTER_ASSESSMENT.md
+    format: md
+    projects: [model-router]
+    tags: [model-router, routing, assessment]
+    freshness: current
+    summary: Architecture assessment of the 9Router model routing system.
+
+  - id: kv-ghostclaw-010
+    title: Agency Agents Roster Assessment
+    category: architecture
+    source_path: docs/knowledge/AGENCY_AGENTS_ROSTER_ASSESSMENT.md
+    format: md
+    projects: [sup-agent-sub-agent-team]
+    tags: [agency, agents, roster, assessment]
+    freshness: current
+    summary: Assessment of agent roster structure and team composition.
+
+  - id: kv-ghostclaw-011
+    title: Robin Defensive OSINT Assessment
+    category: security
+    source_path: docs/knowledge/ROBIN_DEFENSIVE_OSINT_ASSESSMENT.md
+    format: md
+    projects: [defensive-security-lab]
+    tags: [osint, defensive, security, robin]
+    freshness: current
+    summary: Defensive OSINT methodology and tooling assessment.
+
+  - id: kv-ghostclaw-012
+    title: GhostClaw Blueprint
+    category: architecture
+    source_path: docs/GHOSTCLAW_BLUEPRINT.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [blueprint, architecture, ghostclaw]
+    freshness: current
+    summary: High-level architecture blueprint for the GhostClaw operating system.
+
+  - id: kv-ghostclaw-013
+    title: Handoff Context Workflow Assessment
+    category: runbooks
+    source_path: docs/knowledge/HANDOFF_CONTEXT_WORKFLOW_ASSESSMENT.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [handoff, context, workflow, assessment]
+    freshness: current
+    summary: Assessment of context handoff workflows between agents.
+
+  - id: kv-ghostclaw-014
+    title: Hermes Full Auto Mac Mini M2 System
+    category: architecture
+    source_path: docs/knowledge/HERMES_FULL_AUTO_MAC_MINI_M2_SYSTEM.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [hermes, mac-mini, automation, architecture]
+    freshness: current
+    summary: Architecture and automation design for Hermes on Mac Mini M2.
+
+  - id: kv-ghostclaw-015
+    title: Content Intelligence Intake
+    category: ai_knowledge
+    source_path: docs/knowledge/CONTENT_INTELLIGENCE_INTAKE_V1_4.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [content, intelligence, intake, ai]
+    freshness: current
+    summary: Content intelligence pipeline design for AI-driven intake processing.
+
+  - id: kv-ghostclaw-016
+    title: External Agent Tooling Addendum
+    category: external_refs
+    source_path: docs/knowledge/GHOSTCLAW_EXTERNAL_AGENT_TOOLING_ADDENDUM_V1_3.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [external, tooling, agents, addendum]
+    freshness: current
+    summary: External agent tooling integration patterns and guidelines.
+
+  - id: kv-ghostclaw-017
+    title: Sirinx Codex Hermes A2A Queue Status
+    category: operations
+    source_path: docs/knowledge/SIRINX_CODEX_HERMES_A2A_QUEUE_STATUS_2026-06-29.md
+    format: md
+    projects: [hermes-codex-a2a2a]
+    tags: [a2a, queue, status, hermes, codex]
+    freshness: current
+    summary: Current status of the Hermes-Codex A2A message queue as of 2026-06-29.
+
+  - id: kv-ghostclaw-018
+    title: Sirinx Codex Hermes Work Report Draft
+    category: operations
+    source_path: docs/knowledge/SIRINX_CODEX_HERMES_WORK_REPORT_DRAFT_2026-06-29.md
+    format: md
+    projects: [hermes-codex-a2a2a]
+    tags: [work-report, draft, hermes, codex]
+    freshness: current
+    summary: Draft work report for Hermes-Codex collaboration period.
+
+  # ── ARCHITECTURE ──
+
+  - id: kv-ghostclaw-019
+    title: GodMode Master OS
+    category: architecture
+    source_path: .ghostclaw/registry/project-registry.v1.yaml
+    format: yaml
+    projects: [ghostclaw-os]
+    tags: [godmode, architecture, os, master]
+    freshness: current
+    summary: Pointer to project registry for GodMode Master OS architecture reference.
+
+  - id: kv-ghostclaw-020
+    title: GhostClaw Execution Plan
+    category: architecture
+    source_path: docs/ghostclaw-execution-plan.md
+    format: md
+    projects: [ghostclaw-os]
+    tags: [execution, plan, ghostclaw, architecture]
+    freshness: current
+    summary: Execution plan and phased roadmap for GhostClaw OS deployment.
+
+  # ── CREATIVE ASSETS ──
+
+  - id: kv-ghostclaw-021
+    title: KREA Open Weights Workflow
+    category: creative_assets
+    source_path: docs/knowledge/KREA2_OPEN_WEIGHTS_WORKFLOW.md
+    format: md
+    projects: [agm-alpha-gene-record]
+    tags: [krea, open-weights, workflow, creative]
+    freshness: current
+    summary: Open weights model workflow for KREA creative asset generation.
+
+  - id: kv-ghostclaw-022
+    title: KREA Raw to LoRA to Turbo Pipeline
+    category: creative_assets
+    source_path: docs/knowledge/KREA2_RAW_TO_LORA_TO_TURBO.md
+    format: md
+    projects: [agm-alpha-gene-record, ai-image-education-carousel]
+    tags: [krea, lora, turbo, pipeline, creative]
+    freshness: current
+    summary: End-to-end creative pipeline from raw training data to LoRA to Turbo model.
+
+  - id: kv-ghostclaw-023
+    title: Sirinx PageSpeed Audit
+    category: operations
+    source_path: docs/knowledge/SIRINX_PAGESPEED_AUDIT_2026-05-19.md
+    format: md
+    projects: [sirinxdev-os, sirinx-solar-carport]
+    tags: [pagespeed, audit, performance, seo]
+    freshness: current
+    summary: PageSpeed audit results and optimization recommendations.
+
+  - id: kv-ghostclaw-024
+    title: AI Company GodMode V4 Report Triage
+    category: business_strategy
+    source_path: docs/knowledge/SIRINX_AI_COMPANY_GODMODE_V4_REPORT_TRIAGE_2026-05-28.md
+    format: md
+    projects: [ghostclaw-os, sirinxdev-os]
+    tags: [godmode, strategy, report, triage, ai-company]
+    freshness: current
+    summary: Triage and strategy report for AI company GodMode V4 operating model.
+
+  - id: kv-ghostclaw-025
+    title: Marketing CRM Schema Comparison
+    category: business_strategy
+    source_path: docs/knowledge/SIRINX_MARKETING_CRM_SCHEMA_COMPARISON_2026-05-20.md
+    format: md
+    projects: [performance-marketing, storypro-marketing]
+    tags: [marketing, crm, schema, comparison]
+    freshness: current
+    summary: Comparative analysis of CRM schemas for marketing pipeline integration.
+
+  - id: kv-ghostclaw-026
+    title: Solar ROI Proposal Engine Phase 2
+    category: business_strategy
+    source_path: docs/knowledge/SIRINX_SOLAR_ROI_PROPOSAL_ENGINE_PHASE_2.md
+    format: md
+    projects: [sirinx-solar-carport]
+    tags: [solar, roi, proposal, engine, business]
+    freshness: current
+    summary: Phase 2 design for the Solar ROI proposal generation engine.
+
+  - id: kv-ghostclaw-027
+    title: Thailand Solar ESS Knowledge Engine
+    category: research
+    source_path: docs/knowledge/SIRINX_THAILAND_SOLAR_ESS_KNOWLEDGE_ENGINE.md
+    format: md
+    projects: [sirinx-solar-carport, defensive-security-lab]
+    tags: [solar, ess, thailand, knowledge-engine, research]
+    freshness: current
+    summary: Research knowledge base for Thai solar energy storage systems.
+
+  - id: kv-ghostclaw-028
+    title: GPU Compute Provider Assessment
+    category: research
+    source_path: docs/knowledge/GPU_COMPUTE_PROVIDER_ASSESSMENT.md
+    format: md
+    projects: [model-router, ghostclaw-os]
+    tags: [gpu, compute, providers, assessment, research]
+    freshness: current
+    summary: Comparative assessment of GPU compute providers for distributed AI workloads.
+
+  - id: kv-ghostclaw-029
+    title: Success Patterns
+    category: ai_knowledge
+    source_path: docs/knowledge/SUCCESS_PATTERNS.md
+    format: md
+    projects: [ghostclaw-os, sirinxdev-os]
+    tags: [patterns, success, best-practices, knowledge]
+    freshness: current
+    summary: Catalog of proven success patterns across Sirinx OS development.
+
+  - id: kv-ghostclaw-030
+    title: Failed Patterns
+    category: ai_knowledge
+    source_path: docs/knowledge/FAILED_PATTERNS.md
+    format: md
+    projects: [ghostclaw-os, sirinxdev-os]
+    tags: [patterns, failures, lessons, knowledge]
+    freshness: current
+    summary: Catalog of failed patterns and anti-patterns encountered during development.
+
+  - id: kv-ghostclaw-031
+    title: Sirinx Energy Obsidian Super Brain Design
+    category: architecture
+    source_path: docs/knowledge/SIRINX_ENERGY_OBSIDIAN_SUPER_BRAIN_DESIGN.md
+    format: md
+    projects: [ai-second-brain, ghostclaw-os]
+    tags: [obsidian, brain, knowledge, architecture, energy]
+    freshness: current
+    summary: Architecture design for the Obsidian-based super brain knowledge vault.
+
+  - id: kv-ghostclaw-032
+    title: Lead Qualification V2 Status
+    category: business_strategy
+    source_path: docs/knowledge/SIRINX_LEAD_QUALIFICATION_V2_STATUS_2026-05-20.md
+    format: md
+    projects: [sirinx-solar-carport, performance-marketing]
+    tags: [leads, qualification, status, crm]
+    freshness: current
+    summary: Status report for lead qualification V2 pipeline and scoring system.

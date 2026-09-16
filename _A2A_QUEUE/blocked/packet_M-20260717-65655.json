@@ -1,0 +1,60 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.496927,
+  "message_id": "msg-packet_M-20260717-65655",
+  "mission_id": "M-20260717-65655",
+  "from": {
+    "agent": "human-operator",
+    "role": "operator"
+  },
+  "to": {
+    "agent": "hermes-commander",
+    "role": "mission_commander"
+  },
+  "context": {
+    "goal": "Continue the existing unfinished work only: review local evidence and report the current status of P-102/BUILD-05 (Hermes to OmniRoute status boundary) and dependent P-107/ORCH-02 (Auto-Loop to OmniRoute). Verify artifacts, tests, and receipts without executing OmniRoute, Auto-Loop, the Hermes gateway, or any A2A consumer. Do not claim that all CLI tools are wired or healthy, and do not claim completion without evidence.",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "a2a-hermes-1784245733-3401"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_M-20260717-65655",
+    "mission_id": "M-20260717-65655",
+    "timestamp": "2026-07-16T23:48:53.000Z",
+    "from": {
+      "agent": "human-operator",
+      "role": "operator"
+    },
+    "to": {
+      "agent": "hermes-commander",
+      "role": "mission_commander"
+    },
+    "context": {
+      "goal": "Continue the existing unfinished work only: review local evidence and report the current status of P-102/BUILD-05 (Hermes to OmniRoute status boundary) and dependent P-107/ORCH-02 (Auto-Loop to OmniRoute). Verify artifacts, tests, and receipts without executing OmniRoute, Auto-Loop, the Hermes gateway, or any A2A consumer. Do not claim that all CLI tools are wired or healthy, and do not claim completion without evidence.",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "a2a-hermes-1784245733-3401"
+    },
+    "payload": {
+      "type": "task",
+      "action": "Continue the existing unfinished work only: review local evidence and report the current status of P-102/BUILD-05 (Hermes to OmniRoute status boundary) and dependent P-107/ORCH-02 (Auto-Loop to OmniRoute). Verify artifacts, tests, and receipts without executing OmniRoute, Auto-Loop, the Hermes gateway, or any A2A consumer. Do not claim that all CLI tools are wired or healthy, and do not claim completion without evidence.",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.655535+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "B",
+    "reason": "safe"
+  },
+  "dispatch_error": "error: unexpected argument '--no-stream' found\n\n  tip: a similar argument exists: '--no-alt-screen'\n\nUsage: codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]\n\nFor more information, try "
+}

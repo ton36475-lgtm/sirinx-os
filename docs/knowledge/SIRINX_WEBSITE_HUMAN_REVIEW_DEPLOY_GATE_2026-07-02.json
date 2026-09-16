@@ -1,0 +1,109 @@
+{
+  "schema": "sirinx.website.human_review_deploy_gate.v1",
+  "status": "pending_human_review",
+  "generated_at": "2026-07-02",
+  "packet": "_A2A_QUEUE/outbox/packet_040_sirinx_website_human_review_deploy_gate.json",
+  "source_packet": "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+  "evidence_boundary": "local_evidence_only",
+  "not_approval": true,
+  "deployment_approved": false,
+  "human_review_required": true,
+  "review_targets": [
+    "/",
+    "/line",
+    "/contact",
+    "/projects",
+    "/quote",
+    "/roi-calculator",
+    "floating contact cluster",
+    "existing website bot",
+    "LINE QR real-device scan",
+    "packet_039 verification receipt"
+  ],
+  "required_human_evidence": [
+    {
+      "id": "local_website_review",
+      "status": "pending",
+      "evidence_required": "Human review of the local website and packet_039."
+    },
+    {
+      "id": "line_qr_real_device_scan",
+      "status": "pending",
+      "evidence_required": "Human scans the QR with a real device and confirms it opens SIRINX \u0e42\u0e0b\u0e25\u0e48\u0e32\u0e40\u0e0b\u0e25\u0e25\u0e4c LINE Official."
+    },
+    {
+      "id": "existing_bot_manual_check",
+      "status": "pending",
+      "evidence_required": "Human opens the existing website bot and confirms behavior is preserved."
+    },
+    {
+      "id": "deploy_approval",
+      "status": "pending",
+      "evidence_required": "Separate exact approval phrase APPROVE_DEPLOY_SIRINX_SITE_<date> after review."
+    }
+  ],
+  "canonical_line_official": {
+    "display_name": "SIRINX \u0e42\u0e0b\u0e25\u0e48\u0e32\u0e40\u0e0b\u0e25\u0e25\u0e4c",
+    "short_link": "https://lin.ee/S97R6nj",
+    "basic_id": "@304zrttj",
+    "qr_image_url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "add_friend_url": "https://line.me/R/ti/p/%40304zrttj",
+    "chat_url": "https://line.me/R/oaMessage/%40304zrttj"
+  },
+  "closed_gates": {
+    "deploy": false,
+    "line_webhook_activation": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "customer_data_storage": false,
+    "line_send": false,
+    "customer_send": false,
+    "provider_call": false,
+    "public_tunnel": false,
+    "runtime_queue_execution": false
+  },
+  "next_sprint_gates": [
+    {
+      "scope": "quote_flow",
+      "status": "gate_required_before_implementation",
+      "approval_phrase": "APPROVE_QUOTE_FLOW_LOCAL_IMPLEMENTATION_<scope>_<date>",
+      "blocked_until_approval": [
+        "production_submit",
+        "customer_data_storage",
+        "crm_sync"
+      ]
+    },
+    {
+      "scope": "roi_calculator",
+      "status": "gate_required_before_implementation",
+      "approval_phrase": "APPROVE_ROI_CALCULATOR_LOCAL_IMPLEMENTATION_<scope>_<date>",
+      "blocked_until_approval": [
+        "guaranteed_savings_claim",
+        "production_analytics",
+        "customer_data_storage"
+      ]
+    },
+    {
+      "scope": "crm_lead_capture",
+      "status": "gate_required_before_storage",
+      "approval_phrase": "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+      "blocked_until_approval": [
+        "database_write",
+        "customer_data_storage",
+        "crm_sync",
+        "production_data"
+      ]
+    }
+  ],
+  "required_future_approval_phrases": [
+    "APPROVE_DEPLOY_SIRINX_SITE_<date>",
+    "APPROVE_LINE_QR_REAL_DEVICE_CONFIRMED_<device>_<date>",
+    "APPROVE_EXISTING_BOT_MANUAL_CHECK_<date>",
+    "APPROVE_QUOTE_FLOW_LOCAL_IMPLEMENTATION_<scope>_<date>",
+    "APPROVE_ROI_CALCULATOR_LOCAL_IMPLEMENTATION_<scope>_<date>",
+    "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+    "APPROVE_PRODUCTION_ANALYTICS_<scope>_<date>",
+    "APPROVE_LINE_WEBHOOK_<scope>_<date>"
+  ],
+  "next_safe_action": "Wait for human review, real-device LINE QR confirmation, existing bot manual confirmation, and separate exact deploy approval before any deployment action."
+}

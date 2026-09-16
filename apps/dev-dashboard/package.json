@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
-    "verify": "node --check server.mjs && node --check src/app.js"
+    "control-plane-status-card:test": "node scripts/check-control-plane-status-card.mjs",
+    "control-plane-status-card:visual-smoke": "node scripts/check-control-plane-status-card-visual-smoke.mjs",
+    "control-plane-status-card:screenshot": "node scripts/capture-control-plane-status-card-screenshot.mjs",
+    "verify": "node --check server.mjs && node --check src/app.js && node --check scripts/check-control-plane-status-card.mjs && node --check scripts/check-control-plane-status-card-visual-smoke.mjs && node scripts/check-control-plane-status-card.mjs && node scripts/check-control-plane-status-card-visual-smoke.mjs"
   }
 }

@@ -1,8 +1,15 @@
 # HANDOFF_PROTOCOL
 
-Date: 2026-05-20
+Date: 2026-06-28
 Mode: local handoff protocol
 External writes: blocked by default
+
+## Pocket Hatchery Handoff Addendum
+
+- `waxwing` signer is office-internal only; do not expose in public docs.
+- Pocket Hatchery release readiness score is `34/100`; do not deploy to testnet without R0 approval.
+- All R0 gates require explicit per-gate approval from Pitoon.
+- State files to update on every handoff: `PROJECT_STATE.md`, `NEXT_ACTIONS.md`, `AUTONOMOUS_RUN_LOG.md`.
 
 ## Purpose
 

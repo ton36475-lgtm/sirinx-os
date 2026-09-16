@@ -1,0 +1,5 @@
+.env
+.voltagent/*.db
+.voltagent/*.db-*
+dist/
+node_modules/

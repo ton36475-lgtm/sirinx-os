@@ -20,6 +20,32 @@
         </div>
       </header>
 
+      <section class="attention-rail" aria-labelledby="attentionTitle">
+        <div class="attention-lead">
+          <p class="attention-kicker">Now / Needs Attention</p>
+          <h2 id="attentionTitle">Control plane is safe to inspect, not safe to activate.</h2>
+          <p class="attention-copy">Checkout evidence only. Runtime reload, provider access, Telegram delivery, push, and deploy remain unverified or blocked.</p>
+        </div>
+        <ul class="attention-evidence" aria-label="Current safety evidence">
+          <li>
+            <span class="evidence-label evidence-observed">Observed</span>
+            <strong>Targeted dispatcher gates contained</strong>
+            <span>Local tests quarantine unknown actions; runtime reload and activation remain unverified.</span>
+          </li>
+          <li>
+            <span class="evidence-label evidence-unverified">Unverified</span>
+            <strong>Runtime activation</strong>
+            <span>No gateway reload, scheduler activation, provider call, or live delivery is claimed.</span>
+          </li>
+          <li>
+            <span class="evidence-label evidence-blocked">Blocked</span>
+            <strong>External effects</strong>
+            <span>Install, provider, live send, push, deploy, and cloud require exact approval; secret access is hard-denied.</span>
+          </li>
+        </ul>
+        <p class="attention-meta">UI lock v1.0.0 · Telegram registry v2.4.0 · private surface only</p>
+      </section>
+
       <section class="grid summary-grid" aria-label="Operational summary">
         <article class="metric">
           <span class="metric-label">Release Mode</span>
@@ -193,6 +219,36 @@
           <section class="tool-column" aria-label="CenterBrain blocked actions">
             <h3>Blocked Actions</h3>
             <div id="centerBrainBlockedList" class="signal-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel control-plane-panel" aria-label="GhostClaw control-plane status">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">GhostClaw Control Plane</p>
+            <h2>Status Read Model</h2>
+          </div>
+          <span id="controlPlaneStatus" class="status-pill status-warn">Control plane checking</span>
+        </div>
+        <div id="controlPlaneSummary" class="executive-summary" aria-live="polite"></div>
+        <div id="controlPlaneStopPoint" class="agent-launch-stop">Control-plane status waits for local API readiness.</div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Control-plane active projects">
+            <h3>Active Projects</h3>
+            <div id="controlPlaneProjectList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane current packets">
+            <h3>Packets</h3>
+            <div id="controlPlanePacketList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane guardrails">
+            <h3>Guardrails</h3>
+            <div id="controlPlaneGuardrailList" class="signal-list"></div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane receipts">
+            <h3>Receipts</h3>
+            <div id="controlPlaneReceiptList" class="signal-list"></div>
           </section>
         </div>
       </section>

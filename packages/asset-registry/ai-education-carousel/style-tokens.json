@@ -1,0 +1,48 @@
+{
+  "pack_id": "ai-education-carousel-clean-editorial-v1",
+  "style_name": "Clean Editorial AI Academy",
+  "palette": {
+    "warm_ivory": {
+      "hex": "#F7F2E8",
+      "role": "primary background"
+    },
+    "deep_ink_navy": {
+      "hex": "#102033",
+      "role": "headline and primary text"
+    },
+    "cool_slate": {
+      "hex": "#6A7588",
+      "role": "body text and secondary panels"
+    },
+    "clean_cyan": {
+      "hex": "#22C7D8",
+      "role": "diagram lines and learning flow accents"
+    },
+    "warm_coral": {
+      "hex": "#F47C6B",
+      "role": "warnings, emphasis, and callouts"
+    },
+    "muted_gold": {
+      "hex": "#C8A85A",
+      "role": "slide numbers, module markers, and premium details"
+    }
+  },
+  "constraints": {
+    "avoid_cyberpunk": true,
+    "avoid_excessive_glow": true,
+    "avoid_black_dominance": true,
+    "thai_first": true,
+    "mobile_readable": true,
+    "paid_generation_requires_gate": true
+  },
+  "typography": {
+    "headline": "clean Thai sans-serif, bold, high contrast",
+    "body": "clean Thai sans-serif, regular, short line length",
+    "numbers": "tabular numerals or clear editorial markers"
+  },
+  "layout": {
+    "safe_margin_percent": 8,
+    "max_ideas_per_slide": 1,
+    "recommended_slide_count": 5
+  }
+}

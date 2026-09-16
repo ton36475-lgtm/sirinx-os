@@ -19,6 +19,244 @@
       "type": "string",
       "pattern": "^sirinx-a2a2a-[a-z0-9]{8}$"
     },
+    "brainstorm_id": {
+      "type": "string",
+      "description": "Optional canonical brainstorm identifier for LatentMAS shadow-plane correlation."
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "brainstorm.round1.question",
+        "brainstorm.round1.answer",
+        "brainstorm.round2.question",
+        "brainstorm.round2.answer",
+        "brainstorm.inspect_answer",
+        "moa.review",
+        "moa.gated_brainstorm",
+        "latent.shadow_probe",
+        "p0_completed",
+        "p1_completed",
+        "p2_completed",
+        "p3_completed",
+        "p4_completed",
+        "p5_completed",
+        "p6_completed",
+        "p7_completed",
+        "blocked",
+        "completed"
+      ],
+      "description": "Optional LatentMAS/GhostClaw phase marker. Existing producers may omit it."
+    },
+    "terminology_policy": {
+      "type": "object",
+      "description": "Optional brainstorm terminology compatibility policy.",
+      "properties": {
+        "canonical": {
+          "type": "string",
+          "const": "brainstorm"
+        },
+        "canonical_term": {
+          "type": "string",
+          "const": "brainstorm"
+        },
+        "deprecated_aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["beststorm"]
+          }
+        },
+        "invalid_typos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["beststrom"]
+          }
+        },
+        "emit_only_canonical": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "latent_plane": {
+      "type": "object",
+      "description": "Optional non-authoritative latent-plane status. JSON control plane remains authority.",
+      "properties": {
+        "compatible": {
+          "type": "boolean"
+        },
+        "fallback": {
+          "type": "string",
+          "enum": ["json_control_plane", "shadow_only", "disabled"]
+        },
+        "latent_enabled": {
+          "type": "boolean"
+        },
+        "authority": {
+          "type": "string",
+          "const": "shadow"
+        },
+        "debug_probe_mode": {
+          "type": "string",
+          "enum": ["parallel_text_probe"]
+        }
+      }
+    },
+    "moa_summary": {
+      "type": "object",
+      "description": "Optional mixture-of-agents summary metadata.",
+      "properties": {
+        "consensus": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "aggregator_certainty": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "safety_disagreement": {
+          "type": "boolean"
+        },
+        "reference_votes": {
+          "type": "object",
+          "description": "Required MoA reference lanes when a gated brainstorm is evaluated.",
+          "required": [
+            "ref_A_safety_risk",
+            "ref_B_speed_cost",
+            "ref_C_correctness_proof"
+          ],
+          "properties": {
+            "ref_A_safety_risk": {
+              "type": "object",
+              "description": "Safety and risk reference vote. Any safety disagreement creates a hard veto.",
+              "properties": {
+                "vote": {
+                  "type": "string",
+                  "enum": ["approve", "reject", "abstain"]
+                },
+                "safety_disagreement": {
+                  "type": "boolean"
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "ref_B_speed_cost": {
+              "type": "object",
+              "description": "Speed, cost, and operational-efficiency reference vote.",
+              "properties": {
+                "vote": {
+                  "type": "string",
+                  "enum": ["approve", "reject", "abstain"]
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            "ref_C_correctness_proof": {
+              "type": "object",
+              "description": "Correctness, proof, completeness, and testability reference vote.",
+              "properties": {
+                "vote": {
+                  "type": "string",
+                  "enum": ["approve", "reject", "abstain"]
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "hermes_aggregator": {
+          "type": "object",
+          "description": "Hermes synthesis metadata for the MoA brainstorm vote.",
+          "properties": {
+            "agent": {
+              "type": "string",
+              "const": "hermes"
+            },
+            "consensus_threshold": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "aggregator_certainty": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "additionalProperties": true
+        },
+        "moa_score": {
+          "type": "number",
+          "description": "Confidence signal only; never overrides action_tier_cap or policy gate."
+        },
+        "moa_score_is_confidence_signal_only": {
+          "type": "boolean",
+          "const": true
+        },
+        "policy_gate_override_allowed": {
+          "type": "boolean",
+          "const": false
+        },
+        "recursive_moa_launch_allowed": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "moa_gated_brainstorm": {
+      "type": "object",
+      "description": "Optional gated brainstorm metadata; does not authorize action by itself.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "gate_status": {
+          "type": "string",
+          "enum": ["pending", "passed", "blocked", "requires_human"]
+        },
+        "required_human_review": {
+          "type": "boolean"
+        },
+        "action_tier_cap": {
+          "type": "string",
+          "enum": ["A", "B", "C", "D", "X"]
+        },
+        "veto_window_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3600
+        },
+        "safety_disagreement_hard_veto": {
+          "type": "boolean",
+          "const": true
+        },
+        "policy_gate_final_authority": {
+          "type": "boolean",
+          "const": true
+        },
+        "moa_score_authorizes_action": {
+          "type": "boolean",
+          "const": false
+        },
+        "recursive_moa_launch_allowed": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
     "from": {
       "type": "object",
       "required": ["agent", "role"],
@@ -109,6 +347,210 @@
     "status": {
       "type": "string",
       "enum": ["PENDING", "ROUTED", "PROCESSING", "ACTION_PENDING", "ACTION_EXECUTING", "COMPLETED", "BLOCKED", "FAILED", "CANCELLED"]
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional task identifier for worker dispatch tracking."
+    },
+    "from_agent": {
+      "type": "string",
+      "description": "Optional backward-compatible sender agent identifier for worker bus templates."
+    },
+    "to_agent": {
+      "type": "string",
+      "description": "Optional backward-compatible receiver agent identifier for worker bus templates."
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Optional decision identifier for autonomous mutual approval."
+    },
+    "worker_id": {
+      "type": "string",
+      "description": "Optional worker identifier from the worker registry."
+    },
+    "action_class": {
+      "type": "string",
+      "description": "Optional action class for policy gate evaluation (e.g. read_only, code_patch_allowed_path)."
+    },
+    "requester_agent": {
+      "type": "string",
+      "description": "Optional top-level requester agent for autonomous mutual approval compatibility."
+    },
+    "approver_agent": {
+      "type": "string",
+      "description": "Optional top-level approver agent; must differ from requester_agent at policy evaluation time."
+    },
+    "evidence_pack": {
+      "type": "object",
+      "description": "Optional evidence pack for autonomous approval.",
+      "additionalProperties": true,
+      "properties": {
+        "files": { "type": "array", "items": { "type": "string" } },
+        "validation_results": { "type": "object" },
+        "test_output": { "type": "string" }
+      }
+    },
+    "control_plane_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, JSON control plane is required as source of truth."
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, a receipt must be written for this message."
+    },
+    "browser_use": {
+      "type": "object",
+      "description": "Optional browser use worker metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["setup_required", "ready", "smoke_passed", "smoke_failed", "blocked"] },
+        "url": { "type": "string" },
+        "http_status": { "type": "integer" },
+        "console_errors": { "type": "array", "items": { "type": "string" } },
+        "blocked_flows": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "edgeone": {
+      "type": "object",
+      "description": "Optional EdgeOne readiness metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "readiness_level": { "type": "string", "enum": ["R3", "R4", "R5"] },
+        "status": { "type": "string", "enum": ["ready", "not_ready", "deployed", "blocked"] },
+        "environment": { "type": "string", "enum": ["preview", "production"] },
+        "deploy_packet_path": { "type": "string" },
+        "smoke_test_receipt_path": { "type": "string" }
+      }
+    },
+    "model_swap": {
+      "type": "object",
+      "description": "Optional model swap router metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "from_model": { "type": "string" },
+        "to_model": { "type": "string" },
+        "reason": { "type": "string" },
+        "policy_gate_overridden": { "type": "boolean" },
+        "receipt_path": { "type": "string" }
+      }
+    },
+    "autonomous_approval": {
+      "type": "object",
+      "description": "Optional autonomous mutual approval metadata. If absent, legacy human_approval_required field remains in effect.",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "mode": {
+          "type": "string",
+          "enum": ["disabled", "human_required", "agent_mutual_approval", "agent_quorum_approval", "auto_block"]
+        },
+        "requester_agent": { "type": "string" },
+        "approver_agent": { "type": "string" },
+        "human_approval_required": { "type": "boolean" },
+        "self_approval_allowed": { "type": "boolean" },
+        "evidence_pack_required": { "type": "boolean" },
+        "decision_id_required": { "type": "boolean" },
+        "receipt_required": { "type": "boolean" },
+        "action_tier_cap": {
+          "type": "string",
+          "enum": ["A", "B", "C", "D", "X"]
+        },
+        "safe_replacement_actions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "safe_execution_v3": {
+      "type": "object",
+      "description": "Optional Autonomous Safe Execution Mode v3 metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "human_required",
+            "no_human_prompt_safe_autonomy",
+            "full_auto_yolo_safe_execution"
+          ]
+        },
+        "human_prompt_required": { "type": "boolean" },
+        "stall_on_block": { "type": "boolean" },
+        "safe_replacement_enabled": { "type": "boolean" },
+        "zero_prompting_non_blocking_runtime": { "type": "boolean" },
+        "receipt_format": {
+          "type": "string",
+          "enum": ["ghostclaw.receipt.v2", "ghostclaw.receipt.v3_1", "ghostclaw.receipt.v3_2"]
+        },
+        "full_auto_team_contract": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "schema_version": { "type": "string" },
+            "mode": { "type": "string" },
+            "protocol": { "type": "string" },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "required": ["agent", "role"],
+                "properties": {
+                  "agent": { "type": "string" },
+                  "role": { "type": "string" },
+                  "policy_gate": { "type": "string" },
+                  "responsibilities": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "core_invariants": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "blocked_action_behavior": {
+          "type": "string",
+          "enum": [
+            "auto_block_and_continue",
+            "auto_block_and_halt",
+            "auto_block_and_simulate",
+            "hard_block_and_simulate",
+            "human_prompt"
+          ]
+        },
+        "replacement_action_classes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "performance_slo": {
+          "type": "object",
+          "properties": {
+            "decision_latency_ms": { "type": "integer" },
+            "quorum_target_ms": { "type": "integer" }
+          }
+        },
+        "runtime_telemetry_gate": {
+          "type": "object",
+          "properties": {
+            "enforce_deterministic_fallback": { "type": "boolean" },
+            "suppress_interactive_prompts": { "type": "boolean" },
+            "log_level": { "type": "string", "enum": ["debug", "info", "warn", "error"] },
+            "receipt_format": {
+              "type": "string",
+              "enum": ["ghostclaw.receipt.v3_1", "ghostclaw.receipt.v3_2"]
+            }
+          }
+        }
+      }
     }
   }
 }

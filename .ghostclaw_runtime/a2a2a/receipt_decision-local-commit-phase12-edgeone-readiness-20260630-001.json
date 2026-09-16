@@ -1,0 +1,20 @@
+{
+  "schema": "ghostclaw.receipt.v2",
+  "receipt_id": "rcp_1782789102552_pxwl2i",
+  "decision_id": "decision-local-commit-phase12-edgeone-readiness-20260630-001",
+  "timestamp": "2026-06-30T03:11:42.552Z",
+  "evaluation": {
+    "status": "approved",
+    "final_tier": "B",
+    "effective_score": 95,
+    "display_score": 95,
+    "confidence_label": "A",
+    "human_approval_required": false,
+    "reason": "autonomous_mutual_approval_passed"
+  },
+  "context": {
+    "requester": "codex",
+    "approver": "hermes",
+    "action": "local_commit_allowed_scope"
+  }
+}

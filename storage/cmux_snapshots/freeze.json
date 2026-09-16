@@ -1,0 +1,25 @@
+{
+  "node_identity": "local_mac_m2_core",
+  "timestamp": "2026-07-17T11:10:48.827820+00:00",
+  "epoch": 1784286648,
+  "processes": "node 537 localhost:18789\nnode 537 localhost:18789\npython3.1 942 localhost:9119\npython3.1 63321 localhost:8643\npython3.1 63321 *:8644\npython3.1 63321 *:8644\nnode 80830 localhost:8710\nnode 80848 localhost:8711\nnode 81132 *:3800",
+  "git": {
+    "head": "f9357d9b8355",
+    "branch": "migration/v5-rebase",
+    "dirty_files": 1
+  },
+  "a2a_queue": {
+    "inbox": 0,
+    "outbox": 0,
+    "done": 19,
+    "blocked": 31,
+    "approvals": 0
+  },
+  "disk_free_gb": 14.27,
+  "services": {
+    "skills-api": "up",
+    "dev-control": "up",
+    "omniroute": "down",
+    "hermes-gateway": "up"
+  }
+}

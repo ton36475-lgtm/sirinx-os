@@ -1,0 +1,28 @@
+{
+  "schema_version": "sirinx.qa.target-identity.v1",
+  "run_id": "SIRINX-QA-20260723-001",
+  "observed_at": "2026-07-23T12:46:59Z",
+  "observer": "codex-local",
+  "repository_root": "/Users/sirinx/sirinx-os",
+  "branch": "migration/v5-rebase",
+  "commit_sha": "b55f81ecd372ff23a34fcf33c2744706447e14ca",
+  "target_path": "apps/sirinx-site",
+  "target_git_tree": "e06b9bc2a948a9f50a7570c235a72c0354cdbe84",
+  "target_path_dirty_entries": 0,
+  "global_worktree_dirty": true,
+  "global_dirty_entries_at_observation": 1432,
+  "package_sha256": "5aa956ed454398d278f5fa23c787003cfb0381a4896d3f32a9295bce62137cf7",
+  "playwright_config_sha256": "16c6dca618b1d8ef5c1caf285d00d6cf8d8e023becaf1b0a88e7e8646a8b8c0a",
+  "pnpm_lock_sha256": "f4b983c4bde0ecbab968ccce5eca2f23d2c00cc66e700fb474291319b75a5285",
+  "environment": "LOCAL_WORKTREE_AUDIT_ONLY",
+  "build_id": null,
+  "artifact_sha256": null,
+  "deployment_id": null,
+  "build_status": "NOT_AVAILABLE",
+  "deployment_status": "NOT_AVAILABLE",
+  "limitations": [
+    "Repository-wide worktree is dirty; only the target path and pnpm lock were observed clean against HEAD.",
+    "No build, browser, service, network, or deployment probe was executed.",
+    "This identifies source scope only and is not runtime health evidence."
+  ]
+}

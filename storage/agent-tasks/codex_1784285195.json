@@ -1,0 +1,17 @@
+{
+  "agent": "codex-captain",
+  "worktree": "codex",
+  "path": "/Users/sirinx/sirinx-os/.worktrees/codex",
+  "timestamp": "2026-07-17T10:46:35.458046+00:00",
+  "task_count": 1,
+  "tasks": [
+    {
+      "id": "packet_M-20260717-1.json",
+      "lane": "other",
+      "tier": "A",
+      "goal": "",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T10:46:35.458047+00:00"
+    }
+  ]
+}

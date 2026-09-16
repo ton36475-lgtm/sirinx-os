@@ -1,0 +1,23 @@
+{
+  "schema": "ghostclaw.control_plane.manifest.v1",
+  "plane": "control",
+  "authority": "source_of_truth",
+  "format": "json",
+  "json_control_plane_source_of_truth": true,
+  "invariant": "JSON receipt + policy gate > latent score always",
+  "safety_plane": "always_active_final_authority",
+  "safety_policy_plane_final_authority": true,
+  "policy_gate": "action_tier_cap",
+  "latent_plane_override_allowed": false,
+  "moa_or_latent_score_override_allowed": false,
+  "tier_thresholds": {
+    "A": 90,
+    "B": 75,
+    "C": 60,
+    "D": 60
+  },
+  "effective_score_cap": 100,
+  "kv_only_protocol_allowed": false,
+  "model_download_allowed": false,
+  "gpu_live_inference_allowed": false
+}

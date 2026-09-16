@@ -1,0 +1,41 @@
+table,column,type,required,description
+niches,niche_id,text,yes,Unique local niche ID
+niches,niche_name,text,yes,Original niche concept name
+niches,audience,text,recommended,Target audience
+niches,buyer_intent,text,recommended,Gift or purchase intent
+niches,demand_score,number,recommended,Manual research score
+niches,ip_safety_score,number,recommended,Manual IP safety score
+niches,status,text,recommended,DRAFT_ONLY or OWNER_REVIEW
+design_pipeline,design_id,text,yes,Unique design ID
+design_pipeline,niche_id,text,yes,Linked niche ID
+design_pipeline,design_family,text,recommended,Original design family
+design_pipeline,design_phrase,text,recommended,Original phrase only
+design_pipeline,visual_style,text,recommended,Style direction
+design_pipeline,status,text,recommended,DRAFT_ONLY or QC_READY
+ip_policy_checks,check_id,text,yes,Unique policy check ID
+ip_policy_checks,design_id,text,yes,Linked design ID
+ip_policy_checks,trademark_risk,text,recommended,GREEN YELLOW or RED
+ip_policy_checks,copyright_risk,text,recommended,GREEN YELLOW or RED
+ip_policy_checks,celebrity_likeness_risk,text,recommended,GREEN YELLOW or RED
+ip_policy_checks,final_decision,text,recommended,APPROVE_EDIT_REJECT
+listing_drafts,listing_id,text,yes,Unique listing draft ID
+listing_drafts,design_id,text,yes,Linked design ID
+listing_drafts,title,text,recommended,Owner-review title draft
+listing_drafts,bullet_1,text,recommended,Natural bullet draft
+listing_drafts,bullet_2,text,recommended,Natural bullet draft
+listing_drafts,status,text,recommended,DRAFT_ONLY
+qc_reviews,qc_id,text,yes,Unique QC ID
+qc_reviews,design_id,text,yes,Linked design ID
+qc_reviews,spelling_pass,boolean,recommended,Spelling pass flag
+qc_reviews,readability_pass,boolean,recommended,Readability pass flag
+qc_reviews,contrast_pass,boolean,recommended,Contrast pass flag
+qc_reviews,final_qc_status,text,recommended,PASS FIX REJECT
+traffic_content,content_id,text,yes,Unique content ID
+traffic_content,design_id,text,yes,Linked design ID
+traffic_content,channel,text,recommended,Manual channel draft
+traffic_content,caption,text,recommended,Manual caption draft
+traffic_content,publish_status,text,recommended,DRAFT_ONLY
+sales_analytics,analytics_id,text,yes,Unique analytics ID
+sales_analytics,design_id,text,yes,Linked design ID
+sales_analytics,upload_date,text,recommended,Filled after owner action only
+sales_analytics,iteration_decision,text,recommended,KEEP EDIT RETIRE

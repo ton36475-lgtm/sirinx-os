@@ -1,0 +1,44 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "purpose": "Template only for GhostClaw/SIRINX P092. Do not copy into a live OpenCode config or execute npx without a separate install/run approval gate.",
+  "mcp": {
+    "codex-cli": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "codex-mcp-server"
+      ],
+      "enabled": true,
+      "environment": {
+        "STRUCTURED_CONTENT_ENABLED": "true"
+      }
+    },
+    "line-bot": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@line/line-bot-mcp-server"
+      ],
+      "enabled": false,
+      "environment": {
+        "NPM_CONFIG_IGNORE_SCRIPTS": "true",
+        "CHANNEL_ACCESS_TOKEN": "{env:LINE_CHANNEL_ACCESS_TOKEN}",
+        "DESTINATION_USER_ID": "{env:LINE_DESTINATION_USER_ID}"
+      }
+    }
+  },
+  "tools": {
+    "line-bot.broadcast*": false,
+    "line-bot.push*": false
+  },
+  "sirinxLocks": {
+    "lineProductionPath": "https://www.sirinx.co/api/line/webhook",
+    "requiredLineMode": "dry-run",
+    "requiredAutoReplyApproved": false,
+    "installGateRequired": true,
+    "liveSendGateRequired": true,
+    "deployGateRequired": true
+  }
+}

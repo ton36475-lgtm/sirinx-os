@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 !.env.*.example
+.claude/settings.local.json
+.claude/settings.local.*.json
+!.claude/settings.local.example.json
 
 # Dependency and build output
 node_modules/
@@ -29,6 +32,7 @@ logs/
 .hermes/
 .ghostclaw_runtime/
 data/
+memory/live/
 archive/
 
 # Python runtime cache
@@ -45,5 +49,31 @@ secrets/
 SIRINX_SECRET_BACKUP*.tar.gz
 SIRINX_SECRET_BACKUP*.tar.gz.enc
 
+# Rust build artifacts
+target/
+
+# AI agent local workdirs (not project source)
+.opencode/
+.vibe-coding/
+.worktrees/
+.omnigent/
+.mcp.json
+
 # OS/editor noise
 .DS_Store
+
+# Generated system status and architecture reports
+ghostclaw_manager_architecture_report.*
+system-status-report.*
+
+# Runtime evidence collection
+evidence/
+
+# External security skills (embedded repo)
+security/anthropic-cybersecurity-skills/
+
+# Integrations with embedded repos
+integrations/cynative/
+integrations/markdownify-mcp/
+integrations/omniroute/
+packages/skills-kit/

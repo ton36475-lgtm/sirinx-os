@@ -1,0 +1,24 @@
+{
+  "project": "phitsanulok-united-news",
+  "mode": "local_safe_draft_only",
+  "required_outputs": [
+    "local_news_site",
+    "daily_content_pipeline",
+    "facebook_auto_post_draft_only",
+    "admin_dashboard",
+    "partner_panel"
+  ],
+  "required_gates": [
+    "source_name_check",
+    "public_info_only",
+    "owner_review",
+    "ad_disclosure_check"
+  ],
+  "blocked_without_gate": [
+    "live_facebook_post",
+    "customer_data_ingestion",
+    "external_publishing",
+    "paid_api_call",
+    "deploy"
+  ]
+}

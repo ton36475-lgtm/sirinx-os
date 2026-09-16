@@ -1,0 +1,87 @@
+# SIRINX GhostClaw LANE_1 Hermes Decision Preflight Audit
+
+Status: `GHOSTCLAW_LANE1_HERMES_DECISION_PREFLIGHT_AUDIT_LOCAL_ONLY`
+Date: `2026-06-29`
+Mode: local-only review readiness, no decision record, no state mutation
+
+This preflight audit is not a Hermes decision.
+It only confirms local evidence readiness before Hermes records a separate decision.
+
+```text
+status=ready_for_hermes_decision_review_not_decision
+current_actionable_packet=packet_013
+review_evidence_complete=true
+ready_for_hermes_decision_review=true
+decision_record=false
+hermes_decision_recorded=true
+codex_recorder_gate_open=false
+ready_for_codex_recorder=false
+lane2_authorized=false
+ready_for_lane2=false
+runtime_queue_execution=false
+provider_call=false
+model_assistance_scope=any_model_allowed_for_vibe_coding_drafts_only_no_gate_approval
+```
+
+## Machine-Readable Audit
+
+```text
+data/pathspecs/ghostclaw_lane1_hermes_decision_preflight_audit_2026-06-29.json
+_A2A_QUEUE/outbox/packet_017_ghostclaw_lane1_hermes_decision_preflight_audit.json
+```
+
+## Allowed Decision Values
+
+- `block`
+- `open_codex_recorder_gate`
+- `request_revision`
+- `route_to_opus`
+
+## Review Evidence Checked
+
+- `_A2A_QUEUE/inbox/packet_013_ghostclaw_lane1_codex_recorder_gate_request.json`
+- `_A2A_QUEUE/outbox/packet_015_ghostclaw_lane1_hermes_decision_draft.json`
+- `_A2A_QUEUE/outbox/packet_016_ghostclaw_lane1_hermes_decision_intake_handoff.json`
+- `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_draft.py`
+- `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_intake_handoff.py`
+- `WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py`
+- `WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py`
+- `WORKSPACE_SCAFFOLD/templates/ghostclaw_lane1_hermes_review_decision.template.json`
+- `data/pathspecs/ghostclaw_lane1_hermes_decision_inbox_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_hermes_decision_intake_handoff_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_hermes_decision_transition_guard_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_hermes_decision_validator_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_packet013_decision_draft_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_packet013_decision_readiness_2026-06-29.json`
+- `data/pathspecs/ghostclaw_lane1_packet013_decision_workbench_2026-06-29.json`
+- `data/pathspecs/sirinx_codex_hermes_a2a_queue_status_2026-06-29.json`
+- `data/pathspecs/sirinx_codex_hermes_execution_queue_2026-06-29.json`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_INTAKE_HANDOFF_2026-06-29.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DECISION_TRANSITION_GUARD_2026-06-29.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_MODEL_CHOICE_BOUNDARY_2026-06-29.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION_TEMPLATE_2026-06-29.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_DRAFT_2026-06-29.md`
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_PACKET013_DECISION_READINESS_2026-06-29.md`
+
+## Gate Artifacts Still Missing
+
+- `docs/knowledge/SIRINX_GHOSTCLAW_LANE1_OPUS_ARCHITECTURE_PACKET.md`
+
+## Validation Commands After Hermes Records A Decision
+
+```bash
+python3 WORKSPACE_SCAFFOLD/scripts/validate_lane1_hermes_decision.py docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md
+python3 WORKSPACE_SCAFFOLD/scripts/build_lane1_hermes_decision_transition_guard.py --decision docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md
+```
+
+## Non-Actions
+
+No deploy, push, cloud mutation, customer send, secret read, paid/provider call,
+provider call, runtime queue execution, Telegram live send, external message send,
+merge script, install, migration, decision record, state mutation, Codex recorder
+gate opening, final Opus packet creation, or LANE_2 authorization is performed by this audit.
+
+## Next Safe Action
+
+Hermes records a separate local decision artifact, then Codex validates it and reruns the transition guard before any recorder-gate, final-packet, or LANE_2 action.

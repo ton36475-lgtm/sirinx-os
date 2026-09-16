@@ -1,0 +1,77 @@
+{
+  "schema": "sirinx.website_line.hermes_review_packet.v1",
+  "status": "review_packet_ready_local_only",
+  "dispatch_mode": "dry_run_review_only",
+  "approval_scope": "review_only_no_execution",
+  "approval_required_for_review": false,
+  "execution_approval_required": true,
+  "not_approval": true,
+  "packet": "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+  "review_doc": "docs/knowledge/SIRINX_WEBSITE_LINE_HERMES_REVIEW_PACKET_2026-07-02.md",
+  "source_evidence": [
+    "docs/website/SIRINX_WEBSITE_QUALITY_AUDIT.md",
+    "docs/specs/website-quality/TEST_CASES.md",
+    "docs/specs/quote-roi-crm-readiness/TEST_CASES.md",
+    "docs/runbooks/SIRINX_WEBSITE_QUALITY_RUNBOOK.md",
+    "apps/sirinx-site/scripts/check.mjs",
+    "apps/sirinx-site/scripts/closed-gate-checks.mjs",
+    "apps/sirinx-site/scripts/closed-gate-checks.test.mjs",
+    "apps/sirinx-site/tests/line-integration.spec.ts"
+  ],
+  "verified_counts": {
+    "site_browser_uat": 42,
+    "closed_gate_regression": 3,
+    "built_site_files": 17,
+    "uat_crud_security_tests": 16,
+    "a2a_packet_tests": 15
+  },
+  "closed_gates": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "production_mutation": false,
+    "line_webhook_activation": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "mongodb_connect": false,
+    "database_write": false,
+    "database_migration": false,
+    "customer_data": false,
+    "production_data": false,
+    "external_message_send": false,
+    "telegram_live_send": false,
+    "line_send": false,
+    "customer_send": false,
+    "provider_call": false,
+    "paid_provider_call": false,
+    "secret_read": false,
+    "real_env_read": false,
+    "dependency_install": false,
+    "browser_automation_execution": false,
+    "stagehand_execution": false,
+    "playwright_execution": false,
+    "public_tunnel": false,
+    "runtime_queue_execution": false,
+    "local_stack_restart": false
+  },
+  "required_future_approval_phrases": [
+    "APPROVE_DEPLOY_SIRINX_SITE_<date>",
+    "APPROVE_LINE_WEBHOOK_<scope>_<date>",
+    "APPROVE_PRODUCTION_ANALYTICS_<scope>_<date>",
+    "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+    "APPROVE_LOCAL_STACK_RESTART_<scope>_<date>"
+  ],
+  "expected_local_verification": [
+    "pnpm --filter @sirinx/site test:line",
+    "pnpm --filter @sirinx/site test:closed-gates",
+    "pnpm --filter @sirinx/site build && pnpm --filter @sirinx/site check",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_sirinx_website_line_hermes_review_packet -v",
+    "git diff --check",
+    "pnpm night-watch"
+  ],
+  "night_watch_boundary": {
+    "latest_status": "WARN",
+    "known_diagnosis": "local stack services are offline while Hermes Desktop/gateway and public website probes are online",
+    "repair_authorized": false
+  }
+}

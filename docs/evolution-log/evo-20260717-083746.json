@@ -1,0 +1,42 @@
+{
+  "cycle_id": "evo-20260717-083746",
+  "timestamp": "2026-07-17T01:37:46.580686+00:00",
+  "checks": {
+    "disk": {
+      "free_gb": 16.0,
+      "critical": false,
+      "warning": false
+    },
+    "git": {
+      "uncommitted": 144,
+      "warning": true
+    },
+    "services": {
+      "skills-api": "up",
+      "dev-control": "up",
+      "omniroute": "up",
+      "hermes-gateway": "up"
+    },
+    "a2a_queue": {
+      "inbox": 31,
+      "outbox": 0,
+      "done": 0,
+      "blocked": 0,
+      "approvals": 5
+    },
+    "disk_after": {
+      "free_gb": 16.0,
+      "critical": false,
+      "warning": false
+    },
+    "tests": {
+      "passed": true,
+      "returncode": 0,
+      "output_tail": "y\", line 545, in _check_closed\n    raise RuntimeError('Event loop is closed')\nRuntimeError: Event loop is closed\n[test] Ollama local AI\n[test] Kimi CLI\n[test] Node workspace\n[test] AI HQ checks passed"
+    }
+  },
+  "repairs": [],
+  "errors_found": [],
+  "proposals": [],
+  "mutations": []
+}

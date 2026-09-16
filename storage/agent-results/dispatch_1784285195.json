@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-07-17T10:46:35.458506+00:00",
+  "node": "local_mac_m2_core",
+  "total_packets": 5,
+  "dispatched": 5,
+  "tier_c_held": 0,
+  "remaining": 0,
+  "collected_done": 0,
+  "collected_errors": 0,
+  "by_lane": {
+    "backend": 1,
+    "frontend": 1,
+    "architecture": 1,
+    "agent-sync": 1,
+    "other": 1
+  },
+  "by_worktree": {
+    "codex": 3,
+    "claude": 2
+  },
+  "recommendations": [
+    "✅ 5 Tier A/B packets ready for auto-dispatch"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-20260717-010",
+  "correlation_id": "a2a-fable-v5-1721214003-01004",
+  "phase": "dispatch",
+  "from": {
+    "agent": "frontier-generator",
+    "role": "task-orchestrator"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "build_captain"
+  },
+  "action_requested": "Create A2A bridge integration test suite",
+  "context": {
+    "goal": "The A2A bridge (_A2A_QUEUE/a2a-bridge.py) has been silently failing dispatches due to incorrect CLI flags (e.g., codex --no-stream which doesn't exist in v0.144.5; the current code uses 'codex exec -s workspace-write' which IS correct but has no test coverage). Create a Python test suite at _A2A_QUEUE/test-a2a-bridge.py that: (1) tests packet parsing with various formats (flat a2a-dispatch.sh format, wrapped a2a2a_message format), (2) tests safety_scan() with Tier A/B/C/X cases, (3) tests find_cli() for codex/claude/opencode, (4) tests build_receipt() output schema, (5) tests mask_secrets() with various secret patterns. Use only Python stdlib unittest (no external deps). Mock subprocess.run for CLI dispatch tests — do NOT actually invoke any CLI tools. Run the tests with python3 -m pytest or python3 -m unittest to verify they pass.",
+    "constraints": [
+      "no deploy",
+      "no git push",
+      "no cloud mutation",
+      "no secret read or print",
+      "no external send",
+      "do not invoke CLI tools — mock all subprocess calls",
+      "dry-run first"
+    ],
+    "lane": "_A2A_QUEUE",
+    "files": [
+      "test-a2a-bridge.py"
+    ],
+    "deliverables": [
+      "Comprehensive test suite covering packet parsing, safety gates, CLI discovery, receipt building, secret masking",
+      "All tests pass with python3 -m unittest",
+      "No external dependencies (stdlib only)"
+    ],
+    "command_source": "frontier-generator"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "max_turns": 5
+  },
+  "human_approval_required": false,
+  "timestamp": "2026-07-17T17:40:03.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "auto_block_and_continue"
+  },
+  "frontier_model": {
+    "model": "fable-v5-codestral",
+    "role": "code_generation",
+    "tier": "B",
+    "auto_approved": true
+  }
+}

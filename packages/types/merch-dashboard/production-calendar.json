@@ -1,0 +1,10 @@
+{
+  "calendar_id": "merch-30-day-local-v1",
+  "days": 30,
+  "phases": [
+    { "range": "1-7", "focus": "Foundation, schema, audit, niche scoring" },
+    { "range": "8-18", "focus": "Production, design briefs, QC, listing drafts" },
+    { "range": "19-24", "focus": "Review queue, owner action packets, traffic drafts" },
+    { "range": "25-30", "focus": "Analytics review, iteration, next batch planning" }
+  ]
+}

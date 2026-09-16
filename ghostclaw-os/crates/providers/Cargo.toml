@@ -1,0 +1,14 @@
+[package]
+name = "ghostclaw-providers"
+version.workspace = true
+edition = "2021"
+
+[dependencies]
+ghostclaw-core = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+secrecy = { workspace = true }

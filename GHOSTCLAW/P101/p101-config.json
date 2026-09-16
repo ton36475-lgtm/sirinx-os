@@ -1,0 +1,23 @@
+{
+  "mission_id": "P101-D22354812-FULLSTACK-REFACTOR-RUST-MIGRATION-20260713",
+  "mode": "MAX_LOCAL_AUTONOMY_WITH_HARD_BLOCKS",
+  "repos": [
+    "/Users/sirinx/sirinx-os",
+    "/Users/sirinx/sirinx-agent-native-os"
+  ],
+  "tools_path": "GHOSTCLAW/P101/tools/p101",
+  "teams": [
+    "claude-worker",
+    "opencode-worker",
+    "codex-worker"
+  ],
+  "canonical_obsidian_sync": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/scripts/a2a/a2a_obsidian_sync.py",
+  "safety": {
+    "preview_only_by_default": true,
+    "tmux_dispatch": false,
+    "cloud_mutation": false,
+    "provider_call": false,
+    "secret_access": false,
+    "direct_obsidian_append": false
+  }
+}

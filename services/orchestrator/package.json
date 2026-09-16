@@ -1,0 +1,18 @@
+{
+  "name": "@sirinx/hermes-v5-worker",
+  "private": true,
+  "version": "0.1.0-preview.0",
+  "scripts": {
+    "check": "cargo check --workspace --all-targets --offline && cargo check --workspace --target wasm32-unknown-unknown --offline",
+    "test": "cargo test --workspace --all-targets --offline && node --test tests/deploy-contract.test.mjs",
+    "lint": "cargo fmt --all -- --check && cargo clippy --workspace --all-targets --offline -- -D warnings",
+    "deploy:contract": "node scripts/verify-deploy-contract.mjs --stage preflight --config wrangler.preview.jsonc",
+    "build:worker:artifact": "node scripts/build-worker.mjs",
+    "build:worker": "pnpm run build:worker:artifact && node scripts/verify-deploy-contract.mjs --stage artifact --config wrangler.preview.jsonc",
+    "deploy:dry-run": "node scripts/verify-deploy-contract.mjs --stage preflight --config wrangler.preview.jsonc && wrangler deploy --dry-run --strict --x-autoconfig=false --config wrangler.preview.jsonc && node scripts/verify-deploy-contract.mjs --stage artifact --config wrangler.preview.jsonc",
+    "deploy:preview": "node scripts/verify-deploy-contract.mjs --stage preflight --config wrangler.preview.jsonc && wrangler deploy --strict --x-autoconfig=false --config wrangler.preview.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "4.100.0"
+  }
+}

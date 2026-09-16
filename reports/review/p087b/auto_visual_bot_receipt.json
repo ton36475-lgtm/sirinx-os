@@ -1,0 +1,1328 @@
+{
+  "packet_id": "P087B_AUTO_VISUAL_BOT_CHECK_LAYER",
+  "run_id": "p087b_auto_visual_1783373712266",
+  "run_at": "2026-07-07T04:35:12+0700",
+  "mode": "READ_ONLY_BOT_SIMULATION",
+  "target_origin": "http://127.0.0.1:18742",
+  "routes_checked": [
+    "/",
+    "/line/",
+    "/contact/",
+    "/trust-center/",
+    "/projects/",
+    "/quote/",
+    "/roi-calculator/"
+  ],
+  "checks": [
+    {
+      "check_id": "visual_regression_global_all",
+      "check_type": "visual_regression",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "Visual diff stayed within threshold",
+      "data": {
+        "threshold": 0.001,
+        "total": 28
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "accessibility_bot_global_all",
+      "check_type": "accessibility_bot",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "axe-core found no serious violations",
+      "data": {
+        "tool": "axe-core",
+        "violation_count": 0
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "broken_link_crawler_global_all",
+      "check_type": "broken_link_crawler",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "Internal links and LINE CTA patterns are valid",
+      "data": {
+        "broken_count": 0
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "console_error_scan_global_all",
+      "check_type": "console_error_scan",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "No console/page errors found",
+      "data": {
+        "error_count": 0,
+        "bad_warning_count": 0
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "mobile_overlap_bot_global_all",
+      "check_type": "mobile_overlap_bot",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "No blocking interactive overlap found",
+      "data": {
+        "overlap_count": 0
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "lighthouse_automated_global_all",
+      "check_type": "lighthouse_automated",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "Lighthouse thresholds evaluated from local-only Lighthouse run",
+      "data": {
+        "status": "passed",
+        "tool": "lighthouse",
+        "performance": 99,
+        "accessibility": 100,
+        "seo": 100,
+        "best_practices": 96,
+        "report_path": "/Users/sirinx/sirinx-os/reports/review/p087b/lighthouse.json",
+        "thresholds": {
+          "performance": 85,
+          "accessibility": 95,
+          "seo": 95,
+          "best_practices": 90
+        }
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "seo_meta_bot_global_all",
+      "check_type": "seo_meta_bot",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "SEO metadata and JSON-LD checks passed",
+      "data": {
+        "finding_count": 0
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "form_dry_run_bot_global_all",
+      "check_type": "form_dry_run_bot",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "No form submit/live customer data path found",
+      "data": {
+        "finding_count": 0,
+        "submit_performed": false
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "check_id": "cross_browser_bot_global_all",
+      "check_type": "cross_browser_bot",
+      "status": "passed",
+      "route": null,
+      "detail": null,
+      "summary": "Installed browser smoke passed; missing Playwright engines are recorded as environment limitations",
+      "data": {
+        "result_count": 21
+      },
+      "created_at": "2026-07-07T04:36:14+0700"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "external_request_mocked_1783373713346_113bc1",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:13+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373713528_9000a3",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+      "created_at": "2026-07-07T04:35:13+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373713528_7a2b61",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:13+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373714763_e8f8ac",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:14+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373714957_5908a1",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:14+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373716022_d0f2a0",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:16+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373716082_9aece6",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:16+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373717154_789d1a",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:17+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373718226_469eed",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:18+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373719259_a7f123",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:19+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373720425_b2ed08",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:20+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373721532_6b1430",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:21+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373721613_e365da",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+      "created_at": "2026-07-07T04:35:21+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373721615_ce5c28",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:21+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373722804_28867c",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:22+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373722956_f8ae8e",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:22+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373724036_43c43d",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:24+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373724105_93ee88",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:24+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373725133_f4c3dc",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:25+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373726199_e1b497",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:26+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373727211_bbc893",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:27+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373728348_c8ba49",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:28+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373729429_12c724",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:29+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373729506_c80d34",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+      "created_at": "2026-07-07T04:35:29+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373729506_b26984",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:29+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373731020_614f0a",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:31+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373731256_1e2423",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:31+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373732403_167f96",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:32+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373732463_c5111f",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:32+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373733530_87cf9e",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:33+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373734658_76e59c",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:34+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373735802_1c09d9",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:35+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373737108_34d264",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:37+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373738340_cd5f13",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:38+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373738410_09d7a7",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://d2xsxph8kpxj0f.cloudfront.net/310519663541525436/DfaBNh7LYBahFVi2JKfAUv/hero-slide-05-carport-ev_993f529d.jpg",
+      "created_at": "2026-07-07T04:35:38+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373738410_6fecaf",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:38+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373740094_e48d17",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap",
+      "created_at": "2026-07-07T04:35:40+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373740366_9e257c",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:40+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373740441_bc0583",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:40+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373741756_52c1ec",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:41+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373741815_bd4cf4",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:41+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373743068_f6a874",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:43+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373744365_61deca",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:44+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373745646_3f0a29",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:45+0700"
+    },
+    {
+      "finding_id": "external_request_mocked_1783373747194_13fae2",
+      "severity": "warning",
+      "code": "EXTERNAL_REQUEST_MOCKED",
+      "message": "External read request was blocked/mocked during local-only review",
+      "evidence_ref": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+      "created_at": "2026-07-07T04:35:47+0700"
+    }
+  ],
+  "visual_diff_results": [
+    {
+      "route": "/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        12257
+      ],
+      "baseline_dimensions": [
+        375,
+        12257
+      ]
+    },
+    {
+      "route": "/line/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        4564
+      ],
+      "baseline_dimensions": [
+        375,
+        4564
+      ]
+    },
+    {
+      "route": "/contact/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        3637
+      ],
+      "baseline_dimensions": [
+        375,
+        3637
+      ]
+    },
+    {
+      "route": "/trust-center/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        4940
+      ],
+      "baseline_dimensions": [
+        375,
+        4940
+      ]
+    },
+    {
+      "route": "/projects/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        4915
+      ],
+      "baseline_dimensions": [
+        375,
+        4915
+      ]
+    },
+    {
+      "route": "/quote/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        7111
+      ],
+      "baseline_dimensions": [
+        375,
+        7111
+      ]
+    },
+    {
+      "route": "/roi-calculator/",
+      "viewport": "mobile-375",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        375,
+        7372
+      ],
+      "baseline_dimensions": [
+        375,
+        7372
+      ]
+    },
+    {
+      "route": "/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        12107
+      ],
+      "baseline_dimensions": [
+        414,
+        12107
+      ]
+    },
+    {
+      "route": "/line/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        4456
+      ],
+      "baseline_dimensions": [
+        414,
+        4456
+      ]
+    },
+    {
+      "route": "/contact/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        3618
+      ],
+      "baseline_dimensions": [
+        414,
+        3618
+      ]
+    },
+    {
+      "route": "/trust-center/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        4846
+      ],
+      "baseline_dimensions": [
+        414,
+        4846
+      ]
+    },
+    {
+      "route": "/projects/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        4742
+      ],
+      "baseline_dimensions": [
+        414,
+        4742
+      ]
+    },
+    {
+      "route": "/quote/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        6897
+      ],
+      "baseline_dimensions": [
+        414,
+        6897
+      ]
+    },
+    {
+      "route": "/roi-calculator/",
+      "viewport": "mobile-414",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        414,
+        7244
+      ],
+      "baseline_dimensions": [
+        414,
+        7244
+      ]
+    },
+    {
+      "route": "/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        12508
+      ],
+      "baseline_dimensions": [
+        768,
+        12508
+      ]
+    },
+    {
+      "route": "/line/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        4213
+      ],
+      "baseline_dimensions": [
+        768,
+        4213
+      ]
+    },
+    {
+      "route": "/contact/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        3274
+      ],
+      "baseline_dimensions": [
+        768,
+        3274
+      ]
+    },
+    {
+      "route": "/trust-center/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        4367
+      ],
+      "baseline_dimensions": [
+        768,
+        4367
+      ]
+    },
+    {
+      "route": "/projects/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        4429
+      ],
+      "baseline_dimensions": [
+        768,
+        4429
+      ]
+    },
+    {
+      "route": "/quote/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        6381
+      ],
+      "baseline_dimensions": [
+        768,
+        6381
+      ]
+    },
+    {
+      "route": "/roi-calculator/",
+      "viewport": "tablet-768",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        768,
+        6539
+      ],
+      "baseline_dimensions": [
+        768,
+        6539
+      ]
+    },
+    {
+      "route": "/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        7712
+      ],
+      "baseline_dimensions": [
+        1440,
+        7712
+      ]
+    },
+    {
+      "route": "/line/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        3010
+      ],
+      "baseline_dimensions": [
+        1440,
+        3010
+      ]
+    },
+    {
+      "route": "/contact/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        2251
+      ],
+      "baseline_dimensions": [
+        1440,
+        2251
+      ]
+    },
+    {
+      "route": "/trust-center/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        2848
+      ],
+      "baseline_dimensions": [
+        1440,
+        2848
+      ]
+    },
+    {
+      "route": "/projects/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        2797
+      ],
+      "baseline_dimensions": [
+        1440,
+        2797
+      ]
+    },
+    {
+      "route": "/quote/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        3900
+      ],
+      "baseline_dimensions": [
+        1440,
+        3900
+      ]
+    },
+    {
+      "route": "/roi-calculator/",
+      "viewport": "desktop-1440",
+      "baseline_seeded": false,
+      "status": "passed",
+      "diff_ratio": 0,
+      "current_dimensions": [
+        1440,
+        4304
+      ],
+      "baseline_dimensions": [
+        1440,
+        4304
+      ]
+    }
+  ],
+  "a11y_violations": [],
+  "broken_links": [],
+  "console_errors": [],
+  "overlap_findings": [],
+  "lighthouse_scores": {
+    "status": "passed",
+    "tool": "lighthouse",
+    "performance": 99,
+    "accessibility": 100,
+    "seo": 100,
+    "best_practices": 96,
+    "report_path": "/Users/sirinx/sirinx-os/reports/review/p087b/lighthouse.json",
+    "thresholds": {
+      "performance": 85,
+      "accessibility": 95,
+      "seo": 95,
+      "best_practices": 90
+    }
+  },
+  "seo_findings": [],
+  "form_dry_run_result": {
+    "status": "passed",
+    "submit_performed": false,
+    "findings": []
+  },
+  "cross_browser_results": [
+    {
+      "engine": "chromium",
+      "route": "/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "chromium",
+      "route": "/line/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "chromium",
+      "route": "/contact/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "chromium",
+      "route": "/trust-center/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "chromium",
+      "route": "/projects/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "chromium",
+      "route": "/quote/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "chromium",
+      "route": "/roi-calculator/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/line/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/contact/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/trust-center/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/projects/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/quote/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "webkit",
+      "route": "/roi-calculator/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/line/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/contact/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/trust-center/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/projects/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/quote/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    },
+    {
+      "engine": "firefox",
+      "route": "/roi-calculator/",
+      "status": "passed",
+      "http_status": 200,
+      "main_exists": true
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_home-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/home-mobile-375.png",
+      "sha256": "a8d6c67e403652ed86d9c0c8b9f5c9c9284238bac83ae6aa1859170c08ee761a",
+      "created_at": "2026-07-07T04:35:14+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_line-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/line-mobile-375.png",
+      "sha256": "5f441d7cc5b83f96ccd3550db94d2b819c48933acb599f711f6c8011b9b0b04a",
+      "created_at": "2026-07-07T04:35:15+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_contact-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/contact-mobile-375.png",
+      "sha256": "1ab211ac83c461a6bb4e7cb8ca3f4429f047f482fa337910884052e7f6caf0f1",
+      "created_at": "2026-07-07T04:35:16+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_trust-center-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/trust-center-mobile-375.png",
+      "sha256": "689490dab1905863f3eb796af1245b25b358f41b4617fcaac83b286b1125e61c",
+      "created_at": "2026-07-07T04:35:17+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_projects-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/projects-mobile-375.png",
+      "sha256": "6eeed0ccd5fed1f905df79ed0b10d509ed3f0dc32951273b4bec75c07e13f56e",
+      "created_at": "2026-07-07T04:35:18+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_quote-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/quote-mobile-375.png",
+      "sha256": "4ab5b2e1595463183095f1a96e0d612cbfff65d7ffb096d13f4fd2f888d3b0e3",
+      "created_at": "2026-07-07T04:35:19+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_roi-calculator-mobile-375.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/roi-calculator-mobile-375.png",
+      "sha256": "81b673586afc305cd1b2517cc41f61a6d2f81f7a7d6ecee6eaf75784a7e6a350",
+      "created_at": "2026-07-07T04:35:21+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_home-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/home-mobile-414.png",
+      "sha256": "1b066ba61355280b8bc87e63a7dfda75165863d2cc8ce4364be8516b85ed7780",
+      "created_at": "2026-07-07T04:35:22+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_line-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/line-mobile-414.png",
+      "sha256": "671b9df056292fa9e4732a103d1eed5bb0bd2fadb6dccbc5b7a90bf7774dbcf4",
+      "created_at": "2026-07-07T04:35:23+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_contact-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/contact-mobile-414.png",
+      "sha256": "151df2f3c616ce9d99126da44ecdeee7563f585dc332d9dfc388e25f358effa6",
+      "created_at": "2026-07-07T04:35:24+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_trust-center-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/trust-center-mobile-414.png",
+      "sha256": "aebd91ba3af67d2a35c9836a199bb4f5943bf3adc15b109b7dba6df6098aeb50",
+      "created_at": "2026-07-07T04:35:25+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_projects-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/projects-mobile-414.png",
+      "sha256": "5895e67f9fe6e0ce10f8f5daffaceb0df56448aa3cf347ce5cf7727851a479ea",
+      "created_at": "2026-07-07T04:35:26+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_quote-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/quote-mobile-414.png",
+      "sha256": "4154e67581380e84b921630a1f2ce283f59a12e49ed9a4d05e23dd1037e02a7c",
+      "created_at": "2026-07-07T04:35:27+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_roi-calculator-mobile-414.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/roi-calculator-mobile-414.png",
+      "sha256": "0d3f8a4c6955b75a445381973f7c2aa4b679f9140d9bebf13d4b3936d52691c6",
+      "created_at": "2026-07-07T04:35:29+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_home-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/home-tablet-768.png",
+      "sha256": "57e6ee129e0626a356e90fe0487697a990285241955851c3f83093fb8a9631b0",
+      "created_at": "2026-07-07T04:35:30+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_line-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/line-tablet-768.png",
+      "sha256": "21ae5a12941ee8484a584bf269d4d47ed40866315c5d643621db17f2239ea7e1",
+      "created_at": "2026-07-07T04:35:32+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_contact-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/contact-tablet-768.png",
+      "sha256": "c8b55518dab725d39d1616c78106fbd9d287d369bea2a72754b62270040978bd",
+      "created_at": "2026-07-07T04:35:33+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_trust-center-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/trust-center-tablet-768.png",
+      "sha256": "c36355f836bf15a3154cfed7bc38ab3711bcc3088aa068128857454ab5e33d05",
+      "created_at": "2026-07-07T04:35:34+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_projects-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/projects-tablet-768.png",
+      "sha256": "339c9f10e7bfc059221175545e2d9a1f78f3b5b761c61444d31377770457ef8f",
+      "created_at": "2026-07-07T04:35:35+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_quote-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/quote-tablet-768.png",
+      "sha256": "e92d439497a913e54d57c8838964bea55f007bfcdcea3416353eb9bb6a17fff8",
+      "created_at": "2026-07-07T04:35:36+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_roi-calculator-tablet-768.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/roi-calculator-tablet-768.png",
+      "sha256": "382885490f95e28321fcd539fefea23e6ca236012061839d1ba67a0944974c68",
+      "created_at": "2026-07-07T04:35:37+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_home-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/home-desktop-1440.png",
+      "sha256": "c4e0d08cfdc5e65c0a18617480e24881cbfb6db328d5af1f82e48e6576831a13",
+      "created_at": "2026-07-07T04:35:39+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_line-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/line-desktop-1440.png",
+      "sha256": "cdff452658ec26711aba28c2fb8edc10dcb20c805a099b5b5159beeb6a142607",
+      "created_at": "2026-07-07T04:35:41+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_contact-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/contact-desktop-1440.png",
+      "sha256": "f94954f5fa7c0745c1efe72f1441ca07eaf25d02ef76042db40b4a2ba6072b8d",
+      "created_at": "2026-07-07T04:35:42+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_trust-center-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/trust-center-desktop-1440.png",
+      "sha256": "1a37ca1334fa1439734eefa1307b1b642d65fafde260a7ae43a57dbf1867666d",
+      "created_at": "2026-07-07T04:35:43+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_projects-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/projects-desktop-1440.png",
+      "sha256": "03d143b46394ecb2edc1da7dfb282a3ad2c32ba30afd5abefcf5fd390ead7ea2",
+      "created_at": "2026-07-07T04:35:45+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_quote-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/quote-desktop-1440.png",
+      "sha256": "0b15bf200b35356fc1bc12d44fdc3223fd4226b605beb35bdc45191b11d7d460",
+      "created_at": "2026-07-07T04:35:46+0700"
+    },
+    {
+      "artifact_id": "screenshot_reports_review_p087b_screenshots_roi-calculator-desktop-1440.png",
+      "artifact_type": "screenshot",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/screenshots/roi-calculator-desktop-1440.png",
+      "sha256": "ff35bf348688c1bdd2ac8b8bfea5601fac98ccb554a9351a0f123075d885c357",
+      "created_at": "2026-07-07T04:35:48+0700"
+    },
+    {
+      "artifact_id": "json_reports_review_p087b_console_errors.json",
+      "artifact_type": "json",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/console_errors.json",
+      "sha256": "df58e46d11a1779bef6954e6b6e57b956b2b4f6ab0615b509ee3ab98b041fcee",
+      "created_at": "2026-07-07T04:36:14+0700"
+    },
+    {
+      "artifact_id": "json_reports_review_p087b_network_events.json",
+      "artifact_type": "json",
+      "path_or_r2_key": "/Users/sirinx/sirinx-os/reports/review/p087b/network_events.json",
+      "sha256": "202edc8ded24f1872d6b21a8a87aa133ba6a7e47d2a8bd38e36f73a77098be1f",
+      "created_at": "2026-07-07T04:36:14+0700"
+    }
+  ],
+  "verdict": "auto_review_pass_bot_verified",
+  "blocked_actions_confirmed": [
+    "deploy",
+    "push",
+    "cloud_mutation",
+    "line_webhook_live_call",
+    "crm_customer_storage_write",
+    "live_send",
+    "provider_api_call",
+    "secret_read"
+  ],
+  "no_deploy": true,
+  "no_push": true,
+  "no_cloud_mutation": true,
+  "no_live_send": true,
+  "no_secret_read": true
+}

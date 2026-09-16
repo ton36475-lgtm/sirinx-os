@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sirinx.co/schemas/pocket-hatchery/creature-catalog.json",
+  "title": "Pocket Hatchery Creature Catalog",
+  "description": "Schema for deterministic creature definitions. No paid randomness or gambling mechanics.",
+  "type": "object",
+  "required": ["version", "creatures"],
+  "properties": {
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "creatures": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/creature" }
+    }
+  },
+  "definitions": {
+    "creature": {
+      "type": "object",
+      "required": ["id", "name", "family", "rarity", "stage", "deterministic"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "family": { "type": "string", "enum": ["aqua", "terra", "aero", "pyro", "chrono"] },
+        "rarity": { "type": "string", "enum": ["common", "uncommon", "rare", "epic", "legendary"] },
+        "stage": { "type": "string", "enum": ["egg", "hatchling", "juvenile", "adult", "elder"] },
+        "deterministic": { "type": "boolean", "const": true },
+        "evolves_to": { "type": ["string", "null"] },
+        "evolve_conditions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/evolve_condition" }
+        },
+        "metadata_uri": { "type": "string", "format": "uri" }
+      }
+    },
+    "evolve_condition": {
+      "type": "object",
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "type": "string", "enum": ["bond_points", "time_held_days", "completion_tasks", "token_burn"] },
+        "value": { "type": "number", "minimum": 0 },
+        "token_id": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

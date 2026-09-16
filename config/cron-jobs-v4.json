@@ -1,0 +1,55 @@
+{
+  "architecture": "V4_LOCKED",
+  "node_identity": "local_mac_m2_core",
+  "cron_jobs": [
+    {
+      "name": "loop-engineering-v4",
+      "id": "89d1783336c6",
+      "schedule": "every 5m",
+      "script": "node scripts/auto-loop-engineering.mjs",
+      "purpose": "GhostClaw loop cycle — execute A/B tier tasks, generate receipts"
+    },
+    {
+      "name": "disk-health-v4",
+      "id": "fbbd2fb8f9a3",
+      "schedule": "every 10m",
+      "script": "node scripts/cron-disk-check.mjs + python3.12 scripts/self-evolution-core.py --disk",
+      "purpose": "Disk monitor + auto-cleanup if <15GB"
+    },
+    {
+      "name": "health-check-v4",
+      "id": "609e3ba4722c",
+      "schedule": "every 15m",
+      "script": "node scripts/cron-health-check.mjs + curl OmniRoute",
+      "purpose": "Services health probe"
+    },
+    {
+      "name": "agent-dispatch-loop",
+      "id": "38f6ab2406c1",
+      "schedule": "every 7m",
+      "script": "python3.12 scripts/ghostclaw_a2a_local_dispatch_execute.py",
+      "purpose": "Distribute A2A inbox packets to 47 Ronin agents"
+    },
+    {
+      "name": "agent-collect-brainstorm",
+      "id": "6fc33b8f2848",
+      "schedule": "every 20m",
+      "script": "python3.12 scripts/self-evolution-core.py --test + --dream",
+      "purpose": "Collect errors, create mutations, brainstorm fixes via Dream Mode"
+    },
+    {
+      "name": "self-evolution-v4",
+      "id": "32f3bf2b6c0c",
+      "schedule": "every 30m",
+      "script": "python3.12 scripts/self-evolution-core.py",
+      "purpose": "Full evolution cycle: disk + wire + test + checkpoint"
+    },
+    {
+      "name": "daily-report-v4",
+      "id": "8ce55585c5d6",
+      "schedule": "0 8 * * *",
+      "script": "node scripts/cron-daily-report.mjs + deploy-pipeline.py status",
+      "purpose": "Comprehensive daily operator report"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "mode": "execute",
+  "manifest": "manifests/legal_games_manifest.csv",
+  "out": "downloads/staging",
+  "results": [
+    {
+      "row_number": 2,
+      "title": "Beneath a Steel Sky",
+      "download_url": "https://downloads.scummvm.org/games/beneath-a-steel-sky.zip",
+      "filename": "beneath-a-steel-sky.zip",
+      "status": "error",
+      "reason": "HTTP Error 404: Not Found",
+      "output_path": "downloads/staging/beneath-a-steel-sky.zip",
+      "sha256": ""
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+# FREE MODEL PACK — OpenRouter Free Tier + Local Ollama
+# Version: 1.0
+# Updated: 2026-07-08
+# Compatible: Hermes solis profile, GHOSTCLAW model router
+
+version: "SOVEREIGN_FREE_MODEL_PACK_V1"
+description: "Cost-optimized model pack using OpenRouter free models + local Ollama fallback"
+
+defaults:
+  mode: "local_safe_receipt_gated"
+  source_of_truth:
+    - "AGENTS.md"
+    - "CLAUDE.md"
+    - "docs/architecture/CONTEXT_MAP.md"
+    - "docs/openspec/"
+    - "docs/receipts/"
+  blocked_actions:
+    - "provider_limit_bypass"
+    - "account_rotation_for_evasion"
+    - "credential_sharing"
+    - "secret_read_or_print"
+    - "production_deploy"
+    - "git_push_without_gate"
+    - "customer_send"
+    - "dns_mutation"
+    - "line_webhook_activation"
+
+providers:
+  openrouter_free:
+    type: "openai_compatible"
+    base_url: "https://openrouter.ai/api/v1"
+    api_key_env: "OPENROUTER_API_KEY"
+    allowed_by_default: true
+    paid: false
+    notes: "Free tier models - rate limited, availability may change"
+    headers:
+      HTTP-Referer: "https://sirinx.co"
+      X-Title: "SIRINX OS Sovereign Autoloop"
+  
+  local_ollama:
+    type: "openai_compatible"
+    base_url_env: "OLLAMA_BASE_URL"
+    default_base_url: "http://127.0.0.1:11434/v1"
+    api_key_env: "OLLAMA_API_KEY"
+    allowed_by_default: true
+    paid: false
+    models:
+      - "llama3.2:3b"
+      - "qwen3-coder"
+      - "gemma2:2b"
+      - "phi3:mini"
+  
+  local_llamacpp:
+    type: "openai_compatible"
+    base_url_env: "LLAMA_CPP_BASE_URL"
+    default_base_url: "http://127.0.0.1:8080/v1"
+    api_key_env: "LLAMA_CPP_API_KEY"
+    allowed_by_default: true
+    paid: false
+
+models:
+  # ===== TIER 0: Trivial/Classification =====
+  nemotron_ultra_free:
+    provider: "openrouter_free"
+    model: "nvidia/nemotron-3-ultra-550b-a55b:free"
+    role: "general_reasoning_primary"
+    task_tiers: ["T0", "T1"]
+    max_tokens: 4096
+    temperature: 0.3
+    context_length: 1048576
+    capabilities: ["reasoning", "analysis", "planning", "summarization"]
+    cost_per_1k_tokens: 0
+    fallback: "llama32_3b_local"
+  
+  llama32_3b_local:
+    provider: "local_ollama"
+    model: "llama3.2:3b"
+    role: "compression_classification_fallback"
+    task_tiers: ["T0"]
+    max_tokens: 2048
+    temperature: 0.2
+    context_length: 131072
+    capabilities: ["compression", "classification", "light_patch"]
+    cost_per_1k_tokens: 0
+  
+  # ===== TIER 1: Simple Coding/Tool Use =====
+  qwen3_coder_free:
+    provider: "openrouter_free"
+    model: "qwen/qwen3-coder:free"
+    role: "repo_coding_tool_use_long_context"
+    task_tiers: ["T1", "T2_draft"]
+    max_tokens: 8192
+    temperature: 0.2
+    context_length: 32768
+    capabilities: ["coding", "tool_use", "multi_file", "refactoring"]
+    cost_per_1k_tokens: 0
+    fallback: "qwen3_coder_local"
+  
+  qwen3_coder_local:
+    provider: "local_ollama"
+    model: "qwen3-coder"
+    role: "local_coding_fallback"
+    task_tiers: ["T1"]
+    max_tokens: 4096
+    temperature: 0.2
+    context_length: 8192
+    capabilities: ["coding", "tool_use"]
+    cost_per_1k_tokens: 0
+  
+  laguna_free:
+    provider: "openrouter_free"
+    model: "poolside/laguna-m.1:free"
+    role: "agentic_coding_worker"
+    task_tiers: ["T1", "T2_draft"]
+    max_tokens: 8192
+    temperature: 0.2
+    context_length: 16384
+    capabilities: ["agentic_coding", "tool_use", "multi_turn"]
+    cost_per_1k_tokens: 0
+    fallback: "qwen3_coder_free"
+  
+  # ===== TIER 2: Complex/UI/Long Horizon =====
+  kimi_code_worker:
+    provider: "openrouter_free"
+    model: "moonshotai/kimi-k2.7-code"
+    role: "long_horizon_coding_ui_generation_multiturn"
+    task_tiers: ["T2", "T3_draft"]
+    max_tokens: 12000
+    temperature: 0.15
+    context_length: 100000
+    capabilities: ["ui_generation", "long_context", "multi_turn", "architecture"]
+    cost_per_1k_tokens: 0
+    gate: "budget_gate"
+    fallback: "qwen3_coder_free"
+  
+  deepseek_architect:
+    provider: "openrouter_free"
+    model: "deepseek/deepseek-v3.2-exp"
+    role: "architecture_debug_reasoning"
+    task_tiers: ["T2", "T3"]
+    max_tokens: 12000
+    temperature: 0.1
+    context_length: 65536
+    capabilities: ["architecture", "debugging", "reasoning", "algorithm"]
+    cost_per_1k_tokens: 0
+    gate: "budget_gate"
+    fallback: "kimi_code_worker"
+  
+  # ===== TIER 3: Architecture/Strategy (Paid Gate) =====
+  fable5_orchestrator:
+    provider: "openrouter_free"
+    model: "anthropic/claude-fable-5"
+    role: "founder_level_architecture_strategy_synthesis"
+    task_tiers: ["T3", "T4_review"]
+    max_tokens: 12000
+    temperature: 0.15
+    context_length: 200000
+    capabilities: ["strategy", "synthesis", "architecture", "decision_making"]
+    cost_per_1k_tokens: 0
+    permissions: "preview_only_until_provider_gate"
+    gate: "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL"
+    fallback: "deepseek_architect"
+  
+  # ===== LOCAL SPECIALIZED =====
+  gemma2_classifier:
+    provider: "local_ollama"
+    model: "gemma2:2b"
+    role: "intent_classification_lead_scoring"
+    task_tiers: ["T0"]
+    max_tokens: 1024
+    temperature: 0.1
+    context_length: 8192
+    capabilities: ["classification", "scoring", "fast_inference"]
+    cost_per_1k_tokens: 0
+  
+  phi3_mini_local:
+    provider: "local_ollama"
+    model: "phi3:mini"
+    role: "offline_assistant_memory_cleanup"
+    task_tiers: ["T0"]
+    max_tokens: 2048
+    temperature: 0.2
+    context_length: 4096
+    capabilities: ["offline_assist", "memory", "cleanup"]
+    cost_per_1k_tokens: 0
+
+routing:
+  T0:
+    primary: "nemotron_ultra_free"
+    fallback: "llama32_3b_local"
+    description: "Trivial tasks - classification, compression, simple queries"
+  
+  T1:
+    primary: "qwen3_coder_free"
+    fallback: "laguna_free"
+    review: "gemma2_classifier"
+    description: "Simple coding, tool use, single file edits"
+  
+  T2:
+    primary: "kimi_code_worker"
+    fallback: "qwen3_coder_free"
+    peer_review: "codex_peer"
+    final_synthesis: "hermes_or_fable"
+    description: "Complex coding, UI generation, multi-file refactoring"
+  
+  T3:
+    primary: "deepseek_architect"
+    peer_review: "codex_peer"
+    optional_mapper: "glm_repo_mapper"
+    final_synthesis: "fable5_orchestrator"
+    description: "Architecture, debugging, algorithmic reasoning"
+  
+  T4:
+    primary: "human_gate_only"
+    description: "Critical decisions - deploy, push, cloud mutation, paid API"
+
+budget_gates:
+  daily_token_limit: 500000
+  daily_cost_limit_usd: 0.00  # Free tier only
+  max_tokens_per_task: 12000
+  max_cost_per_task_usd: 0.00
+  alert_threshold_pct: 80
+  hard_stop_threshold_pct: 95
+
+model_selection_rules:
+  - pattern: "architecture|brand|strategy|playbook|design decision"
+    model: "fable5_orchestrator"
+    reason: "High-level reasoning/strategy"
+    gate: "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL"
+  
+  - pattern: "refactor|multi.file|large repo|migrate|rewrite whole"
+    model: "kimi_code_worker"
+    reason: "Large context refactoring"
+    gate: "budget_gate"
+  
+  - pattern: "mcp|agent|tool.call|orchestrat|hermes|a2a"
+    model: "kimi_code_worker"
+    reason: "Agentic/tool-use work"
+    gate: "budget_gate"
+  
+  - pattern: "algorithm|math|leetcode|optimi[sz]e|competitive|logic puzzle"
+    model: "deepseek_architect"
+    reason: "Logic/routine work"
+    gate: "budget_gate"
+  
+  - pattern: "classify|summarize|light.patch|compress"
+    model: "llama32_3b_local"
+    reason: "Fast local inference"
+    gate: "none"
+  
+  - pattern: "code|implement|fix|refactor|test"
+    model: "qwen3_coder_free"
+    reason: "General coding"
+    gate: "budget_gate"
+
+fallback_chain:
+  - "nemotron_ultra_free"
+  - "qwen3_coder_free"
+  - "laguna_free"
+  - "kimi_code_worker"
+  - "deepseek_architect"
+  - "llama32_3b_local"
+  - "qwen3_coder_local"
+  - "gemma2_classifier"
+  - "phi3_mini_local"
+
+health_checks:
+  interval_seconds: 300
+  timeout_seconds: 10
+  expected_models:
+    - "nvidia/nemotron-3-ultra-550b-a55b:free"
+    - "qwen/qwen3-coder:free"
+    - "moonshotai/kimi-k2.7-code"
+    - "deepseek/deepseek-v3.2-exp"
+    - "poolside/laguna-m.1:free"
+  local_models:
+    - "llama3.2:3b"
+    - "qwen3-coder"
+    - "gemma2:2b"
+    - "phi3:mini"
+
+cost_tracking:
+  enabled: true
+  log_file: "logs/model_costs.jsonl"
+  project_budget_table: "project_budget"
+  agent_cost_log_table: "agent_cost_log"

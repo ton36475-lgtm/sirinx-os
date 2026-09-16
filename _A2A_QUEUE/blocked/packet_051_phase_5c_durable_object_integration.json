@@ -1,0 +1,60 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.4926379,
+  "message_id": "msg-packet_051_phase_5c_durable_object_integration",
+  "mission_id": "M-packet_051_phase_5c_durable_object_integration",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'packet_id': 'packet_051_phase_5c_durable_object_integration', 'correlation_id': 'sirinx-phase5c-du",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "sirinx-phase5c-durable-object-20260714-001"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_051_phase_5c_durable_object_integration",
+    "mission_id": "M-packet_051_phase_5c_durable_object_integration",
+    "timestamp": "2026-07-14T04:00:00+07:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'packet_id': 'packet_051_phase_5c_durable_object_integration', 'correlation_id': 'sirinx-phase5c-du",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "sirinx-phase5c-durable-object-20260714-001"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.650857+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  },
+  "dispatch_error": "error: unexpected argument '--no-stream' found\n\n  tip: a similar argument exists: '--no-alt-screen'\n\nUsage: codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]\n\nFor more information, try "
+}

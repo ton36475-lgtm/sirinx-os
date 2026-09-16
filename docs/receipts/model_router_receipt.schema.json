@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ghostclaw.model_router_receipt.v2_1",
+  "title": "GhostClaw Model Router Receipt",
+  "type": "object",
+  "required": [
+    "mission_id",
+    "job_id",
+    "model_lane",
+    "task_tier",
+    "status",
+    "timestamp"
+  ],
+  "properties": {
+    "mission_id": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "project": {
+      "type": "string"
+    },
+    "task_tier": {
+      "enum": [
+        "T0",
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ]
+    },
+    "model_lane": {
+      "type": "string"
+    },
+    "model_ref": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "prompt_hash": {
+      "type": "string"
+    },
+    "files_inspected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "files_changed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "policy_result": {
+      "enum": [
+        "allowed",
+        "blocked",
+        "requires_human_gate"
+      ]
+    },
+    "tests_run": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "enum": [
+        "drafted",
+        "validated",
+        "blocked",
+        "failed",
+        "handoff"
+      ]
+    },
+    "risk": {
+      "type": "string"
+    },
+    "rollback_plan": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "safe_pipeline_status": [
+    "IDEA",
+    "RESEARCHED",
+    "IP_PRECHECK_GREEN",
+    "IP_PRECHECK_YELLOW_REVISE",
+    "IP_PRECHECK_RED_BLOCKED",
+    "DESIGN_BRIEF_READY",
+    "DESIGN_DRAFT_READY",
+    "QC_READY",
+    "QC_FAILED",
+    "LISTING_DRAFT_READY",
+    "PUBLISH_READY_OWNER_ACTION",
+    "LIVE_TRACKING_MANUAL",
+    "ITERATE",
+    "RETIRE"
+  ],
+  "risk_levels": [
+    "GREEN",
+    "YELLOW",
+    "RED"
+  ],
+  "final_decisions": [
+    "ALLOW_DRAFT",
+    "REVISE",
+    "BLOCK",
+    "OWNER_REVIEW_REQUIRED"
+  ],
+  "scoring_rules": {
+    "niche_total_score_formula": "total_score = demand_score + buyer_intent_score + competition_gap_score + ip_safety_score + seasonality_score + reusable_asset_score",
+    "hard_rules": [
+      "if ip_safety_score < 15 then status = IP_PRECHECK_RED_BLOCKED",
+      "if risk_level = RED then final_decision = BLOCK",
+      "if keyword_spam_risk = HIGH then final_decision = REVISE",
+      "if celebrity_likeness_risk != NONE then final_decision = BLOCK",
+      "if brand_confusion_risk != NONE then final_decision = BLOCK"
+    ]
+  }
+}

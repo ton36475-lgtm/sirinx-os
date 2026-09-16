@@ -1,0 +1,51 @@
+{
+  "schema": "ghostclaw.receipt.v2",
+  "receipt_id": "sub-agent-team-artifact-validation-20260630T010355Z",
+  "timestamp": "2026-06-30T01:03:55Z",
+  "local_timestamp": "2026-06-30T08:03:55+0700",
+  "task_id": "ghostclaw_sub_agent_team_phase_8_artifact",
+  "correlation_id": "sirinx-a2a2a-fullbuild",
+  "agent": "codex",
+  "mode": "local_only_artifact_write",
+  "files_created": [
+    "docs/knowledge/GHOSTCLAWS_SUB_AGENT_TEAM.md"
+  ],
+  "files_modified": [
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+  ],
+  "validation": {
+    "node_check": "passed",
+    "final_receipt_validator": {
+      "status": "passed",
+      "ok": true,
+      "required_artifact_count": 52,
+      "errors": []
+    },
+    "canonical_term_scan": "passed_no_legacy_typo_matches",
+    "diff_check": "passed"
+  },
+  "blocked_actions": [
+    "push",
+    "deploy",
+    "production_action",
+    "customer_send",
+    "telegram_live_send",
+    "secret_access",
+    "provider_model_call",
+    "package_install",
+    "external_repo_execution",
+    "model_download",
+    "gpu_live_inference"
+  ],
+  "safety_flags": {
+    "no_push": true,
+    "no_deploy": true,
+    "no_secret_access": true,
+    "no_model_download": true,
+    "no_gpu_live_inference": true,
+    "no_telegram_live_send": true,
+    "no_customer_send": true,
+    "no_external_repo_install": true,
+    "no_provider_call": true
+  }
+}

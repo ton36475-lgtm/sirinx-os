@@ -1,31 +1,52 @@
-# SKILLS_REGISTRY
+# Skills Registry — SIRINX OS Unified
 
-Status: verified local skill registry seed
-Date: 2026-05-20
+## Overview
 
-## Rules
+This registry is **path-backed** — every skill entry maps to a real directory on disk with a `SKILL.md`. The registry **does not authorize external writes** or any Tier C action.
 
-- Registry entries must be factual and path-backed.
-- Do not add a skill as active unless its local path exists.
-- A skill does not authorize external writes.
-- Skill instructions are subordinate to `AGENTS.md`.
+- JSON registry: `config/unified-skills-registry.json`
+- Generated: 2026-07-17
 
-## Active Local Skills Used For Current Work
+## Unified Skill Counts
 
-| Skill | Local Path | Use | Safety Boundary |
-| --- | --- | --- | --- |
-| `hermes-project-planning` | `/Users/sirinx/.agents/skills/hermes-project-planning/SKILL.md` | Plan Hermes/dashboard/agent work in phases. | Planning only; no deploy or external write. |
-| `agent-team-orchestration` | `/Users/sirinx/.agents/skills/agent-team-orchestration/SKILL.md` | Design agent team responsibilities when explicitly requested. | Do not spawn agents unless user explicitly requests subagents. |
-| `start-run-debug` | `/Users/sirinx/.agents/skills/start-run-debug/SKILL.md` | Start, run, and debug local services. | Local only unless deploy is approved. |
-| `website-browser-automation` | `/Users/sirinx/.agents/skills/website-browser-automation/SKILL.md` | Browser QA and screenshots. | No account changes, sends, purchases, or deletes. |
-| `doc-coauthoring` | `/Users/sirinx/.codex/skills/anthropics-doc-coauthoring/SKILL.md` | Structured docs, plans, specs, decision records. | No raw chat logs or secrets in docs. |
-| `github:github` | `/Users/sirinx/.codex/plugins/cache/openai-curated/github/dc902811/skills/github/SKILL.md` | GitHub repository orientation and triage. | Push/PR requires exact approval. |
+| Agent | Skills Installed |
+|-------|-----------------|
+| Hermes (solis) | 156 (143 native + 13 synced from Codex) |
+| Codex | 59 |
+| Claude Code | 15 |
+| OpenCode | 7 |
+| GhostClaw Core | 7 (shared across ALL agents) |
+| **Total Unique** | **188** |
 
-## Candidate Skills For Later
+## GhostClaw Core (7 — installed to Hermes, Codex, Claude, OpenCode, Repo, GHOSTCLAW)
 
-| Skill | Use | Gate |
-| --- | --- | --- |
-| `supabase:supabase-postgres-best-practices` | Schema and query review. | No migration/write until approved. |
-| `cloudflare` / `wrangler` | Workers/Pages review and deployment. | Cloudflare write approval required. |
-| `web-perf` | PageSpeed/Core Web Vitals review. | Safe read-only unless deploying fixes. |
-| `openai-developers:agents-sdk` | Agent app design. | API key setup and paid calls gated. |
+| Skill | Purpose | Installed To |
+|-------|---------|--------------|
+| ghostclaw-master-orchestrator | Master control of all subsystems | All 5 systems |
+| autonomous-loop-engineering | Auto Tier A/B execution, cron 5m | All 5 systems |
+| ghostclaw-engineering-loop | Full pipeline P000A→P010 | All 5 systems |
+| ghostclaw-governance-contracts | Tier/Capability/Lease/Approval/Receipt | All 5 systems |
+| ghostclaw-agent-delegation | Parallel agent dispatch pattern | All 5 systems |
+| ghostclaw-integration-onboarding | External tool integration checklist | All 5 systems |
+| thaimart-k15-workflow | K01-K15 + ThaiMart spec + QA gates | All 5 systems |
+
+## Synced Skills (13 — Codex → Hermes)
+
+frontend-design, brand-guidelines, canvas-design, docx, pdf, pptx, xlsx, web-artifacts-builder, webapp-testing, skill-creator, cloudflare-web-perf, browserbase-cli, coderabbitai-autofix
+
+## New Skills (1 — created this session)
+
+| Skill | Purpose |
+|-------|---------|
+| telegram-approval-workflow | Unified approval routing for Telegram command center |
+
+## Agent Roles (AGENT_ROSTER.md)
+- **Hermes**: Commander — orchestrate, dispatch, approve Tier A/B
+- **Codex**: Builder — write code, fix bugs, run tests
+- **Claude Code**: Architect — design, review architecture
+- **OpenCode**: Reviewer — security audit, code review
+- **Auto-Loop**: Autonomous executor — Tier A/B every 5m
+
+## Safety Notice
+
+This registry is path-backed and read-only. It does not authorize external writes, does not grant Tier C permissions, and does not bypass the human gate.

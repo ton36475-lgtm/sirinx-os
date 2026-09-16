@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/spec_workflow_entry.schema.json",
+  "title": "GhostClaw Spec Workflow Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workflow_id", "source_tool", "stages", "policy_precedence"],
+  "properties": {
+    "workflow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_tool": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "enum": ["explore", "propose", "spec", "tasks", "apply", "validate", "receipt"]
+      },
+      "minItems": 1
+    },
+    "policy_precedence": {
+      "const": "ghostclaw_policy_over_generated_specs"
+    }
+  }
+}

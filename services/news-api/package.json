@@ -1,0 +1,10 @@
+{
+  "name": "@services/news-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:phitsanulok": "node src/check-phitsanulok-news-api.mjs",
+    "test:phitsanulok": "vitest run src/phitsanulok-news-pipeline.test.mjs"
+  }
+}

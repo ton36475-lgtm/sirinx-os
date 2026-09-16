@@ -1,0 +1,76 @@
+{
+  "sample_set": "merch-qc-local-samples-v1",
+  "samples": [
+    {
+      "design_id": "DES-PASS-001",
+      "expected_status": "pass",
+      "asset": {
+        "width": 4500,
+        "height": 5400,
+        "color_mode": "RGB"
+      },
+      "metadata": {
+        "title": "Garden Club Captain Weekend Shirt",
+        "brand": "Original Garden Studio",
+        "phrase": "Garden Club Captain",
+        "bullet_points": [
+          "Original garden hobby design for weekend growers.",
+          "Clean readable layout for casual gift ideas."
+        ]
+      }
+    },
+    {
+      "design_id": "DES-FAIL-LOWRES-001",
+      "expected_status": "fail",
+      "asset": {
+        "width": 3000,
+        "height": 3000,
+        "color_mode": "RGB"
+      },
+      "metadata": {
+        "title": "Low Resolution Sample",
+        "brand": "Original Test Studio",
+        "phrase": "Weekend Planter",
+        "bullet_points": [
+          "Original phrase.",
+          "Needs correct export dimensions."
+        ]
+      }
+    },
+    {
+      "design_id": "DES-FAIL-PHRASE-001",
+      "expected_status": "fail",
+      "asset": {
+        "width": 4500,
+        "height": 5400,
+        "color_mode": "RGB"
+      },
+      "metadata": {
+        "title": "Star Wars Garden Club",
+        "brand": "Original Test Studio",
+        "phrase": "Star Wars Garden Club",
+        "bullet_points": [
+          "Intentional blocked phrase sample.",
+          "Must fail local phrase screen."
+        ]
+      }
+    },
+    {
+      "design_id": "DES-FAIL-METADATA-001",
+      "expected_status": "fail",
+      "asset": {
+        "width": 4500,
+        "height": 5400,
+        "color_mode": "RGB"
+      },
+      "metadata": {
+        "title": "",
+        "brand": "",
+        "phrase": "Original Hiking Uncle",
+        "bullet_points": [
+          "Only one bullet."
+        ]
+      }
+    }
+  ]
+}

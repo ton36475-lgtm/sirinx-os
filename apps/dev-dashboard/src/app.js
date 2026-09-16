@@ -50,6 +50,13 @@ const centerBrainStopPoint = document.querySelector("#centerBrainStopPoint");
 const centerBrainNodeList = document.querySelector("#centerBrainNodeList");
 const centerBrainStackList = document.querySelector("#centerBrainStackList");
 const centerBrainBlockedList = document.querySelector("#centerBrainBlockedList");
+const controlPlaneStatus = document.querySelector("#controlPlaneStatus");
+const controlPlaneSummary = document.querySelector("#controlPlaneSummary");
+const controlPlaneStopPoint = document.querySelector("#controlPlaneStopPoint");
+const controlPlaneProjectList = document.querySelector("#controlPlaneProjectList");
+const controlPlanePacketList = document.querySelector("#controlPlanePacketList");
+const controlPlaneGuardrailList = document.querySelector("#controlPlaneGuardrailList");
+const controlPlaneReceiptList = document.querySelector("#controlPlaneReceiptList");
 const teamRuntimeStatus = document.querySelector("#teamRuntimeStatus");
 const teamRuntimeSummary = document.querySelector("#teamRuntimeSummary");
 const teamRuntimeStopPoint = document.querySelector("#teamRuntimeStopPoint");
@@ -621,6 +628,60 @@ const fallbackCenterBrainHub = {
   },
   nextRecommendedAction: "Start the local control API, then refresh this panel.",
   stopPoint: "CENTERBRAIN HUB WAITING FOR LOCAL API"
+};
+
+const fallbackGhostClawControlPlaneStatus = {
+  contract_id: "ghostclaw-control-plane-status-v1",
+  status: "api-offline",
+  mode: "local-fallback",
+  dry_run: true,
+  live_execution: false,
+  projects: [
+    {
+      project_id: "api-offline",
+      name: "Control-plane status unavailable",
+      slug: "api-offline",
+      focus_state: "blocked",
+      status: "start_local_api",
+      public_domain: null,
+      private_domain: null
+    }
+  ],
+  missions: [],
+  packets: [
+    {
+      packet_id: "P106_WAITING_FOR_LOCAL_API",
+      lane: "dashboard_status",
+      status: "api-offline",
+      dry_run: true,
+      live_execution: false,
+      next_action: "Start the local control API, then refresh the dashboard.",
+      artifact_path: null
+    }
+  ],
+  approval_gates: [],
+  receipts: [],
+  dashboard: {
+    active_project_count: 0,
+    active_mission_count: 0,
+    pending_approval_count: 0,
+    active_packet_id: "P106_WAITING_FOR_LOCAL_API",
+    next_safe_action: "Start local API and refresh P106 status card.",
+    warnings: ["control_api_offline"]
+  },
+  guardrails: {
+    read_only: true,
+    worker_execution: false,
+    live_telegram_send: false,
+    provider_call: false,
+    secret_read: false,
+    install: false,
+    push: false,
+    deploy: false,
+    cloudflare_r2_mutation: false,
+    database_migration: false
+  },
+  updated_at: new Date().toISOString()
 };
 
 const fallbackTeamRuntimeBridge = {
@@ -2293,6 +2354,97 @@ function renderCenterBrainHub(status) {
       badge: "blocked"
     }))
   );
+}
+
+function renderGhostClawControlPlaneStatus(status) {
+  const data = status || fallbackGhostClawControlPlaneStatus;
+  const guardrails = data.guardrails || fallbackGhostClawControlPlaneStatus.guardrails;
+  const dangerousActionsClosed = [
+    "worker_execution",
+    "live_telegram_send",
+    "provider_call",
+    "secret_read",
+    "install",
+    "push",
+    "deploy",
+    "cloudflare_r2_mutation",
+    "database_migration"
+  ].every((key) => guardrails[key] === false);
+  const ready =
+    data.status === "ready" &&
+    data.dry_run === true &&
+    data.live_execution === false &&
+    guardrails.read_only === true &&
+    dangerousActionsClosed;
+
+  controlPlaneStatus.textContent = ready ? "Read model ready" : data.status || "Control plane blocked";
+  controlPlaneStatus.classList.remove("status-safe", "status-warn", "status-lock");
+  controlPlaneStatus.classList.add(ready ? "status-safe" : "status-warn");
+
+  controlPlaneSummary.replaceChildren(
+    makeSummaryCard("Projects", `${data.dashboard?.active_project_count ?? data.projects?.length ?? 0}`, "active focus"),
+    makeSummaryCard("Missions", `${data.dashboard?.active_mission_count ?? data.missions?.length ?? 0}`, "read-only"),
+    makeSummaryCard("Packets", `${data.packets?.length || 0}`, data.dashboard?.active_packet_id || "no active packet"),
+    makeSummaryCard("Approvals", `${data.dashboard?.pending_approval_count ?? data.approval_gates?.length ?? 0}`, "pending gates"),
+    makeSummaryCard("Receipts", `${data.receipts?.length || 0}`, "path-hidden API view")
+  );
+
+  controlPlaneStopPoint.textContent =
+    data.dashboard?.next_safe_action || fallbackGhostClawControlPlaneStatus.dashboard.next_safe_action;
+
+  renderSignalList(
+    controlPlaneProjectList,
+    (data.projects || fallbackGhostClawControlPlaneStatus.projects).map((project) => ({
+      title: project.name || project.slug,
+      detail: `${project.slug || "project"} - ${project.status || "unknown"} - focus=${project.focus_state || "unknown"}`,
+      ok: project.focus_state === "active",
+      badge: project.focus_state || "check"
+    }))
+  );
+
+  renderSignalList(
+    controlPlanePacketList,
+    (data.packets || fallbackGhostClawControlPlaneStatus.packets).map((packet) => ({
+      title: packet.packet_id || "packet",
+      detail: `${packet.lane || "lane"} - ${packet.status || "unknown"} - next: ${packet.next_action || "none"}`,
+      ok: packet.dry_run === true && packet.live_execution === false,
+      badge: packet.live_execution ? "live" : "dry-run"
+    }))
+  );
+
+  renderSignalList(
+    controlPlaneGuardrailList,
+    Object.entries(guardrails).map(([key, value]) => {
+      const ok = key === "read_only" ? value === true : value === false;
+      return {
+        title: key.replaceAll("_", " "),
+        detail: ok ? "Guardrail is in the expected local-safe state." : "Guardrail drift detected; stop before execution.",
+        ok,
+        badge: String(value)
+      };
+    })
+  );
+
+  if (data.receipts?.length) {
+    renderSignalList(
+      controlPlaneReceiptList,
+      data.receipts.map((receipt) => ({
+        title: receipt.receipt_id || "receipt",
+        detail: `${receipt.status || "unknown"} - ${receipt.redaction_status || "redaction unknown"}`,
+        ok: receipt.redaction_status === "redacted_or_no_sensitive_data",
+        badge: receipt.status || "check"
+      }))
+    );
+  } else {
+    renderSignalList(controlPlaneReceiptList, [
+      {
+        title: "Receipt list",
+        detail: "No receipts loaded. Start the local control API or enable include_receipts on the read-only route.",
+        ok: false,
+        badge: "empty"
+      }
+    ]);
+  }
 }
 
 function renderTeamRuntimeBridge(status) {
@@ -4217,6 +4369,7 @@ async function loadDashboard() {
   renderAgentLaunchGate(fallbackAgentLaunchGate);
   renderAgentDriver(fallbackAgentDriver);
   renderCenterBrainHub(fallbackCenterBrainHub);
+  renderGhostClawControlPlaneStatus(fallbackGhostClawControlPlaneStatus);
   renderTeamRuntimeBridge(fallbackTeamRuntimeBridge);
   renderOpenRouterQwenAdapter(fallbackOpenRouterQwenAdapter);
   renderModelRoutingApproval(fallbackModelRoutingApproval);
@@ -4319,6 +4472,12 @@ async function loadDashboard() {
       renderCenterBrainHub,
       () => renderCenterBrainHub(fallbackCenterBrainHub),
       "CenterBrain hub"
+    ),
+    loadPanel(
+      "/api/ghostclaw/control-plane/status?include_receipts=true&include_paths=false&limit=3",
+      renderGhostClawControlPlaneStatus,
+      () => renderGhostClawControlPlaneStatus(fallbackGhostClawControlPlaneStatus),
+      "GhostClaw control-plane status"
     ),
     loadPanel(
       "/api/team-runtime-bridge",

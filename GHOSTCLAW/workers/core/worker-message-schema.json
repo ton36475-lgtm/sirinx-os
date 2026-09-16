@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GHOSTCLAW Worker Message Schema",
+  "description": "Message schema for inter-worker communication in the GHOSTCLAW system",
+  "type": "object",
+  "required": ["message_type", "worker_id", "from_agent", "to_agent"],
+  "properties": {
+    "message_type": {
+      "type": "string",
+      "enum": ["request", "response", "broadcast", "heartbeat", "receipt", "approval", "rejection", "evidence", "error"],
+      "description": "Type of message exchanged between workers"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for the task being worked on"
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Correlation ID for tracing related messages across workers"
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Identifier for a decision artifact produced during autonomous mutual approval"
+    },
+    "brainstorm_id": {
+      "type": "string",
+      "description": "Canonical identifier for a brainstorm session"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["planning", "execution", "validation", "approval", "receipt", "finalization"],
+      "description": "Current phase of the GHOSTCLAW workflow"
+    },
+    "from_agent": {
+      "type": "string",
+      "description": "Agent sending the message"
+    },
+    "to_agent": {
+      "type": "string",
+      "description": "Agent receiving the message"
+    },
+    "worker_id": {
+      "type": "string",
+      "description": "Worker identifier from the registry"
+    },
+    "action_class": {
+      "type": "string",
+      "description": "Class of action being requested or performed"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Message payload containing action-specific data"
+    },
+    "evidence_pack": {
+      "type": "object",
+      "description": "Evidence pack containing proof of work, artifacts, and verification data",
+      "properties": {
+        "artifacts": { "type": "array", "items": { "type": "object" } },
+        "verification_data": { "type": "object" },
+        "hash": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "autonomous_approval": {
+      "type": "object",
+      "description": "Autonomous mutual approval information (Hermes approves Codex, Codex approves Hermes)",
+      "properties": {
+        "approved": { "type": "boolean" },
+        "approver_agent": { "type": "string" },
+        "requester_agent": { "type": "string" },
+        "self_approval": { "type": "boolean", "default": false }
+      }
+    },
+    "requester_agent": {
+      "type": "string",
+      "description": "Agent that requested the action (for approval routing)"
+    },
+    "approver_agent": {
+      "type": "string",
+      "description": "Agent that approved the action (must differ from requester_agent)"
+    },
+    "human_approval_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether human approval is required for this message's action"
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether a receipt must be generated for this message"
+    },
+    "control_plane_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether control plane coordination is required for this message"
+    },
+    "latent_plane": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this message operates in the latent plane"
+    },
+    "moa_summary": {
+      "type": "string",
+      "description": "Mixture-of-Agents summary for multi-agent deliberation"
+    },
+    "moa_gated_brainstorm": {
+      "type": "object",
+      "description": "MoA-gated brainstorm session (canonical term: brainstorm)",
+      "properties": {
+        "brainstorm_id": { "type": "string" },
+        "gated": { "type": "boolean" },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "summary": { "type": "string" }
+      }
+    },
+    "browser_use": {
+      "type": "object",
+      "description": "Browser automation metadata for browser_use_worker",
+      "properties": {
+        "url": { "type": "string" },
+        "action": { "type": "string" },
+        "result": { "type": "object" }
+      }
+    },
+    "edgeone": {
+      "type": "object",
+      "description": "EdgeOne readiness metadata for edgeone_readiness_worker",
+      "properties": {
+        "target_environment": { "type": "string" },
+        "ready": { "type": "boolean" },
+        "checklist": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "model_swap": {
+      "type": "object",
+      "description": "Model swap metadata for model_swap_worker",
+      "properties": {
+        "worker_id": { "type": "string" },
+        "previous_model": { "type": "string" },
+        "current_model": { "type": "string" },
+        "reason": { "type": "string" }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the message"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata for extensibility",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

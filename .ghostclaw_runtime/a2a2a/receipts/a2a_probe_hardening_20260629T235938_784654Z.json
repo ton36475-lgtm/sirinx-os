@@ -1,0 +1,62 @@
+{
+  "schema": "ghostclaw.a2a2a.probe_hardening_receipt.v1",
+  "mission": "agent_ghostclaws_a2a_probe_hardening",
+  "status": "pass_with_limitations",
+  "created_at": "2026-06-29T23:59:38.784654Z",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "objective_source": "/Users/sirinx/.codex/attachments/08dbffc6-7a67-40e9-be15-0407b50034a7/goal-objective.md",
+  "scope": "Validate local-only A2A probe behavior and external repo quarantine state without installing or executing third-party code.",
+  "files_verified": [
+    "scripts/ghostclaw_a2a_sync_probe.py",
+    "WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_probe.py",
+    ".ghostclaw_runtime/a2a2a/receipts/a2a_sync_start_20260629T235649_695832Z.json",
+    ".ghostclaw_runtime/a2a2a/state/external_repo_intake_20260629T235649_695832Z.json"
+  ],
+  "verification": [
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_ghostclaw_a2a_sync_probe -v passed: 2 tests",
+    "python3 -m py_compile scripts/ghostclaw_a2a_sync_probe.py passed",
+    "all .ghostclaw_runtime/a2a2a/receipts/*.json parsed with python3 -m json.tool",
+    "all .ghostclaw_runtime/a2a2a/inbox/**/*.json parsed with python3 -m json.tool",
+    "git diff --check scoped to probe/NEXT_ACTIONS/AUTONOMOUS_RUN_LOG passed",
+    "external repo quarantine scan found no node_modules/.pnpm/dist/build directories at maxdepth 2"
+  ],
+  "external_repo_quarantine": [
+    {
+      "name": "oh-my-opencode-lite",
+      "path": ".ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite",
+      "head": "35797ff",
+      "dependency_install_executed": false,
+      "install_scripts_executed": false,
+      "global_plugin_write_executed": false
+    },
+    {
+      "name": "Agent-Blackbox",
+      "path": ".ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox",
+      "head": "d1eb1d0",
+      "dependency_install_executed": false,
+      "install_scripts_executed": false,
+      "global_plugin_write_executed": false
+    }
+  ],
+  "blocked_actions_preserved": [
+    "git push",
+    "deploy",
+    "production action",
+    "secret read",
+    "provider/model call",
+    "Telegram/customer live send",
+    "third-party install script execution",
+    "npx up",
+    "global OpenCode plugin write",
+    "model download",
+    "GPU inference"
+  ],
+  "known_limitations": [
+    "Hermes/KOB/A2A tmux sessions are probe-only mailbox workers, not authenticated full agents.",
+    "The external repos exist in quarantine under .ghostclaw_runtime, but no install execution was validated or approved.",
+    "Goal remains in progress because the full AGENT GHOSTCLAWS operating system is broader than this probe lane."
+  ],
+  "git_status_snapshot": "## staging/godmode-master-os-v2...origin/staging/godmode-master-os-v2 [ahead 3]\n M NEXT_ACTIONS.md\n M pnpm-workspace.yaml\n M scripts/hermes-night-watch-snapshot.sh\n?? WORKSPACE_SCAFFOLD/tests/test_ghostclaw_a2a_sync_probe.py\n?? _A2A_QUEUE/approvals/GATE-PUSH-004-20260630-001.json\n?? _A2A_QUEUE/outbox/outbox_61547c54.json\n?? _A2A_QUEUE/outbox/outbox_90f8193e.json\n?? _A2A_QUEUE/outbox/outbox_e499b98e.json\n?? docs/a2a-sync-completion-20260630.md\n?? scripts/ghostclaw_a2a_sync_probe.py",
+  "next_safe_action": "Create a quarantine install-risk review document for the two external repos before any approved install command."
+}

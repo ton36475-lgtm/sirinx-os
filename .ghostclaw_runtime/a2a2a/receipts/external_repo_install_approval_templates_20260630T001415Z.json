@@ -1,0 +1,52 @@
+{
+  "schema": "ghostclaw.external_repo_install_approval_templates_receipt.v1",
+  "created_at": "2026-06-30T00:14:15Z",
+  "local_created_at": "2026-06-30T07:14:15+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "mode": "local_only_template_creation",
+  "status": "install_blocked_template_ready",
+  "review_doc": "docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_APPROVAL_PACKET_TEMPLATES_20260630.md",
+  "source_risk_review": "docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_RISK_REVIEW_20260630.md",
+  "templates": [
+    {
+      "name": "oh-my-opencode-lite",
+      "template_path": ".ghostclaw_runtime/a2a2a/templates/install-oh-my-opencode-lite-approval.template.json",
+      "approval_phrase": "APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE",
+      "status": "template_only",
+      "install_executed": false,
+      "dependency_install_executed": false,
+      "postinstall_executed": false,
+      "global_plugin_write_executed": false,
+      "provider_call_executed": false,
+      "secret_read_executed": false
+    },
+    {
+      "name": "Agent-Blackbox",
+      "template_path": ".ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json",
+      "approval_phrase": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE",
+      "status": "template_only",
+      "install_executed": false,
+      "dependency_install_executed": false,
+      "postinstall_executed": false,
+      "global_plugin_write_executed": false,
+      "daemon_dashboard_executed": false,
+      "provider_call_executed": false,
+      "secret_read_executed": false
+    }
+  ],
+  "blocked_actions_preserved": [
+    "package_install",
+    "bunx",
+    "npx",
+    "postinstall_execution",
+    "global_plugin_write",
+    "daemon_dashboard_launch",
+    "provider_model_call",
+    "secret_read",
+    "browser_automation",
+    "telegram_customer_live_send",
+    "deploy",
+    "git_push"
+  ],
+  "next_safe_action": "Review and activate one template only after the matching exact approval phrase is provided."
+}

@@ -1,0 +1,25 @@
+{
+  "agent": "codex-captain",
+  "worktree": "codex",
+  "path": "/Users/sirinx/sirinx-os/.worktrees/codex",
+  "timestamp": "2026-07-17T05:04:56.816094+00:00",
+  "task_count": 2,
+  "tasks": [
+    {
+      "id": "packet_013_ghostclaw_lane1_codex_recorder_gate_request.json",
+      "lane": "other",
+      "tier": "A",
+      "goal": "{'id': 'packet_013', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes gate request to open",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T05:04:56.816095+00:00"
+    },
+    {
+      "id": "packet_051_phase_5c_durable_object_integration.json",
+      "lane": "other",
+      "tier": "A",
+      "goal": "{'packet_id': 'packet_051_phase_5c_durable_object_integration', 'correlation_id': 'sirinx-phase5c-du",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T05:04:56.816166+00:00"
+    }
+  ]
+}

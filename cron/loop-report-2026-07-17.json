@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-07-17T08:58:57.893Z",
+  "node_id": "local_mac_m2_core",
+  "executed": 3,
+  "blocked": 0,
+  "receiptCount": 3,
+  "chainValid": true,
+  "panicked": false,
+  "status": "OK"
+}

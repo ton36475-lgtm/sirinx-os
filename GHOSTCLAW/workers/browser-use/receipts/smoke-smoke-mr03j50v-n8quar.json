@@ -1,0 +1,28 @@
+{
+  "smoke_id": "smoke-mr03j50v-n8quar",
+  "timestamp": "2026-06-30T03:37:45.007Z",
+  "url": "http://127.0.0.1:8721/god-mode",
+  "status": "failed",
+  "overall": "fail",
+  "steps": [
+    {
+      "step": "open_url",
+      "status": "fail",
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8721/god-mode\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8721/god-mode\", waiting until \"networkidle\"\u001b[22m\n"
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "dependencies": {
+    "playwright": {
+      "available": true,
+      "runtime": "node",
+      "version": "@playwright/test"
+    },
+    "browser_use": {
+      "available": false,
+      "version": null
+    }
+  },
+  "error": "Failed to open http://127.0.0.1:8721/god-mode: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8721/god-mode\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8721/god-mode\", waiting until \"networkidle\"\u001b[22m\n"
+}

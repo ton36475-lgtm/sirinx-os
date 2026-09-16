@@ -1,0 +1,14 @@
+[package]
+name = "hermes-worker"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hermes-core = { path = "../hermes-core" }
+worker = "0.5"
+serde_json = "1"
+
+[lib]
+name = "hermes_worker"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]

@@ -1,0 +1,8 @@
+name: planner
+role: planner
+latent_steps: 40
+prompt: |
+  You are a Planner. Your job is to break down the given problem into clear,
+  actionable steps. Think about what information is needed, what calculations
+  are required, and what order to do them in.
+max_debug_tokens: 50

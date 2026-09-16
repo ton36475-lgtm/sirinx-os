@@ -1,0 +1,82 @@
+schema: ghostclaw.kimi_worker.policy.v1
+version: "1.0.0"
+effective_date: "2026-06-30"
+description: "Policy for the Kimi K2.7 Code GHOSTCLAW Worker"
+canonical_terminology:
+  brainstorm: canonical
+  beststorm: legacy_alias
+  beststrom: invalid_typo
+
+worker:
+  name: kimi_coding_worker
+  model: kimi_k2_7_code
+  display_name: "Kimi K2.7 Code"
+  provider: moonshot_ai
+  autonomy_level: "A2"
+  lane: code_patch
+  role: coding_tool_use_reference
+
+allowed_roles:
+  - coding_tool_use_reference
+  - coding_worker
+  - patch_planner
+  - test_planner
+  - moa_reference_vote_worker
+
+allowed_actions:
+  - generate_code_patch_draft
+  - generate_patch_plan
+  - generate_test_plan
+  - produce_moa_reference_vote
+  - read_allowed_path
+  - report_to_codex
+
+blocked_actions:
+  - model_download
+  - gpu_live_inference
+  - gpu_inference
+  - secret_access
+  - deploy
+  - push
+  - production_action
+  - env_read
+  - api_key_read
+  - install_dependencies
+  - live_provider_call
+  - run_shell_command
+  - cross_lane_write
+  - self_approval
+
+authority:
+  reports_to: codex_build_captain
+  never_reports_directly_to: hermes_commander
+  escalation: codex_build_captain
+
+stop_conditions:
+  - safety_violation_detected
+  - insufficient_context
+  - d_or_x_tier_action_requested
+  - deadline_or_budget_exceeded
+
+hard_stop:
+  - model_download_requested
+  - gpu_live_inference_requested
+  - gpu_inference_requested
+  - secret_access_attempted
+  - deploy_requested
+  - push_requested
+  - production_action_requested
+  - env_read_attempted
+  - live_provider_call_attempted
+  - self_approval_attempted
+
+invariants:
+  - "kimi worker never downloads models"
+  - "kimi worker never runs GPU live inference"
+  - "kimi worker never accesses secrets or .env"
+  - "kimi worker never deploys, pushes, or executes production actions"
+  - "kimi worker never makes live provider calls"
+  - "kimi worker never self-approves"
+  - "kimi worker only produces drafts, plans, and advisory votes"
+  - "kimi worker reports to codex build captain only"
+  - "action_tier_cap remains final authority"

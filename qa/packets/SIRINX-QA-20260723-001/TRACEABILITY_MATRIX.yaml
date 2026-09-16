@@ -1,0 +1,59 @@
+schema_version: "sirinx.qa.traceability.v1"
+run_id: "SIRINX-QA-20260723-001"
+status: "PLANNED_NOT_EXECUTED"
+entries:
+  - requirement_id: "QA-REQ-001"
+    lanes: ["QA-01", "QA-08"]
+    journeys: []
+    state: "BLOCKED"
+    evidence_refs: ["EVD-TARGET-001"]
+  - requirement_id: "QA-REQ-002"
+    lanes: ["QA-01", "QA-03", "QA-07"]
+    journeys: ["SIRINX-J03", "SIRINX-J04", "SIRINX-J06"]
+    state: "BLOCKED"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-003"
+    lanes: ["QA-01", "QA-02"]
+    journeys: ["SIRINX-J01", "SIRINX-J02", "SIRINX-J03", "SIRINX-J04", "SIRINX-J05", "SIRINX-J06", "SIRINX-J07", "SIRINX-J08"]
+    state: "NOT_RUN"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-004"
+    lanes: ["QA-04", "QA-05", "QA-07"]
+    journeys: ["SIRINX-J01", "SIRINX-J03", "SIRINX-J05", "SIRINX-J07"]
+    state: "NOT_RUN"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-005"
+    lanes: ["QA-03", "QA-07"]
+    journeys: ["SIRINX-J03", "SIRINX-J04", "SIRINX-J06", "SIRINX-J07"]
+    state: "BLOCKED"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-006"
+    lanes: ["QA-06"]
+    journeys: ["SIRINX-J01", "SIRINX-J03", "SIRINX-J05", "SIRINX-J08"]
+    state: "NOT_RUN"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-007"
+    lanes: ["QA-04", "QA-08"]
+    journeys: ["SIRINX-J01", "SIRINX-J02", "SIRINX-J03", "SIRINX-J04", "SIRINX-J07", "SIRINX-J08"]
+    state: "NOT_RUN"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-008"
+    lanes: ["QA-07", "QA-08"]
+    journeys: ["SIRINX-J01", "SIRINX-J03", "SIRINX-J04", "SIRINX-J05", "SIRINX-J08"]
+    state: "BLOCKED"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-009"
+    lanes: ["QA-06", "QA-08"]
+    journeys: ["SIRINX-J05"]
+    state: "BLOCKED"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-010"
+    lanes: ["QA-01", "QA-08"]
+    journeys: []
+    state: "NOT_RUN"
+    evidence_refs: []
+  - requirement_id: "QA-REQ-011"
+    lanes: ["QA-01", "QA-08"]
+    journeys: []
+    state: "FAIL"
+    evidence_refs: ["EVD-LEGACY-QA-001"]

@@ -1,0 +1,39 @@
+{
+  "schema": "sirinx.p101.baseline-review.v1",
+  "receipt_id": "p101-baseline-reconciliation-20260714",
+  "status": "local_validation_passed",
+  "baseline_head": "044bc4e7754be2d3351abe530ae60d6db210b1b4",
+  "artifacts": {
+    "architecture_map": {
+      "path": "reports/mission/P101_BASELINE.json",
+      "sha256": "5a5e49ebbb60980b97796509df655f255d3422371f2613ec6076938c2106d210"
+    },
+    "inventory": {
+      "path": "reports/mission/P101_REPO_INVENTORY.json",
+      "sha256": "28b6b04763b5fb833ad707deb066f5e2dac298b6d4b1fc96574f43541fb94b88"
+    },
+    "canvas": {
+      "path": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/SIRINX P101 Architecture.canvas",
+      "sha256": "57892161c7b12953d0a7d24906a9e59b2ff311d7e43edfa47e2464396e4a0689"
+    }
+  },
+  "validation": {
+    "python_tests_passed": 5,
+    "python_compile": "pass",
+    "shell_syntax": "pass",
+    "json_parse": "pass"
+  },
+  "claims": {
+    "worker_execution_verified": false,
+    "mcp_servers_active": null,
+    "langgraph_connected": null,
+    "distributed_mutex_established": false
+  },
+  "live_actions": {
+    "tmux_dispatch": false,
+    "provider_call": false,
+    "network_write": false,
+    "cloud_mutation": false,
+    "secret_access": false
+  }
+}

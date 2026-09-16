@@ -1,0 +1,42 @@
+{
+  "cycle_id": "evo-20260717-080627",
+  "timestamp": "2026-07-17T01:06:27.014257+00:00",
+  "checks": {
+    "disk": {
+      "free_gb": 7.3,
+      "critical": false,
+      "warning": true
+    },
+    "git": {
+      "uncommitted": 6,
+      "warning": false
+    },
+    "services": {
+      "skills-api": "up",
+      "dev-control": "up",
+      "omniroute": "up",
+      "hermes-gateway": "up"
+    },
+    "a2a_queue": {
+      "inbox": 22,
+      "outbox": 103,
+      "done": 0,
+      "blocked": 0,
+      "approvals": 5
+    },
+    "disk_after": {
+      "free_gb": 7.3,
+      "critical": false,
+      "warning": true
+    },
+    "tests": {
+      "passed": true,
+      "returncode": 0,
+      "output_tail": "scripts/test-ai-hq.sh\n\n[test] thClaws v0.8.8\n[test] thClaws MCP allowlist\n[test] Hermes config\n[test] Hermes MCP\n[test] Ollama local AI\n[test] Kimi CLI\n[test] Node workspace\n[test] AI HQ checks passed"
+    }
+  },
+  "repairs": [],
+  "errors_found": [],
+  "proposals": [],
+  "mutations": []
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "ghostclaw.external_repo_install_approval_template.v1",
+  "status": "template_only",
+  "template_id": "GATE-INSTALL-OH-MY-OPENCODE-LITE-QUARANTINE-TEMPLATE-20260630",
+  "approval_id": "GATE-INSTALL-OH-MY-OPENCODE-LITE-QUARANTINE-<YYYYMMDD-NNN>",
+  "requested_by": "sirinx",
+  "approved_by": null,
+  "approved_at": null,
+  "created_at": "2026-06-30T00:14:15Z",
+  "local_created_at": "2026-06-30T07:14:15+0700",
+  "single_use": true,
+  "install_executed": false,
+  "dependency_install_executed": false,
+  "postinstall_executed": false,
+  "global_plugin_write_executed": false,
+  "provider_call_executed": false,
+  "secret_read_executed": false,
+  "gate": "GATE-INSTALL-OH-MY-OPENCODE-LITE-QUARANTINE",
+  "approval_phrase": "APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE",
+  "target": {
+    "repo": "/Users/sirinx/sirinx-os",
+    "source": "https://github.com/Yeachan-Heo/oh-my-opencode-lite",
+    "quarantine_path": ".ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite",
+    "branch": "dev",
+    "head": "35797ff",
+    "package": "oh-my-opencode@4.3.1",
+    "license": "SUL-1.0"
+  },
+  "command_plan": {
+    "type": "manual_review_required_command_template",
+    "requires_exact_operator_fill": true,
+    "requires_readme_recheck": true,
+    "command_template": "OMO_SEND_ANONYMOUS_TELEMETRY=0 OMO_DISABLE_POSTHOG=1 bunx oh-my-openagent install <operator-reviewed-flags> --project <throwaway-project-dir>",
+    "must_not_run_from_template": true,
+    "notes": "Template is intentionally not executable. Verify current README flags, OpenCode behavior, telemetry variables, and write paths before activation."
+  },
+  "scope": {
+    "allowed_actions_after_activation": [
+      "read_quarantine_metadata",
+      "verify_package_metadata",
+      "capture_before_after_file_inventory",
+      "project_scoped_throwaway_install_only_if_command_is_filled_and_reviewed",
+      "write_local_receipt"
+    ],
+    "forbidden_actions": [
+      "active_repo_root_install",
+      "unreviewed_bunx",
+      "postinstall_without_inventory",
+      "global_opencode_config_write_without_separate_approval",
+      "provider_auth",
+      "provider_model_call",
+      "secret_read",
+      "telegram_customer_live_send",
+      "browser_automation",
+      "deploy",
+      "git_push",
+      "curl_pipe_bash",
+      "model_download",
+      "gpu_inference"
+    ],
+    "expected_writes_to_confirm": [
+      "<throwaway-project-dir>/.opencode/**",
+      "~/.config/opencode/** only if separately approved",
+      ".ghostclaw_runtime/a2a2a/receipts/**",
+      ".ghostclaw_runtime/a2a2a/state/**"
+    ],
+    "forbidden_files": [
+      ".env",
+      ".env.*",
+      "secrets/**",
+      "memory/private/**",
+      "infra/cloudflare/**"
+    ]
+  },
+  "cost_cap": {
+    "max_usd": 0,
+    "paid_provider_calls": false
+  },
+  "preflight": [
+    "git status --short --branch",
+    "python3 -m json.tool .ghostclaw_runtime/a2a2a/templates/install-oh-my-opencode-lite-approval.template.json >/dev/null",
+    "test -d .ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite",
+    "git -C .ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite rev-parse --short HEAD",
+    "python3 - <<'PY'\nimport json\np='.ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite/package.json'\nprint(json.load(open(p)).get('name'))\nPY"
+  ],
+  "rollback": {
+    "strategy": "delete_throwaway_project_and_restore_before_inventory",
+    "requires_human_confirmation": true,
+    "snapshot_required_before_activation": true
+  },
+  "stop_conditions": [
+    "operator approval phrase missing",
+    "branch or head differs from template",
+    "README install flags differ from command_template",
+    "command would write global config without separate approval",
+    "command requests provider auth or API key",
+    "command starts daemon/dashboard/browser unexpectedly",
+    "secret-like diff appears",
+    "telemetry cannot be disabled",
+    "license constraints are not understood"
+  ],
+  "evidence_required": [
+    "approval packet copied from template with concrete approval_id",
+    "before file inventory",
+    "after file inventory",
+    "command output summary",
+    "receipt JSON",
+    "run log entry"
+  ],
+  "notes": "This is a non-executable template only. It does not authorize installation."
+}

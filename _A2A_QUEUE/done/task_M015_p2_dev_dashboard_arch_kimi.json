@@ -1,0 +1,69 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-015",
+    "correlation_id": "a2a-kimi-k3-1784286763-m015",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator-moa",
+      "role": "task-orchestrator",
+      "model_chain": "kimi-k3→fable-v5→solar-1-preview",
+      "authoring_model": "kimi-k3-architecture"
+    },
+    "to": {
+      "agent": "claude-architect",
+      "role": "chief_architect"
+    },
+    "action_requested": "Dev Dashboard Architecture Redesign — From Vanilla JS (3 files) to Component Structure",
+    "context": {
+      "goal": "apps/dev-dashboard/ currently has only 3 vanilla JS files (src/index.html, src/styles.css, src/app.js) plus server.mjs and package.json. The refactor plan targets 50+ files but the architecture must be designed FIRST before code generation.\n\nThis task is ARCHITECTURE DESIGN ONLY — produce:\n1. A detailed component tree (React/TSX or keep vanilla? Recommend approach)\n2. Page layout wireframe (text-based)\n3. State management strategy (how dashboard reads from _A2A_QUEUE, services health endpoints)\n4. API contract: which backend endpoints does the dashboard consume?\n5. File structure blueprint (exact file paths + responsibilities)\n6. Build tooling decision (Vite vs webpack vs none)\n\nDesign the architecture for these pages:\n  - ReleaseGates (approval workflow visualization)\n  - KillSwitches (emergency stop controls)\n  - AgentQueue (live _A2A_QUEUE/inbox + assigned + done visualization)\n  - ApprovalQueue (pending human-approval packets)\n  - ServiceHealth (poll /health + /ready from all services)\n  - Logs (real-time log tailing)",
+      "verified_state": {
+        "current_files": [
+          "src/index.html",
+          "src/styles.css",
+          "src/app.js",
+          "server.mjs",
+          "package.json"
+        ],
+        "current_file_count": 3,
+        "target_file_count": "50+",
+        "existing_components_dir": "apps/dev-dashboard/components/ (exists but contents unknown)",
+        "note": "task_004 was placed in done/ but dashboard was never expanded. REBIRTH task."
+      },
+      "constraints": [
+        "ARCHITECTURE DOCUMENT ONLY — do not write implementation code yet",
+        "No deploy",
+        "No git push",
+        "Output: apps/dev-dashboard/ARCHITECTURE.md",
+        "Consider that OmniRoute is currently DOWN — health checks must handle gracefully",
+        "Prefer lightweight stack (no heavy framework if vanilla JS is sufficient)"
+      ],
+      "lane": "apps/dev-dashboard",
+      "files_to_create": [
+        "apps/dev-dashboard/ARCHITECTURE.md"
+      ],
+      "deliverables": [
+        "ARCHITECTURE.md with component tree, page wireframes, state management plan, API contract, file blueprint, and build tooling decision",
+        "Recommendation: React+Vite vs enhanced-vanilla-JS with clear tradeoffs"
+      ],
+      "command_source": "frontier-generator-moa",
+      "refactor_plan_ref": "docs/FULL_SYSTEM_REFACTOR_PLAN.md §P2-5"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T11:12:43.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P2",
+  "tier": "A",
+  "auto_approved": true,
+  "tier_rationale": "Tier A: Architecture documentation only. No code execution, no existing file modification, fully reversible."
+}

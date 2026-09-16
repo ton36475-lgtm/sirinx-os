@@ -1,0 +1,56 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-20260717-009",
+  "correlation_id": "a2a-fable-v5-1721214002-00903",
+  "phase": "dispatch",
+  "from": {
+    "agent": "frontier-generator",
+    "role": "task-orchestrator"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "build_captain"
+  },
+  "action_requested": "Create OmniRoute dev server startup wrapper script",
+  "context": {
+    "goal": "OmniRoute v3.8.48 is installed at integrations/omniroute/ (Next.js project) but its dev server is OFFLINE (verified: curl to localhost:20128 returns connection refused). Create a startup wrapper script at scripts/start-omniroute.sh that: (1) checks if OmniRoute is already running on port 20128, (2) if not, cd to integrations/omniroute/ and runs 'npm run dev' with PORT=20128, (3) waits up to 30s for the health endpoint to respond, (4) logs startup status. Also create scripts/stop-omniroute.sh that finds and kills the process on port 20128. Both scripts must use bash, be executable, and include safety checks (don't start if already running, graceful shutdown). Do NOT actually start the server — just create the scripts. Verify the scripts are syntactically valid with bash -n.",
+    "constraints": [
+      "no deploy",
+      "no git push",
+      "no cloud mutation",
+      "no secret read or print",
+      "no external send",
+      "do not start the server — create scripts only",
+      "dry-run first"
+    ],
+    "lane": "scripts",
+    "files": [
+      "start-omniroute.sh",
+      "stop-omniroute.sh"
+    ],
+    "deliverables": [
+      "scripts/start-omniroute.sh with health check and port verification",
+      "scripts/stop-omniroute.sh with graceful kill",
+      "Both scripts pass bash -n syntax validation"
+    ],
+    "command_source": "frontier-generator"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "max_turns": 3
+  },
+  "human_approval_required": false,
+  "timestamp": "2026-07-17T17:40:02.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "auto_block_and_continue"
+  },
+  "frontier_model": {
+    "model": "fable-v5-codestral",
+    "role": "code_generation",
+    "tier": "A",
+    "auto_approved": true
+  }
+}

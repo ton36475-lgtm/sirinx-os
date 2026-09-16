@@ -1,0 +1,12 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/ghostclaw-core",
+    "crates/ghostclaw_migration_core",
+    "crates/ghostclaw-providers", 
+    "crates/ghostclaw-hermes",
+    "crates/ghostclaw-telegram",
+    "crates/ghostclaw-mcp",
+    "crates/gc-runtime-core",
+    "services/command-center"
+]

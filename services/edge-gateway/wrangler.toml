@@ -1,0 +1,20 @@
+# Edge Gateway Configuration - Sovereign Fleet
+# Location: /Users/sirinx/sirinx-os/services/edge-gateway/wrangler.toml
+
+name = "sovereign-fleet-gateway"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+ORCHESTRATOR_GO_URL = "http://127.0.0.1:3600"
+MAXPLUS_GATEWAY_URL = "https://api.maxplus-ai.cc/v1"
+
+[env.local]
+[env.local.vars]
+ORCHESTRATOR_GO_URL = "http://127.0.0.1:3600"
+MAXPLUS_GATEWAY_URL = "https://api.maxplus-ai.cc/v1"
+
+[env.production]
+[env.production.vars]
+ORCHESTRATOR_GO_URL = "https://orchestrator.sirinx.co"
+MAXPLUS_GATEWAY_URL = "https://api.maxplus-ai.cc/v1"

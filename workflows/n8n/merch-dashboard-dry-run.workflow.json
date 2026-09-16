@@ -1,0 +1,39 @@
+{
+  "name": "Merch Dashboard Local Dry Run",
+  "active": false,
+  "version": "local-dry-run-v1",
+  "meta": {
+    "mode": "dry_run_only",
+    "live_amazon_api": false,
+    "customer_broadcast": false,
+    "paid_provider_call": false
+  },
+  "nodes": [
+    {
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "build-owner-task",
+      "name": "Build Owner Review Task",
+      "type": "n8n-nodes-base.set",
+      "position": [240, 0],
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "status", "value": "DRAFT_ONLY" },
+            { "name": "next_gate", "value": "OWNER_REVIEW_REQUIRED" }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [[{ "node": "Build Owner Review Task", "type": "main", "index": 0 }]]
+    }
+  }
+}

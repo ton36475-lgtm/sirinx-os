@@ -1,0 +1,8 @@
+{
+  "mission_id": "dryrun-GhostClaw_360_Test_Shot-1783487220",
+  "status": "SUCCESS",
+  "timestamp": "2026-07-08T05:07:00.403870",
+  "model_used": "maxplus-free/deepseek-v4-pro",
+  "chain_hash": "01d0dd9a52e719b843e0c008d67ab23e153bf801971b6282ac5a3c2027129530",
+  "dry_run": true
+}

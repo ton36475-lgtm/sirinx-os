@@ -1,0 +1,33 @@
+{
+  "agent": "opencode-reviewer",
+  "worktree": "opencode",
+  "path": "/Users/sirinx/sirinx-os/.worktrees/opencode",
+  "timestamp": "2026-07-17T05:04:56.815649+00:00",
+  "task_count": 3,
+  "tasks": [
+    {
+      "id": "packet_012_ghostclaw_lane1_hermes_draft_review.json",
+      "lane": "review",
+      "tier": "A",
+      "goal": "{'id': 'packet_012', 'project': 'ghostclaw', 'priority': 'P0', 'title': 'Hermes review request for L",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T05:04:56.815651+00:00"
+    },
+    {
+      "id": "packet_108_security_audit.json",
+      "lane": "review",
+      "tier": "A",
+      "goal": "{'project': 'sirinx-hermes-pending-work-dispatch', 'priority': 'P1', 'title': 'P-108: Security audit",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T05:04:56.815725+00:00"
+    },
+    {
+      "id": "packet_M-20260717-c9e0c9_T4.json",
+      "lane": "review",
+      "tier": "B",
+      "goal": "Review the fix for: fix failing tests in the repo",
+      "status": "ASSIGNED",
+      "assigned_at": "2026-07-17T05:04:56.815793+00:00"
+    }
+  ]
+}

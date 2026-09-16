@@ -1,0 +1,1 @@
+{"adapter":"codex_dry_run_adapter","status":"dry_run_preview_only","route_job_id":"route-p088-001","command_preview":"codex --dry-run --lane backend_core --task 'scan safely'","executed_live":false,"reason":"live_codex_execution_blocked_until_exact_gate"}

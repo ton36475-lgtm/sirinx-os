@@ -1,0 +1,56 @@
+{
+  "$schema": "./schemas/manus-mcp-config.schema.json",
+  "purpose": "Template only for Manus.ai ↔ LINE OA MCP Bridge. Do not activate live mode or add real tokens without completing the install gate and receiving human approval.",
+  "version": "1.0.0",
+  "bridge": {
+    "host": "127.0.0.1",
+    "port": 8788,
+    "auto_approve": false,
+    "dry_run": true
+  },
+  "line": {
+    "mode": "dry-run",
+    "send_blocked": true,
+    "broadcast_blocked": true,
+    "production_webhook": "https://www.sirinx.co/api/line/webhook",
+    "allowed_tools": [
+      "line_send_message",
+      "line_get_profile",
+      "line_get_user_id"
+    ],
+    "blocked_tools": [
+      "line_broadcast",
+      "line_multicast",
+      "line_narrowcast",
+      "line_push"
+    ]
+  },
+  "manus": {
+    "server_name": "SIRINX LINE OA Bridge",
+    "transport": "HTTP",
+    "auth": "none",
+    "tools_available": [
+      "line_send_message",
+      "line_get_profile",
+      "line_get_user_id",
+      "bridge_health",
+      "bridge_status"
+    ]
+  },
+  "a2a": {
+    "queue_root": "../_A2A_QUEUE",
+    "receipts_required": true,
+    "packets_to_inbox": true
+  },
+  "policy_refs": [
+    "policy/manus-mcp-policy.yaml",
+    "policy/line-mcp-operator-policy.yaml"
+  ],
+  "gates": {
+    "install_gate_required": true,
+    "live_send_gate_required": true,
+    "deploy_gate_required": true,
+    "broadcast_gate_required": true,
+    "webhook_activation_gate_required": true
+  }
+}

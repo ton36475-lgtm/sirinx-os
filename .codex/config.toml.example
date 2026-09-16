@@ -1,0 +1,11 @@
+# Codex example config pointers for GhostClaw.
+# Actual Codex settings may vary by installation.
+
+[projects."/Users/sirinx/sirinx-os"]
+trusted = true
+instructions = "Read AGENTS.md first. Follow OpenSpec, file lease, validation, and receipt rules. No deploy/push/secrets/customer send."
+
+[model_router]
+default_worker = "codex"
+peer_review = true
+parallel_subagents = true

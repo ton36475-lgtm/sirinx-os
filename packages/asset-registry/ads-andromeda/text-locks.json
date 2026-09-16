@@ -1,0 +1,35 @@
+{
+  "brand": "ADS Queen",
+  "canonical_text_lock": [
+    "ADS Queen",
+    "ราชินีบัญชียิงแอด",
+    "บัญชียิงแอดคุณภาพสูง",
+    "ปลอดภัย",
+    "เสถียร",
+    "ใช้งานจริง",
+    "ซัพพอร์ต 24 ชม.",
+    "การันตี 100%",
+    "ทักแชทเลย"
+  ],
+  "forbidden_typos": [
+    "ราซินี",
+    "ราชีนี",
+    "ราชชินี",
+    "บัญชียิงแอค"
+  ],
+  "prohibited_phrases": [
+    "รับประกัน",
+    "รวยทันที",
+    "กำไรแน่นอน",
+    "ปลอดภัย 100%",
+    "ไม่มีความเสี่ยง"
+  ],
+  "blocked_visual_patterns": [
+    "fake chat UI",
+    "fake chat bubbles",
+    "fake LINE conversation",
+    "fake testimonial",
+    "แชทปลอม",
+    "รีวิวปลอม"
+  ]
+}

@@ -1,0 +1,78 @@
+
+# Vibe Coding Sidebar - System Schema
+# Lane ownership and file classification
+
+lanes:
+  codex:
+    branch: vibe/codex
+    worktree: .worktrees/codex
+    ownership:
+      - services/
+      - crates/
+      - ghostclaw-os/
+      - packages/database+security
+    excludes:
+      - apps/
+      - docs/
+      - tests/
+      
+  opencode:
+    branch: vibe/opencode
+    worktree: .worktrees/opencode
+    ownership:
+      - apps/
+      - tests/
+      - infra/
+      - packages/ui+types+logger
+    excludes:
+      - services/
+      - crates/
+      
+  claude:
+    branch: vibe/claude
+    worktree: .worktrees/claude
+    ownership:
+      - docs/
+      - prompts/
+      - kms/
+      - schemas/
+      - packages/config
+    excludes:
+      - services/
+      - apps/
+      
+  hermes:
+    branch: main
+    worktree: .
+    ownership:
+      - scripts/
+      - integrations/
+      - .ghostclaw_runtime/
+      - workflows/
+    excludes:
+      - services/
+      - apps/
+      - docs/
+
+  migration:
+    branch: migration/*
+    worktree: .
+    ownership:
+      - "*"
+    excludes: []
+
+merge_protocol:
+  authority: hermes
+  strategy: no-fast-forward
+  review_required: false  # Autonomous mode
+  test_required: true
+
+lane_guards:
+  enabled: true
+  enforcement: strict
+  cross_lane_rejection: true
+
+a2a_sync:
+  enabled: true
+  pulse_interval: 300  # 5 minutes
+  obsidian_brain: true

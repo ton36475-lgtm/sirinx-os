@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/qa/schemas/release-receipt.schema.json",
+  "title": "SIRINX QA Release Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "status",
+    "mode",
+    "decision",
+    "tests",
+    "policy_sha256",
+    "requirements_sha256",
+    "plan_sha256",
+    "scope_sha256",
+    "repository",
+    "commit_sha",
+    "source_tree",
+    "worktree_dirty",
+    "build_identity",
+    "build_id",
+    "artifact_sha256",
+    "deployment_id",
+    "evidence_manifest_sha256",
+    "receipt_chain_head",
+    "expires_at",
+    "waiver_ids",
+    "human_release_approval"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["DRAFT", "PARTIAL", "FINAL"]},
+    "mode": {"enum": ["AUDIT_ONLY", "SAFE_TEST", "RELEASE_GATE"]},
+    "decision": {
+      "enum": ["GO", "CONDITIONAL_GO", "NO_GO", "NOT_APPLICABLE"]
+    },
+    "tests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planned", "executed", "passed", "failed", "blocked"],
+      "properties": {
+        "planned": {"type": "integer", "minimum": 0},
+        "executed": {"type": "integer", "minimum": 0},
+        "passed": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "integer", "minimum": 0}
+      }
+    },
+    "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "requirements_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "repository": {"type": "string", "minLength": 1},
+    "commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "worktree_dirty": {"type": "boolean"},
+    "build_identity": {
+      "enum": ["VERIFIED", "UNVERIFIED", "NOT_AVAILABLE"]
+    },
+    "build_id": {"type": ["string", "null"]},
+    "artifact_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "deployment_id": {"type": ["string", "null"]},
+    "evidence_manifest_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "receipt_chain_head": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "expires_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "waiver_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^WVR-[0-9]{3,}$"},
+      "uniqueItems": true
+    },
+    "human_release_approval": {
+      "enum": ["REQUIRED", "NOT_GRANTED", "GRANTED"]
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"mode": {"const": "AUDIT_ONLY"}},
+        "required": ["mode"]
+      },
+      "then": {
+        "properties": {
+          "decision": {"const": "NOT_APPLICABLE"},
+          "human_release_approval": {"const": "NOT_GRANTED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {"const": "RELEASE_GATE"},
+          "decision": {"enum": ["GO", "CONDITIONAL_GO"]}
+        },
+        "required": ["mode", "decision"]
+      },
+      "then": {
+        "properties": {
+          "status": {"const": "FINAL"},
+          "build_identity": {"const": "VERIFIED"},
+          "build_id": {"type": "string", "minLength": 1},
+          "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "deployment_id": {"type": "string", "minLength": 1},
+          "evidence_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "receipt_chain_head": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "expires_at": {"type": "string", "format": "date-time"},
+          "human_release_approval": {"const": "GRANTED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"decision": {"const": "CONDITIONAL_GO"}},
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "waiver_ids": {"minItems": 1}
+        }
+      }
+    }
+  ]
+}

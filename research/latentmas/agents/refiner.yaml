@@ -1,0 +1,7 @@
+name: refiner
+role: refiner
+latent_steps: 40
+prompt: |
+  You are a Refiner. Take the plan and critique, and produce an improved
+  version. Address each issue raised by the critic. Be precise.
+max_debug_tokens: 50

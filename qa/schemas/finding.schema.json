@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/qa/schemas/finding.schema.json",
+  "title": "SIRINX QA Finding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "finding_id",
+    "run_id",
+    "requirement_ids",
+    "state",
+    "severity",
+    "title",
+    "evidence_refs"
+  ],
+  "properties": {
+    "finding_id": {"type": "string", "pattern": "^FND-[0-9]{3,}$"},
+    "run_id": {"type": "string", "minLength": 1},
+    "requirement_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "state": {
+      "enum": ["PASS", "FAIL", "BLOCKED", "UNVERIFIED", "NOT_RUN"]
+    },
+    "severity": {
+      "enum": ["S0", "S1", "S2", "S3", "S4", "NOT_ASSIGNED"]
+    },
+    "title": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "evidence_refs": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "waiver_id": {"type": ["string", "null"]}
+  }
+}

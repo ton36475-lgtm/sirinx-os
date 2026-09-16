@@ -1,0 +1,16 @@
+# SUPERSEDED V5 CHECKER DRAFT - DO NOT USE AS AN ACTIVE MANIFEST
+
+[workspace]
+members = [
+  "crates/hermes-core",
+  "crates/hermes-worker",
+  "crates/hermes-governance",
+  "crates/hermes-lock",
+  "crates/hermes-router",
+  "crates/hermes-dispatch",
+  "crates/hermes-feed",
+]
+resolver = "2"
+
+# This draft listed future P1 members before they existed. The active preflight
+# manifest keeps them in workspace metadata until Tony opens the P1 gate.

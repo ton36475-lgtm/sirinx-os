@@ -1,0 +1,66 @@
+{
+  "schema": "sirinx.uat_crud_mongodb.hermes_review_packet.v1",
+  "id": "SIRINX-UAT-CRUD-MONGODB-HERMES-REVIEW-20260702",
+  "status": "review_packet_ready_local_only",
+  "created_at": "2026-07-02T03:20:00+07:00",
+  "repo": "/Users/sirinx/sirinx-os",
+  "source_work": {
+    "skill": "skills/uat-crud-mongodb/",
+    "policy_core": "packages/policy-core/src/index.mjs",
+    "coding_engine": "services/dev-control-api/src/vibe-coding-agent.mjs",
+    "evidence_doc": "docs/knowledge/SIRINX_UAT_CRUD_MONGODB_SECURITY_RULES_2026-07-02.md"
+  },
+  "hermes_review_goal": "Review the local-only UAT CRUD MongoDB security-rule slice and confirm whether a future exact UAT execution gate should be requested.",
+  "dispatch_mode": "dry_run_review_only",
+  "approval_scope": "review_only_no_execution",
+  "approval_required_for_review": false,
+  "execution_approval_required": true,
+  "required_future_approval_phrases": [
+    "APPROVE_LOCAL_UAT_CRUD_MONGODB_<target>_<date>",
+    "APPROVE_DEPENDENCY_INSTALL_<package-or-scope>_<date>",
+    "APPROVE_LOCAL_BROWSER_UAT_<target>_<date>",
+    "APPROVE_PUBLIC_TUNNEL_<tool>_<date>",
+    "APPROVE_CUSTOMER_DATA_UAT_<scope>_<date>"
+  ],
+  "closed_gates": {
+    "deploy": false,
+    "push": false,
+    "provider_call": false,
+    "paid_provider_call": false,
+    "external_message_send": false,
+    "telegram_live_send": false,
+    "line_send": false,
+    "customer_send": false,
+    "secret_read": false,
+    "real_env_read": false,
+    "mongodb_connect": false,
+    "database_write": false,
+    "database_migration": false,
+    "customer_data": false,
+    "production_data": false,
+    "dependency_install": false,
+    "browser_automation_execution": false,
+    "stagehand_execution": false,
+    "playwright_execution": false,
+    "public_tunnel": false,
+    "runtime_queue_execution": false,
+    "cloud_mutation": false
+  },
+  "expected_local_verification": [
+    "node --check skills/uat-crud-mongodb/run.mjs",
+    "node --check skills/uat-crud-mongodb/run.js",
+    "node --check services/dev-control-api/src/vibe-coding-agent.mjs",
+    "node --check packages/policy-core/src/index.mjs",
+    "pnpm exec vitest run packages/policy-core/src/index.test.mjs services/dev-control-api/src/vibe-coding-agent.test.mjs skills/uat-crud-mongodb/run.test.mjs",
+    "node skills/uat-crud-mongodb/run.mjs --project . --json",
+    "python3 -m unittest WORKSPACE_SCAFFOLD.tests.test_uat_crud_mongodb_hermes_review_packet -v",
+    "git diff --check -- docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.json docs/knowledge/SIRINX_UAT_CRUD_MONGODB_HERMES_REVIEW_PACKET_2026-07-02.md _A2A_QUEUE/outbox/packet_027_sirinx_uat_crud_mongodb_hermes_review.json WORKSPACE_SCAFFOLD/tests/test_uat_crud_mongodb_hermes_review_packet.py"
+  ],
+  "review_questions": [
+    "Does Hermes accept this as a review-only packet with no runtime execution?",
+    "Is the UAT CRUD MongoDB skill correctly limited to dry-run discovery by default?",
+    "Which single future gate, if any, should be requested before real UAT execution?"
+  ],
+  "not_approval": true,
+  "notes": "This review contract is local evidence only. It is not approval to run CRUD UAT, connect MongoDB, install browser tooling, open tunnels, use customer data, deploy, push, or call providers."
+}

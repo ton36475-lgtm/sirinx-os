@@ -1,0 +1,86 @@
+{
+  "schema": "ghostclaw.phase5_vibe_agent_contract_receipt.v1",
+  "task_id": "phase5_vibe_coding_agent_contract",
+  "correlation_id": "sirinx-a2a2a-fullbuild-phase5",
+  "timestamp": "2026-06-30T01:49:12Z",
+  "local_timestamp": "2026-06-30T08:49:12+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "requester_agent": "codex",
+  "approver_agent": "hermes",
+  "self_approval_allowed": false,
+  "human_approval_required": false,
+  "receipt_required": true,
+  "status": "validated_current_turn",
+  "files_created": [
+    "GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+    ".ghostclaw_runtime/a2a2a/receipts/phase5_vibe_agent_contract_validation_20260630T014912Z.json"
+  ],
+  "files_modified": [
+    "GHOSTCLAW/vibe/vibe-agent-router.mjs",
+    "GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+    "docs/knowledge/GHOSTCLAWS_VIBE_CODING_AGENT.md",
+    "GHOSTCLAW/receipts/final-receipt-validator.mjs"
+  ],
+  "requirements_covered": [
+    "parse natural language command into a task graph",
+    "create execution plan with selected workers",
+    "create decision_id before execution",
+    "create required evidence pack before execution",
+    "request mutual approval with requester_agent != approver_agent",
+    "reject self approval",
+    "execute only mutually approved safe plans",
+    "write receipts with decision/evidence metadata",
+    "archive plan and receipt",
+    "archive blocked commands without executing blocked actions"
+  ],
+  "validation_commands": [
+    {
+      "command": "node --check GHOSTCLAW/vibe/vibe-task-parser.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "node --check GHOSTCLAW/vibe/vibe-agent-router.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "node --check GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m json.tool GHOSTCLAW/vibe/vibe-task-graph.schema.json",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m json.tool GHOSTCLAW/vibe/vibe-execution-plan.template.json",
+      "result": "passed"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run GHOSTCLAW/vibe/vibe-agent-router.test.mjs",
+      "result": "passed_1_file_5_tests"
+    },
+    {
+      "command": "node GHOSTCLAW/receipts/final-receipt-validator.mjs",
+      "result": "passed_ok_true_errors_empty_phase5_vibe_test_case_count_5"
+    }
+  ],
+  "blocked_actions_preserved": [
+    "push",
+    "deploy",
+    "production_action",
+    "customer_send",
+    "telegram_live_send",
+    "secret_access",
+    "api_key_read",
+    "provider_model_call",
+    "package_install",
+    "external_repo_install_without_gate",
+    "model_download",
+    "gpu_live_inference"
+  ],
+  "notes": [
+    "No external repository was installed or executed.",
+    "No live Telegram/customer message was sent.",
+    "No provider/model call, model download, GPU inference, push, deploy, or secret access occurred."
+  ]
+}

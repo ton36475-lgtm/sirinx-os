@@ -1,0 +1,27 @@
+{
+  "schema": "ghostclaw.gbrain.graph_index.v1",
+  "generated_at": "2026-07-03T03:18:00+0700",
+  "mode": "append_only_local_safe_memory_graph",
+  "nodes": [
+    "nodes/agent_engineering.json",
+    "nodes/agent_security.json",
+    "nodes/agent_product.json",
+    "nodes/agent_technical_writer.json",
+    "nodes/task_config_gate_runner_hardening_20260703.json",
+    "nodes/task_codex_opencode_handoff_20260703.json"
+  ],
+  "edges": [
+    "edges/task_config_gate_runner_hardening_executed_by_codex_20260703.json",
+    "edges/task_codex_opencode_handoff_routes_to_codex_20260703.json",
+    "edges/task_codex_opencode_handoff_routes_to_opencode_20260703.json"
+  ],
+  "guardrails": {
+    "store_secrets": false,
+    "store_env_values": false,
+    "store_raw_logs": false,
+    "fable5_default": false,
+    "provider_calls": false,
+    "cloud_mutation": false
+  }
+}
+

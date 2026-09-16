@@ -1,0 +1,40 @@
+name: Deploy to Cloudflare Workers (Dry-Run)
+on:
+  push:
+    branches: [migration/v5-rebase]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: preview
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          
+      - run: npm install -g wrangler
+      
+      - name: Build Worker
+        run: |
+          cd services/orchestrator
+          cargo install -q worker-build
+          worker-build --release
+      
+      - name: Dry-Run Deploy (No Real Credentials)
+        run: |
+          cd services/orchestrator
+          echo "Worker build completed - deployment ready when credentials provided"
+          echo '{"status":"build_ready","commit":"${{ github.sha }}"}' > build/deploy_status.json
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker-build
+          path: services/orchestrator/build/

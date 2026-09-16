@@ -1,0 +1,15 @@
+{
+  "dream_id": "dream_1784279410",
+  "timestamp": "2026-07-17T09:10:10.595033+00:00",
+  "git_head": "962a7565b554",
+  "git_branch": "migration/v5-rebase",
+  "dirty_files": 0,
+  "changes_description": "auto-fix: apply mutation engine to resolve latest errors",
+  "stash_created": false,
+  "sandbox_path": "/Users/sirinx/sirinx-os/storage/dream-sandbox/dream_1784279410",
+  "status": "CHECKPOINT_CREATED",
+  "simulation_passed": true,
+  "test_output_tail": "python@3.12/3.12.13_2/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py\", line 545, in _check_closed\n    raise RuntimeError('Event loop is closed')\nRuntimeError: Event loop is closed\n[test] Ollama local AI\n[test] Kimi CLI\n[test] Node workspace\n[test] AI HQ checks passed",
+  "decision": "APPROVED",
+  "completed_at": "2026-07-17T09:10:38.997336+00:00"
+}

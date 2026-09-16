@@ -1,0 +1,48 @@
+{
+  "schema": "ghostclaw.external_repo_install_risk_review_receipt.v1",
+  "mission": "agent_ghostclaws_external_repo_install_risk_review",
+  "status": "pass_with_blocked_installs",
+  "created_at": "2026-06-30T00:02:29Z",
+  "local_created_at": "2026-06-30T07:02:29+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "branch": "staging/godmode-master-os-v2",
+  "evidence": {
+    "review_doc": "docs/knowledge/GHOSTCLAW_EXTERNAL_REPO_INSTALL_RISK_REVIEW_20260630.md",
+    "manifest": ".ghostclaw_runtime/a2a2a/state/external_repo_install_risk_review_20260630T000229Z.json",
+    "source_intake": ".ghostclaw_runtime/a2a2a/state/external_repo_intake_20260629T235649_695832Z.json",
+    "previous_probe_receipt": ".ghostclaw_runtime/a2a2a/receipts/a2a_probe_hardening_20260629T235938_784654Z.json"
+  },
+  "repos_reviewed": [
+    {
+      "name": "oh-my-opencode-lite",
+      "quarantine_path": ".ghostclaw_runtime/a2a2a/external_repos/oh-my-opencode-lite",
+      "head": "35797ff",
+      "decision": "blocked_until_gate",
+      "required_gate": "APPROVE_INSTALL_OH_MY_OPENCODE_LITE_QUARANTINE"
+    },
+    {
+      "name": "Agent-Blackbox",
+      "quarantine_path": ".ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox",
+      "head": "d1eb1d0",
+      "decision": "blocked_until_gate",
+      "required_gate": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE"
+    }
+  ],
+  "actions_executed": {
+    "metadata_read": true,
+    "review_doc_written": true,
+    "manifest_written": true,
+    "package_install": false,
+    "postinstall_execution": false,
+    "npx_execution": false,
+    "bunx_execution": false,
+    "global_plugin_write": false,
+    "daemon_dashboard_launch": false,
+    "provider_model_call": false,
+    "secret_read": false,
+    "telegram_customer_live_send": false,
+    "deploy": false,
+    "git_push": false
+  },
+  "next_safe_action": "Create one gate-specific approval packet per repo with exact install command, isolated working directory, telemetry setting, expected writes, rollback plan, and stop conditions."
+}

@@ -1,0 +1,113 @@
+{
+  "$schema": "ghostclaw.godmode-v5.architecture-request.v1",
+  "Version": "1.0.0",
+  "RequestId": "GODMODE-V5-ARCH-20260715-001",
+  "TaskId": "GODMODE-V5-LOCAL-CONTROL-PLANE",
+  "CorrelationId": "GODMODE-V5-LOCAL-CONTROL-PLANE",
+  "Phase": "Architecture",
+  "StateReceiptDigest": "9929f1c917b9bb85ceb1a1446ee2c3899e6c1ed3846de362cc160ffe6269d15c",
+  "BaselineTransitionDigest": "74f945d7eba19b4b61774d00675ce2c96a4c356bb4839432721bf26d34397aa4",
+  "RequestedBy": "hermes_commander",
+  "AssignedTo": "claude_architect",
+  "Objective": "Produce the read-only architecture packet for the GODMODE V5 local control plane before Codex receives an implementation lease.",
+  "SkillBundle": {
+    "Name": "unknowcoding-coding-team",
+    "HermesProfile": "solis",
+    "InstalledSkillPath": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/unknowcoding-coding-team/SKILL.md",
+    "CanonicalSourceRoot": "packages/skills-kit/skills",
+    "RequiredSkills": [
+      "autonomous-task-planner",
+      "codebase-cartographer",
+      "system-design-architect",
+      "coding-model-router",
+      "senior-fullstack-builder",
+      "mcp-integration-manager",
+      "codex-workflow-synthesizer",
+      "safety-gate-enforcer",
+      "evidence-verifier"
+    ]
+  },
+  "Inputs": [
+    "configs/godmode_v5_baseline.scope.json",
+    "configs/godmode_v5_runtime.config.json",
+    "configs/ghostclaw_agent_coordination.config.json",
+    "configs/hermes_telegram_gateway.config.json",
+    "configs/cloudflare_deployment_targets.config.json",
+    ".ghostclaw_runtime/a2a2a/evidence/godmode-v5-baseline-evidence.json",
+    ".ghostclaw_runtime/a2a2a/evidence/godmode-v5-baseline-transition.json",
+    "docs/OPUS_ARCHITECTURE_FIRST_WORKFLOW.md",
+    "docs/CODEX_BUILD_CAPTAIN_WORKFLOW.md"
+  ],
+  "RequiredSections": [
+    "Goal",
+    "Current State",
+    "Proposed Architecture",
+    "Interface Contracts",
+    "Data Model Changes",
+    "Lane Assignments",
+    "Risk Assessment",
+    "Dependencies",
+    "Rollback Plan",
+    "Verification"
+  ],
+  "Ownership": {
+    "MissionCommander": "hermes_commander",
+    "ArchitectureOwner": "claude_architect",
+    "SingleRepoWriter": "codex_build_captain",
+    "ReviewOwner": "opencode_glm52_reviewer",
+    "ValidationOwner": "kob_validator",
+    "PolicyVeto": "policy_guardian",
+    "Observer": "mission_control"
+  },
+  "DependencyGraph": [
+    {
+      "Id": "baseline_transition",
+      "DependsOn": []
+    },
+    {
+      "Id": "architecture_packet",
+      "DependsOn": ["baseline_transition"]
+    },
+    {
+      "Id": "hermes_architecture_acceptance",
+      "DependsOn": ["architecture_packet"]
+    },
+    {
+      "Id": "codex_implementation_lease",
+      "DependsOn": ["hermes_architecture_acceptance"]
+    }
+  ],
+  "RollbackRequirements": [
+    "Remain in Architecture when the packet is absent, rejected, stale, or incomplete.",
+    "Do not mutate implementation files while the Architecture exit criteria are incomplete.",
+    "Invalidate a packet when its state receipt digest no longer matches the canonical state.",
+    "Preserve the Baseline transition receipt and every rejected architecture review.",
+    "After three repeated failures, stop dispatch and require a revised architecture request."
+  ],
+  "Output": {
+    "ArchitecturePacketPath": "docs/knowledge/GODMODE_V5_ARCHITECTURE_PACKET.md",
+    "HermesDecisionPath": ".ghostclaw_runtime/a2a2a/decision/godmode-v5-architecture-decision.json",
+    "ReviewReceiptPath": ".ghostclaw_runtime/a2a2a/reviews/godmode-v5-architecture-review.json"
+  },
+  "ProviderDispatch": {
+    "Route": "claude-code/first-party",
+    "Mode": "read_only_plan",
+    "Requested": false,
+    "Authorized": false,
+    "Executed": false,
+    "RequiredExactGate": "APPROVE_CLAUDE_CODE_PROVIDER_CALL_GODMODE_V5_ARCH_20260715_001",
+    "AllowedTools": ["Read", "Glob", "Grep"],
+    "FallbackRequiresSeparateGate": true
+  },
+  "ExternalActions": {
+    "SecretRead": false,
+    "ProviderCall": false,
+    "TelegramLiveSend": false,
+    "Install": false,
+    "GitStage": false,
+    "GitCommit": false,
+    "GitPush": false,
+    "CloudflareWrite": false,
+    "CloudflareDeploy": false
+  }
+}

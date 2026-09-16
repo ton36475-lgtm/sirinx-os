@@ -1,0 +1,30 @@
+policy_id: gpu-compute-budget-policy-v1
+target_tools:
+  - h100_gpu_instance_provider
+classification:
+  lane: COMPUTE_PROVIDER_REVIEW
+  default_gate: YELLOW
+  escalate_to_red_when:
+    - billing_enabled
+    - customer_data_uploaded
+    - production_workload_enabled
+    - model_download_required
+allowed:
+  - create_compute_assessment
+  - create_budget_review
+  - estimate_workload
+  - draft_shutdown_policy
+blocked:
+  - provision_gpu_instance
+  - store_provider_credentials
+  - upload_customer_data
+  - run_training_job
+  - model_download
+  - connect_to_hermes_runtime
+required_controls:
+  - named_provider
+  - budget_ceiling
+  - data_classification
+  - workload_scope
+  - shutdown_policy
+  - receipt_per_provisioning_action

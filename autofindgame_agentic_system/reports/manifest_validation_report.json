@@ -1,0 +1,8 @@
+{
+  "manifest": "manifests/legal_games_manifest.csv",
+  "row_count": 1,
+  "status": "PASS",
+  "error_count": 0,
+  "warning_count": 0,
+  "issues": []
+}

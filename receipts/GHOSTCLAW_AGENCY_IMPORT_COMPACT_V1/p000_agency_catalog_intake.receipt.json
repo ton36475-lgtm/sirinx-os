@@ -1,0 +1,53 @@
+{
+  "receipt_id": "GHOSTCLAW-AGENCY-IMPORT-20260630-001-P000",
+  "mission_id": "GHOSTCLAW-AGENCY-IMPORT-20260630-001",
+  "mission_name": "GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1",
+  "packet_id": "P000_AGENCY_CATALOG_INTAKE",
+  "project": "GhostClaw Agency Adapter",
+  "agent": "Codex",
+  "role": "repo_mapper",
+  "mode": "read_only",
+  "layer": "00_external_catalog_intake",
+  "status": "PASS",
+  "repo": "/Users/sirinx/sirinx-os",
+  "file_lease": {
+    "granted": false,
+    "leased_files": [],
+    "changed_files": [],
+    "lease_match": true
+  },
+  "actions_taken": [
+    "inspected current git status",
+    "searched local workspace for agency-agents paths",
+    "searched current repo for existing agency import artifacts",
+    "confirmed no clone or install action was executed"
+  ],
+  "commands_run": [
+    "git status --short --branch",
+    "git diff --cached --name-only",
+    "find /Users/sirinx -path '*agency-agents*' -maxdepth 5",
+    "rg -n 'agency-agents|GHOSTCLAW_AGENCY_IMPORT|Agency Agents|agency_context_budget' /Users/sirinx/sirinx-os -g '!node_modules' -g '!.git'"
+  ],
+  "validation": {
+    "ran": true,
+    "result": "pass",
+    "details": "Local intake found no existing agency-agents checkout in the target repo and no prior GhostClaw agency import artifacts."
+  },
+  "security": {
+    "secret_read": false,
+    "env_read": false,
+    "provider_call": false,
+    "paid_call": false,
+    "push": false,
+    "deploy": false,
+    "cloud_mutation": false,
+    "customer_send": false
+  },
+  "findings": [
+    "Use agency-agents as an upstream catalog only.",
+    "Do not load or install the full roster.",
+    "Initial import should be capped to 48 curated agents.",
+    "Clone, install, convert, commit, dependency change, and runtime queue execution remain Tier C actions."
+  ],
+  "next_action": "Create GhostClaw agency adapter docs and manifests under leased paths."
+}

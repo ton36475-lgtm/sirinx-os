@@ -1,0 +1,6 @@
+/target/
+/build/
+/evidence_drop/generated/
+*.log
+__pycache__/
+*.pyc

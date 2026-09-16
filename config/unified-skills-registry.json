@@ -1,0 +1,1605 @@
+{
+  "generated": "2026-07-17",
+  "stats": {
+    "hermes": 143,
+    "codex": 59,
+    "claude": 15,
+    "opencode": 7,
+    "ghostclaw": 7
+  },
+  "unique_total": 188,
+  "shared_4plus": [
+    "autonomous-loop-engineering",
+    "ghostclaw-engineering-loop",
+    "ghostclaw-agent-delegation",
+    "thaimart-k15-workflow",
+    "ghostclaw-governance-contracts",
+    "ghostclaw-integration-onboarding",
+    "ghostclaw-master-orchestrator"
+  ],
+  "shared_3plus_count": 12,
+  "shared_2plus_count": 17,
+  "hermes_only": 121,
+  "codex_only": 46,
+  "skills": {
+    "simplify-code": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/simplify-code/SKILL.md"
+      }
+    },
+    "llm-wiki": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/research/llm-wiki/SKILL.md"
+      }
+    },
+    "pokemon-player": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/gaming/pokemon-player/SKILL.md"
+      }
+    },
+    "opencode": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/opencode/SKILL.md"
+      }
+    },
+    "sirinx-spec-first-swarm": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/sirinx-spec-first-swarm/SKILL.md"
+      }
+    },
+    "custom-api-providers": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/custom-api-providers/SKILL.md"
+      }
+    },
+    "comfyui": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/comfyui/SKILL.md"
+      }
+    },
+    "github-auth-troubleshooting": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/github-auth-troubleshooting/SKILL.md"
+      }
+    },
+    "ideation": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/creative-ideation/SKILL.md"
+      }
+    },
+    "writing-skills": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/writing-skills/SKILL.md"
+      }
+    },
+    "notion": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/notion/SKILL.md"
+      }
+    },
+    "ghostclaw-autonomous-mutual-approval-v2": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/ghostclaw-autonomous-mutual-approval-v2/SKILL.md"
+      }
+    },
+    "youtube-content": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/media/youtube-content/SKILL.md"
+      }
+    },
+    "excalidraw": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/excalidraw/SKILL.md"
+      }
+    },
+    "mcp-web-knowledge-integration": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/mcp/mcp-web-knowledge-integration/SKILL.md"
+      }
+    },
+    "sirinx-installer-patterns": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/sirinx-installer-patterns/SKILL.md"
+      }
+    },
+    "hermes-s6-container-supervision": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/hermes-s6-container-supervision/SKILL.md"
+      }
+    },
+    "python-debugpy": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/python-debugpy/SKILL.md"
+      }
+    },
+    "arxiv": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/research/arxiv/SKILL.md"
+      }
+    },
+    "macos-computer-use": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/apple/macos-computer-use/SKILL.md"
+      }
+    },
+    "writing-plans": {
+      "available_in": [
+        "hermes",
+        "hermes",
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/writing-plans/SKILL.md"
+      }
+    },
+    "kanban-worker": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/devops/kanban-worker/SKILL.md"
+      }
+    },
+    "brainstorming": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/brainstorming/SKILL.md"
+      }
+    },
+    "verification-before-completion": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/verification-before-completion/SKILL.md"
+      }
+    },
+    "claude-code": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/claude-code/SKILL.md"
+      }
+    },
+    "hermes-agent": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/hermes-agent/SKILL.md"
+      }
+    },
+    "p100-phase-inventory-audit": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/devops/p100-phase-inventory-audit/SKILL.md"
+      }
+    },
+    "ascii-video": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/ascii-video/SKILL.md"
+      }
+    },
+    "sovereign-fleet-autoloop": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/sovereign-fleet-autoloop/SKILL.md"
+      }
+    },
+    "baoyu-comic": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/baoyu-comic/SKILL.md"
+      }
+    },
+    "research-paper-writing": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/research/research-paper-writing/SKILL.md"
+      }
+    },
+    "ghostclaw-skills-integration": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-skills-integration/SKILL.md"
+      }
+    },
+    "apple-reminders": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/apple/apple-reminders/SKILL.md"
+      }
+    },
+    "thai-english-hybrid-documentation": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/note-taking/thai-english-hybrid-documentation/SKILL.md"
+      }
+    },
+    "dispatching-parallel-agents": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/dispatching-parallel-agents/SKILL.md"
+      }
+    },
+    "teams-meeting-pipeline": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/teams-meeting-pipeline/SKILL.md"
+      }
+    },
+    "ghostclaw-registry-first-execution": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-registry-first-execution/SKILL.md"
+      }
+    },
+    "blogwatcher": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/research/blogwatcher/SKILL.md"
+      }
+    },
+    "pretext": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/pretext/SKILL.md"
+      }
+    },
+    "requesting-code-review": {
+      "available_in": [
+        "hermes",
+        "hermes",
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/requesting-code-review.pre-sp-bak/SKILL.md"
+      }
+    },
+    "huggingface-hub": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/mlops/huggingface-hub/SKILL.md"
+      }
+    },
+    "github-repo-management": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/github-repo-management/SKILL.md"
+      }
+    },
+    "heartmula": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/media/heartmula/SKILL.md"
+      }
+    },
+    "manim-video": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/manim-video/SKILL.md"
+      }
+    },
+    "finishing-a-development-branch": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/finishing-a-development-branch/SKILL.md"
+      }
+    },
+    "popular-web-designs": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/popular-web-designs/SKILL.md"
+      }
+    },
+    "godmode": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/red-teaming/godmode/SKILL.md"
+      }
+    },
+    "airtable": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/airtable/SKILL.md"
+      }
+    },
+    "native-mcp": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/mcp/native-mcp/SKILL.md"
+      }
+    },
+    "imessage": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/apple/imessage/SKILL.md"
+      }
+    },
+    "findmy": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/apple/findmy/SKILL.md"
+      }
+    },
+    "ghostclaw-orchestration-patterns": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/ghostclaw-orchestration-patterns/SKILL.md"
+      }
+    },
+    "sirinx-phase-orchestration": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/sirinx-phase-orchestration/SKILL.md"
+      }
+    },
+    "computer-use": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/computer-use/SKILL.md"
+      }
+    },
+    "kanban-codex-lane": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/kanban-codex-lane/SKILL.md"
+      }
+    },
+    "receiving-code-review": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/receiving-code-review/SKILL.md"
+      }
+    },
+    "subagent-driven-development": {
+      "available_in": [
+        "hermes",
+        "hermes",
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/subagent-driven-development.pre-sp-bak/SKILL.md"
+      }
+    },
+    "using-superpowers": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/using-superpowers/SKILL.md"
+      }
+    },
+    "claude-design": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/claude-design/SKILL.md"
+      }
+    },
+    "end-to-end-automation": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/automation/end-to-end-automation/SKILL.md"
+      }
+    },
+    "github-issues": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/github-issues/SKILL.md"
+      }
+    },
+    "touchdesigner-mcp": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/touchdesigner-mcp/SKILL.md"
+      }
+    },
+    "apple-notes": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/apple/apple-notes/SKILL.md"
+      }
+    },
+    "rust-python-ml-prototype": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/rust-python-ml-prototype/SKILL.md"
+      }
+    },
+    "gif-search": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/media/gif-search/SKILL.md"
+      }
+    },
+    "p100-phase3-execution": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/audit-and-security/p100-phase3-execution/SKILL.md"
+      }
+    },
+    "petdex": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/petdex/SKILL.md"
+      }
+    },
+    "systematic-debugging": {
+      "available_in": [
+        "hermes",
+        "hermes",
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/systematic-debugging/SKILL.md"
+      }
+    },
+    "sirinx-a2a-agent-loop": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/sirinx-a2a-agent-loop/SKILL.md"
+      }
+    },
+    "using-git-worktrees": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/using-git-worktrees/SKILL.md"
+      }
+    },
+    "yuanbao": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/yuanbao/SKILL.md"
+      }
+    },
+    "himalaya": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/email/himalaya/SKILL.md"
+      }
+    },
+    "p5js": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/p5js/SKILL.md"
+      }
+    },
+    "polymarket": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/research/polymarket/SKILL.md"
+      }
+    },
+    "dynamic-workflow": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/dynamic-workflow/SKILL.md"
+      }
+    },
+    "autonomous-loop-engineering": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/autonomous-loop-engineering/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/autonomous-loop-engineering/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/autonomous-loop-engineering/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/autonomous-loop-engineering/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/autonomous-loop-engineering/SKILL.md"
+      }
+    },
+    "sketch": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/sketch/SKILL.md"
+      }
+    },
+    "webhook-subscriptions": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/devops/webhook-subscriptions/SKILL.md"
+      }
+    },
+    "hermes-agent-skill-authoring": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/hermes-agent-skill-authoring/SKILL.md"
+      }
+    },
+    "google-workspace": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/google-workspace/SKILL.md"
+      }
+    },
+    "hermes-desktop-plugins": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/hermes-desktop-plugins/SKILL.md"
+      }
+    },
+    "ghostclaw-engineering-loop": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/ghostclaw-engineering-loop/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/ghostclaw-engineering-loop/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/ghostclaw-engineering-loop/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/ghostclaw-engineering-loop/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/ghostclaw-engineering-loop/SKILL.md"
+      }
+    },
+    "ghostclaw-agent-delegation": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/ghostclaw-agent-delegation/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/ghostclaw-agent-delegation/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/ghostclaw-agent-delegation/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/ghostclaw-agent-delegation/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/ghostclaw-agent-delegation/SKILL.md"
+      }
+    },
+    "obsidian": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/note-taking/obsidian/SKILL.md"
+      }
+    },
+    "architecture-diagram": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/architecture-diagram/SKILL.md"
+      }
+    },
+    "songsee": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/media/songsee/SKILL.md"
+      }
+    },
+    "jupyter-live-kernel": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/data-science/jupyter-live-kernel/SKILL.md"
+      }
+    },
+    "test-driven-development": {
+      "available_in": [
+        "hermes",
+        "hermes",
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/test-driven-development.pre-sp-bak/SKILL.md"
+      }
+    },
+    "pnpm-package-management": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/devops/pnpm-package-management/SKILL.md"
+      }
+    },
+    "universal-website-architecture": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/universal-website-architecture/SKILL.md"
+      }
+    },
+    "spike": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/spike/SKILL.md"
+      }
+    },
+    "openhue": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/smart-home/openhue/SKILL.md"
+      }
+    },
+    "github-auth": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/github-auth/SKILL.md"
+      }
+    },
+    "debugging-hermes-tui-commands": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/debugging-hermes-tui-commands/SKILL.md"
+      }
+    },
+    "kanban-orchestrator": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/devops/kanban-orchestrator/SKILL.md"
+      }
+    },
+    "ghostclaw-governance-framework": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/ghostclaw-governance-framework/SKILL.md"
+      }
+    },
+    "powerpoint": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/powerpoint/SKILL.md"
+      }
+    },
+    "maps": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/maps/SKILL.md"
+      }
+    },
+    "nano-pdf": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/nano-pdf/SKILL.md"
+      }
+    },
+    "retro-handheld-legal-gaming": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/gaming/retro-handheld-legal-gaming/SKILL.md"
+      }
+    },
+    "thaimart-k15-workflow": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/thaimart-k15-workflow/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/thaimart-k15-workflow/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/thaimart-k15-workflow/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/thaimart-k15-workflow/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/thaimart-k15-workflow/SKILL.md"
+      }
+    },
+    "baoyu-infographic": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/baoyu-infographic/SKILL.md"
+      }
+    },
+    "ghostclaw-governance-contracts": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/ghostclaw-governance-contracts/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/ghostclaw-governance-contracts/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/ghostclaw-governance-contracts/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/ghostclaw-governance-contracts/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/ghostclaw-governance-contracts/SKILL.md"
+      }
+    },
+    "spotify": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/media/spotify/SKILL.md"
+      }
+    },
+    "github-pr-workflow": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/github-pr-workflow/SKILL.md"
+      }
+    },
+    "minecraft-modpack-server": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/gaming/minecraft-modpack-server/SKILL.md"
+      }
+    },
+    "ascii-art": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/ascii-art/SKILL.md"
+      }
+    },
+    "plan": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/plan/SKILL.md"
+      }
+    },
+    "codex": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/codex/SKILL.md"
+      }
+    },
+    "vibe-coding-sidebar": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/autonomous-ai-agents/vibe-coding-sidebar/SKILL.md"
+      }
+    },
+    "github-code-review": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/github-code-review/SKILL.md"
+      }
+    },
+    "songwriting-and-ai-music": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/songwriting-and-ai-music/SKILL.md"
+      }
+    },
+    "humanizer": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/humanizer/SKILL.md"
+      }
+    },
+    "ghostclaw-integration-onboarding": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/ghostclaw-integration-onboarding/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/ghostclaw-integration-onboarding/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/ghostclaw-integration-onboarding/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/ghostclaw-integration-onboarding/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/ghostclaw-integration-onboarding/SKILL.md"
+      }
+    },
+    "executing-plans": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/superpowers/executing-plans/SKILL.md"
+      }
+    },
+    "ghostclaw-master-orchestrator": {
+      "available_in": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode",
+        "ghostclaw"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-os/ghostclaw-master-orchestrator/SKILL.md",
+        "codex": "/Users/sirinx/.codex/skills/ghostclaw-master-orchestrator/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/ghostclaw-master-orchestrator/SKILL.md",
+        "opencode": "/Users/sirinx/.opencode/skills/ghostclaw-master-orchestrator/SKILL.md",
+        "ghostclaw": "/Users/sirinx/sirinx-os/GHOSTCLAW/skills/ghostclaw-master-orchestrator/SKILL.md"
+      }
+    },
+    "sirinx-site-design-system": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/design/sirinx-site-design-system/SKILL.md"
+      }
+    },
+    "pixel-art": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/pixel-art/SKILL.md"
+      }
+    },
+    "dogfood": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/dogfood/SKILL.md"
+      }
+    },
+    "linear": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/linear/SKILL.md"
+      }
+    },
+    "ocr-and-documents": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/productivity/ocr-and-documents/SKILL.md"
+      }
+    },
+    "ghostclaw-p101-autonomous-system": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/ghostclaw-p101-autonomous-system/SKILL.md"
+      }
+    },
+    "spec-driven-ai-coding": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/spec-driven-ai-coding/SKILL.md"
+      }
+    },
+    "codebase-inspection": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/github/codebase-inspection/SKILL.md"
+      }
+    },
+    "sirinx-autonomous-ops": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/sirinx-autonomous-ops/SKILL.md"
+      }
+    },
+    "codewhale-integration": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/integration/codewhale-integration/SKILL.md"
+      }
+    },
+    "unknowcoding-coding-team": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/unknowcoding-coding-team/SKILL.md"
+      }
+    },
+    "design-md": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/design-md/SKILL.md"
+      }
+    },
+    "agent-framework-comparison": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/research/agent-framework-comparison/SKILL.md"
+      }
+    },
+    "xurl": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/social-media/xurl/SKILL.md"
+      }
+    },
+    "baoyu-article-illustrator": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/creative/baoyu-article-illustrator/SKILL.md"
+      }
+    },
+    "node-inspect-debugger": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/software-development/node-inspect-debugger/SKILL.md"
+      }
+    },
+    "hermes-godmode-team-ops": {
+      "available_in": [
+        "hermes"
+      ],
+      "paths": {
+        "hermes": "/Users/sirinx/.hermes/profiles/solis/skills/hermes-godmode-team-ops/SKILL.md"
+      }
+    },
+    "workers-best-practices": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-workers-best-practices/SKILL.md"
+      }
+    },
+    "skill-creator": {
+      "available_in": [
+        "codex",
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-skill-creator/SKILL.md"
+      }
+    },
+    "agents-sdk": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-agents-sdk/SKILL.md"
+      }
+    },
+    "pdf": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-pdf/SKILL.md"
+      }
+    },
+    "cloudflare": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-cloudflare/SKILL.md"
+      }
+    },
+    "search": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-search/SKILL.md"
+      }
+    },
+    "fetch": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-fetch/SKILL.md"
+      }
+    },
+    "composio": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/composiohq-composio/SKILL.md"
+      }
+    },
+    "graphql-operations": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-graphql-operations/SKILL.md"
+      }
+    },
+    "mcp-builder": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-mcp-builder/SKILL.md"
+      }
+    },
+    "voltagent-best-practices": {
+      "available_in": [
+        "codex",
+        "claude"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/voltagent-best-practices/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/voltagent-best-practices/SKILL.md"
+      }
+    },
+    "canvas-design": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-canvas-design/SKILL.md"
+      }
+    },
+    "theme-factory": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-theme-factory/SKILL.md"
+      }
+    },
+    "wrangler": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-wrangler/SKILL.md"
+      }
+    },
+    "autofix": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/coderabbitai-autofix/SKILL.md"
+      }
+    },
+    "code-review": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/coderabbitai-code-review/SKILL.md"
+      }
+    },
+    "chronicle": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/chronicle/SKILL.md"
+      }
+    },
+    "functions": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-functions/SKILL.md"
+      }
+    },
+    "sandbox-sdk": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-sandbox-sdk/SKILL.md"
+      }
+    },
+    "voltagent-core-reference": {
+      "available_in": [
+        "codex",
+        "claude"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/voltagent-core-reference/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/voltagent-core-reference/SKILL.md"
+      }
+    },
+    "cookie-sync": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-cookie-sync/SKILL.md"
+      }
+    },
+    "cloudflare-email-service": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-cloudflare-email-service/SKILL.md"
+      }
+    },
+    "internal-comms": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-internal-comms/SKILL.md"
+      }
+    },
+    "ui-test": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-ui-test/SKILL.md"
+      }
+    },
+    "apollo-router-plugin-creator": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-router-plugin-creator/SKILL.md"
+      }
+    },
+    "pptx": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-pptx/SKILL.md"
+      }
+    },
+    "apollo-kotlin": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-kotlin/SKILL.md"
+      }
+    },
+    "doc-coauthoring": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-doc-coauthoring/SKILL.md"
+      }
+    },
+    "durable-objects": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-durable-objects/SKILL.md"
+      }
+    },
+    "web-artifacts-builder": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-web-artifacts-builder/SKILL.md"
+      }
+    },
+    "create-voltagent": {
+      "available_in": [
+        "codex",
+        "claude"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/create-voltagent/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/create-voltagent/SKILL.md"
+      }
+    },
+    "apollo-client": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-client/SKILL.md"
+      }
+    },
+    "voltagent-docs-bundle": {
+      "available_in": [
+        "codex",
+        "claude"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/voltagent-docs-bundle/SKILL.md",
+        "claude": "/Users/sirinx/.claude/skills/voltagent-docs-bundle/SKILL.md"
+      }
+    },
+    "frontend-design": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-frontend-design/SKILL.md"
+      }
+    },
+    "rover": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-rover/SKILL.md"
+      }
+    },
+    "apollo-router": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-router/SKILL.md"
+      }
+    },
+    "slack-gif-creator": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-slack-gif-creator/SKILL.md"
+      }
+    },
+    "apollo-federation": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-federation/SKILL.md"
+      }
+    },
+    "webapp-testing": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-webapp-testing/SKILL.md"
+      }
+    },
+    "xlsx": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-xlsx/SKILL.md"
+      }
+    },
+    "browserbase-cli": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-browserbase-cli/SKILL.md"
+      }
+    },
+    "web-perf": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/cloudflare-web-perf/SKILL.md"
+      }
+    },
+    "docx": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-docx/SKILL.md"
+      }
+    },
+    "apollo-mcp-server": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-mcp-server/SKILL.md"
+      }
+    },
+    "apollo-connectors": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-connectors/SKILL.md"
+      }
+    },
+    "rust-best-practices": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-rust-best-practices/SKILL.md"
+      }
+    },
+    "brand-guidelines": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-brand-guidelines/SKILL.md"
+      }
+    },
+    "graphql-schema": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-graphql-schema/SKILL.md"
+      }
+    },
+    "algorithmic-art": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/anthropics-algorithmic-art/SKILL.md"
+      }
+    },
+    "browser": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/browserbase-browser/SKILL.md"
+      }
+    },
+    "apollo-server": {
+      "available_in": [
+        "codex"
+      ],
+      "paths": {
+        "codex": "/Users/sirinx/.codex/skills/apollographql-apollo-server/SKILL.md"
+      }
+    },
+    "hermes-project-planning": {
+      "available_in": [
+        "claude"
+      ],
+      "paths": {
+        "claude": "/Users/sirinx/.claude/skills/hermes-project-planning/SKILL.md"
+      }
+    },
+    "start-run-debug": {
+      "available_in": [
+        "claude"
+      ],
+      "paths": {
+        "claude": "/Users/sirinx/.claude/skills/start-run-debug/SKILL.md"
+      }
+    },
+    "website-browser-automation": {
+      "available_in": [
+        "claude"
+      ],
+      "paths": {
+        "claude": "/Users/sirinx/.claude/skills/website-browser-automation/SKILL.md"
+      }
+    },
+    "agent-team-orchestration": {
+      "available_in": [
+        "claude"
+      ],
+      "paths": {
+        "claude": "/Users/sirinx/.claude/skills/agent-team-orchestration/SKILL.md"
+      }
+    }
+  }
+}

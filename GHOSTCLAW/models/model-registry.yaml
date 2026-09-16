@@ -1,0 +1,107 @@
+schema: ghostclaw.model_registry.v2
+version: "2.0.0"
+effective_date: "2026-06-30"
+description: "Registry of models available to the GHOSTCLAW Model Auto Swap Router"
+canonical_terminology:
+  brainstorm: canonical
+  beststorm: legacy_alias
+  beststrom: invalid_typo
+
+models:
+  kimi_k2_7_code:
+    display_name: "Kimi K2.7 Code"
+    provider: moonshot_ai
+    type: cloud_api
+    role: coding_tool_use_reference
+    strengths:
+      - code_patch_planning
+      - test_planning
+      - moa_reference_vote
+      - coding_worker
+    cost_per_1k_tokens: 0.004
+    context_window: 256000
+    requires_approval: false
+    lanes:
+      - code_patch
+      - coding
+      - moa_reference_vote
+
+  deepseek_v4_pro:
+    display_name: "DeepSeek V4 Pro"
+    provider: deepseek
+    type: cloud_api
+    role: architecture_reasoner
+    strengths:
+      - deep_reasoning
+      - architecture_design
+      - system_analysis
+      - debug_diagnosis
+    cost_per_1k_tokens: 0.002
+    context_window: 128000
+    requires_approval: false
+    lanes:
+      - architecture
+      - deep_reasoning
+
+  glm_5_2_max:
+    display_name: "GLM 5.2 Max"
+    provider: zhipu_ai
+    type: cloud_api
+    role: high_throughput_coder
+    strengths:
+      - repo_mapping
+      - high_throughput_code_generation
+      - schema_introspection
+      - documentation
+    cost_per_1k_tokens: 0.002
+    context_window: 128000
+    requires_approval: false
+    lanes:
+      - repo_mapping
+      - documentation
+      - schema_work
+
+  gpt_5_5:
+    display_name: "GPT-5.5"
+    provider: openai
+    type: cloud_api
+    role: final_decision_maker
+    strengths:
+      - final_decision
+      - policy_gate_review
+      - holistic_synthesis
+      - cross_lane_summary
+    cost_per_1k_tokens: 0.010
+    context_window: 256000
+    requires_approval: false
+    lanes:
+      - final_decision
+      - policy_review
+
+  claude_opus_4_8:
+    display_name: "Claude Opus 4.8"
+    provider: anthropic
+    type: cloud_api
+    role: critic_reviewer
+    strengths:
+      - critic_review
+      - quality_gate
+      - safety_audit
+      - complex_reasoning
+    cost_per_1k_tokens: 0.015
+    context_window: 200000
+    requires_approval: false
+    lanes:
+      - critic_review
+      - safety_audit
+
+fallback_model: glm_5_2_max
+
+safety_constraints:
+  no_live_provider_call: true
+  no_api_key_read: true
+  no_env_read: true
+  no_model_download: true
+  no_gpu_inference: true
+  routing_only: true
+  action_tier_cap_remains_final_authority: true

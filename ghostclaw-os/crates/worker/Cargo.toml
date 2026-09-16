@@ -1,0 +1,10 @@
+[package]
+name = "ghostclaw-worker"
+version.workspace = true
+edition = "2021"
+
+[dependencies]
+ghostclaw-core = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

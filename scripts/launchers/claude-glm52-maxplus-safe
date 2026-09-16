@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd /Users/sirinx/sirinx-os
+
+export GHOSTCLAW_POLICY_MODE="safe_local_layered"
+export GHOSTCLAW_EXPECTED_PROVIDER="maxplus"
+export GHOSTCLAW_EXPECTED_MODEL="glm-5.2"
+export GHOSTCLAW_EXPECTED_IDENTITY="glm-5.2 via MaxPlus proxy; not native Claude"
+export GHOSTCLAW_EFFORT_CAP="high"
+export CLAUDE_CODE_EFFORT_LEVEL="high"
+export CLAUDE_CODE_SUBPROCESS_ENV_SCRUB="1"
+export ANTHROPIC_BASE_URL="${MAXPLUS_BASE_URL:-https://api.maxplus-ai.cc/v1}"
+
+if [[ -z "${MAXPLUS_API_KEY:-}" ]]; then
+  echo "ERROR: MAXPLUS_API_KEY is not set. Refusing to start without printing or reading secret values." >&2
+  exit 1
+fi
+
+export ANTHROPIC_AUTH_TOKEN="${MAXPLUS_API_KEY}"
+export ANTHROPIC_API_KEY="${MAXPLUS_API_KEY}"
+
+exec claude "$@"

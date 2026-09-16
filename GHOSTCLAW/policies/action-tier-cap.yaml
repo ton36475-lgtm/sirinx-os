@@ -1,0 +1,195 @@
+schema: ghostclaw.action_tier_cap.v2
+mode: fail_closed_guarded_execution
+metadata:
+  version: "2.0.0"
+  effective_date: "2026-06-29"
+  description: "Allows bounded local decisions while holding red actions for an exact human gate"
+  canonical_terminology:
+    brainstorm: canonical
+    beststorm: legacy_alias
+    beststrom: invalid_typo
+
+autonomous_mutual_approval:
+  enabled: true
+  tier_d_requires_exact_human_approval: true
+  tier_x_is_not_approvable: true
+  fallback_behavior: auto_block
+
+  rules:
+    - safe_actions_auto_approve
+    - medium_actions_require_agent_quorum
+    - dangerous_actions_auto_block
+    - no_self_approval
+    - requester_agent_must_not_equal_approver_agent
+    - decision_id_required
+    - evidence_pack_required
+    - receipt_required
+
+agents:
+  allowed_approvers:
+    - hermes
+    - codex
+    - manus
+    - kob
+  no_self_approval: true
+
+tier_rank:
+  A: 4
+  B: 3
+  C: 2
+  D: 1
+  X: 0
+
+action_tier_cap:
+  # Tier A: Safe & Read-Only Actions (Auto-Approve)
+  read_only: A
+  runtime_artifact_write: B
+  governance_doc_write: B
+
+  # Tier B: Controlled Local Automation
+  no_install_validation: B
+  allowed_path_staging: B
+  source_mutation_allowed_path: B
+  schema_upgrade_allowed_path: B
+  code_patch_allowed_path: B
+  local_commit_allowed_scope: D
+
+  # Tier C: Medium Risk Environment Mutations (Agent Quorum Required)
+  lockfile_bound_dependency_repair: C
+  non_production_branch_push: D
+  staging_deploy_with_rollback: D
+
+  # Tier D: Exact human approval required; this engine never executes it
+  dependency_install: D
+  model_download: X
+  gpu_inference: X
+  external_network_write: D
+  commit: D
+
+  # Tier X: Strict forbidden actions (hard block, not approvable)
+  push: D
+  deploy: D
+  production_action: D
+  secret_access: X
+  ambiguous_input: X
+  recursive_codex_launch: X
+  recursive_moa_launch: X
+  kv_only_protocol: X
+
+auto_approve_tiers:
+  - A
+  - B
+
+agent_quorum_tiers:
+  - C
+
+auto_block_tiers:
+  - D
+  - X
+
+hard_violations_force_x:
+  - self_approval_attempted
+  - secret_access_requested
+  - ambiguous_input
+  - blocked_action_attempted
+  - production_action_requested
+  - model_download_requested
+  - gpu_live_inference_requested
+  - kv_only_protocol_requested
+  - recursive_codex_launch_requested
+  - recursive_moa_launch_requested
+
+action_class_aliases:
+  read: read_only
+  read_only: read_only
+  file_read: read_only
+  git_status: read_only
+  git_diff: read_only
+  brain_query: read_only
+  mission_status: read_only
+  plan: read_only
+  report_status: read_only
+  validate: read_only
+  run_tests: read_only
+  run_lint: read_only
+  debug_probe: read_only
+
+  runtime_artifact_write: runtime_artifact_write
+  write_runtime_artifact: runtime_artifact_write
+  write_lane: runtime_artifact_write
+  write_module: runtime_artifact_write
+  fix_bug: runtime_artifact_write
+  refactor: runtime_artifact_write
+
+  governance_doc_write: governance_doc_write
+  write_governance_doc: governance_doc_write
+
+  validation_no_install: no_install_validation
+  no_install_validation: no_install_validation
+  brainstorm: no_install_validation
+  moa_review: no_install_validation
+
+  allowed_path_staging: allowed_path_staging
+  stage_allowed_files: allowed_path_staging
+  git_add_allowed_scope: allowed_path_staging
+
+  allowed_path_mutation: source_mutation_allowed_path
+  source_mutation_allowed_path: source_mutation_allowed_path
+  integrate: source_mutation_allowed_path
+  integrate_patches: source_mutation_allowed_path
+  update_brain: source_mutation_allowed_path
+
+  schema_upgrade: schema_upgrade_allowed_path
+  schema_upgrade_allowed_path: schema_upgrade_allowed_path
+
+  code_patch: code_patch_allowed_path
+  code_patch_allowed_path: code_patch_allowed_path
+
+  local_commit: local_commit_allowed_scope
+  local_commit_allowed_scope: local_commit_allowed_scope
+  git_commit_local_scope: local_commit_allowed_scope
+
+  dependency_repair: lockfile_bound_dependency_repair
+  lockfile_bound_dependency_repair: lockfile_bound_dependency_repair
+
+  install_dependencies: dependency_install
+  dependency_install: dependency_install
+
+  gpu_inference: gpu_inference
+  model_download: model_download
+
+  commit: commit
+  git_commit: commit
+  stage_commit: commit
+
+  push: push
+  git_push: push
+
+  deploy: deploy
+  production_deploy: deploy
+  production_action: production_action
+
+  read_env: secret_access
+  read_secret: secret_access
+  secret_access: secret_access
+
+  ambiguous_input: ambiguous_input
+  blocked_action_attempted: ambiguous_input
+  blocked_action: ambiguous_input
+  external_api_write: ambiguous_input
+  customer_message_send: ambiguous_input
+  cloud_mutation: ambiguous_input
+
+  recursive_codex_launch: recursive_codex_launch
+  recursive_moa_launch: recursive_moa_launch
+  kv_only_protocol: kv_only_protocol
+
+unknown_action_class_default: X
+
+invariants:
+  - "violations override everything and force tier X"
+  - "effective_score is capped at 100; display_score may exceed 100"
+  - "action_tier_cap is final authority over base_tier"
+  - "JSON decision artifact > latent score always"
+  - "no self approval under any mode"
+  - "requester_agent must differ from approver_agent"

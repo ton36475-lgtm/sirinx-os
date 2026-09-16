@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/agent_roster_entry.schema.json",
+  "title": "GhostClaw Agent Roster Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_id",
+    "source_repo",
+    "division",
+    "ghostclaw_lane",
+    "tool_permissions_default",
+    "review"
+  ],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_repo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "division": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ghostclaw_lane": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_permissions_default": {
+      "const": "none"
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manual_review_required", "file_hash_required", "import_receipt_required"],
+      "properties": {
+        "manual_review_required": {
+          "const": true
+        },
+        "file_hash_required": {
+          "const": true
+        },
+        "import_receipt_required": {
+          "const": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+schema_version: "sirinx.qa.legacy-map.v1"
+status: "REPORTING_ADAPTER_ONLY"
+source:
+  manifest: "qa/baselines/legacy-qa-source-manifest.yaml"
+  implementation: "apps/sirinx-site/scripts/auto-review/auto-visual-bot-check.mjs"
+  receipt_schema: "schemas/auto_visual_bot_receipt.schema.json"
+verdicts:
+  auto_review_pass_bot_verified: "PASS"
+  auto_review_blocked_findings_attached: "UNVERIFIED"
+  baseline_initialized_needs_second_run: "BLOCKED"
+reason_codes:
+  auto_review_blocked_findings_attached: "LEGACY_FINDING_CLASSIFICATION_REQUIRED"
+severities:
+  critical: "S1"
+  high: "S2"
+  warning: "S3"
+  info: "S4"
+known_incompatibilities:
+  - id: "LEGACY-QA-001"
+    state: "FAIL"
+    description: "Implementation can emit baseline_initialized_needs_second_run but the legacy receipt schema rejects it."
+rules:
+  modifies_legacy_artifacts: false
+  grants_backward_validation: false
+  missing_mapping: "UNVERIFIED"

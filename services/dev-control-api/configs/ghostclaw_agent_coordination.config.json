@@ -1,0 +1,189 @@
+{
+  "$schema": "ghostclaw.agent_coordination.v1",
+  "version": "1.0.0",
+  "effectiveDate": "2026-07-14",
+  "sourceOfTruth": {
+    "coordinationContract": "configs/ghostclaw_agent_coordination.config.json",
+    "workerIdentityRegistry": "GHOSTCLAW/workers/registry/worker-registry.json",
+    "runtimeSnapshot": ".ghostclaw_runtime/a2a2a/worker_registry.json",
+    "runtimeAlias": ".ghostclaw_runtime/a2a2a/worker-registry.json",
+    "rule": "Runtime snapshots and UI rosters report status but do not redefine worker ownership."
+  },
+  "execution": {
+    "singleWriterRole": "codex_build_captain",
+    "gitOwnerRole": "codex_build_captain",
+    "maxConcurrentRepoWriters": 1,
+    "requireTaskEnvelope": true,
+    "requiredTaskFields": [
+      "task_id",
+      "lane_id",
+      "owner",
+      "allowed_paths",
+      "lease_id",
+      "base_sha",
+      "expected_outputs"
+    ],
+    "requireHeartbeatForActiveStatus": true,
+    "requireHandoffReceipt": true,
+    "directWorkerCommit": false,
+    "directWorkerPush": false,
+    "directWorkerDeploy": false
+  },
+  "roles": [
+    {
+      "id": "hermes_commander",
+      "purpose": "Mission priority, dependency routing, approval decisions, stop conditions, and final reporting.",
+      "reportsTo": "human_operator",
+      "repoAccess": "read_only",
+      "gitAccess": "none",
+      "mayExecuteTasks": false,
+      "mayApproveOwnWork": false
+    },
+    {
+      "id": "claude_architect",
+      "purpose": "Architecture, hard-code design review, invariants, and implementation packets before Codex writes.",
+      "reportsTo": "hermes_commander",
+      "repoAccess": "read_only",
+      "gitAccess": "none",
+      "mayExecuteTasks": false,
+      "providerHealthGate": "claude_code_oauth",
+      "fallbackHealthGate": "opencode_glm52"
+    },
+    {
+      "id": "codex_build_captain",
+      "purpose": "Only main-worktree writer, implementation owner, focused test runner, and scoped Git state owner.",
+      "reportsTo": "hermes_commander",
+      "repoAccess": "write_with_lease",
+      "gitAccess": "scoped_owner",
+      "mayExecuteTasks": true,
+      "mayApproveOwnWork": false
+    },
+    {
+      "id": "opencode_glm52_reviewer",
+      "purpose": "GLM-5.2 review and optional coding-candidate generation; output goes to A2A outbox for Codex application.",
+      "reportsTo": "codex_build_captain",
+      "repoAccess": "read_only",
+      "gitAccess": "none",
+      "mayExecuteTasks": false,
+      "providerHealthGate": "opencode_glm52",
+      "fallbackHealthGate": "opencode_fallback"
+    },
+    {
+      "id": "kob_validator",
+      "purpose": "Local validation, command-plan checks, evidence verification, and fail-closed verdicts.",
+      "reportsTo": "hermes_commander",
+      "repoAccess": "read_only",
+      "gitAccess": "none",
+      "mayExecuteTasks": false
+    },
+    {
+      "id": "policy_guardian",
+      "purpose": "Independent veto for policy, secret, deployment, and cross-lane violations.",
+      "reportsTo": "human_operator",
+      "repoAccess": "read_only",
+      "gitAccess": "none",
+      "mayExecuteTasks": false
+    },
+    {
+      "id": "telegram_controller",
+      "purpose": "Authenticated command ingress, explicit approval/status requests, and redacted result delivery.",
+      "reportsTo": "hermes_commander",
+      "repoAccess": "none",
+      "gitAccess": "none",
+      "mayExecuteTasks": false
+    },
+    {
+      "id": "mcp_connector",
+      "purpose": "MCP inventory, capability discovery, health checks, and scoped connector handoff only.",
+      "reportsTo": "hermes_commander",
+      "repoAccess": "read_only",
+      "gitAccess": "none",
+      "mayExecuteTasks": false
+    },
+    {
+      "id": "obsidian_brain",
+      "purpose": "Append-only durable memory pulse and context-pack lookup; never overrides repository truth.",
+      "reportsTo": "hermes_commander",
+      "repoAccess": "none",
+      "gitAccess": "none",
+      "mayExecuteTasks": false
+    },
+    {
+      "id": "mission_control",
+      "purpose": "Read-only status, queue, receipt, blocker, and health presentation.",
+      "reportsTo": "human_operator",
+      "repoAccess": "none",
+      "gitAccess": "none",
+      "mayExecuteTasks": false
+    }
+  ],
+  "pipeline": [
+    { "stage": "intake", "owner": "telegram_controller", "output": "authenticated_command_receipt" },
+    { "stage": "command", "owner": "hermes_commander", "output": "dependency_ordered_task_envelope" },
+    { "stage": "architecture", "owner": "claude_architect", "output": "architecture_packet" },
+    { "stage": "implementation", "owner": "codex_build_captain", "output": "leased_repo_patch" },
+    { "stage": "review", "owner": "opencode_glm52_reviewer", "output": "review_receipt" },
+    { "stage": "validation", "owner": "kob_validator", "output": "validation_verdict" },
+    { "stage": "policy", "owner": "policy_guardian", "output": "policy_verdict" },
+    { "stage": "report", "owner": "hermes_commander", "output": "final_handoff_receipt" },
+    { "stage": "observe", "owner": "mission_control", "output": "read_only_status" },
+    { "stage": "memory", "owner": "obsidian_brain", "output": "concise_memory_pulse" }
+  ],
+  "modelRouting": {
+    "architecture": {
+      "role": "claude_architect",
+      "primary": "claude-code/first-party",
+      "healthGate": "claude_code_oauth",
+      "fallback": "glm/glm-5.2",
+      "fallbackHealthGate": "opencode_glm52"
+    },
+    "implementation": {
+      "role": "codex_build_captain",
+      "primary": "current-codex-session",
+      "healthGate": "codex_local"
+    },
+    "review": {
+      "role": "opencode_glm52_reviewer",
+      "primary": "glm/glm-5.2",
+      "healthGate": "opencode_glm52",
+      "fallback": "opencode/deepseek-v4-flash-free",
+      "fallbackHealthGate": "opencode_fallback"
+    }
+  },
+  "approval": {
+    "safeAutoApprove": [
+      "read_repository",
+      "write_allowed_paths_by_codex_with_lease",
+      "run_focused_validation",
+      "write_local_receipt",
+      "append_redacted_obsidian_pulse"
+    ],
+    "alwaysGate": [
+      "secret_access",
+      "provider_credential_change",
+      "external_connector_write",
+      "live_message_send",
+      "push",
+      "deploy",
+      "production_mutation"
+    ],
+    "noSelfApproval": true
+  },
+  "mcp": {
+    "owner": "mcp_connector",
+    "defaultMode": "inventory_and_health_check",
+    "serverStartRequiresExplicitPacket": true,
+    "remoteWriteRequiresExplicitPacket": true,
+    "unverifiedNpxEntrypointsAllowed": false,
+    "secretsInConfigAllowed": false
+  },
+  "runtime": {
+    "missionState": ".ghostclaw_runtime/hermes_commander/mission/mission_state.json",
+    "activeLane": ".ghostclaw_runtime/hermes_commander/mission/active_lane.json",
+    "providerHealth": ".ghostclaw_runtime/a2a2a/provider-health.json",
+    "commandBrokerLock": ".ghostclaw_runtime/command_broker/locks/command_broker.lock",
+    "gitOwnerLock": ".ghostclaw_runtime/command_broker/locks/git_owner.lock",
+    "maxMissionAgeHours": 48,
+    "staleSessionsAreActive": false
+  }
+}

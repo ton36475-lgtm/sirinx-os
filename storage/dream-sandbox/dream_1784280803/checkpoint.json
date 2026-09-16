@@ -1,0 +1,11 @@
+{
+  "dream_id": "dream_1784280803",
+  "timestamp": "2026-07-17T09:33:24.035811+00:00",
+  "git_head": "962a7565b554",
+  "git_branch": "migration/v5-rebase",
+  "dirty_files": 40,
+  "changes_description": "auto-fix: apply mutation engine to resolve latest errors",
+  "stash_created": true,
+  "sandbox_path": "/Users/sirinx/sirinx-os/storage/dream-sandbox/dream_1784280803",
+  "status": "CHECKPOINT_CREATED"
+}

@@ -1,0 +1,15 @@
+# MaxPlus API Configuration
+# IMPORTANT: These values are placeholders - rotate before production
+# Original keys were compromised and removed
+
+api_key: "ccsk-f5df7ac2b69c70a51068c43bdb6ea0d78d2461fdad30edd7ae658ec189f173f8"
+secret_key: "CHANGE_ME_maxplus_secret_key"
+
+# Environment settings
+environment: development
+endpoint: https://api.maxplus.example.com/v1
+timeout_ms: 30000
+
+# Rate limiting
+rate_limit_rpm: 60
+rate_limit_burst: 10

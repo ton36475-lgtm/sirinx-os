@@ -1,0 +1,37 @@
+# Example LiteLLM-style model aliases for GhostClaw.
+# Do not put real secrets in this file.
+
+model_list:
+  - model_name: ghostclaw-laguna-free-coder
+    litellm_params:
+      model: openrouter/poolside/laguna-m.1:free
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  - model_name: ghostclaw-qwen3-coder-free
+    litellm_params:
+      model: openrouter/qwen/qwen3-coder:free
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  - model_name: ghostclaw-kimi-code-worker
+    litellm_params:
+      model: openrouter/moonshotai/kimi-k2.7-code
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  - model_name: ghostclaw-deepseek-architect
+    litellm_params:
+      model: openrouter/deepseek/deepseek-v3.2-exp
+      api_key: os.environ/OPENROUTER_API_KEY
+
+  - model_name: ghostclaw-local-qwen
+    litellm_params:
+      model: openai/qwen3-coder
+      api_base: os.environ/OLLAMA_BASE_URL
+      api_key: os.environ/OLLAMA_API_KEY
+
+router_settings:
+  routing_strategy: simple-shuffle
+  allowed_fails: 2
+  cooldown_time: 60
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY

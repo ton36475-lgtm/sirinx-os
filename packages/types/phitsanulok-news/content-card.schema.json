@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/phitsanulok-news/content-card.schema.json",
+  "title": "PhitsanulokNewsContentCard",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "category",
+    "district",
+    "sourceType",
+    "verificationStatus",
+    "summary",
+    "requiredChecks"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "title": { "type": "string", "minLength": 8 },
+    "category": { "type": "string" },
+    "district": { "type": "string" },
+    "sourceType": { "enum": ["public_note", "public_event", "partner_submission_draft"] },
+    "verificationStatus": { "enum": ["draft", "editor_review", "verified"] },
+    "summary": { "type": "string", "minLength": 20 },
+    "requiredChecks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 3
+    }
+  },
+  "additionalProperties": true
+}

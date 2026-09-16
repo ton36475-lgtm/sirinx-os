@@ -1,0 +1,60 @@
+{
+  "packet_id": "A2A2A-P061-ACTIVE-FOCUS-SCOPE-20260703",
+  "status": "PASS",
+  "active_focus": [
+    {
+      "id": "sirinx.co",
+      "package": "@sirinx/site",
+      "paths": [
+        "apps/sirinx-site"
+      ],
+      "purpose": "Protected public SIRINX website and review-gated public surface"
+    },
+    {
+      "id": "agm-autoflow",
+      "packages": [
+        "@agm/site",
+        "@sirinx/agm-autoglow-dashboard",
+        "@sirinx/autoglow-core"
+      ],
+      "paths": [
+        "apps/agm-site",
+        "apps/agm-autoglow-dashboard",
+        "packages/autoglow-core",
+        "docs/creative"
+      ],
+      "purpose": "AGM public creative site and AGM AutoFlow/AutoGlow local delivery workflow"
+    }
+  ],
+  "paused_out_of_focus": [
+    {
+      "id": "kusala",
+      "paths": [
+        "apps/kusala-site",
+        ".ghostclaw_runtime/a2a2a/project_queues/kusala"
+      ],
+      "reason": "Operator narrowed active focus to sirinx.co and AGM AutoFlow only."
+    },
+    {
+      "id": "phitsanulok-news",
+      "paths": [
+        "apps/phitsanulok-news",
+        "services/news-api",
+        "packages/types/phitsanulok-news",
+        ".ghostclaw_runtime/a2a2a/project_queues/phitsanulok_news"
+      ],
+      "reason": "Operator narrowed active focus to sirinx.co and AGM AutoFlow only."
+    }
+  ],
+  "blocked_without_separate_gate": [
+    "reactivate Kusala",
+    "reactivate Phitsanulok News",
+    "git push",
+    "deploy",
+    "Cloudflare/R2 mutation",
+    "provider call",
+    "Telegram live send",
+    "secret value print",
+    ".env read"
+  ]
+}

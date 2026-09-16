@@ -1,0 +1,1 @@
+{"gate":{"gate_id":"p105-gate-ready","status":"ready_for_human_result_transition_gate","dry_run":true,"live_execution":false,"human_decision_required":true,"queue_consumption_allowed":false,"source_mutation_allowed":false,"operator_action":"approve_or_reject_review_result_transition","next_action":"wait_for_explicit_human_transition_decision"},"missing":false,"invalid":false}

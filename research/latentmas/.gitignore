@@ -1,0 +1,27 @@
+# Rust
+target/
+Cargo.lock
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+
+# Runs
+runs/logs/
+runs/traces/
+runs/metrics/
+runs/debug/
+
+# Alignment cache
+*_Wa_*.pt
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp

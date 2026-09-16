@@ -1,0 +1,65 @@
+{
+  "schema": "sirinx.full-stack-godmode.receipt/v1",
+  "receipt_id": "RECEIPT-TEMPLATE",
+  "task_id": "TASK-TEMPLATE",
+  "status": "unverified",
+  "claim": "Replace with the bounded claim being verified.",
+  "scope": [
+    "replace/with/exact/scope"
+  ],
+  "observed_at": "2026-01-01T00:00:00Z",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "requirement": "Replace with an explicit requirement.",
+      "verdict": "UNVERIFIED",
+      "evidence": "Replace with an evidence path or state why it is missing."
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "current_file",
+      "path": "replace/with/evidence/path",
+      "sha256": null,
+      "observed_at": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "validation": [
+    {
+      "command": "replace with exact read-only validation command",
+      "exit_code": 1,
+      "coverage": "Describe what this check proves and what it does not prove."
+    }
+  ],
+  "gates": [],
+  "external_actions": {
+    "secret_read": {
+      "executed": false,
+      "gate_id": null
+    },
+    "install": {
+      "executed": false,
+      "gate_id": null
+    },
+    "provider_call": {
+      "executed": false,
+      "gate_id": null
+    },
+    "live_send": {
+      "executed": false,
+      "gate_id": null
+    },
+    "push": {
+      "executed": false,
+      "gate_id": null
+    },
+    "deploy": {
+      "executed": false,
+      "gate_id": null
+    }
+  },
+  "limitations": [
+    "Replace with explicit limitations."
+  ],
+  "next_safe_action": "Replace with one bounded next action."
+}

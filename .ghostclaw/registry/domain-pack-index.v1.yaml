@@ -1,0 +1,319 @@
+domain_packs:
+  - project_id: ghostclaw-os
+    canonical_role: root_operating_system
+    priority: highest
+    core_rules:
+      - "All routes inherit default routing unless overridden"
+      - "Gate policy applies to all projects under this OS"
+      - "Every autonomous action must produce a receipt"
+    constraints:
+      - "No external deploy without explicit gate approval"
+      - "Secrets never written to disk or vault"
+    known_design_tokens:
+      accent: "#00d4aa"
+      font_heading: "Inter"
+      font_body: "Inter"
+      spacing_unit: 4
+    build_order:
+      - bootstrap_governance
+      - register_schemas
+      - build_registry
+      - deploy_gate_policy
+      - verify_integrity
+    related_files_paths:
+      - ".ghostclaw/policies/*"
+      - ".ghostclaw/registry/*"
+      - ".ghostclaw/schemas/*"
+      - "AGENTS.md"
+      - "CLAUSE.md"
+
+  - project_id: sirinx-solar-carport
+    canonical_role: public_site_guardian
+    priority: high
+    core_rules:
+      - "No guaranteed ROI or savings claims allowed"
+      - "All copy must pass solar claim guard"
+      - "Lead data PII-masked in logs"
+    constraints:
+      - "No deployment without claim guard active"
+      - "External tracking must be privacy-compliant"
+    known_design_tokens:
+      accent: "#f59e0b"
+      font_heading: "Inter"
+      font_body: "Inter"
+      brand_green: "#10b981"
+      solar_orange: "#f97316"
+    known_public_copy:
+      tagline: "Solar Intelligence for Real ROI"
+      cta: "คำนวณ ROI ฟรี"
+    known_brand_text:
+      - "SIRINX GOD AI"
+      - "SIRINX Solar"
+      - "OPAL ROI"
+    build_order:
+      - design_landing
+      - build_roi_calculator
+      - wire_lead_capture
+      - add_claim_guard
+      - deploy_staging
+    related_files_paths:
+      - "apps/web-opal/"
+      - "services/api-opal/"
+      - "prompts/solar-claim-guard.md"
+      - "evaluation/solar_claim_cases.json"
+
+  - project_id: agm-alpha-gene-record
+    canonical_role: creative_media_platform
+    priority: medium
+    core_rules:
+      - "Creative assets must pass brand review before external use"
+      - "All generated content logged with prompt and model metadata"
+    constraints:
+      - "No unapproved external distribution"
+      - "Commercial use requires license verification"
+    known_design_tokens:
+      accent: "#7c3aed"
+      font_heading: "Space Grotesk"
+      font_body: "Inter"
+    known_public_copy:
+      tagline: "Your Brand, Amplified"
+    build_order:
+      - define_asset_pipeline
+      - build_prompt_templates
+      - wire_media_generation
+      - add_brand_review_gate
+      - catalog_assets
+    related_files_paths:
+      - "apps/creative-studio/"
+      - "services/creative-orchestrator/"
+      - "prompts/agm-templates/"
+      - "kms/brand-guidelines/"
+
+  - project_id: ads-andromeda-ads-queen
+    canonical_role: campaign_asset_factory
+    priority: medium
+    core_rules:
+      - "All ad creative must pass compliance filter"
+      - "No misleading or deceptive advertising claims"
+      - "A/B variants tracked with performance metadata"
+    constraints:
+      - "No automated ad spend without gate approval"
+      - "Platform-specific compliance rules enforced per channel"
+    known_design_tokens:
+      accent: "#ec4899"
+      font_heading: "Inter"
+      font_body: "Inter"
+    known_public_copy:
+      tagline: "Campaigns That Convert"
+    build_order:
+      - build_ad_template_library
+      - wire_compliance_filter
+      - implement_ab_variant_generator
+      - test_asset_output
+    related_files_paths:
+      - "services/api-marketing/"
+      - "prompts/ad-templates/"
+      - "workflows/ad-campaign-pipeline/"
+
+  - project_id: kusala-final-farewell
+    canonical_role: funeral_platform_planner
+    priority: medium
+    core_rules:
+      - "Thai language primary for all user-facing content"
+      - "Sensitive personal data handled according to PDPA"
+      - "PII masking mandatory in all logs and exports"
+    constraints:
+      - "No publishing of obituaries without family verification"
+      - "All data encrypted at rest"
+    known_design_tokens:
+      accent: "#6b7280"
+      font_heading: "Noto Sans Thai"
+      font_body: "Noto Sans Thai"
+      tone_light: true
+    build_order:
+      - design_ux_th
+      - build_obituary_flow
+      - wire_memorial_scheduling
+      - add_pii_guard
+      - test_sensitive_data_handling
+    related_files_paths:
+      - "apps/web-kusala/"
+      - "services/api-kusala/"
+      - "kms/pdpa-compliance/"
+      - "prompts/kusala-templates/"
+
+  - project_id: phitsanulok-united-news
+    canonical_role: local_news_automation
+    priority: medium
+    core_rules:
+      - "All news articles must cite sources"
+      - "Fact-check required for match reports and stats"
+      - "No automated defamation or misinformation"
+    constraints:
+      - "Content moderation gate before publication"
+      - "Attribution mandatory for third-party sources"
+    known_design_tokens:
+      accent: "#2563eb"
+      font_heading: "Prompt"
+      font_body: "Sarabun"
+      tone_news: true
+    build_order:
+      - design_news_layout
+      - build_article_pipeline
+      - wire_rss_sources
+      - add_content_moderation
+      - deploy_public
+    related_files_paths:
+      - "apps/web-news-phitsanulok/"
+      - "services/api-news/"
+      - "workflows/news-aggregation/"
+      - "prompts/news-templates/"
+
+  - project_id: amazon-merch-automation
+    canonical_role: local_first_merch_operations_system
+    priority: medium
+    core_rules:
+      - "Dashboard view-only by default"
+      - "No automated submission to Amazon Merch without explicit approval"
+      - "All listing drafts must pass QC checklist"
+    constraints:
+      - "Submission action requires C-gate approval"
+      - "Design assets must not infringe trademarks"
+    known_design_tokens:
+      accent: "#ff9900"
+      font_heading: "Inter"
+      font_body: "Inter"
+      brand_dark: "#131921"
+    build_order:
+      - design_dashboard_layout
+      - build_merch_pipeline
+      - wire_mock_submission
+      - add_approval_gate
+      - test_dry_run
+    related_files_paths:
+      - "apps/merch-dashboard/"
+      - "services/api-merch/"
+      - "workflows/merch-pipeline/"
+      - "prompts/merch-design-templates/"
+
+  - project_id: ai-image-education-carousel
+    canonical_role: education_content_pack
+    priority: low
+    core_rules:
+      - "Educational content only — no misleading or false visuals"
+      - "Thai language support required for all captions"
+      - "AI-generated images must be labeled as such"
+    constraints:
+      - "Content review before publishing"
+      - "No deepfake or deceptive imagery"
+    known_design_tokens:
+      accent: "#06b6d4"
+      font_heading: "Prompt"
+      font_body: "Sarabun"
+      tone_educational: true
+    build_order:
+      - design_carousel_templates
+      - build_prompt_engine
+      - wire_image_generation
+      - add_content_review
+    related_files_paths:
+      - "apps/image-studio/"
+      - "services/image-gateway/"
+      - "prompts/education-carousel/"
+
+  - project_id: rambutan-shop-campaign
+    canonical_role: local_campaign_asset_pack
+    priority: low
+    core_rules:
+      - "Assets must follow Rambutan Shop brand guidelines"
+      - "Campaign scope limited to local market"
+      - "All visuals approved before external use"
+    constraints:
+      - "No sharing of internal campaign drafts externally"
+      - "Asset variants tracked in registry"
+    known_design_tokens:
+      accent: "#e11d48"
+      font_heading: "Inter"
+      font_body: "Inter"
+      brand_secondary: "#f43f5e"
+    build_order:
+      - collect_brand_assets
+      - design_campaign_creatives
+      - build_variant_set
+      - deliver_asset_pack
+    related_files_paths:
+      - "apps/creative-studio/"
+      - "services/creative-orchestrator/"
+      - "kms/brand-guidelines/rambutan-shop/"
+
+  - project_id: storypro-marketing
+    canonical_role: customer_facing_marketing
+    priority: medium
+    core_rules:
+      - "Customer-facing copy must maintain brand voice consistency"
+      - "All marketing content must pass editorial review"
+      - "Track engagement metrics for iterative improvement"
+    constraints:
+      - "No automated customer outreach without approval"
+      - "Content reviewed before publication"
+    known_design_tokens:
+      accent: "#8b5cf6"
+      font_heading: "Inter"
+      font_body: "Inter"
+      tone_warm: true
+    known_public_copy:
+      tagline: "Stories That Sell"
+      cta: "เริ่มเล่าเรื่องแบรนด์ของคุณ"
+    build_order:
+      - define_brand_voice
+      - build_story_templates
+      - wire_marketing_pipeline
+      - add_review_gate
+    related_files_paths:
+      - "services/api-marketing/"
+      - "prompts/storypro-templates/"
+      - "kms/brand-voice.md"
+
+  - project_id: tiktok-live-compliance
+    canonical_role: compliant_video_pipeline_research
+    priority: low
+    core_rules:
+      - "Research only — no production deployment without separate approval"
+      - "No automated posting or scheduling to TikTok"
+      - "All findings must be documented and attributed"
+    constraints:
+      - "No real TikTok API calls without gate approval"
+      - "Compliance research must cite official TikTok policy sources"
+    build_order:
+      - study_compliance_rules
+      - research_pipeline_patterns
+      - document_findings
+      - propose_compliant_flow
+    related_files_paths:
+      - "research/tiktok-live-compliance/"
+      - "docs/tiktok-compliance/"
+      - "workflows/video-pipeline/"
+
+  - project_id: local-business-promo
+    canonical_role: reusable_promo_asset_factory
+    priority: low
+    core_rules:
+      - "Template-based generation only — no custom design per request"
+      - "All promo assets must include clear branding disclaimers"
+      - "Content must be appropriate for local business context"
+    constraints:
+      - "No paid ad spend without gate approval"
+      - "Assets restricted to template system"
+    known_design_tokens:
+      accent: "#14b8a6"
+      font_heading: "Inter"
+      font_body: "Inter"
+    build_order:
+      - design_template_system
+      - build_asset_factory
+      - wire_content_injection
+      - test_render_pipeline
+    related_files_paths:
+      - "apps/promo-factory/"
+      - "services/api-promo/"
+      - "prompts/promo-templates/"

@@ -12,5 +12,8 @@
     "obsidian:sync": "tsx src/cli.ts obsidian:sync",
     "ci-bess": "tsx src/cli.ts ci-bess",
     "ci-bess:obsidian:sync": "tsx src/cli.ts ci-bess:obsidian:sync"
+  },
+  "dependencies": {
+    "tsx": "^4.23.1"
   }
 }

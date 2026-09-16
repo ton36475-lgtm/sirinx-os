@@ -1,0 +1,60 @@
+{
+  "canonical_version": "2.0",
+  "source_node": "poipet_pc_heavy_worker",
+  "gateway_target": "http://127.0.0.1:20128",
+  "timestamp": 1784252048.4964259,
+  "message_id": "msg-packet_104_cloudflare_deploy_prep",
+  "mission_id": "M-packet_104_cloudflare_deploy_prep",
+  "from": {
+    "agent": "hermes-commander",
+    "role": "commander"
+  },
+  "to": {
+    "agent": "codex-captain",
+    "role": "worker"
+  },
+  "context": {
+    "goal": "{'project': 'sirinx-hermes-pending-work-dispatch', 'priority': 'P2', 'title': 'P-104: Cloudflare dep",
+    "tier": "A",
+    "mission": "",
+    "correlation_id": "corr-packet_104_cloudflare_deploy_prep"
+  },
+  "payload": {
+    "schema": "a2a2a.message.v2",
+    "message_id": "msg-packet_104_cloudflare_deploy_prep",
+    "mission_id": "M-packet_104_cloudflare_deploy_prep",
+    "timestamp": "2026-07-17T01:20:15.654869+00:00",
+    "from": {
+      "agent": "hermes-commander",
+      "role": "commander"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "worker"
+    },
+    "context": {
+      "goal": "{'project': 'sirinx-hermes-pending-work-dispatch', 'priority': 'P2', 'title': 'P-104: Cloudflare dep",
+      "tier": "A",
+      "mission": "",
+      "correlation_id": "corr-packet_104_cloudflare_deploy_prep"
+    },
+    "payload": {
+      "type": "task",
+      "action": "",
+      "depends_on": [],
+      "timeout": 300
+    },
+    "meta": {
+      "source": "task-dag-resolver",
+      "version": "2.0",
+      "converted_at": "2026-07-17T01:20:15.654890+00:00"
+    }
+  },
+  "routing_status": "CANONICALIZED",
+  "safety": {
+    "allowed": false,
+    "tier": "C",
+    "reason": "Tier C: cloudflare"
+  },
+  "dispatch_error": "error: unexpected argument '--no-stream' found\n\n  tip: a similar argument exists: '--no-alt-screen'\n\nUsage: codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]\n\nFor more information, try "
+}

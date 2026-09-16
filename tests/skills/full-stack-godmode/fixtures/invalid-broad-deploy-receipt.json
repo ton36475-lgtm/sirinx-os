@@ -1,0 +1,49 @@
+{
+  "schema": "sirinx.full-stack-godmode.receipt/v1",
+  "receipt_id": "RECEIPT-BROAD-DEPLOY-001",
+  "task_id": "TASK-DEPLOY-001",
+  "status": "verified",
+  "claim": "A deployment allegedly ran under a broad godmode token.",
+  "scope": ["all"],
+  "observed_at": "2026-07-14T08:05:00Z",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "requirement": "Deployment had exact authorization.",
+      "verdict": "VERIFIED",
+      "evidence": "godmode target=all action=deploy"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "chat_claim",
+      "path": "godmode target=all action=deploy",
+      "sha256": null,
+      "observed_at": "2026-07-14T08:05:00Z"
+    }
+  ],
+  "validation": [
+    {
+      "command": "wrangler deploy",
+      "exit_code": 0,
+      "coverage": "A claimed command exit without a target-specific gate."
+    }
+  ],
+  "gates": [],
+  "external_actions": {
+    "secret_read": {"executed": false, "gate_id": null},
+    "install": {"executed": false, "gate_id": null},
+    "provider_call": {"executed": false, "gate_id": null},
+    "live_send": {"executed": false, "gate_id": null},
+    "push": {"executed": false, "gate_id": null},
+    "deploy": {
+      "executed": true,
+      "gate_id": "GATE-BROAD",
+      "target": "all",
+      "scope": "all",
+      "exact_operation": "deploy"
+    }
+  },
+  "limitations": [],
+  "next_safe_action": "Obtain exact target-specific deployment evidence and authorization."
+}

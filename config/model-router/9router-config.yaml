@@ -1,0 +1,25 @@
+providers:
+  allowed:
+  - ollama-local
+  - openai-compatible
+  - anthropic-claude
+  - google-gemini
+cost_ceiling:
+  daily_usd: 5.0
+  weekly_usd: 25.0
+  monthly_usd: 100.0
+token_saver:
+  enabled: true
+  redact_secrets: true
+  compress_tool_output: true
+  max_token_per_call: 8192
+fallback:
+  enabled: true
+  max_attempts: 3
+  providers:
+  - primary: ollama-local
+    priority: 1
+  - fallback: openai-compatible
+    priority: 2
+  - fallback: gemini
+    priority: 3

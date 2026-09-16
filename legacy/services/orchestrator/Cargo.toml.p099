@@ -1,0 +1,21 @@
+# LEGACY P099 DRAFT - DO NOT USE AS AN ACTIVE MANIFEST
+
+[workspace]
+members = [
+  "crates/hermes-core",
+  "crates/hermes-worker",
+  "crates/hermes-governance",
+  "crates/hermes-lock",
+  "crates/hermes-router",
+  "crates/hermes-dispatch",
+]
+resolver = "2"
+
+[workspace.package]
+name = "hermes-v3"
+version = "3.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["Tony <tony@sirinx.co>"]
+
+# Runtime and PostgreSQL dependencies were removed from the active V5 preflight.

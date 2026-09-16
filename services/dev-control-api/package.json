@@ -5,6 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
+    "test": "pnpm run test:vitest && pnpm run test:node",
+    "test:vitest": "cd ../.. && node services/dev-control-api/node_modules/vitest/vitest.mjs run services/dev-control-api/src --exclude 'services/dev-control-api/src/*.node.test.mjs'",
+    "test:node": "cd ../.. && node --test services/dev-control-api/src/*.node.test.mjs",
     "verify": "node --check server.mjs && node --check src/gates.mjs"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
   }
 }

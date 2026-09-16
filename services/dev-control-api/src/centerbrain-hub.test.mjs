@@ -21,6 +21,7 @@ describe("CenterBrain Hub contract", () => {
       deviceNodes: 3,
       connectorLanes: 15,
       stackLanes: 7,
+      marketingAutomationLanes: 4,
       liveExternalActions: 0
     });
     expect(status.aiNodes.map((node) => node.id)).toEqual([
@@ -35,6 +36,12 @@ describe("CenterBrain Hub contract", () => {
       "pi"
     ]);
     expect(status.deviceNodes.map((node) => node.id)).toEqual(["mac", "pc", "mobile"]);
+    expect(status.deviceNodes.find((node) => node.id === "pc")).toMatchObject({
+      lanWorker: true,
+      canRemoteControlDevices: false,
+      allowedLocalRoles: expect.arrayContaining(["dry_run_marketing_planner", "autocut_prep"]),
+      forbiddenLocalRoles: expect.arrayContaining(["ad_publish", "live_upload", "remote_desktop_control"])
+    });
     expect(status.stackLanes.map((lane) => lane.id)).toEqual([
       "nextjs",
       "tailwind",
@@ -44,6 +51,15 @@ describe("CenterBrain Hub contract", () => {
       "local-api",
       "a2a2-sync"
     ]);
+    expect(status.marketingAutomation.map((lane) => lane.id)).toEqual([
+      "gemini-daily-report",
+      "ghostclaw-autoflow",
+      "autocut-prep",
+      "online-marketing-platform"
+    ]);
+    expect(status.marketingAutomation.every((lane) => lane.canPublishAds === false)).toBe(true);
+    expect(status.marketingAutomation.every((lane) => lane.canRunAutocut === false)).toBe(true);
+    expect(status.syncContract.reportConsumers).toContain("Gemini CLI manual review");
     expect(status.connectorRegistry.summary.connectorsTotal).toBe(15);
     expect(status.agentDriver.summary.commandExecuted).toBe(0);
   });
@@ -67,6 +83,15 @@ describe("CenterBrain Hub contract", () => {
     expect(dryRun.canDeploy).toBe(false);
     expect(dryRun.syncPlan.devices.map((device) => device.id)).toEqual(["mac", "pc", "mobile"]);
     expect(dryRun.syncPlan.aiNodes).toHaveLength(9);
+    expect(dryRun.syncPlan.marketingAutomation.map((lane) => lane.id)).toEqual([
+      "gemini-daily-report",
+      "ghostclaw-autoflow",
+      "autocut-prep",
+      "online-marketing-platform"
+    ]);
+    expect(dryRun.manualSteps).toContain(
+      "Use Gemini Daily Report as a local packet for manual review only; do not run Gemini automatically."
+    );
     expect(dryRun.syncPlan.handshake).toEqual([
       "discover",
       "classify",
@@ -75,13 +100,16 @@ describe("CenterBrain Hub contract", () => {
       "approval",
       "manual-activation"
     ]);
-    expect(dryRun.nextRecommendedAction).toBe("Build Next.js/Tailwind shell only after local dashboard contract remains green.");
+    expect(dryRun.nextRecommendedAction).toBe(
+      "Create a LAN PC pairing evidence packet before any PC worker sync or marketing automation run."
+    );
   });
 
   it("blocks dangerous sync goals", async () => {
     const dryRun = await createCenterBrainSyncDryRun(
       {
-        goal: "deploy, push, start MCP, install packages, send LINE and Telegram messages, read secrets"
+        goal:
+          "deploy, push, start MCP, install packages, send LINE and Telegram messages, read secrets, publish ads, run autoflow, export autocut video"
       },
       { now: fixedNow }
     );
@@ -94,7 +122,10 @@ describe("CenterBrain Hub contract", () => {
         "mcp_server_start",
         "install_packages",
         "message_send",
-        "secret_read_or_print"
+        "secret_read_or_print",
+        "marketing_platform_publish",
+        "autoflow_live_run",
+        "autocut_live_export"
       ])
     );
     expect(dryRun.externalWrites).toBe(false);

@@ -1,0 +1,27 @@
+{
+  "gateway_configuration": {
+    "node_identity": "local_mac_m2_core",
+    "core_endpoint": "http://127.0.0.1:20128",
+    "hermes_bridge_port": 8644,
+    "skills_api_port": 3800,
+    "protocol_format": "CANONICAL_A2A_V2"
+  },
+  "active_agent_routing_matrix": {
+    "default_llm_provider": "omniroute_load_balancer",
+    "available_providers_count": 250,
+    "mcp_infrastructure": {
+      "total_active_tools": 94,
+      "enabled_tool_groups": [
+        "filesystem-modifier",
+        "git-repository-manager",
+        "process-supervisor-cmux",
+        "obsidian-vault-sync"
+      ]
+    }
+  },
+  "error_interception_channels": {
+    "listen_panes": ["claudecode", "agy", "doctor"],
+    "auto_mutation_trigger": true,
+    "fallback_action": "freeze_state_to_cmux"
+  }
+}

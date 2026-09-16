@@ -1,0 +1,13 @@
+{
+  "mutation_id": "mut_1784281000_f92a99",
+  "error_log": "TIMEOUT after 120s - pnpm hq:test command timed out (exit code 124)",
+  "detected_at": 1784281000.263741,
+  "detected_at_iso": "2026-07-17T09:36:40.263742+00:00",
+  "source_node": "local_mac_m2_core",
+  "status": "MUTATION_READY",
+  "safety": {
+    "allowed": true,
+    "tier": "A",
+    "reason": "safe"
+  }
+}

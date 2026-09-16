@@ -1,0 +1,94 @@
+{
+  "$schema": "ghostclaw.hermes.telegram_gateway.config.v1",
+  "config_id": "HERMES-TELEGRAM-GATEWAY-CONFIG-20260703",
+  "status": "local_safe_config_ready",
+  "mode": "dry_run_first",
+  "approval_reference": "a019e53ee-d979-70d0-9951-fe7cc20887ecd",
+  "gateway": {
+    "defaultLiveSend": false,
+    "webhook": {
+      "enabled": false,
+      "url": null
+    },
+    "polling": {
+      "enabled": false
+    },
+    "allowedUpdates": [
+      "message",
+      "callback_query"
+    ],
+    "parseMode": null,
+    "disableWebPagePreview": true
+  },
+  "credentials": {
+    "source": "environment_presence_only",
+    "tokenEnvKey": "TelegramBotToken",
+    "primaryChatEnvKey": "TelegramHomeChannel",
+    "fallbackChatEnvKey": "TelegramChatId",
+    "approvalSigningKeyEnvKey": "GhostClawTelegramTrustKey",
+    "legacyEnvKeys": {
+      "token": ["TELEGRAM_BOT_TOKEN"],
+      "primaryChat": ["TELEGRAM_HOME_CHANNEL"],
+      "fallbackChat": ["TELEGRAM_CHAT_ID"],
+      "approvalSigningKey": ["GHOSTCLAW_TELEGRAM_TRUST_KEY"]
+    },
+    "storeValuesInRepo": false,
+    "printValues": false
+  },
+  "routing": {
+    "controlPlane": "telegram_to_hermes_preview",
+    "a2a2aInboxPath": ".ghostclaw_runtime/a2a2a/inbox/telegram",
+    "a2a2aOutboxPath": ".ghostclaw_runtime/a2a2a/outbox/telegram",
+    "a2a2aReceiptsPath": ".ghostclaw_runtime/a2a2a/receipts",
+    "queuePayloadExecution": false
+  },
+  "commands": {
+    "registryPath": "configs/telegram_command_center.config.json",
+    "sourceOfTruth": "registry",
+    "inlineCommandCopiesAllowed": false
+  },
+  "modelRouting": {
+    "sourceOfTruth": "configs/ghostclaw_agent_coordination.config.json",
+    "directProviderCall": false,
+    "providerCredentialMutation": false,
+    "usage": "read_model_route_status_only"
+  },
+  "gates": {
+    "liveSend": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_TELEGRAM_GATEWAY_LIVE_SEND_A019E53EE",
+      "requiresRecipientEvidence": true,
+      "requiresTokenPresenceOnlyCheck": true,
+      "receiptSchema": "ghostclaw.telegram.approval-receipt.v2",
+      "pendingReceiptRoot": ".ghostclaw_runtime/telegram/approvals/pending",
+      "consumedReceiptRoot": ".ghostclaw_runtime/telegram/approvals/consumed",
+      "singleUse": true,
+      "signatureAlgorithm": "hmac-sha256"
+    },
+    "webhookActivation": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_TELEGRAM_GATEWAY_WEBHOOK_ACTIVATION_A019E53EE"
+    },
+    "runtimeRestart": {
+      "status": "closed",
+      "requiredApproval": "APPROVE_HERMES_GATEWAY_RESTART_A019E53EE"
+    },
+    "providerCall": {
+      "status": "closed",
+      "requiredApprovalPattern": "APPROVE_TELEGRAM_PROVIDER_CALL_<request_id>",
+      "requiresProviderCredentialPresenceOnlyCheck": true,
+      "requiresBudgetConfirmation": true
+    }
+  },
+  "blockedActions": {
+    "liveTelegramSend": true,
+    "webhookActivation": true,
+    "tokenValueRead": true,
+    "tokenValuePrint": true,
+    "queuePayloadExecution": true,
+    "providerCall": true,
+    "install": true,
+    "push": true,
+    "deploy": true
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sirinx.local/schemas/auto_review_receipt.schema.json",
+  "title": "GhostClaw Auto Review Receipt",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "packet_id",
+    "status",
+    "run_id",
+    "created_at",
+    "result_path",
+    "closed_gates",
+    "no_push",
+    "no_deploy",
+    "no_cloud_mutation",
+    "no_live_send",
+    "no_secret_read"
+  ],
+  "properties": {
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "packet_id": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": [
+        "auto_review_pass",
+        "auto_review_pass_needs_human_approval",
+        "review_blocked_with_findings"
+      ]
+    },
+    "run_id": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string", "minLength": 1 },
+    "result_path": { "type": "string", "minLength": 1 },
+    "closed_gates": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "no_push": { "const": true },
+    "no_deploy": { "const": true },
+    "no_cloud_mutation": { "const": true },
+    "no_live_send": { "const": true },
+    "no_secret_read": { "const": true }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,63 @@
+{
+  "schema": "ghostclaw.lane1.hermes_review_decision.template.v1",
+  "status": "template_not_decision",
+  "decision": "pending",
+  "allowed_decisions": [
+    "route_to_opus",
+    "request_revision",
+    "open_codex_recorder_gate",
+    "block"
+  ],
+  "decision_record": false,
+  "lane2_authorized": false,
+  "provider_call": false,
+  "runtime_queue_execution": false,
+  "deploy": false,
+  "push": false,
+  "hermes_model_selection": {
+    "allowed_for_vibe_coding_drafts": true,
+    "models": "any",
+    "scope": "assist Hermes with vibe coding draft creation and architecture wording only",
+    "separate_action_gate_required": true,
+    "evidence": [
+      "data/pathspecs/ghostclaw_lane1_hermes_model_choice_boundary_2026-06-29.json",
+      "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_MODEL_CHOICE_BOUNDARY_2026-06-29.md"
+    ],
+    "does_not_authorize": [
+      "deploy",
+      "push",
+      "cloud_mutation",
+      "customer_send",
+      "secret_read",
+      "runtime_queue_execution"
+    ]
+  },
+  "external_action_approval": {
+    "blanket_approval_actionable": false,
+    "requires_gate_specific_approval": true,
+    "required_fields": [
+      "gate_id",
+      "action",
+      "target",
+      "environment",
+      "rollback",
+      "evidence_path"
+    ],
+    "blocked_without_gate": [
+      "deploy",
+      "push",
+      "cloud_mutation",
+      "customer_send",
+      "secret_read",
+      "paid_provider_call"
+    ]
+  },
+  "required_inputs": [
+    "_A2A_QUEUE/inbox/packet_012_ghostclaw_lane1_hermes_draft_review.json",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_DRAFT_REVIEW_REQUEST_2026-06-29.md",
+    "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_ARCHITECTURE_PACKET_DRAFT_FOR_HERMES_REVIEW_2026-06-29.md",
+    "docs/knowledge/SIRINX_ACTIVE_GOAL_COMPLETION_AUDIT_2026-06-29.md"
+  ],
+  "required_output_when_decided": "docs/knowledge/SIRINX_GHOSTCLAW_LANE1_HERMES_REVIEW_DECISION.md",
+  "notes": "Copy this template only when recording a real Hermes decision. The template itself is not approval and does not authorize LANE_2."
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "sirinx.website_line.uat_verification_receipt.v1",
+  "status": "local_uat_verified_no_deploy",
+  "date": "2026-07-02",
+  "packet": "_A2A_QUEUE/outbox/packet_039_sirinx_website_line_uat_verification_receipt.json",
+  "source_review_packet": "_A2A_QUEUE/outbox/packet_029_sirinx_website_line_hermes_review.json",
+  "receipt_doc": "docs/knowledge/SIRINX_WEBSITE_LINE_UAT_VERIFICATION_RECEIPT_2026-07-02.md",
+  "evidence_boundary": "local_static_preview_only",
+  "approval_scope": "verification_receipt_only_no_execution",
+  "not_approval": true,
+  "local_playwright_uat_execution": true,
+  "local_playwright_scope": "127.0.0.1 static preview only",
+  "verified_commands": [
+    "pnpm --filter @sirinx/site build",
+    "pnpm --filter @sirinx/site check",
+    "pnpm --filter @sirinx/site test:closed-gates",
+    "pnpm --filter @sirinx/site test:server",
+    "pnpm --filter @sirinx/site test:line"
+  ],
+  "verified_results": {
+    "build": "passed",
+    "static_check": "passed_17_files",
+    "closed_gate_regression": "passed_3_tests",
+    "server_tests": "passed_2_tests",
+    "line_browser_uat": "passed_42_tests"
+  },
+  "verified_routes": [
+    "/",
+    "/line",
+    "/contact",
+    "/trust-center",
+    "/projects",
+    "/quote",
+    "/roi-calculator"
+  ],
+  "verified_line_official": {
+    "display_name": "SIRINX โซล่าเซลล์",
+    "basic_id": "@304zrttj",
+    "short_link": "https://lin.ee/S97R6nj",
+    "qr_image_url": "https://qr-official.line.me/gs/M_304zrttj_GW.png?oat_content=qr",
+    "add_friend_url": "https://line.me/R/ti/p/%40304zrttj",
+    "chat_url": "https://line.me/R/oaMessage/%40304zrttj"
+  },
+  "verified_closed_gates": {
+    "deploy": false,
+    "push": false,
+    "cloud_mutation": false,
+    "production_mutation": false,
+    "line_webhook_activation": false,
+    "production_analytics": false,
+    "crm_customer_data_storage": false,
+    "mongodb_connect": false,
+    "database_write": false,
+    "database_migration": false,
+    "customer_data": false,
+    "production_data": false,
+    "external_message_send": false,
+    "telegram_live_send": false,
+    "line_send": false,
+    "customer_send": false,
+    "provider_call": false,
+    "paid_provider_call": false,
+    "secret_read": false,
+    "real_env_read": false,
+    "dependency_install": false,
+    "external_browser_automation_execution": false,
+    "stagehand_execution": false,
+    "public_tunnel": false,
+    "runtime_queue_execution": false,
+    "local_stack_restart": false
+  },
+  "required_future_approval_phrases": [
+    "APPROVE_DEPLOY_SIRINX_SITE_<date>",
+    "APPROVE_LINE_WEBHOOK_<scope>_<date>",
+    "APPROVE_PRODUCTION_ANALYTICS_<scope>_<date>",
+    "APPROVE_CRM_CUSTOMER_DATA_STORAGE_<scope>_<date>",
+    "APPROVE_LOCAL_STACK_RESTART_<scope>_<date>"
+  ],
+  "next_safe_action": "Hermes/operator reviews packet_039 as local verification evidence; deployment, LINE webhook, production analytics, CRM/customer data storage, live sends, and local stack restart still require separate exact approval."
+}

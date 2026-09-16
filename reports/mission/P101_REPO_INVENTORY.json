@@ -1,0 +1,130 @@
+{
+  "claims": {
+    "distributed_mutex_established": false,
+    "langgraph_connected": null,
+    "mcp_servers_active": null,
+    "tmux_session_presence_is_execution_proof": false
+  },
+  "git": {
+    "available": true,
+    "branch": "feat/sirinx-web-line-trust-v1",
+    "clean": false,
+    "entries": 45,
+    "head": "044bc4e7754be2d3351abe530ae60d6db210b1b4",
+    "staged": 0,
+    "status_sha256": "529ed1ab4e9f685fa451f73e003d68c3f573d338594d80d3b437f2adb9995225",
+    "unstaged": 5,
+    "untracked": 40
+  },
+  "manifests": {
+    "cargo": [
+      {
+        "name": "ghostclaw_migration_core",
+        "path": "crates/ghostclaw_migration_core/Cargo.toml"
+      },
+      {
+        "name": "latentmas",
+        "path": "research/latentmas/Cargo.toml"
+      },
+      {
+        "name": "katgpt-orchestrator",
+        "path": "research/latentmas/crates/katgpt-orchestrator/Cargo.toml"
+      },
+      {
+        "name": "latent-protocol",
+        "path": "research/latentmas/crates/latent-protocol/Cargo.toml"
+      }
+    ],
+    "packages": [
+      {
+        "name": ".opencode",
+        "path": ".opencode/package.json"
+      },
+      {
+        "name": "@sirinx/agm-autoglow-dashboard",
+        "path": "apps/agm-autoglow-dashboard/package.json"
+      },
+      {
+        "name": "@agm/site",
+        "path": "apps/agm-site/package.json"
+      },
+      {
+        "name": "@sirinx/centerbrain-shell",
+        "path": "apps/centerbrain-shell/package.json"
+      },
+      {
+        "name": "@sirinx/dev-dashboard",
+        "path": "apps/dev-dashboard/package.json"
+      },
+      {
+        "name": "@sirinx/enterprise-ai-company",
+        "path": "apps/enterprise-ai-company/package.json"
+      },
+      {
+        "name": "@kusala/site",
+        "path": "apps/kusala-site/package.json"
+      },
+      {
+        "name": "@merch/dashboard",
+        "path": "apps/merch-dashboard/package.json"
+      },
+      {
+        "name": "@phitsanulok/news",
+        "path": "apps/phitsanulok-news/package.json"
+      },
+      {
+        "name": "@sirinx/site",
+        "path": "apps/sirinx-site/package.json"
+      },
+      {
+        "name": "@sirinx/solar-intelligence",
+        "path": "apps/solar-intelligence/package.json"
+      },
+      {
+        "name": "openwiki",
+        "path": "openwiki/package.json"
+      },
+      {
+        "name": "sirinx-os",
+        "path": "package.json"
+      },
+      {
+        "name": "@sirinx/autoglow-core",
+        "path": "packages/autoglow-core/package.json"
+      },
+      {
+        "name": "@sirinx/clawforge-adapter",
+        "path": "packages/clawforge-adapter/package.json"
+      },
+      {
+        "name": "@sirinx/content-factory",
+        "path": "packages/content-factory/package.json"
+      },
+      {
+        "name": "@sirinx/policy-core",
+        "path": "packages/policy-core/package.json"
+      },
+      {
+        "name": "@sirinx/dev-control-api",
+        "path": "services/dev-control-api/package.json"
+      },
+      {
+        "name": "@services/news-api",
+        "path": "services/news-api/package.json"
+      }
+    ]
+  },
+  "repo_root": "/Users/sirinx/sirinx-os",
+  "schema": "sirinx.p101.repo-inventory.v2",
+  "tmux": {
+    "available": true,
+    "sessions": [
+      "claude-worker",
+      "codex-worker",
+      "opencode-worker",
+      "sirinx-full-dev-control-api",
+      "sirinx-full-dev-dashboard",
+      "sirinx-full-sirinx-site"
+    ]
+  }
+}

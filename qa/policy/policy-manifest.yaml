@@ -1,0 +1,21 @@
+schema_version: "sirinx.qa.policy-manifest.v1"
+policy:
+  id: "SIRINX-QA-CONTROL-PLANE"
+  version: "1.1.0-draft"
+  status: "CANONICAL_CANDIDATE_AWAITING_APPROVAL"
+  approved_by: null
+  approved_at: null
+  supersedes: null
+  bundle_sha256: "366c1d04a786df9ffc6ce5aa85954038f230783d79f5b7808504c9a1cb986692"
+bundle_algorithm: "sha256(sorted sha256sum records for the five files below)"
+files:
+  - path: "qa/policy/SIRINX_QA_CORE_POLICY_V1.md"
+    sha256: "a1982d0e9956ee61c85fac0d8e5a57e4d6ff824f2a046f40ed78044bcd2a77bd"
+  - path: "qa/policy/SAFETY_AND_EXTERNAL_WRITE_POLICY.md"
+    sha256: "c794328f88371987b8aa29aea36f2203400eb4fa7b3c2e3e1a661897e36ad0d7"
+  - path: "qa/policy/EVIDENCE_POLICY.md"
+    sha256: "598606ec84e7ae03077bf5cb6431b0046854b8dd179165d9b517dc6f304830ca"
+  - path: "qa/policy/SEVERITY_POLICY.md"
+    sha256: "5c49e68a29954bc0f59154fff6f1b31f8b82212f33aa8e990da2dc23092151a4"
+  - path: "qa/policy/RELEASE_DECISION_POLICY.md"
+    sha256: "2a1f75d69846c13b14284f5235ef5186d6654bca3d73aa2a78e5097472d71c15"

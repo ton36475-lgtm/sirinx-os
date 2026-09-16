@@ -1,0 +1,62 @@
+{
+  "router_version": "GHOSTCLAW_MODEL_ROUTER_V1_6",
+  "default_network_mode": "local_first",
+  "models": {
+    "local_fast_coder": {
+      "provider": "ollama",
+      "model": "gemma4:12b-mlx",
+      "base_url": "http://localhost:11434",
+      "role": "primary_local_coding_agent",
+      "allowed_when": ["OFFLINE", "CAPTIVE_OR_LIMITED", "ONLINE_AUTHORIZED"]
+    },
+    "local_light_edge": {
+      "provider": "ollama",
+      "model": "gemma4:e4b-mlx",
+      "base_url": "http://localhost:11434",
+      "role": "fast_small_task_agent",
+      "allowed_when": ["OFFLINE", "CAPTIVE_OR_LIMITED", "ONLINE_AUTHORIZED"]
+    },
+    "existing_qwen_fallback": {
+      "provider": "ollama",
+      "model": "qwen2.5-coder:7b",
+      "base_url": "http://localhost:11434",
+      "role": "legacy_coder_fallback",
+      "allowed_when": ["OFFLINE", "CAPTIVE_OR_LIMITED", "ONLINE_AUTHORIZED"]
+    },
+    "cloud_escalation": {
+      "provider": "external",
+      "model": "policy_selected",
+      "role": "final_architecture_review_only",
+      "allowed_when": ["ONLINE_AUTHORIZED"],
+      "gate_required": true
+    }
+  },
+  "routing_rules": [
+    {
+      "match": ["repo_map", "diff_review", "patch_plan", "unit_test_fix", "mcp_task_plan", "local_coding"],
+      "route_to": "local_fast_coder"
+    },
+    {
+      "match": ["summary", "receipt", "status_report", "quick_classification"],
+      "route_to": "local_light_edge"
+    },
+    {
+      "match": ["unknown_high_risk", "cloud_api_required", "final_moa_review"],
+      "route_to": "cloud_escalation",
+      "requires_network_mode": "ONLINE_AUTHORIZED",
+      "requires_decision_gate": true
+    }
+  ],
+  "hard_blocks": {
+    "secret_read": true,
+    "auto_push": true,
+    "auto_deploy": true,
+    "telegram_live_send_without_gate": true,
+    "provider_paid_call_without_gate": true,
+    "network_bypass": true,
+    "fake_sni": true,
+    "tls_validation_disable": true,
+    "captive_portal_bypass": true,
+    "unauthorized_proxy_tunnel": true
+  }
+}

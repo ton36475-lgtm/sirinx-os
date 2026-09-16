@@ -1,0 +1,6 @@
+niche_id,niche_name,audience,buyer_intent,gift_occasion,seasonality,demand_score,competition_gap_score,ip_safety_score,reusable_asset_score,total_score,status,notes
+NICHE-001,Weekend Pickleball Aunties,Women 35-60 gifting circle,giftable hobby pride,birthday mothers day weekend league,evergreen spring summer,18,14,22,16,87,IP_PRECHECK_GREEN,Original phrase family; avoid league or brand terms.
+NICHE-002,Thai Cafe Cat Dad,Cat owners and cafe culture buyers,identity humor gift,father day birthday,evergreen,16,17,21,15,82,RESEARCHED,Use generic cafe symbols only; no known character style.
+NICHE-003,Solar Engineer Weekend Mode,Solar installers engineers,work pride niche humor,team gift trade show,evergreen,15,16,20,14,78,DESIGN_BRIEF_READY,Original technical humor; avoid company names and certification marks.
+NICHE-004,Retro Garden Club Captain,Gardening clubs and plant lovers,club identity gift,spring garden fairs,spring summer,17,15,23,17,88,IP_PRECHECK_GREEN,Reusable botanical motif pack.
+NICHE-005,Blocked Famous Space Wizard Parody,fantasy fans,trend capture,holiday,seasonal,20,8,5,4,49,IP_PRECHECK_RED_BLOCKED,Blocked because it depends on recognizable protected references.

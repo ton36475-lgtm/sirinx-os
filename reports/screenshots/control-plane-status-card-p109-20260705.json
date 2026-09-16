@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "packet_id": "P109_DASHBOARD_STATUS_CARD_SCREENSHOT_PROOF",
+  "mode": "local_file_fixture_browser_capture",
+  "fixture_path": "/Users/sirinx/sirinx-os/apps/dev-dashboard/fixtures/control-plane-status-card-visual-smoke.html",
+  "screenshot_path": "/Users/sirinx/sirinx-os/reports/screenshots/control-plane-status-card-p109-20260705.png",
+  "screenshot_bytes": 90207,
+  "viewport": {
+    "width": 1280,
+    "height": 960
+  },
+  "panel_bounds": {
+    "x": 50,
+    "y": 28,
+    "width": 1180,
+    "height": 745
+  },
+  "assertions": {
+    "title": true,
+    "subtitle": true,
+    "projects": true,
+    "guardrails": true,
+    "localOnlyCopy": true,
+    "providerBlocked": true,
+    "deployBlocked": true,
+    "cloudflareBlocked": true
+  },
+  "network_policy": "file_and_data_urls_only",
+  "live_actions": false,
+  "server_started": false,
+  "worker_execution": false,
+  "provider_call": false,
+  "live_telegram_send": false,
+  "secret_read": false,
+  "install": false,
+  "push": false,
+  "deploy": false,
+  "cloudflare_r2_mutation": false,
+  "database_migration": false,
+  "created_at": "2026-07-05T10:04:52.700Z"
+}

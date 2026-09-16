@@ -1,0 +1,10 @@
+{
+  "id": "agent_security",
+  "type": "agent",
+  "label": "Security Agent",
+  "capabilities": ["threat_model", "policy_review", "secret_hygiene_review", "blocked_action_review"],
+  "default_model_route": "deepseek",
+  "fable5_allowed": false,
+  "approval_required_for": ["external_scan", "dependency_install", "provider_call"]
+}
+

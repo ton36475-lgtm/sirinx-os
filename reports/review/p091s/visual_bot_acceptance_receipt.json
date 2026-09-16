@@ -1,0 +1,66 @@
+{
+  "packet_id": "P091S_VISUAL_BOT_ACCEPTANCE",
+  "status": "P091S_VISUAL_BOT_ACCEPTANCE_PASS_READY_FOR_SCOPED_COMMIT_GATE",
+  "run_at": "2026-07-07T04:36:30+0700",
+  "repo": "/Users/sirinx/sirinx-os",
+  "mode": "LOCAL_ONLY_NO_DEPLOY_NO_PUSH",
+  "scope": "apps/sirinx-site + reports/review/p087b + reports/visual/baseline/home-*",
+  "objective": "Accept the restored Solar Carport homepage visual baseline and verify bot/contact behavior before opening a scoped website commit gate.",
+  "visual_acceptance": {
+    "decision": "accepted_restored_solar_carport_homepage_as_new_baseline",
+    "reason": "P091S intentionally restores the original Solar Carport homepage, so the old homepage baseline no longer represents the desired page.",
+    "baseline_files_refreshed": [
+      "reports/visual/baseline/home-desktop-1440.png",
+      "reports/visual/baseline/home-mobile-375.png",
+      "reports/visual/baseline/home-mobile-414.png",
+      "reports/visual/baseline/home-tablet-768.png"
+    ],
+    "baseline_sha256": {
+      "reports/visual/baseline/home-desktop-1440.png": "c4e0d08cfdc5e65c0a18617480e24881cbfb6db328d5af1f82e48e6576831a13",
+      "reports/visual/baseline/home-mobile-375.png": "a8d6c67e403652ed86d9c0c8b9f5c9c9284238bac83ae6aa1859170c08ee761a",
+      "reports/visual/baseline/home-mobile-414.png": "1b066ba61355280b8bc87e63a7dfda75165863d2cc8ce4364be8516b85ed7780",
+      "reports/visual/baseline/home-tablet-768.png": "57e6ee129e0626a356e90fe0487697a990285241955851c3f83093fb8a9631b0"
+    }
+  },
+  "auto_visual_bot": {
+    "receipt_path": "reports/review/p087b/auto_visual_bot_receipt.json",
+    "result_path": "reports/review/p087b/auto_visual_bot_result.json",
+    "verdict": "auto_review_pass_bot_verified",
+    "run_at": "2026-07-07T04:35:12+0700",
+    "routes_checked": [
+      "/",
+      "/line/",
+      "/contact/",
+      "/trust-center/",
+      "/projects/",
+      "/quote/",
+      "/roi-calculator/"
+    ],
+    "visual_regression": "passed_28_of_28_diff_ratio_0",
+    "accessibility_bot": "passed_axe_core_0_serious_violations",
+    "broken_link_crawler": "passed_0_broken_links",
+    "console_error_scan": "passed_0_errors",
+    "mobile_overlap_bot": "passed_0_blocking_overlaps",
+    "lighthouse_scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "seo": 100,
+      "best_practices": 96
+    },
+    "seo_meta_bot": "passed_0_findings",
+    "form_dry_run_bot": "passed_no_submit",
+    "cross_browser_bot": "passed_21_of_21"
+  },
+  "blocked_actions_confirmed": [
+    "deploy",
+    "git_push",
+    "cloudflare_r2_d1_kv_dns_mutation",
+    "line_webhook_activation",
+    "crm_customer_storage_write",
+    "live_telegram_line_email_customer_send",
+    "provider_model_call",
+    "secret_read_print",
+    "broad_dirty_tree_cleanup"
+  ],
+  "next_safe_action": "Open P091S scoped website commit gate only. Push and deploy remain separate exact gates."
+}

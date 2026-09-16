@@ -1,7 +1,7 @@
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
-import { extname, join, normalize } from "node:path";
+import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createDashboardProject } from "./src/autoglow-dashboard-core.mjs";
 import {
@@ -14,7 +14,9 @@ import {
 } from "./src/autoglow-backend-store.mjs";
 
 const root = fileURLToPath(new URL("./src/", import.meta.url));
-const dataRoot = fileURLToPath(new URL("./data/", import.meta.url));
+const dataRoot = process.env.AUTOGLOW_DASHBOARD_DATA_DIR
+  ? resolve(process.env.AUTOGLOW_DASHBOARD_DATA_DIR)
+  : fileURLToPath(new URL("./data/", import.meta.url));
 const storePaths = createStorePaths(dataRoot);
 const host = process.env.AUTOGLOW_DASHBOARD_HOST || "127.0.0.1";
 const port = Number(process.env.AUTOGLOW_DASHBOARD_PORT || 8730);

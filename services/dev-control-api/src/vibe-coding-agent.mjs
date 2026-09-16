@@ -2,6 +2,10 @@ import { getExternalGateEvidenceStatus } from "./external-gate-evidence.mjs";
 import { getSocStatus } from "./soc-status.mjs";
 import { getTruthProtocolStatus } from "./truth-protocol.mjs";
 import { getVibeCommandCenter } from "./vibe-workflows.mjs";
+import {
+  CODING_ENGINE_SECURITY_RULES,
+  evaluateCodingEngineSecurityAction
+} from "../../../packages/policy-core/src/index.mjs";
 
 export const vibeAgentBlockedActions = [
   "deploy",
@@ -12,8 +16,16 @@ export const vibeAgentBlockedActions = [
   "paid_api_call",
   "secret_read_or_print",
   "customer_message_send",
-  "production_database_write"
+  "production_database_write",
+  "raw_env_file_read",
+  "mongodb_write_without_exact_gate",
+  "dependency_install_without_exact_gate",
+  "public_tunnel_without_exact_gate",
+  "production_or_customer_data_crud_uat"
 ];
+
+export const codingEngineSecurityRules = CODING_ENGINE_SECURITY_RULES;
+export { evaluateCodingEngineSecurityAction };
 
 const safeActions = [
   {
@@ -88,6 +100,13 @@ export async function getVibeCodingAgentStatus(options = {}) {
     }));
   const reviewQueue = makeReviewQueue(evidence);
   const blockedGateQueue = makeBlockedGateQueue(evidence);
+  const uatCrudMongoPolicy = evaluateCodingEngineSecurityAction({
+    id: "uat-crud-mongodb-default-write",
+    type: "mongodb-crud-uat",
+    target: "mongodb:local-synthetic-uat",
+    databaseWrite: true,
+    description: "Default MongoDB CRUD UAT verifier write gate"
+  });
 
   return {
     title: "Local Vibe Coding Agent",
@@ -106,11 +125,23 @@ export async function getVibeCodingAgentStatus(options = {}) {
       readyForHumanReview: evidence.summary.ready,
       executableExternalActions: 0,
       blockedActions: vibeAgentBlockedActions.length,
+      codingEngineSecurityRules: codingEngineSecurityRules.length,
       vibeFunctions: vibe.summary?.functions || 0,
       socStatus: soc.status,
       truthProtocol: truth.status
     },
     safeActions,
+    codingEngineSecurityRules,
+    uatCrudMongoSecurityProfile: {
+      mode: "dry-run-discovery-only",
+      defaultWriteDecision: uatCrudMongoPolicy.decision,
+      requiredApproval: "APPROVE_LOCAL_UAT_CRUD_MONGODB_<target>_<date>",
+      syntheticDataOnly: true,
+      canReadRealEnv: false,
+      canUseCustomerData: false,
+      canInstallPackages: false,
+      canOpenPublicTunnel: false
+    },
     reviewQueue,
     blockedGates: blockedGateQueue,
     blockedActions: vibeAgentBlockedActions,

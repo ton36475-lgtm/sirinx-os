@@ -1,0 +1,118 @@
+{
+  "schema": "ghostclaw.external_repo_install_approval_template.v1",
+  "status": "template_only",
+  "template_id": "GATE-INSTALL-AGENT-BLACKBOX-QUARANTINE-TEMPLATE-20260630",
+  "approval_id": "GATE-INSTALL-AGENT-BLACKBOX-QUARANTINE-<YYYYMMDD-NNN>",
+  "requested_by": "sirinx",
+  "approved_by": null,
+  "approved_at": null,
+  "created_at": "2026-06-30T00:14:15Z",
+  "local_created_at": "2026-06-30T07:14:15+0700",
+  "single_use": true,
+  "install_executed": false,
+  "dependency_install_executed": false,
+  "postinstall_executed": false,
+  "global_plugin_write_executed": false,
+  "daemon_dashboard_executed": false,
+  "provider_call_executed": false,
+  "secret_read_executed": false,
+  "gate": "GATE-INSTALL-AGENT-BLACKBOX-QUARANTINE",
+  "approval_phrase": "APPROVE_INSTALL_AGENT_BLACKBOX_QUARANTINE",
+  "target": {
+    "repo": "/Users/sirinx/sirinx-os",
+    "source": "https://github.com/Yeachan-Heo/Agent-Blackbox",
+    "quarantine_path": ".ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox",
+    "branch": "main",
+    "head": "d1eb1d0",
+    "package": "agent-blackbox-monorepo@0.0.0",
+    "license": null
+  },
+  "command_plan": {
+    "type": "manual_review_required_command_template",
+    "requires_exact_operator_fill": true,
+    "requires_readme_recheck": true,
+    "command_template": "npx @taewooopark/agent-blackbox up --project <throwaway-project-dir> --no-open",
+    "must_not_run_from_template": true,
+    "notes": "Template is intentionally not executable. Verify current README, package entrypoint, ports, project-scoped writes, and no-open behavior before activation."
+  },
+  "scope": {
+    "allowed_actions_after_activation": [
+      "read_quarantine_metadata",
+      "verify_package_metadata",
+      "capture_before_after_file_inventory",
+      "project_scoped_no_open_smoke_only_if_command_is_filled_and_reviewed",
+      "capture_ports_and_process_ids",
+      "write_local_receipt"
+    ],
+    "forbidden_actions": [
+      "active_repo_root_install",
+      "unreviewed_npx",
+      "global_opencode_plugin_write_without_separate_approval",
+      "optimize_apply_memory_write",
+      "claude_or_opencode_transcript_tail_without_review",
+      "provider_suggestion_mode",
+      "browser_open",
+      "customer_live_send",
+      "secret_read",
+      "deploy",
+      "git_push",
+      "curl_pipe_bash",
+      "model_download",
+      "gpu_inference"
+    ],
+    "expected_writes_to_confirm": [
+      "<throwaway-project-dir>/.agent-blackbox/**",
+      "<throwaway-project-dir>/.opencode/** only if project scoped",
+      "~/.config/opencode/** only if separately approved",
+      ".ghostclaw_runtime/a2a2a/receipts/**",
+      ".ghostclaw_runtime/a2a2a/state/**"
+    ],
+    "forbidden_files": [
+      ".env",
+      ".env.*",
+      "secrets/**",
+      "memory/private/**",
+      "infra/cloudflare/**",
+      "CLAUDE.md",
+      "AGENTS.md"
+    ]
+  },
+  "cost_cap": {
+    "max_usd": 0,
+    "paid_provider_calls": false
+  },
+  "preflight": [
+    "git status --short --branch",
+    "python3 -m json.tool .ghostclaw_runtime/a2a2a/templates/install-agent-blackbox-approval.template.json >/dev/null",
+    "test -d .ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox",
+    "git -C .ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox rev-parse --short HEAD",
+    "python3 - <<'PY'\nimport json\np='.ghostclaw_runtime/a2a2a/external_repos/Agent-Blackbox/package.json'\nprint(json.load(open(p)).get('name'))\nPY"
+  ],
+  "rollback": {
+    "strategy": "stop_local_processes_delete_throwaway_project_restore_before_inventory",
+    "requires_human_confirmation": true,
+    "snapshot_required_before_activation": true
+  },
+  "stop_conditions": [
+    "operator approval phrase missing",
+    "branch or head differs from template",
+    "README quickstart differs from command_template",
+    "command would write global OpenCode plugin without separate approval",
+    "command requests provider auth or API key",
+    "command opens browser despite no-open expectation",
+    "daemon ports conflict or stay running after stop",
+    "command would modify CLAUDE.md or AGENTS.md",
+    "secret-like diff appears",
+    "license status remains unclear"
+  ],
+  "evidence_required": [
+    "approval packet copied from template with concrete approval_id",
+    "before file inventory",
+    "after file inventory",
+    "ports and process IDs",
+    "command output summary",
+    "receipt JSON",
+    "run log entry"
+  ],
+  "notes": "This is a non-executable template only. It does not authorize installation."
+}

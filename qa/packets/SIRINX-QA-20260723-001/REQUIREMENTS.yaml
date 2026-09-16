@@ -1,0 +1,37 @@
+schema_version: "sirinx.qa.requirements.v1"
+run_id: "SIRINX-QA-20260723-001"
+status: "PARTIAL"
+requirements:
+  - id: "QA-REQ-001"
+    statement: "Bind every result to exact target, source tree, build, environment, policy, plan, and scope identities."
+    mandatory: true
+  - id: "QA-REQ-002"
+    statement: "Prevent all external and production writes during AUDIT_ONLY."
+    mandatory: true
+  - id: "QA-REQ-003"
+    statement: "Trace each business-critical journey to planned tests and evidence."
+    mandatory: true
+  - id: "QA-REQ-004"
+    statement: "Verify applicable WCAG 2.2 Level A and AA criteria with automated and manual evidence."
+    mandatory: true
+  - id: "QA-REQ-005"
+    statement: "Verify an explicit OWASP ASVS 5.0.0 applicability profile without broad certification claims."
+    mandatory: true
+  - id: "QA-REQ-006"
+    statement: "Measure Core Web Vitals separately for mobile and desktop and report missing data honestly."
+    mandatory: true
+  - id: "QA-REQ-007"
+    statement: "Verify route-specific initial title, description, canonical, H1, and rendered-content agreement."
+    mandatory: true
+  - id: "QA-REQ-008"
+    statement: "Bind numeric public claims to an approved claim ledger and fail expired or unverified claims."
+    mandatory: true
+  - id: "QA-REQ-009"
+    statement: "Require approved ROI formula, units, fixtures, and tolerances before calculator verification."
+    mandatory: true
+  - id: "QA-REQ-010"
+    statement: "Require independent maker/checker identities and immutable evidence receipts."
+    mandatory: true
+  - id: "QA-REQ-011"
+    statement: "Require every QA implementation verdict to remain compatible with its versioned receipt schema."
+    mandatory: true

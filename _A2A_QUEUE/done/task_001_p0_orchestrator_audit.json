@@ -1,0 +1,39 @@
+{
+  "a2a2a_message": {
+    "a2a2a_version": "2.0",
+    "mission_id": "M-20260717-001",
+    "correlation_id": "a2a-kimi-k3-1721172800-12345",
+    "phase": "dispatch",
+    "from": {
+      "agent": "frontier-generator",
+      "role": "task-orchestrator"
+    },
+    "to": {
+      "agent": "codex-captain",
+      "role": "build_captain"
+    },
+    "action_requested": "Orchestrator Audit + Trim",
+    "context": {
+      "goal": "Audit services/orchestrator directory, remove build artifacts (target/, node_modules/) to reduce 7083 files to <500 files",
+      "constraints": ["no deploy", "no git push", "dry-run first", "safe_execution"],
+      "lane": "services/orchestrator",
+      "files": [],
+      "deliverables": ["file count report", "cleanup script if needed"],
+      "command_source": "frontier-generator"
+    },
+    "response_expected": {
+      "format": "receipt_json",
+      "max_turns": 3
+    },
+    "human_approval_required": false,
+    "timestamp": "2026-07-17T00:00:00.000Z",
+    "ttl_seconds": 86400,
+    "status": "PENDING",
+    "safe_execution_v3": {
+      "mode": "full_auto_yolo_safe_execution",
+      "blocked_action_behavior": "auto_block_and_continue"
+    }
+  },
+  "priority": "P0",
+  "tier": "A"
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schema.sirinx.io/ghostclaw/agent-registry",
+  "title": "GhostClaw Agent Registry",
+  "description": "Validates the agent registry YAML that defines the agents available within the SIRINX OS GhostClaw system.",
+  "type": "object",
+  "properties": {
+    "agents": {
+      "type": "array",
+      "description": "List of registered agents and their operational permissions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the agent.",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the agent.",
+            "minLength": 1
+          },
+          "lane": {
+            "type": "string",
+            "description": "Operational lane the agent belongs to, governing its role in the pipeline.",
+            "enum": [
+              "control_plane",
+              "primary_builder",
+              "qa_review_only",
+              "final_gatekeeper",
+              "validation",
+              "readonly_intake",
+              "coordination",
+              "architecture",
+              "coding_draft_workers",
+              "local_uat"
+            ]
+          },
+          "mutates_files": {
+            "type": "boolean",
+            "description": "Whether the agent is permitted to create or modify files on disk."
+          },
+          "tier_access": {
+            "type": "array",
+            "description": "Tiers this agent is allowed to operate within.",
+            "items": {
+              "type": "string",
+              "enum": ["A", "B", "C", "D", "X"]
+            },
+            "uniqueItems": true
+          },
+          "owns": {
+            "type": "array",
+            "description": "Glob patterns or resource names the agent is responsible for.",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "forbidden": {
+            "type": "array",
+            "description": "Glob patterns or resource names the agent is explicitly forbidden from touching.",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "requires_lease": {
+            "type": "boolean",
+            "description": "Whether the agent must acquire a lease before performing work."
+          },
+          "requires_receipt": {
+            "type": "boolean",
+            "description": "Whether the agent must produce a signed receipt after completing work."
+          }
+        },
+        "required": ["id", "name", "lane", "mutates_files"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["agents"],
+  "additionalProperties": false
+}

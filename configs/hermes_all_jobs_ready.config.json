@@ -1,0 +1,156 @@
+{
+  "$schema": "ghostclaw.hermes.all_jobs_ready.config.v1",
+  "config_id": "HERMES-ALL-JOBS-READY-20260703",
+  "status": "local_safe_all_jobs_ready",
+  "mode": "route_preview_validate_receipt_only",
+  "controlPlane": "Hermes",
+  "sourceOfTruth": "local_repo",
+  "defaultBehavior": {
+    "dryRun": true,
+    "liveSend": false,
+    "providerCall": false,
+    "repoContentExternalSend": false,
+    "customerDataRouting": false,
+    "install": false,
+    "push": false,
+    "deploy": false,
+    "cloudMutation": false,
+    "secretRead": false,
+    "keyValuePrint": false
+  },
+  "commands": {
+    "accepted": [
+      "/commands",
+      "/status",
+      "/hermes all jobs ready",
+      "/fusion smoke",
+      "/fable5 preview",
+      "/codex status",
+      "/codex run status",
+      "/agent loop status",
+      "/agent loop fusion",
+      "/a2a2a status",
+      "/a2a2a dispatch preview",
+      "/a2a2a gate check <exact gate>",
+      "/a2a2a execute readiness",
+      "/a2a2a execute command preview <exact gate>",
+      "/a2a2a completion audit",
+      "/a2a2a live gate readiness",
+      "/daily report"
+    ],
+    "callbackCommands": [
+      "cmd:status",
+      "cmd:hermes-all-jobs-ready",
+      "cmd:fusion-smoke",
+      "cmd:fable5-preview",
+      "cmd:codex-status",
+      "cmd:agent-loop-status",
+      "cmd:agent-loop-fusion",
+      "cmd:a2a2a-status",
+      "cmd:a2a2a-dispatch-preview",
+      "cmd:a2a2a-gate-check",
+      "cmd:a2a2a-execute-readiness",
+      "cmd:a2a2a-execute-command-preview",
+      "cmd:a2a2a-completion-audit",
+      "cmd:a2a2a-live-gate-readiness",
+      "cmd:daily-report"
+    ]
+  },
+  "lanes": [
+    {
+      "id": "hermes_control_plane",
+      "owner": "Hermes",
+      "status": "ready",
+      "mode": "route_policy_status_receipts",
+      "canMutateSource": false
+    },
+    {
+      "id": "codex_local_builder",
+      "owner": "Codex",
+      "status": "ready",
+      "mode": "leased_local_edits_and_tests_only",
+      "canMutateSource": true
+    },
+    {
+      "id": "opencode_readonly_review",
+      "owner": "OpenCode",
+      "status": "ready",
+      "mode": "read_only_review_snapshot",
+      "canMutateSource": false
+    },
+    {
+      "id": "a2a2a_queue",
+      "owner": "Hermes",
+      "status": "ready",
+      "mode": "local_packet_bus_receipts_only",
+      "canMutateSource": false
+    },
+    {
+      "id": "telegram_gateway_preview",
+      "owner": "Hermes",
+      "status": "ready",
+      "mode": "preview_only_no_live_send",
+      "canMutateSource": false
+    },
+    {
+      "id": "model_router_preview",
+      "owner": "Policy Guardian",
+      "status": "ready",
+      "mode": "dry_run_plan_no_provider_call",
+      "canMutateSource": false
+    },
+    {
+      "id": "obsidian_brain_sync",
+      "owner": "Codex",
+      "status": "ready",
+      "mode": "concise_pulse_only_no_secrets",
+      "canMutateSource": false
+    },
+    {
+      "id": "cloudflare_r2_gate_preview",
+      "owner": "Policy Guardian",
+      "status": "gated",
+      "mode": "plan_and_receipt_only_no_cloud_write",
+      "canMutateSource": false
+    },
+    {
+      "id": "security_validator",
+      "owner": "Validator",
+      "status": "ready",
+      "mode": "local_secret_scan_diff_check_json_yaml",
+      "canMutateSource": false
+    }
+  ],
+  "exactGates": {
+    "telegramLiveSend": "APPROVE_TELEGRAM_GATEWAY_LIVE_SEND_A019E53EE",
+    "openRouterFable5ProviderCall": "APPROVE_OPENROUTER_FABLE5_PROVIDER_CALL_A019E53EE",
+    "cloudflareR2Write": "APPROVE_CLOUDFLARE_R2_WRITE_A2A2A_A019E53EE",
+    "repoContentExternalSend": "APPROVE_REPO_CONTENT_PROVIDER_SEND_A019E53EE",
+    "customerDataRouting": "APPROVE_CUSTOMER_DATA_ROUTING_A019E53EE",
+    "install": "APPROVE_INSTALL_EXACT_PACKAGE_A019E53EE",
+    "push": "APPROVE_GIT_PUSH_EXACT_BRANCH_A019E53EE",
+    "deploy": "APPROVE_DEPLOY_EXACT_TARGET_A019E53EE"
+  },
+  "blockedActions": {
+    "liveTelegramSend": true,
+    "repoContentExternalSend": true,
+    "customerDataRouting": true,
+    "keyValuePrint": true,
+    "secretRead": true,
+    "install": true,
+    "push": true,
+    "deploy": true,
+    "cloudMutation": true,
+    "providerCallByDefault": true,
+    "blanketFullAuto": true
+  },
+  "obsidianBrainSync": {
+    "vault": "/Users/sirinx/Documents/Obsidian Vault/SIRINX",
+    "digestNote": "/Users/sirinx/Documents/Obsidian Vault/SIRINX/AI HQ Knowledge Digest.md",
+    "configPointer": "/Users/sirinx/.codex/obsidian-brain-sync.json",
+    "repoSyncDoc": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/docs/a2async/OBSIDIAN_BRAIN_SYNC.md",
+    "repoSyncScript": "/Users/sirinx/SIRINXDev/sirinx-agent-native-os/scripts/a2a/a2a_obsidian_sync.py",
+    "writePolicy": "append_concise_pulse_only_no_secrets_no_raw_logs"
+  },
+  "nextSafeAction": "Use /hermes all jobs ready or GET /api/hermes/all-jobs-ready to inspect readiness, then open one exact gate for one external action if needed."
+}

@@ -1,0 +1,57 @@
+schema: ghostclaw.hermes.outbox.v2
+worker: hermes-v5-worker
+mode: read_only_preview
+
+storage:
+  ledger_binding: HERMES_LEDGER
+  idempotency_binding: IDEMPOTENCY_CACHE
+  key_prefixes:
+    receipts: receipts/
+    idempotency: idempotency/
+    outbox: outbox/
+    cost: cost/
+
+environments:
+  preview:
+    enabled: false
+    reason: requires_exact_cloudflare_resource_and_deploy_gate
+    worker_name: hermes-v5-worker-preview
+    tag: hermes-v5.0.0-preview
+  production:
+    enabled: false
+    reason: preview_acceptance_and_separate_production_gate_required
+    worker_name: hermes-v5-worker
+
+runtime:
+  public_write_endpoints: false
+  read_only_endpoints:
+    - /health
+    - /api/status
+    - /api/queue
+    - /api/cost
+    - /api/audit
+  authentication:
+    bearer_secret_binding: HERMES_API_TOKEN
+    owner_allowlist_binding: HERMES_OWNER_ALLOWLIST
+    owner_header: X-Hermes-Owner
+    fail_closed: true
+
+dispatch:
+  low:
+    execution: policy_bounded
+    approval_required: false
+  medium:
+    execution: workflow_v2_only
+    approval_required: true
+  high:
+    execution: blocked_until_task_specific_human_approval
+    approval_required: true
+
+guardrails:
+  live_send: false
+  provider_call: false
+  secret_read_or_print: false
+  git_push: false
+  wrangler_deploy: false
+  cloud_mutation: false
+  broad_approval_tokens_accepted: false

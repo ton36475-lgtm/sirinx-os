@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GhostClaw Control Plane Status Card Visual Smoke</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        background: #f7f8f5;
+        color: #17201b;
+      }
+
+      .visual-smoke-frame {
+        width: min(1180px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 28px 0 36px;
+      }
+
+      .panel {
+        border: 1px solid #d7ddd8;
+        border-radius: 8px;
+        background: #ffffff;
+        box-shadow: 0 18px 50px rgba(23, 32, 27, 0.08);
+      }
+
+      .control-plane-panel {
+        margin-bottom: 14px;
+      }
+
+      .panel-head,
+      .tool-layout,
+      .executive-summary {
+        display: grid;
+        gap: 14px;
+      }
+
+      .panel-head {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        padding: 18px;
+        border-bottom: 1px solid #d7ddd8;
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        color: #245d9b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .status-pill,
+      .mini-status {
+        min-width: 0;
+        border: 1px solid #d7ddd8;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #1f7a4d;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .status-pill {
+        min-height: 32px;
+        padding: 7px 10px;
+      }
+
+      .executive-summary {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        padding: 18px 18px 0;
+      }
+
+      .hq-stat,
+      .signal-row {
+        min-width: 0;
+        padding: 11px 12px;
+        border: 1px solid #d7ddd8;
+        border-radius: 8px;
+        background: #fbfcfa;
+      }
+
+      .hq-stat {
+        display: grid;
+        gap: 6px;
+      }
+
+      .hq-stat > *,
+      .signal-row > * {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .metric-label,
+      .metric-note,
+      .signal-detail {
+        color: #5b6861;
+        font-size: 0.82rem;
+      }
+
+      .agent-launch-stop {
+        margin: 14px 18px;
+        padding: 12px 14px;
+        border: 1px solid #b8c8dc;
+        border-radius: 8px;
+        background: #eef5fb;
+        color: #245d9b;
+        font-size: 0.88rem;
+        font-weight: 850;
+      }
+
+      .tool-layout {
+        grid-template-columns: minmax(360px, 1.35fr) minmax(260px, 0.85fr);
+        padding: 0 18px 18px;
+      }
+
+      .tool-column {
+        display: grid;
+        gap: 9px;
+        align-content: start;
+      }
+
+      .tool-column-wide {
+        grid-row: span 2;
+      }
+
+      .signal-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .signal-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        border-left: 4px solid #1f7a4d;
+      }
+
+      .mini-status {
+        min-width: 58px;
+        text-align: center;
+      }
+
+      .signal-warn {
+        border-left-color: #a56711;
+      }
+
+      @media (max-width: 760px) {
+        .executive-summary,
+        .tool-layout,
+        .panel-head {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="visual-smoke-frame">
+      <section class="panel control-plane-panel" aria-label="GhostClaw control-plane status">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">GhostClaw Control Plane</p>
+            <h2>Status Read Model</h2>
+          </div>
+          <span class="status-pill status-safe">Read model ready</span>
+        </div>
+        <div class="executive-summary" aria-live="polite">
+          <article class="hq-stat"><span class="metric-label">Projects</span><strong>2</strong><span class="metric-note">active focus</span></article>
+          <article class="hq-stat"><span class="metric-label">Missions</span><strong>2</strong><span class="metric-note">read-only</span></article>
+          <article class="hq-stat"><span class="metric-label">Packets</span><strong>2</strong><span class="metric-note">P104_CONTROL_PLANE_STATUS_HANDLER_LOCAL_FIXTURE_ONLY</span></article>
+          <article class="hq-stat"><span class="metric-label">Approvals</span><strong>2</strong><span class="metric-note">pending gates</span></article>
+          <article class="hq-stat"><span class="metric-label">Receipts</span><strong>1</strong><span class="metric-note">path-hidden API view</span></article>
+        </div>
+        <div class="agent-launch-stop">
+          P108 local visual smoke fixture, no live execution or live worker execution. Guardrails keep live telegram send,
+          provider call, Cloudflare R2 mutation, and database migration closed.
+        </div>
+        <div class="tool-layout">
+          <section class="tool-column tool-column-wide" aria-label="Control-plane active projects">
+            <h3>Active Projects</h3>
+            <div class="signal-list">
+              <article class="signal-row"><p>SIRINX Core OS</p><span class="mini-status">active</span></article>
+              <article class="signal-row"><p>AGM AutoFlow</p><span class="mini-status">active</span></article>
+            </div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane current packets">
+            <h3>Packets</h3>
+            <div class="signal-list">
+              <article class="signal-row"><p>P104_CONTROL_PLANE_STATUS_HANDLER_LOCAL_FIXTURE_ONLY</p><span class="mini-status">dry-run</span></article>
+            </div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane guardrails">
+            <h3>Guardrails</h3>
+            <div class="signal-list">
+              <article class="signal-row"><p>read only</p><span class="mini-status">true</span></article>
+              <article class="signal-row"><p>provider call</p><span class="mini-status">false</span></article>
+              <article class="signal-row"><p>deploy</p><span class="mini-status">false</span></article>
+              <article class="signal-row"><p>cloudflare r2 mutation</p><span class="mini-status">false</span></article>
+            </div>
+          </section>
+          <section class="tool-column" aria-label="Control-plane receipts">
+            <h3>Receipts</h3>
+            <div class="signal-list">
+              <article class="signal-row"><p>receipt-p104-contract</p><span class="mini-status">written</span></article>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

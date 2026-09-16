@@ -1,113 +1,161 @@
-# NEXT_ACTIONS
+# NEXT_ACTIONS.md - GHOSTCLAW_LOOP_ENGINEERING V1.1
 
-Date: 2026-05-20
-Mode: strict ordered queue
-Source of truth: `AGENTS.md` plus `PROJECT_STATE.md`
+## งานที่ทำแล้ว ✅
 
-## Completed This Session
+### Phase 1A - Agent Registration SQL ✅
+- File: `services/dev-control-api/seed/ghostclaw-agents.sql` - DONE
 
-- [x] Task 0.1: Verify Phase 0/1 operating file stack
-  - Goal: confirm root operating files exist and match safety posture.
-  - File scope: root markdown files, `scripts/check-operating-files.mjs`.
-  - Verification: `pnpm project-os:check`, `pnpm verify`, `git diff --check`.
-  - Stop rule: stop if any file claims external writes are allowed by default.
+### Phase 1B - API Routes ✅
+- File: `services/dev-control-api/routes/agents.ts` - DONE
 
-- [x] Task 0.2: Keep current local control plane healthy
-  - Goal: maintain local Command Center availability for review.
-  - File scope: no code changes unless a test fails.
-  - Verification: `pnpm dashboard:run`, `curl http://127.0.0.1:8711/health`, `pnpm dashboard:e2e`.
-  - Stop rule: do not expose local ports publicly.
+### Phase 1C - UI Integration ✅
+- File: `apps/live-agent-studio/src/hooks/useAgents.ts` - DONE
 
-- [x] Task 1.2: Implement policy-core contract
-  - Goal: define gate decisions, autonomy levels, external-write decisions, and audit outputs.
-  - File scope: `packages/policy-core/`, `services/dev-control-api/src/policy-core-status.mjs`.
-  - Verification: `pnpm policy-core:test`, `pnpm policy-core:api-test`, `pnpm verify`, `pnpm dashboard:e2e`.
-  - Stop rule: external actions still return `approval_required` or `blocked` until exact target evidence exists.
+### Phase 2A - Prisma Schema ✅
+- File: `prisma/schema.prisma` - DONE
 
-- [x] Task 1.1: Design Hermes inbox before runtime code
-  - Goal: define local `POST /hermes/inbox` contract, auth/HMAC strategy, audit event shape, and dry-run behavior.
-  - File scope: `docs/knowledge/SIRINX_HERMES_INBOX_CONTRACT_2026-05-20.md`, `services/hermes-api/README.md`.
-  - Verification: design review, `pnpm verify`, `git diff --check`.
-  - Stop rule: do not connect Telegram/LINE until recipient/token evidence exists.
+### Phase 2B - Controllers ✅
+- File: `services/api-gateway/controllers/ghostclaw-controllers.ts` - DONE
 
-- [x] Task 1.3: Implement Hermes inbox dry-run normalizer
-  - Goal: add pure request normalization and tests for the locked Hermes inbox contract.
-  - File scope: `services/hermes-api/src/inbox.mjs`, `services/dev-control-api/server.mjs`.
-  - Verification: unit tests plus `pnpm verify`, `pnpm dashboard:e2e`.
-  - Stop rule: no Telegram/LINE/Solis/Cloudflare adapter execution.
+### Phase 2C - Components ✅
+- File: `apps/live-agent-studio/src/components/GhostClawComponents.tsx` - DONE
 
-- [x] Task 1.4: Add dashboard presentation for Hermes inbox dry-run
-  - Goal: show local inbox decisions and audit result in Command Center UI.
-  - File scope: `apps/dev-dashboard/`, browser tests.
-  - Verification: `pnpm dashboard:e2e`, local mobile width check.
-  - Stop rule: no external connector execution.
+### Phase 2D - Orchestrator ✅
+- File: `services/dev-control-api/orchestrator/ghostclaw-orchestrator.ts` - DONE
 
-## Immediate
+### Phase 2E - Tests ✅
+- File: `tests/ghostclaw.test.ts` - DONE
 
-- [x] Task 1.5: Implement Hermes inbox approval packet integration
-  - Goal: map `approval_required` inbox decisions into the existing local approval queue format.
-  - File scope: `services/hermes-api/`, `services/dev-control-api/src/approval-queue.mjs`, tests.
-  - Verification: unit tests, `pnpm verify`, `pnpm dashboard:e2e`.
-  - Stop rule: no external connector execution.
+### Phase 2F - CI/CD ✅
+- File: `.github/workflows/ghostclaw-pipeline.yml` - DONE
+- File: `infra/docker/ghostclaw-staging.yml` - DONE
 
-## Scheduled
+### Phase 2G - Monitoring ✅
+- File: `services/dev-control-api/monitoring/ghostclaw-monitoring.ts` - DONE
 
-- [x] Task 1.6: Add durable approval evidence files
-  - Goal: write local approval queue snapshots into Obsidian only when requested.
-  - File scope: `services/dev-control-api/src/approval-evidence.mjs`, `scripts/approval-evidence-write-local.mjs`.
-  - Verification: `pnpm approval-evidence:test`, `pnpm approval-evidence:dry-run`, local confirmed Obsidian write, no external writes.
+### Phase 2H - Security ✅
+- File: `security/ghostclaw-security.md` - DONE
 
-- [x] Task 1.7: Implement local lead-event/audit proposal
-  - Goal: define local lead event evidence shape before any CRM/Supabase/production lead writes.
-  - File scope: `services/dev-control-api/src/lead-event-audit.mjs`, tests, API route.
-  - Verification: `pnpm lead-event-audit:test`, `pnpm verify`, API smoke, no production POST.
+### Phase 2I - Documentation ✅
+- File: `docs/GHOSTCLAW_BLUEPRINT.md` - DONE
 
-- [x] Task 1.8: Implement current pending-work ledger
-  - Goal: expose the remaining work in one ordered local-only ledger so Hermes/Command Center cannot hide or reorder old gates.
-  - File scope: `services/dev-control-api/src/pending-work.mjs`, `scripts/pending-work-ledger.mjs`, `apps/dev-dashboard/`, tests, `docs/knowledge/SIRINX_PENDING_WORK_LEDGER_2026-05-20.md`.
-  - Verification: `pnpm pending-work:test`, `pnpm pending-work:check`, `pnpm verify`, `pnpm dashboard:e2e`.
-  - Stop rule: ledger may report evidence and blockers, but it must never arm external writes.
+## งานค้างอยู่
 
-- [x] Add Command Center view for lead v2 reasons/risk flags if more sales detail is needed.
-  - Goal: display lead event audit lane, risk flags, blocked handoffs, and evidence checklist in the Lead Backend panel.
-  - File scope: `apps/dev-dashboard/src/`, browser tests.
-  - Verification: `pnpm dashboard:e2e`, `pnpm verify`, API smoke.
+## Operating Queue Contract
 
-- [x] Map `sirinx-solar-energy` entities into a local-only solar ops contract.
-  - Goal: map legacy solar leads/customers/installations/contractors/SEO/campaign/tasks/metrics into SIRINX-owned local contract before any schema migration.
-  - File scope: `services/dev-control-api/src/solar-ops-contract.mjs`, tests, `docs/knowledge/SIRINX_SOLAR_OPS_ENTITY_CONTRACT_2026-05-20.md`.
-  - Verification: `pnpm solar-ops-contract:test`, `pnpm verify`, `/api/solar-ops-contract` smoke.
+- This file is the strict ordered queue for local review.
+- Approval-Gated actions remain closed until exact human approval: database connection, migration, staging deploy, push, external writes, live sends, provider calls, package install, public tunnel, secret reads, and customer data storage.
+- Keep local-safe work limited to docs, tests, queue/status snapshots, and review packets unless a gate-specific approval names one target, environment, rollback path, and evidence path.
 
-- [x] Map `oz-corp-omega-dual-node` safe-command and memory ideas into a docs-only policy.
-  - Goal: extract allowlisted command and continuity-memory rules without importing runtime code.
-  - File scope: `docs/knowledge/SIRINX_SAFE_COMMAND_MEMORY_POLICY_2026-05-20.md`, status docs.
-  - Verification: `pnpm verify`, `git diff --check`; no runtime command runner added.
+### Phase 3A - Enable Database Connection
+- Action: Set DATABASE_URL in .env
+- Command: `npx prisma migrate dev --name ghostclaw_agents`
 
-- [x] Compare marketing/CRM schemas against SIRINX lead entity before any database work.
-  - Goal: map old marketing/CRM source fields to SIRINX lead contact, solar qualification, attribution, quality, and audit groups before any external CRM/database write.
-  - File scope: `services/dev-control-api/src/lead-crm-contract.mjs`, tests, `docs/knowledge/SIRINX_LEAD_CRM_HANDOFF_CONTRACT_2026-05-20.md`.
-  - Verification: `pnpm lead-crm-contract:test`, `pnpm verify`, `/api/lead-crm-contract` smoke.
+### Phase 3B - Run Tests
+- Command: `pnpm test`
 
-## Approval-Gated
+### Phase 3C - Staging Deploy
+- Action: Enable after approval
+- Requires: All tests pass, security scan pass
 
-- [ ] Codex Mobile QR/MFA pairing.
-- [ ] Telegram/LINE token and recipient setup.
-- [ ] Solis consent, credential storage, and station mapping.
-- [ ] Cloudflare Bot Management official review.
-- [ ] GitHub push/PR for `sirinx-os` branch.
-  - Current note: this is a separate publish gate, not one of the four Command Center operational gates.
-  - Blocker: exact remote/owner/repo/branch/PR target is not recorded; `git remote -v` printed no configured remote.
+## Safety Gate Status
+- ✅ No secrets written
+- ✅ No push/deploy
+- ✅ All files local stubs
+- ✅ Frontend/Backend decoupled, ready for integration
+- ✅ Security hardening complete
+- ✅ Monitoring in place
 
-## Backlog
+## GhostClaw Knowledge Integration - 2026-07-02 ✅
 
-- [x] Create `RELEASE_GATE.md`.
-- [x] Create `VALIDATION_MATRIX.md`.
-- [x] Create `HANDOFF_PROTOCOL.md`.
-- [x] Create `RUNBOOK_LIVE_START.md`.
-- [x] Create `KNOWN_ISSUES.md`.
-- [x] Refresh `docs/knowledge/SIRINX_EXTERNAL_GATE_ACTION_PACKETS.md` to the current four-gate execution queue plus the separate `sirinx-os` publish gate.
-- [x] Materialize pending evidence files for Codex Mobile, Telegram/LINE, Solis, and Cloudflare Bot Management so the checker reports incomplete evidence instead of missing files.
-- [x] Add local `/api/external-gate-evidence` and Command Center Evidence Readiness panel so Hermes/Codex can inspect gate evidence without terminal parsing.
-- [x] Add `sirinx-os` GitHub publish evidence into the same evidence checker so the push/PR gate is not tracked outside the system.
-- [x] Add local Gate Runner Readiness so Hermes/Codex can see allowed local checks and blocked external actions for each gate.
-- [x] Add local Pending Work Ledger so Hermes/Codex can see strict operator order and confirm `hiddenBacklog=false`.
+**Mission:** GHOSTCLAW-KNOWLEDGE-INTEGRATION-20260702-001
+**Status:** DONE
+
+**Created:**
+- `.ghostclaw/registry/project-registry.v1.yaml`
+- `.ghostclaw/registry/agent-registry.v1.yaml`
+- `.ghostclaw/registry/knowledge-vault-index.v1.yaml`
+- `.ghostclaw/registry/route-matrix.v1.yaml`
+- `.ghostclaw/registry/domain-pack-index.v1.yaml`
+- `.ghostclaw/schemas/` (4 JSON schemas)
+- `docs/GHOSTCLAW_UNIFIED_PROJECT_OPERATING_SYSTEM.md`
+- `docs/KNOWLEDGE_VAULT_RETRIEVAL_PROTOCOL.md`
+- `docs/PROJECT_DOMAIN_PACKS.md`
+- `docs/MASTER_PLAN_INTEGRATION_MAP.md`
+- `docs/A2A2A_ALL_PROJECT_ROUTING_RUNBOOK.md`
+- `scripts/ghostclaw_registry_validate.py`
+- 10 project queue folders under `.ghostclaw_runtime/a2a2a/project_queues/`
+- A2A2A inbox queue item
+
+**Next Recommended Actions:**
+1. Run `python3 scripts/ghostclaw_registry_validate.py --root /Users/sirinx/sirinx-os` to validate all registries
+2. Create agent-specific workspace queue items per project
+3. Seed project queue items for active projects (ghostclaw-os, sirinx-site, agm)
+4. Begin using retrieval protocol for all new tasks instead of full-memory-dump
+
+## Mac mini M2 AI CLI Integration - 2026-07-02 ✅ (Doc Phase)
+
+**Mission:** GHOSTCLAW-MAC-M2-AI-CLI-INTEGRATION-20260702-001
+**Status:** DOC-PHASE DONE — Install phase pending human gate approval
+
+**Created:**
+- `docs/MAC_M2_AI_CLI_INSTALL_UPDATE_RECEIPT.md` (D-tier install gate packet)
+- `docs/AI_CLI_TUI_OPERATOR_RUNBOOK.md`
+- `docs/CODEX_CLAUDE_CODE_LOCAL_WORKFLOW.md`
+
+**Blocked (require explicit human gate):**
+- Codex CLI standalone install via `curl | bash`
+- Claude Code CLI standalone install via `curl | bash`
+- `npm install -g` / `brew install` fallback
+- Home-directory mutation (`~/.codex`, `~/.claude`, `~/.zshrc`)
+- Multi-repo scanner across `/Users/sirinx`
+
+**Next:** Human operator reviews `GATE-INSTALL-001-20260702-001`, approves, and runs the install steps manually on Mac mini. Then return receipt to `.ghostclaw_runtime/a2a2a/receipts/`.
+
+## GhostClaw Coding Model Router Pack V2.1 - 2026-07-02 ✅
+
+**Mission:** GHOSTCLAW-MODEL-ROUTER-V2-1-INSTALL-001
+**Status:** DONE
+
+**Installed:**
+- `AGENTS_MODEL_ROUTER_ADDENDUM.md` / `CLAUDE_MODEL_ROUTER_ADDENDUM.md`
+- `config/model-router/` (4 files)
+- `docs/model-routing/` (7 files)
+- `schemas/ghostclaw/model_router_receipt.schema.json`
+- `skills/coding-model-router/SKILL.md`
+- `.claude/agents/*.md` (6 subagents)
+- `.codex/config.toml.example`
+- `scripts/validate_model_router_pack.py`, `scripts/model_router_dry_run.py`
+- `commands/model-router/`
+- `.env.example` appended
+
+**Validated:**
+- `python3 scripts/validate_model_router_pack.py` → OK
+- `python3 scripts/model_router_dry_run.py --tier T1 --project ghostclaw --task "test model router"` → OK
+
+**Next Recommended Actions:**
+1. Review `AGENTS_MODEL_ROUTER_ADDENDUM.md` and `CLAUDE_MODEL_ROUTER_ADDENDUM.md`
+2. Add real API keys only to local `.env`, never commit
+3. Test T0/T1 dry-runs with local Qwen or laguna free coder
+4. Wire `config/model-router/hermes_model_router.config.yaml` into Hermes dispatcher
+5. Use `skills/coding-model-router/SKILL.md` for repeated model-router workflows
+
+## Codex Task Queue Seeding - 2026-07-02 ✅
+
+**Mission:** GHOSTCLAW-CODEX-TASK-QUEUE-SEED-20260702-001
+**Status:** DONE
+
+**Created:** 13 high-level Codex task queue YAML files in `.ghostclaw_runtime/a2a2a/project_queues/`
+
+**Active project lanes seeded:**
+- `ghostclaw_os/` — 4 tasks (core control plane, registry validator, knowledge retrieval worker, queue coordinator)
+- `sirinx_site/` — 2 tasks (public guardian, ROI calculator)
+- `merch_dashboard/` — 2 tasks (automation dashboard, QC validator)
+- `research/` — 2 tasks (reverse engineering, competitor research)
+- `agm/`, `ads_andromeda/`, `kusala/`, `phitsanulok_news/`, `creative_assets/`, `local_business/` — 1 task each
+
+**Next Recommended Actions:**
+1. Codex picks up `TASK-001-ghostclaw-os-core-control-plane.yaml` first (highest priority)
+2. Codex picks up `TASK-001-sirinx-site-public-guardian.yaml` second
+3. Parallel creative lanes can start when builder is available
+4. Update task statuses from `pending` → `active` → `done` as work progresses

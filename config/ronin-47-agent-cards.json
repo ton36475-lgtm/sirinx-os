@@ -1,0 +1,821 @@
+{
+  "version": "1.0",
+  "generated": "2026-07-17",
+  "total_agents": 47,
+  "departments": {
+    "C-Suite": {
+      "count": 5,
+      "agents": [
+        "shogun",
+        "planner",
+        "backend",
+        "frontend",
+        "scribe"
+      ]
+    },
+    "Engineering": {
+      "count": 8,
+      "agents": [
+        "codex-captain",
+        "claude-architect",
+        "opencode-reviewer",
+        "devops-engineer",
+        "backend-eng-1",
+        "backend-eng-2",
+        "frontend-eng-1",
+        "frontend-eng-2"
+      ]
+    },
+    "Creative": {
+      "count": 4,
+      "agents": [
+        "design-lead",
+        "ui-designer",
+        "creative-producer",
+        "content-writer"
+      ]
+    },
+    "AI/ML": {
+      "count": 4,
+      "agents": [
+        "ml-researcher",
+        "data-scientist",
+        "prompt-engineer",
+        "ai-evaluator"
+      ]
+    },
+    "Security": {
+      "count": 4,
+      "agents": [
+        "security-lead",
+        "pentester",
+        "compliance",
+        "audit-agent"
+      ]
+    },
+    "QA": {
+      "count": 4,
+      "agents": [
+        "qa-lead",
+        "test-eng-1",
+        "test-eng-2",
+        "data-engineer"
+      ]
+    },
+    "Growth": {
+      "count": 3,
+      "agents": [
+        "growth-lead",
+        "marketing",
+        "ads-specialist"
+      ]
+    },
+    "Sales": {
+      "count": 3,
+      "agents": [
+        "sales-lead",
+        "solar-consultant",
+        "crm-agent"
+      ]
+    },
+    "Operations": {
+      "count": 4,
+      "agents": [
+        "ops-lead",
+        "sre-oncall",
+        "cost-guard",
+        "memory-keeper"
+      ]
+    },
+    "Integration": {
+      "count": 3,
+      "agents": [
+        "integration-lead",
+        "line-operator",
+        "webhook-manager"
+      ]
+    },
+    "Innovation": {
+      "count": 2,
+      "agents": [
+        "gpu-researcher",
+        "local-ai"
+      ]
+    },
+    "Defense": {
+      "count": 3,
+      "agents": [
+        "auto-healer",
+        "evolution-engine",
+        "sentinel"
+      ]
+    }
+  },
+  "agents": [
+    {
+      "id": "01",
+      "role": "shogun",
+      "title": "CEO / Mission Commander",
+      "dept": "C-Suite",
+      "model": "glm-5.2",
+      "autonomy": "A5",
+      "tools": [
+        "hermes",
+        "codex",
+        "claude",
+        "opencode"
+      ],
+      "skills": [
+        "ghostclaw-master-orchestrator",
+        "telegram-approval-workflow",
+        "goal-decomposer"
+      ],
+      "specialty": "Strategic decisions, mission control, Tier C approval"
+    },
+    {
+      "id": "02",
+      "role": "planner",
+      "title": "COO / Chief Operating Officer",
+      "dept": "C-Suite",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "goal-decomposer",
+        "writing-plans"
+      ],
+      "specialty": "Goal decomposition, task DAG, resource allocation"
+    },
+    {
+      "id": "03",
+      "role": "backend",
+      "title": "CTO / Chief Technology Officer",
+      "dept": "C-Suite",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "codex",
+        "claude"
+      ],
+      "skills": [
+        "ghostclaw-engineering-loop"
+      ],
+      "specialty": "Architecture decisions, tech stack"
+    },
+    {
+      "id": "04",
+      "role": "frontend",
+      "title": "CPO / Chief Product Officer",
+      "dept": "C-Suite",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "codex",
+        "claude"
+      ],
+      "skills": [
+        "frontend-design"
+      ],
+      "specialty": "Product vision, UX strategy"
+    },
+    {
+      "id": "05",
+      "role": "scribe",
+      "title": "CFO / Chief Financial + Audit",
+      "dept": "C-Suite",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "obsidian",
+        "apple-notes"
+      ],
+      "specialty": "Audit trail, brain sync, documentation"
+    },
+    {
+      "id": "06",
+      "role": "codex-captain",
+      "title": "VP Engineering",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "codex",
+        "ghostclaw-engineering-loop",
+        "test-driven-development"
+      ],
+      "specialty": "Repo execution, Rust, TypeScript, tests"
+    },
+    {
+      "id": "07",
+      "role": "claude-architect",
+      "title": "Principal Architect",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "claude"
+      ],
+      "skills": [
+        "claude-code",
+        "writing-plans"
+      ],
+      "specialty": "System design, read-only analysis"
+    },
+    {
+      "id": "08",
+      "role": "opencode-reviewer",
+      "title": "Staff Engineer",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "opencode"
+      ],
+      "skills": [
+        "opencode",
+        "requesting-code-review"
+      ],
+      "specialty": "Security audit, code review"
+    },
+    {
+      "id": "09",
+      "role": "devops-engineer",
+      "title": "SRE / Platform Engineer",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "codex",
+        "hermes"
+      ],
+      "skills": [
+        "cloudflare-web-perf"
+      ],
+      "specialty": "Docker, Cloudflare, deployment"
+    },
+    {
+      "id": "10",
+      "role": "backend-eng-1",
+      "title": "Senior Backend Engineer",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "codex"
+      ],
+      "specialty": "API design, database"
+    },
+    {
+      "id": "11",
+      "role": "backend-eng-2",
+      "title": "Backend Engineer",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "codex"
+      ],
+      "specialty": "Microservices, queues"
+    },
+    {
+      "id": "12",
+      "role": "frontend-eng-1",
+      "title": "Senior Frontend Engineer",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "anthropics-frontend-design"
+      ],
+      "specialty": "React, Next.js, UI"
+    },
+    {
+      "id": "13",
+      "role": "frontend-eng-2",
+      "title": "Frontend Engineer",
+      "dept": "Engineering",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "anthropics-frontend-design"
+      ],
+      "specialty": "CSS, animations, accessibility"
+    },
+    {
+      "id": "14",
+      "role": "design-lead",
+      "title": "Design Director",
+      "dept": "Creative",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "claude"
+      ],
+      "skills": [
+        "anthropics-brand-guidelines",
+        "claude-design"
+      ],
+      "specialty": "Design system, brand"
+    },
+    {
+      "id": "15",
+      "role": "ui-designer",
+      "title": "Product Designer",
+      "dept": "Creative",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "claude"
+      ],
+      "skills": [
+        "anthropics-canvas-design"
+      ],
+      "specialty": "Prototyping, UI components"
+    },
+    {
+      "id": "16",
+      "role": "creative-producer",
+      "title": "Creative Engineer",
+      "dept": "Creative",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "manim-video",
+        "ascii-video"
+      ],
+      "specialty": "Motion, video, animation"
+    },
+    {
+      "id": "17",
+      "role": "content-writer",
+      "title": "Technical Writer",
+      "dept": "Creative",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes",
+        "opencode"
+      ],
+      "skills": [
+        "humanizer",
+        "anthropics-docx"
+      ],
+      "specialty": "Docs, blog, marketing copy"
+    },
+    {
+      "id": "18",
+      "role": "ml-researcher",
+      "title": "ML Research Lead",
+      "dept": "AI/ML",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "arxiv",
+        "comfyui"
+      ],
+      "specialty": "Model training, fine-tuning"
+    },
+    {
+      "id": "19",
+      "role": "data-scientist",
+      "title": "Data Scientist",
+      "dept": "AI/ML",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "jupyter-live-kernel"
+      ],
+      "specialty": "Analytics, visualization"
+    },
+    {
+      "id": "20",
+      "role": "prompt-engineer",
+      "title": "Prompt Engineer",
+      "dept": "AI/ML",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "outlines"
+      ],
+      "specialty": "Prompt design, structured output"
+    },
+    {
+      "id": "21",
+      "role": "ai-evaluator",
+      "title": "AI Safety Researcher",
+      "dept": "AI/ML",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "evaluating-llms-harness",
+        "obliteratus"
+      ],
+      "specialty": "Red-teaming, evaluation"
+    },
+    {
+      "id": "22",
+      "role": "security-lead",
+      "title": "CISO",
+      "dept": "Security",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "opencode",
+        "claude"
+      ],
+      "skills": [],
+      "specialty": "Security strategy, threat model"
+    },
+    {
+      "id": "23",
+      "role": "pentester",
+      "title": "Security Engineer",
+      "dept": "Security",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "opencode"
+      ],
+      "skills": [],
+      "specialty": "Vulnerability scanning, audit"
+    },
+    {
+      "id": "24",
+      "role": "compliance",
+      "title": "Compliance Manager",
+      "dept": "Security",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "SOC2, GDPR, PDPA"
+    },
+    {
+      "id": "25",
+      "role": "audit-agent",
+      "title": "Internal Auditor",
+      "dept": "Security",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Audit trail, evidence"
+    },
+    {
+      "id": "26",
+      "role": "qa-lead",
+      "title": "QA Director",
+      "dept": "QA",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "opencode"
+      ],
+      "skills": [
+        "test-driven-development"
+      ],
+      "specialty": "Test strategy, automation"
+    },
+    {
+      "id": "27",
+      "role": "test-eng-1",
+      "title": "Senior QA Engineer",
+      "dept": "QA",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "test-driven-development"
+      ],
+      "specialty": "E2E, integration tests"
+    },
+    {
+      "id": "28",
+      "role": "test-eng-2",
+      "title": "QA Engineer",
+      "dept": "QA",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [
+        "test-driven-development"
+      ],
+      "specialty": "Unit tests, regression"
+    },
+    {
+      "id": "29",
+      "role": "data-engineer",
+      "title": "Data Engineer",
+      "dept": "QA",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "codex"
+      ],
+      "skills": [],
+      "specialty": "Pipeline, ETL"
+    },
+    {
+      "id": "30",
+      "role": "growth-lead",
+      "title": "VP Growth",
+      "dept": "Growth",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "polymarket"
+      ],
+      "specialty": "SEO, analytics, funnel"
+    },
+    {
+      "id": "31",
+      "role": "marketing",
+      "title": "Marketing Manager",
+      "dept": "Growth",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "xurl"
+      ],
+      "specialty": "Campaigns, social media"
+    },
+    {
+      "id": "32",
+      "role": "ads-specialist",
+      "title": "Performance Marketer",
+      "dept": "Growth",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Ads, A/B testing"
+    },
+    {
+      "id": "33",
+      "role": "sales-lead",
+      "title": "VP Sales",
+      "dept": "Sales",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Strategy, pipeline"
+    },
+    {
+      "id": "34",
+      "role": "solar-consultant",
+      "title": "Solar ROI Specialist",
+      "dept": "Sales",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Sirinx Solar, OPAL ROI"
+    },
+    {
+      "id": "35",
+      "role": "crm-agent",
+      "title": "CRM Manager",
+      "dept": "Sales",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "airtable",
+        "linear"
+      ],
+      "specialty": "Lead routing, LINE handoff"
+    },
+    {
+      "id": "36",
+      "role": "ops-lead",
+      "title": "VP Operations",
+      "dept": "Operations",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "end-to-end-automation"
+      ],
+      "specialty": "Process, workflow"
+    },
+    {
+      "id": "37",
+      "role": "sre-oncall",
+      "title": "SRE / On-Call",
+      "dept": "Operations",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Incident response, uptime"
+    },
+    {
+      "id": "38",
+      "role": "cost-guard",
+      "title": "Cost Controller",
+      "dept": "Operations",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Budget tracking, spend alerts"
+    },
+    {
+      "id": "39",
+      "role": "memory-keeper",
+      "title": "Knowledge Manager",
+      "dept": "Operations",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "obsidian",
+        "apple-notes"
+      ],
+      "specialty": "Brain sync, memory"
+    },
+    {
+      "id": "40",
+      "role": "integration-lead",
+      "title": "Integration Director",
+      "dept": "Integration",
+      "model": "glm-5.2",
+      "autonomy": "A4",
+      "tools": [
+        "hermes",
+        "codex"
+      ],
+      "skills": [
+        "native-mcp",
+        "webhook-subscriptions"
+      ],
+      "specialty": "OmniRoute, MCP, A2A"
+    },
+    {
+      "id": "41",
+      "role": "line-operator",
+      "title": "LINE Bot Manager",
+      "dept": "Integration",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Webhook, messaging"
+    },
+    {
+      "id": "42",
+      "role": "webhook-manager",
+      "title": "Webhook Specialist",
+      "dept": "Integration",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "webhook-subscriptions"
+      ],
+      "specialty": "Event routing, n8n"
+    },
+    {
+      "id": "43",
+      "role": "gpu-researcher",
+      "title": "GPU Lab Engineer",
+      "dept": "Innovation",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "llama-cpp",
+        "serving-llms-vllm"
+      ],
+      "specialty": "llama.cpp, multi-GPU"
+    },
+    {
+      "id": "44",
+      "role": "local-ai",
+      "title": "Local AI Specialist",
+      "dept": "Innovation",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "llama-cpp"
+      ],
+      "specialty": "Ollama, LM Studio"
+    },
+    {
+      "id": "45",
+      "role": "auto-healer",
+      "title": "Self-Healing Daemon",
+      "dept": "Defense",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Error detection, auto-repair"
+    },
+    {
+      "id": "46",
+      "role": "evolution-engine",
+      "title": "Dream Mode Agent",
+      "dept": "Defense",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [
+        "autonomous-loop-engineering"
+      ],
+      "specialty": "Self-improvement, mutation"
+    },
+    {
+      "id": "47",
+      "role": "sentinel",
+      "title": "System Sentinel",
+      "dept": "Defense",
+      "model": "glm-5.2",
+      "autonomy": "A3",
+      "tools": [
+        "hermes"
+      ],
+      "skills": [],
+      "specialty": "Monitoring, alerting, kill switch"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "mode": "dry_run",
+  "manifest": "manifests/legal_games_manifest.csv",
+  "easyroms": "downloads/staging",
+  "staging": "downloads/staging",
+  "plan": [
+    {
+      "row_number": 2,
+      "title": "Beneath a Steel Sky",
+      "target_folder": "scummvm",
+      "extension": ".zip",
+      "source": "downloads/staging/bass-cd-1.2.zip",
+      "destination": "downloads/staging/scummvm/bass-cd-1.2.zip",
+      "status": "dry_run",
+      "reason": "would copy"
+    }
+  ],
+  "issue_count": 0,
+  "status": "PASS"
+}

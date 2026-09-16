@@ -1,0 +1,71 @@
+mission_id: ""
+project_id: ""
+mode: research_to_build_packet
+owner_agent: repo-mapper-research
+reviewer_agent: opencode
+validator_agent: validator
+flow:
+  - Source
+  - Verify
+  - Reverse_Engineer
+  - Spec
+  - Architecture
+  - Knowledge_Vault
+  - Build_Packet
+  - Validate
+  - Receipt
+  - Handoff
+source:
+  items: []
+  allowed_source_types:
+    - owner_provided
+    - public_documentation
+    - local_repo
+    - approved_export
+  blocked_source_types:
+    - private_customer_data
+    - credential_material
+    - protected_third_party_surface
+verify:
+  evidence_paths: []
+  unknowns: []
+reverse_engineer:
+  components: []
+  data_flow: []
+  api_contracts: []
+  ui_states: []
+  runtime_jobs: []
+  storage_surfaces: []
+  policy_risks: []
+spec:
+  functional_requirements: []
+  non_functional_requirements: []
+  acceptance_criteria: []
+architecture:
+  bounded_contexts: []
+  build_sequence: []
+knowledge_vault:
+  knowledge_card: ""
+  memory_update: ""
+  sop_candidate: ""
+build_packet:
+  allowed_files: []
+  forbidden_files:
+    - .env
+    - secrets/**
+    - customer-data/**
+  first_packet: ""
+validate:
+  commands: []
+  policy_checks:
+    - no_secret_read
+    - no_customer_data
+    - no_third_party_scanning
+    - no_push
+    - no_deploy
+receipt:
+  path: ""
+  status: pending
+handoff:
+  next_owner: ""
+  next_safe_action: ""

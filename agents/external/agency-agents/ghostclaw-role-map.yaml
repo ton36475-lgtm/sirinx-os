@@ -1,0 +1,76 @@
+mission_name: GHOSTCLAW_AGENCY_IMPORT_COMPACT_V1
+role_mapping:
+  Hermes_Supervisor:
+    imports_from:
+      - agents-orchestrator
+      - studio-producer
+      - project-shepherd
+      - multi-agent-systems-architect
+    mutate_repo: false
+    responsibilities:
+      - supervise_queue
+      - enforce_policy
+      - grant_or_deny_file_lease
+      - aggregate_receipts
+  Codex_Builder:
+    imports_from:
+      - backend-architect
+      - software-architect
+      - database-optimizer
+      - ai-engineer
+      - minimal-change-engineer
+    mutate_repo: true
+    requires_file_lease: true
+    responsibilities:
+      - patch_leased_files_only
+      - preserve_existing_code
+      - run_local_validation
+      - write_receipt
+  OpenCode_Reviewer:
+    imports_from:
+      - code-reviewer
+      - reality-checker
+      - security-architect
+      - application-security-engineer
+    mutate_repo: false
+    responsibilities:
+      - review_latest_completed_packet
+      - inspect_diff_read_only
+      - report_blocking_findings
+  Validator_Worker:
+    imports_from:
+      - api-tester
+      - test-results-analyzer
+      - performance-benchmarker
+      - evidence-collector
+      - accessibility-auditor
+    mutate_repo: false
+    responsibilities:
+      - validate_json_yaml_markdown
+      - run_allowed_local_checks
+      - verify_receipt_presence
+      - report_pass_warn_failed_blocked
+  Policy_Guardian:
+    imports_from:
+      - security-architect
+      - senior-secops-engineer
+      - compliance-auditor
+      - agentic-identity-trust-architect
+      - automation-governance-architect
+    mutate_repo: false
+    responsibilities:
+      - enforce_no_secret_read
+      - enforce_no_provider_call
+      - enforce_no_push_deploy
+      - enforce_no_self_approval
+  UX_UI_Worker:
+    imports_from:
+      - ui-designer
+      - ux-architect
+      - brand-guardian
+      - visual-storyteller
+    mutate_repo: false_unless_page_lease_exists
+    responsibilities:
+      - propose_ui_patterns
+      - review_accessibility
+      - avoid_page_edits_without_lease

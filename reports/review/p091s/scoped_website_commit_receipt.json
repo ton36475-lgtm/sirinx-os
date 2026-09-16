@@ -1,0 +1,30 @@
+{
+  "packet_id": "P091S_SCOPED_WEBSITE_COMMIT",
+  "approval_token": "APPROVE_P091S_SCOPED_WEBSITE_COMMIT_20260707",
+  "status": "P091S_SCOPED_WEBSITE_COMMIT_VALIDATED_READY_TO_COMMIT",
+  "run_at": "2026-07-07T04:42:00+0700",
+  "mode": "SCOPED_LOCAL_COMMIT_ONLY_NO_PUSH_NO_DEPLOY",
+  "proposed_commit_message": "fix(site): restore solar carport homepage with line cta",
+  "validation": {
+    "pnpm_filter_site_test_server": "passed_4_tests",
+    "pnpm_filter_site_test_line": "passed_110_tests",
+    "pnpm_filter_site_build": "passed",
+    "pnpm_filter_site_test_auto_visual_bot": "passed_10_tests",
+    "pnpm_filter_site_test_release_readiness": "passed_4_tests",
+    "json_receipts_parse": "passed",
+    "secret_scan": "passed_no_findings"
+  },
+  "blocked_actions_confirmed": [
+    "git_push",
+    "preview_deploy",
+    "production_deploy",
+    "cloudflare_r2_d1_kv_dns_mutation",
+    "line_webhook_activation",
+    "crm_customer_storage_write",
+    "live_telegram_line_email_customer_send",
+    "provider_model_call",
+    "secret_read_print",
+    "broad_dirty_tree_cleanup"
+  ],
+  "next_safe_action": "After local commit, open a separate exact push gate if this should go remote."
+}

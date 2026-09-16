@@ -1,0 +1,55 @@
+{
+  "a2a2a_version": "2.0",
+  "mission_id": "M-20260717-007",
+  "correlation_id": "a2a-solar-1-preview-1721214000-00701",
+  "phase": "dispatch",
+  "from": {
+    "agent": "frontier-generator",
+    "role": "task-orchestrator"
+  },
+  "to": {
+    "agent": "opencode-reviewer",
+    "role": "independent_reviewer"
+  },
+  "action_requested": "Diagnose and fix Cline CLI spawnSync error",
+  "context": {
+    "goal": "The Cline CLI integration is failing with a spawnSync error. Diagnose the root cause: check if the cline binary exists at the expected path, verify the binary is executable on arm64 macOS, check PATH resolution, and identify whether the error is a missing binary, wrong invocation flags, or a Node.js version incompatibility (current Node v26.0.0). Produce a diagnostic report with findings and a concrete fix (patch to a2a-bridge.py AGENT_TO_CLI mapping or CLI_FLAGS if needed, or a clear 'install required' gate packet). Do NOT install anything — diagnosis and fix plan only.",
+    "constraints": [
+      "no deploy",
+      "no git push",
+      "no cloud mutation",
+      "no secret read or print",
+      "no external send",
+      "no package install",
+      "dry-run first"
+    ],
+    "lane": "_A2A_QUEUE",
+    "files": [
+      "_A2A_QUEUE/a2a-bridge.py"
+    ],
+    "deliverables": [
+      "Diagnostic report identifying spawnSync root cause",
+      "Patch to a2a-bridge.py if the fix is a code/config change",
+      "Install gate packet if a binary install is required"
+    ],
+    "command_source": "frontier-generator"
+  },
+  "response_expected": {
+    "format": "receipt_json",
+    "max_turns": 5
+  },
+  "human_approval_required": false,
+  "timestamp": "2026-07-17T17:40:00.000Z",
+  "ttl_seconds": 86400,
+  "status": "PENDING",
+  "safe_execution_v3": {
+    "mode": "full_auto_yolo_safe_execution",
+    "blocked_action_behavior": "auto_block_and_continue"
+  },
+  "frontier_model": {
+    "model": "solar-1-preview",
+    "role": "reasoning_and_diagnosis",
+    "tier": "A",
+    "auto_approved": true
+  }
+}

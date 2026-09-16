@@ -1,0 +1,16 @@
+{
+  "packet_id": "frontier_2",
+  "context": {
+    "goal": {
+      "title": "P1 API Gateway Expansion"
+    },
+    "model": "deepseek-v4-pro",
+    "tier": "A"
+  },
+  "routing_status": "QUEUED",
+  "created_at": "2026-07-17T17:30:00Z",
+  "safety": {
+    "tier": "A",
+    "allowed": true
+  }
+}
