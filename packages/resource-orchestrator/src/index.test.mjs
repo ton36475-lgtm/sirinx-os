@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+import { admissionCheck, bottleneckCandidates, buildResourceGraph, cacheValue, chooseDegradation, classifyTemperature, criticalPathLatency, detectThrashing, leaseStatus, makeBenchmarkCapsule, makeResourceReceipt, memoryPressureAction, overlappedPipeline, promotionDecision, rankCandidates, recommendPlacement } from "./index.mjs";
+
+assert.equal(classifyTemperature({ reuseProbability: 0.9, recencyMs: 100 }), "HOT");
+assert.equal(cacheValue({ reuseProbability: 1, latencySavedMs: 100, sizeBytes: 10 }), 10);
+assert.equal(buildResourceGraph([{ id: "cpu" }, { id: "ram" }], [{ id: "e1", source: "cpu", target: "ram" }]).nodeCount, 2);
+assert.equal(bottleneckCandidates({ interconnectUtilization: 96 })[0].resource, "interconnect");
+assert.equal(criticalPathLatency([{ name: "cpu", latencyMs: 10 }, { name: "gpu", latencyMs: 40 }]).dominant.name, "gpu");
+assert.deepEqual(overlappedPipeline({ computeMs: 30, transferMs: 10, prefetchMs: 20, writebackMs: 5 }), { sequentialMs: 65, overlappedMs: 30 });
+assert.equal(recommendPlacement({ workingSetBytes: 8, reuseProbability: 0.9, recencyMs: 100 }, [{ id: "ram0", kind: "ram", availableBytes: 16 }]).tier, "ram");
+assert.equal(admissionCheck({ memory: 4 }, { memory: 8 }).decision, "ACCEPT");
+assert.equal(memoryPressureAction(0.9), "EVICT");
+assert.equal(memoryPressureAction(0.72), "HOLD");
+assert.equal(memoryPressureAction(0.68), "KEEP");
+assert.equal(detectThrashing({ swapInRate: 10, ioWait: 15, throughputDelta: -1 }).thrashing, true);
+assert.equal(chooseDegradation({ memoryHeadroom: 0.1, computeHeadroom: 0.05 }), "CPU_OFFLOAD");
+assert.equal(leaseStatus({ expiresAt: 1000 }, 1001).state, "EXPIRED");
+assert.equal(makeBenchmarkCapsule({ os: "macOS", runtime: "llama.cpp", framework: "ggml", model: "Bonsai-2-27B", quantization: "PQ2_0", context: 32768, batch: 1, concurrency: 1, topology: "Metal", configuration: "ngl=99", gitCommit: "abc" }).reproducible, true);
+assert.deepEqual(makeResourceReceipt({ workload: "llm", device: "mac", configuration: {}, baseline: { tokps: 20 }, candidate: { tokps: 25 } }).delta, { tokps: 5 });
+assert.equal(rankCandidates([{ a: "A", b: "B", outcome: "a" }, { a: "A", b: "B", outcome: "a" }, { a: "B", b: "C", outcome: "b" }]).ranking[0].id, "A");
+assert.equal(promotionDecision({ smokePassed: true, benchmarkImproved: true, receiptComplete: true, policyAllowed: true }).decision, "PROMOTE");
+assert.equal(promotionDecision({ smokePassed: true, benchmarkImproved: false, receiptComplete: true, policyAllowed: true, judgeRankingSignal: "A" }).decision, "HOLD");
+console.log("resource-orchestrator tests: PASS");
