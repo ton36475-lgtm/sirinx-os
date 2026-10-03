@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-10-04",
+  "scope": "universal-resource-orchestration",
+  "repository": "ton36475-lgtm/sirinx-os",
+  "baseBranch": "codex/urgent-backlog-execution",
+  "candidateBranch": "codex/universal-resource-orchestration-20261004",
+  "validation": {
+    "localNodeTest": "PASS",
+    "testCommand": "node packages/resource-orchestrator/src/index.test.mjs"
+  },
+  "changes": [
+    "add pure hardware-agnostic resource orchestration primitives",
+    "add SIFT-governed self-improvement boundary",
+    "add Mac external-storage migration runbook"
+  ],
+  "runtimeState": {
+    "macTailnetReachable": true,
+    "macSshAccepting": false,
+    "remoteDesktopCommander": "offline",
+    "sentinelConnectedHosts": 0
+  },
+  "migrationDecision": "HOLD_MAC_EXECUTION_CHANNEL",
+  "deploymentDecision": "NOT_DEPLOYED",
+  "secretsRead": false
+}

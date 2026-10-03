@@ -1,0 +1,10 @@
+{
+  "name": "@sirinx/resource-orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pure, hardware-agnostic resource placement, admission, degradation, lease, benchmark, and evidence primitives for SIRINX OS.",
+  "scripts": {
+    "test": "node src/index.test.mjs"
+  }
+}
